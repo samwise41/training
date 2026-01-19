@@ -14,20 +14,12 @@ function getSafeDate(dateInput) {
     return null;
 }
 
-// --- Internal Helper: Normalize Sport (STRICT MODE) ---
-// As requested: Strictly relies on the declared sport name.
-function normalizeSport(item) {
-    // 1. Preferred Field: 'actualSport' (used in training_log.json)
-    // 2. Fallback Field: 'activityType' (used in planned.json)
-    const sportRaw = item.actualSport || item.activityType || '';
-    
-    // Normalize case to handle "Bike" vs "bike"
-    const sport = String(sportRaw).trim().toLowerCase();
-
-    if (sport === 'bike') return 'Bike';
-    if (sport === 'run') return 'Run';
-    if (sport === 'swim') return 'Swim';
-    
+// --- Internal Helper: Sport Normalizer ---
+function getSportFromType(typeRaw) {
+    const s = String(typeRaw || '').trim().toLowerCase();
+    if (s === 'bike' || s === 'cycling') return 'Bike';
+    if (s === 'run' || s === 'running') return 'Run';
+    if (s === 'swim' || s === 'swimming') return 'Swim';
     return 'Other';
 }
 
@@ -171,8 +163,9 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
                 if (!totalDailyMarkers[dateKey]) totalDailyMarkers[dateKey] = 0;
                 totalDailyMarkers[dateKey] += planDur;
 
-                // Strict Normalization
-                const sport = normalizeSport(w);
+                // STRICT: Use 'activityType' for Planned
+                const sport = getSportFromType(w.activityType);
+                
                 if (sportStats[sport]) {
                     sportStats[sport].planned += planDur;
                     if (!sportStats[sport].dailyMarkers[dateKey]) sportStats[sport].dailyMarkers[dateKey] = 0;
@@ -194,8 +187,11 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
                 if (actDur > 0) {
                     totalActual += actDur;
                     
-                    // Strict Normalization
-                    const sport = normalizeSport(item);
+                    // STRICT: Use 'actualSport' for Actuals
+                    const sport = getSportFromType(item.actualSport);
+                    
+                    // DEBUG: If this logs "Other", check the console to see exactly what 'actualSport' contains
+                    console.log(`[ProgressWidget] Date: ${item.date}, Raw Sport: "${item.actualSport}", Resolved: ${sport}`);
 
                     if (sportStats[sport]) {
                         sportStats[sport].actual += actDur;

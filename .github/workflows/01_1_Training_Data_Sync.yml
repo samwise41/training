@@ -35,4 +35,4 @@ jobs:
         GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
       run: |
         # Run the new modular main script
-        python python/01_main.py
+        python python/main.py

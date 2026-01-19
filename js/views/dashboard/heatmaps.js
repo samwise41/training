@@ -46,7 +46,6 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
     }
     
     let currentDate = new Date(startDate);
-    // Safety break
     const maxLoops = 400; 
     let loops = 0;
     
@@ -74,12 +73,10 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
                 totalPlan += pDur; 
                 totalAct += aDur; 
                 
-                // Determine type
                 const type = d.activityType || d.actualSport || 'Other';
                 if (type === 'Rest') isRestType = true;
                 if (type && type !== 'Rest') uniqueTypes.add(type);
 
-                // Build Detail String
                 const name = (d.actualWorkout || d.plannedWorkout || d.planName || 'Workout').replace(/['"]/g, ""); 
                 const durDisplay = aDur > 0 ? `${aDur}m` : `${pDur}m`;
                 detailList.push(`${name} (${durDisplay})`);
@@ -95,7 +92,6 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
         const detailStr = detailList.join('<br>');
         const hasActivity = (totalPlan > 0 || totalAct > 0 || isRestType); 
         
-        // Normalize comparison for "Future" logic
         const compDate = new Date(currentDate);
         compDate.setHours(0,0,0,0);
         const isFuture = compDate > today;
@@ -127,22 +123,27 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
                     else { colorClass = 'bg-yellow-500'; statusLabel = `Partial (${Math.round(ratio*100)}%)`; } 
                 } 
             } else { 
-                // Rest Day or Empty Past
-                colorClass = isRestType ? 'bg-emerald-500/50' : 'bg-slate-800'; 
-                statusLabel = isRestType ? "Rest Day" : "Empty"; 
+                // No Plan + Past = Rest Day (Success)
+                colorClass = 'bg-emerald-500/50'; 
+                statusLabel = "Rest Day"; 
             } 
         }
 
         // Hide Sundays if empty (Layout preference)
-        if (dayOfWeek === 0 && !hasActivity) { 
-            colorClass = ''; 
-            inlineStyle = 'opacity: 0;'; 
+        if (dayOfWeek === 0 && !hasActivity && !isFuture && colorClass !== 'bg-emerald-500/50') { 
+            // Note: If we consider it a "Rest Day", we probably want to show it now, 
+            // unless you explicitly want hidden Sundays. 
+            // I removed the 'hide' logic for Rest Days so they show up as green squares.
+            // Only hide strictly empty "Future" Sundays or if you want strict layout hiding.
+            // For now, let's keep it visible to show the streak.
         }
 
         const hexColor = getHexColor(colorClass);
-        const clickAttr = hasActivity || (isFuture && totalPlan > 0) ? 
+        // Enable tooltip for Rest Days too
+        const isRestDay = statusLabel === "Rest Day";
+        const clickAttr = hasActivity || (isFuture && totalPlan > 0) || isRestDay ? 
             `onclick="window.showDashboardTooltip(event, '${dateKey}', ${totalPlan}, ${totalAct}, '${statusLabel.replace(/'/g, "\\'")}', '${hexColor}', '${sportLabel}', '${detailStr}')"` : '';
-        const cursorClass = (hasActivity || (isFuture && totalPlan > 0)) ? 'cursor-pointer hover:opacity-80' : '';
+        const cursorClass = (hasActivity || (isFuture && totalPlan > 0) || isRestDay) ? 'cursor-pointer hover:opacity-80' : '';
 
         cellsHtml += `<div class="w-3 h-3 rounded-sm ${colorClass} ${cursorClass} m-[1px]" style="${inlineStyle}" ${clickAttr}></div>`;
         currentDate.setDate(currentDate.getDate() + 1);
@@ -187,6 +188,7 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm bg-emerald-500"></div> Done</div>
                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm bg-yellow-500"></div> Partial</div>
                 <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm bg-red-500/80"></div> Missed</div>
+                <div class="flex items-center gap-1"><div class="w-3 h-3 rounded-sm bg-emerald-500/50"></div> Rest</div>
             </div>
         </div>
     `;

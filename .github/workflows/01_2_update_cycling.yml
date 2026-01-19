@@ -1,0 +1,61 @@
+name: 01.2 Update Cycling Power
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 8 * * *'
+
+permissions:
+  contents: write
+  
+jobs:
+  update-cycling:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        working-directory: strava_data
+        run: pip install -r requirements.txt
+
+      - name: Fetch Latest Activity List
+        working-directory: strava_data
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: python 1_fetch_list.py
+
+      # ✅ FIX: Updated working-directory to include /cycling
+      - name: Process Cycling Power
+        working-directory: strava_data/cycling
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: python process_cycling.py
+
+      - name: Commit Cycling Data
+        run: |
+          git config --global user.name "StravaBot"
+          git config --global user.email "bot@github.com"
+          
+          git add strava_data/activity_ids.txt
+          git add strava_data/cycling/my_power_profile.md
+          git add strava_data/cycling/power_curve_graph.json
+          git add strava_data/power_cache/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "⚡ Updated Power Profile"
+            git pull --rebase
+            git push
+          fi

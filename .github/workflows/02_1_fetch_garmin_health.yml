@@ -1,0 +1,51 @@
+name: 02.1 Daily Health Sync
+
+on:
+  schedule:
+    # Runs at 06:00 UTC daily (adjust as needed)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-health:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas garminconnect requests
+        pip install pandas garminconnect requests tabulate
+
+    - name: Run Health Fetcher
+      env:
+        GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+        GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+      run: |
+        python python/_02_fetch_health.py
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        
+        # Stage the specific files we expect to change
+        git add garmin_data/garmin_health.md
+        
+        # Commit only if there are changes
+        git commit -m "🏥 Daily Health & Readiness Update" || echo "No health changes to commit"
+        
+        # Push
+        git pull --rebase
+        git push

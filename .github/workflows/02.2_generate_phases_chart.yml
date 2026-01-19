@@ -1,0 +1,48 @@
+name: 02.2 Generate Training Projection Chart
+
+on:
+  push:
+    paths:
+      - 'python/02_generate_projection.py' # Runs if you update the script
+      - 'endurance_plan.md'      # Runs if you update the plan text
+  workflow_dispatch:             # Allows you to click a button to run it manually
+
+permissions:
+  contents: write                # Required to push the image back to the repo
+
+jobs:
+  build-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install matplotlib pandas numpy
+
+    - name: Run Projection Script
+      run: python  python/_02_generate_projection.py
+
+    - name: Commit and Push Chart
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Add the generated image
+        git add projected_volume_2026.png
+        
+        # Check if anything changed before committing to avoid errors
+        if git diff --staged --quiet; then
+          echo "✅ No changes to the chart detected. Skipping commit."
+        else
+          git commit -m "📊 Update Training Projection Chart"
+          git push
+        fi

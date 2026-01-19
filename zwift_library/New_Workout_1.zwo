@@ -1,0 +1,55 @@
+<workout_file>
+    <author>S.Williams</author>
+    <name>3x30 Sprints with Zone 2</name>
+    <description>2 sets of 3x30 sprints with zone 2 in the middle.</description>
+    <sportType>bike</sportType>
+    <tags>
+        <tag name="INTERVALS"/>
+    </tags>
+    <workout>
+        <Warmup Duration="420" PowerLow="0.43449998" PowerHigh="0.73449993" pace="0">
+            <textevent timeoffset="360" message="Get ready for 3 sprints"/>
+        </Warmup>
+        <FreeRide Duration="30" FlatRoad="0">
+            <textevent timeoffset="0" message="First Sprint"/>
+        </FreeRide>
+        <SteadyState Duration="240" Power="0.47403431" pace="0">
+            <textevent timeoffset="0" message="4 minute recovery"/>
+        </SteadyState>
+        <FreeRide Duration="30" FlatRoad="0">
+            <textevent timeoffset="0" message="Second Sprint. You can do this!"/>
+        </FreeRide>
+        <SteadyState Duration="240" Power="0.47403431" pace="0">
+            <textevent timeoffset="0" message="Another 4 minute recovery."/>
+        </SteadyState>
+        <FreeRide Duration="30" FlatRoad="0">
+            <textevent timeoffset="9" message="Last 30 second sprint."/>
+        </FreeRide>
+        <SteadyState Duration="240" Power="0.47403431" pace="0">
+            <textevent timeoffset="0" message="Recover for your zone 2 session"/>
+        </SteadyState>
+        <SteadyState Duration="1800" Power="0.64999998" pace="0">
+            <textevent timeoffset="0" message="Zone 2 phase"/>
+            <textevent timeoffset="30" message="Build that aerobic engine."/>
+            <textevent timeoffset="1740" message="Another set of sprints"/>
+        </SteadyState>
+        <FreeRide Duration="30" FlatRoad="0">
+            <textevent timeoffset="30" message="1st sprint"/>
+        </FreeRide>
+        <SteadyState Duration="240" Power="0.47403431" pace="0">
+            <textevent timeoffset="0" message="Spin to recover. "/>
+        </SteadyState>
+        <FreeRide Duration="30" FlatRoad="0">
+            <textevent timeoffset="0" message="2nd sprint"/>
+        </FreeRide>
+        <SteadyState Duration="240" Power="0.47403431" pace="0">
+            <textevent timeoffset="0" message="Recover for your last sprint."/>
+        </SteadyState>
+        <FreeRide Duration="30" FlatRoad="0">
+            <textevent timeoffset="0" message="Last sprint! You got this!"/>
+            <textevent timeoffset="10" message="Give it all you got!!!"/>
+        </FreeRide>
+        <SteadyState Duration="240" Power="0.47403431" pace="0"/>
+        <Cooldown Duration="240" PowerLow="0.47403431" PowerHigh="0.25944206" pace="0"/>
+    </workout>
+</workout_file>

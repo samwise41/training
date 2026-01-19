@@ -1,0 +1,50 @@
+name: 04.1 Update Planned Workouts JSON
+
+on:
+  # 1. Run automatically when you edit the plan or the script
+  push:
+    paths:
+      - 'endurance_plan.md'
+      - 'python/_03_build_plan.py'
+  
+  # 2. Run manually from the Actions tab
+  workflow_dispatch:
+
+  # 3. Optional: Run daily at 4:00 AM UTC (adjust as needed)
+  schedule:
+    - cron: '0 4 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  build-plan-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run Builder Script
+        run: |
+          python python/_03_build_plan.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          
+          # Check if there are changes to commit
+          if [[ -n $(git status -s data/planned.json) ]]; then
+            git add data/planned.json
+            git commit -m "🤖 Auto-update planned.json from endurance_plan.md"
+            git push
+            echo "✅ Changes pushed successfully."
+          else
+            echo "✨ No changes detected in planned.json."
+          fi

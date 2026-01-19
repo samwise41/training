@@ -1,0 +1,15 @@
+<workout_file>
+    <author>S.Williams</author>
+    <name>Zone 2 - 71%</name>
+    <description></description>
+    <sportType>bike</sportType>
+    <tags>
+        <tag name="Zone"/>
+        <tag name="2"/>
+    </tags>
+    <workout>
+        <Warmup Duration="300" PowerLow="0.2545" PowerHigh="0.75449997" pace="0"/>
+        <SteadyState Duration="3000" Power="0.71449995" pace="0"/>
+        <Cooldown Duration="300" PowerLow="0.74871242" PowerHigh="0.43111587" pace="0"/>
+    </workout>
+</workout_file>

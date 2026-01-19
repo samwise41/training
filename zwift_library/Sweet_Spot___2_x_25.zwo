@@ -1,0 +1,12 @@
+<workout_file>
+    <author>S.Williams</author>
+    <name>Sweet Spot - 2 x 25</name>
+    <description></description>
+    <sportType>bike</sportType>
+    <tags/>
+    <workout>
+        <Warmup Duration="900" PowerLow="0.50449997" PowerHigh="0.75449997" pace="0"/>
+        <IntervalsT Repeat="2" OnDuration="1500" OffDuration="300" OnPower="0.93937498" OffPower="0.5852083" pace="0"/>
+        <Cooldown Duration="900" PowerLow="0.62270832" PowerHigh="0.50604165" pace="0"/>
+    </workout>
+</workout_file>

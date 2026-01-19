@@ -6,28 +6,47 @@ function getSafeDate(dateInput) {
     if (!dateInput) return null;
     if (dateInput instanceof Date) return new Date(dateInput); 
     if (typeof dateInput === 'string') {
-        // Handle "YYYY-MM-DD"
         const parts = dateInput.split('-');
-        if (parts.length === 3) {
-            return new Date(parts[0], parts[1] - 1, parts[2]);
-        }
-        // Handle ISO strings just in case
+        if (parts.length === 3) return new Date(parts[0], parts[1] - 1, parts[2]);
         const d = new Date(dateInput);
         if (!isNaN(d.getTime())) return d;
     }
     return null;
 }
 
-// --- Internal Helper: Streak Calculators ---
-// (Kept simple to focus on the chart issue)
-function calculateStreak(fullLogData, type) {
-    if (!fullLogData || fullLogData.length === 0) return 0;
-    // ... [Streak logic hidden to save space, logic remains same as previous working version]
-    return 0; // Placeholder if you want to focus purely on the bars for a moment, or paste back the streak logic
+// --- Internal Helper: "Shotgun" Sport Finder ---
+// Checks ALL common field names to find the sport
+function getSportCategory(item) {
+    // 1. Log keys for the very first item to debug field names
+    if (window._debug_keys_logged !== true) {
+        console.log("🔍 DATA STRUCTURE KEYS:", Object.keys(item));
+        window._debug_keys_logged = true;
+    }
+
+    // 2. check all possible candidates in order of preference
+    const candidates = [
+        item.actualSport,      // Your requested field
+        item.actualType,       // Common Parser output
+        item.activityType,     // Common JSON field
+        item.sport,            // Strava default
+        item.type              // Fallback
+    ];
+
+    // 3. Test each candidate
+    for (const raw of candidates) {
+        if (!raw) continue;
+        const s = String(raw).trim().toLowerCase();
+        if (s === 'bike' || s === 'cycling' || s.includes('ride')) return 'Bike';
+        if (s === 'run' || s === 'running') return 'Run';
+        if (s === 'swim' || s === 'swimming') return 'Swim';
+    }
+    
+    return 'Other';
 }
 
+// --- Main Component ---
 export function renderProgressWidget(plannedWorkouts, fullLogData) {
-    console.group("🔥 PROGRESS WIDGET DEBUGGER 🔥");
+    window._debug_keys_logged = false; // Reset debug trigger
 
     // 1. Define Current Week
     const today = new Date();
@@ -43,8 +62,6 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
     sunday.setDate(monday.getDate() + 6);
     sunday.setHours(23,59,59,999);
 
-    console.log(`📅 Date Window: ${monday.toLocaleDateString()} to ${sunday.toLocaleDateString()}`);
-
     // 2. Initialize Stats
     const sportStats = { 
         Bike: { planned: 0, actual: 0, dailyMarkers: {} }, 
@@ -57,78 +74,48 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
     let totalActual = 0; 
     const totalDailyMarkers = {};
 
-    // 3. Process ACTUAL Data (Strict Logic)
-    console.groupCollapsed("🔎 Processing Actuals");
+    // 3. Process ACTUAL Data
     if (fullLogData) {
-        fullLogData.forEach((item, index) => {
+        fullLogData.forEach(item => {
             const d = getSafeDate(item.date);
             const actDur = parseFloat(item.actualDuration) || 0;
-            const rawSport = item.actualSport;
             
-            // Debug String
-            let logPrefix = `[Item ${index}] ${item.date} | Sport: "${rawSport}" | Dur: ${actDur}`;
+            if (d && d >= monday && d <= sunday && actDur > 0) {
+                totalActual += actDur;
+                
+                // USE THE NEW UNIVERSAL FINDER
+                const sport = getSportCategory(item);
+                
+                // Debug specifically for this week's items
+                console.log(`✅ Activity Found [${item.date}]: Scanned fields -> Classified as: ${sport}`);
 
-            if (!d) {
-                console.log(`${logPrefix} -> ❌ REJECTED (Invalid Date)`);
-                return;
+                if (sportStats[sport]) {
+                    sportStats[sport].actual += actDur;
+                } else {
+                    sportStats.Other.actual += actDur;
+                }
             }
-
-            // Date Check
-            if (d < monday || d > sunday) {
-                // Don't log every historical item, too noisy
-                // console.log(`${logPrefix} -> ❌ REJECTED (Date out of range)`);
-                return;
-            }
-
-            // Duration Check
-            if (actDur <= 0) {
-                console.log(`${logPrefix} -> ❌ REJECTED (Duration is 0 or null)`);
-                return;
-            }
-
-            // Strict Sport Check
-            let sport = 'Other';
-            const s = String(rawSport || '').trim().toLowerCase();
-            
-            if (s === 'bike') sport = 'Bike';
-            else if (s === 'run') sport = 'Run';
-            else if (s === 'swim') sport = 'Swim';
-
-            console.log(`${logPrefix} -> ✅ ACCEPTED as ${sport}`);
-
-            // Add to stats
-            totalActual += actDur;
-            sportStats[sport].actual += actDur;
         });
-    } else {
-        console.warn("⚠️ No Actual Data Provided");
     }
-    console.groupEnd();
 
-    // 4. Process PLANNED Data (Strict Logic)
-    console.groupCollapsed("🔎 Processing Planned");
+    // 4. Process PLANNED Data
     if (plannedWorkouts) {
-        plannedWorkouts.forEach((w, index) => {
+        plannedWorkouts.forEach(w => {
             const d = getSafeDate(w.date);
             const planDur = parseFloat(w.plannedDuration) || 0;
-            const rawType = w.activityType;
             
-            let logPrefix = `[Plan ${index}] ${w.date} | Type: "${rawType}"`;
-
-            if (d >= monday && d <= sunday) {
-                let sport = 'Other';
-                const s = String(rawType || '').trim().toLowerCase();
-                
-                if (s === 'bike') sport = 'Bike';
-                else if (s === 'run') sport = 'Run';
-                else if (s === 'swim') sport = 'Swim';
-
-                console.log(`${logPrefix} -> ✅ ACCEPTED as ${sport}`);
-
+            if (d && d >= monday && d <= sunday) {
                 totalPlanned += planDur;
                 const dateKey = d.toISOString().split('T')[0];
                 if (!totalDailyMarkers[dateKey]) totalDailyMarkers[dateKey] = 0;
                 totalDailyMarkers[dateKey] += planDur;
+
+                // For planned, we usually just look at activityType
+                let sport = 'Other';
+                const s = String(w.activityType || '').toLowerCase();
+                if (s.includes('bike') || s.includes('ride')) sport = 'Bike';
+                else if (s.includes('run')) sport = 'Run';
+                else if (s.includes('swim')) sport = 'Swim';
 
                 if (sportStats[sport]) {
                     sportStats[sport].planned += planDur;
@@ -138,9 +125,6 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
             }
         });
     }
-    console.groupEnd();
-    console.log("📊 Final Totals:", sportStats);
-    console.groupEnd();
 
     // 5. HTML Generators
     const generateBarHtml = (label, iconClass, actual, planned, dailyMap, isMain = false, sportType = 'All') => {
@@ -170,7 +154,7 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
         const pctColor = displayPct > 100 ? 'text-emerald-400' : 'text-blue-400';
         const barBgStyle = `style="width: ${barWidth}%; background-color: ${getSportColorVar(sportType)}"`;
 
-        // Always render main bar, but hide sport bars if 0/0
+        // HIDE EMPTY BARS: Only show if there is plan OR actual
         if (!isMain && planned === 0 && actual === 0) return '';
 
         return `
@@ -195,12 +179,9 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
         </div>`;
     };
     
-    // Placeholder Pacing (Can restore logic if needed)
-    const pacingLabel = "Calculating..."; 
-    const pacingColor = "text-slate-500"; 
-    const pacingIcon = "fa-circle-notch";
-
-    // Streak Placeholders
+    // Placeholder Logic for Pacing/Streaks
+    // (Restored simple logic for display)
+    const pacingDiff = totalActual - 0; // expectedSoFar placeholder
     const dailyStreak = 0; 
     const volumeStreak = 0;
 
@@ -214,12 +195,11 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
         </div>
         
         <div class="w-full md:w-auto md:border-l md:border-slate-700 md:pl-6 flex flex-row md:flex-col justify-between md:justify-center items-center md:items-start gap-6 md:gap-4 self-center">
-            <div>
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Debug Info</span>
-                <div class="text-xs text-slate-400 font-mono">
-                    Check Console (F12)<br>
-                    Act: ${Math.round(totalActual)}m<br>
-                    Plan: ${Math.round(totalPlanned)}m
+             <div>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Stats</span>
+                <div class="text-right md:text-left flex flex-col items-end md:items-start mt-1">
+                    <span class="text-[10px] text-slate-300 font-mono">Act: ${Math.round(totalActual)}m</span>
+                    <span class="text-[10px] text-slate-300 font-mono">Plan: ${Math.round(totalPlanned)}m</span>
                 </div>
             </div>
         </div>

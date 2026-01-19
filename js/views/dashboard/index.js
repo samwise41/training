@@ -1,5 +1,5 @@
 // js/views/dashboard/index.js
-import { Parser } from '../../parser.js';
+// Removed Parser import as it is no longer needed for this view
 import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
@@ -106,18 +106,43 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
     window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
 };
 
-export function renderDashboard(planMd, mergedLogData) {
-    const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
-    if (!scheduleSection) return '<p class="text-slate-500 italic">No Weekly Schedule found.</p>';
+// Helper to ensure dates are Date objects
+function normalizeData(data) {
+    if (!Array.isArray(data)) return [];
+    return data.map(item => {
+        // Create a shallow copy to avoid mutating the original source
+        const newItem = { ...item };
+        // Ensure date is a Date object (handling YYYY-MM-DD strings)
+        if (newItem.date && !(newItem.date instanceof Date)) {
+            newItem.date = new Date(newItem.date + 'T00:00:00'); // T00:00:00 ensures local day isn't shifted by UTC
+        }
+        return newItem;
+    });
+}
 
-    const workouts = Parser._parseTableBlock(scheduleSection);
+// Updated Signature: Now accepts JSON arrays instead of Markdown string
+export function renderDashboard(plannedData, actualData) {
+    
+    // 1. Normalize dates (String -> Date Object)
+    const workouts = normalizeData(plannedData);
+    const fullLogData = normalizeData(actualData);
+
+    // 2. Sort by date (Oldest -> Newest)
     workouts.sort((a, b) => a.date - b.date);
+    fullLogData.sort((a, b) => a.date - b.date);
 
-    const fullLogData = mergedLogData || [];
-
+    // 3. Render Components with JSON data
+    // Note: renderPlannedWorkouts and renderHeatmaps might still expect the OLD Markdown format 
+    // depending on your migration plan. For now, I am passing the JSON data to progressWidget
+    // but we might need to handle the other two functions if they haven't been updated yet.
+    
     const progressHtml = renderProgressWidget(workouts, fullLogData);
-    const plannedWorkoutsHtml = renderPlannedWorkouts(planMd);
-    const heatmapsHtml = renderHeatmaps(fullLogData, planMd);
+    
+    // TODO: Update these two functions to accept JSON in future steps
+    // passing '[]' or 'null' might break them if they strictly expect Markdown.
+    // For this specific step, we focus on progressWidget.
+    const plannedWorkoutsHtml = renderPlannedWorkouts(plannedData); // Assuming you will update this next
+    const heatmapsHtml = renderHeatmaps(fullLogData); // Assuming you will update this next
 
     // --- SYNC BUTTON HTML ---
     const syncButtonHtml = `

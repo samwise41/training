@@ -1,5 +1,50 @@
 [
     {
+        "date": "2026-01-19",
+        "day": "Monday",
+        "activityType": {
+            "typeId": 152,
+            "typeKey": "virtual_ride",
+            "parentTypeId": 2,
+            "isHidden": false,
+            "restricted": false,
+            "trimmable": true
+        },
+        "plannedWorkout": "[BIKE] Strength / Hill Focus",
+        "plannedDuration": 60.0,
+        "notes": "**File:** `Sweet_Spot___2_x_15.zwo`. **Focus:** Perform intervals at **Low Cadence (60-70 RPM)** to fix Torque Efficiency (1.97). Grind it out.",
+        "actualDuration": 60.2,
+        "id": 21597324841,
+        "actualWorkout": "Zwift - Sweet Spot - 2 x 15 on Jurassic Coast in Watopia",
+        "sportTypeId": 2,
+        "duration": 3610.0,
+        "distance": 30610.419921875,
+        "averageHR": 133.0,
+        "maxHR": 161.0,
+        "aerobicTrainingEffect": 3.0999999046325684,
+        "anaerobicTrainingEffect": 0.0,
+        "trainingEffectLabel": "AEROBIC_BASE",
+        "avgPower": 175.0,
+        "maxPower": 314.0,
+        "normPower": 197.25279471782324,
+        "trainingStressScore": null,
+        "intensityFactor": null,
+        "averageSpeed": 8.479000091552734,
+        "maxSpeed": 15.062000274658205,
+        "averageBikingCadenceInRevPerMinute": 70.0,
+        "averageRunningCadenceInStepsPerMinute": null,
+        "avgStrideLength": null,
+        "avgVerticalOscillation": null,
+        "avgGroundContactTime": null,
+        "vO2MaxValue": null,
+        "calories": 605.0,
+        "elevationGain": 252.0,
+        "RPE": 6.0,
+        "Feeling": 4,
+        "matchStatus": "Linked",
+        "status": "COMPLETED"
+    },
+    {
         "actualSport": "Bike",
         "Status": "COMPLETED",
         "Day": "Saturday",
@@ -37,7 +82,8 @@
         "calories": 617,
         "elevationGain": 180,
         "RPE": 3,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -77,7 +123,8 @@
         "calories": 292,
         "elevationGain": 0,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -117,7 +164,8 @@
         "calories": 409,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -157,7 +205,8 @@
         "calories": 427,
         "elevationGain": 209,
         "RPE": 3,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -165,39 +214,47 @@
         "Day": "Wednesday",
         "plannedWorkout": "[BIKE] Zwift Race",
         "plannedDuration": 45,
-        "actualWorkout": "[BIKE] Zwift - Race: Zwift Crit Racing Club - Avon Flyer (D) on Avon Flyer in New York (+2)",
+        "actualWorkout": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (D) on Avon Flyer in New York",
         "actualDuration": 53.7,
         "notes": "**Ankle Swap.** Replaces Run Tempo. Fun Factor: Go hard. High intensity stimulus.",
         "date": "2026-01-14",
-        "matchStatus": "Linked",
-        "id": null,
+        "matchStatus": "Linked Group",
+        "id": "21544205799,21544384067,21543836765",
         "activityName": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (D) on Avon Flyer in New York (+2)",
-        "activityType": "virtual_ride",
+        "activityType": {
+            "typeId": 152,
+            "typeKey": "virtual_ride",
+            "parentTypeId": 2,
+            "isHidden": false,
+            "restricted": false,
+            "trimmable": true
+        },
         "sportTypeId": 2,
-        "duration": 3221,
-        "distance": 29294.10938,
-        "averageHR": 144.688606,
-        "maxHR": 193,
+        "duration": 3221.0,
+        "distance": 29294.109375,
+        "averageHR": 144.68860602297423,
+        "maxHR": 193.0,
         "aerobicTrainingEffect": 3.5,
-        "anaerobicTrainingEffect": 2.099999905,
+        "anaerobicTrainingEffect": 2.0999999046325684,
         "trainingEffectLabel": "TEMPO",
-        "avgPower": 180.9863396,
-        "maxPower": 719,
-        "normPower": 200.2723518,
-        "trainingStressScore": 61.8,
-        "intensityFactor": 0.83,
-        "averageSpeed": 9.094444807,
-        "maxSpeed": 14.56400013,
-        "averageBikingCadenceInRevPerMinute": 76.54486184,
+        "avgPower": 180.98633964607265,
+        "maxPower": 719.0,
+        "normPower": 200.2723517572926,
+        "trainingStressScore": null,
+        "intensityFactor": null,
+        "averageSpeed": 10.50800037384033,
+        "maxSpeed": 14.564000129699707,
+        "averageBikingCadenceInRevPerMinute": 82.0,
         "averageRunningCadenceInStepsPerMinute": null,
         "avgStrideLength": null,
         "avgVerticalOscillation": null,
         "avgGroundContactTime": null,
         "vO2MaxValue": null,
-        "calories": 600,
+        "calories": 600.0,
         "elevationGain": 170.93,
-        "RPE": 9,
-        "Feeling": 5
+        "RPE": 9.0,
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -237,7 +294,8 @@
         "calories": 242,
         "elevationGain": 0,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -277,7 +335,8 @@
         "calories": 463,
         "elevationGain": 319.13,
         "RPE": 7,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -317,7 +376,8 @@
         "calories": 398,
         "elevationGain": 0,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -357,7 +417,8 @@
         "calories": 1011,
         "elevationGain": 582,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -397,87 +458,8 @@
         "calories": 264,
         "elevationGain": 0,
         "RPE": 4,
-        "Feeling": 4
-    },
-    {
-        "actualSport": "Swim",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[SWIM] Pool Swim",
-        "actualDuration": 21.6,
-        "notes": null,
-        "date": "2026-01-10",
-        "matchStatus": "Linked (modified)",
-        "id": 21501230950,
-        "activityName": "Pool Swim",
-        "activityType": "lap_swimming",
-        "sportTypeId": 5,
-        "duration": 1296.230957,
-        "distance": 685.7999878,
-        "averageHR": 136,
-        "maxHR": 163,
-        "aerobicTrainingEffect": 2.5,
-        "anaerobicTrainingEffect": 2.200000048,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": null,
-        "maxPower": 0,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": 0.791999996,
-        "maxSpeed": 1.320000052,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 264,
-        "elevationGain": 0,
-        "RPE": 4,
-        "Feeling": 4
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": "[BIKE] Long Steady Distance",
-        "plannedDuration": 120,
-        "actualWorkout": "[BIKE] Richmond Virtual Cycling",
-        "actualDuration": 120.6,
-        "notes": "Zone 2 (134-180W). **Winter Cap Applied.** Practice fueling every 45m.",
-        "date": "2026-01-10",
-        "matchStatus": "Linked",
-        "id": 21502893617,
-        "activityName": "Richmond Virtual Cycling",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 7234,
-        "distance": 51223.03906,
-        "averageHR": 131,
-        "maxHR": 146,
-        "aerobicTrainingEffect": 3,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 146,
-        "maxPower": 381,
-        "normPower": 152.4112637,
-        "trainingStressScore": 80.4,
-        "intensityFactor": 0.63,
-        "averageSpeed": 7.079999924,
-        "maxSpeed": 19.1760006,
-        "averageBikingCadenceInRevPerMinute": 75,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 1011,
-        "elevationGain": 582,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -517,7 +499,8 @@
         "calories": 710,
         "elevationGain": 54,
         "RPE": 3,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -557,7 +540,8 @@
         "calories": 681,
         "elevationGain": 571,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -597,7 +581,8 @@
         "calories": 640,
         "elevationGain": 55,
         "RPE": 5,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -637,7 +622,8 @@
         "calories": 380,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -677,7 +663,8 @@
         "calories": 585,
         "elevationGain": 219,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -717,7 +704,8 @@
         "calories": 1064,
         "elevationGain": 508,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -757,7 +745,8 @@
         "calories": 695,
         "elevationGain": 31,
         "RPE": 3,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -797,7 +786,8 @@
         "calories": 558,
         "elevationGain": 500,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -837,7 +827,8 @@
         "calories": 664,
         "elevationGain": 48,
         "RPE": 3,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -877,7 +868,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Bike",
@@ -917,7 +909,8 @@
         "calories": 551,
         "elevationGain": 363,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -957,7 +950,8 @@
         "calories": 268,
         "elevationGain": 0,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -997,7 +991,8 @@
         "calories": 785,
         "elevationGain": 44,
         "RPE": 7,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -1037,7 +1032,8 @@
         "calories": 560,
         "elevationGain": 504,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -1077,47 +1073,8 @@
         "calories": 299,
         "elevationGain": 206,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": "FTP Test (Bike)",
-        "plannedDuration": 120,
-        "actualWorkout": "[BIKE] Zwift - Road to Sky in Watopia",
-        "actualDuration": 74.6,
-        "notes": "Result: 241W.",
-        "date": "2025-12-23",
-        "matchStatus": "Linked (modified)",
-        "id": 21331586325,
-        "activityName": "Zwift - Road to Sky in Watopia",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 4474,
-        "distance": 17801.33984,
-        "averageHR": 156,
-        "maxHR": 188,
-        "aerobicTrainingEffect": 4.900000095,
-        "anaerobicTrainingEffect": 2.099999905,
-        "trainingEffectLabel": "LACTATE_THRESHOLD",
-        "avgPower": 224,
-        "maxPower": 544,
-        "normPower": 235.6832054,
-        "trainingStressScore": 98.3,
-        "intensityFactor": 0.89,
-        "averageSpeed": 3.977999926,
-        "maxSpeed": 13.59700012,
-        "averageBikingCadenceInRevPerMinute": 86,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 959,
-        "elevationGain": 1054,
-        "RPE": 10,
-        "Feeling": 5
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -1157,7 +1114,8 @@
         "calories": 77,
         "elevationGain": 21,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -1197,7 +1155,8 @@
         "calories": 1208,
         "elevationGain": 173,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -1237,7 +1196,8 @@
         "calories": 310,
         "elevationGain": 0,
         "RPE": 3,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -1277,47 +1237,8 @@
         "calories": 1141,
         "elevationGain": 62,
         "RPE": 4,
-        "Feeling": 4
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Thursday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance",
-        "plannedDuration": 90,
-        "actualWorkout": "[BIKE] Richmond Virtual Cycling",
-        "actualDuration": 50.9,
-        "notes": "Mid-week volume. 90 minutes @ 139W - 189W.",
-        "date": "2025-12-18",
-        "matchStatus": "Linked",
-        "id": 21289830125,
-        "activityName": "Richmond Virtual Cycling",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 3053,
-        "distance": 21844.73047,
-        "averageHR": 118,
-        "maxHR": 167,
-        "aerobicTrainingEffect": 2.200000048,
-        "anaerobicTrainingEffect": 1,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 146,
-        "maxPower": 890,
-        "normPower": 188.0489174,
-        "trainingStressScore": 42.7,
-        "intensityFactor": 0.71,
-        "averageSpeed": 7.15500021,
-        "maxSpeed": 19.7859993,
-        "averageBikingCadenceInRevPerMinute": 79,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 426,
-        "elevationGain": 238,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -1357,7 +1278,8 @@
         "calories": 426,
         "elevationGain": 238,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -1397,7 +1319,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Bike",
@@ -1437,7 +1360,8 @@
         "calories": 925,
         "elevationGain": 443,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -1477,47 +1401,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Roy - Zone 2 - 3 hours - 58-71% FTP",
-        "actualDuration": 78.7,
-        "notes": null,
-        "date": "2025-12-13",
-        "matchStatus": "Linked (modified)",
-        "id": 21247412842,
-        "activityName": "Roy - Zone 2 - 3 hours - 58-71% FTP",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 4720.080078,
-        "distance": 34518.26172,
-        "averageHR": 130,
-        "maxHR": 177,
-        "aerobicTrainingEffect": 2.5,
-        "anaerobicTrainingEffect": 0.699999988,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 132,
-        "maxPower": 382,
-        "normPower": 145,
-        "trainingStressScore": 20.29999924,
-        "intensityFactor": 0.574000001,
-        "averageSpeed": 7.313000202,
-        "maxSpeed": 13.23999977,
-        "averageBikingCadenceInRevPerMinute": 85,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 52,
-        "calories": 761,
-        "elevationGain": 108,
-        "RPE": 3,
-        "Feeling": 4
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Bike",
@@ -1557,7 +1442,8 @@
         "calories": 474,
         "elevationGain": 219,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -1597,47 +1483,8 @@
         "calories": 978,
         "elevationGain": 58,
         "RPE": 4,
-        "Feeling": 4
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Thursday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance",
-        "plannedDuration": 90,
-        "actualWorkout": "[BIKE] Richmond Virtual Cycling",
-        "actualDuration": 90.3,
-        "notes": "Mid-week volume restoration. 90 minutes @ 139W - 189W.",
-        "date": "2025-12-11",
-        "matchStatus": "Linked",
-        "id": 21233520275,
-        "activityName": "Richmond Virtual Cycling",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 5418,
-        "distance": 43800.87891,
-        "averageHR": 136,
-        "maxHR": 157,
-        "aerobicTrainingEffect": 3,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 156,
-        "maxPower": 405,
-        "normPower": 165.2940607,
-        "trainingStressScore": 58.6,
-        "intensityFactor": 0.62,
-        "averageSpeed": 8.083999634,
-        "maxSpeed": 18.58799934,
-        "averageBikingCadenceInRevPerMinute": 78,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 806,
-        "elevationGain": 270,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -1677,7 +1524,8 @@
         "calories": 806,
         "elevationGain": 270,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -1717,7 +1565,8 @@
         "calories": 451,
         "elevationGain": 27,
         "RPE": 3,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -1757,7 +1606,8 @@
         "calories": 608,
         "elevationGain": 338,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -1797,7 +1647,8 @@
         "calories": 344,
         "elevationGain": 0,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -1837,7 +1688,8 @@
         "calories": 383,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -1877,47 +1729,8 @@
         "calories": 976,
         "elevationGain": 48,
         "RPE": 7,
-        "Feeling": 4
-    },
-    {
-        "actualSport": "Swim",
-        "Status": "COMPLETED",
-        "Day": "Friday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[SWIM] Pool Swim",
-        "actualDuration": 44.5,
-        "notes": null,
-        "date": "2025-12-05",
-        "matchStatus": "Linked (modified)",
-        "id": 21175545787,
-        "activityName": "Pool Swim",
-        "activityType": "lap_swimming",
-        "sportTypeId": 5,
-        "duration": 2667.444092,
-        "distance": 1225,
-        "averageHR": 144,
-        "maxHR": 169,
-        "aerobicTrainingEffect": 3.099999905,
-        "anaerobicTrainingEffect": 2,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": null,
-        "maxPower": 0,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": 0.80400002,
-        "maxSpeed": 3.052999973,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 534,
-        "elevationGain": 0,
-        "RPE": 5,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -1957,47 +1770,8 @@
         "calories": 534,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 4
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Thursday",
-        "plannedWorkout": "[SWIM] Endurance Focus",
-        "plannedDuration": 45,
-        "actualWorkout": "[BIKE] City of Westminster Virtual Cycling",
-        "actualDuration": 60.3,
-        "notes": "Focus on continuous swimming and lap count. 30 - 45 min @ Easy.",
-        "date": "2025-12-04",
-        "matchStatus": "Linked",
-        "id": 21171009238,
-        "activityName": "City of Westminster Virtual Cycling",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 3617,
-        "distance": 31259.42969,
-        "averageHR": 131,
-        "maxHR": 175,
-        "aerobicTrainingEffect": 2.900000095,
-        "anaerobicTrainingEffect": 1.899999976,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 151,
-        "maxPower": 815,
-        "normPower": 187.5154817,
-        "trainingStressScore": 50.3,
-        "intensityFactor": 0.71,
-        "averageSpeed": 8.642000198,
-        "maxSpeed": 14.20499992,
-        "averageBikingCadenceInRevPerMinute": 82,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 523,
-        "elevationGain": 127,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -2037,7 +1811,8 @@
         "calories": 523,
         "elevationGain": 127,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2077,7 +1852,8 @@
         "calories": 543,
         "elevationGain": 26,
         "RPE": 6,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -2117,7 +1893,8 @@
         "calories": 771,
         "elevationGain": 471,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2157,7 +1934,8 @@
         "calories": 435,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2197,7 +1975,8 @@
         "calories": 681,
         "elevationGain": 137,
         "RPE": 5,
-        "Feeling": 1
+        "Feeling": 1,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2237,7 +2016,8 @@
         "calories": 842,
         "elevationGain": 142,
         "RPE": 7,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2277,7 +2057,8 @@
         "calories": 340,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -2317,7 +2098,8 @@
         "calories": 869,
         "elevationGain": 713,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2357,7 +2139,8 @@
         "calories": 246,
         "elevationGain": 0,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -2397,7 +2180,8 @@
         "calories": 779,
         "elevationGain": 103,
         "RPE": 6,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2437,7 +2221,8 @@
         "calories": 785,
         "elevationGain": 32,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -2477,7 +2262,8 @@
         "calories": 530,
         "elevationGain": 326,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2517,7 +2303,8 @@
         "calories": 345,
         "elevationGain": 0,
         "RPE": 5,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2557,7 +2344,8 @@
         "calories": 813,
         "elevationGain": 34,
         "RPE": 9,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2597,7 +2385,8 @@
         "calories": 222,
         "elevationGain": null,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2637,7 +2426,8 @@
         "calories": 476,
         "elevationGain": null,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -2677,7 +2467,8 @@
         "calories": 571,
         "elevationGain": 238,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2717,47 +2508,8 @@
         "calories": 637,
         "elevationGain": 41,
         "RPE": 4,
-        "Feeling": 3
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Thursday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance",
-        "plannedDuration": 90,
-        "actualWorkout": null,
-        "actualDuration": null,
-        "notes": "Solid aerobic base. 75 - 90 min @ Z2.",
-        "date": "2025-11-13",
-        "matchStatus": "\u274c Missed",
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -2797,47 +2549,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance",
-        "plannedDuration": 90,
-        "actualWorkout": null,
-        "actualDuration": null,
-        "notes": "Solid aerobic base. 75 - 90 min @ Z2.",
-        "date": "2025-11-12",
-        "matchStatus": "\u274c Missed",
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Swim",
@@ -2877,7 +2590,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Swim",
@@ -2917,7 +2631,8 @@
         "calories": 332,
         "elevationGain": null,
         "RPE": 6,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Swim",
@@ -2957,7 +2672,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Bike",
@@ -2997,47 +2713,8 @@
         "calories": 1647,
         "elevationGain": 1116,
         "RPE": 6,
-        "Feeling": 3
-    },
-    {
-        "actualSport": "Run",
-        "Status": "COMPLETED",
-        "Day": "Thursday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance",
-        "plannedDuration": 75,
-        "actualWorkout": "[RUN] Roy Running",
-        "actualDuration": 46.2,
-        "notes": "Solid aerobic base. 75 - 90 min @ Z2.",
-        "date": "2025-11-06",
-        "matchStatus": "Linked (modified)",
-        "id": 20914289339,
-        "activityName": "Roy Running",
-        "activityType": "running",
-        "sportTypeId": 1,
-        "duration": 2773.705078,
-        "distance": 8209.120117,
-        "averageHR": 156,
-        "maxHR": 170,
-        "aerobicTrainingEffect": 3.5,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 348,
-        "maxPower": 480,
-        "normPower": 358,
-        "trainingStressScore": 140.6,
-        "intensityFactor": 1.35,
-        "averageSpeed": 2.960000038,
-        "maxSpeed": 3.499000072,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": 157.265625,
-        "avgStrideLength": 112.1900024,
-        "avgVerticalOscillation": 9.419999695,
-        "avgGroundContactTime": 277,
-        "vO2MaxValue": 50,
-        "calories": 655,
-        "elevationGain": 30,
-        "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -3077,47 +2754,8 @@
         "calories": 655,
         "elevationGain": 30,
         "RPE": 4,
-        "Feeling": 3
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance",
-        "plannedDuration": 90,
-        "actualWorkout": "[BIKE] Zwift - Pacer Group Ride: Flat Route in Watopia with Miguel",
-        "actualDuration": 60.3,
-        "notes": "Solid aerobic base. 75 - 90 min @ Z2.",
-        "date": "2025-11-05",
-        "matchStatus": "Linked",
-        "id": 20903355677,
-        "activityName": "Zwift - Pacer Group Ride: Flat Route in Watopia with Miguel",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 3616,
-        "distance": 31945.33984,
-        "averageHR": 130,
-        "maxHR": 151,
-        "aerobicTrainingEffect": 2.599999905,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 141,
-        "maxPower": 565,
-        "normPower": 151.9137351,
-        "trainingStressScore": 33,
-        "intensityFactor": 0.57,
-        "averageSpeed": 8.833999634,
-        "maxSpeed": 14.77099991,
-        "averageBikingCadenceInRevPerMinute": 80,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 487,
-        "elevationGain": 201,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3157,7 +2795,8 @@
         "calories": 487,
         "elevationGain": 201,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3197,7 +2836,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Swim",
@@ -3237,7 +2877,8 @@
         "calories": 520,
         "elevationGain": null,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3277,7 +2918,8 @@
         "calories": 462,
         "elevationGain": 180,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Swim",
@@ -3317,7 +2959,8 @@
         "calories": 370,
         "elevationGain": null,
         "RPE": 5,
-        "Feeling": 1
+        "Feeling": 1,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Swim",
@@ -3357,7 +3000,8 @@
         "calories": 343,
         "elevationGain": null,
         "RPE": 6,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3397,47 +3041,8 @@
         "calories": 732,
         "elevationGain": 58,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Run",
-        "Status": "COMPLETED",
-        "Day": "Thursday",
-        "plannedWorkout": "[RUN] Easy Run",
-        "plannedDuration": 30,
-        "actualWorkout": null,
-        "actualDuration": null,
-        "notes": "Restart running durability work. 20-25 min Easy Run.",
-        "date": "2025-10-30",
-        "matchStatus": "\u274c Missed",
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Swim",
@@ -3477,7 +3082,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Bike",
@@ -3517,7 +3123,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Run",
@@ -3557,47 +3164,8 @@
         "calories": 380,
         "elevationGain": 26,
         "RPE": 7,
-        "Feeling": 3
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Monday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Volcano Circuit CCW in Watopia",
-        "actualDuration": 6.5,
-        "notes": null,
-        "date": "2025-10-27",
-        "matchStatus": "Linked",
-        "id": 20810343598,
-        "activityName": "Zwift - Volcano Circuit CCW in Watopia",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 391,
-        "distance": 2751.929932,
-        "averageHR": 109,
-        "maxHR": 131,
-        "aerobicTrainingEffect": 0.400000006,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "UNKNOWN",
-        "avgPower": 102,
-        "maxPower": 379,
-        "normPower": 126.3140851,
-        "trainingStressScore": 2.5,
-        "intensityFactor": 0.48,
-        "averageSpeed": 7.038000107,
-        "maxSpeed": 12.35599995,
-        "averageBikingCadenceInRevPerMinute": 68,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 37,
-        "elevationGain": 6,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 3,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3637,7 +3205,8 @@
         "calories": 524,
         "elevationGain": 169,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Swim",
@@ -3677,7 +3246,8 @@
         "calories": 248,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3717,7 +3287,8 @@
         "calories": 796,
         "elevationGain": 625,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -3757,7 +3328,8 @@
         "calories": 516,
         "elevationGain": 354,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -3797,7 +3369,8 @@
         "calories": 577,
         "elevationGain": 450,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -3837,7 +3410,8 @@
         "calories": 2011,
         "elevationGain": 747,
         "RPE": 6,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -3877,7 +3451,8 @@
         "calories": 747,
         "elevationGain": 36,
         "RPE": 4,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -3917,47 +3492,8 @@
         "calories": 387,
         "elevationGain": 389,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Sweet Spot - 1 x 15 on 2018 Worlds Short Lap in Innsbruck",
-        "actualDuration": 45.2,
-        "notes": null,
-        "date": "2025-10-15",
-        "matchStatus": "Linked",
-        "id": 20696300096,
-        "activityName": "Zwift - Sweet Spot - 1 x 15 on 2018 Worlds Short Lap in Innsbruck",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 2712,
-        "distance": 9835.240234,
-        "averageHR": 126,
-        "maxHR": 161,
-        "aerobicTrainingEffect": 2.799999952,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 149,
-        "maxPower": 421,
-        "normPower": 172.1538689,
-        "trainingStressScore": 31.8,
-        "intensityFactor": 0.65,
-        "averageSpeed": 3.625999928,
-        "maxSpeed": 9.229000092,
-        "averageBikingCadenceInRevPerMinute": 84,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 387,
-        "elevationGain": 389,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -3997,7 +3533,8 @@
         "calories": 464,
         "elevationGain": 429,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4037,7 +3574,8 @@
         "calories": 500,
         "elevationGain": 147,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4077,7 +3615,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Run",
@@ -4117,7 +3656,8 @@
         "calories": 817,
         "elevationGain": 102,
         "RPE": 10,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -4157,7 +3697,8 @@
         "calories": 141,
         "elevationGain": 6,
         "RPE": 3,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4197,7 +3738,8 @@
         "calories": 159,
         "elevationGain": 77,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -4237,7 +3779,8 @@
         "calories": 406,
         "elevationGain": 23,
         "RPE": 4,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -4277,7 +3820,8 @@
         "calories": 429,
         "elevationGain": 30,
         "RPE": 3,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4317,7 +3861,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Run",
@@ -4357,7 +3902,8 @@
         "calories": 421,
         "elevationGain": 25,
         "RPE": 6,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4397,7 +3943,8 @@
         "calories": 346,
         "elevationGain": 382,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -4437,7 +3984,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Run",
@@ -4477,7 +4025,8 @@
         "calories": 966,
         "elevationGain": 38,
         "RPE": 7,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4517,7 +4066,8 @@
         "calories": 505,
         "elevationGain": 133,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4557,7 +4107,8 @@
         "calories": 876,
         "elevationGain": 634,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -4597,7 +4148,8 @@
         "calories": 391,
         "elevationGain": 23,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4637,7 +4189,8 @@
         "calories": 374,
         "elevationGain": 38,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -4677,7 +4230,8 @@
         "calories": 562,
         "elevationGain": 25,
         "RPE": 5,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4717,7 +4271,8 @@
         "calories": 477,
         "elevationGain": 172,
         "RPE": 8,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -4757,7 +4312,8 @@
         "calories": 397,
         "elevationGain": 23,
         "RPE": 7,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4797,7 +4353,8 @@
         "calories": 584,
         "elevationGain": 410,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -4837,47 +4394,8 @@
         "calories": 340,
         "elevationGain": 137,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": "[RUN] Long Run (3.5 miles)",
-        "plannedDuration": 25,
-        "actualWorkout": "Roy Road Cycling",
-        "actualDuration": 75,
-        "notes": "Workout: Run for approximately 3.5 miles at an easy pace.",
-        "date": "2025-09-13",
-        "matchStatus": "Linked (modified)",
-        "id": 20375492961,
-        "activityName": "Roy Road Cycling",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 4500.461914,
-        "distance": 35424.07031,
-        "averageHR": 135,
-        "maxHR": 175,
-        "aerobicTrainingEffect": 3.099999905,
-        "anaerobicTrainingEffect": 0.400000006,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 156,
-        "maxPower": 528,
-        "normPower": 179,
-        "trainingStressScore": 69.40000153,
-        "intensityFactor": 0.748000026,
-        "averageSpeed": 7.870999813,
-        "maxSpeed": 13.40799999,
-        "averageBikingCadenceInRevPerMinute": 90,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 51,
-        "calories": 816,
-        "elevationGain": 129,
-        "RPE": 4,
-        "Feeling": 4
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -4917,7 +4435,8 @@
         "calories": 50,
         "elevationGain": 9,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -4957,7 +4476,8 @@
         "calories": 1030,
         "elevationGain": 1059,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Run",
@@ -4997,7 +4517,8 @@
         "calories": null,
         "elevationGain": 10.99145508,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5037,7 +4558,8 @@
         "calories": 671,
         "elevationGain": 401,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5077,7 +4599,8 @@
         "calories": 511,
         "elevationGain": 315,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5117,47 +4640,8 @@
         "calories": 1130,
         "elevationGain": 504,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Friday",
-        "plannedWorkout": "[BIKE] Zone 2 Endurance Ride",
-        "plannedDuration": 60,
-        "actualWorkout": "[BIKE] Zwift - Race: Zwift Crit Racing Club - Glasgow Crit Circuit (D) on Glasgow Crit Circuit in Scotland",
-        "actualDuration": 29.2,
-        "notes": "Aerobic Maintenance: 60 min @ 144W-180W (Zone 2).",
-        "date": "2025-09-05",
-        "matchStatus": "Linked",
-        "id": 20287945817,
-        "activityName": "Zwift - Race: Zwift Crit Racing Club - Glasgow Crit Circuit (D) on Glasgow Crit Circuit in Scotland",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 1755,
-        "distance": 18749.84961,
-        "averageHR": 168,
-        "maxHR": 197,
-        "aerobicTrainingEffect": 3.900000095,
-        "anaerobicTrainingEffect": 3,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 240,
-        "maxPower": 754,
-        "normPower": 263.4875487,
-        "trainingStressScore": 48.2,
-        "intensityFactor": 0.99,
-        "averageSpeed": 10.68299961,
-        "maxSpeed": 16.17099953,
-        "averageBikingCadenceInRevPerMinute": 88,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 421,
-        "elevationGain": 199,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5197,7 +4681,8 @@
         "calories": 42,
         "elevationGain": 36,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -5237,7 +4722,8 @@
         "calories": 300,
         "elevationGain": 9,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5277,7 +4763,8 @@
         "calories": 507,
         "elevationGain": 197,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5317,47 +4804,8 @@
         "calories": 551,
         "elevationGain": 251,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - 3x30 Sprints with Zone 2 on Suki s Playground in Makuri Islands",
-        "actualDuration": 68.7,
-        "notes": null,
-        "date": "2025-09-02",
-        "matchStatus": "Linked",
-        "id": 20256594778,
-        "activityName": "Zwift - 3x30 Sprints with Zone 2 on Suki s Playground in Makuri Islands",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 4120,
-        "distance": 30225.13086,
-        "averageHR": 130,
-        "maxHR": 177,
-        "aerobicTrainingEffect": 2.599999905,
-        "anaerobicTrainingEffect": 2.200000048,
-        "trainingEffectLabel": "SPEED",
-        "avgPower": 140,
-        "maxPower": 827,
-        "normPower": 224.1455031,
-        "trainingStressScore": 81.9,
-        "intensityFactor": 0.85,
-        "averageSpeed": 7.335999966,
-        "maxSpeed": 15.74600029,
-        "averageBikingCadenceInRevPerMinute": 87,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 551,
-        "elevationGain": 251,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5397,7 +4845,8 @@
         "calories": 263,
         "elevationGain": 175,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5437,7 +4886,8 @@
         "calories": 1579,
         "elevationGain": 198,
         "RPE": 5,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5477,7 +4927,8 @@
         "calories": 546,
         "elevationGain": 398,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5517,7 +4968,8 @@
         "calories": 507,
         "elevationGain": 205,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5557,7 +5009,8 @@
         "calories": 547,
         "elevationGain": 321,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5597,7 +5050,8 @@
         "calories": 299,
         "elevationGain": 113,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5637,7 +5091,8 @@
         "calories": 1533,
         "elevationGain": 202,
         "RPE": 5,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5677,7 +5132,8 @@
         "calories": 485,
         "elevationGain": 322,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5717,7 +5173,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Bike",
@@ -5757,47 +5214,8 @@
         "calories": 516,
         "elevationGain": 157,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": "[RUN] Strength Training & Easy Run",
-        "plannedDuration": 20,
-        "actualWorkout": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Bernie",
-        "actualDuration": 29.8,
-        "notes": "Concurrent Training: 30-45 min full-body strength session.",
-        "date": "2025-08-19",
-        "matchStatus": "Linked",
-        "id": 20109630403,
-        "activityName": "Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Bernie",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 1790,
-        "distance": 14327.07031,
-        "averageHR": 90,
-        "maxHR": 129,
-        "aerobicTrainingEffect": 1.399999976,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "RECOVERY",
-        "avgPower": 112,
-        "maxPower": 338,
-        "normPower": 118.5758682,
-        "trainingStressScore": 10,
-        "intensityFactor": 0.45,
-        "averageSpeed": 8.003000259,
-        "maxSpeed": 12.14500046,
-        "averageBikingCadenceInRevPerMinute": 79,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 194,
-        "elevationGain": 51,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5837,47 +5255,8 @@
         "calories": 194,
         "elevationGain": 51,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Monday",
-        "plannedWorkout": "[BIKE] Active Recovery Ride",
-        "plannedDuration": 360,
-        "actualWorkout": "[BIKE] Rooster Ride",
-        "actualDuration": 337.1,
-        "notes": null,
-        "date": "2025-08-18",
-        "matchStatus": null,
-        "id": 20080578006,
-        "activityName": "Richfield - Rooster Ride",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 20223.56641,
-        "distance": 163751.2031,
-        "averageHR": 148,
-        "maxHR": 177,
-        "aerobicTrainingEffect": 5,
-        "anaerobicTrainingEffect": 2,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 140,
-        "maxPower": 691,
-        "normPower": 169,
-        "trainingStressScore": 290.2999878,
-        "intensityFactor": 0.720000029,
-        "averageSpeed": 8.097000122,
-        "maxSpeed": 17.49500084,
-        "averageBikingCadenceInRevPerMinute": 83,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 48,
-        "calories": 3339,
-        "elevationGain": 1222,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -5917,47 +5296,8 @@
         "calories": 593,
         "elevationGain": 229,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": "[BIKE] Century Ride",
-        "plannedDuration": 337,
-        "actualWorkout": "Richfield - Rooster Ride",
-        "actualDuration": 337.1,
-        "notes": null,
-        "date": "2025-08-16",
-        "matchStatus": "Linked (modified)",
-        "id": 20080578006,
-        "activityName": "Richfield - Rooster Ride",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 20223.56641,
-        "distance": 163751.2031,
-        "averageHR": 148,
-        "maxHR": 177,
-        "aerobicTrainingEffect": 5,
-        "anaerobicTrainingEffect": 2,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 140,
-        "maxPower": 691,
-        "normPower": 169,
-        "trainingStressScore": 290.2999878,
-        "intensityFactor": 0.720000029,
-        "averageSpeed": 8.097000122,
-        "maxSpeed": 17.49500084,
-        "averageBikingCadenceInRevPerMinute": 83,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 48,
-        "calories": 3339,
-        "elevationGain": 1222,
-        "RPE": 7,
-        "Feeling": 3
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -5997,7 +5337,8 @@
         "calories": 33,
         "elevationGain": 5,
         "RPE": 1,
-        "Feeling": 1
+        "Feeling": 1,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Run",
@@ -6037,7 +5378,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -6077,7 +5419,8 @@
         "calories": 713,
         "elevationGain": 95,
         "RPE": 5,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -6117,7 +5460,8 @@
         "calories": 499,
         "elevationGain": 150,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6157,7 +5501,8 @@
         "calories": 500,
         "elevationGain": 144,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -6197,7 +5542,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "MISSED"
     },
     {
         "actualSport": "Run",
@@ -6237,7 +5583,8 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6277,7 +5624,8 @@
         "calories": 2209,
         "elevationGain": 237,
         "RPE": 5,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6317,7 +5665,8 @@
         "calories": 697,
         "elevationGain": 255,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     },
     {
         "actualSport": "Bike",
@@ -6357,47 +5706,8 @@
         "calories": 847,
         "elevationGain": 188,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Race: Zwift Crit Racing Club - Bell Lap (D) on The Bell Lap in Crit City",
-        "actualDuration": 31.4,
-        "notes": null,
-        "date": "2025-07-30",
-        "matchStatus": "Linked",
-        "id": 19895921470,
-        "activityName": "Zwift - Race: Zwift Crit Racing Club - Bell Lap (D) on The Bell Lap in Crit City",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 1883,
-        "distance": 19999.19922,
-        "averageHR": 163,
-        "maxHR": 193,
-        "aerobicTrainingEffect": 3.700000048,
-        "anaerobicTrainingEffect": 2.5,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 236,
-        "maxPower": 679,
-        "normPower": 250.963662,
-        "trainingStressScore": 46.9,
-        "intensityFactor": 0.95,
-        "averageSpeed": 10.61999989,
-        "maxSpeed": 15.65799999,
-        "averageBikingCadenceInRevPerMinute": 81,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 455,
-        "elevationGain": 164,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6437,7 +5747,8 @@
         "calories": 33,
         "elevationGain": 3,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6477,7 +5788,8 @@
         "calories": 182,
         "elevationGain": 46,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6517,47 +5829,8 @@
         "calories": 464,
         "elevationGain": 116,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Friday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Race: Zwift Crit Racing Club - The Classic (D) on The Classic in Watopia",
-        "actualDuration": 61.1,
-        "notes": null,
-        "date": "2025-07-25",
-        "matchStatus": "Linked",
-        "id": 19844014197,
-        "activityName": "Zwift - Race: Zwift Crit Racing Club - The Classic (D) on The Classic in Watopia",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 3668,
-        "distance": 32061.17969,
-        "averageHR": 135,
-        "maxHR": 188,
-        "aerobicTrainingEffect": 3.900000095,
-        "anaerobicTrainingEffect": 2,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 204,
-        "maxPower": 541,
-        "normPower": 222.3170537,
-        "trainingStressScore": 71.7,
-        "intensityFactor": 0.84,
-        "averageSpeed": 8.739999771,
-        "maxSpeed": 17.8560009,
-        "averageBikingCadenceInRevPerMinute": 74,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 734,
-        "elevationGain": 306,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6597,7 +5870,8 @@
         "calories": 71,
         "elevationGain": 53,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6637,7 +5911,8 @@
         "calories": 1075,
         "elevationGain": 1129,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6677,7 +5952,8 @@
         "calories": 1021,
         "elevationGain": 1042,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6717,7 +5993,8 @@
         "calories": 1201,
         "elevationGain": 306,
         "RPE": 3,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6757,7 +6034,8 @@
         "calories": 1901,
         "elevationGain": 1171,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6797,7 +6075,8 @@
         "calories": 506,
         "elevationGain": 223,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6837,7 +6116,8 @@
         "calories": 652,
         "elevationGain": 283,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6877,7 +6157,8 @@
         "calories": 665,
         "elevationGain": 176,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6917,7 +6198,8 @@
         "calories": 369,
         "elevationGain": 85,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6957,7 +6239,8 @@
         "calories": 1570,
         "elevationGain": 215,
         "RPE": 5,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -6997,7 +6280,8 @@
         "calories": 445,
         "elevationGain": 451,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7037,7 +6321,8 @@
         "calories": 674,
         "elevationGain": 150,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7077,7 +6362,8 @@
         "calories": 476,
         "elevationGain": 367,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7117,47 +6403,8 @@
         "calories": 546,
         "elevationGain": 334,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Friday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "Roy Road Cycling",
-        "actualDuration": 189.4,
-        "notes": null,
-        "date": "2025-07-04",
-        "matchStatus": "Linked (modified)",
-        "id": 19630265594,
-        "activityName": "Roy Road Cycling",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 11362.72363,
-        "distance": 94450.09375,
-        "averageHR": 151,
-        "maxHR": 165,
-        "aerobicTrainingEffect": 3.799999952,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 153,
-        "maxPower": 498,
-        "normPower": 162,
-        "trainingStressScore": 149.8999939,
-        "intensityFactor": 0.689999998,
-        "averageSpeed": 8.312000275,
-        "maxSpeed": 11.52299976,
-        "averageBikingCadenceInRevPerMinute": 84,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 48,
-        "calories": 2035,
-        "elevationGain": 204,
-        "RPE": 5,
-        "Feeling": 5
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7197,7 +6444,8 @@
         "calories": 127,
         "elevationGain": 30,
         "RPE": 1,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7237,47 +6485,8 @@
         "calories": 447,
         "elevationGain": 124,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Race: CAT & MOUSE KZR CHASE RACE  (D) on Big Flat 8 in Watopia",
-        "actualDuration": 53.8,
-        "notes": null,
-        "date": "2025-07-02",
-        "matchStatus": "Linked",
-        "id": 19609367612,
-        "activityName": "Zwift - Race: CAT & MOUSE KZR CHASE RACE  (D) on Big Flat 8 in Watopia",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 3226,
-        "distance": 31632.39063,
-        "averageHR": 152,
-        "maxHR": 175,
-        "aerobicTrainingEffect": 3.400000095,
-        "anaerobicTrainingEffect": 0.800000012,
-        "trainingEffectLabel": "TEMPO",
-        "avgPower": 205,
-        "maxPower": 436,
-        "normPower": 208.9274342,
-        "trainingStressScore": 55.7,
-        "intensityFactor": 0.79,
-        "averageSpeed": 9.805000305,
-        "maxSpeed": 16.36300087,
-        "averageBikingCadenceInRevPerMinute": 88,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 652,
-        "elevationGain": 109,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7317,7 +6526,8 @@
         "calories": 61,
         "elevationGain": 43,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7357,7 +6567,8 @@
         "calories": 676,
         "elevationGain": 100,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7397,47 +6608,8 @@
         "calories": 544,
         "elevationGain": 167,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "Roy - Zone 2 Aerobic",
-        "actualDuration": 130.8,
-        "notes": null,
-        "date": "2025-06-28",
-        "matchStatus": "Linked (modified)",
-        "id": 19570399500,
-        "activityName": "Roy - Zone 2 Aerobic",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 7849.525879,
-        "distance": 64971.05859,
-        "averageHR": 149,
-        "maxHR": 166,
-        "aerobicTrainingEffect": 3.599999905,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 171,
-        "maxPower": 548,
-        "normPower": 180,
-        "trainingStressScore": 126.8000031,
-        "intensityFactor": 0.763999999,
-        "averageSpeed": 8.277000427,
-        "maxSpeed": 12.74600029,
-        "averageBikingCadenceInRevPerMinute": 83,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 48,
-        "calories": 1549,
-        "elevationGain": 182,
-        "RPE": 4,
-        "Feeling": 5
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7477,7 +6649,8 @@
         "calories": 139,
         "elevationGain": 37,
         "RPE": 1,
-        "Feeling": 1
+        "Feeling": 1,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7517,7 +6690,8 @@
         "calories": 754,
         "elevationGain": 284,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7557,7 +6731,8 @@
         "calories": 574,
         "elevationGain": 443,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7597,47 +6772,8 @@
         "calories": 615,
         "elevationGain": 574,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Monday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Pacer Group Ride: Loch Loop in Scotland with Miguel",
-        "actualDuration": 64.4,
-        "notes": null,
-        "date": "2025-06-23",
-        "matchStatus": "Linked",
-        "id": 19523337520,
-        "activityName": "Zwift - Pacer Group Ride: Loch Loop in Scotland with Miguel",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 3863,
-        "distance": 33164.66016,
-        "averageHR": 136,
-        "maxHR": 170,
-        "aerobicTrainingEffect": 3,
-        "anaerobicTrainingEffect": 2,
-        "trainingEffectLabel": "AEROBIC_BASE",
-        "avgPower": 168,
-        "maxPower": 839,
-        "normPower": 200.0727322,
-        "trainingStressScore": 61.2,
-        "intensityFactor": 0.75,
-        "averageSpeed": 8.585000038,
-        "maxSpeed": 15.50699997,
-        "averageBikingCadenceInRevPerMinute": 78,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 625,
-        "elevationGain": 296,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7677,7 +6813,8 @@
         "calories": 187,
         "elevationGain": 71,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7717,7 +6854,8 @@
         "calories": 1485,
         "elevationGain": 193,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7757,7 +6895,8 @@
         "calories": 1144,
         "elevationGain": 1064,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7797,7 +6936,8 @@
         "calories": 1089,
         "elevationGain": 377,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7837,47 +6977,8 @@
         "calories": 602,
         "elevationGain": 198,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Zwift - Pacer Group Ride: The Big Ring in Watopia with Miguel",
-        "actualDuration": 30.4,
-        "notes": null,
-        "date": "2025-06-17",
-        "matchStatus": "Linked",
-        "id": 19459516354,
-        "activityName": "Zwift - Pacer Group Ride: The Big Ring in Watopia with Miguel",
-        "activityType": "virtual_ride",
-        "sportTypeId": 2,
-        "duration": 1821,
-        "distance": 16248.16992,
-        "averageHR": 144,
-        "maxHR": 153,
-        "aerobicTrainingEffect": 2.400000095,
-        "anaerobicTrainingEffect": 0,
-        "trainingEffectLabel": "RECOVERY",
-        "avgPower": 149,
-        "maxPower": 353,
-        "normPower": 158.5579883,
-        "trainingStressScore": 18.1,
-        "intensityFactor": 0.6,
-        "averageSpeed": 8.921999931,
-        "maxSpeed": 14.43799973,
-        "averageBikingCadenceInRevPerMinute": 82,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 261,
-        "elevationGain": 57,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7917,7 +7018,8 @@
         "calories": 469,
         "elevationGain": 169,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7957,7 +7059,8 @@
         "calories": 221,
         "elevationGain": 151,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -7997,7 +7100,8 @@
         "calories": 1491,
         "elevationGain": 182,
         "RPE": 4,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8037,7 +7141,8 @@
         "calories": 352,
         "elevationGain": 171,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8077,7 +7182,8 @@
         "calories": 489,
         "elevationGain": 268,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8117,7 +7223,8 @@
         "calories": 523,
         "elevationGain": 260,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8157,7 +7264,8 @@
         "calories": 580,
         "elevationGain": 115,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8197,7 +7305,8 @@
         "calories": 412,
         "elevationGain": 247,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8237,7 +7346,8 @@
         "calories": 1511,
         "elevationGain": 192,
         "RPE": 4,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8277,7 +7387,8 @@
         "calories": 730,
         "elevationGain": 520,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8317,7 +7428,8 @@
         "calories": 431,
         "elevationGain": 288,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8357,7 +7469,8 @@
         "calories": 700,
         "elevationGain": 235,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8397,7 +7510,8 @@
         "calories": 3193,
         "elevationGain": 506,
         "RPE": 7,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8437,7 +7551,8 @@
         "calories": 168,
         "elevationGain": 31,
         "RPE": 1,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8477,7 +7592,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8517,7 +7633,8 @@
         "calories": 148,
         "elevationGain": 42,
         "RPE": 1,
-        "Feeling": 5
+        "Feeling": 5,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8557,7 +7674,8 @@
         "calories": 1896,
         "elevationGain": 212,
         "RPE": 5,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8597,7 +7715,8 @@
         "calories": 600,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8637,7 +7756,8 @@
         "calories": 732,
         "elevationGain": 93,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8677,7 +7797,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8717,7 +7838,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8757,7 +7879,8 @@
         "calories": 2101,
         "elevationGain": 1255,
         "RPE": 7,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8797,47 +7920,8 @@
         "calories": 750,
         "elevationGain": 105,
         "RPE": 5,
-        "Feeling": 2
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "Roy Road Cycling",
-        "actualDuration": 159.9,
-        "notes": null,
-        "date": "2025-04-26",
-        "matchStatus": "Linked (modified)",
-        "id": 18941120047,
-        "activityName": "Roy Road Cycling",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 9596.517578,
-        "distance": 72458.53125,
-        "averageHR": 158,
-        "maxHR": 187,
-        "aerobicTrainingEffect": 4.900000095,
-        "anaerobicTrainingEffect": 2,
-        "trainingEffectLabel": "LACTATE_THRESHOLD",
-        "avgPower": 144,
-        "maxPower": 680,
-        "normPower": 156,
-        "trainingStressScore": 139.3999939,
-        "intensityFactor": 0.723999977,
-        "averageSpeed": 7.551000118,
-        "maxSpeed": 11.91499996,
-        "averageBikingCadenceInRevPerMinute": 86,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 40,
-        "calories": 1640,
-        "elevationGain": 195,
-        "RPE": 5,
-        "Feeling": 4
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8877,7 +7961,8 @@
         "calories": 133,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8917,7 +8002,8 @@
         "calories": 798,
         "elevationGain": 97,
         "RPE": 6,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8957,7 +8043,8 @@
         "calories": 1672,
         "elevationGain": 196,
         "RPE": 3,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -8997,7 +8084,8 @@
         "calories": 1220,
         "elevationGain": 146,
         "RPE": 6,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9037,7 +8125,8 @@
         "calories": 709,
         "elevationGain": 94,
         "RPE": 6,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9077,7 +8166,8 @@
         "calories": 795,
         "elevationGain": 111,
         "RPE": 6,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9117,7 +8207,8 @@
         "calories": 757,
         "elevationGain": 105,
         "RPE": 4,
-        "Feeling": 4
+        "Feeling": 4,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9157,7 +8248,8 @@
         "calories": 998,
         "elevationGain": 374,
         "RPE": 5,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9197,47 +8289,8 @@
         "calories": 1447,
         "elevationGain": 196,
         "RPE": 5,
-        "Feeling": 3
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "[BIKE] Manual Ride",
-        "actualDuration": 42,
-        "notes": null,
-        "date": "2025-02-25",
-        "matchStatus": "Linked",
-        "id": 21159731348,
-        "activityName": "Manual Ride",
-        "activityType": "indoor_cycling",
-        "sportTypeId": 2,
-        "duration": 2520,
-        "distance": 18024.66,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": 7.152642857,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": 400,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9277,7 +8330,8 @@
         "calories": 400,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9317,7 +8371,8 @@
         "calories": 895,
         "elevationGain": 119,
         "RPE": 5,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9357,7 +8412,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9397,7 +8453,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9437,7 +8494,8 @@
         "calories": 350,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9477,7 +8535,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9517,7 +8576,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9557,7 +8617,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9597,7 +8658,8 @@
         "calories": 500,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9637,7 +8699,8 @@
         "calories": 1008,
         "elevationGain": 71,
         "RPE": 4,
-        "Feeling": 3
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9677,7 +8740,8 @@
         "calories": 1857,
         "elevationGain": 249,
         "RPE": 8,
-        "Feeling": 2
+        "Feeling": 2,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9717,47 +8781,8 @@
         "calories": 663,
         "elevationGain": 83,
         "RPE": 3,
-        "Feeling": 3
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Saturday",
-        "plannedWorkout": null,
-        "plannedDuration": null,
-        "actualWorkout": "Roy Road Cycling",
-        "actualDuration": 101.7,
-        "notes": null,
-        "date": "2024-10-05",
-        "matchStatus": "Linked",
-        "id": 17210557038,
-        "activityName": "Roy Road Cycling",
-        "activityType": "road_biking",
-        "sportTypeId": 2,
-        "duration": 6104.395996,
-        "distance": 43485.39063,
-        "averageHR": 154,
-        "maxHR": 191,
-        "aerobicTrainingEffect": 4.300000191,
-        "anaerobicTrainingEffect": 3.200000048,
-        "trainingEffectLabel": "LACTATE_THRESHOLD",
-        "avgPower": 150,
-        "maxPower": 849,
-        "normPower": 176,
-        "trainingStressScore": 124,
-        "intensityFactor": 0.856999993,
-        "averageSpeed": 7.124000072,
-        "maxSpeed": 16.70199966,
-        "averageBikingCadenceInRevPerMinute": 86,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": 40,
-        "calories": 1074,
-        "elevationGain": 186,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": 3,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9797,7 +8822,8 @@
         "calories": 80,
         "elevationGain": 17,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9837,7 +8863,8 @@
         "calories": 669,
         "elevationGain": 79,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9877,7 +8904,8 @@
         "calories": 694,
         "elevationGain": 76,
         "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -9917,207 +8945,8 @@
         "calories": 1941,
         "elevationGain": 542,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Monday",
-        "plannedWorkout": "[BIKE] Strength / Hill Focus",
-        "plannedDuration": 60,
-        "actualWorkout": "[BIKE] Zwift - Sweet Spot - 2 x 15 on Richmond Rollercoaster in Richmond",
-        "actualDuration": 60.3,
-        "notes": "Zone 3 / Sweet Spot (181-226W). Focus on low cadence (60-70 rpm) to build force.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Swim",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": "[SWIM] Technique Focus",
-        "plannedDuration": 30,
-        "actualWorkout": "[SWIM] Pool Swim",
-        "actualDuration": 37.9,
-        "notes": "Zone 1 (RPE 3-4). Drills: Catch & Pull. Focus on smooth rotation.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Run",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": "[RUN] Tempo / Threshold",
-        "plannedDuration": 45,
-        "actualWorkout": "[RUN] Roy - Zone 3 - Tempo - 45 minutes",
-        "actualDuration": 46.6,
-        "notes": "Zone 3 (153-161 bpm) to low Zone 4. Build durability at speed.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Thursday rsday",
-        "plannedWorkout": "[BIKE] Mid-Week Aerobic Volume",
-        "plannedDuration": 90,
-        "actualWorkout": "[BIKE] Harrogate Virtual Cycling",
-        "actualDuration": 85.7,
-        "notes": "**Winter Strategy Applied.** Full volume restored. Zone 2 (134-180W).",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Run",
-        "Status": "COMPLETED",
-        "Day": "Friday",
-        "plannedWorkout": "[RUN] Aerobic Maintenance",
-        "plannedDuration": 45,
-        "actualWorkout": "[RUN] Roy - Zone 2 - 45 Minutes",
-        "actualDuration": 51.8,
-        "notes": "Zone 2 (140-152 bpm). Easy aerobic miles.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "UNPLANNED"
     },
     {
         "actualSport": "Bike",
@@ -10128,8 +8957,8 @@
         "actualWorkout": "[BIKE] Richmond Virtual Cycling",
         "actualDuration": 120.6,
         "notes": "Zone 2 (134-180W). **Winter Cap Applied.** Practice fueling every 45m.",
-        "date": null,
-        "matchStatus": null,
+        "date": "1900-01-01",
+        "matchStatus": "Missed",
         "id": null,
         "activityName": null,
         "activityType": null,
@@ -10157,246 +8986,7 @@
         "calories": null,
         "elevationGain": null,
         "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Monday",
-        "plannedWorkout": "[BIKE] Strength / Hill Focus",
-        "plannedDuration": 60,
-        "actualWorkout": "[BIKE] Zwift - Sweet Spot - 2 x 15 on Richmond Rollercoaster in Richmond",
-        "actualDuration": 60.3,
-        "notes": "Zone 3 / Sweet Spot (181-226W). Focus on low cadence (60-70 rpm) to build force.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Swim",
-        "Status": "COMPLETED",
-        "Day": "Tuesday",
-        "plannedWorkout": "[SWIM] Technique Focus",
-        "plannedDuration": 30,
-        "actualWorkout": "[SWIM] Pool Swim",
-        "actualDuration": 37.9,
-        "notes": "Zone 1 (RPE 3-4). Drills: Catch & Pull. Focus on smooth rotation.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Run",
-        "Status": "COMPLETED",
-        "Day": "Wednesday",
-        "plannedWorkout": "[RUN] Tempo / Threshold",
-        "plannedDuration": 45,
-        "actualWorkout": "[RUN] Roy - Zone 3 - Tempo - 45 minutes",
-        "actualDuration": 46.6,
-        "notes": "Zone 3 (153-161 bpm) to low Zone 4. Build durability at speed.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "COMPLETED",
-        "Day": "Thursday rsday",
-        "plannedWorkout": "[BIKE] Mid-Week Aerobic Volume",
-        "plannedDuration": 90,
-        "actualWorkout": "[BIKE] Harrogate Virtual Cycling",
-        "actualDuration": 85.7,
-        "notes": "**Winter Strategy Applied.** Full volume restored. Zone 2 (134-180W).",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Run",
-        "Status": "COMPLETED",
-        "Day": "Friday",
-        "plannedWorkout": "[RUN] Aerobic Maintenance",
-        "plannedDuration": 45,
-        "actualWorkout": "[RUN] Roy - Zone 2 - 45 Minutes",
-        "actualDuration": 51.8,
-        "notes": "Zone 2 (140-152 bpm). Easy aerobic miles.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
-    },
-    {
-        "actualSport": "Bike",
-        "Status": "PLANNED",
-        "Day": "Saturday",
-        "plannedWorkout": "[BIKE] Long Steady Distance",
-        "plannedDuration": 120,
-        "actualWorkout": "[BIKE] Richmond Virtual Cycling",
-        "actualDuration": 120.6,
-        "notes": "Zone 2 (134-180W). **Winter Cap Applied.** Practice fueling every 45m.",
-        "date": null,
-        "matchStatus": null,
-        "id": null,
-        "activityName": null,
-        "activityType": null,
-        "sportTypeId": null,
-        "duration": null,
-        "distance": null,
-        "averageHR": null,
-        "maxHR": null,
-        "aerobicTrainingEffect": null,
-        "anaerobicTrainingEffect": null,
-        "trainingEffectLabel": null,
-        "avgPower": null,
-        "maxPower": null,
-        "normPower": null,
-        "trainingStressScore": null,
-        "intensityFactor": null,
-        "averageSpeed": null,
-        "maxSpeed": null,
-        "averageBikingCadenceInRevPerMinute": null,
-        "averageRunningCadenceInStepsPerMinute": null,
-        "avgStrideLength": null,
-        "avgVerticalOscillation": null,
-        "avgGroundContactTime": null,
-        "vO2MaxValue": null,
-        "calories": null,
-        "elevationGain": null,
-        "RPE": null,
-        "Feeling": null
+        "Feeling": null,
+        "status": "COMPLETED"
     }
 ]

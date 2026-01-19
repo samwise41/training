@@ -5,14 +5,43 @@ import { getSportColorVar } from './utils.js';
 function getSafeDate(dateInput) {
     if (!dateInput) return null;
     if (dateInput instanceof Date) return new Date(dateInput); 
-    // Handle string "YYYY-MM-DD"
     if (typeof dateInput === 'string') {
         const parts = dateInput.split('-');
         if (parts.length === 3) {
             return new Date(parts[0], parts[1] - 1, parts[2]);
         }
     }
-    return null; // Fallback
+    return null;
+}
+
+// --- Internal Helper: Normalize Sport ---
+// Updated to use actualSport, sportTypeId, and robust string matching
+function normalizeSport(item) {
+    // 1. Check strict actualSport field (User Preference)
+    if (item.actualSport) {
+        const s = String(item.actualSport).trim().toLowerCase();
+        if (s === 'bike' ) return 'Bike';
+        if (s === 'run' ) return 'Run';
+        if (s === 'swim' ) return 'Swim';
+    }
+
+    // // 2. Check Sport Type ID (Robust Fallback from JSON)
+    // // 1=Run, 2=Bike, 5=Swim (Common Garmin/Strava IDs found in your data)
+    // const typeId = parseInt(item.sportTypeId);
+    // if (!isNaN(typeId)) {
+    //     if (typeId === 2) return 'Bike';
+    //     if (typeId === 1) return 'Run';
+    //     if (typeId === 5) return 'Swim';
+    // }
+
+    // // 3. Fallback to activityType string matching
+    // const type = String(item.activityType || '').toLowerCase().trim();
+    
+    // if (type.includes('ride') || type.includes('cycling') || type.includes('bike') || type === 'virtual_ride' || type === 'road_biking') return 'Bike';
+    // if (type.includes('run') || type === 'running') return 'Run';
+    // if (type.includes('swim') || type === 'lap_swimming' || type === 'swimming') return 'Swim';
+
+    return 'Other';
 }
 
 // --- Internal Helper: Streak Calculators ---
@@ -41,13 +70,9 @@ function calculateDailyStreak(fullLogData) {
         if (!weeksMap[key]) weeksMap[key] = { failed: false };
         
         if (item.plannedDuration > 0) {
-            // SAFEGUARD: Ensure Status is a string
             const statusStr = String(item.Status || item.status || '').toUpperCase();
             const isCompleted = statusStr === 'COMPLETED' || (item.actualDuration > 0);
-            
-            if (!isCompleted) {
-                weeksMap[key].failed = true;
-            }
+            if (!isCompleted) weeksMap[key].failed = true;
         }
     });
 
@@ -58,10 +83,8 @@ function calculateDailyStreak(fullLogData) {
     for (let i = 0; i < 260; i++) { 
         const key = checkDate.toISOString().split('T')[0]; 
         const weekData = weeksMap[key];
-        
         if (!weekData) break; 
         if (weekData.failed) break; 
-        
         streak++; 
         checkDate.setDate(checkDate.getDate() - 7);
     }
@@ -103,9 +126,7 @@ function calculateVolumeStreak(fullLogData) {
     for (let i = 0; i < 260; i++) { 
         const key = checkDate.toISOString().split('T')[0]; 
         const stats = weeksMap[key];
-        
         if (!stats) break; 
-        
         if (stats.planned === 0) {
             streak++; 
         } else { 
@@ -145,17 +166,6 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
     let expectedSoFar = 0; 
     const totalDailyMarkers = {};
 
-    // Helper: Normalize sport names from JSON
-    // FIX: Explicitly cast to String() to prevent "type.toLowerCase is not a function"
-    const normalizeSport = (type) => {
-        if (!type) return 'Other';
-        const t = String(type).toLowerCase(); 
-        if (t === 'bike' || t === 'virtual_ride' || t === 'road_biking' || t === 'indoor_cycling') return 'Bike';
-        if (t === 'run' || t === 'running') return 'Run';
-        if (t === 'swim' || t === 'swimming' || t === 'lap_swimming') return 'Swim';
-        return 'Other';
-    };
-
     const now = new Date(); 
 
     // 3. Process PLANNED Data
@@ -169,13 +179,13 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
                 const dateKey = d.toISOString().split('T')[0];
                 
                 totalPlanned += planDur;
-                
                 if (d < now) expectedSoFar += planDur;
 
                 if (!totalDailyMarkers[dateKey]) totalDailyMarkers[dateKey] = 0;
                 totalDailyMarkers[dateKey] += planDur;
 
-                const sport = normalizeSport(w.activityType);
+                // For planned, we usually rely on 'activityType' which is standard
+                const sport = normalizeSport({ activityType: w.activityType });
                 if (sportStats[sport]) {
                     sportStats[sport].planned += planDur;
                     if (!sportStats[sport].dailyMarkers[dateKey]) sportStats[sport].dailyMarkers[dateKey] = 0;
@@ -197,8 +207,8 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
                 if (actDur > 0) {
                     totalActual += actDur;
                     
-                    const sportRaw = item.actualSport || item.activityType || 'Other';
-                    const sport = normalizeSport(sportRaw);
+                    // Improved Normalization Logic
+                    const sport = normalizeSport(item);
 
                     if (sportStats[sport]) {
                         sportStats[sport].actual += actDur;

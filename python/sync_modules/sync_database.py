@@ -23,6 +23,12 @@ def normalize_sport(val, sport_type_id=None):
     """
     Returns 'Run', 'Bike', or 'Swim' based on input.
     Input can be a string ('Run') or a Garmin Dict ({'typeKey': 'virtual_ride'...}).
+    
+    MAPPING:
+    1   = Run
+    2   = Bike
+    5   = Swim
+    255 = Swim  <-- Updated per instruction
     """
     # 1. Trust SportTypeId if present (Integer)
     if sport_type_id is not None:
@@ -31,6 +37,7 @@ def normalize_sport(val, sport_type_id=None):
             if sid == 1: return 'Run'
             if sid == 2: return 'Bike'
             if sid == 5: return 'Swim'
+            if sid == 255: return 'Swim' # Mapped to Swim
         except: pass
 
     # 2. Check value type
@@ -128,18 +135,15 @@ def main():
 
     # --- BUILD LOG MAP & CLAIMED IDs ---
     log_map = {}
-    existing_ids = set() # The Gatekeeper Set
+    existing_ids = set() 
 
     for row in master_log:
-        # Build Map by Date|Sport
         key = get_record_key(row)
         log_map[key] = row
         
-        # Populate Claimed IDs
         r_id = row.get('id')
         if r_id:
             str_id = str(r_id)
-            # Handle concatenated group IDs or single IDs
             if ',' in str_id:
                 for sub in str_id.split(','):
                     if sub.strip().isdigit():
@@ -174,16 +178,27 @@ def main():
     garmin_grouped = {}
     for g in garmin_data:
         g_date = g.get('startTimeLocal', '')[:10]
-        g_sport = detect_garmin_sport(g)
-        if g_sport == 'Other': continue
         if g_date > today_str: continue
+
+        # --- FIX: ROBUST SPORT FILTERING ---
+        # 1. Check ID against Config List (1, 2, 5, 255)
+        sid = g.get('sportTypeId')
+        is_allowed_id = sid in config.ALLOWED_SPORT_TYPES
+        
+        # 2. Check String (Run, Bike, Swim)
+        g_sport = detect_garmin_sport(g) # This now returns 'Swim' for 255
+        is_allowed_str = g_sport in ['Run', 'Bike', 'Swim']
+        
+        # 3. Filter: Only continue if one condition is met
+        if not (is_allowed_id or is_allowed_str):
+            continue
+        # -----------------------------------
 
         k = f"{g_date}|{g_sport}"
         if k not in garmin_grouped: garmin_grouped[k] = []
         garmin_grouped[k].append(g)
         
     for key, g_activities in garmin_grouped.items():
-        # Bundle Logic
         if len(g_activities) > 1:
             composite = bundle_activities(g_activities)
             is_group = True
@@ -192,8 +207,6 @@ def main():
             is_group = False
 
         # --- GATEKEEPER CHECK ---
-        # Check if this ID is already claimed in the DB
-        # If grouped, check if ANY of the IDs are claimed
         current_id_str = str(composite.get('activityId'))
         ids_to_check = current_id_str.split(',') if ',' in current_id_str else [current_id_str]
         
@@ -204,11 +217,9 @@ def main():
                 break
         
         if is_claimed:
-            # STOP: Do not try to match, do not try to add.
             continue
         # -------------------------
 
-        # Hydrate Telemetry
         try:
             dur_sec = safe_get(composite, 'duration', 0) or 0
             act_dur_min = dur_sec / 60.0
@@ -247,7 +258,6 @@ def main():
             "Feeling": composite.get('Feeling')
         }
 
-        # Attempt Match on Date|Sport
         if key in log_map:
             # LINKED
             log_map[key].update(telemetry)
@@ -271,7 +281,6 @@ def main():
             new_row.update(telemetry)
             log_map[key] = new_row
         
-        # Add to existing_ids to handle duplicates within the same run (just in case)
         for check_id in ids_to_check:
             existing_ids.add(check_id.strip())
 

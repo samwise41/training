@@ -132,7 +132,11 @@ def main():
     master_log = load_json(config.MASTER_DB_JSON)
     
     today_str = datetime.now().strftime('%Y-%m-%d')
-
+    
+    from datetime import timedelta
+    cutoff_date = (datetime.now() - timedelta(days=14)).strftime('%Y-%m-%d')
+    print(f"   -> Syncing activities from {cutoff_date} to {today_str}...")
+    
     # --- BUILD LOG MAP & CLAIMED IDs ---
     log_map = {}
     existing_ids = set() 
@@ -178,7 +182,8 @@ def main():
     garmin_grouped = {}
     for g in garmin_data:
         g_date = g.get('startTimeLocal', '')[:10]
-        if g_date > today_str: continue
+        if g_date > today_str or g_date < cutoff_date:
+            continue
 
         # --- FIX: ROBUST SPORT FILTERING ---
         # 1. Check ID against Config List (1, 2, 5, 255)

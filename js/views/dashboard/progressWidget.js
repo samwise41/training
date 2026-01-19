@@ -14,46 +14,137 @@ function getSafeDate(dateInput) {
     return null;
 }
 
-// --- Internal Helper: "Shotgun" Sport Finder ---
-// Checks ALL common field names to find the sport
+// --- Internal Helper: Universal Sport Finder ---
+// Checks multiple possible field names to guarantee a match
 function getSportCategory(item) {
-    // 1. Log keys for the very first item to debug field names
-    if (window._debug_keys_logged !== true) {
-        console.log("🔍 DATA STRUCTURE KEYS:", Object.keys(item));
-        window._debug_keys_logged = true;
-    }
-
-    // 2. check all possible candidates in order of preference
     const candidates = [
-        item.actualSport,      // Your requested field
-        item.actualType,       // Common Parser output
-        item.activityType,     // Common JSON field
-        item.sport,            // Strava default
+        item.actualSport,      // Primary (from sync_database.py)
+        item.actualType,       // Legacy Parser
+        item.activityType,     // Common JSON
+        item.sport,            // Strava
         item.type              // Fallback
     ];
 
-    // 3. Test each candidate
     for (const raw of candidates) {
         if (!raw) continue;
         const s = String(raw).trim().toLowerCase();
-        if (s === 'bike' || s === 'cycling' || s.includes('ride')) return 'Bike';
-        if (s === 'run' || s === 'running') return 'Run';
-        if (s === 'swim' || s === 'swimming') return 'Swim';
+        if (s === 'bike' ) return 'Bike';
+        if (s === 'run' ) return 'Run';
+        if (s === 'swim' ) return 'Swim';
     }
-    
     return 'Other';
+}
+
+// --- Internal Helper: Streak Logic ---
+function calculateDailyStreak(fullLogData) {
+    if (!fullLogData || fullLogData.length === 0) return 0;
+
+    // 1. Setup Week Boundaries
+    const today = new Date(); 
+    today.setHours(0,0,0,0);
+    const dayOfWeek = today.getDay(); 
+    const currentWeekStart = new Date(today); 
+    currentWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+    
+    // 2. Group Data by Week
+    const weeksMap = {};
+    fullLogData.forEach(item => {
+        const d = getSafeDate(item.date);
+        if (!d) return;
+        
+        const day = d.getDay(); 
+        const weekStart = new Date(d); 
+        weekStart.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+        weekStart.setHours(0,0,0,0);
+        
+        // Ignore current incomplete week
+        if (weekStart >= currentWeekStart) return; 
+        
+        const key = weekStart.toISOString().split('T')[0];
+        if (!weeksMap[key]) weeksMap[key] = { failed: false };
+        
+        if (item.plannedDuration > 0) {
+            const statusStr = String(item.Status || item.status || '').toUpperCase();
+            const isCompleted = statusStr === 'COMPLETED' || (item.actualDuration > 0);
+            if (!isCompleted) weeksMap[key].failed = true;
+        }
+    });
+
+    // 3. Count Backwards
+    let streak = 0; 
+    let checkDate = new Date(currentWeekStart); 
+    checkDate.setDate(checkDate.getDate() - 7); 
+
+    for (let i = 0; i < 260; i++) { // Check up to 5 years
+        const key = checkDate.toISOString().split('T')[0]; 
+        const weekData = weeksMap[key];
+        
+        // If no data exists for a week, break the streak
+        if (!weekData) break; 
+        if (weekData.failed) break; 
+        
+        streak++; 
+        checkDate.setDate(checkDate.getDate() - 7);
+    }
+    return streak;
+}
+
+function calculateVolumeStreak(fullLogData) {
+    if (!fullLogData || fullLogData.length === 0) return 0;
+
+    const today = new Date(); 
+    today.setHours(0,0,0,0);
+    const dayOfWeek = today.getDay(); 
+    const currentWeekStart = new Date(today); 
+    currentWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+
+    const weeksMap = {};
+    fullLogData.forEach(item => {
+        const d = getSafeDate(item.date);
+        if (!d) return;
+        
+        const day = d.getDay(); 
+        const weekStart = new Date(d); 
+        weekStart.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+        weekStart.setHours(0,0,0,0);
+        
+        if (weekStart >= currentWeekStart) return;
+
+        const key = weekStart.toISOString().split('T')[0];
+        if (!weeksMap[key]) weeksMap[key] = { planned: 0, actual: 0 };
+        
+        weeksMap[key].planned += (item.plannedDuration || 0);
+        weeksMap[key].actual += (item.actualDuration || 0);
+    });
+
+    let streak = 0; 
+    let checkDate = new Date(currentWeekStart); 
+    checkDate.setDate(checkDate.getDate() - 7); 
+
+    for (let i = 0; i < 260; i++) { 
+        const key = checkDate.toISOString().split('T')[0]; 
+        const stats = weeksMap[key];
+        
+        if (!stats) break; 
+        
+        if (stats.planned === 0) {
+            streak++; // Recovery weeks count
+        } else { 
+            const ratio = stats.actual / stats.planned; 
+            if (ratio >= 0.95) streak++; else break; 
+        }
+        checkDate.setDate(checkDate.getDate() - 7);
+    }
+    return streak;
 }
 
 // --- Main Component ---
 export function renderProgressWidget(plannedWorkouts, fullLogData) {
-    window._debug_keys_logged = false; // Reset debug trigger
-
-    // 1. Define Current Week
+    // 1. Define Current Week (Monday - Sunday)
     const today = new Date();
     today.setHours(0,0,0,0);
-    const currentDay = today.getDay(); // 0=Sun, 1=Mon
+    const currentDay = today.getDay(); 
     const distToMon = currentDay === 0 ? 6 : currentDay - 1;
-    
     const monday = new Date(today);
     monday.setDate(today.getDate() - distToMon);
     monday.setHours(0,0,0,0);
@@ -72,7 +163,9 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
     
     let totalPlanned = 0; 
     let totalActual = 0; 
+    let expectedSoFar = 0; 
     const totalDailyMarkers = {};
+    const now = new Date(); 
 
     // 3. Process ACTUAL Data
     if (fullLogData) {
@@ -82,13 +175,7 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
             
             if (d && d >= monday && d <= sunday && actDur > 0) {
                 totalActual += actDur;
-                
-                // USE THE NEW UNIVERSAL FINDER
                 const sport = getSportCategory(item);
-                
-                // Debug specifically for this week's items
-                console.log(`✅ Activity Found [${item.date}]: Scanned fields -> Classified as: ${sport}`);
-
                 if (sportStats[sport]) {
                     sportStats[sport].actual += actDur;
                 } else {
@@ -106,11 +193,13 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
             
             if (d && d >= monday && d <= sunday) {
                 totalPlanned += planDur;
+                if (d < now) expectedSoFar += planDur;
+
                 const dateKey = d.toISOString().split('T')[0];
                 if (!totalDailyMarkers[dateKey]) totalDailyMarkers[dateKey] = 0;
                 totalDailyMarkers[dateKey] += planDur;
 
-                // For planned, we usually just look at activityType
+                // Simple check for planned type
                 let sport = 'Other';
                 const s = String(w.activityType || '').toLowerCase();
                 if (s.includes('bike') || s.includes('ride')) sport = 'Bike';
@@ -126,7 +215,34 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
         });
     }
 
-    // 5. HTML Generators
+    // 5. Calculate Metrics
+    const pacingDiff = totalActual - expectedSoFar; 
+    let pacingLabel = "On Track"; 
+    let pacingColor = "text-slate-400"; 
+    let pacingIcon = "fa-check";
+    
+    if (pacingDiff >= 15) { 
+        pacingLabel = `${Math.round(pacingDiff)}m Ahead`; 
+        pacingColor = "text-emerald-400"; 
+        pacingIcon = "fa-arrow-trend-up"; 
+    } else if (pacingDiff <= -15) { 
+        pacingLabel = `${Math.abs(Math.round(pacingDiff))}m Behind`; 
+        pacingColor = "text-orange-400"; 
+        pacingIcon = "fa-triangle-exclamation"; 
+    }
+    
+    const totalActualHrs = (totalActual / 60).toFixed(1); 
+    const expectedHrs = (expectedSoFar / 60).toFixed(1);
+    const dailyStreak = calculateDailyStreak(fullLogData);
+    const volumeStreak = calculateVolumeStreak(fullLogData);
+
+    const getStreakColor = (val) => {
+        if (val >= 8) return "text-red-500";
+        if (val >= 3) return "text-orange-400";
+        return "text-slate-500";
+    };
+
+    // 6. HTML Generation
     const generateBarHtml = (label, iconClass, actual, planned, dailyMap, isMain = false, sportType = 'All') => {
         const rawPct = planned > 0 ? Math.round((actual / planned) * 100) : 0; 
         const displayPct = rawPct; 
@@ -154,7 +270,7 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
         const pctColor = displayPct > 100 ? 'text-emerald-400' : 'text-blue-400';
         const barBgStyle = `style="width: ${barWidth}%; background-color: ${getSportColorVar(sportType)}"`;
 
-        // HIDE EMPTY BARS: Only show if there is plan OR actual
+        // Hide empty secondary bars
         if (!isMain && planned === 0 && actual === 0) return '';
 
         return `
@@ -178,12 +294,6 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
             </div>
         </div>`;
     };
-    
-    // Placeholder Logic for Pacing/Streaks
-    // (Restored simple logic for display)
-    const pacingDiff = totalActual - 0; // expectedSoFar placeholder
-    const dailyStreak = 0; 
-    const volumeStreak = 0;
 
     return `
     <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-5 mb-8 flex flex-col md:flex-row items-start gap-6 shadow-sm">
@@ -195,11 +305,29 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
         </div>
         
         <div class="w-full md:w-auto md:border-l md:border-slate-700 md:pl-6 flex flex-row md:flex-col justify-between md:justify-center items-center md:items-start gap-6 md:gap-4 self-center">
-             <div>
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Stats</span>
+            <div>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Pacing</span>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid ${pacingIcon} ${pacingColor}"></i>
+                    <span class="text-lg font-bold ${pacingColor}">${pacingLabel}</span>
+                </div>
                 <div class="text-right md:text-left flex flex-col items-end md:items-start mt-1">
-                    <span class="text-[10px] text-slate-300 font-mono">Act: ${Math.round(totalActual)}m</span>
-                    <span class="text-[10px] text-slate-300 font-mono">Plan: ${Math.round(totalPlanned)}m</span>
+                    <span class="text-[10px] text-slate-300 font-mono">Act: ${Math.round(totalActual)}m <span class="text-slate-500">(${totalActualHrs}h)</span></span>
+                    <span class="text-[10px] text-slate-300 font-mono">Tgt: ${Math.round(expectedSoFar)}m <span class="text-slate-500">(${expectedHrs}h)</span></span>
+                </div>
+            </div>
+            <div>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Daily Streak</span>
+                <div class="flex items-center gap-2" title="Consecutive weeks where every single workout was Completed">
+                    <i class="fa-solid fa-calendar-day ${getStreakColor(dailyStreak)}"></i>
+                    <span class="text-lg font-bold ${getStreakColor(dailyStreak)}">${dailyStreak} Wks</span>
+                </div>
+            </div>
+            <div>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Volume Streak</span>
+                <div class="flex items-center gap-2" title="Consecutive weeks where total volume was >95%">
+                    <i class="fa-solid fa-fire ${getStreakColor(volumeStreak)}"></i>
+                    <span class="text-lg font-bold ${getStreakColor(volumeStreak)}">${volumeStreak} Wks</span>
                 </div>
             </div>
         </div>

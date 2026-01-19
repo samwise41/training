@@ -25,21 +25,21 @@ function normalizeSport(item) {
         if (s === 'swim' ) return 'Swim';
     }
 
-    // // 2. Check Sport Type ID (Robust Fallback from JSON)
-    // // 1=Run, 2=Bike, 5=Swim (Common Garmin/Strava IDs found in your data)
-    // const typeId = parseInt(item.sportTypeId);
-    // if (!isNaN(typeId)) {
-    //     if (typeId === 2) return 'Bike';
-    //     if (typeId === 1) return 'Run';
-    //     if (typeId === 5) return 'Swim';
-    // }
+    // 2. Check Sport Type ID (Robust Fallback from JSON)
+    // 1=Run, 2=Bike, 5=Swim (Common Garmin/Strava IDs found in your data)
+    const typeId = parseInt(item.sportTypeId);
+    if (!isNaN(typeId)) {
+        if (typeId === 2) return 'Bike';
+        if (typeId === 1) return 'Run';
+        if (typeId === 5) return 'Swim';
+    }
 
-    // // 3. Fallback to activityType string matching
-    // const type = String(item.activityType || '').toLowerCase().trim();
+    // 3. Fallback to activityType string matching
+    const type = String(item.activityType || '').toLowerCase().trim();
     
-    // if (type.includes('ride') || type.includes('cycling') || type.includes('bike') || type === 'virtual_ride' || type === 'road_biking') return 'Bike';
-    // if (type.includes('run') || type === 'running') return 'Run';
-    // if (type.includes('swim') || type === 'lap_swimming' || type === 'swimming') return 'Swim';
+    if (type.includes('ride') || type.includes('cycling') || type.includes('bike') || type === 'virtual_ride' || type === 'road_biking') return 'Bike';
+    if (type.includes('run') || type === 'running') return 'Run';
+    if (type.includes('swim') || type === 'lap_swimming' || type === 'swimming') return 'Swim';
 
     return 'Other';
 }

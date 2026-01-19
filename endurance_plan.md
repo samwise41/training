@@ -186,7 +186,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| COMPLETED | Monday | [BIKE] Strength / Hill Focus | 60 mins | [BIKE] Zwift - Sweet Spot - 2 x 15 on Jurassic Coast in Watopia | 60.2 | **File:** `Sweet_Spot___2_x_15.zwo`. **Focus:** Perform intervals at **Low Cadence (60-70 RPM)** to fix Torque Efficiency (1.97). Grind it out. | 2026-01-19 |
+| PLANNED | Monday | [BIKE] Strength / Hill Focus | 60 mins |  |  | **File:** `Sweet_Spot___2_x_15.zwo`. **Focus:** Perform intervals at **Low Cadence (60-70 RPM)** to fix Torque Efficiency (1.97). Grind it out. | 2026-01-19 |
 | PLANNED | Tuesday | [SWIM] Technique Focus | 40 mins | | | **Focus:** Smooth rotation. Swim Efficiency is improving (0.50) but needs maintenance. Use Pull Buoy if legs are tired. | 2026-01-20 |
 | PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Run Durability. Include 4-6 x 20sec "Strides" at the end. **Target:** High Cadence (175+ spm) to lower Ground Contact Time. | 2026-01-21 |
 | PLANNED | Thursday | [BIKE] Mid-Week Aerobic Volume | 90 mins | | | **File:** `Zone_2___71___90_min_.zwo`. **Winter Strategy:** Volume re-allocated here. Strict Zone 2 (134-180W). | 2026-01-22 |

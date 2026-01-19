@@ -8,70 +8,95 @@ function calculateDailyStreak(fullLogData) {
         return 0;
     }
 
-    const today = new Date(); today.setHours(0,0,0,0);
+    // 1. Setup Current Week Boundary (Start of this week, Monday)
+    const today = new Date(); 
+    today.setHours(0,0,0,0);
     const dayOfWeek = today.getDay(); 
-    // Align to Monday start for consistency
     const currentWeekStart = new Date(today); 
-    currentWeekStart.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1));
+    currentWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
     
+    // 2. Group Data by Week
     const weeksMap = {};
     fullLogData.forEach(item => {
         if (!item.date) return;
-        const d = new Date(item.date); d.setHours(0,0,0,0);
+        
+        // Fix: Parse YYYY-MM-DD string to local date
+        const parts = item.date.split('-');
+        const d = new Date(parts[0], parts[1] - 1, parts[2]); 
+        
         const day = d.getDay(); 
         const weekStart = new Date(d); 
-        weekStart.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
+        weekStart.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+        weekStart.setHours(0,0,0,0);
         
+        // Ignore the current partial week for streak calculation
         if (weekStart >= currentWeekStart) return; 
         
         const key = weekStart.toISOString().split('T')[0];
         if (!weeksMap[key]) weeksMap[key] = { failed: false };
         
+        // Check for failures
         if (item.plannedDuration > 0) {
-            const statusStr = (item.status || '').toUpperCase();
-            const isCompleted = item.completed === true || statusStr === 'COMPLETED';
-            const hasDuration = (item.actualDuration || 0) > 0;
-            if (!isCompleted && !hasDuration) weeksMap[key].failed = true;
+            // Check status (handle both JSON "Status" and older formats if mixed)
+            const statusStr = (item.Status || item.status || '').toUpperCase();
+            
+            // Logic: It counts as failed if it wasn't completed AND had no duration
+            // You might want to tighten this to just checking "MISSED" or "SKIPPED" depending on your JSON
+            const isCompleted = statusStr === 'COMPLETED' || (item.actualDuration > 0);
+            
+            if (!isCompleted) {
+                weeksMap[key].failed = true;
+            }
         }
     });
 
+    // 3. Count Backwards
     let streak = 0; 
     let checkDate = new Date(currentWeekStart); 
-    checkDate.setDate(checkDate.getDate() - 7); 
+    checkDate.setDate(checkDate.getDate() - 7); // Start checking from last week
 
-    for (let i = 0; i < 260; i++) { 
+    for (let i = 0; i < 260; i++) { // Check up to 5 years back
         const key = checkDate.toISOString().split('T')[0]; 
         const weekData = weeksMap[key];
+        
+        // If we have no data for a week, break the streak (assuming you log every week)
+        // OR: If the week exists but contains a failure, break.
         if (!weekData) break; 
         if (weekData.failed) break; 
+        
         streak++; 
         checkDate.setDate(checkDate.getDate() - 7);
     }
     
-    // DEBUG LOG
-    console.log(`🔥 Daily Streak Calculated: ${streak} weeks`);
     return streak;
 }
 
 function calculateVolumeStreak(fullLogData) {
     if (!fullLogData || fullLogData.length === 0) return 0;
-    const today = new Date(); today.setHours(0,0,0,0);
+
+    const today = new Date(); 
+    today.setHours(0,0,0,0);
     const dayOfWeek = today.getDay(); 
     const currentWeekStart = new Date(today); 
-    currentWeekStart.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1));
+    currentWeekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
 
     const weeksMap = {};
     fullLogData.forEach(item => {
         if (!item.date) return;
-        const d = new Date(item.date); d.setHours(0,0,0,0);
+        
+        const parts = item.date.split('-');
+        const d = new Date(parts[0], parts[1] - 1, parts[2]); 
+        
         const day = d.getDay(); 
         const weekStart = new Date(d); 
-        weekStart.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
+        weekStart.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+        weekStart.setHours(0,0,0,0);
         
         if (weekStart >= currentWeekStart) return;
 
         const key = weekStart.toISOString().split('T')[0];
         if (!weeksMap[key]) weeksMap[key] = { planned: 0, actual: 0 };
+        
         weeksMap[key].planned += (item.plannedDuration || 0);
         weeksMap[key].actual += (item.actualDuration || 0);
     });
@@ -83,9 +108,11 @@ function calculateVolumeStreak(fullLogData) {
     for (let i = 0; i < 260; i++) { 
         const key = checkDate.toISOString().split('T')[0]; 
         const stats = weeksMap[key];
-        if (!stats) break;
+        
+        if (!stats) break; // Gap in logs
+        
         if (stats.planned === 0) {
-            streak++; 
+            streak++; // Recover weeks count as streaks
         } else { 
             const ratio = stats.actual / stats.planned; 
             if (ratio >= 0.95) streak++; else break; 
@@ -93,29 +120,26 @@ function calculateVolumeStreak(fullLogData) {
         checkDate.setDate(checkDate.getDate() - 7);
     }
 
-    // DEBUG LOG
-    console.log(`🔥 Volume Streak Calculated: ${streak} weeks`);
     return streak;
 }
 
 // --- Main Component ---
-export function renderProgressWidget(workouts, fullLogData) {
+export function renderProgressWidget(plannedWorkouts, fullLogData) {
     console.group("🚀 Progress Widget Debug Start");
-    console.log("Input Workouts:", workouts?.length || 0);
-    console.log("Input Log Data:", fullLogData?.length || 0);
+    console.log("Inputs:", { planned: plannedWorkouts?.length, actuals: fullLogData?.length });
 
     // 1. Strictly Define Current Week (Monday - Sunday)
     const today = new Date();
     today.setHours(0,0,0,0);
-    const currentDay = today.getDay(); 
+    const currentDay = today.getDay(); // 0 = Sun, 1 = Mon
     
-    // Calculate Monday
+    // Calculate Monday (Start of Week)
     const distToMon = currentDay === 0 ? 6 : currentDay - 1;
     const monday = new Date(today);
     monday.setDate(today.getDate() - distToMon);
     monday.setHours(0,0,0,0);
 
-    // Calculate Sunday
+    // Calculate Sunday (End of Week)
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
     sunday.setHours(23,59,59,999);
@@ -135,56 +159,54 @@ export function renderProgressWidget(workouts, fullLogData) {
     let expectedSoFar = 0; 
     const totalDailyMarkers = {};
 
-    // --- STRICT DETECTION (CASE INSENSITIVE) ---
-    const detectSport = (txt) => {
-        if (!txt) return 'Other';
-        const t = txt.toUpperCase();
-
-        if (t.includes('[RUN]')) return 'Run';
-        if (t.includes('[BIKE]')) return 'Bike';
-        if (t.includes('[SWIM]')) return 'Swim';
-        
+    // Helper: Normalize sport names from JSON
+    const normalizeSport = (type) => {
+        if (!type) return 'Other';
+        const t = type.toLowerCase();
+        if (t === 'bike' || t === 'virtual_ride' || t === 'road_biking' || t === 'indoor_cycling') return 'Bike';
+        if (t === 'run' || t === 'running') return 'Run';
+        if (t === 'swim' || t === 'swimming' || t === 'lap_swimming') return 'Swim';
         return 'Other';
     };
 
     const now = new Date(); 
 
-    // 3. Process PLANNED Data
-    let plannedCount = 0;
-    if (workouts) {
-        workouts.forEach(w => {
-            const d = new Date(w.date);
+    // 3. Process PLANNED Data (from planned.json)
+    if (plannedWorkouts) {
+        plannedWorkouts.forEach(w => {
+            // Parse "YYYY-MM-DD" safely
+            const parts = w.date.split('-');
+            const d = new Date(parts[0], parts[1] - 1, parts[2]); 
+            
             if (d >= monday && d <= sunday) {
-                plannedCount++;
                 const planDur = w.plannedDuration || 0;
-                const dateKey = w.date.toISOString().split('T')[0];
+                const dateKey = w.date; // Use string directly as key
                 
                 totalPlanned += planDur;
-                if (w.date < now) expectedSoFar += planDur;
+                
+                // If the workout date is in the past (or today), add to "expectedSoFar"
+                // Note: This adds the full duration if today is the day.
+                if (d < now) expectedSoFar += planDur;
 
                 if (!totalDailyMarkers[dateKey]) totalDailyMarkers[dateKey] = 0;
                 totalDailyMarkers[dateKey] += planDur;
 
-                // Check Plan Name for Tags (or use type if tags missing in plan)
-                const planSport = detectSport(w.planName);
-                if (sportStats[planSport]) {
-                    sportStats[planSport].planned += planDur;
-                    if (!sportStats[planSport].dailyMarkers[dateKey]) sportStats[planSport].dailyMarkers[dateKey] = 0;
-                    sportStats[planSport].dailyMarkers[dateKey] += planDur;
+                const sport = normalizeSport(w.activityType);
+                if (sportStats[sport]) {
+                    sportStats[sport].planned += planDur;
+                    if (!sportStats[sport].dailyMarkers[dateKey]) sportStats[sport].dailyMarkers[dateKey] = 0;
+                    sportStats[sport].dailyMarkers[dateKey] += planDur;
                 }
             }
         });
     }
-    console.log(`📝 Planned Workouts found in window: ${plannedCount}. Total Minutes: ${totalPlanned}`);
 
-    // 4. Process ACTUAL Data
-    const debugActuals = [];
-    const debugSkipped = [];
-
+    // 4. Process ACTUAL Data (from training_log.json)
     if (fullLogData) {
         fullLogData.forEach(item => {
             if (!item.date) return;
-            const d = new Date(item.date);
+            const parts = item.date.split('-');
+            const d = new Date(parts[0], parts[1] - 1, parts[2]); 
             
             // Strict Filter: Current Week Only
             if (d >= monday && d <= sunday) {
@@ -193,37 +215,24 @@ export function renderProgressWidget(workouts, fullLogData) {
                 if (actDur > 0) {
                     totalActual += actDur;
                     
-                    const nameToCheck = item.actualName || "";
-                    const actSport = detectSport(nameToCheck);
-                    
-                    debugActuals.push({ date: item.date, name: nameToCheck, dur: actDur, detected: actSport });
+                    // Use actualSport from log if available, otherwise guess or use activityType
+                    const sportRaw = item.actualSport || item.activityType || 'Other';
+                    const sport = normalizeSport(sportRaw);
 
-                    if (sportStats[actSport]) {
-                        sportStats[actSport].actual += actDur;
+                    if (sportStats[sport]) {
+                        sportStats[sport].actual += actDur;
                     } else {
                         sportStats.Other.actual += actDur;
                     }
-                }
-            } else {
-                // Keep track of a few skipped items just to check logic
-                if (debugSkipped.length < 5) {
-                    debugSkipped.push({ date: item.date, reason: "Outside Date Range" });
                 }
             }
         });
     }
 
-    console.log("✅ Captured Actuals:", debugActuals);
-    if (debugActuals.length === 0) {
-        console.warn("⚠️ No actuals captured! Sample skipped items:", debugSkipped);
-        if (fullLogData && fullLogData.length > 0) {
-            console.log("Sample First Log Date:", fullLogData[0].date);
-        }
-    }
+    console.log(`📊 Totals -> Planned: ${totalPlanned}m, Actual: ${totalActual}m`);
+    console.groupEnd();
 
-    console.groupEnd(); // End Debug Group
-
-    // 5. HTML Generation
+    // 5. HTML Generation Helpers
     const generateBarHtml = (label, iconClass, actual, planned, dailyMap, isMain = false, sportType = 'All') => {
         const rawPct = planned > 0 ? Math.round((actual / planned) * 100) : 0; 
         const displayPct = rawPct; 
@@ -231,6 +240,7 @@ export function renderProgressWidget(workouts, fullLogData) {
         const actualHrs = (actual / 60).toFixed(1); 
         const plannedHrs = (planned / 60).toFixed(1);
         
+        // Markers logic (little ticks for daily workouts)
         let markersHtml = ''; 
         let runningTotal = 0; 
         const sortedDays = Object.keys(dailyMap).sort();

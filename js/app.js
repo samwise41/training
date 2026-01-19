@@ -15,15 +15,15 @@
     };
 
     // --- 1. IMPORT MODULES ---
-    const parserMod = await safeImport('./parser.js', 'Parser');
-    const trendsMod = await safeImport('./views/trends/index.js', 'Trends');
-    const gearMod = await safeImport('./views/gear/index.js', 'Gear');
-    const zonesMod = await safeImport('./views/zones/index.js', 'Zones');
-    const ftpMod = await safeImport('./views/ftp/index.js', 'FTP'); 
-    const roadmapMod = await safeImport('./views/roadmap/index.js', 'Roadmap');
+    #const parserMod = await safeImport('./parser.js', 'Parser');
+    #const trendsMod = await safeImport('./views/trends/index.js', 'Trends');
+    #const gearMod = await safeImport('./views/gear/index.js', 'Gear');
+    #const zonesMod = await safeImport('./views/zones/index.js', 'Zones');
+    #const ftpMod = await safeImport('./views/ftp/index.js', 'FTP'); 
+    #const roadmapMod = await safeImport('./views/roadmap/index.js', 'Roadmap');
     const dashMod = await safeImport('./views/dashboard/index.js', 'Dashboard');
-    const readinessMod = await safeImport('./views/readiness/index.js', 'Readiness');
-    const metricsMod = await safeImport('./views/metrics/index.js', 'Metrics');
+    #const readinessMod = await safeImport('./views/readiness/index.js', 'Readiness');
+    #const metricsMod = await safeImport('./views/metrics/index.js', 'Metrics');
 
     // --- 2. DESTRUCTURE FUNCTIONS ---\n    const Parser = parserMod?.Parser || { parseTrainingLog: () => [], getSection: () => "" };
     const { renderTrends, updateDurationAnalysis } = trendsMod || { renderTrends: () => ({html: ''}) };

@@ -15,15 +15,15 @@
     };
 
     // --- 1. IMPORT MODULES ---
-    #const parserMod = await safeImport('./parser.js', 'Parser');
-    #const trendsMod = await safeImport('./views/trends/index.js', 'Trends');
-    #const gearMod = await safeImport('./views/gear/index.js', 'Gear');
-    #const zonesMod = await safeImport('./views/zones/index.js', 'Zones');
-    #const ftpMod = await safeImport('./views/ftp/index.js', 'FTP'); 
-    #const roadmapMod = await safeImport('./views/roadmap/index.js', 'Roadmap');
+    const parserMod = await safeImport('./parser.js', 'Parser');
+    const trendsMod = await safeImport('./views/trends/index.js', 'Trends');
+    const gearMod = await safeImport('./views/gear/index.js', 'Gear');
+    const zonesMod = await safeImport('./views/zones/index.js', 'Zones');
+    const ftpMod = await safeImport('./views/ftp/index.js', 'FTP'); 
+    const roadmapMod = await safeImport('./views/roadmap/index.js', 'Roadmap');
     const dashMod = await safeImport('./views/dashboard/index.js', 'Dashboard');
-    #const readinessMod = await safeImport('./views/readiness/index.js', 'Readiness');
-    #const metricsMod = await safeImport('./views/metrics/index.js', 'Metrics');
+    const readinessMod = await safeImport('./views/readiness/index.js', 'Readiness');
+    const metricsMod = await safeImport('./views/metrics/index.js', 'Metrics');
 
     // --- 2. DESTRUCTURE FUNCTIONS ---\n    const Parser = parserMod?.Parser || { parseTrainingLog: () => [], getSection: () => "" };
     const { renderTrends, updateDurationAnalysis } = trendsMod || { renderTrends: () => ({html: ''}) };
@@ -137,62 +137,84 @@
             // Can add global stats updates here if needed
         },
 
-        renderCurrentView(viewName) {
-            const view = viewName || localStorage.getItem('currentView') || 'dashboard';
-            const content = document.getElementById('main-content');
+
+        // js/app.js
+
+renderCurrentView(viewName) {
+    // FORCE DASHBOARD ONLY: Ignore the requested viewName or localStorage
+    const view = 'dashboard'; 
+    
+    const content = document.getElementById('main-content');
+    content.classList.add('opacity-0');
+    
+    // ... existing timeout logic ...
+    try {
+        // Since 'view' is now always 'dashboard', 
+        // it will always execute this block and skip trends, gear, etc.
+        const html = this.getStatsBar() + renderDashboard(this.plannedData, this.allData);
+        content.innerHTML = html;
+        this.updateStats(); 
+    } catch (err) {
+        // ... error handling ...
+    }
+}
+        
+        // renderCurrentView(viewName) {
+        //     const view = viewName || localStorage.getItem('currentView') || 'dashboard';
+        //     const content = document.getElementById('main-content');
             
-            content.classList.add('opacity-0');
-            setTimeout(() => {
-                content.innerHTML = '';
-                try {
-                    if (view === 'trends') {
-                        content.innerHTML = this.getStatsBar();
-                        const { html, afterRender } = renderTrends(this.allData);
-                        content.insertAdjacentHTML('beforeend', html);
-                        if (afterRender) afterRender();
-                    }
-                    else if (view === 'gear') {
-                        content.innerHTML = renderGear(this.gearData); 
-                        this.updateGearResult();
-                    }
-                    else if (view === 'zones') {
-                        content.innerHTML = renderZones(this.garminData);
-                    }
-                    else if (view === 'ftp') {
-                        content.innerHTML = renderFTP(this.garminData);
-                    }
-                    else if (view === 'roadmap') {
-                        content.innerHTML = renderRoadmap(this.garminData, this.planMd);
-                    }
-                    else if (view === 'readiness') {
-                        content.innerHTML = renderReadiness(this.garminData);
-                    }
-                    else if (view === 'metrics') {
-                        content.innerHTML = renderMetrics(this.garminData);
-                    }
-                    else if (view === 'plan') {
-                        // Fallback simple markdown render
-                        const mdContent = Parser.getSection(this.planMd, "Weekly Schedule") || "No plan found.";
-                        const safeMarked = window.marked ? window.marked.parse : (t) => t;
-                        content.innerHTML = `<div class="markdown-body">${safeMarked(mdContent)}</div>`;
-                    }
-                    else {
-                        // UPDATED: Now passes the JSON data (this.plannedData) instead of Markdown
-                        const html = this.getStatsBar() + renderDashboard(this.plannedData, this.allData);
-                        content.innerHTML = html;
-                        this.updateStats(); 
-                    }
-                } catch (err) {
-                    console.error("Render error:", err);
-                    content.innerHTML = `<p class="text-red-400">Error rendering view: ${err.message}</p>`;
-                }
-                content.classList.remove('opacity-0');
-                if (window.innerWidth < 1024) {
-                    const sidebar = document.getElementById('sidebar');
-                    if (sidebar.classList.contains('sidebar-open')) this.toggleSidebar();
-                }
-            }, 200);
-        },
+        //     content.classList.add('opacity-0');
+        //     setTimeout(() => {
+        //         content.innerHTML = '';
+        //         try {
+        //             if (view === 'trends') {
+        //                 content.innerHTML = this.getStatsBar();
+        //                 const { html, afterRender } = renderTrends(this.allData);
+        //                 content.insertAdjacentHTML('beforeend', html);
+        //                 if (afterRender) afterRender();
+        //             }
+        //             else if (view === 'gear') {
+        //                 content.innerHTML = renderGear(this.gearData); 
+        //                 this.updateGearResult();
+        //             }
+        //             else if (view === 'zones') {
+        //                 content.innerHTML = renderZones(this.garminData);
+        //             }
+        //             else if (view === 'ftp') {
+        //                 content.innerHTML = renderFTP(this.garminData);
+        //             }
+        //             else if (view === 'roadmap') {
+        //                 content.innerHTML = renderRoadmap(this.garminData, this.planMd);
+        //             }
+        //             else if (view === 'readiness') {
+        //                 content.innerHTML = renderReadiness(this.garminData);
+        //             }
+        //             else if (view === 'metrics') {
+        //                 content.innerHTML = renderMetrics(this.garminData);
+        //             }
+        //             else if (view === 'plan') {
+        //                 // Fallback simple markdown render
+        //                 const mdContent = Parser.getSection(this.planMd, "Weekly Schedule") || "No plan found.";
+        //                 const safeMarked = window.marked ? window.marked.parse : (t) => t;
+        //                 content.innerHTML = `<div class="markdown-body">${safeMarked(mdContent)}</div>`;
+        //             }
+        //             else {
+        //                 // UPDATED: Now passes the JSON data (this.plannedData) instead of Markdown
+        //                 const html = this.getStatsBar() + renderDashboard(this.plannedData, this.allData);
+        //                 content.innerHTML = html;
+        //                 this.updateStats(); 
+        //             }
+        //         } catch (err) {
+        //             console.error("Render error:", err);
+        //             content.innerHTML = `<p class="text-red-400">Error rendering view: ${err.message}</p>`;
+        //         }
+        //         content.classList.remove('opacity-0');
+        //         if (window.innerWidth < 1024) {
+        //             const sidebar = document.getElementById('sidebar');
+        //             if (sidebar.classList.contains('sidebar-open')) this.toggleSidebar();
+        //         }
+        //     }, 200);
+        // },
 
         updateDurationAnalysis(data) { updateDurationAnalysis(data || this.allData); },
         updateGearResult() { updateGearResult(this.gearData); },

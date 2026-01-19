@@ -3,48 +3,56 @@ import os
 from datetime import datetime
 from . import config
 
-def push_changes():
-    print("\n🐙 GIT: Starting Commit & Push...")
-    
-    # 1. Verify files exist
-    files_to_add = [
-        config.MASTER_DB, 
-        config.PLAN_FILE, 
-        config.GARMIN_JSON, 
-        config.BRIEF_FILE
-    ]
-    
-    valid_files = [f for f in files_to_add if os.path.exists(f)]
-    
-    if not valid_files:
-        print("❌ No files found to commit.")
+def run_cmd(args):
+    try:
+        subprocess.run(args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except subprocess.CalledProcessError as e:
+        print(f"Git Error: {e.stderr.decode().strip()}")
+        raise e
+
+def main():
+    # 1. Check Directory
+    if not os.path.exists(os.path.join(config.BASE_DIR, '.git')):
+        print("   -> Not a git repository. Skipping.")
         return
 
-    try:
-        # 2. Configure Git (Safe for CI/CD)
-        subprocess.run(["git", "config", "user.name", "github-actions"], check=False)
-        subprocess.run(["git", "config", "user.email", "github-actions@github.com"], check=False)
+    # 2. Add Files
+    # We want to add everything in data/ and the plan
+    print("   -> Staging files...")
+    files_to_add = [
+        config.MASTER_DB_JSON,
+        config.PLANNED_JSON,
+        config.GARMIN_JSON,
+        config.COACH_BRIEFING_MD,
+        config.PLAN_MARKDOWN
+    ]
+    
+    # Filter for existing
+    cmd = ["git", "add"] + [f for f in files_to_add if os.path.exists(f)]
+    run_cmd(cmd)
 
-        # 3. Add Files
-        cmd_add = ["git", "add"] + valid_files
-        subprocess.run(cmd_add, check=True)
-        
-        # 4. Check Status
-        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout
-        
-        if status:
-            print(f"   Changes detected in: {[os.path.basename(f) for f in valid_files]}")
-            
-            # 5. Commit
-            msg = f"Auto-Update: Training Data {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-            subprocess.run(["git", "commit", "-m", msg], check=True)
-            
-            # 6. Rebase & Push
-            subprocess.run(["git", "pull", "--rebase"], check=True)
-            subprocess.run(["git", "push"], check=True)
-            print("✅ Git Push Complete!")
-        else:
-            print("ℹ️  No changes to commit.")
-            
-    except Exception as e:
-        print(f"⚠️ Git Operation Failed: {e}")
+    # 3. Commit
+    status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout
+    if not status.strip():
+        print("   -> No changes to commit.")
+        return
+
+    msg = f"Auto-Update: Training Data {datetime.now().strftime('%Y-%m-%d')}"
+    print(f"   -> Committing: {msg}")
+    
+    # Optional: Set user if running in generic env
+    # run_cmd(["git", "config", "user.email", "bot@training.local"])
+    # run_cmd(["git", "config", "user.name", "TrainingBot"])
+    
+    run_cmd(["git", "commit", "-m", msg])
+
+    # 4. Sync
+    print("   -> Pulling (rebase)...")
+    run_cmd(["git", "pull", "--rebase"])
+    
+    print("   -> Pushing...")
+    run_cmd(["git", "push"])
+    print("   -> Git Sync Success.")
+
+if __name__ == "__main__":
+    main()

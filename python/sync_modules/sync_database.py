@@ -19,15 +19,46 @@ def safe_get(d, key, default=None):
     val = d.get(key)
     return val if val is not None else default
 
+def normalize_sport(val, sport_type_id=None):
+    """
+    Returns 'Run', 'Bike', or 'Swim' based on input.
+    Input can be a string ('Run') or a Garmin Dict ({'typeKey': 'virtual_ride'...}).
+    """
+    # 1. Trust SportTypeId if present (Integer)
+    if sport_type_id is not None:
+        try:
+            sid = int(sport_type_id)
+            if sid == 1: return 'Run'
+            if sid == 2: return 'Bike'
+            if sid == 5: return 'Swim'
+        except: pass
+
+    # 2. Check value type
+    if isinstance(val, dict):
+        type_key = val.get('typeKey', '').lower()
+        if 'run' in type_key: return 'Run'
+        if 'cycl' in type_key or 'bik' in type_key or 'ride' in type_key: return 'Bike'
+        if 'swim' in type_key: return 'Swim'
+        return 'Other'
+    
+    if isinstance(val, str):
+        s = val.lower()
+        if 'run' in s: return 'Run'
+        if 'bik' in s or 'cycl' in s: return 'Bike'
+        if 'swim' in s: return 'Swim'
+        return val # Default to whatever string it is (e.g. 'Other')
+
+    return 'Other'
+
 def detect_garmin_sport(g_item):
     """Maps Garmin attributes to Plan 'activityType' (Run/Bike/Swim) for Key matching."""
-    sid = g_item.get('sportTypeId')
-    type_key = g_item.get('activityType', {}).get('typeKey', '').lower()
-    
-    if sid == 1 or 'running' in type_key: return 'Run'
-    if sid == 2 or 'cycling' in type_key or 'virtual_ride' in type_key: return 'Bike'
-    if sid == 5 or 'swimming' in type_key: return 'Swim'
-    return 'Other'
+    return normalize_sport(g_item.get('activityType'), g_item.get('sportTypeId'))
+
+def get_record_key(record):
+    """Generates the unique key YYYY-MM-DD|Sport for a DB record."""
+    date = record.get('date')
+    sport = normalize_sport(record.get('activityType'), record.get('sportTypeId'))
+    return f"{date}|{sport}"
 
 def bundle_activities(activities):
     """
@@ -42,7 +73,7 @@ def bundle_activities(activities):
     activities.sort(key=lambda x: safe_get(x, 'duration', 0) or 0, reverse=True)
     primary = activities[0]
     
-    combined = primary.copy() # Start with Primary for text fields/activityType
+    combined = primary.copy() 
     
     # 1. Update ID (Concatenate)
     ids = [str(a.get('activityId')) for a in activities if a.get('activityId')]
@@ -93,26 +124,44 @@ def main():
     garmin_data = load_json(config.GARMIN_JSON)
     master_log = load_json(config.MASTER_DB_JSON)
     
-    # Key: "YYYY-MM-DD|Sport" (e.g., 2026-01-19|Bike)
-    log_map = {f"{x['date']}|{x.get('temp_sport', x.get('activityType'))}": x for x in master_log}
-    
     today_str = datetime.now().strftime('%Y-%m-%d')
-    
+
+    # --- BUILD LOG MAP & CLAIMED IDs ---
+    log_map = {}
+    existing_ids = set() # The Gatekeeper Set
+
+    for row in master_log:
+        # Build Map by Date|Sport
+        key = get_record_key(row)
+        log_map[key] = row
+        
+        # Populate Claimed IDs
+        r_id = row.get('id')
+        if r_id:
+            str_id = str(r_id)
+            # Handle concatenated group IDs or single IDs
+            if ',' in str_id:
+                for sub in str_id.split(','):
+                    if sub.strip().isdigit():
+                        existing_ids.add(sub.strip())
+            elif str_id.strip().isdigit():
+                existing_ids.add(str_id.strip())
+
     # --- PHASE 1: INGEST PLAN ---
     for plan in planned_data:
-        # RULE: No future dates allowed in the log
         if plan['date'] > today_str:
             continue
 
-        key = f"{plan['date']}|{plan['activityType']}"
+        sport_key = normalize_sport(plan['activityType'])
+        key = f"{plan['date']}|{sport_key}"
+        
         entry = log_map.get(key, {})
         
         # Update Planned Fields
         entry.update({
             'date': plan['date'],
             'day': plan['day'],
-            'activityType': plan['activityType'],
-            'temp_sport': plan['activityType'],
+            'activityType': entry.get('activityType', plan['activityType']),
             'plannedWorkout': plan['plannedWorkout'],
             'plannedDuration': plan['plannedDuration'],
             'notes': plan['notes'],
@@ -127,23 +176,39 @@ def main():
         g_date = g.get('startTimeLocal', '')[:10]
         g_sport = detect_garmin_sport(g)
         if g_sport == 'Other': continue
-        
-        # RULE: Ignore future Garmin data too (just in case of timezone weirdness)
-        if g_date > today_str:
-            continue
+        if g_date > today_str: continue
 
         k = f"{g_date}|{g_sport}"
         if k not in garmin_grouped: garmin_grouped[k] = []
         garmin_grouped[k].append(g)
         
     for key, g_activities in garmin_grouped.items():
+        # Bundle Logic
         if len(g_activities) > 1:
             composite = bundle_activities(g_activities)
             is_group = True
         else:
             composite = g_activities[0]
             is_group = False
-            
+
+        # --- GATEKEEPER CHECK ---
+        # Check if this ID is already claimed in the DB
+        # If grouped, check if ANY of the IDs are claimed
+        current_id_str = str(composite.get('activityId'))
+        ids_to_check = current_id_str.split(',') if ',' in current_id_str else [current_id_str]
+        
+        is_claimed = False
+        for check_id in ids_to_check:
+            if check_id.strip() in existing_ids:
+                is_claimed = True
+                break
+        
+        if is_claimed:
+            # STOP: Do not try to match, do not try to add.
+            continue
+        # -------------------------
+
+        # Hydrate Telemetry
         try:
             dur_sec = safe_get(composite, 'duration', 0) or 0
             act_dur_min = dur_sec / 60.0
@@ -182,10 +247,13 @@ def main():
             "Feeling": composite.get('Feeling')
         }
 
+        # Attempt Match on Date|Sport
         if key in log_map:
+            # LINKED
             log_map[key].update(telemetry)
             log_map[key]['matchStatus'] = "Linked Group" if is_group else "Linked"
         else:
+            # UNPLANNED
             g_date, g_sport = key.split('|')
             try:
                 day_name = pd.to_datetime(g_date).day_name()
@@ -194,7 +262,6 @@ def main():
 
             new_row = {
                 "date": g_date,
-                "temp_sport": g_sport,
                 "day": day_name,
                 "plannedWorkout": "",
                 "plannedDuration": 0,
@@ -203,22 +270,25 @@ def main():
             }
             new_row.update(telemetry)
             log_map[key] = new_row
+        
+        # Add to existing_ids to handle duplicates within the same run (just in case)
+        for check_id in ids_to_check:
+            existing_ids.add(check_id.strip())
 
-    # --- PHASE 4: STATUS LOGIC & CLEANUP ---
+    # --- PHASE 4: STATUS LOGIC ---
     final_list = []
     
-    for key, row in log_map.items():
-        if 'temp_sport' in row: del row['temp_sport']
-        
+    for row in log_map.values():
         match_stat = row.get('matchStatus', '')
         p_dur = safe_get(row, 'plannedDuration', 0)
-        
         try: p_dur = float(p_dur)
         except: p_dur = 0
         
         has_actual = False
-        if row.get('id') and str(row.get('id')).replace(',','').isdigit(): 
-            has_actual = True
+        if row.get('id'):
+            sid = str(row.get('id')).replace(',','')
+            if sid.isdigit(): 
+                has_actual = True
         
         if not match_stat:
             if p_dur > 0 and not has_actual:
@@ -239,7 +309,6 @@ def main():
             if row['date'] < today_str:
                 status = "MISSED"
             else:
-                # This catches Today if no upload yet
                 status = "PLANNED" 
         elif p_dur == 0 and a_dur > 0:
             status = "UNPLANNED"
@@ -248,7 +317,6 @@ def main():
             
         row['status'] = status
         
-        # RULE: Final cleanup - strict "Today or Earlier" only
         if row['date'] <= today_str:
             final_list.append(row)
         

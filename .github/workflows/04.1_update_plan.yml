@@ -1,11 +1,11 @@
-name: 04.1 Update Planned Workouts JSON
+name: Update Planned Workouts When Plan is Updated
 
 on:
   # 1. Run automatically when you edit the plan or the script
   push:
     paths:
       - 'endurance_plan.md'
-      - 'python/_03_build_plan.py'
+      - 'python/modules/build_plan.py'
   
   # 2. Run manually from the Actions tab
   workflow_dispatch:

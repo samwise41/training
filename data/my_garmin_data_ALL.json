@@ -131,15 +131,17 @@
         "powerTimeInZone_7": 0.0,
         "endTimeGMT": "2026-01-19 14:43:05",
         "qualifyingDive": false,
-        "purposeful": false,
-        "manualActivity": false,
         "autoCalcCalories": false,
-        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
         "pr": false,
+        "favorite": false,
+        "purposeful": false,
+        "manualActivity": false,
+        "decoDive": false,
         "parent": false,
-        "favorite": false
+        "RPE": 6.0,
+        "Feeling": 4
     },
     {
         "activityId": 21576827226,
@@ -274,17 +276,17 @@
         "powerTimeInZone_7": 14.0,
         "endTimeGMT": "2026-01-17 14:40:42",
         "qualifyingDive": false,
-        "pr": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
+        "purposeful": false,
+        "manualActivity": false,
+        "decoDive": false,
         "parent": false,
-        "perceivedEffort": 3,
-        "feeling": 2
+        "RPE": 3.0,
+        "Feeling": 2
     },
     {
         "activityId": 21575536690,
@@ -402,10 +404,10 @@
         "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "parent": false,
         "decoDive": false,
-        "perceivedEffort": 4,
-        "feeling": 4
+        "parent": false,
+        "RPE": 4.0,
+        "Feeling": 4
     },
     {
         "activityId": 21565654253,
@@ -605,17 +607,17 @@
         "powerTimeInZone_5": 27.0,
         "endTimeGMT": "2026-01-16 13:53:14",
         "qualifyingDive": false,
-        "parent": false,
-        "decoDive": false,
         "autoCalcCalories": false,
         "elevationCorrected": false,
-        "favorite": false,
         "atpActivity": false,
         "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 5,
-        "feeling": 5
+        "decoDive": false,
+        "parent": false,
+        "RPE": 5.0,
+        "Feeling": 5
     },
     {
         "activityId": 21555400588,
@@ -732,6 +734,8 @@
         "anaerobicTrainingEffectMessage": "NO_ANAEROBIC_BENEFIT_0",
         "splitSummaries": [],
         "hasSplits": false,
+        "moderateIntensityMinutes": 11,
+        "vigorousIntensityMinutes": 29,
         "hasHeatMap": false,
         "hrTimeInZone_1": 206.0,
         "hrTimeInZone_2": 1924.0,
@@ -747,19 +751,17 @@
         "powerTimeInZone_7": 0.0,
         "endTimeGMT": "2026-01-15 14:04:28",
         "qualifyingDive": false,
-        "purposeful": false,
-        "favorite": false,
-        "pr": false,
-        "parent": false,
-        "decoDive": false,
-        "manualActivity": false,
         "autoCalcCalories": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "perceivedEffort": 3,
-        "feeling": 4,
-        "moderateIntensityMinutes": 11,
-        "vigorousIntensityMinutes": 29
+        "pr": false,
+        "favorite": false,
+        "purposeful": false,
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": 3.0,
+        "Feeling": 4
     },
     {
         "activityId": 21544384067,
@@ -872,6 +874,8 @@
         "anaerobicTrainingEffectMessage": "NO_ANAEROBIC_BENEFIT_0",
         "splitSummaries": [],
         "hasSplits": false,
+        "moderateIntensityMinutes": 15,
+        "vigorousIntensityMinutes": 0,
         "hasHeatMap": false,
         "hrTimeInZone_1": 0.0,
         "hrTimeInZone_2": 965.0,
@@ -890,14 +894,14 @@
         "autoCalcCalories": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "parent": false,
-        "decoDive": false,
         "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "favorite": false,
-        "moderateIntensityMinutes": 15,
-        "vigorousIntensityMinutes": 0
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21544205799,
@@ -936,6 +940,7 @@
         "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/5536f95b-13fb-4a0f-a7ae-3703e8c0e9b5-prfr.png",
         "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/5536f95b-13fb-4a0f-a7ae-3703e8c0e9b5-prof.png",
         "calories": 465.0,
+        "bmrCalories": 41.0,
         "averageHR": 161.0,
         "maxHR": 193.0,
         "averageBikingCadenceInRevPerMinute": 82.0,
@@ -988,6 +993,7 @@
         "summarizedDiveInfo": {
             "summarizedDiveGases": []
         },
+        "avgVerticalSpeed": 7.007065217391304,
         "maxVerticalSpeed": 0.600006103515625,
         "manufacturer": "ZWIFT",
         "locationName": "New York",
@@ -1014,6 +1020,8 @@
         "anaerobicTrainingEffectMessage": "MAINTAINING_ANAEROBIC_BASE_1",
         "splitSummaries": [],
         "hasSplits": false,
+        "moderateIntensityMinutes": 1,
+        "vigorousIntensityMinutes": 29,
         "hasHeatMap": false,
         "hrTimeInZone_1": 0.0,
         "hrTimeInZone_2": 0.0,
@@ -1032,18 +1040,14 @@
         "autoCalcCalories": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "parent": false,
-        "decoDive": false,
         "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "favorite": false,
-        "perceivedEffort": 9,
-        "feeling": 5,
-        "bmrCalories": 41.0,
-        "avgVerticalSpeed": 7.007065217391304,
-        "moderateIntensityMinutes": 1,
-        "vigorousIntensityMinutes": 29
+        "decoDive": false,
+        "parent": false,
+        "RPE": 9.0,
+        "Feeling": 5
     },
     {
         "activityId": 21543836765,
@@ -1174,12 +1178,14 @@
         "autoCalcCalories": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "parent": false,
-        "decoDive": false,
         "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "favorite": false
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21540135238,
@@ -1268,12 +1274,14 @@
         "autoCalcCalories": true,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "favorite": false,
-        "parent": false,
+        "purposeful": false,
         "manualActivity": true,
-        "purposeful": false
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21522302639,
@@ -1312,6 +1320,7 @@
         "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/5536f95b-13fb-4a0f-a7ae-3703e8c0e9b5-prfr.png",
         "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/5536f95b-13fb-4a0f-a7ae-3703e8c0e9b5-prof.png",
         "calories": 463.0,
+        "bmrCalories": 61.0,
         "averageHR": 143.0,
         "maxHR": 160.0,
         "averageBikingCadenceInRevPerMinute": 71.0,
@@ -1364,6 +1373,7 @@
         "summarizedDiveInfo": {
             "summarizedDiveGases": []
         },
+        "avgVerticalSpeed": 11.63434196135618,
         "maxVerticalSpeed": 0.8000030517578125,
         "manufacturer": "ZWIFT",
         "locationName": "North Ayrshire",
@@ -1408,18 +1418,16 @@
         "endTimeGMT": "2026-01-12 13:48:45",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 7,
-        "feeling": 5,
-        "bmrCalories": 61.0,
-        "avgVerticalSpeed": 11.63434196135618
+        "decoDive": false,
+        "parent": false,
+        "RPE": 7.0,
+        "Feeling": 5
     },
     {
         "activityId": 21521650444,
@@ -1532,16 +1540,16 @@
         "endTimeGMT": "2026-01-12 12:35:42",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 4,
-        "feeling": 4
+        "decoDive": false,
+        "parent": false,
+        "RPE": 4.0,
+        "Feeling": 4
     },
     {
         "activityId": 21502893617,
@@ -1678,14 +1686,16 @@
         "endTimeGMT": "2026-01-10 15:07:08",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21501230950,
@@ -1798,16 +1808,16 @@
         "endTimeGMT": "2026-01-10 12:41:42",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 4,
-        "feeling": 4
+        "decoDive": false,
+        "parent": false,
+        "RPE": 4.0,
+        "Feeling": 4
     },
     {
         "activityId": 21491950789,
@@ -2031,16 +2041,16 @@
         "endTimeGMT": "2026-01-09 13:53:00",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 3,
-        "feeling": 3
+        "decoDive": false,
+        "parent": false,
+        "RPE": 3.0,
+        "Feeling": 3
     },
     {
         "activityId": 21482224757,
@@ -2176,14 +2186,16 @@
         "endTimeGMT": "2026-01-08 14:03:00",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21471583079,
@@ -2408,16 +2420,16 @@
         "endTimeGMT": "2026-01-07 13:35:21",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 5,
-        "feeling": 2
+        "decoDive": false,
+        "parent": false,
+        "RPE": 5.0,
+        "Feeling": 2
     },
     {
         "activityId": 21460455111,
@@ -2530,16 +2542,16 @@
         "endTimeGMT": "2026-01-06 12:40:38",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 5,
-        "feeling": 3
+        "decoDive": false,
+        "parent": false,
+        "RPE": 5.0,
+        "Feeling": 3
     },
     {
         "activityId": 21450339268,
@@ -2675,14 +2687,16 @@
         "endTimeGMT": "2026-01-05 13:41:14",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21430613393,
@@ -2818,14 +2832,16 @@
         "endTimeGMT": "2026-01-03 14:18:58",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21419915623,
@@ -3050,16 +3066,16 @@
         "endTimeGMT": "2026-01-02 13:34:54",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 3,
-        "feeling": 2
+        "decoDive": false,
+        "parent": false,
+        "RPE": 3.0,
+        "Feeling": 2
     },
     {
         "activityId": 21414583520,
@@ -3319,14 +3335,16 @@
         "endTimeGMT": "2025-12-31 13:48:19",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21392665719,
@@ -3551,16 +3569,16 @@
         "endTimeGMT": "2025-12-30 13:34:43",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 3,
-        "feeling": 4
+        "decoDive": false,
+        "parent": false,
+        "RPE": 3.0,
+        "Feeling": 4
     },
     {
         "activityId": 21365025939,
@@ -3695,14 +3713,16 @@
         "endTimeGMT": "2025-12-27 14:41:22",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21363993117,
@@ -3814,16 +3834,16 @@
         "endTimeGMT": "2025-12-27 13:04:19",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 4,
-        "feeling": 3
+        "decoDive": false,
+        "parent": false,
+        "RPE": 4.0,
+        "Feeling": 3
     },
     {
         "activityId": 21355282531,
@@ -4049,16 +4069,16 @@
         "endTimeGMT": "2025-12-26 13:44:33",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": true,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": true,
+        "favorite": false,
         "purposeful": false,
         "manualActivity": false,
-        "perceivedEffort": 7,
-        "feeling": 3
+        "decoDive": false,
+        "parent": false,
+        "RPE": 7.0,
+        "Feeling": 3
     },
     {
         "activityId": 21347428905,
@@ -4194,14 +4214,16 @@
         "endTimeGMT": "2025-12-25 13:24:58",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21341393579,
@@ -4336,14 +4358,16 @@
         "endTimeGMT": "2025-12-24 15:27:46",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21331728746,
@@ -4474,14 +4498,16 @@
         "endTimeGMT": "2025-12-23 13:48:35",
         "qualifyingDive": false,
         "autoCalcCalories": false,
-        "favorite": false,
-        "parent": false,
-        "decoDive": false,
-        "pr": false,
         "elevationCorrected": false,
         "atpActivity": false,
+        "pr": false,
+        "favorite": false,
         "purposeful": false,
-        "manualActivity": false
+        "manualActivity": false,
+        "decoDive": false,
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21331586325,
@@ -4624,8 +4650,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 10,
-        "feeling": 5
+        "RPE": 10.0,
+        "Feeling": 5
     },
     {
         "activityId": 21309912155,
@@ -4814,8 +4840,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 4,
-        "feeling": 3
+        "RPE": 4.0,
+        "Feeling": 3
     },
     {
         "activityId": 21305772239,
@@ -4936,8 +4962,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 3,
-        "feeling": 2
+        "RPE": 3.0,
+        "Feeling": 2
     },
     {
         "activityId": 21298044597,
@@ -5171,8 +5197,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 4,
-        "feeling": 4
+        "RPE": 4.0,
+        "Feeling": 4
     },
     {
         "activityId": 21289830125,
@@ -5314,7 +5340,9 @@
         "purposeful": false,
         "manualActivity": false,
         "decoDive": false,
-        "parent": false
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21272208595,
@@ -5457,7 +5485,9 @@
         "purposeful": false,
         "manualActivity": false,
         "decoDive": false,
-        "parent": false
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21248283077,
@@ -5598,7 +5628,9 @@
         "purposeful": false,
         "manualActivity": false,
         "decoDive": false,
-        "parent": false
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21247412842,
@@ -5812,8 +5844,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 3,
-        "feeling": 4
+        "RPE": 3.0,
+        "Feeling": 4
     },
     {
         "activityId": 21237874811,
@@ -6047,8 +6079,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 4,
-        "feeling": 4
+        "RPE": 4.0,
+        "Feeling": 4
     },
     {
         "activityId": 21233520275,
@@ -6191,7 +6223,9 @@
         "purposeful": false,
         "manualActivity": false,
         "decoDive": false,
-        "parent": false
+        "parent": false,
+        "RPE": null,
+        "Feeling": null
     },
     {
         "activityId": 21220528664,
@@ -6424,8 +6458,8 @@
         "manualActivity": false,
         "decoDive": false,
         "parent": false,
-        "perceivedEffort": 3,
-        "feeling": 3
+        "RPE": 3.0,
+        "Feeling": 3
     },
     {
         "activityId": 21212937186,

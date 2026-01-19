@@ -1,19 +1,16 @@
 // js/views/dashboard/plannedWorkouts.js
-import { Parser } from '../../parser.js';
 import { toLocalYMD, getSportColorVar, getIcon, buildCollapsibleSection } from './utils.js';
 
-export function renderPlannedWorkouts(planMd) {
-    const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
-    if (!scheduleSection) return '<p class="text-slate-500 italic">No Weekly Schedule found.</p>';
-
-    // 1. Parse Planned Workouts
-    const workouts = Parser._parseTableBlock(scheduleSection);
-    workouts.sort((a, b) => a.date - b.date);
+export function renderPlannedWorkouts(plannedData) {
+    // 1. Validate Data
+    if (!plannedData || plannedData.length === 0) {
+        return '<p class="text-slate-500 italic">No planned workouts found in JSON.</p>';
+    }
 
     // 2. Group by Date
     let cardsHtml = '';
     const grouped = {};
-    workouts.forEach(w => { 
+    plannedData.forEach(w => { 
         const key = toLocalYMD(w.date); 
         if (!grouped[key]) grouped[key] = []; 
         grouped[key].push(w); 
@@ -26,21 +23,19 @@ export function renderPlannedWorkouts(planMd) {
     // 3. Build Cards
     sortedKeys.forEach(dateKey => {
         const dailyWorkouts = grouped[dateKey];
-        const dateObj = dailyWorkouts[0].date;
+        const dateObj = new Date(dailyWorkouts[0].date);
         const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-        const isToday = dateObj.getDate() === today.getDate() && 
-                        dateObj.getMonth() === today.getMonth() && 
-                        dateObj.getFullYear() === today.getFullYear();
+        const isToday = dateObj.getTime() === today.getTime();
         
         dailyWorkouts.forEach(w => {
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '') : "No specific notes.";
-            let displayDuration = w.plannedDuration; 
+            let displayDuration = w.plannedDuration || "--"; 
             let displayUnit = "mins"; 
             let statusText = "PLANNED"; 
             let statusColorClass = "text-white"; 
             let cardBorder = 'border border-slate-700 hover:border-slate-600'; 
             
-            if (w.completed) { 
+            if (w.actualDuration > 0) { 
                 statusText = "COMPLETED"; 
                 statusColorClass = "text-emerald-500"; 
                 const plan = w.plannedDuration || 0; 
@@ -51,19 +46,19 @@ export function renderPlannedWorkouts(planMd) {
                 else cardBorder = 'ring-2 ring-red-500 ring-offset-2 ring-offset-slate-900'; 
             } else if (isToday) { 
                 cardBorder = 'ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900'; 
-            } else if (w.type === 'Rest') { 
+            } else if (w.activityType === 'Rest' || w.planName?.toLowerCase().includes('rest')) { 
                 displayDuration = "--"; 
                 statusText = "REST DAY"; 
                 statusColorClass = "text-slate-500"; 
             }
 
-            const titleStyle = `style="color: ${getSportColorVar(w.type)}"`;
+            const titleStyle = `style="color: ${getSportColorVar(w.activityType)}"`;
 
             cardsHtml += `
             <div class="bg-slate-800 rounded-xl p-6 shadow-lg relative overflow-hidden transition-all ${cardBorder}">
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">${dayName}</span>
-                    ${getIcon(w.type)}
+                    ${getIcon(w.activityType)}
                 </div>
                 <div class="flex justify-between items-center mb-6 mt-1">
                     <div class="flex flex-col">
@@ -74,7 +69,7 @@ export function renderPlannedWorkouts(planMd) {
                         <div class="text-sm font-bold ${statusColorClass} uppercase tracking-widest mt-1">${statusText}</div>
                     </div>
                     <div class="text-right pl-4 max-w-[55%]">
-                        <h3 class="text-lg font-bold leading-tight" ${titleStyle}>${w.planName}</h3>
+                        <h3 class="text-lg font-bold leading-tight" ${titleStyle}>${w.planName || 'Workout'}</h3>
                     </div>
                 </div>
                 <div class="h-px bg-slate-700 w-full mb-4"></div>
@@ -85,7 +80,5 @@ export function renderPlannedWorkouts(planMd) {
     });
 
     const cardsContainerHtml = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-0 p-2">${cardsHtml}</div>`;
-    
-    // Return wrapped in the collapsible builder
     return buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', cardsContainerHtml, true);
 }

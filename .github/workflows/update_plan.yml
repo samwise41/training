@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Builder Script
         run: |
-          python python/build_plan.py
+          python python/modules/build_plan.py
 
       - name: Commit and Push Changes
         run: |

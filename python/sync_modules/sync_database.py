@@ -15,8 +15,6 @@ def save_json(path, data):
         json.dump(data, f, indent=4)
 
 def detect_garmin_sport(g_item):
-    """Maps Garmin typeKey or sportTypeId to our Plan types."""
-    # sportTypeId: 1=Run, 2=Bike, 5=Swim
     sid = g_item.get('sportTypeId')
     type_key = g_item.get('activityType', {}).get('typeKey', '').lower()
     
@@ -25,32 +23,35 @@ def detect_garmin_sport(g_item):
     if sid == 5 or 'swimming' in type_key: return 'Swim'
     return 'Other'
 
+def safe_get(d, key, default=0):
+    """Safely gets a value, returning default if missing OR null."""
+    val = d.get(key)
+    return val if val is not None else default
+
 def bundle_activities(activities):
-    """Bundles multiple Garmin activities into one composite record."""
     if not activities: return None
     
-    # Sort by duration desc to find "Primary" activity
-    sorted_acts = sorted(activities, key=lambda x: x.get('duration', 0), reverse=True)
-    primary = sorted_acts[0]
+    # Sort by duration to find Primary
+    # Fix: Handle case where duration is None
+    activities.sort(key=lambda x: safe_get(x, 'duration'), reverse=True)
+    primary = activities[0]
     
     combined = primary.copy()
     
-    # Concatenate IDs
-    combined['activityId'] = ",".join([str(a['activityId']) for a in sorted_acts])
-    combined['activityName'] = " + ".join([a['activityName'] for a in sorted_acts])
+    combined['activityId'] = ",".join([str(a['activityId']) for a in activities])
+    combined['activityName'] = " + ".join([a.get('activityName', 'Activity') for a in activities])
     
     # Sums
-    combined['duration'] = sum(a.get('duration', 0) for a in activities) # Seconds
-    combined['distance'] = sum(a.get('distance', 0) for a in activities)
-    combined['calories'] = sum(a.get('calories', 0) for a in activities)
-    combined['elevationGain'] = sum(a.get('elevationGain', 0) for a in activities)
+    combined['duration'] = sum(safe_get(a, 'duration') for a in activities)
+    combined['distance'] = sum(safe_get(a, 'distance') for a in activities)
+    combined['calories'] = sum(safe_get(a, 'calories') for a in activities)
+    combined['elevationGain'] = sum(safe_get(a, 'elevationGain') for a in activities)
     
-    # Weighted Averages (Power, HR, Cadence)
-    # Helper to calc weighted avg
+    # Weighted Averages
     def calc_weighted(key):
         total_dur = combined['duration']
         if total_dur == 0: return 0
-        w_sum = sum(a.get(key, 0) * a.get('duration', 0) for a in activities if a.get(key) is not None)
+        w_sum = sum(safe_get(a, key) * safe_get(a, 'duration') for a in activities)
         return w_sum / total_dur
 
     combined['avgPower'] = calc_weighted('avgPower')
@@ -58,9 +59,9 @@ def bundle_activities(activities):
     combined['normPower'] = calc_weighted('normPower')
     combined['averageBikingCadenceInRevPerMinute'] = calc_weighted('averageBikingCadenceInRevPerMinute')
     
-    # Maxes
-    combined['maxHR'] = max(a.get('maxHR', 0) for a in activities)
-    combined['maxPower'] = max(a.get('maxPower', 0) for a in activities)
+    # Maxes (Fix: safe_get prevents crash on max(None))
+    combined['maxHR'] = max(safe_get(a, 'maxHR') for a in activities)
+    combined['maxPower'] = max(safe_get(a, 'maxPower') for a in activities)
     
     return combined
 
@@ -72,8 +73,6 @@ def main():
     garmin_data = load_json(config.GARMIN_JSON)
     master_log = load_json(config.MASTER_DB_JSON)
     
-    # Convert Master Log to Dict Map for easy update (Key: Date|Sport)
-    # We maintain a list for the final output, but use a map for processing
     log_map = {f"{x['date']}|{x['activityType']}": x for x in master_log}
     
     today_str = datetime.now().strftime('%Y-%m-%d')
@@ -83,25 +82,14 @@ def main():
         key = f"{plan['date']}|{plan['activityType']}"
         
         if key in log_map:
-            # Update existing Planned Fields
             log_map[key].update({
-                'id': plan['id'], # Keep system ID in sync
+                'id': plan['id'],
                 'day': plan['day'],
                 'plannedWorkout': plan['plannedWorkout'],
                 'plannedDuration': plan['plannedDuration'],
                 'notes': plan['notes']
             })
         else:
-            # Create Pending
-            if plan['date'] <= today_str: # Or allow future? Spec says "No future dates" for pending creation in DB? 
-                # Spec: "If not, it creates a 'Pending' record if the date is the current date or earlier. No future dates."
-                # Actually, standard logic usually allows seeing future plans. 
-                # But we will follow spec: Only create record if today or earlier OR if we want to visualize future.
-                # However, for the "Master Log" (History), we usually only care about past/today.
-                pass 
-            
-            # Actually, let's add it to ensure the DB has the plan record, 
-            # Status calc will handle "PLANNED" vs "MISSED"
             log_map[key] = {
                 'date': plan['date'],
                 'activityType': plan['activityType'],
@@ -115,10 +103,9 @@ def main():
             }
 
     # --- PHASE 2: MATCH ACTUALS ---
-    # Group Garmin by Date + Sport
     garmin_grouped = {}
     for g in garmin_data:
-        g_date = g['startTimeLocal'][:10]
+        g_date = g.get('startTimeLocal', '')[:10]
         g_sport = detect_garmin_sport(g)
         if g_sport == 'Other': continue
         
@@ -129,7 +116,6 @@ def main():
     for key, g_activities in garmin_grouped.items():
         g_date, g_sport = key.split('|')
         
-        # Bundle
         if len(g_activities) > 1:
             composite = bundle_activities(g_activities)
             match_type_suffix = " Group"
@@ -138,40 +124,41 @@ def main():
             match_type_suffix = ""
             
         # Hydrate Target fields
-        actual_dur_min = (composite.get('duration', 0) or 0) / 60
+        actual_dur_min = safe_get(composite, 'duration') / 60.0
         
         telemetry = {
-            'actualWorkout': composite.get('activityName'),
+            'actualWorkout': composite.get('activityName', ''),
             'actualDuration': round(actual_dur_min, 1),
             'garminActivityId': str(composite.get('activityId')),
             'garminSportType': composite.get('sportTypeId'),
-            'duration': composite.get('duration'),
-            'distance': composite.get('distance'),
-            'avgPower': composite.get('avgPower'),
-            'normPower': composite.get('normPower'),
-            'averageHR': composite.get('averageHR'),
-            'maxHR': composite.get('maxHR'),
-            'trainingStressScore': composite.get('trainingStressScore'),
-            'intensityFactor': composite.get('intensityFactor'),
-            'calories': composite.get('calories'),
-            'elevationGain': composite.get('elevationGain'),
-            'RPE': composite.get('RPE'),
-            'Feeling': composite.get('Feeling'),
-            'vO2MaxValue': composite.get('vO2MaxValue')
-            # Add other fields from spec as needed
+            'duration': safe_get(composite, 'duration'),
+            'distance': safe_get(composite, 'distance'),
+            'avgPower': safe_get(composite, 'avgPower'),
+            'normPower': safe_get(composite, 'normPower'),
+            'averageHR': safe_get(composite, 'averageHR'),
+            'maxHR': safe_get(composite, 'maxHR'),
+            'trainingStressScore': safe_get(composite, 'trainingStressScore'),
+            'intensityFactor': safe_get(composite, 'intensityFactor'),
+            'calories': safe_get(composite, 'calories'),
+            'elevationGain': safe_get(composite, 'elevationGain'),
+            'RPE': safe_get(composite, 'RPE', default=None),
+            'Feeling': safe_get(composite, 'Feeling', default=None),
+            'vO2MaxValue': safe_get(composite, 'vO2MaxValue')
         }
 
-        # Check if Plan exists
         if key in log_map:
-            # LINK
             log_map[key].update(telemetry)
             log_map[key]['matchStatus'] = f"Linked{match_type_suffix}"
         else:
-            # UNPLANNED
+            try:
+                day_name = pd.to_datetime(g_date).day_name()
+            except:
+                day_name = ""
+
             new_record = {
                 'date': g_date,
                 'activityType': g_sport,
-                'day': pd.to_datetime(g_date).day_name(),
+                'day': day_name,
                 'plannedWorkout': '',
                 'plannedDuration': 0,
                 'notes': '',
@@ -183,11 +170,17 @@ def main():
     # --- PHASE 4: STATUS CALCULATION ---
     final_list = []
     for key, row in log_map.items():
-        p_dur = row.get('plannedDuration', 0)
-        a_dur = row.get('actualDuration', 0)
-        r_date = row.get('date')
+        p_dur = safe_get(row, 'plannedDuration')
+        a_dur = safe_get(row, 'actualDuration')
+        r_date = row.get('date', '')
         
         status = 'UNKNOWN'
+        
+        # Safe float conversion
+        try: p_dur = float(p_dur)
+        except: p_dur = 0
+        try: a_dur = float(a_dur)
+        except: a_dur = 0
         
         if p_dur > 0 and a_dur > 0:
             status = 'COMPLETED'
@@ -204,8 +197,7 @@ def main():
         row['status'] = status
         final_list.append(row)
         
-    # Sort and Save
-    final_list.sort(key=lambda x: x['date'], reverse=True)
+    final_list.sort(key=lambda x: x.get('date', ''), reverse=True)
     save_json(config.MASTER_DB_JSON, final_list)
     print(f"   -> Synced Database. Total records: {len(final_list)}")
 

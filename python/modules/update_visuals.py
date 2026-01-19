@@ -1,107 +1,100 @@
-import pandas as pd
+import json
 import os
+import re
 from . import config
 
-def update_weekly_plan(df_master):
-    if not os.path.exists(config.PLAN_FILE): 
-        print("⚠️ Plan file not found.")
-        return
+def load_db():
+    if not os.path.exists(config.MASTER_DB_JSON): return []
+    with open(config.MASTER_DB_JSON, 'r', encoding='utf-8') as f:
+        return json.load(f)
 
-    print("🎨 UPDATING VISUALS: Syncing Master DB to Plan Markdown...")
-    
-    # 1. Create a Lookup Dictionary (Date + Sport -> Actual Data)
-    lookup = {}
-    df_master['Date_Norm'] = pd.to_datetime(df_master['Date'], errors='coerce').dt.strftime('%Y-%m-%d')
-    
-    for _, row in df_master.iterrows():
-        d = row.get('Date_Norm')
-        p_work = str(row.get('Planned Workout', '')).upper()
-        
-        # Determine Sport Tag from Plan
-        sport_tag = None
-        if '[RUN]' in p_work: sport_tag = 'RUN'
-        elif '[BIKE]' in p_work: sport_tag = 'BIKE'
-        elif '[SWIM]' in p_work: sport_tag = 'SWIM'
-        
-        a_work = str(row.get('Actual Workout', '')).strip()
-        a_dur = str(row.get('Actual Duration', '')).strip()
-        
-        # Only add to lookup if we have actual data
-        if d and sport_tag and (a_work or a_dur):
-            if a_work.lower() == 'nan': a_work = ""
-            if a_dur.lower() == 'nan': a_dur = ""
-            
-            # Key: (Date, Sport) -> Value: (Name, Duration, Status)
-            lookup[(d, sport_tag)] = (a_work, a_dur, "COMPLETED")
+def main():
+    if not os.path.exists(config.PLAN_MARKDOWN): return
 
-    # 2. Read and Rewrite the Markdown File
-    with open(config.PLAN_FILE, 'r', encoding='utf-8') as f: 
+    db = load_db()
+    # Create lookup: Date|ActivityType -> Record
+    db_map = {f"{r['date']}|{r['activityType']}": r for r in db}
+
+    with open(config.PLAN_MARKDOWN, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-        
+
     new_lines = []
-    table_started = False
-    header_indices = {}
-    
+    in_table = False
+    headers = []
+    header_idx = {}
+
     for line in lines:
         stripped = line.strip()
         
-        # A. Detect Table Start
-        if not table_started:
-            if stripped.startswith('|') and 'date' in stripped.lower() and 'day' in stripped.lower():
-                table_started = True
-                headers = [h.strip().lower() for h in stripped.strip('|').split('|')]
-                for i, h in enumerate(headers):
-                    if 'date' in h: header_indices['date'] = i
-                    elif 'planned workout' in h: header_indices['planned_workout'] = i
-                    elif 'actual workout' in h: header_indices['actual_workout'] = i
-                    elif 'actual duration' in h: header_indices['actual_duration'] = i
-                    elif 'status' in h: header_indices['status'] = i
+        if '| Status |' in stripped and 'Planned Workout' in stripped:
+            in_table = True
+            headers = [h.strip() for h in stripped.strip('|').split('|')]
+            header_idx = {h: i for i, h in enumerate(headers)}
             new_lines.append(line)
             continue
+
+        if in_table:
+            if not stripped.startswith('|'):
+                in_table = False
+                new_lines.append(line)
+                continue
             
-        # B. Process Table Rows
-        if table_started and stripped.startswith('|') and '---' not in stripped:
+            if '---' in stripped:
+                new_lines.append(line)
+                continue
+
+            # Process Row
             cols = [c.strip() for c in stripped.strip('|').split('|')]
-            try:
-                # Extract key data from the row
-                if 'date' in header_indices and 'planned_workout' in header_indices:
-                    row_date_raw = cols[header_indices['date']]
-                    row_plan_raw = cols[header_indices['planned_workout']].upper()
-                    row_date = pd.to_datetime(row_date_raw, errors='coerce').strftime('%Y-%m-%d')
+            
+            # Guard against malformed rows
+            if len(cols) < len(headers):
+                new_lines.append(line)
+                continue
+
+            # Get Keys
+            date_idx = header_idx.get('Date')
+            p_work_idx = header_idx.get('Planned Workout')
+            
+            if date_idx is not None and p_work_idx is not None:
+                r_date = cols[date_idx]
+                p_work = cols[p_work_idx]
+                
+                # Determine Type
+                act_type = 'Other'
+                if '[BIKE]' in p_work: act_type = 'Bike'
+                elif '[RUN]' in p_work: act_type = 'Run'
+                elif '[SWIM]' in p_work: act_type = 'Swim'
+                
+                key = f"{r_date}|{act_type}"
+                
+                if key in db_map:
+                    record = db_map[key]
                     
-                    row_tag = None
-                    if '[RUN]' in row_plan_raw: row_tag = 'RUN'
-                    elif '[BIKE]' in row_plan_raw: row_tag = 'BIKE'
-                    elif '[SWIM]' in row_plan_raw: row_tag = 'SWIM'
+                    # Update Columns
+                    if 'Actual Workout' in header_idx:
+                        cols[header_idx['Actual Workout']] = record.get('actualWorkout', '') or ''
                     
-                    key = (row_date, row_tag)
+                    if 'Actual Duration' in header_idx:
+                        cols[header_idx['Actual Duration']] = str(record.get('actualDuration', ''))
                     
-                    # If we found a match in the Master DB, update this row
-                    if key in lookup:
-                        act_work, act_dur, status_update = lookup[key]
-                        
-                        if 'actual_workout' in header_indices: 
-                            cols[header_indices['actual_workout']] = act_work
-                        if 'actual_duration' in header_indices: 
-                            cols[header_indices['actual_duration']] = act_dur
-                        if 'status' in header_indices: 
-                            cols[header_indices['status']] = status_update
-                            
-                        # Reconstruct the line
-                        new_line = "| " + " | ".join(cols) + " |\n"
-                        new_lines.append(new_line)
-                    else:
-                        new_lines.append(line)
+                    if 'Status' in header_idx:
+                        cols[header_idx['Status']] = record.get('status', 'PLANNED')
+
+                    # Rebuild Line
+                    # Join with " | " and add leading/trailing pipes
+                    new_line = "| " + " | ".join(cols) + " |\n"
+                    new_lines.append(new_line)
                 else:
                     new_lines.append(line)
-            except:
+            else:
                 new_lines.append(line)
         else:
-            # Outside the table, just copy the line
             new_lines.append(line)
 
-    # 3. Write Changes
-    with open(config.PLAN_FILE, 'w', encoding='utf-8') as f: 
+    with open(config.PLAN_MARKDOWN, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
     
-    print("✅ Visuals updated in endurance_plan.md")
+    print("   -> Endurance Plan Visuals Updated.")
+
+if __name__ == "__main__":
+    main()

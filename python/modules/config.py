@@ -1,41 +1,25 @@
 import os
-import sys
 
-# --- PATHS ---
-# Assumes this file is in python/modules/config.py
-MODULES_DIR = os.path.dirname(os.path.abspath(__file__))
-PYTHON_DIR = os.path.dirname(MODULES_DIR) # python/
-ROOT_DIR = os.path.dirname(PYTHON_DIR)    # Project Root
+# --- PROJECT ROOTS ---
+# Assumes this runs from python/sync_modules/ or similar depth
+# Adjust relative path logic if you run from root
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
 
-PLAN_FILE = os.path.join(ROOT_DIR, 'endurance_plan.md')
-MASTER_DB = os.path.join(ROOT_DIR, 'MASTER_TRAINING_DATABASE.md')
-BRIEF_FILE = os.path.join(ROOT_DIR, 'COACH_BRIEFING.md') 
-
-# --- FIX: Point to the 'garmin_data' folder, NOT 'python' folder ---
-GARMIN_JSON = os.path.join(ROOT_DIR, 'garmin_data', 'my_garmin_data_ALL.json')
-
-# --- SCHEMA ---
-# The Single Source of Truth for your Database Columns
-MASTER_COLUMNS = [
-    'Status', 'Day', 'Planned Workout', 'Planned Duration', 
-    'Actual Workout', 'Actual Duration', 'Notes / Targets', 'Date', 'Match Status',
-    'activityId', 'activityName', 'activityType', 'sportTypeId',
-    'duration', 'distance', 'averageHR', 'maxHR', 
-    'aerobicTrainingEffect', 'anaerobicTrainingEffect', 'trainingEffectLabel',
-    'avgPower', 'maxPower', 'normPower', 'trainingStressScore', 'intensityFactor',
-    'averageSpeed', 'maxSpeed', 
-    'averageBikingCadenceInRevPerMinute', 'averageRunningCadenceInStepsPerMinute',
-    'avgStrideLength', 'avgVerticalOscillation', 'avgGroundContactTime',
-    'vO2MaxValue', 'calories', 'elevationGain', 'RPE', 'Feeling'
-]
+# --- FILE PATHS ---
+GARMIN_JSON = os.path.join(DATA_DIR, 'my_garmin_data_ALL.json')
+PLANNED_JSON = os.path.join(DATA_DIR, 'planned.json')
+MASTER_DB_JSON = os.path.join(DATA_DIR, 'training_log.json')
+COACH_BRIEFING_MD = os.path.join(DATA_DIR, 'COACH_BRIEFING.md')
+PLAN_MARKDOWN = os.path.join(BASE_DIR, 'endurance_plan.md')
 
 # --- SETTINGS ---
-# Activities to include in the database
-ALLOWED_SPORT_TYPES = [1, 2, 5, 255] # Run, Bike, Swim, Other
+GARMIN_FETCH_LIMIT = 40
+ALLOWED_SPORT_TYPES = [1, 2, 5, 255]  # Run, Bike, Swim, Other (Garmin IDs)
 
-# Sport Detection Helpers
-SPORT_IDS = {
-    'RUN': [1],
-    'BIKE': [2],
-    'SWIM': [5, 26, 18] 
+# Sport Tag Mapping for Plan Parsing
+SPORT_TAGS = {
+    '[RUN]': 'Run',
+    '[BIKE]': 'Bike',
+    '[SWIM]': 'Swim'
 }

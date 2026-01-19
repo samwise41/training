@@ -14,33 +14,20 @@ function getSafeDate(dateInput) {
     return null;
 }
 
-// --- Internal Helper: Normalize Sport ---
-// Updated to use actualSport, sportTypeId, and robust string matching
+// --- Internal Helper: Normalize Sport (STRICT MODE) ---
+// As requested: Strictly relies on the declared sport name.
 function normalizeSport(item) {
-    // 1. Check strict actualSport field (User Preference)
-    if (item.actualSport) {
-        const s = String(item.actualSport).trim().toLowerCase();
-        if (s === 'bike' ) return 'Bike';
-        if (s === 'run' ) return 'Run';
-        if (s === 'swim' ) return 'Swim';
-    }
-
-    // 2. Check Sport Type ID (Robust Fallback from JSON)
-    // 1=Run, 2=Bike, 5=Swim (Common Garmin/Strava IDs found in your data)
-    const typeId = parseInt(item.sportTypeId);
-    if (!isNaN(typeId)) {
-        if (typeId === 2) return 'Bike';
-        if (typeId === 1) return 'Run';
-        if (typeId === 5) return 'Swim';
-    }
-
-    // 3. Fallback to activityType string matching
-    const type = String(item.activityType || '').toLowerCase().trim();
+    // 1. Preferred Field: 'actualSport' (used in training_log.json)
+    // 2. Fallback Field: 'activityType' (used in planned.json)
+    const sportRaw = item.actualSport || item.activityType || '';
     
-    if (type.includes('ride') || type.includes('cycling') || type.includes('bike') || type === 'virtual_ride' || type === 'road_biking') return 'Bike';
-    if (type.includes('run') || type === 'running') return 'Run';
-    if (type.includes('swim') || type === 'lap_swimming' || type === 'swimming') return 'Swim';
+    // Normalize case to handle "Bike" vs "bike"
+    const sport = String(sportRaw).trim().toLowerCase();
 
+    if (sport === 'bike') return 'Bike';
+    if (sport === 'run') return 'Run';
+    if (sport === 'swim') return 'Swim';
+    
     return 'Other';
 }
 
@@ -184,8 +171,8 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
                 if (!totalDailyMarkers[dateKey]) totalDailyMarkers[dateKey] = 0;
                 totalDailyMarkers[dateKey] += planDur;
 
-                // For planned, we usually rely on 'activityType' which is standard
-                const sport = normalizeSport({ activityType: w.activityType });
+                // Strict Normalization
+                const sport = normalizeSport(w);
                 if (sportStats[sport]) {
                     sportStats[sport].planned += planDur;
                     if (!sportStats[sport].dailyMarkers[dateKey]) sportStats[sport].dailyMarkers[dateKey] = 0;
@@ -207,7 +194,7 @@ export function renderProgressWidget(plannedWorkouts, fullLogData) {
                 if (actDur > 0) {
                     totalActual += actDur;
                     
-                    // Improved Normalization Logic
+                    // Strict Normalization
                     const sport = normalizeSport(item);
 
                     if (sportStats[sport]) {

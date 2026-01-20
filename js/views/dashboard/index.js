@@ -72,10 +72,10 @@ export function renderDashboard(plannedData, actualData) {
     fullLogData.sort((a, b) => a.date - b.date);
 
     // 2. Render Components
-    // PASS BOTH DATASETS to the planned workouts renderer
+    // FIX: Pass BOTH datasets to heatmaps so it can see the actual log
     const plannedWorkoutsHtml = renderPlannedWorkouts(workouts, fullLogData);
     const progressHtml = renderProgressWidget(workouts, fullLogData);
-    const heatmapsHtml = renderHeatmaps(fullLogData);
+    const heatmapsHtml = renderHeatmaps(workouts, fullLogData); 
 
     // 3. Sync Button
     const syncButtonHtml = `

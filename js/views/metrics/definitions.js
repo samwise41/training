@@ -7,29 +7,24 @@ export const SPORT_IDS = {
 };
 
 export const METRIC_DEFINITIONS = {
-    // --- 1. BIKE RPE EFFICIENCY ---
     subjective_bike: {
         title: "Bike RPE Efficiency", sport: "Bike", icon: "fa-person-biking", colorVar: "var(--color-bike)",
         refMin: 25, refMax: 50, invertRanges: false, rangeInfo: "25 – 50 W/RPE",
         description: "Power produced per unit of perceived effort. Higher is better.",
         improvement: "• Aerobic Base<br>• Muscular Endurance"
     },
-    // --- 2. RUN RPE EFFICIENCY ---
     subjective_run: {
         title: "Run RPE Efficiency", sport: "Run", icon: "fa-person-running", colorVar: "var(--color-run)",
         refMin: 0.6, refMax: 1.0, invertRanges: false, rangeInfo: "0.6 – 1.0 Spd/RPE",
         description: "Speed (m/s) produced per unit of perceived effort.",
         improvement: "• Run Economy<br>• Durability"
     },
-    // --- 3. SWIM RPE EFFICIENCY ---
     subjective_swim: {
         title: "Swim RPE Efficiency", sport: "Swim", icon: "fa-person-swimming", colorVar: "var(--color-swim)",
         refMin: 0.15, refMax: 0.3, invertRanges: false, rangeInfo: "0.15 – 0.3 Spd/RPE",
         description: "Water speed (m/s) relative to effort.",
         improvement: "• Technique<br>• Drag Reduction"
     },
-    
-    // --- EXISTING METRICS ---
     endurance: {
         title: "Aerobic Efficiency", sport: "Bike", icon: "fa-heart-pulse", colorVar: "var(--color-bike)",
         refMin: 1.30, refMax: 1.70, invertRanges: false, rangeInfo: "1.30 – 1.70 EF",

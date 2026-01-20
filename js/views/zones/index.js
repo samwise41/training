@@ -8,38 +8,55 @@ export async function renderZonesTab() {
         if (!container) return;
 
         try {
-            // Add a timestamp to the URL to bypass the browser cache
             const cacheBuster = new Date().getTime();
             const response = await fetch(`data/zones/zones.json?t=${cacheBuster}`);
-            
-            if (!response.ok) throw new Error("Zones JSON file not found");
-            
+            if (!response.ok) throw new Error("Zones JSON not found");
             const data = await response.json();
 
-            // Verification logging
-            console.log("Zones Data Loaded:", data);
-
-            const hasCycling = data.cycling?.zones?.length > 0;
-            const hasRunning = data.running?.zones?.length > 0;
-
-            if (!hasCycling && !hasRunning) {
-                container.innerHTML = `<div class="p-12 text-center text-slate-500 italic">Zones found but empty.</div>`;
-                return;
-            }
-
             container.innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4">
-                    ${hasCycling ? renderZoneCard("Cycling Power Zones", data.cycling, "text-purple-400") : ''}
-                    ${hasRunning ? renderZoneCard("Running HR Zones", data.running, "text-pink-400") : ''}
+                <div class="zones-layout grid grid-cols-1 lg:grid-cols-2 gap-10 p-4">
+                    ${renderZoneCard("Cycling Power Zones", data.cycling)}
+                    ${renderZoneCard("Running Heart Rate Zones", data.running)}
                 </div>
             `;
         } catch (err) {
             console.error("Zones Load Error:", err);
-            container.innerHTML = `<div class="p-12 text-center text-slate-500 italic">Unable to load zones.json</div>`;
+            container.innerHTML = `<div class="p-12 text-center text-slate-500 italic">Unable to load zones.</div>`;
         }
     }, 50);
 
     return `<div id="${containerId}" class="min-h-[400px]"></div>`;
 }
 
-// ... renderZoneCard remains the same ...
+function renderZoneCard(title, sportData) {
+    if (!sportData || !sportData.zones) return '';
+
+    const rows = sportData.zones.map(z => {
+        // Determine the CSS class for the color border based on zone name
+        let zClass = 'border-slate-500'; // Default
+        const name = z.name.toLowerCase();
+        
+        if (name.includes('zone 1')) zClass = 'border-slate-400';
+        else if (name.includes('zone 2')) zClass = 'border-blue-500';
+        else if (name.includes('zone 3')) zClass = 'border-emerald-500';
+        else if (name.includes('sweet spot')) zClass = 'border-yellow-500';
+        else if (name.includes('zone 4')) zClass = 'border-orange-500';
+        else if (name.includes('zone 5')) zClass = 'border-red-500';
+
+        return `
+            <div class="flex justify-between items-center bg-slate-800/40 p-4 rounded-lg border-l-4 ${zClass} mb-3 shadow-sm">
+                <span class="text-sm font-bold text-slate-100">${z.name}</span>
+                <span class="text-sm font-mono text-slate-400">${z.range}</span>
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div class="flex flex-col">
+            <h3 class="text-xs font-black uppercase tracking-widest text-white mb-6 opacity-80">${title}</h3>
+            <div class="space-y-1">
+                ${rows}
+            </div>
+        </div>
+    `;
+}

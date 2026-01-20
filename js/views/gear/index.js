@@ -9,7 +9,10 @@ const WEATHER_MAP = {
 
 // --- 2. COMPONENTS ---
 const buildHourlyForecast = (hourlyWeather) => {
-    if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) return '';
+    // If no weather data, show a placeholder or empty string
+    if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
+        return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
+    }
 
     const times = hourlyWeather.time.slice(0, 24); 
     const temps = hourlyWeather.temperature_2m;
@@ -49,23 +52,24 @@ const buildTempOptions = (defaultVal) => {
     return tempOptions;
 };
 
-// Original "Row/Bubble" Layout
+// --- FIX: Forced Tailwind classes to ensure Matrix Layout on tablet+ ---
 const generateRow = (idPrefix, iconClass, label, colorClass) => `
-    <div class="gear-row-container">
-        <div class="activity-header">
+    <div class="gear-row-container flex flex-col md:flex-row gap-4 items-stretch mb-4">
+        <div class="activity-header min-w-[140px] flex items-center gap-3 p-4 bg-slate-800/40 rounded-lg border border-slate-700">
             <i class="${iconClass} ${colorClass} text-lg"></i>
             <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
         </div>
-        <div class="gear-bubbles-row">
-            <div class="gear-bubble">
+        
+        <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
+            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
                 <span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span>
                 <p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
             </div>
-            <div class="gear-bubble">
+            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
                 <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span>
                 <p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
             </div>
-            <div class="gear-bubble">
+            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
                 <span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span>
                 <p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
             </div>
@@ -105,14 +109,11 @@ const renderLayout = (hourlyHtml, tempOptions) => {
                 </div>
             </div>
         </div>
-
-        <div class="mt-8 border-t border-slate-800 pt-8 text-center">
-            <div class="flex items-center justify-center gap-2 mb-6">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="text-sm font-bold text-slate-500 uppercase tracking-widest hover:text-blue-400 transition-colors">
-                    View Full Documentation (Gear.md)
-                </a>
-            </div>
+        
+        <div class="text-center text-xs text-slate-500 mt-4">
+            <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="hover:text-blue-400 underline">
+                View Source Documentation (Gear.md)
+            </a>
         </div>
     `;
 };
@@ -127,6 +128,7 @@ function updateGearUI(gearData) {
     
     const processActivity = (activity, prefixBase) => {
         const list = gearData[activity] || [];
+        
         const findMatch = (t) => {
             const match = list.find(r => {
                 if (r.min === -999) return t < r.max;
@@ -158,8 +160,6 @@ function updateGearUI(gearData) {
 
 // --- 4. EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // Note: removed Parser dependency since gearData is now JSON
-    
     // Default Temp Logic
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
@@ -170,8 +170,6 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
 
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    
-    // Pass only what's needed for the layout (data is handled by updateGearUI)
     const html = renderLayout(hourlyHtml, tempOptions);
 
     return html;

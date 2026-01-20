@@ -1,13 +1,17 @@
 // js/app.js
 
 (async function initApp() {
-    console.log("🚀 Booting App...");
+    console.log("🚀 Booting App (JSON Mode)...");
     const cacheBuster = Date.now();
     
-    // --- 1. IMPORTS ---
+    // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
-        try { return await import(`${path}?t=${cacheBuster}`); } 
-        catch (e) { console.error(`❌ Failed to load ${name}:`, e.message); return null; }
+        try {
+            return await import(`${path}?t=${cacheBuster}`);
+        } catch (e) {
+            console.error(`❌ Failed to load ${name}:`, e.message);
+            return null;
+        }
     };
 
     const [
@@ -28,12 +32,9 @@
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
-    
-    // Gear Exports
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
     const updateGearResult = gearMod?.updateGearResult || (() => {});
-
-    const renderZones = zonesMod?.renderZones || (() => "Zones missing");
+    const renderZonesTab = zonesMod?.renderZonesTab || (() => "Zones missing");
     const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
@@ -45,10 +46,13 @@
         rawLogData: [],   
         parsedLogData: [], 
         plannedData: [],
-        gearData: null, // Will hold JSON object
+        gearData: null,  // Holds JSON
         garminData: [],
         profileData: null,
         readinessData: null,
+        
+        // Placeholder for weather if you implement fetching later
+        weather: { current: null, hourly: null }, 
 
         async init() {
             await this.loadData();
@@ -64,7 +68,7 @@
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/planned.json'),
-                    fetch('./data/gear/gear.json'), // <--- UPDATED: Fetch JSON
+                    fetch('./data/gear/gear.json'), // <--- Load JSON
                     fetch('./data/my_garmin_data_ALL.json'),
                     fetch('./data/profile.json'),
                     fetch('./data/readiness/readiness.json')
@@ -75,11 +79,11 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
                 
-                // Handle Gear Data
+                // Handle Gear JSON
                 if (gearRes.ok) {
                     this.gearData = await gearRes.json();
                 } else {
-                    console.warn("⚠️ gear.json not found. Run python/gear/createGear.py");
+                    console.warn("⚠️ gear.json not found.");
                     this.gearData = { bike: [], run: [] };
                 }
 
@@ -96,7 +100,7 @@
             }
         },
 
-        // Expose updateGearResult to window so HTML onchange="" can call it
+        // Expose function for the "onchange" event in HTML
         updateGearResult() {
             if (this.gearData) {
                 updateGearResult(this.gearData);
@@ -144,7 +148,7 @@
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 content.innerHTML = '';
                 try {
                     switch (view) {
@@ -164,13 +168,13 @@
                             content.innerHTML = renderFTP(this.profileData); 
                             break;
                         case 'gear':
-                            // Pass JSON object directly
-                            content.innerHTML = renderGear(this.gearData);
-                            // Trigger UI update immediately
+                            // UPDATED: Pass data + weather (even if null)
+                            content.innerHTML = renderGear(this.gearData, this.weather.current, this.weather.hourly);
+                            // Initial UI update
                             this.updateGearResult();
                             break;
                         case 'zones':
-                            content.innerHTML = renderZones(this.garminData);
+                            content.innerHTML = await renderZonesTab();
                             break;
                         case 'roadmap':
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);

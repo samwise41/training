@@ -12,26 +12,32 @@ export const getTrainingStats = (logData) => {
     const safeLog = Array.isArray(logData) ? logData : [];
 
     safeLog.forEach(d => {
-        // 1. Check Date
-        const entryDate = new Date(d.date || d.Date);
-        if (entryDate < lookbackDate) return;
+        // 1. Parse Date safely
+        const entryDate = new Date(d.date);
+        if (isNaN(entryDate) || entryDate < lookbackDate) return;
 
-        // 2. Get Duration (Handle numbers or strings)
+        // 2. Strict Duration Check (from your fields list)
         let dur = 0;
-        if (typeof d.actualDuration === 'number') dur = d.actualDuration;
-        else if (typeof d.duration === 'string') dur = parseDur(d.duration);
-        else if (d.Duration) dur = parseDur(d.Duration); // Fallback
+        if (typeof d.actualDuration === 'number') {
+            dur = d.actualDuration;
+        } else if (d.duration) {
+            dur = parseDur(d.duration);
+        }
 
-        // 3. Update Max Stats per Sport
+        // 3. Strict Sport Check (using utils.js)
         if (checkSport(d, 'SWIM')) {
             maxSwim = Math.max(maxSwim, dur);
         }
         else if (checkSport(d, 'BIKE')) {
             maxBike = Math.max(maxBike, dur);
-            // Handle Elevation (Number or String with commas)
-            let elev = d.elevationGain || d.ElevationGain || 0;
-            if (typeof elev === 'string') elev = parseFloat(elev.replace(/,/g, ''));
-            maxBikeElev = Math.max(maxBikeElev, elev || 0);
+            
+            // Strict Elevation Check
+            let elev = 0;
+            if (d.elevationGain) {
+                // Remove commas if string (e.g. "1,200")
+                elev = parseFloat(String(d.elevationGain).replace(/,/g, ''));
+            }
+            if (!isNaN(elev)) maxBikeElev = Math.max(maxBikeElev, elev);
         }
         else if (checkSport(d, 'RUN')) {
             maxRun = Math.max(maxRun, dur);
@@ -41,7 +47,6 @@ export const getTrainingStats = (logData) => {
     return { maxSwim, maxBike, maxRun, maxBikeElev };
 };
 
-// --- MD PARSER: Extracts Races from Markdown Plan ---
 export const parseEvents = (planMd) => {
     if (!planMd || typeof planMd !== 'string') return [];
     
@@ -49,30 +54,25 @@ export const parseEvents = (planMd) => {
     let inTable = false;
     let events = [];
     
-    // Dynamic Column Mapping
-    let colMap = {
-        date: -1, name: -1, priority: -1, 
-        swimGoal: -1, bikeGoal: -1, runGoal: -1, 
-        elevGoal: -1 
-    };
+    let colMap = { date: -1, name: -1, priority: -1, swimGoal: -1, bikeGoal: -1, runGoal: -1, elevGoal: -1 };
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
         const lowerLine = line.toLowerCase();
         
-        // Header Detection (Must contain Date & Event Type)
-        if (lowerLine.includes('|') && lowerLine.includes('date') && lowerLine.includes('event type')) { 
+        // Scan for Race Table Header
+        if (lowerLine.includes('|') && lowerLine.includes('date') && (lowerLine.includes('event') || lowerLine.includes('race'))) { 
             inTable = true; 
             const headers = line.replace(/^\||\|$/g, '').split('|').map(h => h.trim().toLowerCase());
             
             headers.forEach((h, idx) => {
                 if (h.includes('date')) colMap.date = idx;
-                else if (h.includes('event type') || h.includes('race name')) colMap.name = idx;
+                else if (h.includes('event') || h.includes('race')) colMap.name = idx;
                 else if (h.includes('priority')) colMap.priority = idx;
-                else if (h.includes('swim goal')) colMap.swimGoal = idx;
-                else if (h.includes('bike goal')) colMap.bikeGoal = idx;
-                else if (h.includes('run goal')) colMap.runGoal = idx;
-                else if (h.includes('elevation') || h.includes('climb')) colMap.elevGoal = idx;
+                else if (h.includes('swim')) colMap.swimGoal = idx;
+                else if (h.includes('bike')) colMap.bikeGoal = idx;
+                else if (h.includes('run')) colMap.runGoal = idx;
+                else if (h.includes('elev') || h.includes('climb')) colMap.elevGoal = idx;
             });
             continue; 
         }
@@ -99,7 +99,6 @@ export const parseEvents = (planMd) => {
         }
     }
 
-    // Sort and Filter Future Events
     const today = new Date();
     today.setHours(0,0,0,0);
     

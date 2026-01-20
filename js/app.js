@@ -1,7 +1,7 @@
 // js/app.js
 
 (async function initApp() {
-    console.log("🚀 Booting App (Fixed Data Flow)...");
+    console.log("🚀 Booting App (Race Readiness Fix)...");
     const cacheBuster = Date.now();
     
     // --- 1. DYNAMIC IMPORTS ---
@@ -43,8 +43,8 @@
     // --- 2. APP STATE ---
     const App = {
         planMd: "",
-        rawLogData: [],   // Raw JSON (Dates are strings)
-        parsedLogData: [], // Cleaned Data (Dates are Objects) - USED FOR METRICS
+        rawLogData: [],   
+        parsedLogData: [], 
         plannedData: [],
         gearData: "",
         garminData: [],
@@ -73,13 +73,11 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
 
-                // CRITICAL: This function converts string dates to Date Objects
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
-                console.log(`✅ Data Parsed: ${this.parsedLogData.length} entries ready.`);
+                console.log(`✅ Data Loaded: ${this.rawLogData.length} logs found.`);
 
             } catch (err) {
                 console.error("❌ Data Load Error:", err);
-                document.getElementById('main-content').innerHTML = `<div class="p-10 text-red-500">Data Load Error: ${err.message}</div>`;
             }
         },
 
@@ -134,16 +132,17 @@
                         case 'trends':
                             content.innerHTML = renderTrends(this.parsedLogData).html;
                             break;
-                        
-                        // FIX IS HERE: Use parsedLogData instead of rawLogData
                         case 'metrics':
-                            console.log("📊 Rendering Metrics with Parsed Data...");
-                            content.innerHTML = renderMetrics(this.parsedLogData); 
+                            content.innerHTML = renderMetrics(this.rawLogData); 
+                            break;
+                        
+                        // --- FIX IS HERE ---
+                        case 'readiness':
+                            // Now passing BOTH log data AND plan data
+                            console.log("🏁 Rendering Readiness...");
+                            content.innerHTML = renderReadiness(this.rawLogData, this.planMd);
                             break;
                             
-                        case 'readiness':
-                            content.innerHTML = renderReadiness(this.garminData);
-                            break;
                         case 'gear':
                             content.innerHTML = renderGear(this.gearData);
                             updateGearResult(this.gearData);

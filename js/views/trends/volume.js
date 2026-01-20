@@ -13,45 +13,54 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
         };
         const jsonKey = categoryMap[sportType] || 'total';
 
-        // 2. Define Safety Thresholds per documentation
-        // Note: Total Red is > 15%, but Yellow ends at 7.5%. 
-        // We set Red at 0.15 to match the explicit "Red" column, covering the gap with Yellow.
-        const getThresholds = (key) => {
-            switch (key) {
-                case 'running': return 0.05; // > 5%
-                case 'cycling': return 0.10; // > 10%
-                case 'swimming': return 0.10; // > 10%
-                case 'total': return 0.15;   // > 15%
-                default: return 0.10;
-            }
-        };
-        const redLimit = getThresholds(jsonKey);
+        // 2. Revised Color Logic Methodology per image_e49363.png
+        const getStatusColor = (pctChange, key) => {
+            const val = pctChange;
 
-        // 3. Color Logic Methodology
-        const getStatusColor = (pctChange) => {
-            // Red (High Risk)
-            if (pctChange > redLimit) return ['bg-red-500', '#ef4444', 'text-red-400'];
-            
-            // Yellow (Minor Increase): 0% to RedLimit
-            // Note: For Total, this covers 0% to 15%.
-            if (pctChange > 0) return ['bg-yellow-500', '#eab308', 'text-yellow-400'];
-            
-            // Grey (Recovery/Drop): < -20%
-            if (pctChange < -0.20) return ['bg-slate-600', '#475569', 'text-slate-500']; 
-            
-            // Green (Optimal Growth/Maintenance): -20% to 0%
+            // --- Grey: Recovery / Deload (Below -5% for all) ---
+            if (val < -0.05) return ['bg-slate-600', '#475569', 'text-slate-500'];
+
+            // --- RUNNING Thresholds ---
+            if (key === 'running') {
+                if (val > 0.15) return ['bg-red-500', '#ef4444', 'text-red-400'];       // Aggressive/Risk: 15.01%+
+                if (val > 0.10) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; // Overloading: 10.01% - 15%
+                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              // Controlled: -5% - 10%
+            }
+
+            // --- TOTAL Thresholds ---
+            if (key === 'total') {
+                if (val > 0.25) return ['bg-red-500', '#ef4444', 'text-red-400'];       // Aggressive/Risk: 25.01%+
+                if (val > 0.15) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; // Overloading: 15.01% - 25%
+                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              // Controlled: -5% - 15%
+            }
+
+            // --- CYCLING & SWIMMING Thresholds (Kept separate as requested) ---
+            if (key === 'cycling' || key === 'swimming') {
+                if (val > 0.30) return ['bg-red-500', '#ef4444', 'text-red-400'];       // Aggressive/Risk: 30.01%+
+                if (val > 0.20) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; // Overloading: 20.01% - 30%
+                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              // Controlled: -5% - 20%
+            }
+
             return ['bg-emerald-500', '#10b981', 'text-emerald-400'];
         };
 
-        // 4. Calculate Max Volume for Scale (Using pre-calculated JSON values)
+        // 3. Dynamic Threshold Label for Tooltips
+        const getRedLimitLabel = (key) => {
+            switch (key) {
+                case 'running': return "Limit: 15%";
+                case 'total': return "Limit: 25%";
+                case 'cycling':
+                case 'swimming': return "Limit: 30%";
+                default: return "Limit: 20%";
+            }
+        };
+
+        // 4. Calculate Max Volume for Scale
         let maxVol = 0;
         trendsJson.data.forEach(week => {
             const cat = week.categories[jsonKey];
             if (cat) {
-                // Ensure we handle missing values gracefully
-                const p = cat.planned || 0;
-                const a = cat.actual || 0;
-                maxVol = Math.max(maxVol, p, a);
+                maxVol = Math.max(maxVol, cat.planned || 0, cat.actual || 0);
             }
         });
         maxVol = maxVol || 1; 
@@ -64,28 +73,27 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
             if (!cat) return;
 
             const isCurrentWeek = (idx === trendsJson.data.length - 1); 
-            
             const plannedMins = cat.planned || 0;
             const actualMins = cat.actual || 0;
 
             const hActual = Math.round((actualMins / maxVol) * 100); 
             const hPlan = Math.round((plannedMins / maxVol) * 100); 
 
-            // Use pre-calculated growth from JSON
             const actualGrowth = cat.actual_growth !== undefined ? cat.actual_growth : 0;
             const plannedGrowth = cat.planned_growth !== undefined ? cat.planned_growth : 0;
 
-            const [actualClass, _, actualTextClass] = getStatusColor(actualGrowth);
-            const [__, planHex, planTextClass] = getStatusColor(plannedGrowth);
+            // Apply new logic to both bar types
+            const [actualClass, _, actualTextClass] = getStatusColor(actualGrowth, jsonKey);
+            const [__, planHex, planTextClass] = getStatusColor(plannedGrowth, jsonKey);
 
             const formatLabel = (val) => {
                 const sign = val > 0 ? '▲' : (val < 0 ? '▼' : '');
-                return (val !== null && val !== undefined) ? `${sign} ${Math.round(Math.abs(val) * 100)}%` : '--';
+                return `${sign} ${Math.round(Math.abs(val) * 100)}%`;
             };
             
             const actLabel = formatLabel(actualGrowth);
             const planLabel = formatLabel(plannedGrowth);
-            const limitLabel = `Limit: ${Math.round(redLimit*100)}%`;
+            const limitLabel = getRedLimitLabel(jsonKey);
 
             const planBarStyle = `
                 background: repeating-linear-gradient(
@@ -102,9 +110,9 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
                         <div style="height: ${hPlan}%; ${planBarStyle}" class="absolute bottom-0 w-full rounded-t-sm z-0"></div>
                         <div style="height: ${hActual}%;" class="relative z-10 w-2/3 ${actualClass} ${actualOpacity} rounded-t-sm"></div>
                     </div>
-                    <span class="text-[9px] text-slate-500 font-mono text-center leading-none mt-1 pointer-events-none">
+                    <span class="text-[9px] text-slate-400 font-mono text-center leading-none mt-1 pointer-events-none">
                         ${week.week_label}
-                        ${isCurrentWeek ? '<br><span class="text-[8px] text-blue-400 font-bold">NEXT</span>' : ''}
+                        ${isCurrentWeek ? '<br><span class="text-[8px] text-blue-400 font-bold uppercase">Next</span>' : ''}
                     </span>
                 </div>
             `;

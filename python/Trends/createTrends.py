@@ -6,32 +6,56 @@ from datetime import datetime, timedelta
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../"))
 LOG_FILE = os.path.join(ROOT_DIR, 'data', 'training_log.json')
+PLANNED_FILE = os.path.join(ROOT_DIR, 'data', 'planned.json')
 OUTPUT_FILE = os.path.join(ROOT_DIR, 'data', 'trends', 'trends.json')
 
 def get_saturday(date_obj):
     """Returns the Saturday date for the week containing date_obj."""
-    # weekday(): Monday=0, Sunday=6. Saturday=5.
     days_to_sat = (5 - date_obj.weekday()) % 7
     return date_obj + timedelta(days=days_to_sat)
 
 def main():
-    if not os.path.exists(LOG_FILE):
-        print(f"Error: {LOG_FILE} not found.")
-        return
+    # 1. Load data sources
+    logs = []
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, 'r', encoding='utf-8') as f:
+            logs = json.load(f)
+    
+    planned_data = []
+    if os.path.exists(PLANNED_FILE):
+        with open(PLANNED_FILE, 'r', encoding='utf-8') as f:
+            planned_data = json.load(f)
 
-    with open(LOG_FILE, 'r', encoding='utf-8') as f:
-        logs = json.load(f)
+    # 2. Identify Unique Logged Items (Date + Sport)
+    # We normalize to lowercase to prevent "Run" vs "run" mismatches
+    logged_keys = {f"{entry.get('date')}_{(entry.get('actualSport') or '').lower().strip()}" for entry in logs}
+    
+    # 3. Merge Strategy: Start with Logs, then add missing Planned items
+    combined_data = list(logs)
+    added_count = 0
 
-    # 1. Determine Date Range (Current Saturday and 12 weeks back)
-    # Using the current system time provided (Jan 20, 2026)
+    for p_item in planned_data:
+        p_date = p_item.get('date')
+        # Check 'activityType' or 'plannedSport'
+        p_sport = (p_item.get('activityType') or p_item.get('plannedSport') or "").lower().strip()
+        p_key = f"{p_date}_{p_sport}"
+        
+        if p_key not in logged_keys:
+            combined_data.append(p_item)
+            added_count += 1
+        else:
+            # Debug: This item is already in the training_log
+            pass
+
+    print(f"📊 Processing: {len(logs)} logs found. Added {added_count} unique items from planned.json.")
+
+    # 4. Determine Date Range
     current_date = datetime(2026, 1, 20) 
     current_sat = get_saturday(current_date)
-    
-    # We need 13 Saturdays total to calculate growth for the 12th trailing week
     saturdays = [current_sat - timedelta(weeks=i) for i in range(13)]
     saturdays.sort()
 
-    # 2. Initialize Weekly Data Structure
+    # 5. Initialize Weekly Data
     weekly_data = {sat.strftime('%Y-%m-%d'): {
         "total": {"p": 0, "a": 0},
         "cycling": {"p": 0, "a": 0},
@@ -39,49 +63,42 @@ def main():
         "swimming": {"p": 0, "a": 0}
     } for sat in saturdays}
 
-    for entry in logs:
+    # 6. Aggregate Volume
+    for entry in combined_data:
         try:
             entry_date = datetime.strptime(entry['date'], '%Y-%m-%d')
             sat_key = get_saturday(entry_date).strftime('%Y-%m-%d')
             
             if sat_key in weekly_data:
-                sport = entry.get('actualSport', 'Other')
-                if sport is None: sport = "" # Handle null sport
-                sport = sport.lower()
-
-                # SAFETY FIX: Ensure None/null values are treated as 0
-                p_dur = entry.get('plannedDuration') or 0
+                # Catch sport from any available field
+                sport = (entry.get('actualSport') or entry.get('activityType') or entry.get('plannedSport') or "").lower()
+                
+                # Check for duration in multiple possible fields
+                p_dur = entry.get('plannedDuration') or entry.get('duration') or 0
                 a_dur = entry.get('actualDuration') or 0
 
-                # Map to categories
                 cat = None
-                if 'bike' in sport or 'cycling' in sport: cat = 'cycling'
+                if any(x in sport for x in ['bike', 'cycling', 'stationary']): cat = 'cycling'
                 elif 'run' in sport: cat = 'running'
                 elif 'swim' in sport: cat = 'swimming'
 
-                # Update Category
                 if cat:
                     weekly_data[sat_key][cat]['p'] += p_dur
                     weekly_data[sat_key][cat]['a'] += a_dur
                 
-                # Update Total
                 weekly_data[sat_key]['total']['p'] += p_dur
                 weekly_data[sat_key]['total']['a'] += a_dur
         except (ValueError, KeyError, TypeError):
             continue
 
-    # 3. Calculate Growth relative to Prior Week Actuals
+    # 7. Calculate Growth and Save
     final_data = []
     for i in range(1, len(saturdays)):
         curr_sat = saturdays[i].strftime('%Y-%m-%d')
         prev_sat = saturdays[i-1].strftime('%Y-%m-%d')
         
-        # Use Windows-friendly formatting for the label (M/D)
-        # On Linux/Mac use %-m/%-d
-        label_date = saturdays[i].strftime('%#m/%#d') 
-
         week_entry = {
-            "week_label": label_date,
+            "week_label": saturdays[i].strftime('%#m/%#d'),
             "week_end": curr_sat,
             "categories": {}
         }
@@ -91,7 +108,6 @@ def main():
             curr_a = weekly_data[curr_sat][cat]['a']
             prev_a = weekly_data[prev_sat][cat]['a']
 
-            # Prevent division by zero and calculate growth floats
             p_growth = (curr_p / prev_a - 1) if prev_a > 0 else 0
             a_growth = (curr_a / prev_a - 1) if prev_a > 0 else 0
 
@@ -101,15 +117,10 @@ def main():
                 "planned_growth": round(p_growth, 4),
                 "actual_growth": round(a_growth, 4)
             }
-        
         final_data.append(week_entry)
 
-    # 4. Save Output
     output = {
-        "config": {
-            "trailing_weeks": 12,
-            "last_updated": datetime.now().isoformat()
-        },
+        "config": {"trailing_weeks": 12, "last_updated": datetime.now().isoformat()},
         "data": final_data
     }
 
@@ -117,7 +128,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=4)
     
-    print(f"✅ Trends generated successfully for {len(final_data)} weeks.")
+    print(f"✅ Trends generated: data/trends/trends.json")
 
 if __name__ == "__main__":
     main()

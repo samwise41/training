@@ -1,5 +1,56 @@
 // js/views/readiness/utils.js
 
+// --- HELPER: Identify Sport (Strict Text Match) ---
+export const checkSport = (activity, sportKey) => {
+    // Look at 'actualSport' (Primary) or 'activityType' (Fallback)
+    const sportStr = String(activity.actualSport || activity.activityType || "").toUpperCase();
+    const target = sportKey.toUpperCase();
+
+    if (target === 'BIKE') return sportStr.includes('BIKE') || sportStr.includes('CYCL') || sportStr.includes('RIDE');
+    if (target === 'RUN')  return sportStr.includes('RUN') || sportStr.includes('JOG');
+    if (target === 'SWIM') return sportStr.includes('SWIM') || sportStr.includes('POOL');
+    
+    return false;
+};
+
+export const parseDur = (str) => {
+    if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
+    if (typeof str === 'number') return str;
+    
+    let mins = 0;
+    const clean = str.toString().toLowerCase().trim();
+    
+    // Handle "1h 30m" format
+    if (clean.includes('h')) {
+        const parts = clean.split('h');
+        mins += parseInt(parts[0]) * 60;
+        if (parts[1] && parts[1].includes('m')) {
+            mins += parseInt(parts[1]);
+        }
+    } 
+    // Handle "90m" or just numbers
+    else if (clean.includes('m')) {
+        mins += parseInt(clean);
+    } 
+    // Handle "1:30" format
+    else if (clean.includes(':')) {
+        const parts = clean.split(':');
+        mins += parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
+    }
+    // Handle raw numbers (assumed minutes)
+    else if (!isNaN(clean)) {
+        mins += parseInt(clean);
+    }
+    
+    return Math.round(mins);
+};
+
+export const formatTime = (mins) => {
+    const h = Math.floor(mins / 60);
+    const m = Math.round(mins % 60);
+    return `${h}:${m.toString().padStart(2, '0')}`;
+};
+
 // --- GLOBAL TOGGLE ---
 window.toggleSection = (id) => {
     const content = document.getElementById(id);
@@ -27,12 +78,8 @@ window.toggleSection = (id) => {
 };
 
 export const buildCollapsibleSection = (id, title, contentHtml, isOpen = true) => {
-    const contentClasses = isOpen 
-        ? "max-h-[5000px] opacity-100 py-4 mb-8" 
-        : "max-h-0 opacity-0 py-0 mb-0";
-    const iconClasses = isOpen 
-        ? "rotate-0" 
-        : "-rotate-90";
+    const contentClasses = isOpen ? "max-h-[5000px] opacity-100 py-4 mb-8" : "max-h-0 opacity-0 py-0 mb-0";
+    const iconClasses = isOpen ? "rotate-0" : "-rotate-90";
 
     return `
         <div class="w-full">
@@ -45,28 +92,4 @@ export const buildCollapsibleSection = (id, title, contentHtml, isOpen = true) =
             </div>
         </div>
     `;
-};
-
-export const parseDur = (str) => {
-    if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
-    if (str.includes('km') || str.includes('mi')) return 0;
-    if (!isNaN(str) && str.trim() !== '') return parseInt(str);
-    let mins = 0;
-    if (str.includes('h')) {
-        const hParts = str.split('h');
-        mins += parseInt(hParts[0]) * 60;
-        if (hParts[1] && hParts[1].includes('m')) mins += parseInt(hParts[1]);
-    } else if (str.includes('m')) {
-        mins += parseInt(str);
-    } else if (str.includes(':')) {
-        const parts = str.split(':');
-        mins += parseInt(parts[0]) * 60 + parseInt(parts[1] || 0); 
-    }
-    return Math.round(mins);
-};
-
-export const formatTime = (mins) => {
-    const h = Math.floor(mins / 60);
-    const m = Math.round(mins % 60);
-    return `${h}:${m.toString().padStart(2, '0')}`;
 };

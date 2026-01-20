@@ -12,20 +12,25 @@ let planMdContent = "";
 window.App = window.App || {};
 window.App.updateDurationAnalysis = updateDurationAnalysis;
 
-export function renderTrends(mergedLogData) {
+// Updated signature to accept trendsData
+export function renderTrends(mergedLogData, trendsData) {
     // 1. Initialize Data
     logData = Array.isArray(mergedLogData) ? mergedLogData : [];
     planMdContent = window.App?.planMd || "";
+    
+    // Ensure we have valid trends data or default to object with empty data array
+    const safeTrendsData = trendsData || { data: [] };
 
     // 2. Build Sections
     
     // --- VOLUME SECTION ---
+    // Pass safeTrendsData instead of logData/planMdContent
     const volumeChartsHtml = `
-        ${renderVolumeChart(logData, planMdContent, 'All', 'Total Weekly Volume')}
+        ${renderVolumeChart(safeTrendsData, 'All', 'Total Weekly Volume')}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-0">
-            ${renderVolumeChart(logData, planMdContent, 'Bike', 'Cycling Volume')}
-            ${renderVolumeChart(logData, planMdContent, 'Run', 'Running Volume')}
-            ${renderVolumeChart(logData, planMdContent, 'Swim', 'Swimming Volume')}
+            ${renderVolumeChart(safeTrendsData, 'Bike', 'Cycling Volume')}
+            ${renderVolumeChart(safeTrendsData, 'Run', 'Running Volume')}
+            ${renderVolumeChart(safeTrendsData, 'Swim', 'Swimming Volume')}
         </div>`;
     const volumeSection = buildCollapsibleSection('volume-section', 'Weekly Volume Analysis', volumeChartsHtml, true);
 

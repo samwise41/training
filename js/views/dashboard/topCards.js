@@ -2,11 +2,12 @@
 
 // Helper: Parse Markdown Text
 function parseStats(planMd) {
-    let currentPhase = "Training";
+    // Default State
+    let currentPhase = "Unknown Phase";
     let nextEvent = null;
     
-    // Safety check
     if (!planMd || typeof planMd !== 'string') {
+        console.warn("⚠️ TopCards: No Markdown content received.");
         return { phase: currentPhase, event: nextEvent };
     }
 
@@ -14,35 +15,64 @@ function parseStats(planMd) {
     today.setHours(0,0,0,0);
     let minDays = 9999;
 
-    const lines = planMd.split('\n');
+    // Split lines and clean them
+    const lines = planMd.split('\n').map(l => l.trim());
+    let inEventTable = false;
 
-    for (const line of lines) {
-        // 1. Status Line
-        if (line.includes('**Status:**')) {
-            currentPhase = line.replace('**Status:**', '').trim();
+    console.groupCollapsed("🔎 TopCards Parser Debug");
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        // --- 1. FIND CURRENT STATUS ---
+        // Looks for: "**Current Status:** Base Phase 1" or similar
+        if (line.toLowerCase().startsWith('**current status:**') || line.toLowerCase().startsWith('**status:**')) {
+            const rawStatus = line.split(':')[1] || '';
+            currentPhase = rawStatus.trim().replace(/\*\*/g, ''); // Remove bold markers
+            console.log(`✅ Found Status: "${currentPhase}"`);
         }
-        
-        // 2. Event Table Row
-        if (line.trim().startsWith('|') && !line.includes('---') && !line.includes('Event Type')) {
+
+        // --- 2. FIND NEXT EVENT ---
+        // Detect Start of Event Table
+        if (line.toLowerCase().includes('event schedule') || line.toLowerCase().includes('upcoming events')) {
+            inEventTable = true;
+            continue;
+        }
+
+        // Stop if we hit a new section
+        if (inEventTable && line.startsWith('#')) {
+            inEventTable = false;
+        }
+
+        // Parse Table Rows: | Date | Event Name | ...
+        if (inEventTable && line.startsWith('|') && !line.includes('---') && !line.toLowerCase().includes('event name')) {
             const parts = line.split('|').map(s => s.trim());
-            // Table structure: | Date | Name | ...
+            
+            // Allow flexible column positions, but usually: | Date | Name | ...
             if (parts.length >= 3) {
-                const evtDateStr = parts[1];
-                const evtName = parts[2];
-                const evtDate = new Date(evtDateStr);
+                const dateStr = parts[1];
+                const nameStr = parts[2];
                 
-                if (!isNaN(evtDate) && evtDate >= today) {
-                    const diffTime = Math.abs(evtDate - today);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                    
-                    if (diffDays < minDays) {
-                        minDays = diffDays;
-                        nextEvent = { name: evtName, days: diffDays, date: evtDateStr };
+                // Try to parse the date
+                const evtDate = new Date(dateStr);
+                
+                if (!isNaN(evtDate.getTime())) {
+                    // Check if Future
+                    if (evtDate >= today) {
+                        const diffTime = Math.abs(evtDate - today);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        
+                        if (diffDays < minDays) {
+                            minDays = diffDays;
+                            nextEvent = { name: nameStr, days: diffDays, date: dateStr };
+                            console.log(`✅ Found Next Event: ${nameStr} (${dateStr})`);
+                        }
                     }
                 }
             }
         }
     }
+    console.groupEnd();
     
     return { phase: currentPhase, event: nextEvent };
 }

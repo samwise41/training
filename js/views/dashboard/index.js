@@ -19,7 +19,7 @@ window.triggerGitHubSync = async () => {
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Syncing...</span>';
 
     try {
-        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/01_1_Training_Data_Sync.yml/dispatches`, {
+        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/Training_Data_Sync.yml/dispatches`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -96,7 +96,7 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
 
 // --- DATA HELPERS ---
 
-// 1. Normalize Dates
+// 1. Normalize Dates (String -> Date Object)
 function normalizeData(data) {
     if (!Array.isArray(data)) return [];
     return data.map(item => {
@@ -129,6 +129,7 @@ function deduplicateData(data) {
         
         const uniqueKey = `${dateStr}|${sport}`;
         
+        // If conflict, keep the one with larger duration (assumed to be the master entry)
         if (map.has(uniqueKey)) {
             const existing = map.get(uniqueKey);
             const existDur = parseFloat(existing.plannedDuration || existing.actualDuration) || 0;
@@ -143,7 +144,7 @@ function deduplicateData(data) {
 
 // 3. Parse Phase & Events from Markdown
 function parseTopLevelStats(planMd) {
-    // Check if planMd is valid string to prevent .split error
+    // Safety check for Markdown string
     if (!planMd || typeof planMd !== 'string') return { phase: "Unknown", event: null };
 
     const today = new Date();
@@ -156,17 +157,18 @@ function parseTopLevelStats(planMd) {
     const lines = planMd.split('\n');
 
     for (const line of lines) {
-        // Extract Status
+        // A. Extract Status
         if (line.includes('**Status:**')) {
             currentPhase = line.replace('**Status:**', '').trim();
         }
         
-        // Extract Events
+        // B. Extract Events
         if (line.trim().startsWith('|') && !line.includes('---') && !line.includes('Event Type')) {
             const parts = line.split('|').map(s => s.trim());
+            // Format: | Date | Event Name | ...
             if (parts.length >= 3) {
-                const evtName = parts[2]; // Name is typically col 2 or 3 depending on table
-                const evtDateStr = parts[1]; // Date is typically col 1 or 2
+                const evtDateStr = parts[1];
+                const evtName = parts[2];
                 const evtDate = new Date(evtDateStr);
                 
                 if (!isNaN(evtDate) && evtDate >= today) {
@@ -186,13 +188,17 @@ function parseTopLevelStats(planMd) {
 }
 
 // --- MAIN RENDERER ---
+// UPDATED SIGNATURE: Accepts 3 arguments to match app.js
 export function renderDashboard(plannedData, actualData, planMd) {
+    
     // 1. Process Data
     let workouts = normalizeData(plannedData);
     let fullLogData = normalizeData(actualData);
 
+    // Fix doubling issue
     workouts = deduplicateData(workouts);
 
+    // Sort
     workouts.sort((a, b) => a.date - b.date);
     fullLogData.sort((a, b) => a.date - b.date);
 
@@ -225,10 +231,12 @@ export function renderDashboard(plannedData, actualData, planMd) {
         </div>
     `;
 
-    // 4. Render Components
+    // 4. Render Child Components
     const progressHtml = renderProgressWidget(workouts, fullLogData);
+    // Note: plannedWorkouts now accepts both to check completion status
     const plannedWorkoutsHtml = renderPlannedWorkouts(workouts, fullLogData);
-    const heatmapsHtml = renderHeatmaps(fullLogData); // Simplified: Heatmap only needs log
+    // Note: heatmaps now only needs fullLogData
+    const heatmapsHtml = renderHeatmaps(fullLogData);
 
     // 5. Sync Button
     const syncButtonHtml = `

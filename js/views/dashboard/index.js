@@ -28,19 +28,25 @@ window.triggerGitHubSync = async () => {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github.v3+json'
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ref: 'main' })
         });
 
         if (response.ok) {
-            alert("🚀 Sync triggered! The dashboard will update in about 2 minutes.");
+            alert("🚀 Sync Started!\n\nThe update process is running on GitHub.\nCheck back in ~2-3 minutes and refresh the page.");
         } else {
-            throw new Error(`Sync failed: ${response.statusText}`);
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem('github_pat');
+                alert("❌ Authentication Failed.\n\nYour token might be invalid or expired.");
+            } else {
+                const err = await response.text();
+                alert(`❌ Error: ${err}`);
+            }
         }
-    } catch (err) {
-        console.error(err);
-        alert("❌ Error starting sync. Check your console and PAT permissions.");
+    } catch (e) {
+        alert(`❌ Network Connection Error: ${e.message}`);
     } finally {
         btn.disabled = false;
         btn.classList.remove('opacity-50', 'cursor-not-allowed');
@@ -50,7 +56,7 @@ window.triggerGitHubSync = async () => {
 
 /**
  * Main Dashboard Entry Point
- * Now converted to an ASYNC function to support the streak data fetch
+ * Converted to ASYNC to support the new data-fetching widget
  */
 export async function renderDashboard(planMd, mergedLogData) {
     const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
@@ -61,10 +67,9 @@ export async function renderDashboard(planMd, mergedLogData) {
 
     const fullLogData = mergedLogData || [];
 
-    // Await the widget result to prevent [object Promise] errors
+    // --- FIX: We must await this call now ---
     const progressHtml = await renderProgressWidget(workouts, fullLogData);
     
-    // These remain synchronous or handle their own loading states internally
     const plannedWorkoutsHtml = renderPlannedWorkouts(planMd);
     const heatmapsHtml = renderHeatmaps(fullLogData, planMd);
 
@@ -83,5 +88,6 @@ export async function renderDashboard(planMd, mergedLogData) {
         ${progressHtml}
         ${plannedWorkoutsHtml}
         ${heatmapsHtml}
+        <div id="dashboard-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-2 rounded shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed"></div>
     `;
 }

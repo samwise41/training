@@ -1,0 +1,54 @@
+{
+    "bike": [
+        {
+            "min": -999,
+            "max": 40,
+            "rangeLabel": "**Below 40\u00b0F**",
+            "upper": "Regular Jersey<br>Thermal Sleeves<br>Outer Jacket",
+            "lower": "Thermal Leggings",
+            "extremities": "Balaclava<br>Handlebar Mitts<br>Foot Booties"
+        },
+        {
+            "min": 40,
+            "max": 45,
+            "rangeLabel": "**40\u00b0F \u2013 45\u00b0F**",
+            "upper": "Regular Jersey<br>Thermal Sleeves<br>Sleeveless Vest<br>Wind Breaker",
+            "lower": "Thermal Leggings",
+            "extremities": "Balaclava<br>Gloves"
+        },
+        {
+            "min": 45,
+            "max": 55,
+            "rangeLabel": "**45\u00b0F \u2013 55\u00b0F**",
+            "upper": "Regular Jersey<br>Thermal Sleeves<br>Sleeveless Vest",
+            "lower": "Thermal Leggings",
+            "extremities": "Gloves<br>Neck Wrap"
+        },
+        {
+            "min": 55,
+            "max": 65,
+            "rangeLabel": "**55\u00b0F \u2013 65\u00b0F**",
+            "upper": "Regular Jersey<br>Thermal Sleeves",
+            "lower": "Thermal Leggings",
+            "extremities": "None"
+        },
+        {
+            "min": 65,
+            "max": 70,
+            "rangeLabel": "**65\u00b0F \u2013 70\u00b0F**",
+            "upper": "Regular Jersey",
+            "lower": "Shorts or Leggings",
+            "extremities": "None"
+        },
+        {
+            "min": 70,
+            "max": 999,
+            "rangeLabel": "**Above 70\u00b0F**",
+            "upper": "Sleeveless Jersey (Tank Top)",
+            "lower": "Shorts",
+            "extremities": "None"
+        }
+    ],
+    "run": [],
+    "lastUpdated": "Generated via Python"
+}

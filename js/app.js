@@ -18,7 +18,7 @@
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
         safeImport('./views/gear/index.js', 'Gear'),
-        safeImport('./views/zones/index.js', 'Zones'), // This loads your js/views/zones/index.js
+        safeImport('./views/zones/index.js', 'Zones'),
         safeImport('./views/ftp/index.js', 'FTP'),
         safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
@@ -29,10 +29,11 @@
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
     
+    // Gear Exports
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
     const updateGearResult = gearMod?.updateGearResult || (() => {});
 
-    // --- UPDATED: Use renderZonesTab instead of renderZones ---
+    // UPDATED: Mapping to the correct function in your zones module
     const renderZonesTab = zonesMod?.renderZonesTab || (() => "Zones missing");
     
     const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
@@ -40,16 +41,107 @@
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
 
-    // ... (App State and loadData remain exactly as they were) ...
-
+    // --- 2. APP STATE ---
     const App = {
-        // ... (Existing App properties) ...
-        
+        planMd: "",
+        rawLogData: [],   
+        parsedLogData: [], 
+        plannedData: [],
+        gearData: null,
+        garminData: [],
+        profileData: null,
+        readinessData: null,
+
+        async init() {
+            await this.loadData();
+            this.setupNavigation();
+            const savedView = localStorage.getItem('currentView') || 'dashboard';
+            this.renderCurrentView(savedView);
+        },
+
+        async loadData() {
+            try {
+                console.log("📡 Fetching Data...");
+                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes] = await Promise.all([
+                    fetch('./endurance_plan.md'),
+                    fetch('./data/training_log.json'),
+                    fetch('./data/planned.json'),
+                    fetch('./data/gear/gear.json'),
+                    fetch('./data/my_garmin_data_ALL.json'),
+                    fetch('./data/profile.json'),
+                    fetch('./data/readiness/readiness.json')
+                ]);
+
+                this.planMd = await planRes.text();
+                this.rawLogData = await logRes.json();
+                this.plannedData = await plannedRes.json();
+                this.garminData = await garminRes.json();
+                
+                if (gearRes.ok) this.gearData = await gearRes.json();
+                else this.gearData = { bike: [], run: [] };
+
+                if (profileRes.ok) this.profileData = await profileRes.json();
+                else this.profileData = {}; 
+
+                if (readinessRes.ok) this.readinessData = await readinessRes.json();
+                else this.readinessData = null;
+
+                this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
+
+            } catch (err) {
+                console.error("❌ Data Load Error:", err);
+            }
+        },
+
+        updateGearResult() {
+            if (this.gearData) {
+                updateGearResult(this.gearData);
+            }
+        },
+
+        setupNavigation() {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (menuBtn) {
+                menuBtn.addEventListener('click', () => {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.remove('hidden');
+                });
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                });
+            }
+
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.nav-item').forEach(b => {
+                        b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
+                        b.classList.add('text-slate-400', 'border-transparent');
+                    });
+                    e.currentTarget.classList.remove('text-slate-400', 'border-transparent');
+                    e.currentTarget.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
+
+                    const view = e.currentTarget.dataset.view;
+                    localStorage.setItem('currentView', view);
+                    this.renderCurrentView(view);
+
+                    if (window.innerWidth < 1024 && sidebar) {
+                        sidebar.classList.add('-translate-x-full');
+                        overlay.classList.add('hidden');
+                    }
+                });
+            });
+        },
+
         renderCurrentView(view) {
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
-            setTimeout(async () => { // Added async here for the await call below
+            // Reverted to standard setTimeout to avoid async/await syntax issues in this block
+            setTimeout(async () => {
                 content.innerHTML = '';
                 try {
                     switch (view) {
@@ -72,14 +164,10 @@
                             content.innerHTML = renderGear(this.gearData);
                             this.updateGearResult();
                             break;
-                        
-                        // --- UPDATED CASE FOR ZONES ---
                         case 'zones':
-                            // Call the new async function. No need to pass garminData anymore
-                            // as the component now fetches its own zones.json
+                            // UPDATED: Calling the new async render function
                             content.innerHTML = await renderZonesTab();
                             break;
-                            
                         case 'roadmap':
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);
                             break;
@@ -96,7 +184,12 @@
                 }
                 content.classList.remove('opacity-0');
                 
-                // ... (Rest of the rendering logic remains the same) ...
+                document.querySelectorAll('.nav-item').forEach(b => {
+                    if (b.dataset.view === view) {
+                        b.classList.remove('text-slate-400', 'border-transparent');
+                        b.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
+                    }
+                });
             }, 150);
         }
     };

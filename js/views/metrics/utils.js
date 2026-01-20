@@ -2,17 +2,21 @@
 import { SPORT_IDS, METRIC_DEFINITIONS } from './definitions.js';
 
 export const checkSport = (activity, sportKey) => {
-    // 1. String Match (Primary for JSON)
-    const typeStr = String(activity.activityType || activity.actualSport || activity.actualType || "").toUpperCase();
     const key = sportKey.toUpperCase();
+
+    // 1. Check ID (sportTypeId) from your list
+    if (activity.sportTypeId) {
+        if (key === 'RUN' && activity.sportTypeId == 1) return true;
+        if (key === 'BIKE' && activity.sportTypeId == 2) return true;
+        if (key === 'SWIM' && (activity.sportTypeId == 5 || activity.sportTypeId == 26 || activity.sportTypeId == 18)) return true;
+    }
+
+    // 2. Check String Strings (actualSport / activityType)
+    const typeStr = String(activity.actualSport || activity.activityType || "").toUpperCase();
     
     if (key === 'BIKE' && (typeStr.includes('BIKE') || typeStr.includes('CYCL') || typeStr.includes('RIDE'))) return true;
     if (key === 'RUN' && typeStr.includes('RUN')) return true;
     if (key === 'SWIM' && typeStr.includes('SWIM')) return true;
-    
-    // 2. ID Match (Legacy/Garmin)
-    const typeId = activity.sportTypeId || (activity.activityType ? activity.activityType.typeId : null);
-    if (typeId && SPORT_IDS[sportKey] && SPORT_IDS[sportKey].includes(parseInt(typeId))) return true;
     
     return false;
 };

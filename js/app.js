@@ -66,14 +66,14 @@
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/planned.json'),
-                    fetch('./js/views/gear/Gear.md'),
+                    fetch('./data/gear/gear.json'),
                     fetch('./data/my_garmin_data_ALL.json'),
                     fetch('./data/profile.json'),
                     fetch('./data/readiness/readiness.json') // <--- NEW FETCH
                 ]);
 
                 this.planMd = await planRes.text();
-                this.gearData = await gearRes.text();
+                this.gearData = await gearRes.json();
                 this.rawLogData = await logRes.json();
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();

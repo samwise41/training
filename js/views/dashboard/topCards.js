@@ -43,5 +43,5 @@ export function renderTopCards() {
     }, 50);
 
     // Initial loading state
-    return `<div id="${containerId}" class="min-h-[100px] bg-slate-800/10 animate-pulse rounded-xl mb-6"></div>`;
+    return `<div id="${containerId}" class="min-h-[100px] bg-slate-800 rounded-xl mb-6"></div>`;
 }

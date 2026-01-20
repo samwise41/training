@@ -1,4 +1,4 @@
-import { Parser } from '../../parser.js';
+// js/views/gear/index.js
 
 // --- 1. UTILS ---
 const WEATHER_MAP = {
@@ -9,6 +9,8 @@ const WEATHER_MAP = {
 
 // --- 2. COMPONENTS ---
 const buildHourlyForecast = (hourlyWeather) => {
+    // ... (Keep existing implementation) ...
+    // Copy/paste your existing buildHourlyForecast function here
     if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) return '';
 
     const times = hourlyWeather.time.slice(0, 24); 
@@ -41,6 +43,7 @@ const buildHourlyForecast = (hourlyWeather) => {
 };
 
 const buildTempOptions = (defaultVal) => {
+    // ... (Keep existing implementation) ...
     let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
     for (let i = 30; i <= 70; i++) {
         tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
@@ -72,11 +75,7 @@ const generateRow = (idPrefix, iconClass, label, colorClass) => `
     </div>
 `;
 
-const renderLayout = (hourlyHtml, tempOptions, markdownContent) => {
-    const parsedMarkdown = (typeof marked !== 'undefined' && marked.parse) 
-        ? marked.parse(markdownContent || "*No gear data found in Gear.md.*") 
-        : (markdownContent || "Markdown parser not loaded.");
-
+const renderLayout = (hourlyHtml, tempOptions) => {
     return `
         <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
             ${hourlyHtml}
@@ -108,15 +107,11 @@ const renderLayout = (hourlyHtml, tempOptions, markdownContent) => {
                 </div>
             </div>
         </div>
-
-        <div class="mt-8 border-t border-slate-800 pt-8">
-            <div class="flex items-center gap-2 mb-6">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest">Full Documentation</h3>
-            </div>
-            <div class="markdown-body">
-                ${parsedMarkdown}
-            </div>
+        
+        <div class="text-center text-xs text-slate-500 mt-4">
+            <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="hover:text-blue-400 underline">
+                View Source Documentation (Gear.md)
+            </a>
         </div>
     `;
 };
@@ -131,10 +126,14 @@ function updateGearUI(gearData) {
     
     const processActivity = (activity, prefixBase) => {
         const list = gearData[activity] || [];
+        
         const findMatch = (t) => {
             const match = list.find(r => {
+                // If it's a "Below X" rule
                 if (r.min === -999) return t < r.max;
+                // If it's an "Above X" rule
                 if (r.max === 999) return t >= r.min;
+                // Standard range
                 return t >= r.min && t <= r.max;
             });
             return match || { upper: "—", lower: "—", extremities: "—" };
@@ -161,8 +160,8 @@ function updateGearUI(gearData) {
 }
 
 // --- 4. EXPORTS ---
-export function renderGear(gearMd, currentTemp, hourlyWeather) {
-    const gearData = Parser.parseGearMatrix(gearMd);
+export function renderGear(gearData, currentTemp, hourlyWeather) {
+    // gearData is now passed in as a JSON object, no parsing needed here.
 
     // Default Temp Logic
     let defaultVal = 50;
@@ -174,9 +173,9 @@ export function renderGear(gearMd, currentTemp, hourlyWeather) {
 
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    const html = renderLayout(hourlyHtml, tempOptions, gearMd);
+    const html = renderLayout(hourlyHtml, tempOptions);
 
-    return { html, gearData };
+    return html;
 }
 
 export function updateGearResult(gearData) {

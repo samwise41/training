@@ -105,11 +105,20 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
     window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
 };
 
-// --- MAIN RENDER FUNCTION (Synchronous) ---
-export function renderDashboard(planMd, mergedLogData) {
+// --- MAIN RENDER FUNCTION ---
+// UPDATED: Now accepts 3 arguments to match app.js calling convention
+// (plannedJson, mergedLogData, planMd)
+export function renderDashboard(plannedJson, mergedLogData, planMd) {
+    
+    // Safety check: if planMd is missing but plannedJson is a string, we might be receiving old args
+    if (!planMd && typeof plannedJson === 'string') {
+        planMd = plannedJson;
+    }
+
     const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
     if (!scheduleSection) return '<p class="text-slate-500 italic">No Weekly Schedule found.</p>';
 
+    // Note: Assuming Parser._parseTableBlock exists (it was used in old code)
     const workouts = Parser._parseTableBlock(scheduleSection);
     workouts.sort((a, b) => a.date - b.date);
 
@@ -119,9 +128,10 @@ export function renderDashboard(planMd, mergedLogData) {
     const progressHtml = renderProgressWidget(workouts, fullLogData);
     const plannedWorkoutsHtml = renderPlannedWorkouts(planMd);
     
-    // Calls heatmaps synchronously; heatmaps handles its own async data fetching
+    // Render Heatmaps (Sync placeholder, async fetch)
     const heatmapsHtml = renderHeatmaps();
 
+    // --- SYNC BUTTON HTML ---
     const syncButtonHtml = `
         <div class="flex justify-end mb-4">
             <button id="btn-force-sync" onclick="window.triggerGitHubSync()" 

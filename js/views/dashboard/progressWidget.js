@@ -1,61 +1,169 @@
-// js/views/dashboard/progressWidget.js
 import { getSportColorVar } from './utils.js';
 
-export function renderProgressWidget(unifiedData) {
-    // 1. Define Current Week Window
-    const today = new Date(); today.setHours(0,0,0,0);
-    const day = today.getDay();
-    const monday = new Date(today); monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
-    const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+export function renderProgressWidget() {
+    // 1. Placeholder while loading
+    const loadingHtml = `
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-pulse">
+            <div class="bg-slate-800 h-24 rounded-xl"></div>
+            <div class="bg-slate-800 h-24 rounded-xl"></div>
+            <div class="bg-slate-800 h-24 rounded-xl"></div>
+            <div class="bg-slate-800 h-24 rounded-xl"></div>
+        </div>`;
+        
+    // Insert placeholder immediately if container exists
+    setTimeout(async () => {
+        const container = document.getElementById('progress-widget-container');
+        if (!container) return;
+        
+        try {
+            const response = await fetch('data/dashboard/plannedWorkouts.json');
+            if (!response.ok) throw new Error("Data not found");
+            
+            const data = await response.json();
+            container.innerHTML = generateWidgetHTML(data);
+            
+        } catch (error) {
+            console.error("Widget Error:", error);
+            container.innerHTML = ''; // Hide on error
+        }
+    }, 50);
+
+    return `<div id="progress-widget-container">${loadingHtml}</div>`;
+}
+
+function generateWidgetHTML(data) {
+    if (!data || data.length === 0) return '';
+
+    // --- 1. Date Setup ---
+    const today = new Date();
+    // Normalize to Monday of current week
+    const day = today.getDay(); 
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1); 
+    const currentWeekMonday = new Date(today.setDate(diff));
+    currentWeekMonday.setHours(0,0,0,0);
     
-    // 2. Aggregate Stats
-    const stats = { 
-        Bike: { p: 0, a: 0 }, Run: { p: 0, a: 0 }, Swim: { p: 0, a: 0 }, Other: { p: 0, a: 0 }, All: { p: 0, a: 0 }
+    // Helper: Get "Week Key" (YYYY-Www) for grouping
+    const getWeekKey = (dateStr) => {
+        const d = new Date(dateStr);
+        d.setHours(0,0,0,0);
+        const dDay = d.getDay();
+        const dDiff = d.getDate() - dDay + (dDay === 0 ? -6 : 1);
+        const monday = new Date(d);
+        monday.setDate(dDiff);
+        return `${monday.getFullYear()}-${monday.getMonth()+1}-${monday.getDate()}`;
     };
 
-    unifiedData.forEach(item => {
-        if (item.date >= monday && item.date <= sunday) {
-            // Determine Sport Category
-            let s = 'Other';
-            const type = String(item.activityType || item.actualSport || '').toLowerCase();
-            if (type.includes('bike') || type.includes('ride')) s = 'Bike';
-            else if (type.includes('run')) s = 'Run';
-            else if (type.includes('swim')) s = 'Swim';
+    const thisWeekKey = getWeekKey(new Date().toISOString());
 
-            // Add Values
-            stats[s].p += item.plannedDuration;
-            stats[s].a += item.actualDuration;
-            stats.All.p += item.plannedDuration;
-            stats.All.a += item.actualDuration;
+    // --- 2. Process Data ---
+    const weeks = {};
+
+    data.forEach(w => {
+        const key = getWeekKey(w.date);
+        if (!weeks[key]) weeks[key] = { planned: 0, actual: 0, completedCount: 0, totalCount: 0, missed: false };
+        
+        // Sum Duration
+        weeks[key].planned += (w.plannedDuration || 0);
+        weeks[key].actual += (w.actualDuration || 0);
+        
+        // Check Status (Only count "real" workouts, ignore Rest days for failure check)
+        if (w.plannedDuration > 0) {
+            weeks[key].totalCount++;
+            if (w.status === 'COMPLETED' || w.actualDuration >= (w.plannedDuration * 0.8)) {
+                weeks[key].completedCount++;
+            } else if (w.status === 'MISSED') {
+                weeks[key].missed = true;
+            }
         }
     });
 
-    // 3. Render Helper
-    const drawBar = (label, icon, s) => {
-        const p = stats[s].p; const a = stats[s].a;
-        if (p === 0 && a === 0) return ''; // Hide empty rows
-        
-        const pct = p > 0 ? Math.min(Math.round((a / p) * 100), 100) : 0;
-        const color = getSportColorVar(s);
-        
-        return `
-        <div class="mb-3">
-            <div class="flex justify-between mb-1 text-xs font-bold text-slate-400">
-                <div class="flex items-center gap-2"><i class="fa-solid ${icon}" style="color:${color}"></i> ${label}</div>
-                <div>${Math.round(a)} / ${Math.round(p)}m</div>
-            </div>
-            <div class="h-2 bg-slate-700 rounded-full overflow-hidden">
-                <div class="h-full transition-all duration-500" style="width: ${pct}%; background-color: ${color}"></div>
-            </div>
-        </div>`;
-    };
+    // --- 3. Current Week Stats ---
+    const currentWeek = weeks[thisWeekKey] || { planned: 0, actual: 0 };
+    const adherencePct = currentWeek.planned > 0 
+        ? Math.round((currentWeek.actual / currentWeek.planned) * 100) 
+        : 0;
 
+    // --- 4. Streak Calculation (Lookback) ---
+    // Sort weeks descending (newest first)
+    const sortedWeeks = Object.keys(weeks).sort((a, b) => new Date(b) - new Date(a));
+    
+    let volumeStreak = 0;
+    let perfectStreak = 0;
+
+    // Skip "This Week" for streak calculation (since it's not done yet), 
+    // start from Last Week.
+    for (let i = 0; i < sortedWeeks.length; i++) {
+        if (sortedWeeks[i] === thisWeekKey) continue; // Skip current incomplete week
+
+        const w = weeks[sortedWeeks[i]];
+        
+        // Volume Streak Logic (>90% volume hit)
+        if (w.planned > 0 && (w.actual / w.planned) >= 0.90) {
+            volumeStreak++;
+        } else {
+            break; // Streak broken
+        }
+    }
+
+    // Perfect Streak Logic (No missed workouts)
+    for (let i = 0; i < sortedWeeks.length; i++) {
+        if (sortedWeeks[i] === thisWeekKey) continue;
+        const w = weeks[sortedWeeks[i]];
+        
+        if (!w.missed && w.totalCount > 0 && w.completedCount === w.totalCount) {
+            perfectStreak++;
+        } else {
+            break;
+        }
+    }
+
+    // --- 5. Formatting Helpers ---
+    const getStreakColor = (val) => val > 3 ? 'text-emerald-400' : (val > 0 ? 'text-blue-400' : 'text-slate-500');
+    const complianceColor = adherencePct >= 100 ? 'text-emerald-400' : (adherencePct >= 80 ? 'text-blue-400' : 'text-yellow-400');
+    
+    // --- 6. HTML Output ---
     return `
-    <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-5 mb-8">
-        <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Current Week Progress</div>
-        ${drawBar('Total Volume', 'fa-chart-simple', 'All')}
-        ${drawBar('Bike', 'fa-bicycle', 'Bike')}
-        ${drawBar('Run', 'fa-person-running', 'Run')}
-        ${drawBar('Swim', 'fa-person-swimming', 'Swim')}
-    </div>`;
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            
+            <div class="bg-slate-800 rounded-xl p-4 shadow-lg border border-slate-700 relative overflow-hidden group">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Weekly Compliance</span>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-3xl font-bold ${complianceColor} tracking-tight">${adherencePct}%</span>
+                </div>
+                <div class="w-full bg-slate-700 h-1.5 mt-3 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full transition-all duration-1000" style="width: ${Math.min(adherencePct, 100)}%"></div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-4 shadow-lg border border-slate-700 relative overflow-hidden group">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Total Volume</span>
+                <div class="flex flex-col">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-3xl font-bold text-white tracking-tight">${Math.round(currentWeek.actual)}</span>
+                        <span class="text-sm text-slate-400 font-mono">min</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 mt-1">Target: ${Math.round(currentWeek.planned)} min</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-4 shadow-lg border border-slate-700 relative overflow-hidden group">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Perfect Weeks</span>
+                <div class="flex items-center gap-3 mt-1">
+                    <i class="fa-solid fa-calendar-check text-2xl ${getStreakColor(perfectStreak)} opacity-80"></i>
+                    <span class="text-3xl font-bold text-white tracking-tight">${perfectStreak}</span>
+                </div>
+                <span class="text-[10px] text-slate-500 absolute bottom-3 right-4">Streak</span>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl p-4 shadow-lg border border-slate-700 relative overflow-hidden group">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Volume Streak</span>
+                <div class="flex items-center gap-3 mt-1">
+                    <i class="fa-solid fa-fire text-2xl ${getStreakColor(volumeStreak)} opacity-80"></i>
+                    <span class="text-3xl font-bold text-white tracking-tight">${volumeStreak}</span>
+                </div>
+                <span class="text-[10px] text-slate-500 absolute bottom-3 right-4">>90% Vol</span>
+            </div>
+
+        </div>
+    `;
 }

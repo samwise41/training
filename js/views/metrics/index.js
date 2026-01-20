@@ -14,10 +14,9 @@ window.toggleMetricsTime = (range) => {
 export function renderMetrics(allData) {
     cachedData = allData || [];
     
-    // Ensure charts render after the DOM update
     setTimeout(() => {
         updateCharts(cachedData, metricsState.timeRange);
-    }, 0);
+    }, 50);
 
     const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all">${label}</button>`;
     
@@ -32,7 +31,6 @@ export function renderMetrics(allData) {
     const tableHtml = renderSummaryTable(cachedData);
     const tableSection = buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
-    // --- CHART SECTION HEADERS ---
     const buildSectionHeader = (title, icon, color) => `
         <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
             <i class="fa-solid ${icon} ${color}"></i>

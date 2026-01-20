@@ -3,9 +3,15 @@ import json
 import os
 
 # --- CONFIGURATION ---
-# ".." moves up one level from the "scripts" folder to the root
-PLAN_FILE = os.path.join(os.path.dirname(__file__), '../endurance_plan.md')
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), '../data/profile.json')
+# Get the absolute path of the script itself
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Go up one level to find the project root (assuming script is in /scripts)
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+# Define paths relative to the Project Root
+PLAN_FILE = os.path.join(PROJECT_ROOT, 'endurance_plan.md')
+OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'profile.json')
 
 # W/kg Categories (Matches your JS config)
 CATEGORIES = [
@@ -25,20 +31,17 @@ def extract_value(text, patterns):
     return None
 
 def parse_plan():
-    # Resolve absolute paths to avoid confusion
-    plan_path = os.path.abspath(PLAN_FILE)
-    output_path = os.path.abspath(OUTPUT_FILE)
-
-    if not os.path.exists(plan_path):
-        print(f"❌ Error: {plan_path} not found.")
-        print("   Make sure you are running this from the root or scripts folder.")
+    print(f"📂 Project Root detected: {PROJECT_ROOT}")
+    
+    if not os.path.exists(PLAN_FILE):
+        print(f"❌ Error: Could not find plan at: {PLAN_FILE}")
         return
 
-    with open(plan_path, 'r', encoding='utf-8') as f:
+    with open(PLAN_FILE, 'r', encoding='utf-8') as f:
         content = f.read()
 
     # --- 1. EXTRACT RAW DATA ---
-    print(f"🔍 Scanning {os.path.basename(plan_path)} for Biometrics...")
+    print(f"🔍 Scanning {os.path.basename(PLAN_FILE)} for Biometrics...")
     
     # Weight (lbs)
     weight_str = extract_value(content, [r'Weight[:\s|]+(\d+)', r'Body Weight[:\s|]+(\d+)'])
@@ -89,11 +92,13 @@ def parse_plan():
     }
 
     # --- 4. SAVE ---
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w', encoding='utf-8') as f:
+    # Ensure 'data' folder exists in root
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+    
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(profile_data, f, indent=4)
 
-    print(f"✅ Success! Profile saved to {output_path}")
+    print(f"✅ Success! Profile saved to: {OUTPUT_FILE}")
     print(f"   Stats: {watts}W / {weight}lbs = {wkg_num} W/kg ({category['label']})")
 
 if __name__ == "__main__":

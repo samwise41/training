@@ -1,145 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training Dashboard</title>
+<nav class="flex-1 overflow-y-auto px-3 mt-6">
     
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cstyle%3E.icon{fill:none;stroke:%233b82f6;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}.head{fill:%233b82f6;stroke:none}%3C/style%3E%3Cg transform='translate(64, 24)'%3E%3Ccircle class='head' cx='0' cy='-12' r='7'/%3E%3Cpath class='icon' d='M-18 -4 c 8 -10, 28 -10, 36 0'/%3E%3Cpath class='icon' d='M-24 8 q 12 8, 24 0 t 24 0'/%3E%3Cpath class='icon' d='M-24 20 q 12 8, 24 0 t 24 0'/%3E%3C/g%3E%3Cg transform='translate(32, 90)'%3E%3Ccircle class='head' cx='0' cy='-24' r='7'/%3E%3Cpath class='icon' d='M0 -14 v 14 l -10 12 m 10 -12 l 10 8'/%3E%3Cpath class='icon' d='M0 -14 l -8 8 m 8 -8 l 8 8'/%3E%3C/g%3E%3Cg transform='translate(96, 90)'%3E%3Ccircle class='head' cx='0' cy='-24' r='7'/%3E%3Ccircle class='icon' cx='-14' cy='12' r='10'/%3E%3Ccircle class='icon' cx='14' cy='12' r='10'/%3E%3Cpath class='icon' d='M-14 12 l 14 -22 h 8 l 6 22'/%3E%3Cpath class='icon' d='M0 -10 l -4 8'/%3E%3C/g%3E%3C/svg%3E">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css">
-    
-    <link rel="stylesheet" href="css/styles.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-        body { background-color: #0f172a; color: #e2e8f0; }
-        .nav-link { 
-            display: flex; align-items: center; gap: 0.75rem; 
-            padding: 0.75rem 1rem; border-radius: 0.5rem; 
-            color: #94a3b8; transition: all 0.2s; 
-        }
-        .nav-link:hover { background-color: #1e293b; color: #f8fafc; }
-        .nav-link.active { background-color: #3b82f6; color: white; }
-        .nav-link i { width: 1.5rem; text-align: center; }
-        
-        /* Mobile Sidebar Transitions */
-        .sidebar-closed { transform: translateX(-100%); }
-        .sidebar-open { transform: translateX(0); }
-        @media (min-width: 1024px) { 
-            .sidebar-closed { transform: translateX(0); } 
-        }
-    </style>
-</head>
-
-<body class="bg-slate-900 text-slate-200 min-h-screen flex flex-col lg:block">
-
-    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/80 z-20 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
-
-    <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-slate-900 border-r border-slate-700 z-30 transition-transform duration-300 sidebar-closed flex flex-col">
-        <div class="p-6 border-b border-slate-700 flex justify-between items-center">
-            <h1 class="text-xl font-bold text-white tracking-tight">
-                <i class="fa-solid fa-person-biking icon-bike mr-2"></i>IronPlan
-            </h1>
-            <button id="btn-sidebar-close" class="lg:hidden text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-        </div>
-
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <div class="px-3 py-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Main</div>
-            
-            <a href="#dashboard" id="nav-dashboard" class="nav-link">
-                <i class="fa-solid fa-house"></i> <span>Dashboard</span>
-            </a>
-            <a href="#trends" id="nav-trends" class="nav-link">
-                <i class="fa-solid fa-chart-line"></i> <span>Trends</span>
-            </a>
-            
-            <a href="#readiness" id="nav-readiness" class="nav-link">
-                <i class="fa-solid fa-flag-checkered"></i> <span>Race Readiness</span>
-            </a>
-
-            <a href="#metrics" id="nav-metrics" class="nav-link">   
-                <i class="fa-solid fa-bullseye"></i> <span>Performance Metrics</span>
-            </a>
-            
-            <a href="#ftp" id="nav-ftp" class="nav-link">
-                <i class="fa-solid fa-gauge-high"></i> <span>FTP / Threshold</span>
-            </a>
-
-            <div class="px-3 py-2 mt-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Resources</div>
-
-            <a href="#roadmap" id="nav-roadmap" class="nav-link">
-                <i class="fa-solid fa-map"></i> <span>Roadmap</span>
-            </a>
-
-            <a href="#logbook" id="nav-logbook" class="nav-link">
-                <i class="fa-solid fa-book-open"></i> <span>Logbook</span>
-            </a>
-            
-            <a href="#gear" id="nav-gear" class="nav-link">
-                <i class="fa-solid fa-shirt"></i> <span>Gear</span>
-            </a>
-            
-            <a href="#zones" id="nav-zones" class="nav-link">
-                <i class="fa-solid fa-layer-group"></i> <span>Zones</span>
-            </a>
-        </nav>
-
-    </aside>
-
-    <main class="flex-1 flex flex-col min-w-0 bg-slate-900 lg:pl-64 relative min-h-screen">
-        <header class="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-4 sticky top-0 z-10">
-            <div class="flex items-center gap-4">
-                <button id="btn-sidebar-open" class="lg:hidden text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-                <h2 id="header-title-dynamic" class="text-lg font-bold text-white">Dashboard</h2>
-            </div>
-            
-            <div class="flex items-center gap-4 text-xs font-mono text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700">
-                <span id="weather-info">Loading...</span>
-                <span id="weather-icon-top" class="text-lg"></span>
-            </div>
-        </header>
-
-        <div id="content" class="flex-1 p-4 md:p-8 scroll-smooth transition-opacity duration-300 opacity-0">
-        </div>
-    </main>
-
-    <div id="security-curtain" class="hidden fixed inset-0 bg-slate-950 z-50 flex flex-col items-center justify-center transition-opacity duration-500">
-        <div class="w-full max-w-sm px-6">
-            <div class="mb-8 text-center">
-                <i class="fa-solid fa-shield-halved text-5xl text-blue-500 mb-4"></i>
-                <h2 class="text-2xl font-bold text-white">Secure Dashboard</h2>
-                <p class="text-slate-400 mt-2 text-sm">Restricted Access Environment</p>
-            </div>
-            <div class="space-y-4">
-                <input type="password" id="access-code" placeholder="Enter Access Code" 
-                       class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors text-center font-mono">
-                <button id="btn-unlock" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition-colors shadow-lg shadow-blue-500/20">
-                    Unlock Dashboard
-                </button>
-                <p id="access-error" class="text-red-500 text-xs text-center hidden font-bold mt-2">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Access Denied
-                </p>
-            </div>
-        </div>
+    <div class="px-3 mb-2 mt-2">
+        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Main</span>
     </div>
 
-    <script>
-        const script = document.createElement('script');
-        script.type = 'module';
-        // Appends current time (?t=12345...) to force browser to reload app.js
-        script.src = 'js/app.js?t=' + Date.now();
-        document.body.appendChild(script);
-    </script>
-</body>
-</html>
+    <div class="space-y-1">
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 bg-blue-600 text-white shadow-md hover:bg-blue-500" data-view="dashboard">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-house"></i></div>
+            <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="trends">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-chart-line"></i></div>
+            <span>Trends</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="readiness">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-flag-checkered"></i></div>
+            <span>Race Readiness</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="metrics">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-bullseye"></i></div>
+            <span>Performance Metrics</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="ftp">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-gauge-high"></i></div>
+            <span>FTP / Threshold</span>
+        </button>
+    </div>
+
+    <div class="px-3 mb-2 mt-8">
+        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Resources</span>
+    </div>
+
+    <div class="space-y-1">
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="roadmap">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-map"></i></div>
+            <span>Roadmap</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="plan">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-book-open"></i></div>
+            <span>Logbook</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="gear">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-shirt"></i></div>
+            <span>Gear</span>
+        </button>
+
+        <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="zones">
+            <div class="w-6 flex justify-center"><i class="fa-solid fa-layer-group"></i></div>
+            <span>Zones</span>
+        </button>
+    </div>
+
+</nav>

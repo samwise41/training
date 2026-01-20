@@ -135,3 +135,35 @@ export const buildCollapsibleSection = (id, title, content, isOpen = true) => {
         </div>
     `;
 };
+
+// Add this at the bottom of utils.js
+window.showTooltip = function(evt, date, minutes, type, color) {
+    let tooltip = document.getElementById('global-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'global-tooltip';
+        tooltip.className = 'fixed z-50 bg-slate-900 border border-slate-600 rounded px-3 py-2 shadow-xl pointer-events-none text-xs';
+        document.body.appendChild(tooltip);
+    }
+
+    if (minutes == 0 || minutes === '0') {
+        tooltip.innerHTML = `<span class="text-slate-400">${date}</span><br><span class="font-bold text-slate-500">No Activity</span>`;
+    } else {
+        tooltip.innerHTML = `
+            <span class="text-slate-300 border-b border-slate-700 pb-0.5 mb-1 block">${date}</span>
+            <div class="font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full" style="background:${color}"></span> ${type}
+            </div>
+            <span class="text-slate-400">${minutes} mins</span>
+        `;
+    }
+
+    tooltip.style.display = 'block';
+    tooltip.style.left = (evt.clientX + 15) + 'px';
+    tooltip.style.top = (evt.clientY + 15) + 'px';
+};
+
+window.hideTooltip = function() {
+    const tooltip = document.getElementById('global-tooltip');
+    if (tooltip) tooltip.style.display = 'none';
+};

@@ -17,8 +17,8 @@ const mergeWorkouts = (planned, logs) => {
     const logMap = {};
 
     // Map logs by Date for quick lookup (YYYY-MM-DD)
-    // We only take the FIRST log per day per sport to avoid complexity for now
     logs.forEach(l => {
+        if (!l.date) return;
         const dateKey = l.date.split('T')[0];
         if (!logMap[dateKey]) logMap[dateKey] = [];
         logMap[dateKey].push(l);
@@ -36,7 +36,8 @@ const mergeWorkouts = (planned, logs) => {
             match = matchingLogs.find(l => {
                 const pType = (p.type || "").toLowerCase();
                 const lType = (l.actualSport || l.activityType || "").toLowerCase();
-                // Simple fuzzy match
+                
+                // Fuzzy match sports
                 return (pType.includes('run') && lType.includes('run')) ||
                        (pType.includes('bike') && (lType.includes('bike') || lType.includes('cycl'))) ||
                        (pType.includes('swim') && lType.includes('swim'));
@@ -49,14 +50,13 @@ const mergeWorkouts = (planned, logs) => {
                 status: 'completed',
                 date: pDate,
                 day: getDayName(pDate),
-                type: p.type,
+                type: p.type || "Workout", // Default if missing
                 title: p.title || match.title,
                 planDur: p.duration,
-                actDur: match.actualDuration || match.duration, // Handle various log formats
-                details: p.details, // Keep the markdown details from the plan
-                file: match.fileName // If you have it
+                actDur: match.actualDuration || match.duration,
+                details: p.details,
+                file: match.fileName
             });
-            // Mark log as used so we don't duplicate it later (optional, simplistic approach)
             match._used = true;
         } else {
             // NO MATCH: Plan only
@@ -64,7 +64,7 @@ const mergeWorkouts = (planned, logs) => {
                 status: 'planned',
                 date: pDate,
                 day: getDayName(pDate),
-                type: p.type,
+                type: p.type || "Workout", // Default if missing
                 title: p.title,
                 planDur: p.duration,
                 actDur: 0,
@@ -73,10 +73,6 @@ const mergeWorkouts = (planned, logs) => {
         }
     });
 
-    // 2. (Optional) Add Unplanned Logs? 
-    // For the dashboard "Upcoming/Weekly" view, we usually just stick to the plan schedule.
-    // If you want to see unplanned workouts, we'd iterate logMap here for !l._used.
-    
     // Sort by Date
     return merged.sort((a, b) => new Date(a.date) - new Date(b.date));
 };
@@ -90,11 +86,14 @@ const renderCard = (w) => {
     const textColor = isDone ? 'text-emerald-400' : 'text-blue-400';
     const label = isDone ? 'COMPLETED' : 'PLANNED';
     
-    // Icon Logic
-    let icon = 'fa-dumbbell';
-    if (w.type.toLowerCase().includes('run')) icon = 'fa-person-running';
-    if (w.type.toLowerCase().includes('bike')) icon = 'fa-person-biking';
-    if (w.type.toLowerCase().includes('swim')) icon = 'fa-person-swimming';
+    // --- ICON LOGIC (CRASH FIX HERE) ---
+    // We safely handle undefined types by defaulting to empty string
+    const typeStr = (w.type || "").toLowerCase();
+    
+    let icon = 'fa-dumbbell'; // Default generic icon
+    if (typeStr.includes('run')) icon = 'fa-person-running';
+    if (typeStr.includes('bike')) icon = 'fa-person-biking';
+    if (typeStr.includes('swim')) icon = 'fa-person-swimming';
 
     // Duration Display
     let durHtml = '';
@@ -104,12 +103,12 @@ const renderCard = (w) => {
         durHtml = `<span class="text-3xl font-bold text-white">${w.planDur}</span><span class="text-sm text-slate-400 ml-1">min</span>`;
     }
 
-    // Markdown content parsing (simple)
+    // Markdown content parsing
     const renderMarkdown = (text) => {
         if (!text) return '';
         return text
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-            .replace(/`(.*?)`/g, '<code class="bg-slate-700 px-1 rounded text-orange-300">$1</code>') // Code
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/`(.*?)`/g, '<code class="bg-slate-700 px-1 rounded text-orange-300">$1</code>')
             .replace(/\n/g, '<br>');
     };
 
@@ -142,19 +141,15 @@ export function renderDashboard(plannedData, logData, planMd) {
         return `<div class="p-8 text-center text-slate-500">No planned workouts found.</div>`;
     }
 
-    // 1. Filter for THIS WEEK (Optional, keeps the dashboard focused)
-    // For now, let's just grab the next 7 days of plans or recent ones
+    // 1. Filter for RELEVANT PLANS (Yesterday, Today, + Next 5 Days)
     const today = new Date();
     today.setHours(0,0,0,0);
     
-    // Sort planned data just in case
-    plannedData.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-    // Simple view: Show Future Plans + Past 2 Days
     const visiblePlans = plannedData.filter(p => {
+        if (!p.date) return false;
         const d = new Date(p.date);
         const diff = (d - today) / (1000 * 60 * 60 * 24);
-        return diff >= -2 && diff <= 5; // Show yesterday/today + next 5 days
+        return diff >= -2 && diff <= 5; 
     });
 
     // 2. Merge Data

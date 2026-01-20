@@ -2,16 +2,14 @@
 import { parseDur, formatTime } from './utils.js';
 
 const SPORT_CONFIG = {
-    swim: { color: 'icon-swim', icon: 'fa-person-swimming', label: 'Swim' },
-    bike: { color: 'icon-bike', icon: 'fa-person-biking', label: 'Bike' },
-    bikeElev: { color: 'icon-bike', icon: 'fa-mountain', label: 'Bike (Climb)' },
-    run:  { color: 'icon-run',  icon: 'fa-person-running',  label: 'Run' }
+    swim: { color: 'text-blue-400', icon: 'fa-person-swimming', label: 'Swim', bar: 'bg-blue-500' },
+    bike: { color: 'text-purple-400', icon: 'fa-person-biking', label: 'Bike', bar: 'bg-purple-500' },
+    bikeElev: { color: 'text-purple-400', icon: 'fa-mountain', label: 'Bike (Climb)', bar: 'bg-purple-500' },
+    run:  { color: 'text-pink-400',  icon: 'fa-person-running',  label: 'Run', bar: 'bg-pink-500' }
 };
 
-// FIX: Handle commas in numbers (e.g. "4,000")
 const parseElev = (str) => {
     if (!str) return 0;
-    // Remove commas before parsing
     const cleanStr = str.replace(/,/g, ''); 
     const match = cleanStr.match(/[\d\.]+/);
     return match ? parseFloat(match[0]) : 0;
@@ -65,15 +63,16 @@ export const renderEventList = (events, stats) => {
         const tgtRun  = parseDur(e.runGoal);
         const tgtBikeElev = parseElev(e.bikeElevGoal); 
 
-        // Convert stats (meters) to feet
-        const currentBikeElevFt = (stats.maxBikeElev || 0) * 3.28084;
+        // Convert stats (meters -> feet if needed, assume raw is feet for now based on typical MD)
+        // Adjust if your log uses meters but plan uses feet. For now assuming explicit values.
+        const currentBikeElev = stats.maxBikeElev || 0;
 
         const getPct = (curr, tgt) => tgt > 0 ? Math.min(Math.round((curr/tgt)*100), 100) : 0;
         
         const swimPct = getPct(stats.maxSwim, tgtSwim);
         const bikePct = getPct(stats.maxBike, tgtBike);
         const runPct  = getPct(stats.maxRun, tgtRun);
-        const bikeElevPct = getPct(currentBikeElevFt, tgtBikeElev);
+        const bikeElevPct = getPct(currentBikeElev, tgtBikeElev);
 
         const activePcts = [];
         if (tgtSwim > 0) activePcts.push(swimPct);
@@ -94,10 +93,10 @@ export const renderEventList = (events, stats) => {
         const timeString = `${weeks}W ${days}D TO GO`;
 
         const buildBar = (type, current, target, pct, isElev = false) => {
-            // CRITICAL CHECK: If target is 0, bar is hidden.
             if (!target || target === 0) return ''; 
             
             const config = SPORT_CONFIG[type];
+            // Use specific bar color if ready, else use config default
             const barColor = pct >= 85 ? 'bg-emerald-500' : (pct >= 60 ? 'bg-yellow-500' : 'bg-red-500');
             
             const displayCurrent = isElev ? formatElev(current) : formatTime(current);
@@ -146,7 +145,7 @@ export const renderEventList = (events, stats) => {
                 <div class="md:w-3/4 w-full">
                     ${buildBar('swim', stats.maxSwim, tgtSwim, swimPct)}
                     ${buildBar('bike', stats.maxBike, tgtBike, bikePct)}
-                    ${buildBar('bikeElev', currentBikeElevFt, tgtBikeElev, bikeElevPct, true)}
+                    ${buildBar('bikeElev', currentBikeElev, tgtBikeElev, bikeElevPct, true)}
                     ${buildBar('run', stats.maxRun, tgtRun, runPct)}
                 </div>
             </div>

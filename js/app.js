@@ -1,7 +1,7 @@
 // js/app.js
 
 (async function initApp() {
-    console.log("🚀 Booting App (Race Readiness Fix)...");
+    console.log("🚀 Booting App (Strava FTP Restore)...");
     const cacheBuster = Date.now();
     
     // --- 1. DYNAMIC IMPORTS ---
@@ -74,7 +74,6 @@
                 this.garminData = await garminRes.json();
 
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
-                console.log(`✅ Data Loaded: ${this.rawLogData.length} logs found.`);
 
             } catch (err) {
                 console.error("❌ Data Load Error:", err);
@@ -135,12 +134,14 @@
                         case 'metrics':
                             content.innerHTML = renderMetrics(this.rawLogData); 
                             break;
-                        
-                        // --- FIX IS HERE ---
                         case 'readiness':
-                            // Now passing BOTH log data AND plan data
-                            console.log("🏁 Rendering Readiness...");
                             content.innerHTML = renderReadiness(this.rawLogData, this.planMd);
+                            break;
+                        
+                        // --- RESTORED: PASS ONLY PLAN MD ---
+                        // The view itself will fetch the Strava files
+                        case 'ftp':
+                            content.innerHTML = renderFTP(this.planMd); 
                             break;
                             
                         case 'gear':
@@ -149,9 +150,6 @@
                             break;
                         case 'zones':
                             content.innerHTML = renderZones(this.garminData);
-                            break;
-                        case 'ftp':
-                            content.innerHTML = renderFTP(this.garminData);
                             break;
                         case 'roadmap':
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);

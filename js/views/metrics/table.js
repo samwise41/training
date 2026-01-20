@@ -1,127 +1,15 @@
 // js/views/metrics/table.js
 import { METRIC_DEFINITIONS } from './definitions.js';
-import { checkSport, calculateTrend, getTrendIcon } from './utils.js';
-
-const METRIC_FORMULAS = {
-    'subjective_bike': '(Avg Power / RPE)',
-    'subjective_run': '(Avg Speed / RPE)',
-    'subjective_swim': '(Avg Speed / RPE)',
-    'endurance': '(Norm Power / Avg HR)',
-    'strength': '(Torque / Output)',
-    'run': '(Avg Power / Avg Speed)',
-    'swim': '(Avg Speed / Stroke Rate)',
-    'mechanical': '(Vert Osc / GCT)'
-};
-
-export const extractMetricData = (data, key) => {
-    // Helper to check training effect labels if they exist
-    const isInt = (item, labels) => {
-        const l = (item.trainingEffectLabel || "").toString().toUpperCase().trim();
-        return labels.some(allowed => l === allowed.toUpperCase());
-    };
-
-    switch(key) {
-        // CYCLING
-        case 'endurance': 
-            return data.filter(x => checkSport(x, 'BIKE') && x.avgPower > 0 && x.avgHR > 0).map(x => ({ 
-                val: x.avgPower / x.avgHR, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `Pwr:${Math.round(x.avgPower)} / HR:${Math.round(x.avgHR)}` 
-            }));
-        case 'strength': 
-            return data.filter(x => checkSport(x, 'BIKE') && x.avgPower > 0 && x.avgCadence > 0).map(x => ({ 
-                val: x.avgPower / x.avgCadence, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `Pwr:${Math.round(x.avgPower)} / RPM:${Math.round(x.avgCadence)}` 
-            }));
-        
-        // RUNNING
-        case 'run': 
-            return data.filter(x => checkSport(x, 'RUN') && x.avgSpeed > 0 && x.avgHR > 0).map(x => ({ 
-                val: (x.avgSpeed * 60) / x.avgHR, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `Pace:${Math.round(x.avgSpeed*60)}m/m / HR:${Math.round(x.avgHR)}` 
-            }));
-        case 'mechanical': 
-            return data.filter(x => checkSport(x, 'RUN') && x.avgSpeed > 0 && x.avgPower > 0).map(x => ({ 
-                val: (x.avgSpeed * 100) / x.avgPower, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `Spd:${x.avgSpeed.toFixed(1)} / Pwr:${Math.round(x.avgPower)}` 
-            }));
-        case 'gct': 
-            return data.filter(x => checkSport(x, 'RUN') && x.avgGroundContactTime > 0).map(x => ({ 
-                val: x.avgGroundContactTime, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `${Math.round(x.avgGroundContactTime)} ms` 
-            }));
-        case 'vert': 
-            return data.filter(x => checkSport(x, 'RUN') && x.avgVerticalOscillation > 0).map(x => ({ 
-                val: x.avgVerticalOscillation, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `${x.avgVerticalOscillation.toFixed(1)} cm` 
-            }));
-        
-        // SWIMMING
-        case 'swim': 
-            return data.filter(x => checkSport(x, 'SWIM') && x.avgSpeed > 0 && x.avgHR > 0).map(x => ({ 
-                val: (x.avgSpeed * 60) / x.avgHR, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `Spd:${(x.avgSpeed*60).toFixed(1)}m/m / HR:${Math.round(x.avgHR)}` 
-            }));
-        
-        // GENERAL
-        case 'vo2max': 
-            return data.filter(x => x.vO2MaxValue > 0).map(x => ({ 
-                val: x.vO2MaxValue, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: "VO2 Est", 
-                breakdown: `Score: ${x.vO2MaxValue}` 
-            }));
-        case 'anaerobic': 
-            return data.filter(x => x.anaerobicTrainingEffect > 0.5).map(x => ({ 
-                val: x.anaerobicTrainingEffect, 
-                date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName || x.activityName, 
-                breakdown: `Anaerobic: ${x.anaerobicTrainingEffect}` 
-            }));
-        case 'tss': 
-            return []; // Handled by aggregate logic elsewhere or returned empty if not needed
-        default: return [];
-    }
-};
-
-const extractSubjectiveTableData = (data, key) => {
-    let sportMode = null;
-    if (key === 'subjective_bike') sportMode = 'bike';
-    else if (key === 'subjective_run') sportMode = 'run';
-    else if (key === 'subjective_swim') sportMode = 'swim';
-    if (!sportMode) return [];
-
-    return data.map(d => {
-        const rpe = parseFloat(d.RPE || d.rpe || 0);
-        if (rpe <= 0) return null;
-        let val = 0;
-
-        if (sportMode === 'bike' && checkSport(d, 'BIKE')) {
-            const pwr = parseFloat(d.avgPower);
-            if (pwr > 0) val = pwr / rpe;
-        } else if (sportMode === 'run' && checkSport(d, 'RUN')) {
-            const spd = parseFloat(d.avgSpeed);
-            if (spd > 0) val = spd / rpe;
-        } else if (sportMode === 'swim' && checkSport(d, 'SWIM')) {
-            const spd = parseFloat(d.avgSpeed);
-            if (spd > 0) val = spd / rpe;
-        }
-        
-        if (val > 0) return { val, date: d.date };
-        return null;
-    }).filter(Boolean).sort((a,b) => a.date - b.date);
-};
+import { calculateTrend, getTrendIcon } from './utils.js';
+// NEW IMPORT:
+import { METRIC_FORMULAS, extractMetricData, extractSubjectiveTableData } from './parser.js';
 
 export const renderSummaryTable = (allData) => {
     let rows = '';
     const now = new Date();
 
     const groups = [
-        { name: 'General Fitness', keys: ['vo2max', 'anaerobic'] },
+        { name: 'General Fitness', keys: ['vo2max', 'tss', 'anaerobic'] },
         { name: 'Cycling Metrics', keys: ['subjective_bike', 'endurance', 'strength'] },
         { name: 'Running Metrics', keys: ['subjective_run', 'run', 'mechanical', 'gct', 'vert'] },
         { name: 'Swimming Metrics', keys: ['subjective_swim', 'swim'] }
@@ -149,6 +37,7 @@ export const renderSummaryTable = (allData) => {
             
             if (!fullData || !fullData.length) return;
 
+            // Trend Calculations
             const getT = (days) => {
                 const cutoff = new Date();
                 cutoff.setDate(now.getDate() - days);
@@ -161,6 +50,7 @@ export const renderSummaryTable = (allData) => {
             const t90 = getT(90);
             const t6m = getT(180);
 
+            // Current Status
             const recentSubset = fullData.filter(d => d.date >= new Date(now.getTime() - 30*24*60*60*1000));
             let statusHtml = '<span class="text-slate-500">--</span>';
             if (recentSubset.length > 0) {
@@ -174,6 +64,7 @@ export const renderSummaryTable = (allData) => {
                 }
             }
 
+            // Icons
             const iconCell = `
                 <div onclick="window.scrollToMetric('${key}')" class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700 hover:border-slate-500 hover:scale-110 transition-all duration-200 group shadow-sm" title="Jump to Chart">
                     <i class="fa-solid ${def.icon} text-xs group-hover:text-white transition-colors" style="color: ${def.colorVar}"></i>
@@ -215,3 +106,10 @@ export const renderSummaryTable = (allData) => {
                         <th class="px-4 py-3 text-center">6m</th>
                         <th class="px-4 py-3 text-right">Current Status</th>
                     </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700/50 text-slate-300">
+                    ${rows}
+                </tbody>
+            </table>
+        </div>`;
+};

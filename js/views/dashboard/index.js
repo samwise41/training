@@ -55,7 +55,6 @@ window.triggerGitHubSync = async () => {
 };
 
 // --- TOOLTIP HANDLER ---
-// Keeps the tooltip logic for the Progress Widget and other dashboard elements
 window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, details) => {
     let tooltip = document.getElementById('dashboard-tooltip-popup');
     
@@ -106,9 +105,8 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
     window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
 };
 
-// --- MAIN RENDER FUNCTION ---
-// Now async to handle fetching the heatmap JSON
-export async function renderDashboard(planMd, mergedLogData) {
+// --- MAIN RENDER FUNCTION (Synchronous) ---
+export function renderDashboard(planMd, mergedLogData) {
     const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
     if (!scheduleSection) return '<p class="text-slate-500 italic">No Weekly Schedule found.</p>';
 
@@ -117,27 +115,13 @@ export async function renderDashboard(planMd, mergedLogData) {
 
     const fullLogData = mergedLogData || [];
 
-    // 1. Fetch Heatmap Data (New Implementation)
-    let heatmapData = {};
-    try {
-        const response = await fetch('data/dashboard/heatmaps.json');
-        if (response.ok) {
-            heatmapData = await response.json();
-        } else {
-            console.warn("Heatmaps.json not found, falling back to empty.");
-        }
-    } catch (e) {
-        console.error("Error loading heatmaps:", e);
-    }
-
-    // 2. Render Widgets
+    // Render Widgets
     const progressHtml = renderProgressWidget(workouts, fullLogData);
     const plannedWorkoutsHtml = renderPlannedWorkouts(planMd);
     
-    // Pass the fetched JSON data to the heatmaps renderer
-    const heatmapsHtml = renderHeatmaps(heatmapData);
+    // Calls heatmaps synchronously; heatmaps handles its own async data fetching
+    const heatmapsHtml = renderHeatmaps();
 
-    // --- SYNC BUTTON HTML ---
     const syncButtonHtml = `
         <div class="flex justify-end mb-4">
             <button id="btn-force-sync" onclick="window.triggerGitHubSync()" 

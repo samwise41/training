@@ -1,7 +1,7 @@
 // js/views/metrics/table.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend, getTrendIcon } from './utils.js';
-// Correctly importing the functions we just exported above
+// FIX: Importing from the correct parser file
 import { METRIC_FORMULAS, extractMetricData, extractSubjectiveTableData } from './parser.js';
 
 export const renderSummaryTable = (allData) => {
@@ -28,7 +28,8 @@ export const renderSummaryTable = (allData) => {
             if (!fullData) fullData = [];
             fullData.sort((a,b) => a.date - b.date);
 
-            if (fullData.length === 0) return; // Skip empty metrics
+            // Skip empty rows
+            if (fullData.length === 0) return;
 
             const getT = (days) => {
                 const cutoff = new Date(); cutoff.setDate(now.getDate() - days);

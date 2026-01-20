@@ -4,18 +4,22 @@ import { SPORT_IDS, METRIC_DEFINITIONS } from './definitions.js';
 // --- DATA HELPERS ---
 
 export const checkSport = (activity, sportKey) => {
-    // 1. Try ID Match (Most Robust)
-    const typeId = activity.activityType ? activity.activityType.typeId : null;
-    const parentId = activity.activityType ? activity.activityType.parentTypeId : null;
+    // 1. Try ID Match (Old Way)
+    const typeId = activity.activityType?.typeId || activity.sportTypeId;
+    const parentId = activity.activityType?.parentTypeId;
     
     if (SPORT_IDS[sportKey] && (SPORT_IDS[sportKey].includes(typeId) || SPORT_IDS[sportKey].includes(parentId))) {
         return true;
     }
 
-    // 2. Fallback: String Match (Safety Net)
-    if (activity.actualType && activity.actualType.toUpperCase() === sportKey) {
-        return true;
-    }
+    // 2. String Match (New Way for training_log.json)
+    // Checks 'activityType' or 'actualSport' for string inclusion
+    const typeStr = String(activity.activityType || activity.actualSport || activity.actualType || "").toUpperCase();
+    const key = sportKey.toUpperCase();
+    
+    if (key === 'BIKE' && (typeStr.includes('BIKE') || typeStr.includes('CYCL') || typeStr.includes('RIDE'))) return true;
+    if (key === 'RUN' && typeStr.includes('RUN')) return true;
+    if (key === 'SWIM' && typeStr.includes('SWIM')) return true;
     
     return false;
 };
@@ -23,16 +27,20 @@ export const checkSport = (activity, sportKey) => {
 export const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
-        if (!d.trainingStressScore || d.trainingStressScore === 0) return;
+        const tss = parseFloat(d.trainingStressScore || d.tss || 0);
+        if (tss === 0) return;
+        
         const date = new Date(d.date);
         const day = date.getDay(); 
         const diff = date.getDate() - day + (day === 0 ? 0 : 7); 
         const weekEnd = new Date(date.setDate(diff));
         weekEnd.setHours(0,0,0,0);
         const key = weekEnd.toISOString().split('T')[0];
+        
         if (!weeks[key]) weeks[key] = 0;
-        weeks[key] += parseFloat(d.trainingStressScore);
+        weeks[key] += tss;
     });
+    
     return Object.keys(weeks).sort().map(k => ({
         date: new Date(k),
         dateStr: `Week Ending ${k}`,
@@ -65,9 +73,7 @@ export const getTrendIcon = (slope, invert) => {
     };
 };
 
-
 // --- UI COMPONENT BUILDERS ---
-
 export const buildCollapsibleSection = (id, title, contentHtml, isOpen = true) => {
     const contentClasses = isOpen ? "max-h-[5000px] opacity-100 py-4 mb-8" : "max-h-0 opacity-0 py-0 mb-0";
     const iconClasses = isOpen ? "rotate-0" : "-rotate-90";
@@ -84,9 +90,7 @@ export const buildCollapsibleSection = (id, title, contentHtml, isOpen = true) =
     `;
 };
 
-
 // --- GLOBAL INTERACTION HANDLERS ---
-
 window.toggleSection = (id) => {
     const content = document.getElementById(id);
     if (!content) return;
@@ -108,14 +112,11 @@ window.toggleSection = (id) => {
 const performScroll = (id) => {
     const wrapper = document.getElementById(id);
     if (!wrapper) return;
-    
     wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
     const card = wrapper.firstElementChild;
     if (card) {
         card.classList.remove('bg-slate-800/30'); 
         card.classList.add('bg-slate-800', 'ring-2', 'ring-inset', 'ring-blue-500', 'shadow-lg', 'shadow-blue-900/50', 'transition-all', 'duration-500');
-        
         setTimeout(() => {
             card.classList.remove('bg-slate-800', 'ring-2', 'ring-inset', 'ring-blue-500', 'shadow-lg', 'shadow-blue-900/50');
             card.classList.add('bg-slate-800/30'); 
@@ -127,7 +128,6 @@ window.scrollToMetric = (key) => {
     const sectionId = 'metrics-charts-section';
     const chartId = `metric-chart-${key}`;
     const section = document.getElementById(sectionId);
-    
     if (section && section.classList.contains('max-h-0')) {
         window.toggleSection(sectionId);
         setTimeout(() => performScroll(chartId), 300);
@@ -135,9 +135,6 @@ window.scrollToMetric = (key) => {
         performScroll(chartId);
     }
 };
-
-
-// --- TOOLTIP STATE MANAGER ---
 
 let activeTooltips = { data: null, static: null };
 let tooltipTimers = { data: null, static: null };
@@ -156,51 +153,25 @@ const closeTooltip = (channel) => {
 const manageTooltip = (evt, id, contentHTML, channel) => {
     evt.stopPropagation(); 
     const triggerEl = evt.target;
-
     if (activeTooltips[channel] && activeTooltips[channel].trigger === triggerEl) {
         closeTooltip(channel);
         return;
     }
-    
     closeTooltip(channel);
-
     const tooltip = document.getElementById(id);
     if (!tooltip) return;
-
     tooltip.innerHTML = contentHTML;
     tooltip.classList.remove('opacity-0', 'pointer-events-none');
-
-    const x = evt.pageX;
-    const y = evt.pageY;
-    const viewportWidth = window.innerWidth;
-
-    if (x > viewportWidth * 0.6) {
-        tooltip.style.right = `${viewportWidth - x + 10}px`; tooltip.style.left = 'auto';
-    } else {
-        tooltip.style.left = `${x + 10}px`; tooltip.style.right = 'auto';
-    }
-    
+    const x = evt.pageX; const y = evt.pageY; const viewportWidth = window.innerWidth;
+    if (x > viewportWidth * 0.6) { tooltip.style.right = `${viewportWidth - x + 10}px`; tooltip.style.left = 'auto'; } 
+    else { tooltip.style.left = `${x + 10}px`; tooltip.style.right = 'auto'; }
     let topPos = channel === 'data' ? y - tooltip.offsetHeight - 20 : y + 25;
-    const otherChannel = channel === 'data' ? 'static' : 'data';
-    const otherActive = activeTooltips[otherChannel];
-    
-    if (otherActive) {
-        const otherEl = document.getElementById(otherActive.id);
-        if (otherEl && !otherEl.classList.contains('opacity-0')) {
-            const r2 = otherEl.getBoundingClientRect();
-            if (channel === 'static' && (y - r2.bottom < 50)) {
-                topPos = Math.max(topPos, r2.bottom + window.scrollY + 10);
-            }
-        }
-    }
     tooltip.style.top = `${topPos}px`;
-
     activeTooltips[channel] = { id, trigger: triggerEl };
     if (tooltipTimers[channel]) clearTimeout(tooltipTimers[channel]);
     tooltipTimers[channel] = setTimeout(() => closeTooltip(channel), 15000);
 };
 
-// Global click listener for tooltips
 window.addEventListener('click', (e) => {
     ['data', 'static'].forEach(channel => {
         const active = activeTooltips[channel];

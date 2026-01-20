@@ -1,153 +1,113 @@
 // js/views/dashboard/utils.js
 
 // --- DATE HELPERS ---
-
 export const toLocalYMD = (dateInput) => {
+    if (!dateInput) return '';
     const d = new Date(dateInput);
+    if (isNaN(d.getTime())) return ''; // Safety check
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 };
 
+// --- DATA NORMALIZERS ---
+
+// 1. Convert Strings to Date Objects (Fixes Timezone Shifts)
+export function normalizeData(data) {
+    if (!Array.isArray(data)) return [];
+    return data.map(item => {
+        const newItem = { ...item };
+        if (newItem.date && typeof newItem.date === 'string') {
+            const parts = newItem.date.split('-');
+            if (parts.length === 3) {
+                // Force Local Time Construction
+                newItem.date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            } else {
+                newItem.date = new Date(newItem.date);
+            }
+        }
+        return newItem;
+    });
+}
+
+// 2. Intelligent Merge (Fixes Doubling)
+// Log Data overwrites Planned Data if they are on the same day/sport
+export function mergeAndDeduplicate(planned, actuals) {
+    const map = new Map();
+
+    // Helper to generate key: "2024-01-01|bike"
+    const getKey = (item) => {
+        if (!item.date) return null;
+        const dateStr = item.date.toISOString().split('T')[0];
+        let sport = 'Other';
+        const type = String(item.activityType || item.actualSport || '').toLowerCase();
+        if (type.includes('bike') || type.includes('ride')) sport = 'Bike';
+        else if (type.includes('run')) sport = 'Run';
+        else if (type.includes('swim')) sport = 'Swim';
+        return `${dateStr}|${sport}`;
+    };
+
+    // 1. Load Plan first
+    planned.forEach(item => {
+        const k = getKey(item);
+        if (k) map.set(k, item);
+    });
+
+    // 2. Overlay Actuals (Source of Truth)
+    actuals.forEach(item => {
+        const k = getKey(item);
+        if (k) {
+            // Merge actuals INTO plan, or replace plan
+            const existing = map.get(k) || {};
+            // We keep the plan metadata (notes) but take the actual stats
+            const merged = { ...existing, ...item };
+            map.set(k, merged);
+        }
+    });
+
+    return Array.from(map.values());
+}
 
 // --- STYLE & COLOR HELPERS ---
-
 export const getSportColorVar = (type) => {
-    if (type === 'Bike') return 'var(--color-bike)';
-    if (type === 'Run') return 'var(--color-run)';
-    if (type === 'Swim') return 'var(--color-swim)';
-    if (type === 'Strength') return 'var(--color-strength, #a855f7)';
+    if (!type) return 'var(--color-all)';
+    const t = type.toLowerCase();
+    if (t === 'bike' || t.includes('cycl')) return 'var(--color-bike)';
+    if (t === 'run' || t.includes('run')) return 'var(--color-run)';
+    if (t === 'swim' || t.includes('swim')) return 'var(--color-swim)';
+    if (t === 'strength') return 'var(--color-strength, #a855f7)';
     return 'var(--color-all)';
 };
 
 export const getIcon = (type) => { 
     const colorStyle = `style="color: ${getSportColorVar(type)}"`;
-    if (type === 'Bike') return `<i class="fa-solid fa-bicycle text-xl opacity-80" ${colorStyle}></i>`;
-    if (type === 'Run') return `<i class="fa-solid fa-person-running text-xl opacity-80" ${colorStyle}></i>`;
-    if (type === 'Swim') return `<i class="fa-solid fa-person-swimming text-xl opacity-80" ${colorStyle}></i>`;
-    if (type === 'Strength') return `<i class="fa-solid fa-dumbbell text-xl opacity-80" ${colorStyle}></i>`;
-    return `<i class="fa-solid fa-stopwatch text-slate-500 text-xl opacity-80"></i>`; 
+    const t = String(type || '').toLowerCase();
+    
+    if (t === 'bike' || t.includes('cycl') || t.includes('ride')) 
+        return `<i class="fa-solid fa-bicycle text-xl opacity-80" ${colorStyle}></i>`;
+    if (t === 'run') 
+        return `<i class="fa-solid fa-person-running text-xl opacity-80" ${colorStyle}></i>`;
+    if (t === 'swim') 
+        return `<i class="fa-solid fa-person-swimming text-xl opacity-80" ${colorStyle}></i>`;
+    
+    return `<i class="fa-solid fa-dumbbell text-xl opacity-80" ${colorStyle}></i>`;
 };
 
-
-// --- UI COMPONENT BUILDERS ---
-
-/**
- * Creates a collapsible section structure.
- * Note: Relies on window.toggleSection (defined below) for interactivity.
- */
-export const buildCollapsibleSection = (id, title, contentHtml, isOpen = true) => {
-    const contentClasses = isOpen 
-        ? "max-h-[5000px] opacity-100 py-4 mb-8" 
-        : "max-h-0 opacity-0 py-0 mb-0";
-    const iconClasses = isOpen 
-        ? "rotate-0" 
-        : "-rotate-90";
-
+export const buildCollapsibleSection = (id, title, content, isOpen = false) => {
+    const arrowClass = isOpen ? 'fa-rotate-180' : '';
+    const contentClass = isOpen ? '' : 'hidden';
+    
     return `
-        <div class="w-full">
-            <div class="flex items-center gap-2 cursor-pointer py-3 border-b-2 border-slate-700 hover:border-slate-500 transition-colors group select-none" onclick="window.toggleSection('${id}')">
-                <i id="icon-${id}" class="fa-solid fa-caret-down text-slate-400 text-base transition-transform duration-300 group-hover:text-white ${iconClasses}"></i>
-                <h2 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">${title}</h2>
-            </div>
-            <div id="${id}" class="collapsible-content overflow-hidden transition-all duration-500 ease-in-out ${contentClasses}">
-                ${contentHtml}
-            </div>
-        </div>
-    `;
-};
-
-
-// --- GLOBAL INTERACTION HANDLERS ---
-
-/**
- * Toggles the visibility of a collapsible section.
- * Attached to window to support inline onclick handlers in HTML strings.
- */
-window.toggleSection = (id) => {
-    const content = document.getElementById(id);
-    const icon = document.getElementById(`icon-${id}`);
-    
-    if (!content) return;
-
-    // Toggle Content
-    if (content.classList.contains('max-h-0')) {
-        // OPEN
-        content.classList.remove('max-h-0', 'opacity-0', 'py-0', 'mb-0');
-        content.classList.add('max-h-[5000px]', 'opacity-100', 'py-4', 'mb-8');
-        if (icon) {
-            icon.classList.remove('-rotate-90');
-            icon.classList.add('rotate-0');
-        }
-    } else {
-        // CLOSE
-        content.classList.remove('max-h-[5000px]', 'opacity-100', 'py-4', 'mb-8');
-        content.classList.add('max-h-0', 'opacity-0', 'py-0', 'mb-0');
-        if (icon) {
-            icon.classList.remove('rotate-0');
-            icon.classList.add('-rotate-90');
-        }
-    }
-};
-
-/**
- * Renders the floating tooltip for charts/grids.
- * Attached to window to support inline onclick handlers.
- */
-window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType) => {
-    let tooltip = document.getElementById('dashboard-tooltip-popup');
-    
-    if (!tooltip) {
-        tooltip = document.createElement('div');
-        tooltip.id = 'dashboard-tooltip-popup';
-        tooltip.className = 'z-50 bg-slate-900 border border-slate-600 p-3 rounded-md shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed min-w-[140px]';
-        document.body.appendChild(tooltip);
-    }
-
-    tooltip.innerHTML = `
-        <div class="text-center">
-            <div class="text-white font-bold text-sm mb-0.5 whitespace-nowrap">
-                Plan: ${Math.round(plan)}m | Act: ${Math.round(act)}m
-            </div>
-            
-            <div class="text-[10px] text-slate-400 font-normal mb-1">
-                ${date}
-            </div>
-
-            <div class="text-[10px] text-slate-200 font-mono font-bold border-b border-slate-700 pb-1 mb-1">
-                ${sportType}
-            </div>
-
-            <div class="text-[11px] font-bold mt-1 uppercase tracking-wide" style="color: ${color}">
-                ${label}
+        <div class="mb-6 border border-slate-700 rounded-xl overflow-hidden bg-slate-800/30">
+            <button onclick="document.getElementById('${id}').classList.toggle('hidden'); this.querySelector('i').classList.toggle('fa-rotate-180')" 
+                class="w-full flex justify-between items-center p-4 bg-slate-800/50 hover:bg-slate-800 transition-colors text-left">
+                <span class="font-bold text-slate-200 text-sm uppercase tracking-wider">${title}</span>
+                <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300 ${arrowClass}"></i>
+            </button>
+            <div id="${id}" class="${contentClass} p-4 border-t border-slate-700/50">
+                ${content}
             </div>
         </div>
     `;
-
-    // Position Logic
-    const x = evt.clientX;
-    const y = evt.clientY;
-    const viewportWidth = window.innerWidth;
-    
-    tooltip.style.top = `${y - 75}px`; 
-    tooltip.style.left = '';
-    tooltip.style.right = '';
-
-    if (x > viewportWidth * 0.60) {
-        tooltip.style.right = `${viewportWidth - x + 10}px`;
-        tooltip.style.left = 'auto';
-    } else {
-        tooltip.style.left = `${x - 70}px`; 
-        tooltip.style.right = 'auto';
-    }
-    
-    if (parseInt(tooltip.style.left) < 10) tooltip.style.left = '10px';
-
-    tooltip.classList.remove('opacity-0');
-    
-    if (window.dashTooltipTimer) clearTimeout(window.dashTooltipTimer);
-    window.dashTooltipTimer = setTimeout(() => {
-        tooltip.classList.add('opacity-0');
-    }, 3000);
 };

@@ -1,7 +1,7 @@
 // js/views/dashboard/heatmaps.js
 import { toLocalYMD } from './utils.js';
 
-// --- Internal Helper: CSS Vars for Activity Heatmap ---
+// --- CSS Vars for Activity Types ---
 const getSportColorVar = (type) => {
     if (type === 'Bike') return 'var(--color-bike)';
     if (type === 'Run') return 'var(--color-run)';
@@ -10,13 +10,13 @@ const getSportColorVar = (type) => {
     return 'var(--color-all)';
 };
 
-// --- Internal Builder: Generic Heatmap (Consistency) ---
-function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn, containerId = null) {
-    if (!combinedLog) combinedLog = [];
+// --- Heatmap 1: Consistency (Planned vs Actual) ---
+function buildGenericHeatmap(logData, startDate, endDate, title, dateToKeyFn, containerId = null) {
+    if (!logData) logData = [];
     
-    // Group data by date
+    // 1. Group Data
     const dataMap = {}; 
-    combinedLog.forEach(item => { 
+    logData.forEach(item => { 
         if (!item.date) return;
         const dateKey = dateToKeyFn(item.date); 
         if (!dataMap[dateKey]) dataMap[dateKey] = []; 
@@ -26,7 +26,8 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
     const today = new Date(); 
     today.setHours(0,0,0,0);
     
-    const highContrastStripe = "background-image: repeating-linear-gradient(45deg, #10b981, #10b981 3px, #065f46 3px, #065f46 6px);";
+    // Styles
+    const stripeStyle = "background-image: repeating-linear-gradient(45deg, #10b981, #10b981 3px, #065f46 3px, #065f46 6px);";
     
     const getHexColor = (cls) => {
         if (cls.includes('emerald-500')) return '#10b981';
@@ -37,17 +38,15 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
         return '#94a3b8';
     };
 
-    const startDay = startDate.getDay(); // 0=Sun
+    // 2. Build Grid
+    const startDay = startDate.getDay(); 
     let cellsHtml = ''; 
-    
-    // Empty cells for alignment
     for (let i = 0; i < startDay; i++) { 
         cellsHtml += `<div class="w-3 h-3 m-[1px] opacity-0"></div>`; 
     }
     
     let currentDate = new Date(startDate);
-    const maxLoops = 400; 
-    let loops = 0;
+    const maxLoops = 400; let loops = 0;
     
     while (currentDate <= endDate && loops < maxLoops) {
         loops++; 
@@ -66,6 +65,7 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
         const uniqueTypes = new Set();
         let detailList = [];
 
+        // 3. Aggregate Day Data
         if (dayData && dayData.length > 0) { 
             dayData.forEach(d => { 
                 const pDur = parseFloat(d.plannedDuration) || 0;
@@ -82,76 +82,78 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
                 detailList.push(`${name} (${durDisplay})`);
             }); 
             
-            if (uniqueTypes.size > 0) {
-                sportLabel = Array.from(uniqueTypes).join(' + ');
-            } else if (isRestType) {
-                sportLabel = "Rest Day";
-            }
+            if (uniqueTypes.size > 0) sportLabel = Array.from(uniqueTypes).join(' + ');
+            else if (isRestType) sportLabel = "Rest Day";
         }
         
         const detailStr = detailList.join('<br>');
-        const hasActivity = (totalPlan > 0 || totalAct > 0); 
+        const hasActivity = (totalPlan > 0 || totalAct > 0);
         
-        const compDate = new Date(currentDate);
-        compDate.setHours(0,0,0,0);
-        const isFuture = compDate > today;
-
-        if (totalAct > 0 && (totalPlan === 0)) { 
+        // 4. Determine Cell Color
+        if (totalAct > 0 && totalPlan === 0) { 
             colorClass = 'bg-emerald-500'; 
-            inlineStyle = highContrastStripe; 
+            inlineStyle = stripeStyle; 
             statusLabel = "Unplanned"; 
-        }
-        else if (isFuture) { 
-            if (totalPlan > 0) { 
-                colorClass = 'bg-slate-700'; 
-                statusLabel = "Planned"; 
-            } else { 
-                colorClass = 'bg-slate-800'; 
-                statusLabel = "Future"; 
-            } 
-        }
-        else { 
-            if (totalPlan > 0) { 
-                if (totalAct === 0) { 
+        } 
+        else if (totalPlan > 0) {
+            if (totalAct === 0) { 
+                // Only mark missed if it's in the past
+                if (currentDate < today) {
                     colorClass = 'bg-red-500/80'; 
-                    statusLabel = "Missed"; 
-                } else { 
-                    const ratio = totalAct / totalPlan; 
-                    if (ratio >= 0.95) { colorClass = 'bg-emerald-500'; statusLabel = "Completed"; } 
-                    else { colorClass = 'bg-yellow-500'; statusLabel = `Partial (${Math.round(ratio*100)}%)`; } 
-                } 
+                    statusLabel = "Missed";
+                } else {
+                    colorClass = 'bg-slate-700';
+                    statusLabel = "Planned";
+                }
             } else { 
-                colorClass = isRestType ? 'bg-emerald-500/50' : 'bg-slate-800'; 
-                statusLabel = isRestType ? "Rest Day" : "Empty"; 
-            } 
+                const ratio = totalAct / totalPlan; 
+                if (ratio >= 0.95) { colorClass = 'bg-emerald-500'; statusLabel = "Completed"; } 
+                else { colorClass = 'bg-yellow-500'; statusLabel = `Partial (${Math.round(ratio*100)}%)`; } 
+            }
+        } 
+        else {
+            // No Plan, No Actual
+            if (isRestType) {
+                colorClass = 'bg-emerald-500/50'; 
+                statusLabel = "Rest Day";
+            } else {
+                // Infer Rest Day if in the past
+                if (currentDate <= today) {
+                    colorClass = 'bg-emerald-500/50';
+                    statusLabel = "Rest Day";
+                } else {
+                    colorClass = 'bg-slate-800'; // Future empty
+                    statusLabel = "Future";
+                }
+            }
         }
 
-        // SUNDAY VISIBILITY: Hide if no REAL activity (Plan or Actual). 
-        // This hides "Rest Day" and "Empty" on Sundays.
-        if (dayOfWeek === 0 && !hasActivity && !isFuture) { 
+        // 5. Hide Empty Sundays
+        // Hide if Sunday AND no real work done/planned
+        if (dayOfWeek === 0 && !hasActivity) { 
+            // If it was inferred as Rest Day, we still hide it on Sunday for layout cleanliness
+            // unless there is explicit data.
             inlineStyle = 'opacity: 0;'; 
             colorClass = '';
         }
 
         const hexColor = getHexColor(colorClass);
-        const isVisible = !(dayOfWeek === 0 && !hasActivity && !isFuture);
+        const isVisible = !(dayOfWeek === 0 && !hasActivity);
         
         const clickAttr = isVisible ? 
             `onclick="window.showDashboardTooltip(event, '${dateKey}', ${totalPlan}, ${totalAct}, '${statusLabel.replace(/'/g, "\\'")}', '${hexColor}', '${sportLabel}', '${detailStr}')"` : '';
-        
         const cursorClass = isVisible ? 'cursor-pointer hover:opacity-80' : '';
 
         cellsHtml += `<div class="w-3 h-3 rounded-sm ${colorClass} ${cursorClass} m-[1px]" style="${inlineStyle}" ${clickAttr}></div>`;
         currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    // Month Labels
+    // 6. Build Month Labels
     let monthsHtml = '';
     let loopDate = new Date(startDate);
     loopDate.setDate(loopDate.getDate() - loopDate.getDay());
     let lastMonth = -1;
     const labelLoopsMax = 60; let labelLoops = 0;
-    
     while (loopDate <= endDate && labelLoops < labelLoopsMax) {
         labelLoops++;
         const m = loopDate.getMonth();
@@ -190,11 +192,11 @@ function buildGenericHeatmap(combinedLog, startDate, endDate, title, dateToKeyFn
     `;
 }
 
-// --- Internal Builder: Activity Heatmap (Sport Types) ---
-function buildActivityHeatmap(fullLog, startDate, endDate, title, dateToKeyFn, containerId = null) {
-    if (!fullLog) fullLog = [];
+// --- Heatmap 2: Activity Types (Actuals Only) ---
+function buildActivityHeatmap(logData, startDate, endDate, title, dateToKeyFn, containerId = null) {
+    if (!logData) logData = [];
 
-    // --- SPORT DETECTION LOGIC ---
+    // Sport Detector
     const detectSport = (item) => {
         const raw = item.actualSport || item.activityType || item.sport || '';
         const name = String(item.actualWorkout || item.activityName || raw).toUpperCase();
@@ -207,10 +209,11 @@ function buildActivityHeatmap(fullLog, startDate, endDate, title, dateToKeyFn, c
         return 'Other';
     };
     
-    // Map: Date -> { sports: Set(), totalAct: 0, details: [] }
+    // Group Actuals
     const activityMap = {};
-    fullLog.forEach(item => {
+    logData.forEach(item => {
         const dur = parseFloat(item.actualDuration) || 0;
+        // Only count if meaningful duration exists
         if (dur > 0 && item.date) {
             const key = dateToKeyFn(item.date);
             if (!activityMap[key]) activityMap[key] = { sports: new Set(), totalAct: 0, details: [] };
@@ -256,6 +259,7 @@ function buildActivityHeatmap(fullLog, startDate, endDate, title, dateToKeyFn, c
                 style = `background-color: ${getSportColorVar(sports[0])};`;
                 colorClass = ''; 
             } else if (sports.length > 1) {
+                // Gradient for multisport
                 const step = 100 / sports.length;
                 let gradientStr = 'linear-gradient(135deg, ';
                 sports.forEach((s, idx) => {
@@ -269,7 +273,7 @@ function buildActivityHeatmap(fullLog, startDate, endDate, title, dateToKeyFn, c
             }
         }
 
-        // STRICT SUNDAY LOGIC: If no workout (run/bike/swim), hide it.
+        // VISIBILITY: Hide Sundays unless a workout happened
         if (dayOfWeek === 0 && !hasActivity) {
             style = 'opacity: 0;';
             colorClass = '';
@@ -283,6 +287,7 @@ function buildActivityHeatmap(fullLog, startDate, endDate, title, dateToKeyFn, c
         currentDate.setDate(currentDate.getDate() + 1);
     }
 
+    // Month Labels
     let monthsHtml = '';
     let loopDate = new Date(startDate);
     loopDate.setDate(loopDate.getDate() - loopDate.getDay());
@@ -322,15 +327,10 @@ function buildActivityHeatmap(fullLog, startDate, endDate, title, dateToKeyFn, c
     `;
 }
 
-// --- Main Render Function ---
-export function renderHeatmaps(plannedData, actualData) {
+// --- Main Render Function (Simplified) ---
+export function renderHeatmaps(logData) {
     const today = new Date();
     today.setHours(0,0,0,0);
-
-    const combinedLog = [...(actualData || [])];
-    if (plannedData) {
-        combinedLog.push(...plannedData);
-    }
 
     const endOfWeek = new Date(today); 
     const dayOfWeek = endOfWeek.getDay(); 
@@ -343,15 +343,14 @@ export function renderHeatmaps(plannedData, actualData) {
     const startYear = new Date(today.getFullYear(), 0, 1); 
     const endYear = new Date(today.getFullYear(), 11, 31);
     
-    // 1. Consistency Heatmap (Combined Data)
-    const heatmapTrailingHtml = buildGenericHeatmap(combinedLog, startTrailing, endOfWeek, "Recent Consistency (Trailing 6 Months)", toLocalYMD, "heatmap-trailing-scroll");
+    // 1. Consistency Heatmap
+    const heatmapTrailingHtml = buildGenericHeatmap(logData, startTrailing, endOfWeek, "Recent Consistency (Trailing 6 Months)", toLocalYMD, "heatmap-trailing-scroll");
     
-    // 2. Activity Heatmap (Actual Data Only)
-    // FIX: Using 'actualData' specifically for the activity log as requested
-    const heatmapActivityHtml = buildActivityHeatmap(actualData, startTrailing, endOfWeek, "Activity Log (Workout Types)", toLocalYMD, "heatmap-activity-scroll");
+    // 2. Activity Heatmap
+    const heatmapActivityHtml = buildActivityHeatmap(logData, startTrailing, endOfWeek, "Activity Log (Workout Types)", toLocalYMD, "heatmap-activity-scroll");
 
-    // 3. Annual Overview (Combined)
-    const heatmapYearHtml = buildGenericHeatmap(combinedLog, startYear, endYear, `Annual Overview (${today.getFullYear()})`, toLocalYMD, null);
+    // 3. Annual Overview
+    const heatmapYearHtml = buildGenericHeatmap(logData, startYear, endYear, `Annual Overview (${today.getFullYear()})`, toLocalYMD, null);
 
     setTimeout(() => {
         const scrollIds = ['heatmap-trailing-scroll', 'heatmap-activity-scroll'];

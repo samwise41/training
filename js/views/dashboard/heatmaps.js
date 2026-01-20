@@ -1,10 +1,7 @@
 import { toLocalYMD, getSportColorVar } from './utils.js';
 
 // --- 1. Main Render Function ---
-// Returns a placeholder immediately so the dashboard doesn't break/wait.
-// Fetches data in the background and updates itself.
 export function renderHeatmaps() {
-    // Trigger the fetch and render process after the placeholder is in the DOM
     setTimeout(initHeatmaps, 0);
 
     return `
@@ -33,13 +30,22 @@ async function initHeatmaps() {
         const response = await fetch('data/dashboard/heatmaps.json');
         if (!response.ok) throw new Error("Heatmap data missing");
         
-        const heatmapData = await response.json();
+        // Use unified array data from your new logic
+        const rawData = await response.json();
         
+        // Convert Array to Map for fast lookup by date string
+        const heatmapData = {};
+        if (Array.isArray(rawData)) {
+            rawData.forEach(d => {
+                heatmapData[d.date] = d;
+            });
+        }
+
         // Generate the full HTML
         const html = generateHeatmapHTML(heatmapData);
         container.outerHTML = html;
 
-        // Apply scrolling to show the latest date (right side)
+        // Apply scrolling
         setTimeout(() => {
             ['heatmap-trailing-scroll', 'heatmap-activity-scroll'].forEach(id => {
                 const el = document.getElementById(id);
@@ -49,7 +55,7 @@ async function initHeatmaps() {
 
     } catch (e) {
         console.error("Heatmap Load Error:", e);
-        container.innerHTML = `<p class="text-red-500 text-xs p-4">Unable to load heatmaps.</p>`;
+        container.innerHTML = `<p class="text-red-500 text-xs p-4">Unable to load heatmaps: ${e.message}</p>`;
     }
 }
 
@@ -58,12 +64,11 @@ function generateHeatmapHTML(data) {
     const today = new Date();
     
     // Calculate Date Ranges
-    // End of week (Saturday) to align the grid perfectly
     const endOfWeek = new Date(today);
     const distToSaturday = 6 - today.getDay(); 
     endOfWeek.setDate(today.getDate() + distToSaturday); 
 
-    // Trailing 6 Months Start
+    // Trailing 6 Months
     const startTrailing = new Date(endOfWeek);
     startTrailing.setMonth(startTrailing.getMonth() - 6);
     
@@ -116,7 +121,7 @@ function generateHeatmapHTML(data) {
 function buildGrid(data, startDate, endDate, title, scrollId, isConsistencyMode) {
     let gridCells = '';
     
-    // Normalize start date to Sunday to ensure columns align correctly in grid-flow-col
+    // Normalize start date to Sunday
     const current = new Date(startDate);
     const day = current.getDay();
     current.setDate(current.getDate() - day); 
@@ -127,36 +132,49 @@ function buildGrid(data, startDate, endDate, title, scrollId, isConsistencyMode)
         const dateStr = toLocalYMD(current);
         const entry = data[dateStr];
         
-        const minutes = entry ? (entry.minutes || 0) : 0;
-        const type = entry ? (entry.type || 'Other') : 'Rest';
-        const sportColor = entry ? getSportColorVar(type) : 'var(--color-bg-card)';
-        
-        let bgColor = 'var(--color-bg-card)'; 
-        let opacity = 0.3; // Default dimness for empty/future cells
+        // --- DATA MAPPING LOGIC (Updated to match your provided file) ---
+        // Uses 'complianceStatus' and 'actualSport' from the JSON
+        const status = entry ? entry.complianceStatus : null;
+        const sport = entry ? entry.actualSport : null;
+        const activityName = entry ? (entry.activityName || status) : 'No Activity';
+        const minutes = entry ? (entry.actualDuration || 0) : 0;
 
-        // Coloring Logic
-        if (minutes > 0) {
-            if (isConsistencyMode) {
-                // Consistency Mode: Heatmap intensity (Green/Theme color)
-                bgColor = sportColor; // Uses sport color but varies opacity
-                if (minutes < 30) opacity = 0.4;
-                else if (minutes < 60) opacity = 0.6;
-                else if (minutes < 90) opacity = 0.8;
-                else opacity = 1.0;
-            } else {
-                // Activity Mode: Solid color for sport type
-                bgColor = sportColor;
+        let bgColor = 'var(--color-bg-card)'; 
+        let opacity = 0.15; // Default dim for empty
+        let styleOverride = '';
+
+        if (isConsistencyMode) {
+            // Consistency Logic (Unplanned, Completed, etc.)
+            if (status === 'Unplanned') {
+                // Striped Green
+                bgColor = '#10b981';
+                opacity = 1.0;
+                styleOverride = "background-image: repeating-linear-gradient(45deg, #10b981, #10b981 2px, #065f46 2px, #065f46 4px);";
+            } else if (status === 'Completed') {
+                bgColor = '#10b981'; // Emerald
+                opacity = 1.0;
+            } else if (status === 'Partial') {
+                bgColor = '#eab308'; // Yellow
                 opacity = 0.9;
+            } else if (status === 'Missed') {
+                bgColor = '#ef4444'; // Red
+                opacity = 0.4;
+            } else if (status === 'Rest') {
+                bgColor = '#10b981'; 
+                opacity = 0.1;
             }
         } else {
-            // Empty Cell
-            opacity = 0.15;
+            // Activity Mode Logic (Sport Color)
+            if (minutes > 0 && sport) {
+                bgColor = getSportColorVar(sport);
+                opacity = 0.9;
+            }
         }
 
         gridCells += `
             <div class="w-3 h-3 rounded-sm transition-all hover:ring-1 hover:ring-white relative group"
-                 style="background-color: ${bgColor}; opacity: ${opacity};"
-                 onmouseover="window.showTooltip(event, '${dateStr}', '${minutes}', '${type}', '${sportColor}')"
+                 style="background-color: ${bgColor}; opacity: ${opacity}; ${styleOverride}"
+                 onmouseover="window.showTooltip(event, '${dateStr}', '${minutes}', '${activityName}', '${bgColor}')"
                  onmouseout="window.hideTooltip()">
             </div>
         `;
@@ -164,11 +182,10 @@ function buildGrid(data, startDate, endDate, title, scrollId, isConsistencyMode)
         current.setDate(current.getDate() + 1);
     }
 
-    // Grid Layout: 7 rows (days), auto columns
     return `
         <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700/50 shadow-sm flex flex-col h-full backdrop-blur-sm">
             <h3 class="text-slate-100 font-bold text-sm mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-fire text-orange-400"></i> ${title}
+                <i class="fa-solid ${isConsistencyMode ? 'fa-fire text-orange-400' : 'fa-layer-group text-blue-400'}"></i> ${title}
             </h3>
             
             <div class="flex-1 overflow-x-auto pb-2 custom-scrollbar" id="${scrollId || ''}">
@@ -185,15 +202,10 @@ function buildGrid(data, startDate, endDate, title, scrollId, isConsistencyMode)
 function renderLegend(isConsistencyMode) {
     if (isConsistencyMode) {
         return `
-            <div class="mt-3 flex justify-between items-center text-[10px] text-slate-400 uppercase tracking-wider">
-                <span>Less</span>
-                <div class="flex gap-1">
-                    <div class="w-2 h-2 rounded-sm bg-slate-700/30"></div>
-                    <div class="w-2 h-2 rounded-sm" style="background: var(--color-run); opacity: 0.4"></div>
-                    <div class="w-2 h-2 rounded-sm" style="background: var(--color-run); opacity: 0.7"></div>
-                    <div class="w-2 h-2 rounded-sm" style="background: var(--color-run); opacity: 1.0"></div>
-                </div>
-                <span>More</span>
+            <div class="mt-3 flex gap-3 text-[10px] text-slate-400 uppercase tracking-wider overflow-x-auto">
+                <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-sm bg-emerald-500"></div> Done</div>
+                <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-sm bg-yellow-500"></div> Partial</div>
+                <div class="flex items-center gap-1"><div class="w-2 h-2 rounded-sm bg-red-500/40"></div> Missed</div>
             </div>
         `;
     } else {

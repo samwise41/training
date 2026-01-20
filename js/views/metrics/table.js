@@ -1,7 +1,6 @@
 // js/views/metrics/table.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend, getTrendIcon } from './utils.js';
-// FIX: Importing from the correct parser file
 import { METRIC_FORMULAS, extractMetricData, extractSubjectiveTableData } from './parser.js';
 
 export const renderSummaryTable = (allData) => {

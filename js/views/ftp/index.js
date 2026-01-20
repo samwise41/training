@@ -1,18 +1,6 @@
 // js/views/ftp/index.js
 
-// --- CONFIGURATION ---
-const CONFIG = {
-    WKG_SCALE: { min: 1.0, max: 6.0 },
-    CATEGORIES: [
-        { threshold: 5.05, label: "Exceptional", color: "#a855f7" },
-        { threshold: 3.93, label: "Very Good",   color: "#3b82f6" },
-        { threshold: 2.79, label: "Good",        color: "#22c55e" },
-        { threshold: 2.23, label: "Fair",        color: "#f97316" },
-        { threshold: 0.00, label: "Untrained",   color: "#ef4444" }
-    ]
-};
-
-// --- DATA FETCHING ---
+// --- DATA FETCHING FOR CHARTS (Keeps Strava Logic) ---
 const fetchCyclingData = async () => {
     try {
         const res = await fetch('strava_data/cycling/power_curve_graph.json');
@@ -30,7 +18,7 @@ const fetchRunningData = async () => {
     } catch (e) { return []; }
 };
 
-// Parser to extract Date and ID from Markdown Links
+// Parser to extract Date and ID from Markdown Links (Run PRs)
 const parseRunningMarkdown = (md) => {
     const rows = [];
     const distMap = { 
@@ -139,7 +127,8 @@ const renderLogChart = (containerId, data, options) => {
         const pct = i / ySteps;
         const val = minY + (pct * (maxY - minY));
         const y = getLinY(val, minY, maxY, height, pad);
-        gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width - pad.r}" y2="${y}" stroke="#334155" stroke-width="1" opacity="0.3" /><text x="${pad.l - 8}" y="${y + 3}" text-anchor="end" font-size="10" fill="#94a3b8">${xType === 'distance' ? formatPace(val) : Math.round(val)}</text>`;
+        const yLabel = xType === 'distance' ? formatPace(val) : Math.round(val);
+        gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width - pad.r}" y2="${y}" stroke="#334155" stroke-width="1" opacity="0.3" /><text x="${pad.l - 8}" y="${y + 3}" text-anchor="end" font-size="10" fill="#94a3b8">${yLabel}</text>`;
     }
 
     const genPath = (key) => {
@@ -168,7 +157,7 @@ const renderLogChart = (containerId, data, options) => {
     return `<div class="relative w-full h-full group select-none"><svg id="${containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">${gridHtml}<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" /><path d="${path6w}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="5,5" /><path d="${pathAll}" fill="none" stroke="${colorAll}" stroke-width="2" />${pointsHtml}<line id="${containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" /><circle id="${containerId}-lock-dot" cx="0" cy="${pad.t}" r="3" fill="#ef4444" opacity="0" /><rect x="${pad.l}" y="${pad.t}" width="${width - pad.l - pad.r}" height="${height - pad.t - pad.b}" fill="transparent" /></svg><div id="${containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-700 rounded shadow-xl p-3 z-50 min-w-[140px]"></div><div class="absolute top-2 right-4 flex gap-3 pointer-events-none"><div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full" style="background-color: ${colorAll}"></div><span class="text-[10px] text-slate-300">All Time</span></div><div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full border" style="border-color: ${color6w}"></div><span class="text-[10px] text-slate-300">6 Weeks</span></div></div></div>`;
 };
 
-// --- INTERACTION LOGIC ---
+// --- INTERACTION LOGIC (Simplified) ---
 const setupChartInteractions = (containerId, data, options) => {
     const svg = document.getElementById(`${containerId}-svg`);
     const guide = document.getElementById(`${containerId}-guide`);
@@ -233,67 +222,26 @@ const formatPace = (val) => {
     return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
-// --- ROBUST BIOMETRICS PARSER ---
-const extractBiometrics = (md) => {
-    // Default values if nothing is found
-    const bio = { watts: 0, weight: 175, lthr: '--', runFtp: '--', fiveK: '--' }; 
-    if (!md) return bio;
-
-    const findVal = (keywords) => {
-        const regex = new RegExp(`(?:\\|\\s*|\\*\\*|\\b)(${keywords.join('|')})[:\\s\\|]+([\\d:.]+)`, 'i');
-        const match = md.match(regex);
-        return match ? match[2].trim() : null;
-    };
-
-    // 1. Weight (lbs)
-    const w = findVal(['Weight', 'Body Weight']);
-    if (w) bio.weight = parseInt(w);
-
-    // 2. Cycling FTP (Watts)
-    const p = findVal(['FTP', 'Cycling FTP', 'Watts', 'Power']);
-    if (p) bio.watts = parseInt(p);
-
-    // 3. Run FTP (Pace)
-    const r = findVal(['Run FTP', 'Threshold Pace', 'T-Pace']);
-    if (r) bio.runFtp = r;
-
-    // 4. LTHR
-    const h = findVal(['LTHR', 'Threshold HR', 'Heart Rate']);
-    if (h) bio.lthr = h;
-
-    // 5. 5k Estimate
-    const f = findVal(['5k', '5k Est', '5km']);
-    if (f) bio.fiveK = f;
-
-    return bio;
-};
-
 // --- MAIN RENDER ---
-export function renderFTP(planMd) {
-    const bio = extractBiometrics(planMd);
+export function renderFTP(profileData) {
+    // 1. USE CLEAN JSON DATA
+    const bio = profileData || { 
+        weight_lbs: 0, ftp_watts: 0, run_ftp_pace: '--', lthr: '--', five_k_time: '--', 
+        wkg: 0, gauge_percent: 0, category: { label: "Unknown", color: "#64748b" } 
+    };
     
-    // Calculate W/kg
-    const weightKg = bio.weight * 0.453592;
-    const wkgNum = (bio.watts > 0 && weightKg > 0) ? (bio.watts / weightKg) : 0;
-    
-    // --- FIX IS HERE: ATTACH CALCULATED VALUE TO BIO OBJECT ---
-    bio.wkgNum = wkgNum; 
-    
-    const cat = CONFIG.CATEGORIES.find(c => wkgNum >= c.threshold) || CONFIG.CATEGORIES[CONFIG.CATEGORIES.length - 1];
-    const percent = Math.min(Math.max((wkgNum - CONFIG.WKG_SCALE.min) / (CONFIG.WKG_SCALE.max - CONFIG.WKG_SCALE.min), 0), 1);
-
     const style = getComputedStyle(document.documentElement);
     const bikeColor = style.getPropertyValue('--color-bike').trim() || '#a855f7'; 
     const runColor = style.getPropertyValue('--color-run').trim() || '#ec4899';   
     
-    const gaugeHtml = renderGauge(wkgNum, percent, cat);
+    const gaugeHtml = renderGauge(bio.wkg, bio.gauge_percent, bio.category);
     const cyclingStatsHtml = renderCyclingStats(bio);
     const runningStatsHtml = renderRunningStats(bio);
     
     const cyclingChartId = `cycle-chart-${Date.now()}`;
     const runningChartId = `run-chart-${Date.now()}`;
 
-    // Load Charts Async
+    // Load Charts Async (Still fetch Strava data directly as logic is separate)
     (async () => {
         const cyclingData = await fetchCyclingData();
         const cEl = document.getElementById(cyclingChartId);
@@ -389,8 +337,8 @@ const renderCyclingStats = (bio) => `
             <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Cycling FTP</span>
         </div>
         <div class="flex flex-col mt-2">
-            <span class="text-5xl font-black text-white">${bio.watts > 0 ? bio.watts : '--'}</span>
-            <span class="text-sm text-slate-400 font-mono mt-2">${bio.wkgNum.toFixed(2)} W/kg</span>
+            <span class="text-5xl font-black text-white">${bio.ftp_watts > 0 ? bio.ftp_watts : '--'}</span>
+            <span class="text-sm text-slate-400 font-mono mt-2">${bio.wkg.toFixed(2)} W/kg</span>
         </div>
     </div>
 `;
@@ -404,7 +352,7 @@ const renderRunningStats = (bio) => `
         <div class="grid grid-cols-3 gap-4">
             <div class="flex flex-col">
                 <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">Pace (FTP)</span>
-                <span class="text-xl font-bold text-white leading-none">${bio.runFtp}</span>
+                <span class="text-xl font-bold text-white leading-none">${bio.run_ftp_pace}</span>
             </div>
             <div class="flex flex-col border-l border-slate-700 pl-4">
                 <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">LTHR</span>
@@ -412,7 +360,7 @@ const renderRunningStats = (bio) => `
             </div>
             <div class="flex flex-col border-l border-slate-700 pl-4">
                 <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">5K Est</span>
-                <span class="text-xl font-bold text-white leading-none">${bio.fiveK}</span>
+                <span class="text-xl font-bold text-white leading-none">${bio.five_k_time}</span>
             </div>
         </div>
     </div>

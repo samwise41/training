@@ -1,7 +1,7 @@
 import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
-import { renderTopCards } from './topCards.js'; // Added back
+import { renderTopCards } from './topCards.js';
 
 // --- GITHUB SYNC TRIGGER ---
 window.triggerGitHubSync = async () => {
@@ -72,11 +72,10 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
     tooltip.innerHTML = `
         <div class="text-center">
             <div class="text-white font-bold text-sm mb-0.5 whitespace-nowrap">
-                Plan: ${Math.round(plan)}m | Act: ${Math.round(act)}m
+                ${label}
             </div>
             <div class="text-[10px] text-slate-400 font-normal mb-1">${date}</div>
             <div class="text-[10px] text-slate-200 font-mono font-bold border-b border-slate-700 pb-1 mb-1">${sportType}</div>
-            <div class="text-[11px] font-bold mt-1 uppercase tracking-wide" style="color: ${color}">${label}</div>
             ${detailsHtml}
         </div>
     `;
@@ -121,12 +120,11 @@ export function renderDashboard(plannedJson, mergedLogData) {
     }
 
     // 2. Render Widgets
-    const topCardsHtml = renderTopCards(); // Added Back
+    const topCardsHtml = renderTopCards();
     const progressHtml = renderProgressWidget(workouts, fullLogData);
     const plannedWorkoutsHtml = renderPlannedWorkouts(workouts); 
     const heatmapsHtml = renderHeatmaps();
 
-    // --- SYNC BUTTON HTML ---
     const syncButtonHtml = `
         <div class="flex justify-end mb-4">
             <button id="btn-force-sync" onclick="window.triggerGitHubSync()" 
@@ -137,12 +135,13 @@ export function renderDashboard(plannedJson, mergedLogData) {
         </div>
     `;
 
+    // REORDERED: Heatmaps are now at the bottom
     return `
         ${syncButtonHtml}
         ${topCardsHtml}
         ${progressHtml}
-        ${heatmapsHtml}
         ${plannedWorkoutsHtml}
+        ${heatmapsHtml}
         <div id="dashboard-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-2 rounded shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed"></div>
     `;
 }

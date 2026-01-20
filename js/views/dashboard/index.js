@@ -1,4 +1,3 @@
-import { Parser } from '../../parser.js';
 import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
@@ -106,29 +105,29 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
 };
 
 // --- MAIN RENDER FUNCTION ---
-// UPDATED: Now accepts 3 arguments to match app.js calling convention
-// (plannedJson, mergedLogData, planMd)
-export function renderDashboard(plannedJson, mergedLogData, planMd) {
-    
-    // Safety check: if planMd is missing but plannedJson is a string, we might be receiving old args
-    if (!planMd && typeof plannedJson === 'string') {
-        planMd = plannedJson;
-    }
-
-    const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
-    if (!scheduleSection) return '<p class="text-slate-500 italic">No Weekly Schedule found.</p>';
-
-    // Note: Assuming Parser._parseTableBlock exists (it was used in old code)
-    const workouts = Parser._parseTableBlock(scheduleSection);
-    workouts.sort((a, b) => a.date - b.date);
-
+export function renderDashboard(plannedJson, mergedLogData) {
     const fullLogData = mergedLogData || [];
 
-    // Render Widgets
+    // 1. Prepare Workout Data from JSON
+    // We map the JSON keys to match what the Progress Widget expects
+    // (e.g. converting string dates to Date objects, mapping 'plannedWorkout' to 'planned')
+    let workouts = [];
+    if (Array.isArray(plannedJson)) {
+        workouts = plannedJson.map(item => ({
+            ...item,
+            date: new Date(item.date), // Ensure Date object for sorting
+            planned: item.plannedWorkout, // Map JSON key to Widget expectation
+            actual: item.actualWorkout || ''
+        }));
+        
+        // Sort Chronologically
+        workouts.sort((a, b) => a.date - b.date);
+    }
+
+    // 2. Render Widgets
+    // Note: renderPlannedWorkouts and renderHeatmaps handle their own data fetching internally
     const progressHtml = renderProgressWidget(workouts, fullLogData);
-    const plannedWorkoutsHtml = renderPlannedWorkouts(planMd);
-    
-    // Render Heatmaps (Sync placeholder, async fetch)
+    const plannedWorkoutsHtml = renderPlannedWorkouts(); 
     const heatmapsHtml = renderHeatmaps();
 
     // --- SYNC BUTTON HTML ---

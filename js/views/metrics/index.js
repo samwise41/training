@@ -2,26 +2,23 @@
 import { buildCollapsibleSection } from './utils.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
-// Import the new health check
-import { runDataHealthCheck } from './parser.js';
+import { normalizeMetricsData } from './parser.js';
 
 let metricsState = { timeRange: '6m' };
-let cachedData = [];
+let cleanData = [];
 
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;
-    updateCharts(cachedData, metricsState.timeRange);
+    updateCharts(cleanData, metricsState.timeRange);
 };
 
-export function renderMetrics(allData) {
-    cachedData = allData || [];
+export function renderMetrics(rawData) {
+    // 1. Normalize Data (Fixes keys once)
+    cleanData = normalizeMetricsData(rawData || []);
     
-    // --- TRIGGER DEBUGGER ---
-    // Look at your browser console (F12) to see which fields are missing
     setTimeout(() => {
-        runDataHealthCheck(cachedData);
-        updateCharts(cachedData, metricsState.timeRange);
-    }, 100);
+        updateCharts(cleanData, metricsState.timeRange);
+    }, 50);
 
     const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
     
@@ -33,15 +30,16 @@ export function renderMetrics(allData) {
             <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
         </div>`;
 
+    // 2. Render Table
     let tableHtml = "";
     try {
-        tableHtml = renderSummaryTable(cachedData);
+        tableHtml = renderSummaryTable(cleanData);
     } catch (e) {
         tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
     }
-    
     const tableSection = buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
+    // 3. Render Charts
     const buildSectionHeader = (title, icon, color) => `
         <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
             <i class="fa-solid ${icon} ${color}"></i>

@@ -34,7 +34,7 @@
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
     const updateGearResult = gearMod?.updateGearResult || (() => {});
-    const renderZones = zonesMod?.renderZones || (() => "Zones missing");
+    const renderZonesTab = zonesMod?.renderZonesTab || (() => "Zones missing");
     const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");

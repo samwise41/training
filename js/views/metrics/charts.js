@@ -1,56 +1,8 @@
 // js/views/metrics/charts.js
 import { METRIC_DEFINITIONS } from './definitions.js';
-import { calculateTrend, getTrendIcon, checkSport } from './utils.js';
-import { extractMetricData } from './table.js';
-
-const METRIC_FORMULAS = {
-    'subjective_bike': '(Avg Power / RPE)',
-    'subjective_run': '(Avg Speed / RPE)',
-    'subjective_swim': '(Avg Speed / RPE)',
-    'endurance': '(Norm Power / Avg HR)',
-    'strength': '(Torque / Output)',
-    'run': '(Avg Power / Avg Speed)',
-    'swim': '(Avg Speed / Stroke Rate)',
-    'mechanical': '(Vert Osc / GCT)'
-};
-
-const calculateSubjectiveEfficiency = (allData, sportMode) => {
-    return allData
-        .map(d => {
-            const rpe = parseFloat(d.RPE || d.rpe || 0);
-            if (rpe <= 0) return null;
-
-            let val = 0;
-            let breakdown = "";
-            let match = false;
-
-            if (sportMode === 'bike' && checkSport(d, 'BIKE')) {
-                const pwr = parseFloat(d.avgPower);
-                if (pwr > 0) { val = pwr / rpe; breakdown = `${Math.round(pwr)}W / ${rpe} RPE`; match = true; }
-            }
-            else if (sportMode === 'run' && checkSport(d, 'RUN')) {
-                const spd = parseFloat(d.avgSpeed); 
-                if (spd > 0) { val = spd / rpe; breakdown = `${spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
-            }
-            else if (sportMode === 'swim' && checkSport(d, 'SWIM')) {
-                const spd = parseFloat(d.avgSpeed);
-                if (spd > 0) { val = spd / rpe; breakdown = `${spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
-            }
-
-            if (match && val > 0) {
-                return {
-                    date: d.date,
-                    dateStr: d.date.toISOString().split('T')[0],
-                    val: val,
-                    name: d.actualName || d.activityName || 'Activity',
-                    breakdown: breakdown
-                };
-            }
-            return null;
-        })
-        .filter(Boolean)
-        .sort((a, b) => a.date - b.date);
-};
+import { calculateTrend, getTrendIcon } from './utils.js';
+// NEW IMPORT: All math logic from the new parser file
+import { METRIC_FORMULAS, extractMetricData, calculateSubjectiveEfficiency } from './parser.js';
 
 const buildMetricChart = (displayData, fullData, key) => {
     const def = METRIC_DEFINITIONS[key];
@@ -67,6 +19,15 @@ const buildMetricChart = (displayData, fullData, key) => {
         const trend = calculateTrend(subset);
         return trend ? getTrendIcon(trend.slope, def.invertRanges) : { icon: 'fa-minus', color: 'text-slate-600' };
     };
+    
+    // ... (Standard chart building logic remains the same) ...
+    // Since we didn't change the buildMetricChart function logic, 
+    // I will skip pasting the entire SVG generation block here to save space 
+    // unless you need the full file again. The key change is the IMPORT at the top.
+    
+    // ... (Insert buildMetricChart body here) ...
+    
+    // For completeness of the "updateCharts" function which DOES change:
     const t30 = getSlope(30);
     const t90 = getSlope(90);
     const t6m = getSlope(180);
@@ -102,6 +63,7 @@ const buildMetricChart = (displayData, fullData, key) => {
         </div>`;
     }
 
+    // Chart Dimensions
     const width = 800, height = 150;
     const pad = { t: 20, b: 30, l: 50, r: 20 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
@@ -120,6 +82,7 @@ const buildMetricChart = (displayData, fullData, key) => {
 
     const getY = (val) => height - pad.b - ((val - domainMin) / (domainMax - domainMin)) * (height - pad.t - pad.b);
 
+    // Reference Lines
     let refLinesHtml = '';
     if (def.refMin !== undefined && def.refMax !== undefined) {
         const yMin = getY(def.refMin);
@@ -139,7 +102,7 @@ const buildMetricChart = (displayData, fullData, key) => {
         <text x="${pad.l - 6}" y="${getY(domainMin) + 4}" text-anchor="end" font-size="9" fill="#64748b">${domainMin.toFixed(2)}</text>
     `;
 
-    // X-Axis Date Labels
+    // X-Axis
     let xAxisLabelsHtml = '';
     if (displayData.length > 1) {
         const targetCount = 5; 
@@ -215,27 +178,33 @@ export const updateCharts = (allData, timeRange) => {
         const el = document.getElementById(id);
         if (el) {
             let full;
-            if (key === 'subjective_bike') full = calculateSubjectiveEfficiency(allData, 'bike');
-            else if (key === 'subjective_run') full = calculateSubjectiveEfficiency(allData, 'run');
-            else if (key === 'subjective_swim') full = calculateSubjectiveEfficiency(allData, 'swim');
-            else full = extractMetricData(allData, key).sort((a,b) => a.date - b.date);
+            if (key.startsWith('subjective_')) {
+                const mode = key.split('_')[1]; // bike, run, swim
+                full = calculateSubjectiveEfficiency(allData, mode);
+            } else {
+                full = extractMetricData(allData, key).sort((a,b) => a.date - b.date);
+            }
             
             const display = full.filter(d => d.date >= cutoff);
             el.innerHTML = buildMetricChart(display, full, key);
         }
     };
 
+    // Render grouped charts
     render('metric-chart-vo2max', 'vo2max');
     render('metric-chart-tss', 'tss');
     render('metric-chart-anaerobic', 'anaerobic');
+
     render('metric-chart-subjective_bike', 'subjective_bike');
     render('metric-chart-endurance', 'endurance');
     render('metric-chart-strength', 'strength');
+
     render('metric-chart-subjective_run', 'subjective_run');
     render('metric-chart-run', 'run');
     render('metric-chart-mechanical', 'mechanical');
     render('metric-chart-gct', 'gct');
     render('metric-chart-vert', 'vert');
+
     render('metric-chart-subjective_swim', 'subjective_swim');
     render('metric-chart-swim', 'swim');
 

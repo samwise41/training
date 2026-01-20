@@ -156,7 +156,7 @@
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
                             break;
                         case 'trends':
-                            content.innerHTML = renderTrends(this.parsedLogData).html;
+                            content.innerHTML = await renderVolumeAnalysis();
                             break;
                         case 'metrics':
                             content.innerHTML = renderMetrics(this.rawLogData); 

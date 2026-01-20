@@ -27,6 +27,21 @@ const renderMarkdown = (text) => {
         .replace(/\n/g, '<br>');
 };
 
+// --- HELPER: Safe Date Key ---
+// Converts Date Object or String into "YYYY-MM-DD"
+const getDateKey = (dateInput) => {
+    if (!dateInput) return "9999-99-99"; // Fallback
+    try {
+        // If it's already a string like "2023-01-01T00:00...", just split it
+        if (typeof dateInput === 'string') return dateInput.split('T')[0];
+        
+        // If it's a Date object, convert to ISO string first
+        return new Date(dateInput).toISOString().split('T')[0];
+    } catch (e) {
+        return "9999-99-99";
+    }
+};
+
 // --- COMPONENT: Single Card ---
 const renderCard = (w) => {
     const isDone = w.status === 'completed';
@@ -99,7 +114,7 @@ export const renderPlannedWorkouts = (unifiedData) => {
         return `<div class="p-8 text-center text-slate-500">No scheduled workouts found.</div>`;
     }
 
-    // --- DEDUPLICATION LOGIC (The Fix) ---
+    // --- DEDUPLICATION LOGIC (Fixed for Date Objects) ---
     // Problem: The list has both "Planned" (Blue) and "Merged" (Green) items for the same day.
     // Solution: If a "Completed" item exists for Date X + Sport Y, remove the "Planned" item for Date X + Sport Y.
     
@@ -109,12 +124,12 @@ export const renderPlannedWorkouts = (unifiedData) => {
     // 1. First Pass: Identify all COMPLETED items
     unifiedData.forEach(w => {
         if (w.status === 'completed') {
-            const dateKey = w.date.split('T')[0]; // Simple YYYY-MM-DD
+            const dateKey = getDateKey(w.date); // SAFE KEY
             const typeKey = (w.type || "workout").toLowerCase().trim();
-            // We use a simplified type key (run, bike, swim) to match loosely
+            
             let sport = 'other';
             if (typeKey.includes('run')) sport = 'run';
-            else if (typeKey.includes('bike')) sport = 'bike';
+            else if (typeKey.includes('bike') || typeKey.includes('cycl')) sport = 'bike';
             else if (typeKey.includes('swim')) sport = 'swim';
             
             completedMap.add(`${dateKey}|${sport}`);
@@ -125,11 +140,12 @@ export const renderPlannedWorkouts = (unifiedData) => {
     // 2. Second Pass: Add PLANNED items ONLY if not in map
     unifiedData.forEach(w => {
         if (w.status !== 'completed') {
-            const dateKey = w.date.split('T')[0];
+            const dateKey = getDateKey(w.date); // SAFE KEY
             const typeKey = (w.type || "workout").toLowerCase().trim();
+            
             let sport = 'other';
             if (typeKey.includes('run')) sport = 'run';
-            else if (typeKey.includes('bike')) sport = 'bike';
+            else if (typeKey.includes('bike') || typeKey.includes('cycl')) sport = 'bike';
             else if (typeKey.includes('swim')) sport = 'swim';
 
             // Check if we already have a completed entry for this day/sport

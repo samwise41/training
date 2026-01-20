@@ -1,7 +1,6 @@
 // js/views/metrics/charts.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend, getTrendIcon } from './utils.js';
-// NEW IMPORT: All math logic from the new parser file
 import { METRIC_FORMULAS, extractMetricData, calculateSubjectiveEfficiency } from './parser.js';
 
 const buildMetricChart = (displayData, fullData, key) => {
@@ -11,6 +10,49 @@ const buildMetricChart = (displayData, fullData, key) => {
     const unitLabel = def.rangeInfo.split(' ').pop(); 
     const color = def.colorVar;
 
+    const formula = METRIC_FORMULAS[key] || '';
+    const titleHtml = `
+        <h3 class="text-xs font-bold text-white flex items-center gap-2">
+            <i class="fa-solid ${def.icon}" style="color: ${color}"></i> 
+            ${def.title}
+            ${formula ? `<span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span>` : ''}
+        </h3>
+    `;
+
+    // Empty State
+    if (!displayData || displayData.length < 2) {
+        return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between opacity-75">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                ${titleHtml}
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center text-slate-500 gap-2">
+                <i class="fa-solid fa-chart-simple text-2xl opacity-20"></i>
+                <p class="text-xs italic">Not enough data</p>
+                </div>
+        </div>`;
+    }
+
+    // Chart Dimensions
+    const width = 800, height = 150;
+    const pad = { t: 20, b: 30, l: 50, r: 20 };
+    const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
+    
+    const dataValues = displayData.map(d => d.val);
+    let minV = Math.min(...dataValues);
+    let maxV = Math.max(...dataValues);
+
+    // Apply Reference Floor/Ceiling
+    if (def.refMin !== undefined) minV = Math.min(minV, def.refMin);
+    if (def.refMax !== undefined) maxV = Math.max(maxV, def.refMax);
+
+    const range = maxV - minV;
+    const buf = range * 0.15 || (maxV * 0.1) || 1; 
+    const domainMin = Math.max(0, minV - buf);
+    const domainMax = maxV + buf;
+
+    const getY = (val) => height - pad.b - ((val - domainMin) / (domainMax - domainMin)) * (height - pad.t - pad.b);
+
+    // Trend Lines
     const now = new Date();
     const getSlope = (days) => {
         const cutoff = new Date();
@@ -19,15 +61,6 @@ const buildMetricChart = (displayData, fullData, key) => {
         const trend = calculateTrend(subset);
         return trend ? getTrendIcon(trend.slope, def.invertRanges) : { icon: 'fa-minus', color: 'text-slate-600' };
     };
-    
-    // ... (Standard chart building logic remains the same) ...
-    // Since we didn't change the buildMetricChart function logic, 
-    // I will skip pasting the entire SVG generation block here to save space 
-    // unless you need the full file again. The key change is the IMPORT at the top.
-    
-    // ... (Insert buildMetricChart body here) ...
-    
-    // For completeness of the "updateCharts" function which DOES change:
     const t30 = getSlope(30);
     const t90 = getSlope(90);
     const t6m = getSlope(180);
@@ -45,86 +78,36 @@ const buildMetricChart = (displayData, fullData, key) => {
             </div>
         </div>`;
 
-    const formula = METRIC_FORMULAS[key] || '';
-    const titleHtml = `
-        <h3 class="text-xs font-bold text-white flex items-center gap-2">
-            <i class="fa-solid ${def.icon}" style="color: ${color}"></i> 
-            ${def.title}
-            ${formula ? `<span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span>` : ''}
-        </h3>
-    `;
-
-    if (!displayData || displayData.length < 2) {
-        return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between">
-            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-                ${titleHtml}
-            </div>
-            <div class="flex-1 flex items-center justify-center"><p class="text-xs text-slate-500 italic">No data available.</p></div>
-        </div>`;
-    }
-
-    // Chart Dimensions
-    const width = 800, height = 150;
-    const pad = { t: 20, b: 30, l: 50, r: 20 };
-    const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
-    
-    const dataValues = displayData.map(d => d.val);
-    let minV = Math.min(...dataValues);
-    let maxV = Math.max(...dataValues);
-
-    if (def.refMin !== undefined) minV = Math.min(minV, def.refMin);
-    if (def.refMax !== undefined) maxV = Math.max(maxV, def.refMax);
-
-    const range = maxV - minV;
-    const buf = range * 0.15 || (maxV * 0.1); 
-    const domainMin = Math.max(0, minV - buf);
-    const domainMax = maxV + buf;
-
-    const getY = (val) => height - pad.b - ((val - domainMin) / (domainMax - domainMin)) * (height - pad.t - pad.b);
-
-    // Reference Lines
-    let refLinesHtml = '';
-    if (def.refMin !== undefined && def.refMax !== undefined) {
-        const yMin = getY(def.refMin);
-        const yMax = getY(def.refMax);
-        const colorMax = def.invertRanges ? '#ef4444' : '#10b981';
-        const colorMin = def.invertRanges ? '#10b981' : '#ef4444';
-
-        if (yMin >= pad.t && yMin <= height - pad.b) refLinesHtml += `<line x1="${pad.l}" y1="${yMin}" x2="${width - pad.r}" y2="${yMin}" stroke="${colorMin}" stroke-width="1" stroke-dasharray="4,4" opacity="0.6" />`;
-        if (yMax >= pad.t && yMax <= height - pad.b) refLinesHtml += `<line x1="${pad.l}" y1="${yMax}" x2="${width - pad.r}" y2="${yMax}" stroke="${colorMax}" stroke-width="1" stroke-dasharray="4,4" opacity="0.6" />`;
-    }
-
+    // SVG Parts
     const yAxisLine = `<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" />`;
     const yMid = (domainMin + domainMax) / 2;
     const axisLabelsHtml = `
-        <text x="${pad.l - 6}" y="${getY(domainMax) + 4}" text-anchor="end" font-size="9" fill="#64748b">${domainMax.toFixed(2)}</text>
-        <text x="${pad.l - 6}" y="${getY(yMid) + 4}" text-anchor="end" font-size="9" fill="#64748b">${yMid.toFixed(2)}</text>
-        <text x="${pad.l - 6}" y="${getY(domainMin) + 4}" text-anchor="end" font-size="9" fill="#64748b">${domainMin.toFixed(2)}</text>
+        <text x="${pad.l - 6}" y="${getY(domainMax) + 4}" text-anchor="end" font-size="9" fill="#64748b">${domainMax.toFixed(1)}</text>
+        <text x="${pad.l - 6}" y="${getY(yMid) + 4}" text-anchor="end" font-size="9" fill="#64748b">${yMid.toFixed(1)}</text>
+        <text x="${pad.l - 6}" y="${getY(domainMin) + 4}" text-anchor="end" font-size="9" fill="#64748b">${domainMin.toFixed(1)}</text>
     `;
 
     // X-Axis
     let xAxisLabelsHtml = '';
-    if (displayData.length > 1) {
-        const targetCount = 5; 
-        const step = (displayData.length - 1) / (targetCount - 1);
-        const indices = new Set();
-        for (let j = 0; j < targetCount; j++) indices.add(Math.round(j * step));
-        
-        indices.forEach(index => {
-            if (index < displayData.length) {
-                const d = displayData[index];
-                const xPos = getX(d, index);
-                const dateObj = new Date(d.date);
-                const label = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                
-                let anchor = 'middle';
-                if (index === 0) anchor = 'start';
-                if (index === displayData.length - 1) anchor = 'end';
-                
-                xAxisLabelsHtml += `<text x="${xPos}" y="${height - 5}" text-anchor="${anchor}" font-size="9" fill="#64748b">${label}</text>`;
-            }
-        });
-    }
+    const targetCount = 5; 
+    const step = (displayData.length - 1) / (targetCount - 1);
+    const indices = new Set();
+    for (let j = 0; j < targetCount; j++) indices.add(Math.round(j * step));
+    
+    indices.forEach(index => {
+        if (index < displayData.length) {
+            const d = displayData[index];
+            const xPos = getX(d, index);
+            const dateObj = new Date(d.date);
+            const label = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            
+            let anchor = 'middle';
+            if (index === 0) anchor = 'start';
+            if (index === displayData.length - 1) anchor = 'end';
+            
+            xAxisLabelsHtml += `<text x="${xPos}" y="${height - 5}" text-anchor="${anchor}" font-size="9" fill="#64748b">${label}</text>`;
+        }
+    });
 
     const chartTrend = calculateTrend(displayData);
     let trendHtml = chartTrend ? `<line x1="${getX(null, 0)}" y1="${getY(chartTrend.startVal)}" x2="${getX(null, displayData.length - 1)}" y2="${getY(chartTrend.endVal)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.5" />` : '';
@@ -155,7 +138,6 @@ const buildMetricChart = (displayData, fullData, key) => {
                     ${yAxisLine}
                     ${axisLabelsHtml}
                     ${xAxisLabelsHtml}
-                    ${refLinesHtml}
                     ${trendHtml}
                     <path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />
                     ${pointsHtml}
@@ -165,8 +147,8 @@ const buildMetricChart = (displayData, fullData, key) => {
     `;
 };
 
-export const updateCharts = (allData, timeRange) => {
-    if (!allData || allData.length === 0) return;
+export const updateCharts = (normalizedData, timeRange) => {
+    if (!normalizedData || normalizedData.length === 0) return;
     
     const cutoff = new Date();
     if (timeRange === '30d') cutoff.setDate(cutoff.getDate() - 30);
@@ -178,15 +160,17 @@ export const updateCharts = (allData, timeRange) => {
         const el = document.getElementById(id);
         if (el) {
             let full;
+            // Calculations assume strict data keys now
             if (key.startsWith('subjective_')) {
-                const mode = key.split('_')[1]; // bike, run, swim
-                full = calculateSubjectiveEfficiency(allData, mode);
+                const mode = key.split('_')[1]; 
+                full = calculateSubjectiveEfficiency(normalizedData, mode);
             } else {
-                full = extractMetricData(allData, key).sort((a,b) => a.date - b.date);
+                full = extractMetricData(normalizedData, key);
             }
             
-            const display = full.filter(d => d.date >= cutoff);
-            el.innerHTML = buildMetricChart(display, full, key);
+            if (full) full.sort((a,b) => a.date - b.date);
+            const display = full ? full.filter(d => d.date >= cutoff) : [];
+            el.innerHTML = buildMetricChart(display, full || [], key);
         }
     };
 

@@ -2,23 +2,26 @@
 import { buildCollapsibleSection } from './utils.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
+import { normalizeMetricsData } from './parser.js'; // Import Normalizer
 
 let metricsState = { timeRange: '6m' };
-let cachedData = [];
+let cleanData = [];
 
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;
-    updateCharts(cachedData, metricsState.timeRange);
+    updateCharts(cleanData, metricsState.timeRange);
 };
 
-export function renderMetrics(allData) {
-    cachedData = allData || [];
+export function renderMetrics(rawData) {
+    // 1. NORMALIZE DATA ONCE
+    // This fixes key mismatches immediately
+    cleanData = normalizeMetricsData(rawData);
     
     setTimeout(() => {
-        updateCharts(cachedData, metricsState.timeRange);
+        updateCharts(cleanData, metricsState.timeRange);
     }, 50);
 
-    const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all">${label}</button>`;
+    const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
     
     const headerHtml = `
         <div class="flex justify-between items-center bg-slate-900/40 p-3 rounded-xl border border-slate-800 backdrop-blur-sm sticky top-0 z-10 mb-6">
@@ -28,7 +31,14 @@ export function renderMetrics(allData) {
             <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
         </div>`;
 
-    const tableHtml = renderSummaryTable(cachedData);
+    // 2. Render Table using Clean Data
+    let tableHtml = "";
+    try {
+        tableHtml = renderSummaryTable(cleanData);
+    } catch (e) {
+        tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
+    }
+    
     const tableSection = buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
     const buildSectionHeader = (title, icon, color) => `
@@ -40,24 +50,24 @@ export function renderMetrics(allData) {
     const chartsGrid = `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'icon-all')}
+            ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'text-emerald-400')}
             <div id="metric-chart-vo2max"></div>
             <div id="metric-chart-tss"></div>
             <div id="metric-chart-anaerobic"></div>
 
-            ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
+            ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'text-purple-400')}
             <div id="metric-chart-subjective_bike"></div>
             <div id="metric-chart-endurance"></div>
             <div id="metric-chart-strength"></div>
 
-            ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
+            ${buildSectionHeader('Running Metrics', 'fa-person-running', 'text-pink-400')}
             <div id="metric-chart-subjective_run"></div>
             <div id="metric-chart-run"></div>
             <div id="metric-chart-mechanical"></div>
             <div id="metric-chart-gct"></div>
             <div id="metric-chart-vert"></div>
 
-            ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
+            ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'text-blue-400')}
             <div id="metric-chart-subjective_swim"></div>
             <div id="metric-chart-swim"></div> 
         </div>`;

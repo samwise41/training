@@ -148,7 +148,7 @@
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 content.innerHTML = '';
                 try {
                     switch (view) {

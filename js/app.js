@@ -46,12 +46,12 @@
         rawLogData: [],   
         parsedLogData: [], 
         plannedData: [],
-        gearData: null,  // Holds JSON
+        gearData: null,
         garminData: [],
         profileData: null,
         readinessData: null,
+        trendsData: null, // <--- New State Property
         
-        // Placeholder for weather if you implement fetching later
         weather: { current: null, hourly: null }, 
 
         async init() {
@@ -64,14 +64,16 @@
         async loadData() {
             try {
                 console.log("📡 Fetching Data...");
-                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes] = await Promise.all([
+                // Added fetch for trends.json
+                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes, trendsRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/planned.json'),
-                    fetch('./data/gear/gear.json'), // <--- Load JSON
+                    fetch('./data/gear/gear.json'),
                     fetch('./data/my_garmin_data_ALL.json'),
                     fetch('./data/profile.json'),
-                    fetch('./data/readiness/readiness.json')
+                    fetch('./data/readiness/readiness.json'),
+                    fetch('./data/trends/trends.json') // <--- Fetch new file
                 ]);
 
                 this.planMd = await planRes.text();
@@ -79,7 +81,6 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
                 
-                // Handle Gear JSON
                 if (gearRes.ok) {
                     this.gearData = await gearRes.json();
                 } else {
@@ -93,6 +94,10 @@
                 if (readinessRes.ok) this.readinessData = await readinessRes.json();
                 else this.readinessData = null;
 
+                // Handle Trends JSON
+                if (trendsRes.ok) this.trendsData = await trendsRes.json();
+                else this.trendsData = null;
+
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
 
             } catch (err) {
@@ -100,7 +105,6 @@
             }
         },
 
-        // Expose function for the "onchange" event in HTML
         updateGearResult() {
             if (this.gearData) {
                 updateGearResult(this.gearData);
@@ -156,7 +160,8 @@
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
                             break;
                         case 'trends':
-                            content.innerHTML = renderTrends(this.parsedLogData).html;
+                            // Pass trendsData to the view
+                            content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
                             break;
                         case 'metrics':
                             content.innerHTML = renderMetrics(this.rawLogData); 
@@ -168,9 +173,7 @@
                             content.innerHTML = renderFTP(this.profileData); 
                             break;
                         case 'gear':
-                            // UPDATED: Pass data + weather (even if null)
                             content.innerHTML = renderGear(this.gearData, this.weather.current, this.weather.hourly);
-                            // Initial UI update
                             this.updateGearResult();
                             break;
                         case 'zones':

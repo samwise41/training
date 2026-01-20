@@ -1,5 +1,4 @@
 // js/views/dashboard/index.js
-import { Parser } from '../../parser.js'; // Keep for table parsing if needed
 import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
@@ -95,9 +94,57 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
     window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
 };
 
-// --- HELPER: Parse Top Level Stats (Status & Events) ---
+// --- DATA HELPERS ---
+
+// 1. Normalize Dates
+function normalizeData(data) {
+    if (!Array.isArray(data)) return [];
+    return data.map(item => {
+        const newItem = { ...item };
+        if (newItem.date && typeof newItem.date === 'string') {
+            const parts = newItem.date.split('-');
+            if (parts.length === 3) {
+                // Force Local Time Construction
+                newItem.date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            } else {
+                newItem.date = new Date(newItem.date);
+            }
+        }
+        return newItem;
+    });
+}
+
+// 2. Deduplicate (Fixes the "Doubling" Issue)
+function deduplicateData(data) {
+    const map = new Map();
+    data.forEach(item => {
+        if (!item.date) return;
+        const dateStr = item.date.toISOString().split('T')[0];
+        
+        let sport = 'Other';
+        const type = String(item.activityType || item.actualSport || '').toLowerCase();
+        if (type.includes('bike') || type.includes('ride')) sport = 'Bike';
+        else if (type.includes('run')) sport = 'Run';
+        else if (type.includes('swim')) sport = 'Swim';
+        
+        const uniqueKey = `${dateStr}|${sport}`;
+        
+        if (map.has(uniqueKey)) {
+            const existing = map.get(uniqueKey);
+            const existDur = parseFloat(existing.plannedDuration || existing.actualDuration) || 0;
+            const newDur = parseFloat(item.plannedDuration || item.actualDuration) || 0;
+            if (newDur > existDur) map.set(uniqueKey, item);
+        } else {
+            map.set(uniqueKey, item);
+        }
+    });
+    return Array.from(map.values());
+}
+
+// 3. Parse Phase & Events from Markdown
 function parseTopLevelStats(planMd) {
-    if (!planMd) return { phase: "Unknown Phase", event: null };
+    // Check if planMd is valid string to prevent .split error
+    if (!planMd || typeof planMd !== 'string') return { phase: "Unknown", event: null };
 
     const today = new Date();
     today.setHours(0,0,0,0);
@@ -109,29 +156,23 @@ function parseTopLevelStats(planMd) {
     const lines = planMd.split('\n');
 
     for (const line of lines) {
-        // 1. Extract Status Line (**Status:** Phase 1...)
+        // Extract Status
         if (line.includes('**Status:**')) {
-            // Remove the bold marker and trim
             currentPhase = line.replace('**Status:**', '').trim();
         }
         
-        // 2. Extract Events from Table (| Date | Event Name | ...)
-        // Skip header rows containing 'Event Type' or separators '---'
+        // Extract Events
         if (line.trim().startsWith('|') && !line.includes('---') && !line.includes('Event Type')) {
             const parts = line.split('|').map(s => s.trim());
-            // Expected format: | Date | Event Name | Goal | Priority | ...
             if (parts.length >= 3) {
-                const evtDateStr = parts[1]; // Column 1
-                const evtName = parts[2];    // Column 2
-                
-                // Try to parse date
+                const evtName = parts[2]; // Name is typically col 2 or 3 depending on table
+                const evtDateStr = parts[1]; // Date is typically col 1 or 2
                 const evtDate = new Date(evtDateStr);
                 
                 if (!isNaN(evtDate) && evtDate >= today) {
-                    const diffTime = evtDate - today;
+                    const diffTime = Math.abs(evtDate - today);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
                     
-                    // Find the soonest event
                     if (diffDays < minDays) {
                         minDays = diffDays;
                         nextEvent = { name: evtName, days: diffDays, date: evtDateStr };
@@ -145,21 +186,20 @@ function parseTopLevelStats(planMd) {
 }
 
 // --- MAIN RENDERER ---
-export function renderDashboard(planMd, mergedLogData) {
-    // 1. Parse Schedule for Workouts
-    const scheduleSection = Parser.getSection(planMd, "Weekly Schedule");
-    let workouts = [];
-    if (scheduleSection) {
-        workouts = Parser._parseTableBlock(scheduleSection);
-        workouts.sort((a, b) => a.date - b.date);
-    }
+export function renderDashboard(plannedData, actualData, planMd) {
+    // 1. Process Data
+    let workouts = normalizeData(plannedData);
+    let fullLogData = normalizeData(actualData);
 
-    const fullLogData = mergedLogData || [];
+    workouts = deduplicateData(workouts);
 
-    // 2. Parse Top Cards (Phase & Event)
+    workouts.sort((a, b) => a.date - b.date);
+    fullLogData.sort((a, b) => a.date - b.date);
+
+    // 2. Extract Top Cards Info
     const { phase, event } = parseTopLevelStats(planMd);
 
-    // 3. Build Top Cards HTML
+    // 3. Render Top Cards
     const eventHtml = event 
         ? `<div class="text-right">
              <div class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Next Event</div>
@@ -168,7 +208,7 @@ export function renderDashboard(planMd, mergedLogData) {
            </div>`
         : `<div class="text-right">
              <div class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Next Event</div>
-             <div class="text-sm text-slate-500 italic">No future events found</div>
+             <div class="text-sm text-slate-500 italic">No events scheduled</div>
            </div>`;
 
     const topCardsHtml = `
@@ -185,10 +225,10 @@ export function renderDashboard(planMd, mergedLogData) {
         </div>
     `;
 
-    // 4. Render Child Components
+    // 4. Render Components
     const progressHtml = renderProgressWidget(workouts, fullLogData);
-    const plannedWorkoutsHtml = renderPlannedWorkouts(planMd);
-    const heatmapsHtml = renderHeatmaps(fullLogData, planMd);
+    const plannedWorkoutsHtml = renderPlannedWorkouts(workouts, fullLogData);
+    const heatmapsHtml = renderHeatmaps(fullLogData); // Simplified: Heatmap only needs log
 
     // 5. Sync Button
     const syncButtonHtml = `

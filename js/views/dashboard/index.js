@@ -1,71 +1,183 @@
 // js/views/dashboard/index.js
-import { renderTopCards } from './topCards.js';
-import { renderProgressWidget } from './progressWidget.js';
-import { renderPlannedWorkouts } from './plannedWorkouts.js';
-import { renderHeatmaps } from './heatmaps.js';
-import { normalizeData, mergeAndDeduplicate } from './utils.js';
 
-// --- GITHUB SYNC (Logic Only) ---
-window.triggerGitHubSync = async () => {
-    let token = localStorage.getItem('github_pat');
-    if (!token) {
-        token = prompt("🔐 Enter GitHub PAT:");
-        if (token) localStorage.setItem('github_pat', token.trim()); else return;
-    }
-    const btn = document.getElementById('btn-force-sync');
-    const orgHtml = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Syncing...';
-    btn.disabled = true;
-    try {
-        await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/Training_Data_Sync.yml/dispatches`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ref: 'main' })
-        });
-        alert("🚀 Sync Started!");
-    } catch (e) { alert(`Error: ${e.message}`); }
-    btn.innerHTML = orgHtml;
-    btn.disabled = false;
+// --- 1. UTILITY: FORMATTING & PARSING ---
+const formatDate = (dateStr) => {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 };
 
-// --- TOOLTIPS (Global Helper) ---
-window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, details) => {
-    let t = document.getElementById('dash-tooltip');
-    if (!t) { t = document.createElement('div'); t.id = 'dash-tooltip'; t.className = 'fixed z-50 bg-slate-900 border border-slate-600 p-3 rounded shadow-xl pointer-events-none opacity-0 transition-opacity'; document.body.appendChild(t); }
-    t.innerHTML = `<div class="text-center text-xs text-white"><div class="font-bold mb-1">${label}</div><div>${sportType}</div><div>Plan: ${plan}m | Act: ${act}m</div><div class="text-slate-400 mt-1">${date}</div></div>`;
-    t.style.top = `${evt.clientY - 80}px`; t.style.left = `${evt.clientX - 60}px`;
-    t.classList.remove('opacity-0');
-    setTimeout(() => t.classList.add('opacity-0'), 3000);
+const getDayName = (dateStr) => {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { weekday: 'long' });
 };
 
-// --- MAIN RENDERER ---
-export function renderDashboard(plannedData, actualData, planMd) {
-    // 1. Prepare Data (Clean & Merge)
-    const pData = normalizeData(plannedData);
-    const aData = normalizeData(actualData);
+// --- 2. LOGIC: MERGE PLANNED & COMPLETED ---
+const mergeWorkouts = (planned, logs) => {
+    const merged = [];
+    const logMap = {};
+
+    // Map logs by Date for quick lookup (YYYY-MM-DD)
+    // We only take the FIRST log per day per sport to avoid complexity for now
+    logs.forEach(l => {
+        const dateKey = l.date.split('T')[0];
+        if (!logMap[dateKey]) logMap[dateKey] = [];
+        logMap[dateKey].push(l);
+    });
+
+    // 1. Process PLANNED workouts
+    planned.forEach(p => {
+        const pDate = p.date;
+        const matchingLogs = logMap[pDate];
+        
+        let match = null;
+
+        // Try to find a log that matches the sport type
+        if (matchingLogs) {
+            match = matchingLogs.find(l => {
+                const pType = (p.type || "").toLowerCase();
+                const lType = (l.actualSport || l.activityType || "").toLowerCase();
+                // Simple fuzzy match
+                return (pType.includes('run') && lType.includes('run')) ||
+                       (pType.includes('bike') && (lType.includes('bike') || lType.includes('cycl'))) ||
+                       (pType.includes('swim') && lType.includes('swim'));
+            });
+        }
+
+        if (match) {
+            // MERGE: Plan + Actual
+            merged.push({
+                status: 'completed',
+                date: pDate,
+                day: getDayName(pDate),
+                type: p.type,
+                title: p.title || match.title,
+                planDur: p.duration,
+                actDur: match.actualDuration || match.duration, // Handle various log formats
+                details: p.details, // Keep the markdown details from the plan
+                file: match.fileName // If you have it
+            });
+            // Mark log as used so we don't duplicate it later (optional, simplistic approach)
+            match._used = true;
+        } else {
+            // NO MATCH: Plan only
+            merged.push({
+                status: 'planned',
+                date: pDate,
+                day: getDayName(pDate),
+                type: p.type,
+                title: p.title,
+                planDur: p.duration,
+                actDur: 0,
+                details: p.details
+            });
+        }
+    });
+
+    // 2. (Optional) Add Unplanned Logs? 
+    // For the dashboard "Upcoming/Weekly" view, we usually just stick to the plan schedule.
+    // If you want to see unplanned workouts, we'd iterate logMap here for !l._used.
     
-    // Create Unified Timeline (Fixes doubling and connects planned vs actual)
-    const unifiedData = mergeAndDeduplicate(pData, aData);
-    unifiedData.sort((a, b) => a.date - b.date);
+    // Sort by Date
+    return merged.sort((a, b) => new Date(a.date) - new Date(b.date));
+};
 
-    // 2. Render Components (Passing Clean Data)
-    const topCards = renderTopCards(planMd);
-    const progress = renderProgressWidget(unifiedData); // Widget now uses unified list
-    const workouts = renderPlannedWorkouts(unifiedData);
-    const heatmaps = renderHeatmaps(unifiedData);
 
-    const syncBtn = `
-        <div class="flex justify-end mb-4">
-            <button id="btn-force-sync" onclick="window.triggerGitHubSync()" class="text-[10px] uppercase bg-slate-800 text-slate-400 hover:text-white border border-slate-700 font-bold py-1.5 px-3 rounded flex items-center gap-2">
-                <i class="fa-solid fa-rotate"></i> <span>Force Sync</span>
-            </button>
-        </div>`;
+// --- 3. COMPONENT: STATUS CARD ---
+const renderCard = (w) => {
+    const isDone = w.status === 'completed';
+    const borderColor = isDone ? 'border-emerald-500' : 'border-blue-500';
+    const bgColor = isDone ? 'bg-emerald-900/10' : 'bg-blue-900/10';
+    const textColor = isDone ? 'text-emerald-400' : 'text-blue-400';
+    const label = isDone ? 'COMPLETED' : 'PLANNED';
+    
+    // Icon Logic
+    let icon = 'fa-dumbbell';
+    if (w.type.toLowerCase().includes('run')) icon = 'fa-person-running';
+    if (w.type.toLowerCase().includes('bike')) icon = 'fa-person-biking';
+    if (w.type.toLowerCase().includes('swim')) icon = 'fa-person-swimming';
+
+    // Duration Display
+    let durHtml = '';
+    if (isDone) {
+        durHtml = `<span class="text-3xl font-bold text-white">${w.actDur}</span><span class="text-sm text-slate-400 ml-1">min</span> <span class="text-xs text-slate-500">/ ${w.planDur}m plan</span>`;
+    } else {
+        durHtml = `<span class="text-3xl font-bold text-white">${w.planDur}</span><span class="text-sm text-slate-400 ml-1">min</span>`;
+    }
+
+    // Markdown content parsing (simple)
+    const renderMarkdown = (text) => {
+        if (!text) return '';
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+            .replace(/`(.*?)`/g, '<code class="bg-slate-700 px-1 rounded text-orange-300">$1</code>') // Code
+            .replace(/\n/g, '<br>');
+    };
 
     return `
-        ${topCards}
-        ${syncBtn}
-        ${progress}
-        ${workouts}
-        ${heatmaps}
+    <div class="relative overflow-hidden rounded-xl border ${borderColor} ${bgColor} p-5 transition-all hover:shadow-lg hover:shadow-${isDone ? 'emerald' : 'blue'}-900/20">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">${w.day.toUpperCase()}</div>
+                ${durHtml}
+            </div>
+            <div class="text-right">
+                <i class="fa-solid ${icon} ${textColor} text-xl mb-1"></i>
+                <div class="text-[10px] font-bold ${textColor} border border-${isDone ? 'emerald' : 'blue'}-500/30 px-2 py-0.5 rounded bg-slate-900/40">${label}</div>
+            </div>
+        </div>
+        
+        <h4 class="text-lg font-bold text-white mb-2 leading-tight">${w.title}</h4>
+        
+        <div class="text-xs text-slate-400 leading-relaxed border-t border-slate-700/50 pt-3 mt-3">
+            ${renderMarkdown(w.details)}
+        </div>
+    </div>
+    `;
+};
+
+
+// --- 4. MAIN RENDER FUNCTION ---
+export function renderDashboard(plannedData, logData, planMd) {
+    if (!plannedData || !Array.isArray(plannedData)) {
+        return `<div class="p-8 text-center text-slate-500">No planned workouts found.</div>`;
+    }
+
+    // 1. Filter for THIS WEEK (Optional, keeps the dashboard focused)
+    // For now, let's just grab the next 7 days of plans or recent ones
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    
+    // Sort planned data just in case
+    plannedData.sort((a,b) => new Date(a.date) - new Date(b.date));
+
+    // Simple view: Show Future Plans + Past 2 Days
+    const visiblePlans = plannedData.filter(p => {
+        const d = new Date(p.date);
+        const diff = (d - today) / (1000 * 60 * 60 * 24);
+        return diff >= -2 && diff <= 5; // Show yesterday/today + next 5 days
+    });
+
+    // 2. Merge Data
+    const displayWorkouts = mergeWorkouts(visiblePlans, logData || []);
+
+    // 3. Generate HTML
+    const cardsHtml = displayWorkouts.map(w => renderCard(w)).join('');
+
+    return `
+        <div class="max-w-7xl mx-auto pb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-blue-500/20 p-2 rounded-lg">
+                    <i class="fa-solid fa-calendar-week text-blue-400 text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-white">Weekly Schedule</h2>
+                    <p class="text-xs text-slate-400">Your upcoming training block</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                ${cardsHtml}
+            </div>
+        </div>
     `;
 }

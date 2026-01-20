@@ -1,28 +1,73 @@
 import { toLocalYMD, getSportColorVar } from './utils.js';
 
 // --- 1. Main Render Function ---
-export function renderHeatmaps(heatmapData) {
-    if (!heatmapData) return '<p class="text-slate-500">Loading heatmaps...</p>';
+// Returns placeholder string immediately to satisfy sync caller
+export function renderHeatmaps() {
+    // Trigger async load after current stack clears to ensure DOM element exists
+    setTimeout(loadHeatmapData, 0);
 
+    return `
+        <div id="heatmaps-wrapper" class="min-h-[300px] flex items-center justify-center bg-slate-800/30 rounded-xl border border-slate-700/50">
+            <div class="animate-pulse text-slate-500 text-sm flex flex-col items-center gap-2">
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                <span>Loading heatmaps...</span>
+            </div>
+        </div>
+    `;
+}
+
+// --- 2. Async Data Loader ---
+async function loadHeatmapData() {
+    try {
+        const response = await fetch('data/dashboard/heatmaps.json');
+        let heatmapData = {};
+        if (response.ok) {
+            heatmapData = await response.json();
+        } else {
+            console.warn("Heatmaps.json not found");
+        }
+
+        // Generate the actual grid HTML
+        const html = generateHeatmapGridHTML(heatmapData);
+
+        // Inject into the DOM, replacing the placeholder
+        const wrapper = document.getElementById('heatmaps-wrapper');
+        if (wrapper) {
+            wrapper.outerHTML = html;
+            
+            // Apply scroll logic after injection
+            setTimeout(() => {
+                const scrollIds = ['heatmap-trailing-scroll', 'heatmap-activity-scroll'];
+                scrollIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.scrollLeft = el.scrollWidth;
+                });
+            }, 50);
+        }
+
+    } catch (e) {
+        console.error("Error loading heatmaps:", e);
+        const wrapper = document.getElementById('heatmaps-wrapper');
+        if (wrapper) wrapper.innerHTML = '<p class="text-red-500 text-xs p-4">Error loading heatmap data.</p>';
+    }
+}
+
+// --- 3. HTML Generator (Logic from previous turn) ---
+function generateHeatmapGridHTML(heatmapData) {
     const today = new Date();
     
     // Calculate Date Ranges
-    // End of week (Saturday) to align the grid
     const endOfWeek = new Date(today);
     const distToSaturday = 6 - today.getDay(); 
     endOfWeek.setDate(today.getDate() + distToSaturday); 
 
-    // Trailing 6 Months Start
     const startTrailing = new Date(endOfWeek);
     startTrailing.setMonth(startTrailing.getMonth() - 6);
     
-    // Annual Start (Jan 1)
     const startYear = new Date(today.getFullYear(), 0, 1); 
     const endYear = new Date(today.getFullYear(), 11, 31);
 
-    // --- Generate Views ---
-
-    // 1. Recent Consistency (Trailing)
+    // Generate Sub-Views
     const heatmapTrailingHtml = buildHeatmapGrid(
         heatmapData, 
         startTrailing, 
@@ -32,7 +77,6 @@ export function renderHeatmaps(heatmapData) {
         true // isTrailing
     );
     
-    // 2. Activity Types (Trailing)
     const heatmapActivityHtml = buildActivityGrid(
         heatmapData, 
         startTrailing, 
@@ -41,7 +85,6 @@ export function renderHeatmaps(heatmapData) {
         "heatmap-activity-scroll"
     );
 
-    // 3. Annual Overview (Full Year)
     const heatmapYearHtml = buildHeatmapGrid(
         heatmapData, 
         startYear, 
@@ -50,15 +93,6 @@ export function renderHeatmaps(heatmapData) {
         null,
         false // isAnnual
     );
-
-    // --- Auto-Scroll Logic ---
-    setTimeout(() => {
-        const scrollIds = ['heatmap-trailing-scroll', 'heatmap-activity-scroll'];
-        scrollIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.scrollLeft = el.scrollWidth;
-        });
-    }, 50);
 
     return `
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -71,13 +105,12 @@ export function renderHeatmaps(heatmapData) {
     `;
 }
 
-// --- 2. Generic Heatmap Builder (Volume/Consistency) ---
+// --- 4. Grid Builders ---
 function buildHeatmapGrid(data, startDate, endDate, title, scrollId, isTrailing) {
     let gridHtml = '';
     
-    // Create a robust date iterator
     const current = new Date(startDate);
-    // Align start to Sunday if it's a grid view to prevent offset issues
+    // Align start to Sunday for consistent grid structure if trailing
     if (isTrailing) {
         const day = current.getDay();
         const diff = current.getDate() - day; 
@@ -90,26 +123,21 @@ function buildHeatmapGrid(data, startDate, endDate, title, scrollId, isTrailing)
         const dateStr = toLocalYMD(current);
         const entry = data[dateStr];
         
-        // Data Extraction
         const minutes = entry ? entry.minutes || 0 : 0;
         const type = entry ? entry.type || 'Other' : 'Rest';
         const rawColor = entry ? getSportColorVar(type) : 'var(--color-bg-card)';
         
-        // Color Logic (Opacity based on duration)
-        // If data exists, we use the sport color. If 0 minutes, we check if it was a planned rest or just empty.
         let bgColor = 'var(--color-bg-card)'; 
-        let opacity = 0.3; // base dimness for empty slots
+        let opacity = 0.3;
 
         if (minutes > 0) {
             bgColor = rawColor;
-            // Opacity scale: 0-30m = 0.4, 30-60m = 0.6, 60-90m = 0.8, 90+ = 1.0
             if (minutes < 30) opacity = 0.5;
             else if (minutes < 60) opacity = 0.7;
             else if (minutes < 90) opacity = 0.85;
             else opacity = 1.0;
         }
 
-        // Cell Construction
         gridHtml += `
             <div class="w-3 h-3 rounded-sm transition-all hover:ring-1 hover:ring-white relative group"
                  style="background-color: ${bgColor}; opacity: ${minutes > 0 ? opacity : 0.15};"
@@ -121,12 +149,7 @@ function buildHeatmapGrid(data, startDate, endDate, title, scrollId, isTrailing)
         current.setDate(current.getDate() + 1);
     }
 
-    // Grid Container with specific 'grid-cols-53' from your old code
-    // Note: 'grid-cols-53' needs to be defined in your Tailwind config or CSS. 
-    // If it's missing, we fallback to flex/wrap or generic grid, but your old code used it specifically.
-    const containerClass = isTrailing 
-        ? "grid grid-rows-7 grid-flow-col gap-0.5" 
-        : "grid grid-rows-7 grid-flow-col gap-0.5";
+    const containerClass = "grid grid-rows-7 grid-flow-col gap-0.5";
 
     return `
         <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700/50 shadow-sm flex flex-col h-full backdrop-blur-sm">
@@ -154,14 +177,12 @@ function buildHeatmapGrid(data, startDate, endDate, title, scrollId, isTrailing)
     `;
 }
 
-// --- 3. Activity Type Grid ---
 function buildActivityGrid(data, startDate, endDate, title, scrollId) {
     let gridHtml = '';
     
-    // Align start to Sunday
     const current = new Date(startDate);
     const day = current.getDay(); 
-    current.setDate(current.getDate() - day);
+    current.setDate(current.getDate() - day); // Align to Sunday
     
     const tempEnd = new Date(endDate);
 
@@ -172,8 +193,6 @@ function buildActivityGrid(data, startDate, endDate, title, scrollId) {
         const minutes = entry ? entry.minutes || 0 : 0;
         const type = entry ? entry.type || '' : '';
         const color = type ? getSportColorVar(type) : 'var(--color-bg-card)';
-
-        // For activity type map, we just show the color if activity exists
         const opacity = minutes > 0 ? 0.9 : 0.15;
 
         gridHtml += `

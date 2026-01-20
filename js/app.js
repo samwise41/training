@@ -48,7 +48,8 @@
         plannedData: [],
         gearData: [],
         garminData: [],
-        profileData: null, // <--- NEW FIELD
+        profileData: null,
+        readinessData: null, // <--- NEW FIELD
 
         async init() {
             await this.loadData();
@@ -60,13 +61,15 @@
         async loadData() {
             try {
                 console.log("📡 Fetching Data...");
-                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes] = await Promise.all([
+                // Added readinessRes to the Promise.all array
+                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/planned.json'),
                     fetch('./js/views/gear/Gear.md'),
                     fetch('./data/my_garmin_data_ALL.json'),
-                    fetch('./data/profile.json') // <--- NEW FETCH
+                    fetch('./data/profile.json'),
+                    fetch('./data/readiness/readiness.json') // <--- NEW FETCH
                 ]);
 
                 this.planMd = await planRes.text();
@@ -75,12 +78,19 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
                 
-                // Fallback if profile.json is missing
                 if (profileRes.ok) {
                     this.profileData = await profileRes.json();
                 } else {
-                    console.warn("⚠️ profile.json not found. Run the Python script!");
+                    console.warn("⚠️ profile.json not found.");
                     this.profileData = {}; 
+                }
+
+                // Handle Readiness Data
+                if (readinessRes.ok) {
+                    this.readinessData = await readinessRes.json();
+                } else {
+                    console.warn("⚠️ readiness.json not found. Run the Python script!");
+                    this.readinessData = null;
                 }
 
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
@@ -145,15 +155,12 @@
                             content.innerHTML = renderMetrics(this.rawLogData); 
                             break;
                         case 'readiness':
-                            content.innerHTML = renderReadiness(this.rawLogData, this.planMd);
+                            // UPDATED: Pass pre-loaded readinessData instead of raw logs
+                            content.innerHTML = renderReadiness(this.readinessData);
                             break;
-                        
-                        // --- FIX IS HERE ---
                         case 'ftp':
-                            // Pass the PRE-CALCULATED JSON data
                             content.innerHTML = renderFTP(this.profileData); 
                             break;
-                            
                         case 'gear':
                             content.innerHTML = renderGear(this.gearData);
                             updateGearResult(this.gearData);

@@ -20,8 +20,7 @@
     ] = await Promise.all([
         safeImport('./parser.js', 'Parser'),
         safeImport('./views/dashboard/index.js', 'Dashboard'),
-        safeImport('./views/trends/volume.js', 'Trends'),
-        #safeImport('./views/trends/index.js', 'Trends'),
+        safeImport('./views/trends/index.js', 'Trends'),
         safeImport('./views/gear/index.js', 'Gear'),
         safeImport('./views/zones/index.js', 'Zones'),
         safeImport('./views/ftp/index.js', 'FTP'),

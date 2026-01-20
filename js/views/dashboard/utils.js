@@ -4,7 +4,7 @@
 export const toLocalYMD = (dateInput) => {
     if (!dateInput) return '';
     const d = new Date(dateInput);
-    if (isNaN(d.getTime())) return ''; // Safety check
+    if (isNaN(d.getTime())) return '';
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
@@ -40,11 +40,15 @@ export function mergeAndDeduplicate(planned, actuals) {
     const getKey = (item) => {
         if (!item.date) return null;
         const dateStr = item.date.toISOString().split('T')[0];
+        
+        // SAFEGUARD: Ensure strings
         let sport = 'Other';
         const type = String(item.activityType || item.actualSport || '').toLowerCase();
-        if (type.includes('bike') || type.includes('ride')) sport = 'Bike';
+        
+        if (type.includes('bike') || type.includes('ride') || type.includes('cycl')) sport = 'Bike';
         else if (type.includes('run')) sport = 'Run';
         else if (type.includes('swim')) sport = 'Swim';
+        
         return `${dateStr}|${sport}`;
     };
 
@@ -58,9 +62,8 @@ export function mergeAndDeduplicate(planned, actuals) {
     actuals.forEach(item => {
         const k = getKey(item);
         if (k) {
-            // Merge actuals INTO plan, or replace plan
+            // Merge actuals INTO plan (keeping plan notes)
             const existing = map.get(k) || {};
-            // We keep the plan metadata (notes) but take the actual stats
             const merged = { ...existing, ...item };
             map.set(k, merged);
         }
@@ -70,10 +73,12 @@ export function mergeAndDeduplicate(planned, actuals) {
 }
 
 // --- STYLE & COLOR HELPERS ---
+// CRITICAL FIX: Added String() wrapper to prevent crashes
 export const getSportColorVar = (type) => {
     if (!type) return 'var(--color-all)';
-    const t = type.toLowerCase();
-    if (t === 'bike' || t.includes('cycl')) return 'var(--color-bike)';
+    const t = String(type).toLowerCase(); // Force string conversion
+    
+    if (t === 'bike' || t.includes('cycl') || t.includes('ride')) return 'var(--color-bike)';
     if (t === 'run' || t.includes('run')) return 'var(--color-run)';
     if (t === 'swim' || t.includes('swim')) return 'var(--color-swim)';
     if (t === 'strength') return 'var(--color-strength, #a855f7)';

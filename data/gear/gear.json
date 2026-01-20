@@ -49,6 +49,55 @@
             "extremities": "None"
         }
     ],
-    "run": [],
+    "run": [
+        {
+            "min": -999,
+            "max": 35,
+            "rangeLabel": "**Below 35\u00b0F**",
+            "upper": "Thermal Long Sleeve Top<br>Short Sleeved Shirt",
+            "lower": "Thermal Leggings",
+            "extremities": "Hat<br>Gloves"
+        },
+        {
+            "min": 35,
+            "max": 40,
+            "rangeLabel": "**35\u00b0F \u2013 40\u00b0F**",
+            "upper": "Thermal Long Sleeve Top<br>Short Sleeved Shirt<br>(Add Long Sleeved for short runs)",
+            "lower": "Thermal Leggings",
+            "extremities": "Hat<br>Gloves"
+        },
+        {
+            "min": 40,
+            "max": 45,
+            "rangeLabel": "**40\u00b0F \u2013 45\u00b0F**",
+            "upper": "Short Sleeved Shirt<br>Long Sleeved Shirt<br>(Shed Long Sleeved when warm)",
+            "lower": "Shorts",
+            "extremities": "Hat<br>Gloves"
+        },
+        {
+            "min": 45,
+            "max": 50,
+            "rangeLabel": "**45\u00b0F \u2013 50\u00b0F**",
+            "upper": "Short Sleeved Shirt",
+            "lower": "Shorts",
+            "extremities": "Optional Gloves"
+        },
+        {
+            "min": 50,
+            "max": 60,
+            "rangeLabel": "**50\u00b0F \u2013 60\u00b0F**",
+            "upper": "Short Sleeved Shirt",
+            "lower": "Shorts",
+            "extremities": "None"
+        },
+        {
+            "min": 60,
+            "max": 999,
+            "rangeLabel": "**Above 60\u00b0F**",
+            "upper": "Tank Top Shirt",
+            "lower": "Shorts",
+            "extremities": "None"
+        }
+    ],
     "lastUpdated": "Generated via Python"
 }

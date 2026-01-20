@@ -1,0 +1,12 @@
+{
+    "cycling": {
+        "type": "Power",
+        "unit": "Watts",
+        "zones": []
+    },
+    "running": {
+        "type": "Heart Rate",
+        "unit": "bpm",
+        "zones": []
+    }
+}

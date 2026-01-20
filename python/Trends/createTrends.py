@@ -22,17 +22,16 @@ def main():
     with open(LOG_FILE, 'r', encoding='utf-8') as f:
         logs = json.load(f)
 
-    # 1. Determine Date Range (Current Saturday and 11 weeks back)
-    # Using current time 2026-01-20 (Tuesday), the current week ends 2026-01-24
+    # 1. Determine Date Range (Current Saturday and 12 weeks back)
+    # Using the current system time provided (Jan 20, 2026)
     current_date = datetime(2026, 1, 20) 
     current_sat = get_saturday(current_date)
     
-    # We need 13 Saturdays total (to calculate growth for the first visible week)
+    # We need 13 Saturdays total to calculate growth for the 12th trailing week
     saturdays = [current_sat - timedelta(weeks=i) for i in range(13)]
     saturdays.sort()
 
-    # 2. Aggregate Volume by Saturday Week-End
-    # Structure: { sat_date: { "total": {"p": 0, "a": 0}, "cycling": {...}, ... } }
+    # 2. Initialize Weekly Data Structure
     weekly_data = {sat.strftime('%Y-%m-%d'): {
         "total": {"p": 0, "a": 0},
         "cycling": {"p": 0, "a": 0},
@@ -46,9 +45,13 @@ def main():
             sat_key = get_saturday(entry_date).strftime('%Y-%m-%d')
             
             if sat_key in weekly_data:
-                sport = entry.get('actualSport', 'Other').lower()
-                p_dur = entry.get('plannedDuration', 0)
-                a_dur = entry.get('actualDuration', 0)
+                sport = entry.get('actualSport', 'Other')
+                if sport is None: sport = "" # Handle null sport
+                sport = sport.lower()
+
+                # SAFETY FIX: Ensure None/null values are treated as 0
+                p_dur = entry.get('plannedDuration') or 0
+                a_dur = entry.get('actualDuration') or 0
 
                 # Map to categories
                 cat = None
@@ -64,18 +67,21 @@ def main():
                 # Update Total
                 weekly_data[sat_key]['total']['p'] += p_dur
                 weekly_data[sat_key]['total']['a'] += a_dur
-        except (ValueError, KeyError):
+        except (ValueError, KeyError, TypeError):
             continue
 
     # 3. Calculate Growth relative to Prior Week Actuals
     final_data = []
-    # Start from index 1 so we can look back at index 0 for prior actuals
     for i in range(1, len(saturdays)):
         curr_sat = saturdays[i].strftime('%Y-%m-%d')
         prev_sat = saturdays[i-1].strftime('%Y-%m-%d')
         
+        # Use Windows-friendly formatting for the label (M/D)
+        # On Linux/Mac use %-m/%-d
+        label_date = saturdays[i].strftime('%#m/%#d') 
+
         week_entry = {
-            "week_label": saturdays[i].strftime('%#m/%#d'), # Windows formatting for m/d
+            "week_label": label_date,
             "week_end": curr_sat,
             "categories": {}
         }
@@ -85,15 +91,15 @@ def main():
             curr_a = weekly_data[curr_sat][cat]['a']
             prev_a = weekly_data[prev_sat][cat]['a']
 
-            # Prevent division by zero
+            # Prevent division by zero and calculate growth floats
             p_growth = (curr_p / prev_a - 1) if prev_a > 0 else 0
             a_growth = (curr_a / prev_a - 1) if prev_a > 0 else 0
 
             week_entry["categories"][cat] = {
                 "planned": curr_p,
                 "actual": curr_a,
-                "planned_growth": round(p_growth, 3),
-                "actual_growth": round(a_growth, 3)
+                "planned_growth": round(p_growth, 4),
+                "actual_growth": round(a_growth, 4)
             }
         
         final_data.append(week_entry)
@@ -111,7 +117,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=4)
     
-    print(f"✅ Trends generated for {len(final_data)} weeks.")
+    print(f"✅ Trends generated successfully for {len(final_data)} weeks.")
 
 if __name__ == "__main__":
     main()

@@ -19,7 +19,7 @@ window.triggerGitHubSync = async () => {
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Syncing...</span>';
 
     try {
-        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/01_1_Training_Data_Sync.yml/dispatches`, {
+        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/Training_Data_Sync.yml/dispatches`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -94,7 +94,9 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
     window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
 };
 
-// --- HELPER 1: Normalize Dates ---
+// --- DATA HELPERS ---
+
+// 1. Normalize Dates (String -> Date Object)
 function normalizeData(data) {
     if (!Array.isArray(data)) return [];
     return data.map(item => {
@@ -102,7 +104,7 @@ function normalizeData(data) {
         if (newItem.date && typeof newItem.date === 'string') {
             const parts = newItem.date.split('-');
             if (parts.length === 3) {
-                // Force Local Time Construction to avoid Timezone shifts
+                // Force Local Time Construction
                 newItem.date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
             } else {
                 newItem.date = new Date(newItem.date);
@@ -112,7 +114,7 @@ function normalizeData(data) {
     });
 }
 
-// --- HELPER 2: Deduplicate (Fixes 120m vs 60m issue) ---
+// 2. Deduplicate (Fixes the "Doubling" Issue)
 function deduplicateData(data) {
     const map = new Map();
     data.forEach(item => {
@@ -127,7 +129,7 @@ function deduplicateData(data) {
         
         const uniqueKey = `${dateStr}|${sport}`;
         
-        // If duplicates exist, keep the one with larger duration (prevents ghost entries)
+        // If conflict, keep the one with larger duration (assumed to be the master entry)
         if (map.has(uniqueKey)) {
             const existing = map.get(uniqueKey);
             const existDur = parseFloat(existing.plannedDuration || existing.actualDuration) || 0;
@@ -140,8 +142,9 @@ function deduplicateData(data) {
     return Array.from(map.values());
 }
 
-// --- HELPER 3: Parse Top Cards (Status & Events) ---
+// 3. Parse Phase & Events from Markdown
 function parseTopLevelStats(planMd) {
+    // Safety check for Markdown string
     if (!planMd || typeof planMd !== 'string') return { phase: "Unknown", event: null };
 
     const today = new Date();
@@ -154,18 +157,18 @@ function parseTopLevelStats(planMd) {
     const lines = planMd.split('\n');
 
     for (const line of lines) {
-        // 1. Status Line (**Status:** Phase 1...)
+        // A. Extract Status
         if (line.includes('**Status:**')) {
             currentPhase = line.replace('**Status:**', '').trim();
         }
         
-        // 2. Events Table (| Date | Event Name | ...)
+        // B. Extract Events
         if (line.trim().startsWith('|') && !line.includes('---') && !line.includes('Event Type')) {
             const parts = line.split('|').map(s => s.trim());
-            // MD Table: | Date | Event Type | Goal ...
+            // Format: | Date | Event Name | ...
             if (parts.length >= 3) {
-                const evtDateStr = parts[1]; // Column 1
-                const evtName = parts[2];    // Column 2
+                const evtDateStr = parts[1];
+                const evtName = parts[2];
                 const evtDate = new Date(evtDateStr);
                 
                 if (!isNaN(evtDate) && evtDate >= today) {
@@ -185,21 +188,24 @@ function parseTopLevelStats(planMd) {
 }
 
 // --- MAIN RENDERER ---
+// UPDATED SIGNATURE: Accepts 3 arguments to match app.js
 export function renderDashboard(plannedData, actualData, planMd) {
+    
     // 1. Process Data
     let workouts = normalizeData(plannedData);
     let fullLogData = normalizeData(actualData);
 
-    // Fix: Remove duplicates before rendering
+    // Fix doubling issue
     workouts = deduplicateData(workouts);
 
+    // Sort
     workouts.sort((a, b) => a.date - b.date);
     fullLogData.sort((a, b) => a.date - b.date);
 
-    // 2. Parse Top Cards from Markdown
+    // 2. Extract Top Cards Info
     const { phase, event } = parseTopLevelStats(planMd);
 
-    // 3. Build Top Cards HTML
+    // 3. Render Top Cards
     const eventHtml = event 
         ? `<div class="text-right">
              <div class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-1">Next Event</div>
@@ -227,8 +233,10 @@ export function renderDashboard(plannedData, actualData, planMd) {
 
     // 4. Render Child Components
     const progressHtml = renderProgressWidget(workouts, fullLogData);
+    // Note: plannedWorkouts now accepts both to check completion status
     const plannedWorkoutsHtml = renderPlannedWorkouts(workouts, fullLogData);
-    const heatmapsHtml = renderHeatmaps(fullLogData); // Only needs log
+    // Note: heatmaps now only needs fullLogData
+    const heatmapsHtml = renderHeatmaps(fullLogData);
 
     // 5. Sync Button
     const syncButtonHtml = `

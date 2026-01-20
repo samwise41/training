@@ -24,14 +24,14 @@ export const Parser = {
     },
 
     // --- MAIN: Parse Training Log ---
-    // FIXED: Detects if data is JSON (Array) or Markdown (String)
+    // FIXED: Handles JSON Arrays vs Markdown Strings safely
     parseTrainingLog: (data) => {
-        // 1. If it's already an array (JSON from training_log.json), just clean dates
+        // 1. JSON Array Support (The new standard)
         if (Array.isArray(data)) {
             return data.map(item => {
                 const newItem = { ...item };
                 
-                // Convert String Dates to Objects
+                // Convert String Dates to Date Objects
                 if (newItem.date && typeof newItem.date === 'string') {
                     const parts = newItem.date.split('-');
                     if (parts.length === 3) {
@@ -41,7 +41,7 @@ export const Parser = {
                     }
                 }
 
-                // Ensure Numbers
+                // Ensure Numbers exist (prevent NaNs)
                 newItem.plannedDuration = parseFloat(newItem.plannedDuration) || 0;
                 newItem.actualDuration = parseFloat(newItem.actualDuration) || 0;
                 newItem.RPE = parseFloat(newItem.RPE || newItem.rpe || 0);
@@ -50,7 +50,7 @@ export const Parser = {
             });
         }
 
-        // 2. Fallback for Strings (Legacy Support)
+        // 2. Legacy String Support
         if (typeof data === 'string') {
             console.warn("Legacy Markdown Log detected.");
             return []; 

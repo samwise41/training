@@ -174,7 +174,7 @@
                             this.updateGearResult();
                             break;
                         case 'zones':
-                            content.innerHTML = await renderZonesTab();
+                            content.innerHTML = renderZonesTab();
                             break;
                         case 'roadmap':
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);

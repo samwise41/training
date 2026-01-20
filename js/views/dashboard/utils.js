@@ -16,43 +16,74 @@ export function normalizeData(data) {
     if (!Array.isArray(data)) return [];
     return data.map(item => {
         const newItem = { ...item };
+        
+        // 1. Normalize Dates to Local Midnight
         if (newItem.date && typeof newItem.date === 'string') {
             const parts = newItem.date.split('-');
-            if (parts.length === 3) {
-                newItem.date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            if (parts.length >= 3) {
+                // Force "2023-10-25" OR "2023-10-25T14:00:00" to Local Midnight
+                newItem.date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2].slice(0, 2)));
             } else {
                 newItem.date = new Date(newItem.date);
             }
         }
+
+        // 2. Normalize Sport/Activity Type
+        // We look for common fields (sport, type, activityType) and consolidate them
+        const rawType = newItem.activityType || newItem.sport || newItem.type || newItem.actualSport || 'Other';
+        newItem.activityType = rawType; // Ensure this field always exists for the UI
+
+        // 3. Normalize Numbers
         newItem.plannedDuration = parseFloat(newItem.plannedDuration) || 0;
         newItem.actualDuration = parseFloat(newItem.actualDuration) || 0;
+        
         return newItem;
     });
 }
 
 export function mergeAndDeduplicate(planned, actuals) {
     const map = new Map();
+    
+    // Robust Key Generator
     const getKey = (item) => {
         if (!item.date) return null;
-        const dateStr = item.date.toISOString().split('T')[0];
+        
+        // Use toLocalYMD to ensure we match on "Calendar Day" not "UTC Timestamp"
+        const dateStr = toLocalYMD(item.date);
+        
+        // Normalize sport for matching purposes
         let sport = 'Other';
-        const type = String(item.activityType || item.actualSport || '').toLowerCase();
+        const type = String(item.activityType || '').toLowerCase();
+        
         if (type.includes('bike') || type.includes('ride') || type.includes('cycl')) sport = 'Bike';
-        else if (type.includes('run')) sport = 'Run';
-        else if (type.includes('swim')) sport = 'Swim';
+        else if (type.includes('run') || type.includes('jog')) sport = 'Run';
+        else if (type.includes('swim') || type.includes('pool')) sport = 'Swim';
+        else if (type.includes('strength') || type.includes('weight') || type.includes('lift')) sport = 'Strength';
+        
         return `${dateStr}|${sport}`;
     };
 
+    // 1. Add Plans
     planned.forEach(item => {
         const k = getKey(item);
         if (k) map.set(k, { ...item, source: 'plan' });
     });
 
+    // 2. Merge Actuals
     actuals.forEach(item => {
         const k = getKey(item);
         if (k) {
             const existing = map.get(k) || {};
-            const merged = { ...existing, ...item, source: 'merged' };
+            // Merge existing plan with actual data
+            // We prioritize 'item' (actual) values for things that overlap, but keep plan data
+            const merged = { 
+                ...existing, 
+                ...item, 
+                // Ensure specific fields don't get overwritten if they exist in plan but not actual
+                plannedDuration: existing.plannedDuration || 0,
+                plannedWorkout: existing.plannedWorkout || existing.planName,
+                source: existing.source ? 'merged' : 'actual_only' 
+            };
             map.set(k, merged);
         }
     });
@@ -60,21 +91,16 @@ export function mergeAndDeduplicate(planned, actuals) {
     return Array.from(map.values());
 }
 
-// --- STYLE & ICON HELPERS (Updated to Match Screenshot) ---
+// --- STYLE & ICON HELPERS ---
 export const getSportColorVar = (type) => {
     const t = String(type || '').toLowerCase();
     
-    // MATCHING SCREENSHOT COLORS:
-    // Bike = Purple
-    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return '#a855f7'; // Purple-500
-    // Run = Pink
-    if (t.includes('run')) return '#ec4899'; // Pink-500
-    // Swim = Blue
-    if (t.includes('swim')) return '#3b82f6'; // Blue-500
-    // Strength = Slate
-    if (t.includes('strength')) return '#94a3b8'; // Slate-400
+    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return '#a855f7'; // Purple
+    if (t.includes('run')) return '#ec4899'; // Pink
+    if (t.includes('swim')) return '#3b82f6'; // Blue
+    if (t.includes('strength') || t.includes('weight')) return '#94a3b8'; // Slate
     
-    return '#10b981'; // Default Green (Emerald-500)
+    return '#10b981'; // Emerald (Default)
 };
 
 export const getIcon = (type) => { 

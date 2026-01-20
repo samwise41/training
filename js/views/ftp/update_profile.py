@@ -3,17 +3,24 @@ import json
 import os
 
 # --- CONFIGURATION ---
-# Get the absolute path of the script itself
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# 1. Find the Project Root by hunting for 'endurance_plan.md'
+def find_project_root():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Climb up directories (max 5 levels) to find the plan file
+    for _ in range(5):
+        if os.path.exists(os.path.join(current_dir, 'endurance_plan.md')):
+            return current_dir
+        parent = os.path.dirname(current_dir)
+        if parent == current_dir: # Hit the top of the drive
+            break
+        current_dir = parent
+    
+    return None
 
-# Go up one level to find the project root (assuming script is in /scripts)
-PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+PROJECT_ROOT = find_project_root()
 
-# Define paths relative to the Project Root
-PLAN_FILE = os.path.join(PROJECT_ROOT, 'endurance_plan.md')
-OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'profile.json')
-
-# W/kg Categories (Matches your JS config)
+# W/kg Categories
 CATEGORIES = [
     { "threshold": 5.05, "label": "Exceptional", "color": "#a855f7" },
     { "threshold": 3.93, "label": "Very Good",   "color": "#3b82f6" },
@@ -23,7 +30,6 @@ CATEGORIES = [
 ]
 
 def extract_value(text, patterns):
-    """Helper to find a value using multiple regex patterns."""
     for pattern in patterns:
         match = re.search(pattern, text, re.IGNORECASE)
         if match:
@@ -31,54 +37,49 @@ def extract_value(text, patterns):
     return None
 
 def parse_plan():
-    print(f"📂 Project Root detected: {PROJECT_ROOT}")
-    
-    if not os.path.exists(PLAN_FILE):
-        print(f"❌ Error: Could not find plan at: {PLAN_FILE}")
+    if not PROJECT_ROOT:
+        print("❌ CRITICAL ERROR: Could not find 'endurance_plan.md' in any parent directory.")
+        print(f"   Script location: {os.path.dirname(os.path.abspath(__file__))}")
         return
 
-    with open(PLAN_FILE, 'r', encoding='utf-8') as f:
+    plan_file = os.path.join(PROJECT_ROOT, 'endurance_plan.md')
+    output_file = os.path.join(PROJECT_ROOT, 'data', 'profile.json')
+
+    print(f"📂 Project Root found: {PROJECT_ROOT}")
+    print(f"   Reading: {os.path.basename(plan_file)}")
+
+    with open(plan_file, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # --- 1. EXTRACT RAW DATA ---
-    print(f"🔍 Scanning {os.path.basename(PLAN_FILE)} for Biometrics...")
-    
-    # Weight (lbs)
+    # --- EXTRACT DATA ---
     weight_str = extract_value(content, [r'Weight[:\s|]+(\d+)', r'Body Weight[:\s|]+(\d+)'])
-    weight = int(weight_str) if weight_str else 175 # Default
+    weight = int(weight_str) if weight_str else 175
     
-    # Cycling FTP (Watts)
     watts_str = extract_value(content, [r'Cycling FTP[:\s|*]+(\d+)', r'FTP[:\s|*]+(\d+)'])
     watts = int(watts_str) if watts_str else 0
     
-    # LTHR
     lthr_str = extract_value(content, [r'LTHR[:\s|*]+(\d+)', r'Threshold HR[:\s|*]+(\d+)'])
     lthr = lthr_str if lthr_str else "--"
     
-    # Run FTP (Pace)
     run_ftp_str = extract_value(content, [r'Run FTP[:\s|*]+([\d:]+)', r'Threshold Pace[:\s|*]+([\d:]+)'])
     run_ftp = run_ftp_str if run_ftp_str else "--"
 
-    # 5k Estimate
     five_k_str = extract_value(content, [r'5k Estimate[:\s|*]+([\d:]+)', r'5k[:\s|*]+([\d:]+)'])
     five_k = five_k_str if five_k_str else "--"
 
-    # --- 2. CALCULATE METRICS ---
+    # --- CALCULATIONS ---
     weight_kg = weight * 0.453592
     wkg_num = round(watts / weight_kg, 2) if (watts > 0 and weight_kg > 0) else 0.00
 
-    # Determine Category
-    category = CATEGORIES[-1] # Default to Untrained
+    category = CATEGORIES[-1]
     for cat in CATEGORIES:
         if wkg_num >= cat["threshold"]:
             category = cat
             break
             
-    # Calculate Gauge Percent (1.0 to 6.0 scale)
     min_scale, max_scale = 1.0, 6.0
     percent = max(0, min((wkg_num - min_scale) / (max_scale - min_scale), 1))
 
-    # --- 3. BUILD JSON ---
     profile_data = {
         "weight_lbs": weight,
         "weight_kg": round(weight_kg, 1),
@@ -91,14 +92,12 @@ def parse_plan():
         "gauge_percent": percent
     }
 
-    # --- 4. SAVE ---
-    # Ensure 'data' folder exists in root
-    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-    
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+    # --- SAVE ---
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(profile_data, f, indent=4)
 
-    print(f"✅ Success! Profile saved to: {OUTPUT_FILE}")
+    print(f"✅ Success! Profile saved to: data/profile.json")
     print(f"   Stats: {watts}W / {weight}lbs = {wkg_num} W/kg ({category['label']})")
 
 if __name__ == "__main__":

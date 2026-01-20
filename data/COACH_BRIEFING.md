@@ -1,6 +1,6 @@
 # Coach Briefing 
 
-**Generated:** 2026-01-19 23:42
+**Generated:** 2026-01-20 13:41
 
 ## Run Trends
 | Metric | 30-Day Trend | 90-Day Trend | Status |

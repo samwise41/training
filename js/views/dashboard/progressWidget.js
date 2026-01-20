@@ -1,6 +1,9 @@
 // js/views/dashboard/progressWidget.js
 import { getSportColorVar } from './utils.js';
 
+/**
+ * Renders the Progress Widget with Bar Charts and pre-calculated Python Streaks
+ */
 export async function renderProgressWidget(workouts, fullLogData) {
     // 1. Fetch pre-calculated streaks from Python output
     let streaks = { daily_streak: 0, volume_streak: 0 };
@@ -13,13 +16,13 @@ export async function renderProgressWidget(workouts, fullLogData) {
         console.warn("Streak data not found, defaulting to 0"); 
     }
 
-    // 2. Strictly Define Current Week (Sunday - Saturday)
+    // 2. Define Current Week (Sunday - Saturday) to match Python logic
     const today = new Date();
     today.setHours(0,0,0,0);
     const currentDay = today.getDay(); // Sunday is 0
     
     const sunday = new Date(today);
-    sunday.setDate(today.getDate() - currentDay); // Go back to most recent Sunday
+    sunday.setDate(today.getDate() - currentDay);
     sunday.setHours(0,0,0,0);
 
     const saturday = new Date(sunday);
@@ -94,7 +97,7 @@ export async function renderProgressWidget(workouts, fullLogData) {
         });
     }
 
-    // 6. Formatting Helpers
+    // 6. Formatting Helper for Bar Charts
     const generateBarHtml = (label, iconClass, actual, planned, dailyMap, isMain = false, sportType = 'All') => {
         const rawPct = planned > 0 ? Math.round((actual / planned) * 100) : 0; 
         const barWidth = Math.min(rawPct, 100); 
@@ -114,8 +117,7 @@ export async function renderProgressWidget(workouts, fullLogData) {
         }
         
         const labelHtml = isMain ? `<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">${label}</span>` : ''; 
-        const colorStyle = `style="color: ${getSportColorVar(sportType)}"`;
-        const iconHtml = iconClass ? `<i class="fa-solid ${iconClass} mr-2 w-4 text-center" ${colorStyle}></i>` : ''; 
+        const iconHtml = iconClass ? `<i class="fa-solid ${iconClass} mr-2 w-4 text-center" style="color: ${getSportColorVar(sportType)}"></i>` : ''; 
         const heightClass = isMain ? 'h-3' : 'h-2.5'; 
         const mbClass = isMain ? 'mb-4' : 'mb-3'; 
         const pctColor = rawPct > 100 ? 'text-emerald-400' : 'text-blue-400';
@@ -145,6 +147,7 @@ export async function renderProgressWidget(workouts, fullLogData) {
         </div>`;
     };
     
+    // Pacing Logic
     const pacingDiff = totalActual - expectedSoFar; 
     let pacingLabel = "On Track"; 
     let pacingColor = "text-slate-400"; 
@@ -169,6 +172,7 @@ export async function renderProgressWidget(workouts, fullLogData) {
         return "text-slate-500";
     };
     
+    // Final Template
     return `
     <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-5 mb-8 flex flex-col md:flex-row items-start gap-6 shadow-sm">
         <div class="flex-1 w-full">
@@ -177,6 +181,7 @@ export async function renderProgressWidget(workouts, fullLogData) {
             ${generateBarHtml('Run', 'fa-person-running', sportStats.Run.actual, sportStats.Run.planned, sportStats.Run.dailyMarkers, false, 'Run')}
             ${generateBarHtml('Swim', 'fa-person-swimming', sportStats.Swim.actual, sportStats.Swim.planned, sportStats.Swim.dailyMarkers, false, 'Swim')}
         </div>
+
         <div class="w-full md:w-auto md:border-l md:border-slate-700 md:pl-6 flex flex-row md:flex-col justify-between md:justify-center items-center md:items-start gap-6 md:gap-4 self-center">
             <div>
                 <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Pacing</span>
@@ -189,16 +194,18 @@ export async function renderProgressWidget(workouts, fullLogData) {
                     <span class="text-[10px] text-slate-300 font-mono">Tgt: ${Math.round(expectedSoFar)}m <span class="text-slate-500">(${expectedHrs}h)</span></span>
                 </div>
             </div>
+
             <div>
                 <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Daily Streak</span>
-                <div class="flex items-center gap-2" title="Consecutive weeks (Sun-Sat) where every single workout was Completed">
+                <div class="flex items-center gap-2" title="Consecutive weeks where every single workout was Completed">
                     <i class="fa-solid fa-calendar-day ${getStreakColor(streaks.daily_streak)}"></i>
                     <span class="text-lg font-bold ${getStreakColor(streaks.daily_streak)}">${streaks.daily_streak} Wks</span>
                 </div>
             </div>
+
             <div>
                 <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-0.5">Volume Streak</span>
-                <div class="flex items-center gap-2" title="Consecutive weeks (Sun-Sat) where total volume was >95%">
+                <div class="flex items-center gap-2" title="Consecutive weeks where total volume was >95%">
                     <i class="fa-solid fa-fire ${getStreakColor(streaks.volume_streak)}"></i>
                     <span class="text-lg font-bold ${getStreakColor(streaks.volume_streak)}">${streaks.volume_streak} Wks</span>
                 </div>

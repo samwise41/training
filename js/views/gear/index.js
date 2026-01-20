@@ -9,6 +9,7 @@ const WEATHER_MAP = {
 
 // --- 2. COMPONENTS ---
 const buildHourlyForecast = (hourlyWeather) => {
+    // Check if weather data exists; if not, return empty string
     if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) return '';
 
     const times = hourlyWeather.time.slice(0, 24); 
@@ -49,7 +50,7 @@ const buildTempOptions = (defaultVal) => {
     return tempOptions;
 };
 
-// --- THIS RESTORES YOUR ORIGINAL MATRIX LAYOUT ---
+// RESTORED EXACT ORIGINAL LAYOUT
 const generateRow = (idPrefix, iconClass, label, colorClass) => `
     <div class="gear-row-container">
         <div class="activity-header">
@@ -126,7 +127,6 @@ function updateGearUI(gearData) {
     const temp = parseInt(tempSelect.value);
     
     const processActivity = (activity, prefixBase) => {
-        // Safe access to data arrays (bike/run)
         const list = gearData[activity] || [];
         
         const findMatch = (t) => {
@@ -160,7 +160,7 @@ function updateGearUI(gearData) {
 
 // --- 4. EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // gearData is now passed in directly as JSON (no Parsing step needed here)
+    // gearData is now passed in as a JSON object, so NO Parser call needed.
 
     // Default Temp Logic
     let defaultVal = 50;
@@ -172,8 +172,6 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
 
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    
-    // We removed the markdown content argument since we link to it instead
     const html = renderLayout(hourlyHtml, tempOptions);
 
     return html;

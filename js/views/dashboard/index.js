@@ -2,10 +2,10 @@
 import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
-import { renderTopCards } from './topCards.js'; // NEW IMPORT
-import { normalizeData, mergeAndDeduplicate } from './utils.js'; // NEW IMPORTS
+import { renderTopCards } from './topCards.js'; // New Import
+import { normalizeData, mergeAndDeduplicate } from './utils.js'; // New Utilities
 
-// --- GITHUB SYNC TRIGGER ---
+// --- GITHUB SYNC (Standard) ---
 window.triggerGitHubSync = async () => {
     let token = localStorage.getItem('github_pat');
     if (!token) {
@@ -13,32 +13,24 @@ window.triggerGitHubSync = async () => {
         if (token) localStorage.setItem('github_pat', token.trim());
         else return;
     }
-
     const btn = document.getElementById('btn-force-sync');
     const originalContent = btn.innerHTML;
     btn.disabled = true;
     btn.classList.add('opacity-50', 'cursor-not-allowed');
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Syncing...</span>';
-
     try {
-        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/01_1_Training_Data_Sync.yml/dispatches`, {
+        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/Training_Data_Sync.yml/dispatches`, {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
             body: JSON.stringify({ ref: 'main' })
         });
-
         if (response.ok) alert("🚀 Sync Started!\n\nCheck back in ~2-3 minutes.");
         else {
             if (response.status === 401) localStorage.removeItem('github_pat');
             alert(`❌ Sync Failed: ${await response.text()}`);
         }
-    } catch (e) {
-        alert(`❌ Error: ${e.message}`);
-    } finally {
+    } catch (e) { alert(`❌ Error: ${e.message}`); } 
+    finally {
         btn.disabled = false;
         btn.classList.remove('opacity-50', 'cursor-not-allowed');
         btn.innerHTML = originalContent;
@@ -54,9 +46,7 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
         tooltip.className = 'z-50 bg-slate-900 border border-slate-600 p-3 rounded-md shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed min-w-[140px]';
         document.body.appendChild(tooltip);
     }
-
     const detailsHtml = details ? `<div class="mt-2 pt-2 border-t border-slate-700 border-dashed text-slate-400 font-mono text-[10px] leading-tight text-left">${details}</div>` : '';
-
     tooltip.innerHTML = `
         <div class="text-center">
             <div class="text-white font-bold text-sm mb-0.5 whitespace-nowrap">Plan: ${Math.round(plan)}m | Act: ${Math.round(act)}m</div>
@@ -65,17 +55,14 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
             <div class="text-[11px] font-bold mt-1 uppercase tracking-wide" style="color: ${color}">${label}</div>
             ${detailsHtml}
         </div>`;
-
+    
     const x = evt.clientX;
     const y = evt.clientY;
     const viewportWidth = window.innerWidth;
-    
     tooltip.style.top = `${y - 75}px`; 
     tooltip.style.left = (x > viewportWidth * 0.60) ? 'auto' : `${x - 70}px`;
     tooltip.style.right = (x > viewportWidth * 0.60) ? `${viewportWidth - x + 10}px` : 'auto';
-    
     if (parseInt(tooltip.style.left) < 10) tooltip.style.left = '10px';
-
     tooltip.classList.remove('opacity-0');
     if (window.dashTooltipTimer) clearTimeout(window.dashTooltipTimer);
     window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
@@ -83,25 +70,24 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
 
 // --- MAIN RENDERER ---
 export function renderDashboard(plannedData, actualData, planMd) {
-    // 1. Clean Data (Normalize Dates)
-    const pData = normalizeData(plannedData);
-    const aData = normalizeData(actualData);
-
-    // 2. Merge (Fixes the Doubling Issue)
-    // mergedWorkouts contains deduplicated data for Progress/Cards
-    const mergedWorkouts = mergeAndDeduplicate(pData, aData);
-    mergedWorkouts.sort((a, b) => a.date - b.date);
+    // 1. Data Cleaning
+    let workouts = normalizeData(plannedData);
+    let fullLogData = normalizeData(actualData);
     
-    // Sort raw logs for Heatmaps
-    aData.sort((a, b) => a.date - b.date);
+    // 2. Intelligent Deduplication (Fixes 120m vs 60m bug)
+    workouts = mergeAndDeduplicate(workouts, fullLogData);
 
-    // 3. Render Components
+    // 3. Sorting
+    workouts.sort((a, b) => a.date - b.date);
+    fullLogData.sort((a, b) => a.date - b.date);
+
+    // 4. Render Components
     const topCardsHtml = renderTopCards(planMd);
-    const progressHtml = renderProgressWidget(mergedWorkouts, aData);
-    const plannedWorkoutsHtml = renderPlannedWorkouts(mergedWorkouts, aData);
-    const heatmapsHtml = renderHeatmaps(aData); // Only needs history
+    const progressHtml = renderProgressWidget(workouts, fullLogData);
+    const plannedWorkoutsHtml = renderPlannedWorkouts(workouts, fullLogData);
+    const heatmapsHtml = renderHeatmaps(fullLogData); // Only needs history
 
-    // 4. Sync Button
+    // 5. Build Final HTML
     const syncButtonHtml = `
         <div class="flex justify-end mb-4">
             <button id="btn-force-sync" onclick="window.triggerGitHubSync()" 

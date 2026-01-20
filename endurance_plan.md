@@ -64,22 +64,26 @@ The primary "A" races and secondary objectives for the 2026 season.
 
 ### Cycling Power Zones (Based on 241W FTP)
 
-* **Zone 1 (Recovery):** < 133W
-* **Zone 2 (Endurance):** 134W – 180W
-* **Zone 3 (Tempo):** 181W – 210W
-* **Sweet Spot**: 211W – 226W
-* **Zone 4 (Threshold):** 227W – 253W
-* **Zone 5 (VO2 Max):** 254W – 289W
+| Zone | Range |
+|:---|:---|
+| Zone 1 (Recovery) | < 133W |
+| Zone 2 (Endurance) | 134W – 180W |
+| Zone 3 (Tempo) | 181W – 210W |
+| Sweet Spot | 211W – 226W | 
+| Zone 4 (Threshold)| 227W – 253W |
+| Zone 5 (VO2 Max) | 254W – 289W |
 
 ### Running Heart Rate Zones (Based on 171 bpm LTHR)
 
-* **Zone 1 (Recovery):** < 139 bpm
-* **Zone 2 (Endurance):** 140 – 152 bpm
-* **Zone 3 (Tempo):** 153 – 161 bpm
-* **Zone 4 (Threshold):** 162 – 170 bpm
-* **Zone 5a (Anaerobic Capacity):** 171 – 174 bpm
-* **Zone 5b (Anaerobic Endurance):** 175 – 181 bpm
-* **Zone 5c (Anaerobic Power):** > 182 bpm
+| Zone | Range |
+|:---|:---|
+| Zone 1 (Recovery) | < 139 bpm |
+| Zone 2 (Endurance) | 140 – 152 bpm |
+| Zone 3 (Tempo) | 153 – 161 bpm |
+| Zone 4 (Threshold) | 162 – 170 bpm |
+| Zone 5a (Anaerobic Capacity) | 171 – 174 bpm |
+| Zone 5b (Anaerobic Endurance) | 175 – 181 bpm |
+| Zone 5c (Anaerobic Power) | > 182 bpm |
 
 
 ## 4. Periodization Phases and Microcycle Templates

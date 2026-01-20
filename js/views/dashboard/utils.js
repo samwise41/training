@@ -12,14 +12,10 @@ export const toLocalYMD = (dateInput) => {
 };
 
 // --- DATA NORMALIZATION & MERGING ---
-
-// 1. Normalize: clean dates and ensure numbers are numbers
 export function normalizeData(data) {
     if (!Array.isArray(data)) return [];
     return data.map(item => {
         const newItem = { ...item };
-        
-        // Fix Date
         if (newItem.date && typeof newItem.date === 'string') {
             const parts = newItem.date.split('-');
             if (parts.length === 3) {
@@ -28,47 +24,34 @@ export function normalizeData(data) {
                 newItem.date = new Date(newItem.date);
             }
         }
-
-        // Fix Numbers
         newItem.plannedDuration = parseFloat(newItem.plannedDuration) || 0;
         newItem.actualDuration = parseFloat(newItem.actualDuration) || 0;
-
         return newItem;
     });
 }
 
-// 2. Merge: Combine Plan and Actuals into single "Day Objects" to prevent double counting
 export function mergeAndDeduplicate(planned, actuals) {
     const map = new Map();
-
-    // Key Generator: "2024-01-01|bike"
     const getKey = (item) => {
         if (!item.date) return null;
         const dateStr = item.date.toISOString().split('T')[0];
-        
-        // Safe Sport Detection
         let sport = 'Other';
         const type = String(item.activityType || item.actualSport || '').toLowerCase();
-        
         if (type.includes('bike') || type.includes('ride') || type.includes('cycl')) sport = 'Bike';
         else if (type.includes('run')) sport = 'Run';
         else if (type.includes('swim')) sport = 'Swim';
-        
         return `${dateStr}|${sport}`;
     };
 
-    // A. Add Plans First
     planned.forEach(item => {
         const k = getKey(item);
         if (k) map.set(k, { ...item, source: 'plan' });
     });
 
-    // B. Merge Actuals (Overwrite/Augment Plan)
     actuals.forEach(item => {
         const k = getKey(item);
         if (k) {
             const existing = map.get(k) || {};
-            // Merge logic: Actuals take precedence for status, but keep plan metadata
             const merged = { ...existing, ...item, source: 'merged' };
             map.set(k, merged);
         }
@@ -77,31 +60,36 @@ export function mergeAndDeduplicate(planned, actuals) {
     return Array.from(map.values());
 }
 
-// --- STYLE & ICON HELPERS (Crash Proof) ---
-
+// --- STYLE & ICON HELPERS (Updated to Match Screenshot) ---
 export const getSportColorVar = (type) => {
-    // Safety check: force string
     const t = String(type || '').toLowerCase();
     
-    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return 'var(--color-bike)';
-    if (t.includes('run')) return 'var(--color-run)';
-    if (t.includes('swim')) return 'var(--color-swim)';
-    if (t.includes('strength')) return 'var(--color-strength, #a855f7)';
-    return 'var(--color-all)';
+    // MATCHING SCREENSHOT COLORS:
+    // Bike = Purple
+    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return '#a855f7'; // Purple-500
+    // Run = Pink
+    if (t.includes('run')) return '#ec4899'; // Pink-500
+    // Swim = Blue
+    if (t.includes('swim')) return '#3b82f6'; // Blue-500
+    // Strength = Slate
+    if (t.includes('strength')) return '#94a3b8'; // Slate-400
+    
+    return '#10b981'; // Default Green (Emerald-500)
 };
 
 export const getIcon = (type) => { 
     const t = String(type || '').toLowerCase();
-    const colorStyle = `style="color: ${getSportColorVar(t)}"`;
+    const color = getSportColorVar(t);
+    const style = `style="color: ${color}"`;
     
     if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) 
-        return `<i class="fa-solid fa-bicycle text-xl opacity-80" ${colorStyle}></i>`;
+        return `<i class="fa-solid fa-bicycle text-xl opacity-80" ${style}></i>`;
     if (t.includes('run')) 
-        return `<i class="fa-solid fa-person-running text-xl opacity-80" ${colorStyle}></i>`;
+        return `<i class="fa-solid fa-person-running text-xl opacity-80" ${style}></i>`;
     if (t.includes('swim')) 
-        return `<i class="fa-solid fa-person-swimming text-xl opacity-80" ${colorStyle}></i>`;
+        return `<i class="fa-solid fa-person-swimming text-xl opacity-80" ${style}></i>`;
     
-    return `<i class="fa-solid fa-dumbbell text-xl opacity-80" ${colorStyle}></i>`;
+    return `<i class="fa-solid fa-dumbbell text-xl opacity-80" ${style}></i>`;
 };
 
 // --- UI BUILDER ---

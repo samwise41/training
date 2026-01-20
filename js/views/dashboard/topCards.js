@@ -1,76 +1,47 @@
-// js/views/dashboard/topCards.js
+export function renderTopCards() {
+    const containerId = 'top-cards-container';
 
-export function renderTopCards(planMd) {
-    // 1. Default Data
-    let phaseTitle = "Unknown Phase";
-    let phaseSubtitle = "No active block";
-    let eventName = "No events scheduled";
-    let eventDate = "--";
-    let daysToGo = "--";
+    // Initiate the fetch for pre-calculated event and phase data
+    setTimeout(async () => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
 
-    // 2. Parse Markdown (if available)
-    if (planMd && typeof planMd === 'string') {
-        const lines = planMd.split('\n');
-        const today = new Date(); today.setHours(0,0,0,0);
-        let minDays = 9999;
+        try {
+            const response = await fetch('data/dashboard/top_cards.json');
+            if (!response.ok) throw new Error("Top cards data not found");
+            const data = await response.json();
 
-        for (const line of lines) {
-            // A. Status Parsing
-            if (line.includes('**Status:**')) {
-                const raw = line.replace('**Status:**', '').trim();
-                const parts = raw.split('-');
-                phaseTitle = parts[0] ? parts[0].trim() : raw;
-                phaseSubtitle = parts[1] ? parts[1].trim() : "";
-            }
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Current Training Status</span>
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-layer-group text-2xl text-blue-400 mt-1"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xl font-bold text-white leading-tight">${data.phase}</span>
+                                <span class="text-sm font-medium text-slate-400 mt-0.5">${data.block}</span>
+                            </div>
+                        </div>
+                    </div>
 
-            // B. Event Parsing
-            if (line.trim().startsWith('|') && !line.includes('---') && !line.includes('Event Name')) {
-                const parts = line.split('|').map(s => s.trim());
-                if (parts.length >= 3) {
-                    const dStr = parts[1];
-                    const name = parts[2];
-                    const d = new Date(dStr);
-                    if (!isNaN(d) && d >= today) {
-                        const diff = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
-                        if (diff < minDays) {
-                            minDays = diff;
-                            eventName = name;
-                            eventDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                            daysToGo = `${Math.floor(diff / 7)}W ${diff % 7}D`;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // 3. Render HTML
-    return `
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm relative overflow-hidden flex flex-col justify-center h-32">
-            <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2">Current Phase</div>
-            <div class="text-2xl font-bold text-blue-400 tracking-tight leading-none mb-1">${phaseTitle}</div>
-            <div class="text-sm font-bold text-white tracking-wide">${phaseSubtitle}</div>
-        </div>
-
-        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm relative overflow-hidden flex items-center justify-between h-32">
-            <div class="flex flex-col justify-center z-10 w-full">
-                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2">Next Event</div>
-                <div class="text-xl font-bold text-white tracking-tight leading-none mb-2 truncate" title="${eventName}">${eventName}</div>
-                <div class="flex items-center gap-3 text-xs font-mono">
-                    <span class="text-slate-400 font-bold">${eventDate}</span>
-                    <span class="text-slate-600">|</span>
-                    <div class="flex items-center gap-1.5 text-emerald-400 font-bold">
-                        <i class="fa-solid fa-hourglass-half text-[10px]"></i>
-                        <span>${daysToGo} TO GO</span>
+                    <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm relative overflow-hidden">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Next Priority Event</span>
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-flag-checkered text-2xl text-emerald-400 mt-1"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xl font-bold text-white leading-tight">${data.next_event}</span>
+                                <span class="text-xs text-slate-400 font-mono mt-1">${data.days_to_go} days to go</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="flex flex-col items-center justify-center border-l border-slate-700 pl-6 ml-4">
-                <span class="text-3xl font-black text-emerald-500 tracking-tighter leading-none">100%</span>
-                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Readiness</span>
-            </div>
-        </div>
-    </div>`;
+            `;
+        } catch (err) {
+            console.error("Top Cards Error:", err);
+            container.innerHTML = `<p class="text-slate-500 italic p-4 text-center">Event data temporarily unavailable.</p>`;
+        }
+    }, 50);
+
+    // Initial loading state
+    return `<div id="${containerId}" class="min-h-[100px] bg-slate-800/10 animate-pulse rounded-xl mb-6"></div>`;
 }

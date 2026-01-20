@@ -1,26 +1,19 @@
 // js/app.js
 
 (async function initApp() {
-    console.log("🚀 Booting App (Debug Mode)...");
+    console.log("🚀 Booting App (Fixed Data Flow)...");
     const cacheBuster = Date.now();
     
-    // --- 1. ROBUST IMPORTER ---
+    // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
         try {
-            console.log(`⏳ Loading module: ${name} (${path})...`);
-            const module = await import(`${path}?t=${cacheBuster}`);
-            console.log(`✅ Success: ${name}`);
-            return module;
+            return await import(`${path}?t=${cacheBuster}`);
         } catch (e) {
-            console.error(`❌ FAILURE LOADING ${name}:`);
-            console.error(`   File: ${path}`);
-            console.error(`   Error: ${e.message}`);
-            if (e.stack) console.error(e.stack);
+            console.error(`❌ Failed to load ${name}:`, e.message);
             return null;
         }
     };
 
-    // Load all view modules with explicit names for debugging
     const [
         parserMod, dashMod, trendsMod, gearMod, zonesMod, ftpMod, roadmapMod, 
         metricsMod, readinessMod 
@@ -36,33 +29,22 @@
         safeImport('./views/readiness/index.js', 'Readiness')
     ]);
 
-    // Extract functions with detailed fallback messages
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
-    const renderDashboard = dashMod?.renderDashboard || (() => "<p class='text-red-500'>Error: Dashboard module failed to load. Check console.</p>");
-    const renderTrends = trendsMod?.renderTrends || (() => ({ html: "<p class='text-red-500'>Trends module failed.</p>" }));
-    const renderGear = gearMod?.renderGear || (() => "<p class='text-red-500'>Gear module failed.</p>");
+    const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
+    const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
+    const renderGear = gearMod?.renderGear || (() => "Gear missing");
     const updateGearResult = gearMod?.updateGearResult || (() => {});
-    const renderZones = zonesMod?.renderZones || (() => "<p class='text-red-500'>Zones module failed.</p>");
-    const renderFTP = ftpMod?.renderFTP || (() => "<p class='text-red-500'>FTP module failed.</p>");
-    const renderRoadmap = roadmapMod?.renderRoadmap || (() => "<p class='text-red-500'>Roadmap module failed.</p>");
-    
-    // METRICS DEBUG FALLBACK
-    const renderMetrics = metricsMod?.renderMetrics || ((data) => {
-        console.error("Attempted to render metrics, but module is missing.");
-        return `
-            <div class="p-10 text-center border border-red-500/30 rounded-xl bg-red-500/10">
-                <h2 class="text-xl font-bold text-red-400 mb-2"><i class="fa-solid fa-bug"></i> Metrics Module Failed</h2>
-                <p class="text-sm text-red-300">The module could not be loaded. Open your browser console (F12) to see the specific syntax error.</p>
-            </div>`;
-    });
-
-    const renderReadiness = readinessMod?.renderReadiness || (() => "<p class='text-red-500'>Readiness module failed.</p>");
+    const renderZones = zonesMod?.renderZones || (() => "Zones missing");
+    const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
+    const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
+    const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
+    const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
 
     // --- 2. APP STATE ---
     const App = {
         planMd: "",
-        rawLogData: [],
-        parsedLogData: [],
+        rawLogData: [],   // Raw JSON (Dates are strings)
+        parsedLogData: [], // Cleaned Data (Dates are Objects) - USED FOR METRICS
         plannedData: [],
         gearData: "",
         garminData: [],
@@ -76,7 +58,7 @@
 
         async loadData() {
             try {
-                console.log("📡 Fetching Data Suite...");
+                console.log("📡 Fetching Data...");
                 const [planRes, logRes, plannedRes, gearRes, garminRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
@@ -91,11 +73,13 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
 
+                // CRITICAL: This function converts string dates to Date Objects
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
-                console.log(`✅ Data Loaded: ${this.rawLogData.length} logs found.`);
+                console.log(`✅ Data Parsed: ${this.parsedLogData.length} entries ready.`);
 
             } catch (err) {
                 console.error("❌ Data Load Error:", err);
+                document.getElementById('main-content').innerHTML = `<div class="p-10 text-red-500">Data Load Error: ${err.message}</div>`;
             }
         },
 
@@ -137,7 +121,6 @@
         },
 
         renderCurrentView(view) {
-            console.log(`👀 Rendering View: ${view}`);
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
@@ -151,10 +134,13 @@
                         case 'trends':
                             content.innerHTML = renderTrends(this.parsedLogData).html;
                             break;
+                        
+                        // FIX IS HERE: Use parsedLogData instead of rawLogData
                         case 'metrics':
-                            console.log("📊 Rendering Metrics...");
-                            content.innerHTML = renderMetrics(this.rawLogData); 
+                            console.log("📊 Rendering Metrics with Parsed Data...");
+                            content.innerHTML = renderMetrics(this.parsedLogData); 
                             break;
+                            
                         case 'readiness':
                             content.innerHTML = renderReadiness(this.garminData);
                             break;
@@ -179,11 +165,8 @@
                             content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }
                 } catch (e) {
-                    console.error(`💥 Render Error in ${view}:`, e);
-                    content.innerHTML = `<div class="p-10 text-red-500">
-                        <h3 class="font-bold">Render Error</h3>
-                        <pre class="text-xs mt-2">${e.message}</pre>
-                    </div>`;
+                    console.error(`Render Error in ${view}:`, e);
+                    content.innerHTML = `<div class="p-10 text-red-500">Render Error: ${e.message}</div>`;
                 }
                 content.classList.remove('opacity-0');
                 

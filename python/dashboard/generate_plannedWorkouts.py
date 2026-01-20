@@ -82,7 +82,7 @@ def main():
     dashboard_list.sort(key=lambda x: x['date'], reverse=True)
 
     # 6. Save to Data Directory
-    output_path = os.path.join(config.DATA_DIR, 'dashboard_data.json')
+    output_path = os.path.join(config.DATA_DIR, 'plannedWorkouts.json')
     
     try:
         with open(output_path, 'w', encoding='utf-8') as f:

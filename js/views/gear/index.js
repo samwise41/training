@@ -49,92 +49,70 @@ const buildTempOptions = (defaultVal) => {
     return tempOptions;
 };
 
-// --- NEW MATRIX ROW GENERATOR ---
-const generateMatrixRow = (idPrefix, iconClass, label, colorClass) => `
-    <div class="flex items-center gap-2 md:justify-center p-3 bg-slate-800/50 rounded-lg md:rounded-none md:bg-transparent md:border-r border-slate-700/50">
-        <i class="${iconClass} ${colorClass} text-xl"></i>
-        <span class="md:hidden text-xs font-bold text-slate-300 uppercase tracking-widest">${label}</span>
-    </div>
-
-    <div class="p-3 bg-slate-800/30 rounded-lg md:rounded-none md:bg-transparent flex flex-col justify-center">
-        <span class="md:hidden text-[9px] font-bold text-blue-500 uppercase mb-1">Upper Body</span>
-        <p id="${idPrefix}-upper" class="text-sm text-slate-200 font-medium leading-snug">--</p>
-    </div>
-
-    <div class="p-3 bg-slate-800/30 rounded-lg md:rounded-none md:bg-transparent md:border-l border-slate-700/50 flex flex-col justify-center">
-        <span class="md:hidden text-[9px] font-bold text-emerald-500 uppercase mb-1">Lower Body</span>
-        <p id="${idPrefix}-lower" class="text-sm text-slate-200 font-medium leading-snug">--</p>
-    </div>
-
-    <div class="p-3 bg-slate-800/30 rounded-lg md:rounded-none md:bg-transparent md:border-l border-slate-700/50 flex flex-col justify-center">
-        <span class="md:hidden text-[9px] font-bold text-purple-500 uppercase mb-1">Extremities</span>
-        <p id="${idPrefix}-extremities" class="text-sm text-slate-200 font-medium leading-snug">--</p>
+// Original "Row/Bubble" Layout
+const generateRow = (idPrefix, iconClass, label, colorClass) => `
+    <div class="gear-row-container">
+        <div class="activity-header">
+            <i class="${iconClass} ${colorClass} text-lg"></i>
+            <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
+        </div>
+        <div class="gear-bubbles-row">
+            <div class="gear-bubble">
+                <span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span>
+                <p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
+            </div>
+            <div class="gear-bubble">
+                <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span>
+                <p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
+            </div>
+            <div class="gear-bubble">
+                <span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span>
+                <p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
+            </div>
+        </div>
     </div>
 `;
 
 const renderLayout = (hourlyHtml, tempOptions) => {
     return `
-        <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-4 md:p-6 mb-8 shadow-sm">
+        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
             ${hourlyHtml}
             
-            <div class="flex flex-col gap-2 mb-8 max-w-sm mx-auto">
-                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Effective Temperature</label>
-                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-xl font-bold py-3 bg-slate-800 border-slate-700 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors">
+            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Temperature</label>
+                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">
                     ${tempOptions}
                 </select>
             </div>
 
             <div class="mb-10">
                 <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></span> 
-                    Standard Kit
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions
                 </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-[80px_1fr_1fr_1fr] gap-2 md:gap-0 bg-slate-800/20 rounded-xl border border-slate-800 overflow-hidden">
-                    <div class="hidden md:contents">
-                        <div class="p-3 bg-slate-800/80 border-b border-r border-slate-700/50"></div>
-                        <div class="p-3 bg-slate-800/80 border-b border-slate-700/50 text-[10px] font-bold text-blue-400 uppercase tracking-widest text-center">Upper Body</div>
-                        <div class="p-3 bg-slate-800/80 border-b border-l border-slate-700/50 text-[10px] font-bold text-emerald-400 uppercase tracking-widest text-center">Lower Body</div>
-                        <div class="p-3 bg-slate-800/80 border-b border-l border-slate-700/50 text-[10px] font-bold text-purple-400 uppercase tracking-widest text-center">Extremities</div>
-                    </div>
-
-                    ${generateMatrixRow('bike-standard', 'fa-solid fa-bicycle', 'Cycling', 'text-cyan-400')}
-                    
-                    <div class="md:hidden h-px bg-slate-800 my-2"></div>
-                    <div class="hidden md:block col-span-full h-px bg-slate-700/30"></div>
-
-                    ${generateMatrixRow('run-standard', 'fa-solid fa-person-running', 'Running', 'text-orange-400')}
+                <div class="flex flex-col gap-4">
+                    ${generateRow('bike-standard', 'fa-solid fa-bicycle', 'Cycling', 'icon-bike')}
+                    ${generateRow('run-standard', 'fa-solid fa-person-running', 'Running', 'icon-run')}
                 </div>
             </div>
 
             <div>
                 <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-orange-500 shadow-sm shadow-orange-500/50"></span> 
-                    Windy & Rainy (-10°F Rule)
+                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)
                 </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-[80px_1fr_1fr_1fr] gap-2 md:gap-0 bg-slate-800/20 rounded-xl border border-slate-800 overflow-hidden">
-                    <div class="hidden md:contents">
-                        <div class="p-3 bg-slate-800/80 border-b border-r border-slate-700/50"></div>
-                        <div class="p-3 bg-slate-800/80 border-b border-slate-700/50 text-[10px] font-bold text-blue-400 uppercase tracking-widest text-center">Upper Body</div>
-                        <div class="p-3 bg-slate-800/80 border-b border-l border-slate-700/50 text-[10px] font-bold text-emerald-400 uppercase tracking-widest text-center">Lower Body</div>
-                        <div class="p-3 bg-slate-800/80 border-b border-l border-slate-700/50 text-[10px] font-bold text-purple-400 uppercase tracking-widest text-center">Extremities</div>
-                    </div>
-
-                    ${generateMatrixRow('bike-weather', 'fa-solid fa-bicycle', 'Cycling', 'text-cyan-400')}
-                    
-                    <div class="md:hidden h-px bg-slate-800 my-2"></div>
-                    <div class="hidden md:block col-span-full h-px bg-slate-700/30"></div>
-
-                    ${generateMatrixRow('run-weather', 'fa-solid fa-person-running', 'Running', 'text-orange-400')}
+                <div class="flex flex-col gap-4">
+                    ${generateRow('bike-weather', 'fa-solid fa-bicycle', 'Cycling', 'icon-bike')}
+                    ${generateRow('run-weather', 'fa-solid fa-person-running', 'Running', 'icon-run')}
                 </div>
             </div>
         </div>
-        
-        <div class="text-center text-xs text-slate-500 mt-4">
-            <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="hover:text-blue-400 underline transition-colors">
-                View Source Documentation (Gear.md)
-            </a>
+
+        <div class="mt-8 border-t border-slate-800 pt-8 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="text-sm font-bold text-slate-500 uppercase tracking-widest hover:text-blue-400 transition-colors">
+                    View Full Documentation (Gear.md)
+                </a>
+            </div>
         </div>
     `;
 };
@@ -149,7 +127,6 @@ function updateGearUI(gearData) {
     
     const processActivity = (activity, prefixBase) => {
         const list = gearData[activity] || [];
-        
         const findMatch = (t) => {
             const match = list.find(r => {
                 if (r.min === -999) return t < r.max;
@@ -181,6 +158,9 @@ function updateGearUI(gearData) {
 
 // --- 4. EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
+    // Note: removed Parser dependency since gearData is now JSON
+    
+    // Default Temp Logic
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
         if (currentTemp < 30) defaultVal = 25;
@@ -190,6 +170,8 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
 
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
+    
+    // Pass only what's needed for the layout (data is handled by updateGearUI)
     const html = renderLayout(hourlyHtml, tempOptions);
 
     return html;

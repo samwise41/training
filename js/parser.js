@@ -9,10 +9,12 @@ export const Parser = {
         let content = [];
         
         for (const line of lines) {
-            if (line.startsWith('##') && line.includes(header)) {
+            // Flexible matching for headers (e.g. ## Header or ### Header)
+            if (line.match(new RegExp(`^#{1,4}\\s+${header}`, 'i'))) {
                 inSection = true;
                 continue;
             }
+            // Stop if we hit the next header of the same level
             if (inSection && line.startsWith('##')) {
                 break; 
             }
@@ -23,8 +25,69 @@ export const Parser = {
         return content.join('\n').trim();
     },
 
+    // --- Helper: Parse a Markdown Table into an Array of Objects ---
+    // This is the function that was missing
+    _parseTableBlock: (markdownText) => {
+        if (!markdownText) return [];
+        
+        const lines = markdownText.split('\n')
+            .map(l => l.trim())
+            .filter(l => l.startsWith('|'));
+
+        if (lines.length < 3) return []; // Need headers, separator, and data
+
+        // 1. Parse Headers
+        const headerLine = lines[0];
+        const headers = headerLine.split('|')
+            .map(h => h.trim())
+            .filter(h => h) // Remove empty first/last strings from split
+            .map(h => h.replace(/\*\*/g, '').toLowerCase()); // Clean "**Day**" -> "day"
+
+        // 2. Parse Rows
+        const data = [];
+        // Start at index 2 to skip Header (0) and Separator line (1)
+        for (let i = 2; i < lines.length; i++) {
+            const line = lines[i];
+            const cells = line.split('|').map(c => c.trim());
+            
+            // Remove empty matches from leading/trailing pipes
+            // e.g. "| A | B |" splits to ["", "A", "B", ""]
+            // We want ["A", "B"]
+            const cleanCells = cells.slice(1, -1); 
+
+            if (cleanCells.length === headers.length) {
+                const rowObj = {};
+                headers.forEach((header, index) => {
+                    let value = cleanCells[index];
+                    
+                    // Specific keys that need parsing
+                    if (header.includes('duration') || header.includes('plan') || header.includes('act')) {
+                        // Extract number: "60 mins" -> 60
+                        const num = parseInt(value.replace(/\D/g, ''));
+                        value = isNaN(num) ? 0 : num;
+                        
+                        // Map standard keys for the dashboard
+                        if (header.includes('planned duration')) header = 'plannedDuration';
+                        if (header.includes('actual duration')) header = 'actualDuration';
+                    }
+
+                    // Map key names to standard expected format
+                    if (header === 'planned workout') header = 'planned';
+                    if (header === 'actual workout') header = 'actual';
+                    
+                    rowObj[header] = value;
+                });
+                
+                // Only add valid rows
+                if (rowObj.day) {
+                    data.push(rowObj);
+                }
+            }
+        }
+        return data;
+    },
+
     // --- MAIN: Parse Training Log ---
-    // FIXED: Handles JSON Arrays vs Markdown Strings safely
     parseTrainingLog: (data) => {
         // 1. JSON Array Support (The new standard)
         if (Array.isArray(data)) {
@@ -33,11 +96,16 @@ export const Parser = {
                 
                 // Convert String Dates to Date Objects
                 if (newItem.date && typeof newItem.date === 'string') {
-                    const parts = newItem.date.split('-');
-                    if (parts.length === 3) {
-                        newItem.date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                    // Try standard date parse first
+                    const d = new Date(newItem.date);
+                    if (!isNaN(d)) {
+                         newItem.date = d;
                     } else {
-                        newItem.date = new Date(newItem.date);
+                        // Fallback for YYYY-MM-DD
+                        const parts = newItem.date.split('-');
+                        if (parts.length === 3) {
+                            newItem.date = new Date(parts[0], parts[1] - 1, parts[2]);
+                        }
                     }
                 }
 

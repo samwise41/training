@@ -2,24 +2,26 @@
 import { buildCollapsibleSection } from './utils.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
-import { normalizeMetricsData } from './parser.js'; // Import Normalizer
+// Import the new health check
+import { runDataHealthCheck } from './parser.js';
 
 let metricsState = { timeRange: '6m' };
-let cleanData = [];
+let cachedData = [];
 
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;
-    updateCharts(cleanData, metricsState.timeRange);
+    updateCharts(cachedData, metricsState.timeRange);
 };
 
-export function renderMetrics(rawData) {
-    // 1. NORMALIZE DATA ONCE
-    // This fixes key mismatches immediately
-    cleanData = normalizeMetricsData(rawData);
+export function renderMetrics(allData) {
+    cachedData = allData || [];
     
+    // --- TRIGGER DEBUGGER ---
+    // Look at your browser console (F12) to see which fields are missing
     setTimeout(() => {
-        updateCharts(cleanData, metricsState.timeRange);
-    }, 50);
+        runDataHealthCheck(cachedData);
+        updateCharts(cachedData, metricsState.timeRange);
+    }, 100);
 
     const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
     
@@ -31,10 +33,9 @@ export function renderMetrics(rawData) {
             <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
         </div>`;
 
-    // 2. Render Table using Clean Data
     let tableHtml = "";
     try {
-        tableHtml = renderSummaryTable(cleanData);
+        tableHtml = renderSummaryTable(cachedData);
     } catch (e) {
         tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
     }

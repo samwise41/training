@@ -1,178 +1,116 @@
 // js/views/dashboard/plannedWorkouts.js
+import { getIcon, getSportColorVar, toLocalYMD, buildCollapsibleSection } from './utils.js';
 
-// --- HELPER: Parse Duration ---
-const parseDur = (val) => {
-    if (typeof val === 'number') return val;
-    if (!val) return 0;
-    const str = val.toString().toLowerCase();
-    let mins = 0;
-    if (str.includes('h')) {
-        const parts = str.split('h');
-        mins += parseInt(parts[0]) * 60;
-        if (parts[1] && parts[1].includes('m')) mins += parseInt(parts[1]);
-    } else if (str.includes('m')) {
-        mins += parseInt(str);
-    } else {
-        mins = parseInt(str);
-    }
-    return isNaN(mins) ? 0 : mins;
-};
+export function renderPlannedWorkouts(unifiedData) {
+    // 1. Calculate Current Week Window
+    const today = new Date(); 
+    today.setHours(0,0,0,0);
+    const day = today.getDay();
+    const monday = new Date(today); 
+    monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
+    const sunday = new Date(monday); 
+    sunday.setDate(monday.getDate() + 6);
 
-// --- HELPER: Markdown Renderer ---
-const renderMarkdown = (text) => {
-    if (!text) return '';
-    return text
-        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-200">$1</strong>')
-        .replace(/`(.*?)`/g, '<code class="bg-slate-700 px-1 rounded text-orange-300 font-mono text-[10px]">$1</code>')
-        .replace(/\n/g, '<br>');
-};
+    // 2. Filter Data for This Week
+    // We sort by date to ensure Monday -> Sunday order
+    const weeklyData = unifiedData
+        .filter(d => d.date >= monday && d.date <= sunday)
+        .sort((a, b) => a.date - b.date);
 
-// --- HELPER: Safe Date Key ---
-// Converts Date Object or String into "YYYY-MM-DD"
-const getDateKey = (dateInput) => {
-    if (!dateInput) return "9999-99-99"; // Fallback
-    try {
-        // If it's already a string like "2023-01-01T00:00...", just split it
-        if (typeof dateInput === 'string') return dateInput.split('T')[0];
-        
-        // If it's a Date object, convert to ISO string first
-        return new Date(dateInput).toISOString().split('T')[0];
-    } catch (e) {
-        return "9999-99-99";
-    }
-};
-
-// --- COMPONENT: Single Card ---
-const renderCard = (w) => {
-    const isDone = w.status === 'completed';
-    const borderColor = isDone ? 'border-emerald-500' : 'border-blue-500';
-    const bgColor = isDone ? 'bg-emerald-900/10' : 'bg-blue-900/10';
-    const textColor = isDone ? 'text-emerald-400' : 'text-blue-400';
-    const label = isDone ? 'COMPLETED' : 'PLANNED';
-    
-    // Icon Selection
-    const typeStr = (w.type || "").toLowerCase();
-    let icon = 'fa-dumbbell'; 
-    if (typeStr.includes('run')) icon = 'fa-person-running';
-    if (typeStr.includes('bike') || typeStr.includes('cycl')) icon = 'fa-person-biking';
-    if (typeStr.includes('swim')) icon = 'fa-person-swimming';
-
-    // Duration / Status Line
-    let durHtml = '';
-    if (isDone) {
-        // Show Plan vs Act if matched
-        const planVal = parseDur(w.planDur || w.duration); // Fallback to duration if planDur missing
-        const actVal = parseDur(w.actDur || w.actualDuration);
-        
-        durHtml = `
-            <div class="flex justify-between items-end mt-4 pt-3 border-t border-slate-700/50">
-                <span class="text-[9px] text-slate-500 uppercase font-bold tracking-wider">Plan vs Act</span>
-                <div class="text-xs font-mono text-slate-300">
-                    <span class="text-slate-500">${planVal}m</span> <span class="text-slate-600">/</span> <span class="text-emerald-400 font-bold">${actVal}m</span>
-                </div>
-            </div>`;
-    } 
-
-    // Main Big Duration Number (Top Left)
-    const mainDur = isDone ? (w.actDur || w.actualDuration) : (w.planDur || w.duration);
-    
-    // Day Name (e.g., MONDAY)
-    const d = new Date(w.date);
-    const dayName = d.toLocaleDateString('en-US', { weekday: 'long' });
-
-    return `
-    <div class="relative overflow-hidden rounded-xl border ${borderColor} ${bgColor} p-5 transition-all hover:shadow-lg hover:shadow-${isDone ? 'emerald' : 'blue'}-900/20 flex flex-col h-full">
-        <div class="flex justify-between items-start mb-3">
-            <div>
-                <div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">${dayName}</div>
-                <div>
-                    <span class="text-4xl font-black text-white tracking-tighter">${mainDur}</span>
-                    <span class="text-xs text-slate-400 ml-1 font-bold">min</span>
-                </div>
-                <div class="text-[10px] font-bold ${textColor} uppercase mt-1 tracking-wide">${label}</div>
-            </div>
-            <div class="text-right">
-                <i class="fa-solid ${icon} ${textColor} text-xl mb-1 opacity-80"></i>
-                <div class="text-[10px] font-bold text-slate-500 text-right max-w-[80px] leading-tight mt-1">
-                    [${(w.type || "Workout").toUpperCase()}] ${w.title}
-                </div>
-            </div>
-        </div>
-        
-        <div class="text-xs text-slate-400 leading-relaxed mt-auto">
-            ${renderMarkdown(w.details)}
-        </div>
-
-        ${durHtml}
-    </div>
-    `;
-};
-
-// --- MAIN EXPORT ---
-export const renderPlannedWorkouts = (unifiedData) => {
-    if (!unifiedData || !Array.isArray(unifiedData) || unifiedData.length === 0) {
-        return `<div class="p-8 text-center text-slate-500">No scheduled workouts found.</div>`;
+    if (weeklyData.length === 0) {
+        return buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', '<p class="text-slate-500 italic p-4">No workouts found for this week.</p>', true);
     }
 
-    // --- DEDUPLICATION LOGIC (Fixed for Date Objects) ---
-    // Problem: The list has both "Planned" (Blue) and "Merged" (Green) items for the same day.
-    // Solution: If a "Completed" item exists for Date X + Sport Y, remove the "Planned" item for Date X + Sport Y.
+    let cardsHtml = '';
     
-    const cleanList = [];
-    const completedMap = new Set(); // Stores "YYYY-MM-DD|Sport" keys
+    weeklyData.forEach(w => {
+        const isToday = w.date.getTime() === today.getTime();
+        const dayName = w.date.toLocaleDateString('en-US', { weekday: 'long' });
+        
+        // Data Normalization (Handle fields from both Plan and Actual sources)
+        const planName = w.plannedWorkout || w.planName || w.actualWorkout || "Workout";
+        const sportType = w.activityType || w.actualSport || 'Other';
+        const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '') : "No specific notes.";
+        
+        let displayDur = w.plannedDuration || 0;
+        let displayUnit = "min";
 
-    // 1. First Pass: Identify all COMPLETED items
-    unifiedData.forEach(w => {
-        if (w.status === 'completed') {
-            const dateKey = getDateKey(w.date); // SAFE KEY
-            const typeKey = (w.type || "workout").toLowerCase().trim();
-            
-            let sport = 'other';
-            if (typeKey.includes('run')) sport = 'run';
-            else if (typeKey.includes('bike') || typeKey.includes('cycl')) sport = 'bike';
-            else if (typeKey.includes('swim')) sport = 'swim';
-            
-            completedMap.add(`${dateKey}|${sport}`);
-            cleanList.push(w); // Keep the completed item
-        }
-    });
+        // Status Logic
+        let statusText = "PLANNED";
+        let statusColor = "text-white";
+        let cardBorder = "border border-slate-700 hover:border-slate-600";
+        
+        // A. Completed (Has Actual Duration)
+        if (w.actualDuration > 0) {
+            statusText = "COMPLETED";
+            statusColor = "text-emerald-500";
+            displayDur = w.actualDuration; // Show what you actually did
 
-    // 2. Second Pass: Add PLANNED items ONLY if not in map
-    unifiedData.forEach(w => {
-        if (w.status !== 'completed') {
-            const dateKey = getDateKey(w.date); // SAFE KEY
-            const typeKey = (w.type || "workout").toLowerCase().trim();
-            
-            let sport = 'other';
-            if (typeKey.includes('run')) sport = 'run';
-            else if (typeKey.includes('bike') || typeKey.includes('cycl')) sport = 'bike';
-            else if (typeKey.includes('swim')) sport = 'swim';
+            // Compliance Coloring
+            const ratio = w.plannedDuration > 0 ? (w.actualDuration / w.plannedDuration) : 1;
+            if (ratio >= 0.95) cardBorder = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900";
+            else if (ratio >= 0.8) cardBorder = "ring-2 ring-yellow-500 ring-offset-2 ring-offset-slate-900";
+            else cardBorder = "ring-2 ring-red-500 ring-offset-2 ring-offset-slate-900";
 
-            // Check if we already have a completed entry for this day/sport
-            if (!completedMap.has(`${dateKey}|${sport}`)) {
-                cleanList.push(w);
+            // Unplanned Workout Case
+            if (w.plannedDuration === 0) {
+                statusText = "UNPLANNED";
+                cardBorder = "ring-2 ring-blue-400 ring-offset-2 ring-offset-slate-900";
+            }
+        } 
+        // B. Not Completed Yet
+        else {
+            if (w.date < today && w.plannedDuration > 0) {
+                statusText = "MISSED";
+                statusColor = "text-red-500";
+                cardBorder = "border border-red-900/50 opacity-75";
+            } else if (isToday) {
+                cardBorder = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900";
+            }
+            
+            // Rest Day Handling
+            if (String(sportType).toLowerCase() === 'rest') {
+                statusText = "REST DAY";
+                statusColor = "text-slate-500";
+                displayDur = "--";
+                displayUnit = "";
             }
         }
+
+        const titleStyle = `style="color: ${getSportColorVar(sportType)}"`;
+
+        cardsHtml += `
+            <div class="bg-slate-800 rounded-xl p-6 shadow-lg relative overflow-hidden transition-all ${cardBorder}">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">${dayName}</span>
+                    ${getIcon(sportType)}
+                </div>
+                <div class="flex justify-between items-center mb-6 mt-1">
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-5xl font-bold text-white tracking-tight leading-none">${displayDur}</span>
+                            <span class="text-lg font-medium text-slate-400 font-mono">${displayUnit}</span>
+                        </div>
+                        <div class="text-sm font-bold ${statusColor} uppercase tracking-widest mt-1">${statusText}</div>
+                    </div>
+                    <div class="text-right pl-4 max-w-[55%]">
+                        <h3 class="text-lg font-bold leading-tight" ${titleStyle}>${planName}</h3>
+                    </div>
+                </div>
+                <div class="h-px bg-slate-700 w-full mb-4"></div>
+                <div><p class="text-sm text-slate-300 leading-relaxed font-sans line-clamp-3">${notes}</p></div>
+                
+                ${w.actualDuration > 0 && w.plannedDuration > 0 ? `
+                <div class="mt-4 pt-3 border-t border-slate-700/50 flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Plan vs Act</span>
+                    <span class="text-sm font-mono font-bold text-emerald-400">${w.plannedDuration}m / ${w.actualDuration}m</span>
+                </div>` : ''}
+            </div>
+        `;
     });
 
-    // 3. Sort by Date
-    cleanList.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    // 4. Render
-    const cardsHtml = cleanList.map(w => renderCard(w)).join('');
-
-    return `
-        <div class="mt-8">
-            <div class="flex items-center justify-between mb-4 border-b border-slate-700 pb-2">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-calendar-check text-blue-400"></i>
-                    <h3 class="text-sm font-bold text-white uppercase tracking-widest">Planned Workouts</h3>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                ${cardsHtml}
-            </div>
-        </div>
-    `;
-};
+    const container = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-0 p-2">${cardsHtml}</div>`;
+    
+    // Return wrapped in the collapsible builder
+    return buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', container, true);
+}

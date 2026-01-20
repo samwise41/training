@@ -1,10 +1,22 @@
 import json
 import os
+import sys
 from datetime import datetime
-from . import config
 
-# Helper to ensure activity type is always a simple string for the UI
+# --- PATH SETUP (Fixes the Import Error) ---
+# 1. Get the current directory (python/dashboard)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 2. Get the python/ directory (parent of dashboard)
+python_dir = os.path.dirname(current_dir)
+# 3. Add to system path so we can import sync_modules
+sys.path.append(python_dir)
+
+# Now we can import from the sibling folder
+from sync_modules import config
+
+# --- HELPER FUNCTIONS ---
 def normalize_sport_string(item):
+    """Ensures activityType is always a simple string for the UI."""
     # If it's a dictionary (Garmin format), extract the key
     val = item.get('activityType')
     if isinstance(val, dict):
@@ -22,8 +34,12 @@ def main():
     print("   -> Generating Dashboard Data...")
 
     # 1. Load Files
-    if not os.path.exists(config.MASTER_DB_JSON): return
-    if not os.path.exists(config.PLANNED_JSON): return
+    if not os.path.exists(config.MASTER_DB_JSON): 
+        print(f"Error: Could not find {config.MASTER_DB_JSON}")
+        return
+    if not os.path.exists(config.PLANNED_JSON): 
+        print(f"Error: Could not find {config.PLANNED_JSON}")
+        return
 
     with open(config.MASTER_DB_JSON, 'r', encoding='utf-8') as f:
         history = json.load(f)
@@ -37,7 +53,6 @@ def main():
     dashboard_list = []
 
     # 3. Add History (All Past & Today's Completed items)
-    # We clean up the data so the UI doesn't have to guess types
     for record in history:
         # Create a clean copy for the dashboard
         clean_record = record.copy()
@@ -50,8 +65,8 @@ def main():
         dashboard_list.append(clean_record)
 
     # 4. Add Future Plan (Only dates AFTER today)
-    # sync_database.py handles "Today" matching, so we trust it for today's data.
-    # We only grab plan items strictly in the future.
+    # We filter out today's plan because sync_database.py already matched it 
+    # if it happened, or marked it as missed/planned in the history file.
     for plan in full_plan:
         if plan['date'] > today_str:
             clean_plan = plan.copy()
@@ -63,18 +78,19 @@ def main():
             
             dashboard_list.append(clean_plan)
 
-    # 5. Sort (Descending: Newest/Future at top, Oldest at bottom)
-    # or Ascending depending on your UI preference. 
-    # Usually Dashboards show "Today" then look forward or back.
-    # Let's standardise on Descending (Future -> Past)
+    # 5. Sort (Descending: Future -> Past)
     dashboard_list.sort(key=lambda x: x['date'], reverse=True)
 
-    # 6. Save
+    # 6. Save to Data Directory
     output_path = os.path.join(config.DATA_DIR, 'dashboard_data.json')
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(dashboard_list, f, indent=4)
-        
-    print(f"   -> Dashboard Data Saved: {len(dashboard_list)} records")
+    
+    try:
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(dashboard_list, f, indent=4)
+        print(f"   -> Dashboard Data Saved to: {output_path}")
+        print(f"   -> Total records: {len(dashboard_list)}")
+    except Exception as e:
+        print(f"   -> Error saving file: {e}")
 
 if __name__ == "__main__":
     main()

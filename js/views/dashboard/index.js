@@ -1,18 +1,17 @@
 import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
+import { renderTopCards } from './topCards.js'; // Added back
 
 // --- GITHUB SYNC TRIGGER ---
 window.triggerGitHubSync = async () => {
     let token = localStorage.getItem('github_pat');
-    
-    // First time setup: Ask for token
     if (!token) {
         token = prompt("🔐 Enter GitHub Personal Access Token (PAT) to enable remote sync:");
         if (token) {
             localStorage.setItem('github_pat', token.trim());
         } else {
-            return; // User cancelled
+            return; 
         }
     }
 
@@ -37,7 +36,7 @@ window.triggerGitHubSync = async () => {
             alert("🚀 Sync Started!\n\nThe update process is running on GitHub.\nCheck back in ~2-3 minutes and refresh the page.");
         } else {
             if (response.status === 401 || response.status === 403) {
-                localStorage.removeItem('github_pat'); // Clear bad token
+                localStorage.removeItem('github_pat'); 
                 alert("❌ Authentication Failed.\n\nYour token might be invalid or expired. Please try again.");
             } else {
                 const err = await response.text();
@@ -108,26 +107,23 @@ window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, de
 export function renderDashboard(plannedJson, mergedLogData) {
     const fullLogData = mergedLogData || [];
 
-    // 1. Prepare Workout Data from JSON
-    // We map the JSON keys to match what the Progress Widget expects
-    // (e.g. converting string dates to Date objects, mapping 'plannedWorkout' to 'planned')
+    // 1. Prepare Workout Data
     let workouts = [];
     if (Array.isArray(plannedJson)) {
         workouts = plannedJson.map(item => ({
             ...item,
-            date: new Date(item.date), // Ensure Date object for sorting
-            planned: item.plannedWorkout, // Map JSON key to Widget expectation
+            date: item.date ? item.date : new Date().toISOString().split('T')[0], 
+            planned: item.plannedWorkout,
             actual: item.actualWorkout || ''
         }));
         
-        // Sort Chronologically
-        workouts.sort((a, b) => a.date - b.date);
+        workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
     }
 
     // 2. Render Widgets
-    // Note: renderPlannedWorkouts and renderHeatmaps handle their own data fetching internally
+    const topCardsHtml = renderTopCards(); // Added Back
     const progressHtml = renderProgressWidget(workouts, fullLogData);
-    const plannedWorkoutsHtml = renderPlannedWorkouts(); 
+    const plannedWorkoutsHtml = renderPlannedWorkouts(workouts); 
     const heatmapsHtml = renderHeatmaps();
 
     // --- SYNC BUTTON HTML ---
@@ -143,9 +139,10 @@ export function renderDashboard(plannedJson, mergedLogData) {
 
     return `
         ${syncButtonHtml}
+        ${topCardsHtml}
         ${progressHtml}
-        ${plannedWorkoutsHtml}
         ${heatmapsHtml}
+        ${plannedWorkoutsHtml}
         <div id="dashboard-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-2 rounded shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed"></div>
     `;
 }

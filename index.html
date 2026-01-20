@@ -20,19 +20,44 @@
             <h1 class="text-xl font-bold text-white tracking-tight">Endurance<span class="text-emerald-500">OS</span></h1>
         </div>
 
-        <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
-            <button class="nav-item w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white border border-slate-600 shadow-sm" data-view="dashboard">
-                <i class="fa-solid fa-chart-line w-5 text-center text-emerald-400"></i>
-                Dashboard
-            </button>
-            
-            <div class="mt-8 px-4 text-xs font-bold text-slate-600 uppercase tracking-widest">
-                Dev Mode
-            </div>
-            <div class="px-4 py-2 text-xs text-slate-500 italic">
-                Other tabs disabled for refactor.
-            </div>
-        </nav>
+<nav class="space-y-1 px-3 mt-6">
+    
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 bg-slate-800 text-white shadow-sm ring-1 ring-slate-700" data-view="dashboard">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-chart-line text-emerald-400"></i></div>
+        <span>Dashboard</span>
+    </button>
+
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="trends">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-list-check text-blue-400"></i></div>
+        <span>Logbook & Trends</span>
+    </button>
+
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="roadmap">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-map text-purple-400"></i></div>
+        <span>Roadmap</span>
+    </button>
+
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="ftp">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-bolt text-yellow-400"></i></div>
+        <span>Power Curve</span>
+    </button>
+
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="zones">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-layer-group text-pink-400"></i></div>
+        <span>Zones</span>
+    </button>
+
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="gear">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-bicycle text-orange-400"></i></div>
+        <span>Gear Tracker</span>
+    </button>
+
+    <button class="nav-item w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/50" data-view="plan">
+        <div class="w-6 flex justify-center"><i class="fa-solid fa-file-lines text-slate-400"></i></div>
+        <span>Full Plan</span>
+    </button>
+
+</nav>
 
         <div class="p-4 border-t border-slate-800">
             <div class="flex items-center gap-3 px-2">

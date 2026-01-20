@@ -7,28 +7,24 @@ const buildMetricChart = (displayData, fullData, key) => {
     const def = METRIC_DEFINITIONS[key];
     if (!def) return '';
     const color = def.colorVar;
-
     const formula = METRIC_FORMULAS[key] || '';
-    const titleHtml = `
-        <h3 class="text-xs font-bold text-white flex items-center gap-2">
-            <i class="fa-solid ${def.icon}" style="color: ${color}"></i> 
-            ${def.title}
-            ${formula ? `<span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span>` : ''}
-        </h3>
-    `;
 
-    // Empty State
+    // --- EMPTY STATE ---
     if (!displayData || displayData.length < 2) {
+        console.log(`⚪ Chart [${key}] is empty. (Points: ${displayData?.length || 0})`);
         return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between opacity-60">
-            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">${titleHtml}</div>
-            <div class="flex-1 flex flex-col items-center justify-center text-slate-500">
-                <i class="fa-solid fa-chart-simple text-2xl opacity-20"></i>
-                <p class="text-[10px] italic">Not enough data</p>
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                <h3 class="text-xs font-bold text-slate-400 flex items-center gap-2"><i class="fa-solid ${def.icon}"></i> ${def.title}</h3>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center text-slate-500 gap-1">
+                <i class="fa-solid fa-chart-simple text-xl opacity-20"></i>
+                <p class="text-[10px] italic">No data found</p>
+                <p class="text-[8px] font-mono text-slate-600">Formula: ${formula}</p>
             </div>
         </div>`;
     }
 
-    // Chart Dimensions
+    // Chart Dimensions & Scales
     const width = 800, height = 150;
     const pad = { t: 20, b: 30, l: 40, r: 20 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
@@ -37,11 +33,10 @@ const buildMetricChart = (displayData, fullData, key) => {
     let minV = Math.min(...vals), maxV = Math.max(...vals);
     if (def.refMin) minV = Math.min(minV, def.refMin);
     if (def.refMax) maxV = Math.max(maxV, def.refMax);
-    
     const range = maxV - minV || 1;
-    const domainMin = Math.max(0, minV - range * 0.1);
-    const domainMax = maxV + range * 0.1;
-    const getY = (val) => height - pad.b - ((val - domainMin) / (domainMax - domainMin)) * (height - pad.t - pad.b);
+    const dMin = Math.max(0, minV - range * 0.1);
+    const dMax = maxV + range * 0.1;
+    const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
     // SVG
     let pathD = `M ${getX(displayData[0], 0)} ${getY(displayData[0].val)}`;
@@ -53,12 +48,12 @@ const buildMetricChart = (displayData, fullData, key) => {
     });
 
     const trend = calculateTrend(displayData);
-    let trendHtml = trend ? `<line x1="${getX(null, 0)}" y1="${getY(trend.startVal)}" x2="${getX(null, displayData.length - 1)}" y2="${getY(trend.endVal)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.5" />` : '';
+    const trendLine = trend ? `<line x1="${getX(displayData[0], 0)}" y1="${getY(trend.startVal)}" x2="${getX(displayData[displayData.length-1], displayData.length-1)}" y2="${getY(trend.endVal)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.5" />` : '';
 
     return `
         <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors">
             <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-                <div class="flex items-center gap-2">${titleHtml}</div>
+                <h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid ${def.icon}" style="color: ${color}"></i> ${def.title}</h3>
                 <div class="flex items-center gap-2">
                     <span class="text-[9px] text-slate-500 font-mono">${displayData.length} Activities</span>
                     <i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.showAnalysisTooltip(event, '${key}')"></i>
@@ -67,9 +62,9 @@ const buildMetricChart = (displayData, fullData, key) => {
             <div class="flex-1 w-full h-[120px]">
                 <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
                     <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" />
-                    <text x="${pad.l-5}" y="${getY(domainMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${domainMax.toFixed(1)}</text>
-                    <text x="${pad.l-5}" y="${getY(domainMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${domainMin.toFixed(1)}</text>
-                    ${trendHtml}
+                    <text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text>
+                    <text x="${pad.l-5}" y="${getY(dMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMin.toFixed(1)}</text>
+                    ${trendLine}
                     <path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />
                     ${pointsHtml}
                 </svg>

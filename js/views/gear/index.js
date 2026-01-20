@@ -49,7 +49,7 @@ const buildTempOptions = (defaultVal) => {
     return tempOptions;
 };
 
-// Original "Row/Bubble" Layout
+// --- THIS RESTORES YOUR ORIGINAL MATRIX LAYOUT ---
 const generateRow = (idPrefix, iconClass, label, colorClass) => `
     <div class="gear-row-container">
         <div class="activity-header">
@@ -126,7 +126,9 @@ function updateGearUI(gearData) {
     const temp = parseInt(tempSelect.value);
     
     const processActivity = (activity, prefixBase) => {
+        // Safe access to data arrays (bike/run)
         const list = gearData[activity] || [];
+        
         const findMatch = (t) => {
             const match = list.find(r => {
                 if (r.min === -999) return t < r.max;
@@ -158,8 +160,8 @@ function updateGearUI(gearData) {
 
 // --- 4. EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // Note: removed Parser dependency since gearData is now JSON
-    
+    // gearData is now passed in directly as JSON (no Parsing step needed here)
+
     // Default Temp Logic
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
@@ -171,7 +173,7 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
     
-    // Pass only what's needed for the layout (data is handled by updateGearUI)
+    // We removed the markdown content argument since we link to it instead
     const html = renderLayout(hourlyHtml, tempOptions);
 
     return html;

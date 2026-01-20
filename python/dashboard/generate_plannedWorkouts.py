@@ -1,8 +1,7 @@
 import json
 import os
 import sys
-import re
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # --- SETUP PATHS ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,39 +16,30 @@ OUTPUT_FILE = os.path.join(dashboard_dir, 'plannedWorkouts.json')
 
 # --- HELPERS ---
 
-def get_current_week_dates():
-    """Returns a list of YYYY-MM-DD strings for the current week (Mon-Sun)."""
-    today = datetime.now()
-    start_of_week = today - timedelta(days=today.weekday()) 
-    
-    dates = []
-    for i in range(7):
-        day = start_of_week + timedelta(days=i)
-        dates.append(day.strftime('%Y-%m-%d'))
-    return dates
-
 def normalize_sport(sport_str):
+    """Normalizes sport names to standard categories."""
     s = str(sport_str).lower()
     if 'run' in s: return 'Run'
     if 'bik' in s or 'cycl' in s or 'ride' in s: return 'Bike'
     if 'swim' in s: return 'Swim'
     if 'strength' in s or 'gym' in s or 'weight' in s: return 'Strength'
+    if 'rest' in s: return 'Rest'
     return 'Other'
 
 def main():
-    print("   -> Generating Planned Workouts (from planned.json)...")
-    
-    # 1. Get Dates for Current Week
-    week_dates = get_current_week_dates()
-    print(f"   -> Processing Week: {week_dates[0]} to {week_dates[-1]}")
+    print("   -> Generating Dashboard Data from planned.json...")
 
-    # 2. Load Files
+    # 1. Load Files
     if not os.path.exists(PLANNED_FILE):
         print(f"Error: {PLANNED_FILE} not found.")
         return
 
-    with open(PLANNED_FILE, 'r', encoding='utf-8') as f:
-        full_plan = json.load(f)
+    try:
+        with open(PLANNED_FILE, 'r', encoding='utf-8') as f:
+            full_plan = json.load(f)
+    except Exception as e:
+        print(f"Error reading planned.json: {e}")
+        return
 
     logs = []
     if os.path.exists(LOG_FILE):
@@ -59,120 +49,104 @@ def main():
         except Exception as e:
             print(f"   -> Warning: Could not read training log: {e}")
 
-    # 3. Create Lookup Maps
-    # Plan Map: Date -> Plan Object
-    # (Assuming one plan per day for simplicity, or taking the first one found)
-    plan_map = {}
-    for p in full_plan:
-        if p.get('date') in week_dates:
-            plan_map[p['date']] = p
-
-    # Log Map: Date -> Log Object (Prioritize matching sport if complex, but here we assume Date Match)
+    # 2. Create Log Lookup Map
+    # Key: "YYYY-MM-DD" -> List of log entries for that day
     log_map = {}
     for l in logs:
+        # Handle date string variations (e.g. 2023-10-25T14:30:00)
         l_date = l.get('date', '').split('T')[0]
-        if l_date in week_dates:
-            # We store it. If multiple, we might overwrite, but usually 1 main workout per day is tracked here.
-            # Ideally we match by Sport too, but let's look up by date first.
-            if l_date not in log_map: log_map[l_date] = []
+        if l_date:
+            if l_date not in log_map: 
+                log_map[l_date] = []
             log_map[l_date].append(l)
 
-    # 4. Build Output
+    # 3. Process Plan
     output_list = []
     today_str = datetime.now().strftime('%Y-%m-%d')
 
-    for date_str in week_dates:
-        day_name = datetime.strptime(date_str, '%Y-%m-%d').strftime('%A')
+    for plan in full_plan:
+        date_str = plan.get('date')
+        if not date_str: continue
+
+        # Format friendly Day name
+        try:
+            day_name = datetime.strptime(date_str, '%Y-%m-%d').strftime('%A')
+        except:
+            day_name = ""
         
-        plan = plan_map.get(date_str)
-        
-        # If no plan exists for this date, do we show it? 
-        # Usually yes, if there's an actual workout. If neither, maybe skip or show Rest.
-        # Let's assume we show it if there is a plan OR an actual.
-        
+        # --- Find Match ---
         log_entries = log_map.get(date_str, [])
-        
-        # Try to match specific plan to specific log if multiple exist
-        # For simplicity in this script, we'll take the primary match or just the first log.
-        
         match = None
-        if plan and log_entries:
-            # Try to match sport
-            plan_sport = normalize_sport(plan.get('activityType'))
+        
+        # Strategy: Try to match by sport first
+        plan_sport_norm = normalize_sport(plan.get('activityType'))
+        
+        if log_entries:
             for log in log_entries:
-                log_sport = normalize_sport(log.get('actualSport') or log.get('activityType'))
-                if log_sport == plan_sport:
+                log_sport_norm = normalize_sport(log.get('actualSport') or log.get('activityType'))
+                if log_sport_norm == plan_sport_norm:
                     match = log
                     break
-            # If no direct sport match, just grab the first log (Unplanned/Mismatch case)
-            if not match and log_entries:
+            
+            # If no strict sport match, but only 1 log exists and it's not a rest day, assume it's the one
+            if not match and len(log_entries) == 1 and plan_sport_norm != 'Rest':
                 match = log_entries[0]
-        elif log_entries:
-            # No plan, but we have a log (Unplanned)
-            match = log_entries[0]
 
-        # --- BUILD CARD DATA ---
+        # --- Build Output Object ---
         
-        # 1. Basic Info
+        # 1. Defaults from Plan
+        planned_sport_raw = plan.get('activityType', 'Other')
+        
         item = {
             "date": date_str,
             "day": day_name,
-            "status": "PLANNED",
-            "notes": ""
+            "plannedWorkout": plan.get('plannedWorkout') or plan.get('title') or "Workout",
+            "plannedDuration": float(plan.get('plannedDuration', 0) or 0),
+            "notes": plan.get('notes', ''),
+            # This will be overwritten if match is found
+            "actualSport": normalize_sport(planned_sport_raw) 
         }
 
-        # 2. Extract Plan Details (if exists)
-        if plan:
-            item["plannedWorkout"] = plan.get('plannedWorkout') or plan.get('title')
-            item["plannedDuration"] = float(plan.get('plannedDuration', 0) or 0)
-            item["notes"] = plan.get('notes', '')
-            planned_sport_raw = plan.get('activityType', 'Other')
-        else:
-            item["plannedWorkout"] = "Rest Day"
-            item["plannedDuration"] = 0
-            planned_sport_raw = "Rest"
-
-        # 3. Extract Actual Details (if exists/match)
+        # 2. Apply Status & Match Data
         if match:
             item["status"] = "COMPLETED"
-            # Prefer actualDuration, fallback to duration/60
-            raw_dur = match.get('actualDuration')
-            if raw_dur is None:
-                raw_dur = match.get('duration', 0) / 60
-            item["actualDuration"] = round(float(raw_dur), 1)
+            
+            # Get actual duration (prefer 'actualDuration', fallback to 'duration')
+            raw_act_dur = match.get('actualDuration')
+            if raw_act_dur is None:
+                raw_act_dur = match.get('duration', 0) / 60
+            item["actualDuration"] = round(float(raw_act_dur), 1)
+            
             item["actualWorkout"] = match.get('actualWorkout') or match.get('activityName')
             
-            # THE LOGIC YOU REQUESTED:
-            # "Have it match the training log if the training log has a value"
+            # USE LOG SPORT if available
             item["actualSport"] = match.get('actualSport') or normalize_sport(match.get('activityType'))
-            
-            # Calc Compliance
+
+            # Compliance
             if item["plannedDuration"] > 0:
                 item["compliance"] = round((item["actualDuration"] / item["plannedDuration"]) * 100)
             else:
-                item["status"] = "UNPLANNED"
+                item["compliance"] = 0 # Unplanned or Rest
         
         else:
-            # No Actual Found
+            # No match found
             item["actualDuration"] = 0
             item["actualWorkout"] = None
-            
-            # THE LOGIC YOU REQUESTED:
-            # "If not it reverts to the activityType from the planned.json"
-            item["actualSport"] = normalize_sport(planned_sport_raw)
+            item["compliance"] = 0
 
-            # Handle Missed vs Planned
-            if date_str < today_str and item["plannedDuration"] > 0:
+            if plan_sport_norm == 'Rest':
+                 item["status"] = "REST"
+            elif date_str < today_str:
                 item["status"] = "MISSED"
-            
-            # Handle Rest
-            if item["actualSport"] == 'Rest' or (not plan and not match):
-                item["status"] = "REST"
-                item["actualSport"] = "Rest"
+            else:
+                item["status"] = "PLANNED"
 
         output_list.append(item)
 
-    # 5. Sort & Save
+    # 4. Sort & Save
+    # Sort descending (Newest first) or Ascending? 
+    # Usually lists are better Ascending (Oldest -> Newest) or just Newest at top.
+    # Let's do Standard Chronological (Ascending) so user sees the flow of the week
     output_list.sort(key=lambda x: x['date'])
 
     if not os.path.exists(dashboard_dir):
@@ -181,7 +155,8 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output_list, f, indent=4)
         
-    print(f"   -> Success! Saved {len(output_list)} records to {OUTPUT_FILE}")
+    print(f"   -> Success! Processed {len(output_list)} records.")
+    print(f"   -> Saved to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()

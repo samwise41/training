@@ -2,80 +2,97 @@
     {
         "date": "2026-01-19",
         "day": "Monday",
-        "status": "COMPLETED",
-        "notes": "**File:** `Sweet_Spot___2_x_15.zwo`. **Focus:** Perform intervals at **Low Cadence (60-70 RPM)** to fix Torque Efficiency (1.97). Grind it out.",
         "plannedWorkout": "[BIKE] Strength / Hill Focus",
         "plannedDuration": 60.0,
+        "notes": "**File:** `Sweet_Spot___2_x_15.zwo`. **Focus:** Perform intervals at **Low Cadence (60-70 RPM)** to fix Torque Efficiency (1.97). Grind it out.",
+        "actualSport": "Bike",
+        "status": "COMPLETED",
         "actualDuration": 60.2,
         "actualWorkout": "Zwift - Sweet Spot - 2 x 15 on Jurassic Coast in Watopia",
-        "actualSport": "Bike",
         "compliance": 100
     },
     {
         "date": "2026-01-20",
         "day": "Tuesday",
-        "status": "COMPLETED",
-        "notes": "**Focus:** Smooth rotation. Swim Efficiency is improving (0.50) but needs maintenance. Use Pull Buoy if legs are tired.",
         "plannedWorkout": "[SWIM] Technique Focus",
         "plannedDuration": 40.0,
+        "notes": "**Focus:** Smooth rotation. Swim Efficiency is improving (0.50) but needs maintenance. Use Pull Buoy if legs are tired.",
+        "actualSport": "Swim",
+        "status": "COMPLETED",
         "actualDuration": 46.6,
         "actualWorkout": "Pool Swim",
-        "actualSport": "Swim",
         "compliance": 116
     },
     {
         "date": "2026-01-21",
         "day": "Wednesday",
-        "status": "PLANNED",
-        "notes": "**Focus:** Run Durability. Include 4-6 x 20sec \"Strides\" at the end. **Target:** High Cadence (175+ spm) to lower Ground Contact Time.",
         "plannedWorkout": "[RUN] Tempo / Threshold",
         "plannedDuration": 45.0,
+        "notes": "**Focus:** Run Durability. Include 4-6 x 20sec \"Strides\" at the end. **Target:** High Cadence (175+ spm) to lower Ground Contact Time.",
+        "actualSport": "Run",
         "actualDuration": 0,
         "actualWorkout": null,
-        "actualSport": "Run"
+        "compliance": 0,
+        "status": "PLANNED"
     },
     {
         "date": "2026-01-22",
         "day": "Thursday",
-        "status": "PLANNED",
-        "notes": "**File:** `Zone_2___71___90_min_.zwo`. **Winter Strategy:** Volume re-allocated here. Strict Zone 2 (134-180W).",
         "plannedWorkout": "[BIKE] Mid-Week Aerobic Volume",
         "plannedDuration": 90.0,
+        "notes": "**File:** `Zone_2___71___90_min_.zwo`. **Winter Strategy:** Volume re-allocated here. Strict Zone 2 (134-180W).",
+        "actualSport": "Bike",
         "actualDuration": 0,
         "actualWorkout": null,
-        "actualSport": "Bike"
+        "compliance": 0,
+        "status": "PLANNED"
     },
     {
         "date": "2026-01-23",
         "day": "Friday",
-        "status": "PLANNED",
-        "notes": "**Focus:** Pure Zone 2. Keep HR < 152 bpm. Focus on quick feet / low vertical oscillation.",
-        "plannedWorkout": "[RUN] Aerobic Maintenance",
-        "plannedDuration": 50.0,
+        "plannedWorkout": "[SWIM] Touch Swim",
+        "plannedDuration": 20.0,
+        "notes": "Very easy. Drills only. Maintain \"feel for water.\"",
+        "actualSport": "Swim",
         "actualDuration": 0,
         "actualWorkout": null,
-        "actualSport": "Run"
+        "compliance": 0,
+        "status": "PLANNED"
+    },
+    {
+        "date": "2026-01-23",
+        "day": "Friday",
+        "plannedWorkout": "[RUN] Aerobic Maintenance",
+        "plannedDuration": 50.0,
+        "notes": "**Focus:** Pure Zone 2. Keep HR < 152 bpm. Focus on quick feet / low vertical oscillation.",
+        "actualSport": "Run",
+        "actualDuration": 0,
+        "actualWorkout": null,
+        "compliance": 0,
+        "status": "PLANNED"
     },
     {
         "date": "2026-01-24",
         "day": "Saturday",
-        "status": "PLANNED",
-        "notes": "**File:** `Zone_2___71___2_hrs_.zwo`. **Winter Cap Applied.** 2.0 Hours max. Fueling practice (60-90g carb/hr).",
         "plannedWorkout": "[BIKE] Long Steady Distance",
         "plannedDuration": 120.0,
+        "notes": "**File:** `Zone_2___71___2_hrs_.zwo`. **Winter Cap Applied.** 2.0 Hours max. Fueling practice (60-90g carb/hr).",
+        "actualSport": "Bike",
         "actualDuration": 0,
         "actualWorkout": null,
-        "actualSport": "Bike"
+        "compliance": 0,
+        "status": "PLANNED"
     },
     {
         "date": "2026-01-25",
         "day": "Sunday",
-        "status": "PLANNED",
-        "notes": "Strict recovery. No activity.",
         "plannedWorkout": "Rest",
         "plannedDuration": 0.0,
+        "notes": "Strict recovery. No activity.",
+        "actualSport": "Other",
         "actualDuration": 0,
         "actualWorkout": null,
-        "actualSport": "Other"
+        "compliance": 0,
+        "status": "PLANNED"
     }
 ]

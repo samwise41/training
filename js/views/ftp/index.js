@@ -168,7 +168,7 @@ const renderLogChart = (containerId, data, options) => {
     return `<div class="relative w-full h-full group select-none"><svg id="${containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">${gridHtml}<line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" /><path d="${path6w}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="5,5" /><path d="${pathAll}" fill="none" stroke="${colorAll}" stroke-width="2" />${pointsHtml}<line id="${containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" /><circle id="${containerId}-lock-dot" cx="0" cy="${pad.t}" r="3" fill="#ef4444" opacity="0" /><rect x="${pad.l}" y="${pad.t}" width="${width - pad.l - pad.r}" height="${height - pad.t - pad.b}" fill="transparent" /></svg><div id="${containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-700 rounded shadow-xl p-3 z-50 min-w-[140px]"></div><div class="absolute top-2 right-4 flex gap-3 pointer-events-none"><div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full" style="background-color: ${colorAll}"></div><span class="text-[10px] text-slate-300">All Time</span></div><div class="flex items-center gap-1"><div class="w-2 h-2 rounded-full border" style="border-color: ${color6w}"></div><span class="text-[10px] text-slate-300">6 Weeks</span></div></div></div>`;
 };
 
-// --- INTERACTION LOGIC (Simplified) ---
+// --- INTERACTION LOGIC ---
 const setupChartInteractions = (containerId, data, options) => {
     const svg = document.getElementById(`${containerId}-svg`);
     const guide = document.getElementById(`${containerId}-guide`);
@@ -239,8 +239,6 @@ const extractBiometrics = (md) => {
     const bio = { watts: 0, weight: 175, lthr: '--', runFtp: '--', fiveK: '--' }; 
     if (!md) return bio;
 
-    // Helper: Find value by keywords in Markdown (Table or List)
-    // Looks for: "| Weight | 180 |" OR "Weight: 180"
     const findVal = (keywords) => {
         const regex = new RegExp(`(?:\\|\\s*|\\*\\*|\\b)(${keywords.join('|')})[:\\s\\|]+([\\d:.]+)`, 'i');
         const match = md.match(regex);
@@ -277,6 +275,9 @@ export function renderFTP(planMd) {
     // Calculate W/kg
     const weightKg = bio.weight * 0.453592;
     const wkgNum = (bio.watts > 0 && weightKg > 0) ? (bio.watts / weightKg) : 0;
+    
+    // --- FIX IS HERE: ATTACH CALCULATED VALUE TO BIO OBJECT ---
+    bio.wkgNum = wkgNum; 
     
     const cat = CONFIG.CATEGORIES.find(c => wkgNum >= c.threshold) || CONFIG.CATEGORIES[CONFIG.CATEGORIES.length - 1];
     const percent = Math.min(Math.max((wkgNum - CONFIG.WKG_SCALE.min) / (CONFIG.WKG_SCALE.max - CONFIG.WKG_SCALE.min), 0), 1);

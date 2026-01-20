@@ -1,17 +1,13 @@
 // js/app.js
 
 (async function initApp() {
-    console.log("🚀 Booting App (JSON Profile)...");
+    console.log("🚀 Booting App...");
     const cacheBuster = Date.now();
     
-    // --- 1. DYNAMIC IMPORTS ---
+    // --- 1. IMPORTS ---
     const safeImport = async (path, name) => {
-        try {
-            return await import(`${path}?t=${cacheBuster}`);
-        } catch (e) {
-            console.error(`❌ Failed to load ${name}:`, e.message);
-            return null;
-        }
+        try { return await import(`${path}?t=${cacheBuster}`); } 
+        catch (e) { console.error(`❌ Failed to load ${name}:`, e.message); return null; }
     };
 
     const [
@@ -32,8 +28,11 @@
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
+    
+    // Gear Exports
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
     const updateGearResult = gearMod?.updateGearResult || (() => {});
+
     const renderZones = zonesMod?.renderZones || (() => "Zones missing");
     const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
@@ -46,10 +45,10 @@
         rawLogData: [],   
         parsedLogData: [], 
         plannedData: [],
-        gearData: [],
+        gearData: null, // Will hold JSON object
         garminData: [],
         profileData: null,
-        readinessData: null, // <--- NEW FIELD
+        readinessData: null,
 
         async init() {
             await this.loadData();
@@ -61,42 +60,46 @@
         async loadData() {
             try {
                 console.log("📡 Fetching Data...");
-                // Added readinessRes to the Promise.all array
                 const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/planned.json'),
-                    fetch('./data/gear/gear.json'),
+                    fetch('./data/gear/gear.json'), // <--- UPDATED: Fetch JSON
                     fetch('./data/my_garmin_data_ALL.json'),
                     fetch('./data/profile.json'),
-                    fetch('./data/readiness/readiness.json') // <--- NEW FETCH
+                    fetch('./data/readiness/readiness.json')
                 ]);
 
                 this.planMd = await planRes.text();
-                this.gearData = await gearRes.json();
                 this.rawLogData = await logRes.json();
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
                 
-                if (profileRes.ok) {
-                    this.profileData = await profileRes.json();
+                // Handle Gear Data
+                if (gearRes.ok) {
+                    this.gearData = await gearRes.json();
                 } else {
-                    console.warn("⚠️ profile.json not found.");
-                    this.profileData = {}; 
+                    console.warn("⚠️ gear.json not found. Run python/gear/createGear.py");
+                    this.gearData = { bike: [], run: [] };
                 }
 
-                // Handle Readiness Data
-                if (readinessRes.ok) {
-                    this.readinessData = await readinessRes.json();
-                } else {
-                    console.warn("⚠️ readiness.json not found. Run the Python script!");
-                    this.readinessData = null;
-                }
+                if (profileRes.ok) this.profileData = await profileRes.json();
+                else this.profileData = {}; 
+
+                if (readinessRes.ok) this.readinessData = await readinessRes.json();
+                else this.readinessData = null;
 
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
 
             } catch (err) {
                 console.error("❌ Data Load Error:", err);
+            }
+        },
+
+        // Expose updateGearResult to window so HTML onchange="" can call it
+        updateGearResult() {
+            if (this.gearData) {
+                updateGearResult(this.gearData);
             }
         },
 
@@ -155,15 +158,16 @@
                             content.innerHTML = renderMetrics(this.rawLogData); 
                             break;
                         case 'readiness':
-                            // UPDATED: Pass pre-loaded readinessData instead of raw logs
                             content.innerHTML = renderReadiness(this.readinessData);
                             break;
                         case 'ftp':
                             content.innerHTML = renderFTP(this.profileData); 
                             break;
                         case 'gear':
+                            // Pass JSON object directly
                             content.innerHTML = renderGear(this.gearData);
-                            updateGearResult(this.gearData);
+                            // Trigger UI update immediately
+                            this.updateGearResult();
                             break;
                         case 'zones':
                             content.innerHTML = renderZones(this.garminData);

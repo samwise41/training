@@ -1,47 +1,73 @@
-import { parsePlanLimits, aggregateVolumeBuckets } from './analysis.js';
-
-export const renderVolumeChart = (data, planMd, sportType = 'All', title = 'Weekly Volume Trend') => {
+export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly Volume Trend') => {
     try {
-        if (!data || data.length === 0) return '<div class="p-4 text-slate-500 italic">No data available</div>';
-        
-        const { limitRed, limitYellow } = parsePlanLimits(planMd, sportType);
-        const buckets = aggregateVolumeBuckets(data, sportType);
+        if (!trendsJson || !trendsJson.data || trendsJson.data.length === 0) {
+            return '<div class="p-4 text-slate-500 italic">No data available</div>';
+        }
 
-        let barsHtml = ''; 
-        const maxVol = Math.max(...buckets.map(b => Math.max(b.actualMins, b.plannedMins))) || 1;
+        // Map UI sport types to JSON keys
+        const categoryMap = {
+            'All': 'total',
+            'Bike': 'cycling',
+            'Run': 'running',
+            'Swim': 'swimming'
+        };
+        const jsonKey = categoryMap[sportType] || 'total';
+
+        // Hardcoded safety thresholds from documentation
+        // Run: Red > 5%, Yellow > 0%
+        // Others: Red > 10%, Yellow > 0% (Total: Red > 15%, Yellow > 0%)
+        // Everyone: Grey < -20%
+        const getThresholds = (type) => {
+            if (type === 'running') return { red: 0.05, yellow: 0.0 };
+            if (type === 'total') return { red: 0.15, yellow: 0.0 };
+            return { red: 0.10, yellow: 0.0 };
+        };
+        const { red, yellow } = getThresholds(jsonKey);
 
         const getStatusColor = (pctChange) => {
-            if (pctChange > limitRed) return ['bg-red-500', '#ef4444', 'text-red-400'];
-            if (pctChange > limitYellow) return ['bg-yellow-500', '#eab308', 'text-yellow-400'];
+            if (pctChange > red) return ['bg-red-500', '#ef4444', 'text-red-400'];
+            if (pctChange > yellow) return ['bg-yellow-500', '#eab308', 'text-yellow-400'];
             if (pctChange < -0.20) return ['bg-slate-600', '#475569', 'text-slate-500']; 
+            // -20% to 0% is Green (Optimal Growth/Maintenance)
             return ['bg-emerald-500', '#10b981', 'text-emerald-400'];
         };
 
-        buckets.forEach((b, idx) => {
-            const isCurrentWeek = (idx === buckets.length - 1); 
-            const hActual = Math.round((b.actualMins / maxVol) * 100); 
-            const hPlan = Math.round((b.plannedMins / maxVol) * 100); 
-            const prevActual = idx > 0 ? buckets[idx - 1].actualMins : 0;
-
-            let actualGrowth = 0; 
-            let plannedGrowth = 0;
-
-            if (prevActual > 0) {
-                actualGrowth = (b.actualMins - prevActual) / prevActual;
-                plannedGrowth = (b.plannedMins - prevActual) / prevActual;
+        // Calculate max volume for scaling
+        let maxVol = 0;
+        trendsJson.data.forEach(week => {
+            const cat = week.categories[jsonKey];
+            if (cat) {
+                maxVol = Math.max(maxVol, cat.actual || 0, cat.planned || 0);
             }
+        });
+        maxVol = maxVol || 1; // Prevent division by zero
+
+        let barsHtml = ''; 
+
+        trendsJson.data.forEach((week, idx) => {
+            const cat = week.categories[jsonKey];
+            if (!cat) return;
+
+            const isCurrentWeek = (idx === trendsJson.data.length - 1); 
+            const hActual = Math.round((cat.actual / maxVol) * 100); 
+            const hPlan = Math.round((cat.planned / maxVol) * 100); 
+
+            // Use the growth values pre-calculated in the JSON
+            const actualGrowth = cat.actual_growth || 0;
+            const plannedGrowth = cat.planned_growth || 0;
 
             const [actualClass, _, actualTextClass] = getStatusColor(actualGrowth);
             const [__, planHex, planTextClass] = getStatusColor(plannedGrowth);
 
             const formatLabel = (val) => {
                 const sign = val > 0 ? '▲' : (val < 0 ? '▼' : '');
-                return prevActual > 0 ? `${sign} ${Math.round(Math.abs(val) * 100)}%` : '--';
+                // Show label if value exists, otherwise --
+                return (val !== undefined && val !== null) ? `${sign} ${Math.round(Math.abs(val) * 100)}%` : '--';
             };
             
             const actLabel = formatLabel(actualGrowth);
             const planLabel = formatLabel(plannedGrowth);
-            const limitLabel = `Limit: ${Math.round(limitRed*100)}%`;
+            const limitLabel = `Limit: ${Math.round(red*100)}%`;
 
             const planBarStyle = `
                 background: repeating-linear-gradient(
@@ -50,7 +76,7 @@ export const renderVolumeChart = (data, planMd, sportType = 'All', title = 'Week
 
             const actualOpacity = isCurrentWeek ? 'opacity-90' : 'opacity-80'; 
             
-            const clickAttr = `onclick="window.showVolumeTooltip(event, '${b.label}', ${Math.round(b.plannedMins)}, '${planLabel}', '${planTextClass}', ${Math.round(b.actualMins)}, '${actLabel}', '${actualTextClass}', '${limitLabel}')"`;
+            const clickAttr = `onclick="window.showVolumeTooltip(event, '${week.week_label}', ${Math.round(cat.planned)}, '${planLabel}', '${planTextClass}', ${Math.round(cat.actual)}, '${actLabel}', '${actualTextClass}', '${limitLabel}')"`;
 
             barsHtml += `
                 <div class="flex flex-col items-center gap-1 flex-1 group relative cursor-pointer" ${clickAttr}>
@@ -59,7 +85,7 @@ export const renderVolumeChart = (data, planMd, sportType = 'All', title = 'Week
                         <div style="height: ${hActual}%;" class="relative z-10 w-2/3 ${actualClass} ${actualOpacity} rounded-t-sm"></div>
                     </div>
                     <span class="text-[9px] text-slate-500 font-mono text-center leading-none mt-1 pointer-events-none">
-                        ${b.label}
+                        ${week.week_label}
                         ${isCurrentWeek ? '<br><span class="text-[8px] text-blue-400 font-bold">NEXT</span>' : ''}
                     </span>
                 </div>

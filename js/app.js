@@ -1,7 +1,7 @@
 // js/app.js
 
 (async function initApp() {
-    console.log("🚀 Booting App (Strava FTP Restore)...");
+    console.log("🚀 Booting App (JSON Profile)...");
     const cacheBuster = Date.now();
     
     // --- 1. DYNAMIC IMPORTS ---
@@ -46,8 +46,9 @@
         rawLogData: [],   
         parsedLogData: [], 
         plannedData: [],
-        gearData: "",
+        gearData: [],
         garminData: [],
+        profileData: null, // <--- NEW FIELD
 
         async init() {
             await this.loadData();
@@ -59,12 +60,13 @@
         async loadData() {
             try {
                 console.log("📡 Fetching Data...");
-                const [planRes, logRes, plannedRes, gearRes, garminRes] = await Promise.all([
+                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/planned.json'),
                     fetch('./js/views/gear/Gear.md'),
-                    fetch('./data/my_garmin_data_ALL.json')
+                    fetch('./data/my_garmin_data_ALL.json'),
+                    fetch('./data/profile.json') // <--- NEW FETCH
                 ]);
 
                 this.planMd = await planRes.text();
@@ -72,6 +74,14 @@
                 this.rawLogData = await logRes.json();
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
+                
+                // Fallback if profile.json is missing
+                if (profileRes.ok) {
+                    this.profileData = await profileRes.json();
+                } else {
+                    console.warn("⚠️ profile.json not found. Run the Python script!");
+                    this.profileData = {}; 
+                }
 
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
 
@@ -138,10 +148,10 @@
                             content.innerHTML = renderReadiness(this.rawLogData, this.planMd);
                             break;
                         
-                        // --- RESTORED: PASS ONLY PLAN MD ---
-                        // The view itself will fetch the Strava files
+                        // --- FIX IS HERE ---
                         case 'ftp':
-                            content.innerHTML = renderFTP(this.planMd); 
+                            // Pass the PRE-CALCULATED JSON data
+                            content.innerHTML = renderFTP(this.profileData); 
                             break;
                             
                         case 'gear':

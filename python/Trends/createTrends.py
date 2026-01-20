@@ -15,7 +15,6 @@ def get_saturday(date_obj):
     return date_obj + timedelta(days=days_to_sat)
 
 def main():
-    # 1. Load data sources
     logs = []
     if os.path.exists(LOG_FILE):
         with open(LOG_FILE, 'r', encoding='utf-8') as f:
@@ -26,72 +25,64 @@ def main():
         with open(PLANNED_FILE, 'r', encoding='utf-8') as f:
             planned_data = json.load(f)
 
-    # 2. Identify Unique Logged Items (Date + Sport)
-    # We normalize to lowercase to prevent "Run" vs "run" mismatches
+    # 1. Deduplication using Date + Sport
     logged_keys = {f"{entry.get('date')}_{(entry.get('actualSport') or '').lower().strip()}" for entry in logs}
     
-    # 3. Merge Strategy: Start with Logs, then add missing Planned items
     combined_data = list(logs)
     added_count = 0
-
     for p_item in planned_data:
         p_date = p_item.get('date')
-        # Check 'activityType' or 'plannedSport'
         p_sport = (p_item.get('activityType') or p_item.get('plannedSport') or "").lower().strip()
         p_key = f"{p_date}_{p_sport}"
-        
         if p_key not in logged_keys:
             combined_data.append(p_item)
             added_count += 1
-        else:
-            # Debug: This item is already in the training_log
-            pass
 
-    print(f"📊 Processing: {len(logs)} logs found. Added {added_count} unique items from planned.json.")
-
-    # 4. Determine Date Range
+    # 2. Date Range Setup
     current_date = datetime(2026, 1, 20) 
     current_sat = get_saturday(current_date)
     saturdays = [current_sat - timedelta(weeks=i) for i in range(13)]
     saturdays.sort()
 
-    # 5. Initialize Weekly Data
+    # 3. Aggregate and Normalize Volume
     weekly_data = {sat.strftime('%Y-%m-%d'): {
-        "total": {"p": 0, "a": 0},
-        "cycling": {"p": 0, "a": 0},
-        "running": {"p": 0, "a": 0},
-        "swimming": {"p": 0, "a": 0}
+        "total": {"p": 0, "a": 0}, "cycling": {"p": 0, "a": 0},
+        "running": {"p": 0, "a": 0}, "swimming": {"p": 0, "a": 0}
     } for sat in saturdays}
 
-    # 6. Aggregate Volume
     for entry in combined_data:
         try:
             entry_date = datetime.strptime(entry['date'], '%Y-%m-%d')
             sat_key = get_saturday(entry_date).strftime('%Y-%m-%d')
             
             if sat_key in weekly_data:
-                # Catch sport from any available field
                 sport = (entry.get('actualSport') or entry.get('activityType') or entry.get('plannedSport') or "").lower()
                 
-                # Check for duration in multiple possible fields
-                p_dur = entry.get('plannedDuration') or entry.get('duration') or 0
-                a_dur = entry.get('actualDuration') or 0
+                # Fetch raw durations
+                raw_p = entry.get('plannedDuration') or entry.get('duration') or 0
+                raw_a = entry.get('actualDuration') or 0
 
+                # --- NORMALIZATION LOGIC ---
+                # Swim data often imports in seconds (e.g., 3600s instead of 60m)
+                if 'swim' in sport:
+                    if raw_p > 500: raw_p = raw_p / 60
+                    if raw_a > 500: raw_a = raw_a / 60
+                
                 cat = None
                 if any(x in sport for x in ['bike', 'cycling', 'stationary']): cat = 'cycling'
                 elif 'run' in sport: cat = 'running'
                 elif 'swim' in sport: cat = 'swimming'
 
                 if cat:
-                    weekly_data[sat_key][cat]['p'] += p_dur
-                    weekly_data[sat_key][cat]['a'] += a_dur
+                    weekly_data[sat_key][cat]['p'] += raw_p
+                    weekly_data[sat_key][cat]['a'] += raw_a
                 
-                weekly_data[sat_key]['total']['p'] += p_dur
-                weekly_data[sat_key]['total']['a'] += a_dur
+                weekly_data[sat_key]['total']['p'] += raw_p
+                weekly_data[sat_key][weekly_data[sat_key]['total']['a']] += raw_a
         except (ValueError, KeyError, TypeError):
             continue
 
-    # 7. Calculate Growth and Save
+    # 4. Calculate Growth and Save
     final_data = []
     for i in range(1, len(saturdays)):
         curr_sat = saturdays[i].strftime('%Y-%m-%d')
@@ -112,8 +103,8 @@ def main():
             a_growth = (curr_a / prev_a - 1) if prev_a > 0 else 0
 
             week_entry["categories"][cat] = {
-                "planned": curr_p,
-                "actual": curr_a,
+                "planned": round(curr_p, 1),
+                "actual": round(curr_a, 1),
                 "planned_growth": round(p_growth, 4),
                 "actual_growth": round(a_growth, 4)
             }
@@ -128,7 +119,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=4)
     
-    print(f"✅ Trends generated: data/trends/trends.json")
+    print(f"✅ Normalization complete. Swim durations over 500 converted to minutes.")
 
 if __name__ == "__main__":
     main()

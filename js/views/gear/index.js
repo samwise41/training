@@ -9,8 +9,6 @@ const WEATHER_MAP = {
 
 // --- 2. COMPONENTS ---
 const buildHourlyForecast = (hourlyWeather) => {
-    // ... (Keep existing implementation) ...
-    // Copy/paste your existing buildHourlyForecast function here
     if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) return '';
 
     const times = hourlyWeather.time.slice(0, 24); 
@@ -43,7 +41,6 @@ const buildHourlyForecast = (hourlyWeather) => {
 };
 
 const buildTempOptions = (defaultVal) => {
-    // ... (Keep existing implementation) ...
     let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
     for (let i = 30; i <= 70; i++) {
         tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
@@ -129,11 +126,8 @@ function updateGearUI(gearData) {
         
         const findMatch = (t) => {
             const match = list.find(r => {
-                // If it's a "Below X" rule
                 if (r.min === -999) return t < r.max;
-                // If it's an "Above X" rule
                 if (r.max === 999) return t >= r.min;
-                // Standard range
                 return t >= r.min && t <= r.max;
             });
             return match || { upper: "—", lower: "—", extremities: "—" };
@@ -161,8 +155,6 @@ function updateGearUI(gearData) {
 
 // --- 4. EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // gearData is now passed in as a JSON object, no parsing needed here.
-
     // Default Temp Logic
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {

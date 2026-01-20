@@ -47,11 +47,11 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
         // 3. Dynamic Threshold Label for Tooltips
         const getRedLimitLabel = (key) => {
             switch (key) {
-                case 'running': return "Limit: 15%";
-                case 'total': return "Limit: 25%";
+                case 'running': return "Limit: 10%";
+                case 'total': return "Limit: 20%";
                 case 'cycling':
-                case 'swimming': return "Limit: 30%";
-                default: return "Limit: 20%";
+                case 'swimming': return "Limit: 15%";
+                default: return "Limit: 10%";
             }
         };
 

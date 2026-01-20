@@ -1,6 +1,6 @@
 // js/views/metrics/charts.js
 import { METRIC_DEFINITIONS } from './definitions.js';
-import { calculateTrend, getTrendIcon } from './utils.js';
+import { calculateTrend, getTrendIcon, checkSport } from './utils.js';
 import { extractMetricData } from './table.js';
 
 const METRIC_FORMULAS = {
@@ -14,46 +14,27 @@ const METRIC_FORMULAS = {
     'mechanical': '(Vert Osc / GCT)'
 };
 
-// --- Helper to calculate Subjective Efficiency per Sport ---
 const calculateSubjectiveEfficiency = (allData, sportMode) => {
     return allData
         .map(d => {
-            const rpe = parseFloat(d.RPE);
-            if (!rpe || rpe <= 0) return null;
+            const rpe = parseFloat(d.RPE || d.rpe || 0);
+            if (rpe <= 0) return null;
 
             let val = 0;
             let breakdown = "";
             let match = false;
 
-            // BIKE (Power / RPE)
-            if (sportMode === 'bike') {
-                const isBike = d.sportTypeId == '2' || (d.activityType && d.activityType.includes('cycl')) || (d.actualType === 'Bike');
+            if (sportMode === 'bike' && checkSport(d, 'BIKE')) {
                 const pwr = parseFloat(d.avgPower);
-                if (isBike && pwr > 0) {
-                    val = pwr / rpe;
-                    breakdown = `${Math.round(pwr)}W / ${rpe} RPE`;
-                    match = true;
-                }
+                if (pwr > 0) { val = pwr / rpe; breakdown = `${Math.round(pwr)}W / ${rpe} RPE`; match = true; }
             }
-            // RUN (Speed / RPE)
-            else if (sportMode === 'run') {
-                const isRun = d.sportTypeId == '1' || (d.activityType && d.activityType.includes('run')) || (d.actualType === 'Run');
+            else if (sportMode === 'run' && checkSport(d, 'RUN')) {
                 const spd = parseFloat(d.avgSpeed); 
-                if (isRun && spd > 0) {
-                    val = spd / rpe;
-                    breakdown = `${spd.toFixed(2)} m/s / ${rpe} RPE`;
-                    match = true;
-                }
+                if (spd > 0) { val = spd / rpe; breakdown = `${spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
             }
-            // SWIM (Speed / RPE)
-            else if (sportMode === 'swim') {
-                const isSwim = d.sportTypeId == '5' || (d.activityType && d.activityType.includes('swim')) || (d.actualType === 'Swim');
+            else if (sportMode === 'swim' && checkSport(d, 'SWIM')) {
                 const spd = parseFloat(d.avgSpeed);
-                if (isSwim && spd > 0) {
-                    val = spd / rpe;
-                    breakdown = `${spd.toFixed(2)} m/s / ${rpe} RPE`;
-                    match = true;
-                }
+                if (spd > 0) { val = spd / rpe; breakdown = `${spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
             }
 
             if (match && val > 0) {
@@ -164,10 +145,7 @@ const buildMetricChart = (displayData, fullData, key) => {
         const targetCount = 5; 
         const step = (displayData.length - 1) / (targetCount - 1);
         const indices = new Set();
-        
-        for (let j = 0; j < targetCount; j++) {
-            indices.add(Math.round(j * step));
-        }
+        for (let j = 0; j < targetCount; j++) indices.add(Math.round(j * step));
         
         indices.forEach(index => {
             if (index < displayData.length) {
@@ -247,21 +225,17 @@ export const updateCharts = (allData, timeRange) => {
         }
     };
 
-    // Render grouped charts
     render('metric-chart-vo2max', 'vo2max');
     render('metric-chart-tss', 'tss');
     render('metric-chart-anaerobic', 'anaerobic');
-
     render('metric-chart-subjective_bike', 'subjective_bike');
     render('metric-chart-endurance', 'endurance');
     render('metric-chart-strength', 'strength');
-
     render('metric-chart-subjective_run', 'subjective_run');
     render('metric-chart-run', 'run');
     render('metric-chart-mechanical', 'mechanical');
     render('metric-chart-gct', 'gct');
     render('metric-chart-vert', 'vert');
-
     render('metric-chart-subjective_swim', 'subjective_swim');
     render('metric-chart-swim', 'swim');
 

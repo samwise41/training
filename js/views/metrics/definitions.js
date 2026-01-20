@@ -1,10 +1,6 @@
 // js/views/metrics/definitions.js
 
-export const SPORT_IDS = {
-    RUN: [1],      
-    BIKE: [2],     
-    SWIM: [5, 26, 18] 
-};
+
 
 // UPDATED: Using Hex Codes to ensure charts are not black
 export const METRIC_DEFINITIONS = {

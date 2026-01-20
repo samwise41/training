@@ -25,7 +25,7 @@ def main():
         with open(PLANNED_FILE, 'r', encoding='utf-8') as f:
             planned_data = json.load(f)
 
-    # 1. Deduplication using Date + actualSport/activityType
+    # 1. Deduplication using Date + Sport
     logged_keys = {f"{entry.get('date')}_{(entry.get('actualSport') or '').lower().strip()}" for entry in logs}
     
     combined_data = list(logs)
@@ -36,7 +36,7 @@ def main():
         if p_key not in logged_keys:
             combined_data.append(p_item)
 
-    # 2. Date Range Setup
+    # 2. Date Range Setup (Trailing 12 weeks ending Saturday)
     current_date = datetime(2026, 1, 20) 
     current_sat = get_saturday(current_date)
     saturdays = [current_sat - timedelta(weeks=i) for i in range(13)]
@@ -60,7 +60,9 @@ def main():
                 # Prioritize actualSport for categorization
                 sport_str = (entry.get('actualSport') or entry.get('activityType') or entry.get('plannedSport') or "").lower()
                 
-                # Fetch raw durations
+                # STRICT DURATION LOGIC:
+                # Actuals ONLY come from actualDuration.
+                # Planned comes from plannedDuration (falling back to duration for planned.json entries).
                 p_dur = entry.get('plannedDuration') or entry.get('duration') or 0
                 a_dur = entry.get('actualDuration') or 0
 
@@ -80,7 +82,7 @@ def main():
                     weekly_data[sat_key][cat]['p'] += p_dur
                     weekly_data[sat_key][cat]['a'] += a_dur
                 
-                # Update Total (Regardless of category match)
+                # Update Total
                 weekly_data[sat_key]['total']['p'] += p_dur
                 weekly_data[sat_key]['total']['a'] += a_dur
         except (ValueError, KeyError, TypeError):
@@ -103,7 +105,6 @@ def main():
             curr_a = weekly_data[curr_sat][cat]['a']
             prev_a = weekly_data[prev_sat][cat]['a']
 
-            # Calculate growth relative to prior week actuals
             p_growth = (curr_p / prev_a - 1) if prev_a > 0 else 0
             a_growth = (curr_a / prev_a - 1) if prev_a > 0 else 0
 
@@ -125,7 +126,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=4)
     
-    print(f"✅ Fixed Trends: Correctly categorizing by actualSport and handling total volume.")
+    print(f"✅ Trends generated: actualDuration strictly used for actuals.")
 
 if __name__ == "__main__":
     main()

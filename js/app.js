@@ -35,7 +35,7 @@
         safeImport('./views/ftp/index.js', 'FTP'),
         safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
-        safeImport('./views/readiness/index.js', 'Readiness')
+        safeImport('./views/readiness/index.js', 'Readiness'),
     ]);
         safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- ADD THIS
 

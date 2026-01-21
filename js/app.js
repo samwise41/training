@@ -3,6 +3,15 @@
 (async function initApp() {
     console.log("🚀 Booting App (JSON Mode)...");
     const cacheBuster = Date.now();
+
+    const CONFIG = {
+        WEATHER_MAP: {
+            0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
+            45: ["Foggy", "🌫️"], 48: ["Foggy", "🌫️"], 51: ["Drizzle", "🌦️"], 
+            61: ["Rain", "🌧️"], 63: ["Rain", "🌧️"],
+            71: ["Snow", "❄️"], 95: ["Storm", "⛈️"]
+        }
+    };
     
     // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
@@ -14,9 +23,10 @@
         }
     };
 
+    // LOAD ALL MODULES (Including the new Analyzer)
     const [
         parserMod, dashMod, trendsMod, gearMod, zonesMod, ftpMod, roadmapMod, 
-        metricsMod, readinessMod 
+        metricsMod, readinessMod, analyzerMod 
     ] = await Promise.all([
         safeImport('./parser.js', 'Parser'),
         safeImport('./views/dashboard/index.js', 'Dashboard'),
@@ -26,7 +36,8 @@
         safeImport('./views/ftp/index.js', 'FTP'),
         safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
-        safeImport('./views/readiness/index.js', 'Readiness')
+        safeImport('./views/readiness/index.js', 'Readiness'),
+        safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- NEW MODULE
     ]);
 
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
@@ -39,6 +50,7 @@
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
+    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing"); // <--- NEW RENDERER
 
     // --- 2. APP STATE ---
     const App = {
@@ -50,13 +62,15 @@
         garminData: [],
         profileData: null,
         readinessData: null,
-        trendsData: null, // <--- New State Property
+        trendsData: null, 
         
-        weather: { current: null, hourly: null }, 
+        weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
             await this.loadData();
             this.setupNavigation();
+            this.fetchWeather(); 
+
             const savedView = localStorage.getItem('currentView') || 'dashboard';
             this.renderCurrentView(savedView);
         },
@@ -64,7 +78,6 @@
         async loadData() {
             try {
                 console.log("📡 Fetching Data...");
-                // Added fetch for trends.json
                 const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes, trendsRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
@@ -73,7 +86,7 @@
                     fetch('./data/my_garmin_data_ALL.json'),
                     fetch('./data/profile.json'),
                     fetch('./data/readiness/readiness.json'),
-                    fetch('./data/trends/trends.json') // <--- Fetch new file
+                    fetch('./data/trends/trends.json') 
                 ]);
 
                 this.planMd = await planRes.text();
@@ -81,12 +94,8 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
                 
-                if (gearRes.ok) {
-                    this.gearData = await gearRes.json();
-                } else {
-                    console.warn("⚠️ gear.json not found.");
-                    this.gearData = { bike: [], run: [] };
-                }
+                if (gearRes.ok) this.gearData = await gearRes.json();
+                else this.gearData = { bike: [], run: [] };
 
                 if (profileRes.ok) this.profileData = await profileRes.json();
                 else this.profileData = {}; 
@@ -94,7 +103,6 @@
                 if (readinessRes.ok) this.readinessData = await readinessRes.json();
                 else this.readinessData = null;
 
-                // Handle Trends JSON
                 if (trendsRes.ok) this.trendsData = await trendsRes.json();
                 else this.trendsData = null;
 
@@ -105,27 +113,77 @@
             }
         },
 
+        async fetchWeather() {
+            try {
+                const locRes = await fetch('https://ipapi.co/json/');
+                const locData = await locRes.json();
+                if (locData.latitude) {
+                    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
+                    const weatherData = await weatherRes.json();
+                    
+                    this.weather.current = Math.round(weatherData.current_weather.temperature);
+                    this.weather.hourly = weatherData.hourly || null;
+                    this.weather.code = weatherData.current_weather.weathercode;
+                    
+                    this.updateHeaderUI();
+                }
+            } catch (e) { console.error("Weather unavailable", e); }
+        },
+
+        // --- HELPER: Updates Top Bar Title & Weather ---
+        updateHeaderUI(viewName) {
+            // 1. Update Title
+            const titles = { 
+                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', 
+                roadmap: 'Season Roadmap', gear: 'Gear Choice', zones: 'Training Zones', 
+                ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics'
+            };
+            
+            if (viewName) {
+                const titleEl = document.getElementById('header-title-dynamic');
+                if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
+            }
+
+            // 2. Update Weather (if data exists)
+            if (this.weather.current !== null) {
+                const condition = CONFIG.WEATHER_MAP[this.weather.code] || ["Cloudy", "☁️"];
+                const wInfo = document.getElementById('weather-info');
+                const wIcon = document.getElementById('weather-icon-top');
+                
+                if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
+                if (wIcon) wIcon.innerText = condition[1];
+            }
+        },
+
         updateGearResult() {
             if (this.gearData) {
                 updateGearResult(this.gearData);
             }
         },
 
+        // --- Mobile Navigation (Fixed Logic) ---
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            const btnClose = document.getElementById('btn-sidebar-close'); 
+
+            // FIXED: Toggles the exact classes found in your HTML
+            const toggleSidebar = () => {
+                sidebar.classList.toggle('sidebar-closed'); 
+                sidebar.classList.toggle('sidebar-open');   
+                overlay.classList.toggle('hidden');
+            };
 
             if (menuBtn) {
-                menuBtn.addEventListener('click', () => {
-                    sidebar.classList.remove('-translate-x-full');
-                    overlay.classList.remove('hidden');
-                });
-                overlay.addEventListener('click', () => {
-                    sidebar.classList.add('-translate-x-full');
-                    overlay.classList.add('hidden');
+                menuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSidebar();
                 });
             }
+            
+            if (overlay) overlay.addEventListener('click', toggleSidebar);
+            if (btnClose) btnClose.addEventListener('click', toggleSidebar);
 
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -140,15 +198,17 @@
                     localStorage.setItem('currentView', view);
                     this.renderCurrentView(view);
 
-                    if (window.innerWidth < 1024 && sidebar) {
-                        sidebar.classList.add('-translate-x-full');
-                        overlay.classList.add('hidden');
+                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
+                        toggleSidebar();
                     }
                 });
             });
         },
 
         renderCurrentView(view) {
+            // Update Header Title & Weather
+            this.updateHeaderUI(view);
+
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
@@ -157,10 +217,10 @@
                 try {
                     switch (view) {
                         case 'dashboard':
-                            content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
+                            // Pass Readiness Data here (4th argument)
+                            content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
-                            // Pass trendsData to the view
                             content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
                             break;
                         case 'metrics':
@@ -183,8 +243,9 @@
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);
                             break;
                         case 'plan':
-                            const md = Parser.getSection(this.planMd, "Weekly Schedule") || "No plan found.";
-                            content.innerHTML = `<div class="markdown-body p-6 bg-slate-900 rounded-xl border border-slate-700">${window.marked.parse(md)}</div>`;
+                            // --- NEW ANALYZER TOOL ---
+                            // Uses rawLogData for the pivot calculations
+                            content.innerHTML = renderAnalyzer(this.rawLogData);
                             break;
                         default:
                             content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;

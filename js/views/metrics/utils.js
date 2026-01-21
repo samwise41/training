@@ -1,5 +1,7 @@
 // js/views/metrics/utils.js
+
 import { METRIC_DEFINITIONS } from './definitions.js';
+
 
 export const checkSport = (activity, sportKey) => {
     // STRICT RULE: ONLY USE 'actualSport' FIELD

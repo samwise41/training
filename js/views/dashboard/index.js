@@ -84,7 +84,7 @@ window.triggerGitHubSync = async () => {
     btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Syncing...</span>';
 
     try {
-        const response = await fetch(`https://api.github.com/repos/samwise41/training-plan/actions/workflows/01_1_Training_Data_Sync.yml/dispatches`, {
+        const response = await fetch(`https://api.github.com/repos/samwise41/training/actions/workflows/Training_Data_Sync.yml/dispatches`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -115,7 +115,7 @@ window.triggerGitHubSync = async () => {
 };
 
 // --- MAIN RENDER FUNCTION ---
-export function renderDashboard(plannedJson, mergedLogData) {
+export function renderDashboard(plannedJson, mergedLogData, readinessData) {
     const fullLogData = mergedLogData || [];
 
     // 1. Prepare Workout Data

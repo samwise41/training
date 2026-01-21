@@ -1,5 +1,44 @@
 // js/views/dashboard/utils.js
 
+
+// 1. Define the Helper Helper FIRST
+const getColor = (varName) => {
+    // Check if we are in a browser environment to avoid crashes during build
+    if (typeof window !== "undefined" && window.getComputedStyle) {
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+    // Fallback colors if CSS isn't loaded yet
+    const defaults = {
+        '--color-swim': '#22d3ee',
+        '--color-bike': '#c084fc',
+        '--color-run': '#f472b6',
+        '--color-strength': '#94a3b8'
+    };
+    return defaults[varName] || '#888888';
+};
+
+// 2. Your Color Logic (Now it can safely use getColor)
+export const getSportColor = (t) => {
+    if (!t) return '#888888'; // Safety check for empty values
+    const type = t.toLowerCase();
+
+    if (type.includes('bike') || type.includes('cycl') || type.includes('ride')) {
+        return getColor('--color-bike'); 
+    }
+    if (type.includes('run')) {
+        return getColor('--color-run'); 
+    }
+    if (type.includes('swim') || type.includes('pool') || type.includes('water')) {
+        return getColor('--color-swim'); 
+    }
+    if (type.includes('strength') || type.includes('weight') || type.includes('gym')) {
+        return getColor('--color-strength'); 
+    }
+    
+    return '#94a3b8'; // Default Slate
+};
+
+
 // --- DATE HELPERS ---
 export const toLocalYMD = (dateInput) => {
     if (!dateInput) return '';
@@ -10,6 +49,8 @@ export const toLocalYMD = (dateInput) => {
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 };
+
+
 
 // --- DATA NORMALIZATION & MERGING ---
 export function normalizeData(data) {
@@ -91,16 +132,17 @@ export function mergeAndDeduplicate(planned, actuals) {
     return Array.from(map.values());
 }
 
-// --- STYLE & ICON HELPERS ---
+
 export const getSportColorVar = (type) => {
+        
     const t = String(type || '').toLowerCase();
     
-    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return '#a855f7'; // Purple
-    if (t.includes('run')) return '#ec4899'; // Pink
-    if (t.includes('swim')) return '#3b82f6'; // Blue
+    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return getColor('--color-bike'); // Purple
+    if (t.includes('run')) return getColor('--color-run'); // Pink
+    if (t.includes('swim')) return getColor('--color-swim'); // Blue
     if (t.includes('strength') || t.includes('weight')) return '#94a3b8'; // Slate
     
-    return '#10b981'; // Emerald (Default)
+    return getColor('--color-all'); // Emerald (Default)
 };
 
 export const getIcon = (type) => { 

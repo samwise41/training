@@ -2,10 +2,30 @@
 import { parseDur, formatTime } from './utils.js';
 
 const SPORT_CONFIG = {
-    swim: { color: 'text-blue-400', icon: 'fa-person-swimming', label: 'Swim', bar: 'bg-blue-500' },
-    bike: { color: 'text-purple-400', icon: 'fa-person-biking', label: 'Bike', bar: 'bg-purple-500' },
-    bikeElev: { color: 'text-purple-400', icon: 'fa-mountain', label: 'Bike (Climb)', bar: 'bg-purple-500' },
-    run:  { color: 'text-pink-400',  icon: 'fa-person-running',  label: 'Run', bar: 'bg-pink-500' }
+    swim: { 
+        color: 'icon-swim',      // Uses the .text-swim class from styles.css
+        icon: 'fa-person-swimming', 
+        label: 'Swim', 
+        bar: 'bg-icon-swim'           // Uses the .bg-swim class from styles.css
+    },
+    bike: { 
+        color: 'icon-bike',      // Uses .text-bike
+        icon: 'fa-person-biking', 
+        label: 'Bike', 
+        bar: 'bg-icon-bike'           // Uses .bg-bike
+    },
+    bikeElev: { 
+        color: 'icon-bike',      // Shared color for Bike Climb
+        icon: 'fa-mountain', 
+        label: 'Bike (Climb)', 
+        bar: 'bg-icon-bike' 
+    },
+    run: { 
+        color: 'icon-run',       // Uses .text-run
+        icon: 'fa-person-running', 
+        label: 'Run', 
+        bar: 'bg-icon-run'            // Uses .bg-run
+    }
 };
 
 const parseElev = (str) => {

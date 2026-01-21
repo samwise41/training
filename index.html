@@ -3,17 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IronPlan Dashboard</title>
+    <title>Athlete Dashboard</title>
     
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cstyle%3E.icon{fill:none;stroke:%233b82f6;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}.head{fill:%233b82f6;stroke:none}%3C/style%3E%3Cg transform='translate(64, 24)'%3E%3Ccircle class='head' cx='0' cy='-12' r='7'/%3E%3Cpath class='icon' d='M-18 -4 c 8 -10, 28 -10, 36 0'/%3E%3Cpath class='icon' d='M-24 8 q 12 8, 24 0 t 24 0'/%3E%3Cpath class='icon' d='M-24 20 q 12 8, 24 0 t 24 0'/%3E%3C/g%3E%3Cg transform='translate(32, 90)'%3E%3Ccircle class='head' cx='0' cy='-24' r='7'/%3E%3Cpath class='icon' d='M0 -14 v 14 l -10 12 m 10 -12 l 10 8'/%3E%3Cpath class='icon' d='M0 -14 l -8 8 m 8 -8 l 8 8'/%3E%3C/g%3E%3Cg transform='translate(96, 90)'%3E%3Ccircle class='head' cx='0' cy='-24' r='7'/%3E%3Ccircle class='icon' cx='-14' cy='12' r='10'/%3E%3Ccircle class='icon' cx='14' cy='12' r='10'/%3E%3Cpath class='icon' d='M-14 12 l 14 -22 h 8 l 6 22'/%3E%3Cpath class='icon' d='M0 -10 l -4 8'/%3E%3C/g%3E%3C/svg%3E">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-dark.min.css">
+    <link rel="stylesheet" href="css/styles.css">
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-enterprise/dist/ag-grid-enterprise.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-quartz.css">
+
+    
     <style>
         body { background-color: #0f172a; color: #e2e8f0; }
         
@@ -57,7 +64,7 @@
     <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-slate-900 border-r border-slate-700 z-30 transition-transform duration-300 sidebar-closed flex flex-col">
         <div class="p-6 border-b border-slate-700 flex justify-between items-center h-16">
             <h1 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-                <i class="fa-solid fa-bicycle text-blue-500"></i> IronPlan
+                <i class="fa-solid fa-bicycle ttext-bike"></i> AthleteOS
             </h1>
             <button id="btn-sidebar-close" class="lg:hidden text-slate-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-xl"></i>
@@ -71,27 +78,27 @@
             </div>
 
             <button class="nav-item bg-slate-800 text-white border-slate-600" data-view="dashboard">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-house text-blue-400"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-house "></i></div>
                 <span>Dashboard</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="trends">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-chart-line text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-chart-line "></i></div>
                 <span>Trends</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="readiness">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-flag-checkered text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-flag-checkered "></i></div>
                 <span>Race Readiness</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="metrics">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-bullseye text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-bullseye "></i></div>
                 <span>Performance Metrics</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="ftp">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-gauge-high text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-gauge-high "></i></div>
                 <span>FTP / Threshold</span>
             </button>
 
@@ -101,22 +108,22 @@
             </div>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="roadmap">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-map text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-map "></i></div>
                 <span>Roadmap</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="plan">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-book-open text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-book-open "></i></div>
                 <span>Logbook</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="gear">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-shirt text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-shirt "></i></div>
                 <span>Gear</span>
             </button>
 
             <button class="nav-item text-slate-400 border-transparent" data-view="zones">
-                <div class="w-5 flex justify-center"><i class="fa-solid fa-layer-group text-slate-400 group-hover:text-white"></i></div>
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-layer-group "></i></div>
                 <span>Zones</span>
             </button>
 
@@ -124,14 +131,20 @@
     </aside>
 
     <main class="flex-1 flex flex-col min-w-0 bg-slate-900 lg:pl-64 relative min-h-screen">
-        <header class="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-4 sticky top-0 z-10 lg:hidden">
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-btn" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
-                <h2 class="text-lg font-bold text-white">IronPlan</h2>
-            </div>
-        </header>
+    <header class="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-4 sticky top-0 z-10">
+        <div class="flex items-center gap-4">
+            <button id="mobile-menu-btn" class="lg:hidden text-slate-400 hover:text-white">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            
+            <h2 id="header-title-dynamic" class="text-lg font-bold text-white">Dashboard</h2>
+        </div>
+    
+        <div class="flex items-center gap-4 text-xs font-mono text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-700">
+            <span id="weather-info">Loading...</span>
+            <span id="weather-icon-top" class="text-lg"></span>
+        </div>
+    </header>
 
         <div id="main-content" class="flex-1 p-4 md:p-8 scroll-smooth transition-opacity duration-300 opacity-0">
             </div>

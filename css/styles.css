@@ -167,3 +167,45 @@ body {
     min-width: 70px; display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
     padding: 0.75rem; background: #0f172a; border-radius: 0.5rem; border: 1px solid #1e293b;
 }
+
+
+/* --- AG GRID: HYBRID THEME (Dark Grid / Light Sidebar) --- */
+
+/* 1. Force the Sidebar & Tool Panels to be WHITE */
+.ag-theme-quartz-dark .ag-side-bar,
+.ag-theme-quartz-dark .ag-tool-panel-wrapper,
+.ag-theme-quartz-dark .ag-side-buttons {
+    background-color: #ffffff !important; /* Pure White */
+    color: #0f172a !important; /* Dark Slate Text */
+    border-left: 1px solid #cbd5e1 !important; /* Light Border */
+}
+
+/* 2. Fix the Column/Filter Text inside the sidebar */
+.ag-theme-quartz-dark .ag-column-select-column-label, 
+.ag-theme-quartz-dark .ag-group-component-title,
+.ag-theme-quartz-dark .ag-filter-toolpanel-header,
+.ag-theme-quartz-dark .ag-header-cell-text {
+    color: #334155 !important; /* Slate 700 Text */
+}
+
+/* 3. Fix Input Boxes (Search Bar) to look normal on white */
+.ag-theme-quartz-dark .ag-text-field-input {
+    background-color: #f1f5f9 !important; /* Light Grey Input */
+    color: #0f172a !important; /* Dark Text */
+    border: 1px solid #94a3b8 !important;
+}
+
+/* 4. Sidebar Tabs (Columns/Filters buttons) */
+.ag-theme-quartz-dark .ag-side-button-button {
+    color: #64748b !important; /* Slate 500 (Inactive) */
+}
+.ag-theme-quartz-dark .ag-side-button-button.ag-selected {
+    color: #0f172a !important; /* Dark (Active) */
+    border-left-color: #22d3ee !important; /* Cyan Accent */
+}
+
+/* 5. Force the Context Menu (Right Click) to be Visible */
+.ag-theme-quartz-dark .ag-menu {
+    background-color: #1e293b !important; /* Keep Menu Dark */
+    color: #f8fafc !important;
+}

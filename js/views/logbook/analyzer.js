@@ -20,7 +20,7 @@ export const renderAnalyzer = (rawLogData) => {
 };
 
 const initAGGrid = (gridId, statsId, rawData) => {
-    // 1. License Key
+    // 1. Set License
     const licenseKey = '__AG_GRID_LICENSE_KEY__';
     if (licenseKey && !licenseKey.startsWith('__')) {
         agGrid.LicenseManager.setLicenseKey(licenseKey);
@@ -29,13 +29,12 @@ const initAGGrid = (gridId, statsId, rawData) => {
     const gridDiv = document.getElementById(gridId);
     if (!gridDiv) return;
 
-    // 2. Map Data (Robust)
+    // 2. Parse Your Data
     const rowData = rawData.map(d => {
-        // Conversions
-        const durHrs = (d.duration || d.actualDuration * 60 || 0) / 3600; // Store as hours for math
+        const dateObj = new Date(d.date);
+        const durHrs = (d.duration || d.actualDuration * 60 || 0) / 3600;
         const distMiles = (d.distance || 0) / 1609.34;
         const elevFeet = (d.elevationGain || 0) * 3.28084;
-        const dateObj = new Date(d.date);
 
         return {
             date: d.date, 
@@ -53,26 +52,18 @@ const initAGGrid = (gridId, statsId, rawData) => {
             avg_hr: d.averageHR || 0,
             norm_pwr: d.normPower || 0,
             if: d.intensityFactor || 0,
-            
-            cadence_run: d.averageRunningCadenceInStepsPerMinute || 0,
-            cadence_bike: d.averageBikingCadenceInRevPerMinute || 0,
-            aerobic_te: d.aerobicTrainingEffect || 0,
             rpe: d.RPE || 0
         };
     });
 
-    // 3. Grid Options (Merged from Config)
+    // 3. Initialize Grid with Config
     const gridOptions = {
-        ...GRID_CONFIG, // Load settings from config.js
+        ...GRID_CONFIG,
         rowData: rowData,
-        pivotMode: true, // Force Pivot Mode ON by default to match screenshot
         
-        onGridReady: (params) => {
-            updateStats(params.api, statsId);
-        },
-        onModelUpdated: (params) => {
-            updateStats(params.api, statsId);
-        }
+        // Listeners for Top Bar Stats
+        onGridReady: (params) => updateStats(params.api, statsId),
+        onModelUpdated: (params) => updateStats(params.api, statsId)
     };
 
     agGrid.createGrid(gridDiv, gridOptions);
@@ -80,15 +71,10 @@ const initAGGrid = (gridId, statsId, rawData) => {
 
 // --- Custom Stats Bar Logic ---
 const updateStats = (api, statsId) => {
-    let count = 0;
-    let dur = 0;
-    let dist = 0;
-    let elev = 0;
-    let tss = 0;
+    let count = 0, dur = 0, dist = 0, elev = 0, tss = 0;
 
     api.forEachNodeAfterFilter(node => {
-        // In Pivot Mode, we only want to sum the leaf nodes (the actual activities)
-        // Aggregations handle the groups, but for our custom top bar, we sum raw data
+        // Only sum LEAF nodes (actual activities) to avoid double counting groups
         if (!node.group && node.data) {
             count++;
             dur += node.data.duration || 0;
@@ -97,9 +83,6 @@ const updateStats = (api, statsId) => {
             tss += node.data.tss || 0;
         }
     });
-
-    const h = Math.floor(dur);
-    const m = Math.round((dur - h) * 60);
 
     const card = (label, val, sub, color) => `
         <div class="flex flex-col">
@@ -113,9 +96,9 @@ const updateStats = (api, statsId) => {
     if(el) {
         el.innerHTML = `
             ${card('Activities', count, 'Rows', 'text-white')}
-            ${card('Duration', `${h}h ${m}m`, 'Total Time', 'text-blue-400')}
-            ${card('Distance', dist.toLocaleString(undefined,{maximumFractionDigits:0}), 'Miles', 'text-pink-400')}
-            ${card('Elevation', elev.toLocaleString(undefined,{maximumFractionDigits:0}), 'Feet', 'text-purple-400')}
+            ${card('Duration', `${Math.round(dur)}h`, 'Total Time', 'text-blue-400')}
+            ${card('Distance', Math.round(dist).toLocaleString(), 'Miles', 'text-pink-400')}
+            ${card('Elevation', Math.round(elev).toLocaleString(), 'Feet', 'text-purple-400')}
             ${card('TSS', Math.round(tss), 'Load', 'text-yellow-400')}
         `;
     }

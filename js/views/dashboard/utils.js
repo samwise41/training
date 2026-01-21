@@ -1,5 +1,44 @@
 // js/views/dashboard/utils.js
 
+
+// 1. Define the Helper Helper FIRST
+const getColor = (varName) => {
+    // Check if we are in a browser environment to avoid crashes during build
+    if (typeof window !== "undefined" && window.getComputedStyle) {
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+    // Fallback colors if CSS isn't loaded yet
+    const defaults = {
+        '--color-swim': '#22d3ee',
+        '--color-bike': '#c084fc',
+        '--color-run': '#f472b6',
+        '--color-strength': '#94a3b8'
+    };
+    return defaults[varName] || '#888888';
+};
+
+// 2. Your Color Logic (Now it can safely use getColor)
+export const getSportColor = (t) => {
+    if (!t) return '#888888'; // Safety check for empty values
+    const type = t.toLowerCase();
+
+    if (type.includes('bike') || type.includes('cycl') || type.includes('ride')) {
+        return getColor('--color-bike'); 
+    }
+    if (type.includes('run')) {
+        return getColor('--color-run'); 
+    }
+    if (type.includes('swim') || type.includes('pool') || type.includes('water')) {
+        return getColor('--color-swim'); 
+    }
+    if (type.includes('strength') || type.includes('weight') || type.includes('gym')) {
+        return getColor('--color-strength'); 
+    }
+    
+    return '#94a3b8'; // Default Slate
+};
+
+
 // --- DATE HELPERS ---
 export const toLocalYMD = (dateInput) => {
     if (!dateInput) return '';
@@ -95,8 +134,6 @@ export function mergeAndDeduplicate(planned, actuals) {
 
 
 export const getSportColorVar = (type) => {
-    const getColor = (varName) => {
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
         
     const t = String(type || '').toLowerCase();
     

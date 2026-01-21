@@ -115,7 +115,7 @@ window.triggerGitHubSync = async () => {
 };
 
 // --- MAIN RENDER FUNCTION ---
-export function renderDashboard(plannedJson, mergedLogData) {
+export function renderDashboard(plannedJson, mergedLogData, readinessData) {
     const fullLogData = mergedLogData || [];
 
     // 1. Prepare Workout Data

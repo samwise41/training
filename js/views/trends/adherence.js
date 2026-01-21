@@ -1,7 +1,4 @@
-{
-type: uploaded file
-fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/trends/adherence.js
-fullContent:
+
 import { COLOR_MAP } from './utils.js';
 
 // --- LOCAL STATE ---
@@ -204,4 +201,3 @@ export const renderDynamicCharts = (containerId, rollingData) => {
 
     container.innerHTML = `${controlsHtml}${chart1}${chart2}`;
 };
-}

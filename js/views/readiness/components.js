@@ -3,25 +3,25 @@ import { parseDur, formatTime } from './utils.js';
 
 const SPORT_CONFIG = {
     swim: { 
-        color: 'text-swim',      // Uses the .text-swim class from styles.css
+        color: 'icon-swim',      // Uses the .text-swim class from styles.css
         icon: 'fa-person-swimming', 
         label: 'Swim', 
         bar: 'bg-icon-swim'           // Uses the .bg-swim class from styles.css
     },
     bike: { 
-        color: 'text-bike',      // Uses .text-bike
+        color: 'icon-bike',      // Uses .text-bike
         icon: 'fa-person-biking', 
         label: 'Bike', 
         bar: 'bg-icon-bike'           // Uses .bg-bike
     },
     bikeElev: { 
-        color: 'text-bike',      // Shared color for Bike Climb
+        color: 'icon-bike',      // Shared color for Bike Climb
         icon: 'fa-mountain', 
         label: 'Bike (Climb)', 
         bar: 'bg-icon-bike' 
     },
     run: { 
-        color: 'text-run',       // Uses .text-run
+        color: 'icon-run',       // Uses .text-run
         icon: 'fa-person-running', 
         label: 'Run', 
         bar: 'bg-icon-run'            // Uses .bg-run

@@ -1,5 +1,4 @@
 // js/views/metrics/utils.js
-import { METRIC_DEFINITIONS } from './definitions.js';
 
 const getColor = (varName) => {
     if (typeof window !== "undefined" && window.getComputedStyle) {
@@ -7,6 +6,9 @@ const getColor = (varName) => {
     }
     return '#888888'; // Fallback
 };
+
+import { METRIC_DEFINITIONS } from './definitions.js';
+
 
 export const checkSport = (activity, sportKey) => {
     // STRICT RULE: ONLY USE 'actualSport' FIELD

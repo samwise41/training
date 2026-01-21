@@ -1,7 +1,4 @@
-{
-type: uploaded file
-fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/trends/compliance.js
-fullContent:
+
 import { getIconForType } from './utils.js';
 
 // Helper: Color Coding based on %
@@ -95,4 +92,3 @@ export const renderComplianceSection = (complianceData) => {
         </div>
     `;
 };
-}

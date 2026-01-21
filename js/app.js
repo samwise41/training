@@ -23,9 +23,10 @@
         }
     };
 
+    // LOAD ALL MODULES (Including the new Analyzer)
     const [
         parserMod, dashMod, trendsMod, gearMod, zonesMod, ftpMod, roadmapMod, 
-        metricsMod, readinessMod 
+        metricsMod, readinessMod, analyzerMod 
     ] = await Promise.all([
         safeImport('./parser.js', 'Parser'),
         safeImport('./views/dashboard/index.js', 'Dashboard'),
@@ -36,8 +37,8 @@
         safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
+        safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- NEW MODULE
     ]);
-        safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- ADD THIS
 
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
@@ -49,7 +50,7 @@
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
-    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing"); // <--- ADD THIS
+    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing"); // <--- NEW RENDERER
 
     // --- 2. APP STATE ---
     const App = {
@@ -63,7 +64,7 @@
         readinessData: null,
         trendsData: null, 
         
-        weather: { current: null, hourly: null }, 
+        weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
             await this.loadData();
@@ -122,11 +123,8 @@
                     
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
-                    
-                    // Store condition code for UI updates
                     this.weather.code = weatherData.current_weather.weathercode;
                     
-                    // If we are already running, update the header immediately
                     this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
@@ -136,7 +134,7 @@
         updateHeaderUI(viewName) {
             // 1. Update Title
             const titles = { 
-                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', logbook: 'Logbook', 
+                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', 
                 roadmap: 'Season Roadmap', gear: 'Gear Choice', zones: 'Training Zones', 
                 ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics'
             };
@@ -163,14 +161,14 @@
             }
         },
 
-        // --- Mobile Navigation ---
-    setupNavigation() {
+        // --- Mobile Navigation (Fixed Logic) ---
+        setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             const btnClose = document.getElementById('btn-sidebar-close'); 
 
-            // FIXED: Only toggle the custom classes found in your HTML
+            // FIXED: Toggles the exact classes found in your HTML
             const toggleSidebar = () => {
                 sidebar.classList.toggle('sidebar-closed'); 
                 sidebar.classList.toggle('sidebar-open');   
@@ -178,21 +176,17 @@
             };
 
             if (menuBtn) {
-                // Use 'click' and stopPropagation to prevent immediate closing
                 menuBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleSidebar();
                 });
             }
             
-            // Allow closing via overlay or X button
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
 
-            // Close sidebar when a navigation item is clicked
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    // 1. Update Visuals
                     document.querySelectorAll('.nav-item').forEach(b => {
                         b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
                         b.classList.add('text-slate-400', 'border-transparent');
@@ -200,12 +194,10 @@
                     e.currentTarget.classList.remove('text-slate-400', 'border-transparent');
                     e.currentTarget.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
 
-                    // 2. Render View
                     const view = e.currentTarget.dataset.view;
                     localStorage.setItem('currentView', view);
                     this.renderCurrentView(view);
 
-                    // 3. Close Mobile Menu (Check if overlay is visible)
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }
@@ -225,8 +217,7 @@
                 try {
                     switch (view) {
                         case 'dashboard':
-                            // --- CHANGED: Just render the dashboard content ---
-                            // Your new topCards.js logic is assumed to be inside renderDashboard now
+                            // Pass Readiness Data here (4th argument)
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
@@ -252,8 +243,9 @@
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);
                             break;
                         case 'plan':
-                            const md = Parser.getSection(this.planMd, "Weekly Schedule", this.rawLogData)) || "No plan found.";
-                            content.innerHTML = `<div class="markdown-body p-6 bg-slate-900 rounded-xl border border-slate-700">${window.marked.parse(md)}</div>`;
+                            // --- NEW ANALYZER TOOL ---
+                            // Uses rawLogData for the pivot calculations
+                            content.innerHTML = renderAnalyzer(this.rawLogData);
                             break;
                         default:
                             content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;

@@ -5,7 +5,6 @@ export function renderHeatmaps() {
     // Initiate async fetch immediately
     setTimeout(initHeatmaps, 0);
 
-    // Initial placeholder with NO fixed height to prevent layout jumping
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -32,49 +31,59 @@ async function initHeatmaps() {
     try {
         const response = await fetch('data/dashboard/heatmaps.json');
         if (!response.ok) throw new Error("Heatmap file not found");
-        const unifiedData = await response.json();
+        const rawData = await response.json();
 
-        // Convert Array to Map for fast lookup by date string
-        const dataMap = {};
-        if (Array.isArray(unifiedData)) {
-            unifiedData.forEach(d => {
-                dataMap[d.date] = d;
+        // --- PRE-PROCESSING DATA ---
+        
+        // 1. Activity Map: Contains EVERYTHING (for "Activity Log")
+        const activityMap = {};
+        if (Array.isArray(rawData)) {
+            rawData.forEach(d => { activityMap[d.date] = d; });
+        }
+
+        // 2. Consistency Map: FILTERED (Only days where a workout was PLANNED)
+        // This ensures the Consistency charts only show planned days.
+        const consistencyMap = {};
+        if (Array.isArray(rawData)) {
+            rawData.forEach(d => {
+                // The Filter: Must have planned minutes to appear in Consistency/Annual Plan view
+                if (d.plannedDuration > 0) {
+                    consistencyMap[d.date] = d;
+                }
             });
         }
 
+        // --- DATE RANGES ---
         const today = new Date();
         
-        // --- 1. Trailing Views (Last 6 Months) ---
-        // End of week (Saturday) alignment
+        // Trailing 6 Months
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
 
         const startTrailing = new Date(endTrailing); 
         startTrailing.setMonth(startTrailing.getMonth() - 6);
-        // Align start to Sunday for clean grid
         const day = startTrailing.getDay();
-        startTrailing.setDate(startTrailing.getDate() - day);
+        startTrailing.setDate(startTrailing.getDate() - day); // Align to Sunday
 
-        // --- 2. Annual View (Current Year) ---
+        // Annual View
         const startYear = new Date(today.getFullYear(), 0, 1);
         const yearDay = startYear.getDay();
         startYear.setDate(startYear.getDate() - yearDay); // Align to Sunday
         const endYear = new Date(today.getFullYear(), 11, 31);
 
-        // --- 3. Render HTML ---
-        // Layout: Grid for top two, separate div for bottom one
+        // --- RENDER ---
         container.innerHTML = `
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                ${buildGrid(dataMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true)}
-                ${buildGrid(dataMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false)}
+                ${buildGrid(consistencyMap, startTrailing, endTrailing, "Recent Consistency (Plan Only)", "hm-consistency", true)}
+                ${buildGrid(activityMap, startTrailing, endTrailing, "Activity Log (All Activity)", "hm-activity", false)}
             </div>
             <div>
-                ${buildGrid(dataMap, startYear, endYear, `Annual Overview (${today.getFullYear()})`, null, true)}
+                ${buildGrid(consistencyMap, startYear, endYear, `Annual Overview (${today.getFullYear()})`, null, true)}
             </div>
         `;
 
-        // Auto-scroll logic (Right align)
+        // Auto-scroll to end
         setTimeout(() => {
             ['hm-consistency', 'hm-activity'].forEach(id => {
                 const el = document.getElementById(id);
@@ -96,26 +105,25 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
     // Loop through days
     while (curr <= end) {
         const dateStr = toLocalYMD(curr);
-        const entry = dataMap[dateStr];
+        const entry = dataMap[dateStr]; // This is now pre-filtered based on the mode
         
-        // --- DATA MAPPING LOGIC ---
+        let bgColor = 'bg-slate-800/50'; // Default empty
+        let opacity = '0.3'; 
+        let styleOverride = '';
+        let tooltipColor = '#1e293b';
+        
+        // Metadata for Tooltip
         const status = entry ? entry.complianceStatus : null;
         const sport = entry ? entry.actualSport : null;
         const activityName = entry ? (entry.activityName || status) : 'No Activity';
-        const minutes = entry ? (entry.actualDuration || 0) : 0;
-        
-        // CHANGED: Grab plannedDuration to filter Consistency views
-        const plannedMinutes = entry ? (entry.plannedDuration || 0) : 0;
-
-        let bgColor = 'bg-slate-800/50'; 
-        let opacity = '0.3'; 
-        let styleOverride = '';
-        let tooltipColor = '#1e293b'; // Default slate
+        const actMins = entry ? (entry.actualDuration || 0) : 0;
+        const planMins = entry ? (entry.plannedDuration || 0) : 0;
 
         // --- COLOR LOGIC ---
-        if (isConsistencyMode) {
-            // UPDATED: Strict Filter -> Only show if PLANNED > 0
-            if (plannedMinutes > 0) {
+        if (entry) {
+            if (isConsistencyMode) {
+                // DATASET IS ALREADY FILTERED to Planned > 0.
+                // Just map status to color.
                 if (status === 'Completed') {
                     bgColor = 'bg-emerald-500';
                     tooltipColor = '#10b981';
@@ -128,25 +136,28 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
                     bgColor = 'bg-red-500';
                     tooltipColor = '#ef4444';
                     opacity = '0.4';
+                } else {
+                    // Fallback (e.g. if status is weird but plan > 0)
+                    bgColor = 'bg-slate-700'; 
+                    opacity = '0.5';
                 }
-                // Note: 'Unplanned' implies plannedMinutes == 0, so it falls through to empty (gray)
-                // Note: 'Rest' implies plannedMinutes == 0 (usually), so it falls through to empty
-            }
-        } else {
-            // Activity Mode (Shows everything: Planned or Unplanned)
-            if (minutes > 0 && sport) {
-                const sportColor = getSportColorVar(sport); 
-                styleOverride = `background-color: ${sportColor};`;
-                tooltipColor = sportColor;
-                opacity = '0.9';
+            } else {
+                // Activity Mode (Unfiltered)
+                // Only color if there was movement
+                if (actMins > 0 && sport) {
+                    const sportColor = getSportColorVar(sport); 
+                    styleOverride = `background-color: ${sportColor};`;
+                    tooltipColor = sportColor;
+                    opacity = '0.9';
+                }
             }
         }
 
-        // --- CELL HTML ---
+        // --- CELL RENDER ---
         gridCells += `
             <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative ${styleOverride ? '' : bgColor}"
                  style="opacity: ${opacity}; ${styleOverride}"
-                 onmouseover="window.showDashboardTooltip(event, '${dateStr}', ${Math.round(plannedMinutes)}, '${minutes}', '${activityName}', '${tooltipColor}', '${isConsistencyMode ? (status || 'Rest') : (sport || 'Rest')}', '')"
+                 onmouseover="window.showDashboardTooltip(event, '${dateStr}', ${Math.round(planMins)}, '${Math.round(actMins)}', '${activityName}', '${tooltipColor}', '${isConsistencyMode ? (status || 'Rest') : (sport || 'Rest')}', '')"
                  onmouseout="document.getElementById('dashboard-tooltip-popup').classList.add('opacity-0')">
             </div>
         `;

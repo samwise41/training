@@ -24,14 +24,12 @@ def main():
     except Exception as e:
         print(f"   -> Warning: Could not set git config: {e}")
 
-    # 3. Add Files (Updated Strategy)
+    # 3. Add Files
     print("   -> Staging files...")
     
-    # We add the entire 'data' folder to capture ALL JSON updates
-    # We also add the markdown plan in the root
+    # FIX: Add the ENTIRE data directory + Plan Markdown
     paths_to_add = ["data", "endurance_plan.md"]
     
-    # Validate paths exist relative to BASE_DIR
     valid_paths = []
     for p in paths_to_add:
         full_p = os.path.join(config.BASE_DIR, p)
@@ -59,7 +57,10 @@ def main():
         run_cmd(["git", "pull", "--rebase"])
     except Exception:
         print("   -> Rebase failed. Trying standard pull...")
-        run_cmd(["git", "pull"])
+        try:
+            run_cmd(["git", "pull"])
+        except Exception:
+            pass 
     
     print("   -> Pushing...")
     run_cmd(["git", "push"])

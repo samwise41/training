@@ -5,6 +5,7 @@ from . import config
 
 def run_cmd(args):
     try:
+        # Capture output so we can print it if there's an error
         subprocess.run(args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         print(f"Git Error: {e.stderr.decode().strip()}")
@@ -21,14 +22,15 @@ def main():
     try:
         run_cmd(["git", "config", "user.email", "github-actions@github.com"])
         run_cmd(["git", "config", "user.name", "github-actions"])
-    except Exception as e:
-        print(f"   -> Warning: Could not set git config: {e}")
+    except Exception:
+        pass # Ignore if already set
 
-    # 3. Add Files
-    print("   -> Staging files...")
+    # 3. Add Files (The Fix)
+    print("   -> Staging ALL files in data directory...")
     
-    # FIX: Add the ENTIRE data directory + Plan Markdown
-    paths_to_add = ["data", "endurance_plan.md"]
+    # FIX: We point to the directories, not specific files.
+    # This tells git: "Add everything inside 'data/' and 'strava_data/'"
+    paths_to_add = ["data", "strava_data", "endurance_plan.md"]
     
     valid_paths = []
     for p in paths_to_add:
@@ -37,6 +39,8 @@ def main():
             valid_paths.append(full_p)
     
     if valid_paths:
+        # Debug print to prove it's finding the folder
+        print(f"   -> Adding paths: {valid_paths}")
         cmd = ["git", "add"] + valid_paths
         run_cmd(cmd)
 
@@ -60,7 +64,7 @@ def main():
         try:
             run_cmd(["git", "pull"])
         except Exception:
-            pass 
+            pass # Continue to push even if pull failed
     
     print("   -> Pushing...")
     run_cmd(["git", "push"])

@@ -11,6 +11,8 @@ export const toLocalYMD = (dateInput) => {
     return `${year}-${month}-${day}`;
 };
 
+
+
 // --- DATA NORMALIZATION & MERGING ---
 export function normalizeData(data) {
     if (!Array.isArray(data)) return [];
@@ -92,6 +94,10 @@ export function mergeAndDeduplicate(planned, actuals) {
 }
 
 // --- STYLE & ICON HELPERS ---
+const getColor = (varName) => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+};
+
 export const getSportColorVar = (type) => {
     const t = String(type || '').toLowerCase();
     

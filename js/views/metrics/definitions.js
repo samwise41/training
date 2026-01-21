@@ -1,21 +1,21 @@
 // js/views/metrics/definitions.js
 
 const getColor = (varName) => {
-    // Check if we are in a browser environment to avoid crashes during build
+    // Check if we are in a browser environment
     if (typeof window !== "undefined" && window.getComputedStyle) {
         return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
     }
     // Fallback colors if CSS isn't loaded yet
     const defaults = {
-        '--color-swim': '#22d3ee',
-        '--color-bike': '#c084fc',
-        '--color-run': '#f472b6',
-        '--color-strength': '#94a3b8'
+        '--color-swim': '#22d3ee',     // Cyan-400
+        '--color-bike': '#c084fc',     // Purple-400
+        '--color-run': '#f472b6',      // Pink-400
+        '--color-strength': '#94a3b8', // Slate-400
+        '--color-all': '#34d399'       // Emerald-400 (New for General metrics)
     };
     return defaults[varName] || '#888888';
 };
 
-// UPDATED: Using Hex Codes to ensure charts are not black
 export const METRIC_DEFINITIONS = {
     // --- CYCLING (Purple) ---
     subjective_bike: {
@@ -44,7 +44,8 @@ export const METRIC_DEFINITIONS = {
     },
     strength: {
         title: "Torque Efficiency", 
-        sport: "Bike", icon: "fa-bolt", 
+        sport: "Bike", 
+        icon: "fa-bolt", 
         colorVar: getColor('--color-bike'),
         refMin: 2.5, 
         refMax: 3.5, 
@@ -121,7 +122,7 @@ export const METRIC_DEFINITIONS = {
         title: "Swim RPE Efficiency", 
         sport: "Swim", 
         icon: "fa-person-swimming", 
-        colorVar: getColor('--color-bike'),
+        colorVar: getColor('--color-swim'), // FIXED: Was set to bike
         refMin: 0.15, 
         refMax: 0.3, 
         invertRanges: false, 
@@ -133,7 +134,7 @@ export const METRIC_DEFINITIONS = {
         title: "Swim Efficiency", 
         sport: "Swim", 
         icon: "fa-person-swimming", 
-        colorVar: getColor('--color-bike'),
+        colorVar: getColor('--color-swim'), // FIXED: Was set to bike
         refMin: 0.3, 
         refMax: 0.6, 
         invertRanges: false, 
@@ -142,7 +143,7 @@ export const METRIC_DEFINITIONS = {
         improvement: "• Drills (Catch/Pull)<br>• Long Steady Swims"
     },
 
-    // --- GENERAL (Emerald) ---
+    // --- GENERAL (Emerald/Green) ---
     vo2max: {
         title: "VO₂ Max Trend", 
         sport: "All", 
@@ -159,7 +160,7 @@ export const METRIC_DEFINITIONS = {
         title: "Weekly TSS Load", 
         sport: "All", 
         icon: "fa-layer-group", 
-        colorVar: getColor('--color-all')
+        colorVar: getColor('--color-all'), // FIXED: Added missing comma
         refMin: 300, 
         refMax: 600, 
         invertRanges: false, 

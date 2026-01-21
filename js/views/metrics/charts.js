@@ -1,7 +1,3 @@
-{
-type: uploaded file
-fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/metrics/charts.js
-fullContent:
 // js/views/metrics/charts.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend } from './utils.js';
@@ -77,4 +73,3 @@ export const updateCharts = (allData, timeRange) => {
     ['vo2max','tss','anaerobic','subjective_bike','endurance','strength','subjective_run','run','mechanical','gct','vert','subjective_swim','swim'].forEach(k => render(`metric-chart-${k}`, k));
     ['30d','90d','6m','1y'].forEach(r => { const b = document.getElementById(`btn-metric-${r}`); if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; });
 };
-}

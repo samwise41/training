@@ -1,31 +1,26 @@
 import { getIcon, getSportColorVar, buildCollapsibleSection } from './utils.js';
 
-export function renderPlannedWorkouts() {
-    setTimeout(async () => {
+export function renderPlannedWorkouts(data) {
+    setTimeout(() => {
         const container = document.getElementById('planned-workouts-content');
         if (!container) return;
         
         try {
-            // 1. Fetch the merged data
-            const response = await fetch('data/dashboard/plannedWorkouts.json');
-            if (!response.ok) throw new Error("Schedule file not found");
-            
-            let data = await response.json();
-            
-            // 2. Sort Chronologically (Oldest -> Newest)
-            data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p class="text-slate-500 italic p-4">No planned workouts found.</p>';
+                return;
+            }
 
-            // 3. Render
-            container.innerHTML = generateCardsHTML(data);
+            const sortedData = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+            container.innerHTML = generateCardsHTML(sortedData);
             
-            // Scroll Today into view
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500'); // Today's marker
+                const todayCard = container.querySelector('.ring-blue-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
             
         } catch (error) {
-            console.error("Failed to load schedule:", error);
+            console.error("Failed to render schedule:", error);
             container.innerHTML = `<p class="text-slate-500 italic p-4">Unable to load schedule.</p>`;
         }
     }, 50);
@@ -38,58 +33,46 @@ export function renderPlannedWorkouts() {
 }
 
 function generateCardsHTML(data) {
-    if (!data || data.length === 0) {
-        return '<p class="text-slate-500 italic p-4">No workouts found.</p>';
-    }
-
     let cardsHtml = '';
-    const todayStr = new Date().toISOString().split('T')[0];
+    
+    // TIMEZONE FIX: Use local calendar date (YYYY-MM-DD) instead of UTC
+    const todayStr = new Date().toLocaleDateString('en-CA'); 
 
     data.forEach(w => {
-        // --- 1. Data Prep ---
-        const dayName = w.day || w.date; // e.g. "MONDAY"
+        const dayName = w.day || w.date; 
         const planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
         const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No specific notes.";
         
-        // Icon & Color based on Actual Sport (falls back to Plan if not completed)
-        const sportType = w.actualSport || 'Other'; 
+        const sportType = w.actualSport || w.activityType || 'Other'; 
         const titleStyle = `style="color: ${getSportColorVar(sportType)}"`;
         const iconHtml = getIcon(sportType);
 
-        // --- 2. Status & Styling Logic ---
-        let statusText = w.status;
+        let statusText = w.status || "PLANNED";
         let statusColorClass = "text-slate-400";
         let cardBorderClass = "border border-slate-700 hover:border-slate-600";
-        let displayDuration = Math.round(w.plannedDuration);
+        let displayDuration = Math.round(w.plannedDuration || 0);
         let displayUnit = "min";
 
-        // Logic: Today
-        if (w.date === todayStr && statusText !== 'COMPLETED') {
+        const isToday = w.date.startsWith ? w.date.startsWith(todayStr) : w.date === todayStr;
+        
+        if (isToday && statusText !== 'COMPLETED') {
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900";
         }
 
-        // Logic: Completed (Green Outline)
         if (statusText === 'COMPLETED' || statusText === 'UNPLANNED') {
             statusText = "COMPLETED";
             statusColorClass = "text-emerald-400";
-            
-            // THE REQUESTED FORMATTING: Green Outline for completed
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900";
             
-            // Optionally show Actual Duration as the big number? 
-            // The snippet showed Plan usually, but let's stick to Plan as big number 
-            // and Actual in footer, unless it was Unplanned.
             if (w.plannedDuration === 0) {
-                displayDuration = Math.round(w.actualDuration);
+                displayDuration = Math.round(w.actualDuration || 0);
                 statusText = "UNPLANNED";
             }
         } 
-        // Logic: Missed
         else if (statusText === 'MISSED') {
             statusColorClass = "text-red-500";
             cardBorderClass = "border border-red-900/50 opacity-75";
         }
-        // Logic: Rest
         else if (statusText === 'REST' || sportType === 'Rest') {
             statusText = "REST DAY";
             displayDuration = "--";
@@ -97,9 +80,8 @@ function generateCardsHTML(data) {
             cardBorderClass = "border border-slate-800 opacity-50";
         }
 
-        // --- 3. HTML Generation (Matching your Snippet) ---
         cardsHtml += `
-            <div class="bg-slate-800 rounded-xl p-6 shadow-lg relative overflow-hidden transition-all ${cardBorderClass}">
+            <div class="bg-slate-800 rounded-xl p-6 shadow-lg relative overflow-hidden transition-all ${cardBorderClass} flex flex-col h-full">
                 
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">${dayName}</span>
@@ -115,13 +97,13 @@ function generateCardsHTML(data) {
                         <div class="text-sm font-bold ${statusColorClass} uppercase tracking-widest mt-1">${statusText}</div>
                     </div>
                     <div class="text-right pl-4 max-w-[55%]">
-                        <h3 class="text-lg font-bold leading-tight" ${titleStyle}>${planName}</h3>
+                        <h3 class="text-lg font-bold leading-tight line-clamp-2" ${titleStyle}>${planName}</h3>
                     </div>
                 </div>
 
                 <div class="h-px bg-slate-700 w-full mb-4"></div>
 
-                <div>
+                <div class="flex-grow">
                     <p class="text-sm text-slate-300 leading-relaxed font-sans line-clamp-3" title="${notes}">${notes}</p>
                 </div>
 

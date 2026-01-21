@@ -169,19 +169,36 @@ body {
 }
 
 
-/* Force AG Grid Quartz to match your App Background */
-.ag-theme-quartz-dark {
-    --ag-background-color: #0f172a !important; /* bg-slate-900 */
-    --ag-header-background-color: #1e293b !important; /* bg-slate-800 */
-    --ag-row-hover-color: #334155 !important;
-    --ag-odd-row-background-color: #0f172a !important;
-    --ag-foreground-color: #e2e8f0 !important;
-    --ag-border-color: #334155 !important;
-    font-family: inherit !important; /* Use your app's font */
+/* --- AG GRID SIDEBAR CONTRAST FIX --- */
+
+/* 1. Make the Sidebar Panel Lighter (Slate 800) so it stands out from the Grid (Slate 900) */
+.ag-theme-quartz-dark .ag-side-bar {
+    background-color: #1e293b !important; 
+    border-left: 1px solid #475569 !important; /* Stronger Border Line */
 }
 
-/* Make the Pivot Sidebar blend in */
-.ag-theme-quartz-dark .ag-side-bar {
-    background-color: #1e293b !important;
+/* 2. Style the Tab Strip (The vertical strip with "Columns" / "Filters" text) */
+.ag-theme-quartz-dark .ag-side-buttons {
+    background-color: #0f172a !important; /* Darker strip for contrast */
     border-left: 1px solid #334155 !important;
+}
+
+/* 3. Make the Sidebar Text/Icons Bright */
+.ag-theme-quartz-dark .ag-side-button-button {
+    color: #94a3b8 !important; /* Slate 400 (Inactive) */
+}
+
+/* 4. Highlight the Active Tab (Cyan Border) */
+.ag-theme-quartz-dark .ag-side-button-button.ag-selected {
+    background-color: #1e293b !important;
+    color: #ffffff !important; /* White text when active */
+    border-left: 3px solid #22d3ee !important; /* Cyan accent line */
+}
+
+/* 5. Headers inside the sidebar */
+.ag-theme-quartz-dark .ag-tool-panel-wrapper .ag-panel-title-bar {
+    background-color: #1e293b !important;
+    border-bottom: 1px solid #334155 !important;
+    color: #f1f5f9 !important; /* White text */
+    font-weight: bold;
 }

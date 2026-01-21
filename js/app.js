@@ -75,40 +75,72 @@
             this.renderCurrentView(savedView);
         },
 
+        // js/app.js
+
         async loadData() {
             try {
-                console.log("📡 Fetching Data...");
-                const [planRes, logRes, gearRes, garminRes, profileRes, readinessRes, trendsRes] = await Promise.all([
-                    fetch('./endurance_plan.md'),
-                    fetch('./data/training_log.json'),
-                    fetch('./data/gear/gear.json'),
-                    fetch('./data/my_garmin_data_ALL.json'),
-                    fetch('./data/profile.json'),
-                    fetch('./data/readiness/readiness.json'),
-                    fetch('./data/trends/trends.json') 
-                ]);
+                console.log("📡 Fetching Data (Isolated Mode)...");
 
-                this.planMd = await planRes.text();
-                this.rawLogData = await logRes.json();
-                this.plannedData = await plannedRes.json();
-                this.garminData = await garminRes.json();
+                // 1. Define sources map (Order no longer matters!)
+                const sources = {
+                    planMd: './endurance_plan.md',
+                    log: './data/training_log.json',
+                    // planned: './data/planned.json', // Safe to comment out now
+                    gear: './data/gear/gear.json',
+                    garmin: './data/my_garmin_data_ALL.json',
+                    profile: './data/profile.json',
+                    readiness: './data/readiness/readiness.json',
+                    trends: './data/trends/trends.json'
+                };
+
+                // 2. Fetch all keys in parallel
+                const requests = Object.entries(sources).map(async ([key, url]) => {
+                    try {
+                        const res = await fetch(url);
+                        return { key, res, ok: res.ok };
+                    } catch (e) {
+                        console.warn(`⚠️ Failed to fetch ${key}:`, e);
+                        return { key, res: null, ok: false };
+                    }
+                });
+
+                const results = await Promise.all(requests);
                 
-                if (gearRes.ok) this.gearData = await gearRes.json();
+                // Convert array back to a lookup object
+                const dataMap = results.reduce((acc, item) => {
+                    acc[item.key] = item;
+                    return acc;
+                }, {});
+
+                // 3. Assign Data Safely (Isolation guaranteed)
+                
+                // -- Text Files --
+                if (dataMap.planMd?.ok) this.planMd = await dataMap.planMd.res.text();
+
+                // -- JSON Files --
+                if (dataMap.log?.ok) this.rawLogData = await dataMap.log.res.json();
+                
+                if (dataMap.gear?.ok) this.gearData = await dataMap.gear.res.json();
                 else this.gearData = { bike: [], run: [] };
 
-                if (profileRes.ok) this.profileData = await profileRes.json();
+                if (dataMap.garmin?.ok) this.garminData = await dataMap.garmin.res.json();
+                else this.garminData = [];
+
+                if (dataMap.profile?.ok) this.profileData = await dataMap.profile.res.json();
                 else this.profileData = {}; 
 
-                if (readinessRes.ok) this.readinessData = await readinessRes.json();
+                if (dataMap.readiness?.ok) this.readinessData = await dataMap.readiness.res.json();
                 else this.readinessData = null;
 
-                if (trendsRes.ok) this.trendsData = await trendsRes.json();
+                if (dataMap.trends?.ok) this.trendsData = await dataMap.trends.res.json();
                 else this.trendsData = null;
 
+                // 4. Parse Log
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
+                console.log("✅ Data Load Complete");
 
             } catch (err) {
-                console.error("❌ Data Load Error:", err);
+                console.error("❌ Critical Data Load Error:", err);
             }
         },
 

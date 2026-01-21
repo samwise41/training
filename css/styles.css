@@ -167,3 +167,30 @@ body {
     min-width: 70px; display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
     padding: 0.75rem; background: #0f172a; border-radius: 0.5rem; border: 1px solid #1e293b;
 }
+
+
+/* AG Grid Overrides for Neon/Slate Theme */
+.ag-theme-alpine-dark {
+    --ag-background-color: #0f172a !important; /* Matches bg-slate-900 */
+    --ag-foreground-color: #e2e8f0 !important;
+    --ag-border-color: #334155 !important;
+    --ag-header-background-color: #1e293b !important; /* Matches bg-slate-800 */
+    --ag-row-hover-color: #1e293b !important;
+    --ag-odd-row-background-color: #0f172a !important;
+    --ag-font-family: inherit !important;
+    --ag-header-foreground-color: #94a3b8 !important; /* Slate-400 */
+}
+
+.ag-theme-alpine-dark .ag-root-wrapper {
+    border: none !important;
+}
+
+/* Custom Scrollbars inside the Grid */
+.ag-body-viewport::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.ag-body-viewport::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 4px;
+}

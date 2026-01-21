@@ -5,7 +5,7 @@ from . import config
 
 def run_cmd(args):
     try:
-        # Capture output so we can print it if there's an error
+        # Capture output to debug if needed
         subprocess.run(args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         print(f"Git Error: {e.stderr.decode().strip()}")
@@ -23,25 +23,27 @@ def main():
         run_cmd(["git", "config", "user.email", "github-actions@github.com"])
         run_cmd(["git", "config", "user.name", "github-actions"])
     except Exception:
-        pass # Ignore if already set
+        pass 
 
-    # 3. Add Files (The Fix)
+    # 3. Add Files (THE FIX)
     print("   -> Staging ALL files in data directory...")
     
-    # FIX: We point to the directories, not specific files.
-    # This tells git: "Add everything inside 'data/' and 'strava_data/'"
-    paths_to_add = ["data", "strava_data", "endurance_plan.md"]
+    # We construct the path to the 'data' folder explicitly
+    data_folder = os.path.join(config.BASE_DIR, 'data')
+    strava_folder = os.path.join(config.BASE_DIR, 'strava_data')
+    plan_file = os.path.join(config.BASE_DIR, 'endurance_plan.md')
+
+    # Force add the entire folders. This picks up NEW and MODIFIED files automatically.
+    paths_to_add = [data_folder, plan_file]
     
-    valid_paths = []
-    for p in paths_to_add:
-        full_p = os.path.join(config.BASE_DIR, p)
-        if os.path.exists(full_p):
-            valid_paths.append(full_p)
-    
-    if valid_paths:
-        # Debug print to prove it's finding the folder
-        print(f"   -> Adding paths: {valid_paths}")
-        cmd = ["git", "add"] + valid_paths
+    # Add strava folder if it exists
+    if os.path.exists(strava_folder):
+        paths_to_add.append(strava_folder)
+        
+    # Run the add command
+    if paths_to_add:
+        # We use standard strings here to avoid path issues
+        cmd = ["git", "add"] + paths_to_add
         run_cmd(cmd)
 
     # 4. Check Status
@@ -64,7 +66,7 @@ def main():
         try:
             run_cmd(["git", "pull"])
         except Exception:
-            pass # Continue to push even if pull failed
+            pass # Continue to push
     
     print("   -> Pushing...")
     run_cmd(["git", "push"])

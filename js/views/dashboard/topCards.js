@@ -1,35 +1,50 @@
-import { getFileContent, formatDate, parseDate, getDaysDiff } from './utils.js';
+// js/views/dashboard/topCards.js
 
-export async function renderTopCards() {
-    const container = document.getElementById('top-cards-container');
-    
-    try {
-        // 1. Load both the Plan Markdown and the Readiness JSON
-        const [planMd, readinessRes] = await Promise.all([
-            getFileContent('endurance_plan.md'),
-            fetch('data/readiness/readiness.json')
-        ]);
+// --- Local Helpers (to avoid import errors) ---
+function parseDate(dateStr) {
+    if (!dateStr) return null;
+    const parts = dateStr.split('-');
+    // Create date in local time (Year, MonthIndex, Day)
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+}
 
-        const readinessData = await readinessRes.json();
+function formatDate(dateStr) {
+    const d = parseDate(dateStr);
+    if (!d) return '';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
 
-        // --- Parsing Plan Logic (Existing) ---
+function getDaysDiff(d1, d2) {
+    const oneDay = 24 * 60 * 60 * 1000;
+    return Math.round((d2 - d1) / oneDay);
+}
+
+export function renderTopCards() {
+    // 1. Access Data from Global State (Synchronously)
+    const planMd = window.App?.planMd || '';
+    const trendsData = window.App?.trendsData || null;
+
+    // 2. Parse Plan for Next Event
+    let currentPhase = 'Unknown';
+    let nextEvent = null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (planMd) {
         const lines = planMd.split('\n');
-        let currentPhase = 'Unknown';
-        let nextEvent = null;
-        const today = new Date();
-
         for (const line of lines) {
-            // Parse Phase (## Phase: Name)
+            // Parse Phase
             const phaseMatch = line.match(/^##\s+(.+)/);
             if (phaseMatch) {
-                currentPhase = phaseMatch[1];
+                currentPhase = phaseMatch[1].trim();
             }
 
-            // Parse Event (- Date: Name)
+            // Parse Event (- YYYY-MM-DD: Name)
             const eventMatch = line.match(/^-\s+(\d{4}-\d{2}-\d{2}):\s+(.+)/);
             if (eventMatch) {
                 const eventDate = parseDate(eventMatch[1]);
-                if (eventDate >= today && !nextEvent) {
+                // We want the first event that is today or in the future
+                if (eventDate && eventDate >= today && !nextEvent) {
                     nextEvent = {
                         date: eventMatch[1],
                         name: eventMatch[2],
@@ -38,73 +53,80 @@ export async function renderTopCards() {
                 }
             }
         }
+    }
 
-        // --- NEW LOGIC: Calculate Readiness Status ---
-        // Get the latest entry (assuming array is sorted by date, or just take the last one)
-        // If your JSON has specific dates, you might want to find(d => d.date === todayString)
-        const latestReadiness = readinessData[readinessData.length - 1]; 
-        
-        let readinessHtml = '<span class="text-gray-500 text-xs">No Data</span>';
-        
-        if (latestReadiness) {
-            // Extract Form/TSB values. Adjust keys 'swim', 'bike', 'run' if your JSON uses different names.
-            // Assuming structure is like: { swim: { form: 10 }, bike: { form: -5 }, ... } 
-            // OR flat: { swimForm: 10, bikeForm: -5 ... }
-            // Adaptation: Detecting structure based on common patterns
-            
+    // 3. Readiness / Performance Logic
+    // We pull from Trends Data to find the lowest performing discipline vs Plan
+    let readinessHtml = '<span class="text-gray-500 text-xs">No Data</span>';
+
+    if (trendsData && trendsData.data && trendsData.data.length > 0) {
+        // Get the most recent week of data
+        const lastWeek = trendsData.data[trendsData.data.length - 1];
+        const cats = lastWeek.categories;
+
+        if (cats) {
             const sports = [
-                { name: 'Swim', val: latestReadiness.swim?.form ?? latestReadiness.swimForm ?? 0 },
-                { name: 'Bike', val: latestReadiness.bike?.form ?? latestReadiness.bikeForm ?? 0 },
-                { name: 'Run', val: latestReadiness.run?.form ?? latestReadiness.runForm ?? 0 }
+                { name: 'Swim', val: cats.swimming?.actual_growth || 0 },
+                { name: 'Bike', val: cats.cycling?.actual_growth || 0 },
+                { name: 'Run',  val: cats.running?.actual_growth || 0 }
             ];
 
             // Find lowest performing discipline
             const lowest = sports.reduce((prev, curr) => prev.val < curr.val ? prev : curr);
+
+            // Format for display
+            const pct = Math.round(lowest.val * 100);
             
-            // Color logic: Negative is typically Red (fatigue), Positive is Green (freshness)
-            // Or usually TSB < -10 is Red, -10 to +10 Green/Grey.
-            // Adjusting to standard TSB coloring: Very negative = Red.
-            const colorClass = lowest.val < -20 ? 'text-red-500' : (lowest.val < -10 ? 'text-orange-400' : 'text-green-400');
-            const icon = lowest.val < 0 ? '📉' : '📈';
+            // Color Logic: Negative/Low is Red (Warning), Positive is Green
+            let colorClass = 'text-green-400';
+            let icon = '📈';
+            
+            if (pct < -10) {
+                colorClass = 'text-red-400';
+                icon = '📉';
+            } else if (pct < 0) {
+                colorClass = 'text-orange-400';
+                icon = '📉';
+            }
 
-            readinessHtml = `<div class="mt-1 text-sm font-medium ${colorClass}">
-                ${icon} ${lowest.name}: ${lowest.val}
-            </div>`;
-        }
-
-        // --- Render HTML ---
-        container.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div class="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
-                    <h3 class="text-gray-400 text-xs uppercase font-bold mb-1">Current Phase</h3>
-                    <p class="text-2xl font-bold text-white">${currentPhase}</p>
-                    <div class="mt-2 text-xs text-blue-400">
-                        Focus: Base Building
-                    </div>
+            readinessHtml = `
+                <div class="mt-2 text-sm font-medium ${colorClass} flex items-center gap-1">
+                    <span>${icon}</span>
+                    <span>${lowest.name}: ${pct > 0 ? '+' : ''}${pct}% (vs Plan)</span>
                 </div>
+            `;
+        }
+    }
 
-                <div class="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
-                    <h3 class="text-gray-400 text-xs uppercase font-bold mb-1">Next Priority Event</h3>
-                    ${nextEvent ? `
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-xl font-bold text-white truncate">${nextEvent.name}</p>
-                                <p class="text-sm text-gray-400">${formatDate(nextEvent.date)}</p>
-                                ${readinessHtml} </div>
-                            <div class="text-right">
-                                <span class="text-3xl font-bold text-blue-500">${nextEvent.daysToGo}</span>
-                                <p class="text-xs text-gray-500 uppercase">Days Out</p>
-                            </div>
-                        </div>
-                    ` : `
-                        <p class="text-gray-500">No upcoming events planned.</p>
-                    `}
+    // 4. Return HTML String (Synchronous)
+    return `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+                <h3 class="text-gray-400 text-xs uppercase font-bold mb-1">Current Phase</h3>
+                <p class="text-2xl font-bold text-white">${currentPhase}</p>
+                <div class="mt-2 text-xs text-blue-400">
+                    Focus: Base Building
                 </div>
             </div>
-        `;
 
-    } catch (error) {
-        console.error('Error rendering top cards:', error);
-        container.innerHTML = `<p class="text-red-500">Failed to load dashboard data.</p>`;
-    }
+            <div class="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
+                <h3 class="text-gray-400 text-xs uppercase font-bold mb-1">Next Priority Event</h3>
+                ${nextEvent ? `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xl font-bold text-white truncate max-w-[200px]" title="${nextEvent.name}">${nextEvent.name}</p>
+                            <p class="text-sm text-gray-400">${formatDate(nextEvent.date)}</p>
+                            ${readinessHtml}
+                        </div>
+                        <div class="text-right">
+                            <span class="text-3xl font-bold text-blue-500">${nextEvent.daysToGo}</span>
+                            <p class="text-xs text-gray-500 uppercase">Days Out</p>
+                        </div>
+                    </div>
+                ` : `
+                    <p class="text-gray-500 mt-2">No upcoming events planned.</p>
+                `}
+            </div>
+        </div>
+    `;
 }

@@ -1,3 +1,7 @@
+{
+type: uploaded file
+fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/metrics/charts.js
+fullContent:
 // js/views/metrics/charts.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend } from './utils.js';
@@ -19,12 +23,26 @@ const buildMetricChart = (displayData, fullData, key) => {
     
     const vals = displayData.map(d => d.val);
     let minV = Math.min(...vals), maxV = Math.max(...vals);
+    
+    // Ensure the chart scale includes the target zones
     if (def.refMin) minV = Math.min(minV, def.refMin);
     if (def.refMax) maxV = Math.max(maxV, def.refMax);
+    
     const range = maxV - minV || 1;
     const dMin = Math.max(0, minV - range * 0.1);
     const dMax = maxV + range * 0.1;
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
+
+    // --- Build Target Lines ---
+    let targetsHtml = '';
+    if (def.refMin !== undefined) {
+        const yVal = getY(def.refMin);
+        targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />`;
+    }
+    if (def.refMax !== undefined) {
+        const yVal = getY(def.refMax);
+        targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />`;
+    }
 
     let pathD = `M ${getX(displayData[0], 0)} ${getY(displayData[0].val)}`;
     let pointsHtml = '';
@@ -37,7 +55,7 @@ const buildMetricChart = (displayData, fullData, key) => {
     const trend = calculateTrend(displayData);
     let trendHtml = trend ? `<line x1="${getX(null, 0)}" y1="${getY(trend.startVal)}" x2="${getX(null, displayData.length - 1)}" y2="${getY(trend.endVal)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.5" />` : '';
 
-    return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors"><div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2"><div class="flex items-center gap-2"><h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid ${def.icon}" style="color: ${color}"></i> ${def.title} <span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span></h3></div><div class="flex items-center gap-2"><span class="text-[9px] text-slate-500 font-mono">${displayData.length} Activities</span><i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.showAnalysisTooltip(event, '${key}')"></i></div></div><div class="flex-1 w-full h-[120px]"><svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible"><line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" /><text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text><text x="${pad.l-5}" y="${getY(dMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMin.toFixed(1)}</text>${trendHtml}<path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />${pointsHtml}</svg></div></div>`;
+    return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors"><div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2"><div class="flex items-center gap-2"><h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid ${def.icon}" style="color: ${color}"></i> ${def.title} <span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span></h3></div><div class="flex items-center gap-2"><span class="text-[9px] text-slate-500 font-mono">${displayData.length} Activities</span><i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.showAnalysisTooltip(event, '${key}')"></i></div></div><div class="flex-1 w-full h-[120px]"><svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible"><line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" /><text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text><text x="${pad.l-5}" y="${getY(dMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMin.toFixed(1)}</text>${targetsHtml}${trendHtml}<path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />${pointsHtml}</svg></div></div>`;
 };
 
 export const updateCharts = (allData, timeRange) => {
@@ -59,3 +77,4 @@ export const updateCharts = (allData, timeRange) => {
     ['vo2max','tss','anaerobic','subjective_bike','endurance','strength','subjective_run','run','mechanical','gct','vert','subjective_swim','swim'].forEach(k => render(`metric-chart-${k}`, k));
     ['30d','90d','6m','1y'].forEach(r => { const b = document.getElementById(`btn-metric-${r}`); if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; });
 };
+}

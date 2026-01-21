@@ -103,6 +103,9 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
         const sport = entry ? entry.actualSport : null;
         const activityName = entry ? (entry.activityName || status) : 'No Activity';
         const minutes = entry ? (entry.actualDuration || 0) : 0;
+        
+        // CHANGED: Grab plannedDuration to filter Consistency views
+        const plannedMinutes = entry ? (entry.plannedDuration || 0) : 0;
 
         let bgColor = 'bg-slate-800/50'; 
         let opacity = '0.3'; 
@@ -111,29 +114,26 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
 
         // --- COLOR LOGIC ---
         if (isConsistencyMode) {
-            // Consistency Mode
-            if (status === 'Unplanned') {
-                tooltipColor = '#10b981';
-                opacity = '1';
-                styleOverride = "background-image: repeating-linear-gradient(45deg, #10b981, #10b981 2px, #065f46 2px, #065f46 4px);";
-            } else if (status === 'Completed') {
-                bgColor = 'bg-emerald-500';
-                tooltipColor = '#10b981';
-                opacity = '1';
-            } else if (status === 'Partial') {
-                bgColor = 'bg-yellow-500';
-                tooltipColor = '#eab308';
-                opacity = '0.9';
-            } else if (status === 'Missed') {
-                bgColor = 'bg-red-500';
-                tooltipColor = '#ef4444';
-                opacity = '0.4';
-            } else if (status === 'Rest') {
-                bgColor = 'bg-emerald-500'; 
-                opacity = '0.1';
+            // UPDATED: Strict Filter -> Only show if PLANNED > 0
+            if (plannedMinutes > 0) {
+                if (status === 'Completed') {
+                    bgColor = 'bg-emerald-500';
+                    tooltipColor = '#10b981';
+                    opacity = '1';
+                } else if (status === 'Partial') {
+                    bgColor = 'bg-yellow-500';
+                    tooltipColor = '#eab308';
+                    opacity = '0.9';
+                } else if (status === 'Missed') {
+                    bgColor = 'bg-red-500';
+                    tooltipColor = '#ef4444';
+                    opacity = '0.4';
+                }
+                // Note: 'Unplanned' implies plannedMinutes == 0, so it falls through to empty (gray)
+                // Note: 'Rest' implies plannedMinutes == 0 (usually), so it falls through to empty
             }
         } else {
-            // Activity Mode
+            // Activity Mode (Shows everything: Planned or Unplanned)
             if (minutes > 0 && sport) {
                 const sportColor = getSportColorVar(sport); 
                 styleOverride = `background-color: ${sportColor};`;
@@ -143,11 +143,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
         }
 
         // --- CELL HTML ---
-        // gap-0.5 is handled by parent grid
         gridCells += `
             <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative ${styleOverride ? '' : bgColor}"
                  style="opacity: ${opacity}; ${styleOverride}"
-                 onmouseover="window.showDashboardTooltip(event, '${dateStr}', 0, '${minutes}', '${activityName}', '${tooltipColor}', '${isConsistencyMode ? (status || 'Rest') : (sport || 'Rest')}', '')"
+                 onmouseover="window.showDashboardTooltip(event, '${dateStr}', ${Math.round(plannedMinutes)}, '${minutes}', '${activityName}', '${tooltipColor}', '${isConsistencyMode ? (status || 'Rest') : (sport || 'Rest')}', '')"
                  onmouseout="document.getElementById('dashboard-tooltip-popup').classList.add('opacity-0')">
             </div>
         `;

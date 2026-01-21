@@ -1,319 +1,92 @@
-import json
+import sys
 import os
-import pandas as pd
-from datetime import datetime
-from . import config, build_plan
+import subprocess
 
-def load_json(path):
-    if not os.path.exists(path): return []
-    with open(path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.append(SCRIPT_DIR)
 
-def save_json(path, data):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4)
+# --- Strava Paths ---
+STRAVA_CYCLING_SCRIPT = os.path.join(ROOT_DIR, 'strava_data', 'cycling', 'process_cycling.py')
+STRAVA_RUNNING_SCRIPT = os.path.join(ROOT_DIR, 'strava_data', 'running', 'process_running.py')
 
-def safe_get(d, key, default=None):
-    """Safely gets a value from a dict."""
-    val = d.get(key)
-    return val if val is not None else default
+# --- Module Imports ---
+from sync_modules import fetch_garmin, sync_database, analyze_trends, update_visuals, git_ops
 
-def normalize_sport(val, sport_type_id=None):
-    """
-    Returns 'Run', 'Bike', or 'Swim' based on input.
-    Input can be a string ('Run') or a Garmin Dict ({'typeKey': 'virtual_ride'...}).
-    """
-    # 1. Trust SportTypeId if present (Integer)
-    if sport_type_id is not None:
-        try:
-            sid = int(sport_type_id)
-            if sid == 1: return 'Run'
-            if sid == 2: return 'Bike'
-            if sid == 5: return 'Swim'
-            if sid == 255: return 'Swim' 
-        except: pass
-
-    # 2. Check value type
-    if isinstance(val, dict):
-        type_key = val.get('typeKey', '').lower()
-        if 'run' in type_key: return 'Run'
-        if 'cycl' in type_key or 'bik' in type_key or 'ride' in type_key: return 'Bike'
-        if 'swim' in type_key: return 'Swim'
-        return 'Other'
-    
-    if isinstance(val, str):
-        s = val.lower()
-        if 'run' in s: return 'Run'
-        if 'bik' in s or 'cycl' in s: return 'Bike'
-        if 'swim' in s: return 'Swim'
-        return val 
-
-    return 'Other'
-
-def detect_garmin_sport(g_item):
-    """Maps Garmin attributes to Plan 'activityType' (Run/Bike/Swim) for Key matching."""
-    return normalize_sport(g_item.get('activityType'), g_item.get('sportTypeId'))
-
-def get_record_key(record):
-    """Generates the unique key YYYY-MM-DD|Sport for a DB record."""
-    date = record.get('date')
-    sport = normalize_sport(record.get('activityType'), record.get('sportTypeId'))
-    return f"{date}|{sport}"
-
-def bundle_activities(activities):
-    """
-    Bundles multiple activities.
-    Logic: Sums duration/distance/calories. 
-    Calculates weighted averages for Power/HR. 
-    """
-    if not activities: return None
-    
-    activities.sort(key=lambda x: safe_get(x, 'duration', 0) or 0, reverse=True)
-    primary = activities[0]
-    
-    combined = primary.copy() 
-    
-    ids = [str(a.get('activityId')) for a in activities if a.get('activityId')]
-    combined['activityId'] = ",".join(ids)
-    
-    def get_sum(key):
-        return sum((safe_get(a, key, 0) or 0) for a in activities)
-
-    combined['duration'] = get_sum('duration')
-    combined['distance'] = get_sum('distance')
-    combined['calories'] = get_sum('calories')
-    combined['elevationGain'] = get_sum('elevationGain') 
-
-    def calc_weighted(key):
-        total_dur = combined['duration']
-        if total_dur == 0: return 0
-        
-        weighted_sum = 0
-        
-        for a in activities:
-            val = safe_get(a, key)
-            dur = safe_get(a, 'duration', 0) or 0
-            if val is not None:
-                weighted_sum += val * dur
-        
-        return weighted_sum / total_dur if total_dur > 0 else 0
-
-    combined['avgPower'] = calc_weighted('avgPower')
-    combined['averageHR'] = calc_weighted('averageHR')
-    combined['normPower'] = calc_weighted('normPower')
-    
-    combined['maxHR'] = max((safe_get(a, 'maxHR', 0) or 0) for a in activities)
-    combined['maxPower'] = max((safe_get(a, 'maxPower', 0) or 0) for a in activities)
-    combined['maxSpeed'] = max((safe_get(a, 'maxSpeed', 0) or 0) for a in activities)
-
-    return combined
+# --- Dashboard & Data Tabs ---
+try:
+    from readiness import createReadiness
+    from gear import createGear
+    from zones import createZones   # <--- ADDED ZONES
+    from dashboard import calculateHeatmaps, calculate_streaks, generate_plannedWorkouts, generate_top_cards
+    from Trends import createTrends
+except ImportError as e:
+    print(f"⚠️ Import Warning: {e}")
 
 def main():
-    # 1. Refresh Plan
-    build_plan.main()
-    
-    planned_data = load_json(config.PLANNED_JSON)
-    garmin_data = load_json(config.GARMIN_JSON)
-    master_log = load_json(config.MASTER_DB_JSON)
-    
-    today_str = datetime.now().strftime('%Y-%m-%d')
+    print("🚀 STARTING DAILY TRAINING SYNC PIPELINE")
+    print("==================================================")
 
-    # --- BUILD LOG MAP & CLAIMED IDs ---
-    log_map = {}
-    existing_ids = set() 
+    # 1. Fetch Garmin
+    print("\n[STEP 1] Fetching Garmin Data...")
+    try:
+        fetch_garmin.main()
+    except Exception as e:
+        print(f"⚠️ Garmin Fetch Warning: {e}")
 
-    for row in master_log:
-        key = get_record_key(row)
-        log_map[key] = row
-        
-        r_id = row.get('id')
-        if r_id:
-            str_id = str(r_id)
-            if ',' in str_id:
-                for sub in str_id.split(','):
-                    if sub.strip().isdigit():
-                        existing_ids.add(sub.strip())
-            elif str_id.strip().isdigit():
-                existing_ids.add(str_id.strip())
+    # 1.5 Sync Strava
+    print("\n[STEP 1.5] Syncing Strava...")
+    try:
+        if os.path.exists(STRAVA_CYCLING_SCRIPT):
+            subprocess.run([sys.executable, STRAVA_CYCLING_SCRIPT], check=True)
+        if os.path.exists(STRAVA_RUNNING_SCRIPT):
+            subprocess.run([sys.executable, STRAVA_RUNNING_SCRIPT], check=True)
+    except Exception as e:
+        print(f"⚠️ Strava Sync Warning: {e}")
 
-    # --- PHASE 1: INGEST PLAN ---
-    for plan in planned_data:
-        if plan['date'] > today_str:
-            continue
+    # 2. Sync Database (This now reads/writes planned.json to the NEW location via config)
+    print("\n[STEP 2] Syncing Databases...")
+    try:
+        sync_database.main()
+    except Exception as e:
+        print(f"❌ Database Sync Failed: {e}")
+        return 
 
-        sport_key = normalize_sport(plan['activityType'])
-        key = f"{plan['date']}|{sport_key}"
+    # 2.5 Generate All Tab Data
+    print("\n[STEP 2.5] Generating Tab Data...")
+    try:
+        print("   -> Running Zones...")
+        createZones.main()  # <--- NOW EXECUTING
         
-        entry = log_map.get(key, {})
+        print("   -> Running Gear...")
+        createGear.main()
         
-        entry.update({
-            'date': plan['date'],
-            'day': plan['day'],
-            'activityType': entry.get('activityType', plan['activityType']),
-            'plannedWorkout': plan['plannedWorkout'],
-            'plannedDuration': plan['plannedDuration'],
-            'notes': plan['notes'],
-            'actualDuration': entry.get('actualDuration', 0),
-            'id': entry.get('id', plan['id']) 
-        })
-        log_map[key] = entry
+        print("   -> Running Readiness...")
+        createReadiness.main()
+        
+        print("   -> Running Trends...")
+        createTrends.main()
 
-    # --- PHASE 2: MATCH ACTUALS ---
-    garmin_grouped = {}
-    for g in garmin_data:
-        g_date = g.get('startTimeLocal', '')[:10]
-        if g_date > today_str: continue
+        print("   -> Running Dashboard Widgets...")
+        calculateHeatmaps.main()
+        calculate_streaks.main()
+        generate_plannedWorkouts.main() # Reads the new planned.json path
+        generate_top_cards.main()
+        
+    except Exception as e:
+        print(f"⚠️ Tab Generation Warning: {e}")
 
-        sid = g.get('sportTypeId')
-        is_allowed_id = sid in config.ALLOWED_SPORT_TYPES
-        
-        g_sport = detect_garmin_sport(g) 
-        is_allowed_str = g_sport in ['Run', 'Bike', 'Swim']
-        
-        if not (is_allowed_id or is_allowed_str):
-            continue
+    # 3, 4, 5 (Trends, Visuals, Git)
+    print("\n[STEP 3] Analyzing Trends...")
+    analyze_trends.main()
 
-        k = f"{g_date}|{g_sport}"
-        if k not in garmin_grouped: garmin_grouped[k] = []
-        garmin_grouped[k].append(g)
-        
-    for key, g_activities in garmin_grouped.items():
-        if len(g_activities) > 1:
-            composite = bundle_activities(g_activities)
-            is_group = True
-        else:
-            composite = g_activities[0]
-            is_group = False
+    print("\n[STEP 4] Updating Visuals...")
+    update_visuals.main()
 
-        # --- GATEKEEPER CHECK ---
-        current_id_str = str(composite.get('activityId'))
-        ids_to_check = current_id_str.split(',') if ',' in current_id_str else [current_id_str]
-        
-        is_claimed = False
-        for check_id in ids_to_check:
-            if check_id.strip() in existing_ids:
-                is_claimed = True
-                break
-        
-        if is_claimed:
-            continue
+    print("\n[STEP 5] Saving to Git...")
+    git_ops.main()
 
-        try:
-            dur_sec = safe_get(composite, 'duration', 0) or 0
-            act_dur_min = dur_sec / 60.0
-        except:
-            act_dur_min = 0
-
-        # FIX: Explicitly populate 'actualSport' using the detection logic
-        telemetry = {
-            "actualWorkout": composite.get('activityName'),
-            "actualDuration": round(act_dur_min, 1),
-            "actualSport": detect_garmin_sport(composite),  # <-- ADDED THIS FIELD
-            "id": composite.get('activityId'),
-            "activityType": composite.get('activityType'), # Raw Garmin Type
-            "sportTypeId": composite.get('sportTypeId'),
-            "duration": composite.get('duration'),
-            "distance": composite.get('distance'),
-            "averageHR": composite.get('averageHR'),
-            "maxHR": composite.get('maxHR'),
-            "aerobicTrainingEffect": composite.get('aerobicTrainingEffect'),
-            "anaerobicTrainingEffect": composite.get('anaerobicTrainingEffect'),
-            "trainingEffectLabel": composite.get('trainingEffectLabel'),
-            "avgPower": composite.get('avgPower'),
-            "maxPower": composite.get('maxPower'),
-            "normPower": composite.get('normPower'),
-            "trainingStressScore": composite.get('trainingStressScore'),
-            "intensityFactor": composite.get('intensityFactor'),
-            "averageSpeed": composite.get('averageSpeed'),
-            "maxSpeed": composite.get('maxSpeed'),
-            "averageBikingCadenceInRevPerMinute": composite.get('averageBikingCadenceInRevPerMinute'),
-            "averageRunningCadenceInStepsPerMinute": composite.get('averageRunningCadenceInStepsPerMinute'),
-            "avgStrideLength": composite.get('avgStrideLength'),
-            "avgVerticalOscillation": composite.get('avgVerticalOscillation'),
-            "avgGroundContactTime": composite.get('avgGroundContactTime'),
-            "vO2MaxValue": composite.get('vO2MaxValue'),
-            "calories": composite.get('calories'),
-            "elevationGain": composite.get('elevationGain'),
-            "RPE": composite.get('RPE'),
-            "Feeling": composite.get('Feeling')
-        }
-
-        if key in log_map:
-            # LINKED
-            log_map[key].update(telemetry)
-            log_map[key]['matchStatus'] = "Linked Group" if is_group else "Linked"
-        else:
-            # UNPLANNED
-            g_date, g_sport = key.split('|')
-            try:
-                day_name = pd.to_datetime(g_date).day_name()
-            except:
-                day_name = ""
-
-            new_row = {
-                "date": g_date,
-                "day": day_name,
-                "plannedWorkout": "",
-                "plannedDuration": 0,
-                "notes": "",
-                "matchStatus": "Unplanned Group" if is_group else "Unplanned"
-            }
-            new_row.update(telemetry)
-            log_map[key] = new_row
-        
-        for check_id in ids_to_check:
-            existing_ids.add(check_id.strip())
-
-    # --- PHASE 4: STATUS LOGIC ---
-    final_list = []
-    
-    for row in log_map.values():
-        match_stat = row.get('matchStatus', '')
-        p_dur = safe_get(row, 'plannedDuration', 0)
-        try: p_dur = float(p_dur)
-        except: p_dur = 0
-        
-        has_actual = False
-        if row.get('id'):
-            sid = str(row.get('id')).replace(',','')
-            if sid.isdigit(): 
-                has_actual = True
-        
-        if not match_stat:
-            if p_dur > 0 and not has_actual:
-                if row['date'] < today_str:
-                    row['matchStatus'] = "Missed"
-                else:
-                    row['matchStatus'] = "Planned"
-        
-        a_dur = safe_get(row, 'actualDuration', 0)
-        try: a_dur = float(a_dur)
-        except: a_dur = 0
-        
-        status = "UNKNOWN"
-        
-        if p_dur > 0 and a_dur > 0:
-            status = "COMPLETED"
-        elif p_dur > 0 and a_dur == 0:
-            if row['date'] < today_str:
-                status = "MISSED"
-            else:
-                status = "PLANNED" 
-        elif p_dur == 0 and a_dur > 0:
-            status = "UNPLANNED"
-        elif row['date'] >= today_str:
-            status = "PLANNED"
-            
-        row['status'] = status
-        
-        if row['date'] <= today_str:
-            final_list.append(row)
-        
-    final_list.sort(key=lambda x: x.get('date', ''), reverse=True)
-    
-    save_json(config.MASTER_DB_JSON, final_list)
-    print(f"   -> Synced Database. Total records: {len(final_list)}")
+    print("\n✅ PIPELINE COMPLETE")
 
 if __name__ == "__main__":
     main()

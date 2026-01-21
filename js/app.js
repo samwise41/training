@@ -3,6 +3,27 @@
 (async function initApp() {
     console.log("🚀 Booting App (JSON Mode)...");
     const cacheBuster = Date.now();
+
+    // Add this method to the App object
+    async fetchWeather() {
+    try {
+        // Simple location approximation (or hardcode your lat/lon if preferred)
+        const locRes = await fetch('https://ipapi.co/json/');
+        const locData = await locRes.json();
+        
+        if (locData.latitude) {
+            const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
+            const weatherData = await weatherRes.json();
+            
+            // Store it in the state property you already created
+            this.weather.current = Math.round(weatherData.current_weather.temperature);
+            this.weather.hourly = weatherData.hourly;
+        }
+    } catch (e) {
+        console.warn("Weather fetch failed:", e);
+    }
+    },
+
     
     // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {

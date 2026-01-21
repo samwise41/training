@@ -130,7 +130,7 @@
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
-        // --- NEW HELPER: Updates Top Bar Title & Weather ---
+        // --- HELPER: Updates Top Bar Title & Weather ---
         updateHeaderUI(viewName) {
             // 1. Update Title
             const titles = { 
@@ -139,7 +139,6 @@
                 ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics'
             };
             
-            // Only update title if viewName is passed (otherwise just update weather)
             if (viewName) {
                 const titleEl = document.getElementById('header-title-dynamic');
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
@@ -156,178 +155,23 @@
             }
         },
 
-        getStatsBar() {
-            return `
-                <div id="stats-bar" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl flex flex-col justify-center shadow-lg">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Current Phase</p>
-                        <div class="flex flex-col">
-                            <span class="text-lg font-bold text-blue-500 leading-tight" id="stat-phase">--</span>
-                            <span class="text-sm font-bold text-white leading-tight mt-1" id="stat-week">--</span>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl flex justify-between items-center shadow-lg relative overflow-hidden">
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Next Event</p>
-                            <div id="stat-event">
-                                <p class="text-lg font-bold text-white leading-tight" id="stat-event-name">--</p>
-                                <div class="flex items-center gap-3 mt-1 text-[10px] font-mono text-slate-400">
-                                    <span id="stat-event-date" class="border-r border-slate-600 pr-3 text-slate-300">--</span>
-                                    <span id="stat-event-countdown" class="uppercase">--</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-right pl-4 border-l border-slate-700/50" id="stat-readiness-box" style="display:none;">
-                            <div class="text-3xl font-black text-slate-200 leading-none tracking-tighter" id="stat-readiness-val">--%</div>
-                            <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Readiness</div>
-                            <div class="flex flex-col items-end gap-1 mt-1">
-                                <div id="stat-readiness-badge" class="px-1.5 py-0.5 rounded bg-slate-900 border text-[8px] font-bold uppercase tracking-wider inline-block">--</div>
-                                <div id="stat-weakest-link" class="text-[9px] text-slate-500 font-mono hidden">
-                                    Limit: <span id="stat-weakest-name" class="font-bold">--</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        },
-
-        updateStats() {
-            if (!this.planMd) return;
-            
-            const statusMatch = this.planMd.match(/\*\*Status:\*\*\s*(.*?)\s+-\s+(.*)/i);
-            const currentPhaseRaw = statusMatch ? statusMatch[1].trim() : "Plan Active";
-            const currentWeek = statusMatch ? statusMatch[2].trim() : "";
-
-            const phaseEl = document.getElementById('stat-phase');
-            if (phaseEl) phaseEl.innerText = currentPhaseRaw;
-            
-            const weekEl = document.getElementById('stat-week');
-            if (weekEl) weekEl.innerText = currentWeek;
-
-            const lines = this.planMd.split('\n');
-            let nextEvent = null;
-            let inTable = false;
-            const today = new Date(); today.setHours(0,0,0,0);
-
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (line.includes('| **Date** |')) { inTable = true; continue; }
-                if (inTable && line.startsWith('| :---')) continue;
-                if (inTable && line.startsWith('|')) {
-                    const clean = line.replace(/^\||\|$/g, '');
-                    const cols = clean.split('|').map(c => c.trim());
-                    if (cols.length >= 2) {
-                        const d = new Date(cols[0]);
-                        if (!isNaN(d.getTime()) && d >= today) {
-                            nextEvent = { 
-                                date: d, name: cols[1], 
-                                swimGoal: cols[7]||'', bikeGoal: cols[9]||'', runGoal: cols[11]||'' 
-                            };
-                            break; 
-                        }
-                    }
-                } else if (inTable && line === '') inTable = false;
-            }
-
-            if (nextEvent) {
-                const nameEl = document.getElementById('stat-event-name');
-                if(nameEl) nameEl.innerText = nextEvent.name;
-                
-                const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
-                const dateEl = document.getElementById('stat-event-date');
-                if(dateEl) dateEl.innerText = nextEvent.date.toLocaleDateString('en-US', dateOptions);
-                
-                const diff = Math.ceil((nextEvent.date - today) / 86400000);
-                const timeStr = diff < 0 ? "Completed" : (diff === 0 ? "Today!" : `${Math.floor(diff/7)}w ${diff%7}d to go`);
-                const cdEl = document.getElementById('stat-event-countdown');
-                if(cdEl) cdEl.innerHTML = `<i class="fa-solid fa-hourglass-half mr-1"></i> ${timeStr}`;
-
-                if (this.parsedLogData && this.parsedLogData.length > 0) {
-                    const parseDur = (str) => {
-                        if(!str || str.includes('km') || str.includes('mi')) return 0;
-                        if(!isNaN(str)) return parseInt(str);
-                        let m=0;
-                        if(str.includes('h')) { const p=str.split('h'); m+=parseInt(p[0])*60; if(p[1]) m+=parseInt(p[1]); }
-                        else if(str.includes(':')) { const p=str.split(':'); m+=parseInt(p[0])*60 + parseInt(p[1]); }
-                        else if(str.includes('m')) m+=parseInt(str);
-                        return m;
-                    };
-
-                    const lookback = new Date(); lookback.setDate(lookback.getDate()-30);
-                    let mS=0, mB=0, mR=0;
-                    
-                    this.parsedLogData.forEach(d => {
-                        if(new Date(d.date) >= lookback) {
-                            let dur = typeof d.actualDuration === 'number' ? d.actualDuration : parseDur(d.duration);
-                            if(d.type==='Swim') mS=Math.max(mS,dur);
-                            if(d.type==='Bike') mB=Math.max(mB,dur);
-                            if(d.type==='Run') mR=Math.max(mR,dur);
-                        }
-                    });
-
-                    const tS = parseDur(nextEvent.swimGoal);
-                    const tB = parseDur(nextEvent.bikeGoal);
-                    const tR = parseDur(nextEvent.runGoal);
-                    
-                    const scores = [];
-                    if(tS>0) scores.push({ type: 'Swim', val: Math.min(Math.round((mS/tS)*100),100), color: 'text-cyan-400' });
-                    if(tB>0) scores.push({ type: 'Bike', val: Math.min(Math.round((mB/tB)*100),100), color: 'text-purple-400' });
-                    if(tR>0) scores.push({ type: 'Run', val: Math.min(Math.round((mR/tR)*100),100), color: 'text-pink-400' });
-
-                    if(scores.length > 0) {
-                        const minScore = scores.reduce((prev, curr) => prev.val < curr.val ? prev : curr);
-                        const box = document.getElementById('stat-readiness-box');
-                        const val = document.getElementById('stat-readiness-val');
-                        const badge = document.getElementById('stat-readiness-badge');
-                        const weakBox = document.getElementById('stat-weakest-link');
-                        const weakName = document.getElementById('stat-weakest-name');
-                        
-                        if(box) {
-                            box.style.display = 'block';
-                            val.innerText = `${minScore.val}%`;
-                            let color = "text-red-500"; let bColor = "border-red-500/50"; let label = "WARNING";
-                            if(minScore.val >= 85) { color="text-emerald-500"; bColor="border-emerald-500/50"; label="READY"; }
-                            else if(minScore.val >= 60) { color="text-yellow-500"; bColor="border-yellow-500/50"; label="BUILD"; }
-
-                            val.className = `text-3xl font-black ${color} leading-none tracking-tighter`;
-                            badge.innerText = label;
-                            badge.className = `px-1.5 py-0.5 rounded bg-slate-900 border ${bColor} ${color} text-[8px] font-bold uppercase tracking-wider inline-block`;
-                            
-                            if (minScore.val < 100) {
-                                weakBox.classList.remove('hidden');
-                                weakName.innerText = minScore.type;
-                                weakName.className = `font-bold ${minScore.color}`;
-                            } else {
-                                weakBox.classList.add('hidden');
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
         updateGearResult() {
             if (this.gearData) {
                 updateGearResult(this.gearData);
             }
         },
 
-        // --- FIXED: Mobile Navigation (Restored Old Logic) ---
+        // --- Mobile Navigation ---
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            const btnClose = document.getElementById('btn-sidebar-close'); // Added this in case it exists
+            const btnClose = document.getElementById('btn-sidebar-close'); 
 
-            // Helper to toggle menu
             const toggleSidebar = () => {
-                // Try both the new way and the old way to be safe
                 sidebar.classList.toggle('-translate-x-full'); // Tailwind way
                 sidebar.classList.toggle('sidebar-closed');    // Old CSS way
                 sidebar.classList.toggle('sidebar-open');      // Old CSS way
-                
                 overlay.classList.toggle('hidden');
             };
 
@@ -338,7 +182,6 @@
                 });
             }
             
-            // Allow clicking overlay or close button to close
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
 
@@ -355,7 +198,6 @@
                     localStorage.setItem('currentView', view);
                     this.renderCurrentView(view);
 
-                    // Close sidebar on selection if on mobile
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }
@@ -364,7 +206,7 @@
         },
 
         renderCurrentView(view) {
-            // --- FIX: Update Header Title & Weather Logic ---
+            // Update Header Title & Weather
             this.updateHeaderUI(view);
 
             const content = document.getElementById('main-content');
@@ -375,10 +217,9 @@
                 try {
                     switch (view) {
                         case 'dashboard':
-                            const statsHtml = this.getStatsBar();
-                            const dashHtml = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
-                            content.innerHTML = statsHtml + dashHtml;
-                            this.updateStats();
+                            // --- CHANGED: Just render the dashboard content ---
+                            // Your new topCards.js logic is assumed to be inside renderDashboard now
+                            content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
                             break;
                         case 'trends':
                             content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
@@ -415,7 +256,6 @@
                 }
                 content.classList.remove('opacity-0');
                 
-                // Ensure active state is set correctly on reload
                 document.querySelectorAll('.nav-item').forEach(b => {
                     if (b.dataset.view === view) {
                         b.classList.remove('text-slate-400', 'border-transparent');

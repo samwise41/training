@@ -1,7 +1,4 @@
-{
-type: uploaded file
-fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/trends/index.js
-fullContent:
+
 import { buildCollapsibleSection } from './utils.js';
 import { renderVolumeChart } from './volume.js';
 import { renderDynamicCharts } from './adherence.js';
@@ -79,4 +76,3 @@ export function renderTrends(mergedLogData, _trendsData) {
 }
 
 export { updateDurationAnalysis };
-}

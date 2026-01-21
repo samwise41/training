@@ -2,16 +2,21 @@
 
 export const GRID_CONFIG = {
     // 1. VISUALS
-    themeClass: 'ag-theme-quartz-dark', // Modern Dark Theme
+    themeClass: 'ag-theme-quartz-dark',
     rowHeight: 40,
     headerHeight: 45,
     animateRows: true,
 
-    // 2. PIVOT & GROUPING DEFAULTS (Matches your snippet)
-    pivotMode: true,  // <--- Starts in Pivot Mode like the docs
-    pivotPanelShow: "always", // Shows the "drop zones" at the top
+    // --- NEW: ENABLE CHARTS ---
+    enableRangeSelection: true, // Required: Allows you to drag-select cells
+    enableCharts: true,         // Required: Turns on the Charting engine
+    popupParent: document.body, // Optional: Ensures menus/charts don't get clipped
 
-    // 3. SIDEBAR CONFIGURATION (Matches your snippet)
+    // 2. PIVOT & GROUPING
+    pivotMode: true,
+    pivotPanelShow: "always",
+
+    // 3. SIDEBAR CONFIGURATION
     sideBar: {
         toolPanels: [
             {
@@ -21,11 +26,10 @@ export const GRID_CONFIG = {
                 iconKey: "columns",
                 toolPanel: "agColumnsToolPanel",
                 toolPanelParams: {
-                    // Start with these FALSE so you can actually interact with them
                     suppressRowGroups: false,
                     suppressValues: false,
                     suppressPivots: false,
-                    suppressPivotMode: false, // Set to TRUE if you want to hide the toggle switch
+                    suppressPivotMode: false,
                 },
             },
             {
@@ -51,66 +55,41 @@ export const GRID_CONFIG = {
         enableValue: true,
     },
 
-    // 5. COLUMN DEFINITIONS (Mapped to YOUR data)
+    // 5. COLUMN DEFINITIONS
     columnDefs: [
-        // --- Dimensions (Rows/Columns) ---
-        { 
-            field: "year", 
-            headerName: "Year", 
-            rowGroup: true, // <--- Group by Year first
-            hide: true      // Hide from grid view (standard when grouping)
-        },
-        { 
-            field: "type", 
-            headerName: "Sport", 
-            pivot: true,    // <--- Pivot the columns by Sport (Bike/Run/Swim)
-            enablePivot: true 
-        },
-        { 
-            field: "month", 
-            headerName: "Month", 
-            rowGroup: true, // <--- Group by Month second
-            hide: true 
-        },
+        // --- Dimensions ---
+        { field: "year", headerName: "Year", rowGroup: true, hide: true },
+        { field: "type", headerName: "Sport", pivot: true, enablePivot: true },
+        { field: "month", headerName: "Month", rowGroup: true, hide: true },
         { field: "date", headerName: "Date", sort: 'desc' },
         { field: "workout", headerName: "Workout" },
 
-        // --- Values (The Numbers) ---
+        // --- Values (Summable for Charts) ---
         { 
-            field: "distance", 
-            headerName: "Distance (mi)", 
-            aggFunc: "sum", 
-            enableValue: true,
+            field: "distance", headerName: "Distance (mi)", 
+            aggFunc: "sum", enableValue: true, chartDataType: 'series', // Hint to Chart engine
             valueFormatter: p => p.value ? p.value.toFixed(1) : ''
         },
         { 
-            field: "elevation", 
-            headerName: "Elevation (ft)", 
-            aggFunc: "sum", 
-            enableValue: true,
+            field: "elevation", headerName: "Elevation (ft)", 
+            aggFunc: "sum", enableValue: true, chartDataType: 'series',
             valueFormatter: p => p.value ? Math.round(p.value).toLocaleString() : ''
         },
         { 
-            field: "duration", 
-            headerName: "Duration (hrs)", 
-            aggFunc: "sum", 
-            enableValue: true,
+            field: "duration", headerName: "Duration (hrs)", 
+            aggFunc: "sum", enableValue: true, chartDataType: 'series',
             valueFormatter: p => p.value ? p.value.toFixed(1) : ''
         },
         { 
-            field: "tss", 
-            headerName: "TSS", 
-            aggFunc: "sum", 
-            enableValue: true 
+            field: "tss", headerName: "TSS", 
+            aggFunc: "sum", enableValue: true, chartDataType: 'series'
         }
     ],
     
-    // 6. AUTO GROUP COLUMN (The first column with the caret >)
+    // 6. AUTO GROUP
     autoGroupColumnDef: {
         minWidth: 200,
         headerName: 'Timeline', 
-        cellRendererParams: {
-            suppressCount: false, // Shows (12) count next to groups
-        }
+        cellRendererParams: { suppressCount: false }
     }
 };

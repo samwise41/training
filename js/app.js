@@ -81,7 +81,6 @@
                 const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes, trendsRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
-                    fetch('./data/planned.json'),
                     fetch('./data/gear/gear.json'),
                     fetch('./data/my_garmin_data_ALL.json'),
                     fetch('./data/profile.json'),

@@ -95,12 +95,12 @@ export function mergeAndDeduplicate(planned, actuals) {
 export const getSportColorVar = (type) => {
     const t = String(type || '').toLowerCase();
     
-    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return '#a855f7'; // Purple
-    if (t.includes('run')) return '#ec4899'; // Pink
-    if (t.includes('swim')) return '#3b82f6'; // Blue
+    if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return getColor('--color-bike'); // Purple
+    if (t.includes('run')) return getColor('--color-run'); // Pink
+    if (t.includes('swim')) return getColor('--color-swim'); // Blue
     if (t.includes('strength') || t.includes('weight')) return '#94a3b8'; // Slate
     
-    return '#10b981'; // Emerald (Default)
+    return getColor('--color-all'); // Emerald (Default)
 };
 
 export const getIcon = (type) => { 

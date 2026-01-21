@@ -78,7 +78,7 @@
         async loadData() {
             try {
                 console.log("📡 Fetching Data...");
-                const [planRes, logRes, plannedRes, gearRes, garminRes, profileRes, readinessRes, trendsRes] = await Promise.all([
+                const [planRes, logRes, gearRes, garminRes, profileRes, readinessRes, trendsRes] = await Promise.all([
                     fetch('./endurance_plan.md'),
                     fetch('./data/training_log.json'),
                     fetch('./data/gear/gear.json'),

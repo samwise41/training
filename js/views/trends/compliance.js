@@ -1,4 +1,7 @@
-
+{
+type: uploaded file
+fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/trends/compliance.js
+fullContent:
 import { getIconForType } from './utils.js';
 
 // Helper: Color Coding based on %
@@ -34,19 +37,24 @@ const buildConcentricChart = (d30, d60, centerLabel) => {
                     <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">${centerLabel}</span>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px] w-full max-w-[160px]">
-                <div class="text-right font-bold text-slate-400 flex items-center justify-end gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${color1}"></span> 30d
-                </div>
-                <div class="font-mono text-white flex items-center gap-1 truncate" title="${d30.label}">
-                    ${d30.pct}% <span class="text-slate-500 opacity-70">(${d30.label})</span>
+            
+            <div class="flex flex-col gap-1 text-[10px] w-full items-center">
+                <div class="flex items-center justify-center gap-2">
+                    <span class="font-bold text-slate-400 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${color1}"></span> 30d
+                    </span>
+                    <span class="font-mono text-white flex items-center gap-1">
+                        ${d30.pct}% <span class="text-slate-500 opacity-70">(${d30.label})</span>
+                    </span>
                 </div>
                 
-                <div class="text-right font-bold text-slate-500 flex items-center justify-end gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${color2}"></span> 60d
-                </div>
-                <div class="font-mono text-slate-300 flex items-center gap-1 truncate" title="${d60.label}">
-                    ${d60.pct}% <span class="text-slate-600 opacity-70">(${d60.label})</span>
+                <div class="flex items-center justify-center gap-2">
+                    <span class="font-bold text-slate-500 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${color2}"></span> 60d
+                    </span>
+                    <span class="font-mono text-slate-300 flex items-center gap-1">
+                        ${d60.pct}% <span class="text-slate-600 opacity-70">(${d60.label})</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -92,3 +100,4 @@ export const renderComplianceSection = (complianceData) => {
         </div>
     `;
 };
+}

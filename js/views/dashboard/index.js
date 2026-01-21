@@ -1,4 +1,5 @@
-import { renderPlannedWorkouts } from './plannedWorkouts.js';
+const progressHtml = renderPr
+    import { renderPlannedWorkouts } from './plannedWorkouts.js';
 import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
 import { renderTopCards } from './topCards.js';
@@ -121,8 +122,8 @@ export function renderDashboard( mergedLogData, readinessData) {
 
     // 2. Render Widgets
     const topCardsHtml = renderTopCards();
-    const progressHtml = renderProgressWidget(workouts, fullLogData);
-    const plannedWorkoutsHtml = renderPlannedWorkouts(workouts); 
+    const progressHtml = renderProgressWidget();
+    const plannedWorkoutsHtml = renderPlannedWorkouts(); 
     const heatmapsHtml = renderHeatmaps();
 
     const syncButtonHtml = `

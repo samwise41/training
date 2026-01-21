@@ -10,10 +10,8 @@ const chartState = {
     Bike: false,
     Run: false,
     Swim: false,
-    timeRange: '30d', // This now controls the Rolling Window (7d, 30d, 60d etc)
-    showWeekly: true, 
-    show30d: false, // Legacy toggle, might repurpose or keep simple
-    show60d: false    
+    timeRange: '30d', // Matches the keys in JSON (7d, 30d, 60d...)
+    showWeekly: true // Only one line style needed now, simplification
 };
 
 let currentRollingData = [];
@@ -48,18 +46,15 @@ const buildTrendChart = (title, isCount, rollingData) => {
     const chartW = width - padding.left - padding.right; const chartH = height - padding.top - padding.bottom;
 
     const activeTypes = Object.keys(chartState).filter(k => chartState[k] && k !== 'timeRange' && !k.startsWith('show')); 
-    
-    // We want to graph the 'chartState.timeRange' rolling average for each active sport
-    // e.g. If '30d' is selected, we show the 30d rolling average line for Bike and Run
     const targetMetric = isCount ? 'count_pct' : 'duration_pct';
-    const rangeKey = chartState.timeRange; // '7d', '30d', '60d' etc
+    const rangeKey = chartState.timeRange; 
 
     let allValues = [];
     
-    // 1. Collect values for Y-scale
+    // Collect values for Scale
     activeTypes.forEach(type => {
         rollingData.forEach(pt => {
-             // Access: pt['All']['30d']['duration_pct']
+             // Access: Week -> Sport -> Window -> Metric
              if (pt[type] && pt[type][rangeKey]) {
                  allValues.push(pt[type][rangeKey][targetMetric]);
              }
@@ -105,9 +100,6 @@ const buildTrendChart = (title, isCount, rollingData) => {
         const color = COLOR_MAP[type]; 
         let dPath = '';
         
-        // Filter out weeks that don't have data if necessary, or just plot 0
-        // Currently adherence.json has 52 weeks guaranteed
-        
         rollingData.forEach((pt, i) => {
             if (!pt[type] || !pt[type][rangeKey]) return;
             
@@ -127,7 +119,7 @@ const buildTrendChart = (title, isCount, rollingData) => {
 
     // X Axis Labels
     let labelsHtml = '';
-    const modVal = 4; // Show every 4th label (monthly-ish)
+    const modVal = 4; // Monthly-ish labels
     
     rollingData.forEach((p, i) => {
         if (i % modVal === 0 || i === rollingData.length - 1) {
@@ -207,8 +199,8 @@ export const renderDynamicCharts = (containerId, rollingData) => {
         <div id="trend-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-2 rounded shadow-xl text-xs pointer-events-none opacity-0 transition-opacity"></div>
     `;
 
-    const chart1 = buildTrendChart("Adherence % (Duration)", false, rollingData);
-    const chart2 = buildTrendChart("Adherence % (Count)", true, rollingData);
+    const chart1 = buildTrendChart("Rolling Adherence (Duration Based)", false, rollingData);
+    const chart2 = buildTrendChart("Rolling Adherence (Count Based)", true, rollingData);
 
     container.innerHTML = `${controlsHtml}${chart1}${chart2}`;
 };

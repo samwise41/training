@@ -1,6 +1,11 @@
 // js/views/metrics/definitions.js
 
-
+const getColor = (varName) => {
+    if (typeof window !== "undefined" && window.getComputedStyle) {
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+    return '#888888'; // Fallback
+};
 
 // UPDATED: Using Hex Codes to ensure charts are not black
 export const METRIC_DEFINITIONS = {

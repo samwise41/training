@@ -43,7 +43,14 @@ function generateCardsHTML(data) {
     }
 
     let cardsHtml = '';
-    const todayStr = new Date().toISOString().split('T')[0];
+      // FIX: Use local time components instead of toISOString() (which is UTC)
+
+    const d = new Date();
+    const todayStr = [
+        d.getFullYear(),
+        String(d.getMonth() + 1).padStart(2, '0'),
+        String(d.getDate()).padStart(2, '0')
+    ].join('-');
 
     data.forEach(w => {
         // --- 1. Data Prep ---

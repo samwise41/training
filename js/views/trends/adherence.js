@@ -152,7 +152,7 @@ const buildTrendChart = (title, isCount, rawData) => {
             let opacity = '1';
 
             if (metric === '7d') { dashArray = 'none'; strokeWidth = '2'; opacity = '0.9'; } 
-            if (metric === '30d') { dashArray = '1,2'; strokeWidth = '1.5'; opacity = '0.75'; } 
+            if (metric === '30d') { dashArray = '1,3'; strokeWidth = '1.5'; opacity = '0.75'; } 
             if (metric === '60d') { dashArray = '4,3,1,2'; strokeWidth = '1'; opacity = '0.55'; } // Dash-Dot fallback
             if (metric === '90d') { dashArray = '6,4'; strokeWidth = '.6'; opacity = '0.45'; } 
 

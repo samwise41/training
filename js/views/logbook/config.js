@@ -7,16 +7,28 @@ export const GRID_CONFIG = {
     headerHeight: 45,
     animateRows: true,
 
-    // --- NEW: ENABLE CHARTS ---
-    enableRangeSelection: true, // Required: Allows you to drag-select cells
-    enableCharts: true,         // Required: Turns on the Charting engine
-    popupParent: document.body, // Optional: Ensures menus/charts don't get clipped
+    // 2. CHARTING & SELECTION (Critical)
+    enableRangeSelection: true, 
+    enableCharts: true,         
+    popupParent: document.body,
 
-    // 2. PIVOT & GROUPING
+    // 3. FORCE CONTEXT MENU (This fixes the missing Chart option)
+    getContextMenuItems: (params) => {
+        return [
+            'copy',
+            'copyWithHeaders',
+            'separator',
+            'chartRange', // <--- Explicitly adds the Chart menu
+            'separator',
+            'export'
+        ];
+    },
+
+    // 4. PIVOT DEFAULTS
     pivotMode: true,
     pivotPanelShow: "always",
 
-    // 3. SIDEBAR CONFIGURATION
+    // 5. SIDEBAR (Standard Config)
     sideBar: {
         toolPanels: [
             {
@@ -43,7 +55,6 @@ export const GRID_CONFIG = {
         defaultToolPanel: "columns",
     },
 
-    // 4. COLUMN DEFAULTS
     defaultColDef: {
         flex: 1,
         minWidth: 100,
@@ -55,19 +66,17 @@ export const GRID_CONFIG = {
         enableValue: true,
     },
 
-    // 5. COLUMN DEFINITIONS
     columnDefs: [
-        // --- Dimensions ---
         { field: "year", headerName: "Year", rowGroup: true, hide: true },
         { field: "type", headerName: "Sport", pivot: true, enablePivot: true },
         { field: "month", headerName: "Month", rowGroup: true, hide: true },
         { field: "date", headerName: "Date", sort: 'desc' },
         { field: "workout", headerName: "Workout" },
 
-        // --- Values (Summable for Charts) ---
+        // Values
         { 
             field: "distance", headerName: "Distance (mi)", 
-            aggFunc: "sum", enableValue: true, chartDataType: 'series', // Hint to Chart engine
+            aggFunc: "sum", enableValue: true, chartDataType: 'series',
             valueFormatter: p => p.value ? p.value.toFixed(1) : ''
         },
         { 
@@ -86,7 +95,6 @@ export const GRID_CONFIG = {
         }
     ],
     
-    // 6. AUTO GROUP
     autoGroupColumnDef: {
         minWidth: 200,
         headerName: 'Timeline', 

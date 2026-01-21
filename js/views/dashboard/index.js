@@ -3,6 +3,68 @@ import { renderProgressWidget } from './progressWidget.js';
 import { renderHeatmaps } from './heatmaps.js';
 import { renderTopCards } from './topCards.js';
 
+// --- GLOBAL CLICK HANDLER (To close tooltip) ---
+document.addEventListener('click', (e) => {
+    // If click target is NOT a heatmap cell, hide the tooltip
+    if (!e.target.closest('.heatmap-cell')) {
+        const tooltip = document.getElementById('dashboard-tooltip-popup');
+        if (tooltip) tooltip.classList.add('opacity-0');
+    }
+});
+
+// --- NEW TOOLTIP CLICK HANDLER ---
+window.handleHeatmapClick = (evt, date, plan, act, label, color, sportType, details) => {
+    evt.stopPropagation(); // Stop click from bubbling to document (which would close it)
+
+    let tooltip = document.getElementById('dashboard-tooltip-popup');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'dashboard-tooltip-popup';
+        tooltip.className = 'z-50 bg-slate-900 border border-slate-600 p-3 rounded-md shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed min-w-[140px]';
+        document.body.appendChild(tooltip);
+    }
+
+    // Populate Content
+    const detailsHtml = details ? `
+        <div class="mt-2 pt-2 border-t border-slate-700 border-dashed text-slate-400 font-mono text-[10px] leading-tight text-left">
+            ${details}
+        </div>
+    ` : '';
+
+    tooltip.innerHTML = `
+        <div class="text-center">
+            <div class="text-white font-bold text-sm mb-0.5 whitespace-nowrap">
+                ${label}
+            </div>
+            <div class="text-[10px] text-slate-400 font-normal mb-1">${date}</div>
+            <div class="text-[10px] text-slate-200 font-mono font-bold border-b border-slate-700 pb-1 mb-1">${sportType}</div>
+            <div class="text-[10px] text-slate-400">Plan: ${plan}m | Act: ${act}m</div>
+            ${detailsHtml}
+        </div>
+    `;
+
+    // Position
+    const x = evt.clientX;
+    const y = evt.clientY;
+    const viewportWidth = window.innerWidth;
+    
+    tooltip.style.top = `${y - 85}px`; 
+    tooltip.style.left = ''; tooltip.style.right = '';
+
+    if (x > viewportWidth * 0.60) {
+        tooltip.style.right = `${viewportWidth - x + 10}px`;
+        tooltip.style.left = 'auto';
+    } else {
+        tooltip.style.left = `${x - 70}px`; 
+        tooltip.style.right = 'auto';
+    }
+    
+    if (parseInt(tooltip.style.left) < 10) tooltip.style.left = '10px';
+
+    // Show
+    tooltip.classList.remove('opacity-0');
+};
+
 // --- GITHUB SYNC TRIGGER ---
 window.triggerGitHubSync = async () => {
     let token = localStorage.getItem('github_pat');
@@ -52,56 +114,6 @@ window.triggerGitHubSync = async () => {
     }
 };
 
-// --- TOOLTIP HANDLER ---
-window.showDashboardTooltip = (evt, date, plan, act, label, color, sportType, details) => {
-    let tooltip = document.getElementById('dashboard-tooltip-popup');
-    
-    if (!tooltip) {
-        tooltip = document.createElement('div');
-        tooltip.id = 'dashboard-tooltip-popup';
-        tooltip.className = 'z-50 bg-slate-900 border border-slate-600 p-3 rounded-md shadow-xl text-xs pointer-events-none opacity-0 transition-opacity fixed min-w-[140px]';
-        document.body.appendChild(tooltip);
-    }
-
-    const detailsHtml = details ? `
-        <div class="mt-2 pt-2 border-t border-slate-700 border-dashed text-slate-400 font-mono text-[10px] leading-tight text-left">
-            ${details}
-        </div>
-    ` : '';
-
-    tooltip.innerHTML = `
-        <div class="text-center">
-            <div class="text-white font-bold text-sm mb-0.5 whitespace-nowrap">
-                ${label}
-            </div>
-            <div class="text-[10px] text-slate-400 font-normal mb-1">${date}</div>
-            <div class="text-[10px] text-slate-200 font-mono font-bold border-b border-slate-700 pb-1 mb-1">${sportType}</div>
-            ${detailsHtml}
-        </div>
-    `;
-
-    const x = evt.clientX;
-    const y = evt.clientY;
-    const viewportWidth = window.innerWidth;
-    
-    tooltip.style.top = `${y - 75}px`; 
-    tooltip.style.left = ''; tooltip.style.right = '';
-
-    if (x > viewportWidth * 0.60) {
-        tooltip.style.right = `${viewportWidth - x + 10}px`;
-        tooltip.style.left = 'auto';
-    } else {
-        tooltip.style.left = `${x - 70}px`; 
-        tooltip.style.right = 'auto';
-    }
-    
-    if (parseInt(tooltip.style.left) < 10) tooltip.style.left = '10px';
-
-    tooltip.classList.remove('opacity-0');
-    if (window.dashTooltipTimer) clearTimeout(window.dashTooltipTimer);
-    window.dashTooltipTimer = setTimeout(() => tooltip.classList.add('opacity-0'), 3000);
-};
-
 // --- MAIN RENDER FUNCTION ---
 export function renderDashboard(plannedJson, mergedLogData) {
     const fullLogData = mergedLogData || [];
@@ -135,7 +147,6 @@ export function renderDashboard(plannedJson, mergedLogData) {
         </div>
     `;
 
-    // REORDERED: Heatmaps are now at the bottom
     return `
         ${syncButtonHtml}
         ${topCardsHtml}

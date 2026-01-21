@@ -17,8 +17,7 @@ def main():
         print("   -> Not a git repository. Skipping.")
         return
 
-    # 2. Configure Git Identity (CRITICAL FIX)
-    # This ensures the runner knows 'who' is committing
+    # 2. Configure Git Identity
     print("   -> Configuring Git Identity...")
     try:
         run_cmd(["git", "config", "user.email", "github-actions@github.com"])
@@ -28,19 +27,24 @@ def main():
 
     # 3. Add Files
     print("   -> Staging files...")
-    files_to_add = [
-        config.MASTER_DB_JSON,
-        config.PLANNED_JSON,
-        config.GARMIN_JSON,
-        config.COACH_BRIEFING_MD,
-        config.PLAN_MARKDOWN
+    
+    # FIX: Add the ENTIRE data directory to capture all subfolders (dashboard, readiness, etc.)
+    # Also add strava_data if it exists to capture those updates too.
+    paths_to_add = [
+        config.DATA_DIR,         # Catch-all for data/ (trends, gear, dashboard, etc.)
+        config.PLAN_MARKDOWN     # The endurance_plan.md file
     ]
     
-    # Filter for files that actually exist to avoid errors
-    valid_files = [f for f in files_to_add if os.path.exists(f)]
+    # Optional: Add strava_data if it exists (for the power/pace curves)
+    strava_dir = os.path.join(config.BASE_DIR, 'strava_data')
+    if os.path.exists(strava_dir):
+        paths_to_add.append(strava_dir)
+
+    # Filter for paths that actually exist
+    valid_paths = [p for p in paths_to_add if os.path.exists(p)]
     
-    if valid_files:
-        cmd = ["git", "add"] + valid_files
+    if valid_paths:
+        cmd = ["git", "add"] + valid_paths
         run_cmd(cmd)
 
     # 4. Check Status
@@ -60,8 +64,12 @@ def main():
         run_cmd(["git", "pull", "--rebase"])
     except Exception:
         print("   -> Rebase failed/conflict. Trying standard pull...")
-        run_cmd(["git", "pull"])
-    
+        try:
+            run_cmd(["git", "pull"])
+        except Exception as e:
+            print(f"   -> Standard pull failed: {e}")
+            # We continue to try pushing even if pull failed, though it might reject.
+
     print("   -> Pushing...")
     run_cmd(["git", "push"])
     print("   -> Git Sync Success.")

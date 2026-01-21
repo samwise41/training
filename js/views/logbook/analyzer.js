@@ -23,8 +23,11 @@ export const renderAnalyzer = (rawLogData) => {
     `;
 };
 
+
+
 // --- LOGIC ---
 const initAGGrid = (gridId, statsId, rawData) => {
+    agGrid.LicenseManager.setLicenseKey("MTc3MTU0NTYwMDAwMA==00161e219ce2062df968d7b521e69b85");
     const gridDiv = document.getElementById(gridId);
     
     // 1. Data Parsing Helper

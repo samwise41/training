@@ -6,25 +6,25 @@ const SPORT_CONFIG = {
         color: 'text-swim',      // Uses the .text-swim class from styles.css
         icon: 'fa-person-swimming', 
         label: 'Swim', 
-        bar: 'bg-swim'           // Uses the .bg-swim class from styles.css
+        bar: 'bg-icon-swim'           // Uses the .bg-swim class from styles.css
     },
     bike: { 
         color: 'text-bike',      // Uses .text-bike
         icon: 'fa-person-biking', 
         label: 'Bike', 
-        bar: 'bg-bike'           // Uses .bg-bike
+        bar: 'bg-icon-bike'           // Uses .bg-bike
     },
     bikeElev: { 
         color: 'text-bike',      // Shared color for Bike Climb
         icon: 'fa-mountain', 
         label: 'Bike (Climb)', 
-        bar: 'bg-bike' 
+        bar: 'bg-icon-bike' 
     },
     run: { 
         color: 'text-run',       // Uses .text-run
         icon: 'fa-person-running', 
         label: 'Run', 
-        bar: 'bg-run'            // Uses .bg-run
+        bar: 'bg-icon-run'            // Uses .bg-run
     }
 };
 

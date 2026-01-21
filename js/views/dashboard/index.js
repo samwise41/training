@@ -115,21 +115,9 @@ window.triggerGitHubSync = async () => {
 };
 
 // --- MAIN RENDER FUNCTION ---
-export function renderDashboard(plannedJson, mergedLogData, readinessData) {
+export function renderDashboard( mergedLogData, readinessData) {
     const fullLogData = mergedLogData || [];
 
-    // 1. Prepare Workout Data
-    let workouts = [];
-    if (Array.isArray(plannedJson)) {
-        workouts = plannedJson.map(item => ({
-            ...item,
-            date: item.date ? item.date : new Date().toISOString().split('T')[0], 
-            planned: item.plannedWorkout,
-            actual: item.actualWorkout || ''
-        }));
-        
-        workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
-    }
 
     // 2. Render Widgets
     const topCardsHtml = renderTopCards();

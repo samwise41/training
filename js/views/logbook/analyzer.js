@@ -23,14 +23,18 @@ export const renderAnalyzer = (rawLogData) => {
     `;
 };
 
-
-
 // --- LOGIC ---
 const initAGGrid = (gridId, statsId, rawData) => {
-    agGrid.LicenseManager.setLicenseKey("MTc3MTU0NTYwMDAwMA==00161e219ce2062df968d7b521e69b85");
+    
+    // REPLACE WITH YOUR GITHUB SECRET PLACEHOLDER
+    const licenseKey = '__AG_GRID_LICENSE_KEY__';
+    if (licenseKey && !licenseKey.startsWith('__')) {
+        agGrid.LicenseManager.setLicenseKey(licenseKey);
+    }
+
     const gridDiv = document.getElementById(gridId);
     
-    // 1. Data Parsing Helper
+    // 1. UPDATED DATA PARSER (Captures more fields now)
     const rowData = rawData.map(d => {
         // Parse Duration
         let min = 0;
@@ -54,55 +58,55 @@ const initAGGrid = (gridId, statsId, rawData) => {
             elev = parseInt(d.elevation.replace(/[^\d]/g, '')) || 0;
         } else { elev = d.elevation || 0; }
 
-        // Add Year/Month for better Grouping
+        // Year/Month for Grouping
         const dateObj = new Date(d.date);
         const year = isNaN(dateObj) ? 'Unknown' : dateObj.getFullYear();
         const month = isNaN(dateObj) ? 'Unknown' : dateObj.toLocaleString('default', { month: 'short' });
 
         return {
+            // Standard Fields
             date: d.date, 
             year: year,
             month: month,
             type: d.type,
+            notes: d.notes || '',
+            
+            // Metrics (Summable)
             distance: dist,
             elevation: elev,
             duration: min,
             tss: d.tss || 0,
-            notes: d.notes || ''
+            calories: d.calories || 0,
+            
+            // Metrics (Average-able)
+            avg_hr: d.avg_hr || d.hr || 0,
+            max_hr: d.max_hr || 0,
+            watts: d.avg_power || d.watts || 0,
+            rpe: d.rpe || 0,
+            
+            // Categories (Groupable)
+            equipment: d.equipment || d.shoes || d.bike || '' 
         };
     });
 
-    // 2. Column Definitions (Enterprise Features Enabled)
+    // 2. COLUMN DEFINITIONS (Explicitly define every field you want to see)
     const columnDefs = [
         { 
-            field: "date", 
-            headerName: "Date", 
-            width: 120,
-            sort: 'desc',
-            filter: 'agDateColumnFilter',
+            field: "date", headerName: "Date", width: 120,
+            sort: 'desc', filter: 'agDateColumnFilter',
             comparator: (valueA, valueB) => new Date(valueA) - new Date(valueB)
         },
         { 
-            field: "year", 
-            headerName: "Year", 
-            width: 90,
-            enableRowGroup: true, // Allows grouping by Year
-            hide: true // Hidden by default (useful when dragging to group)
+            field: "year", headerName: "Year", width: 90,
+            enableRowGroup: true, hide: true 
         },
         { 
-            field: "month", 
-            headerName: "Month", 
-            width: 90,
-            enableRowGroup: true,
-            hide: true 
+            field: "month", headerName: "Month", width: 90,
+            enableRowGroup: true, hide: true 
         },
         { 
-            field: "type", 
-            headerName: "Sport", 
-            width: 140,
-            filter: true,
-            enableRowGroup: true, // Allows grouping by Sport
-            enablePivot: true,    // Allows pivoting
+            field: "type", headerName: "Sport", width: 140,
+            filter: true, enableRowGroup: true, enablePivot: true,
             cellRenderer: params => {
                 if (!params.value) return '';
                 const s = params.value.toLowerCase();
@@ -113,60 +117,71 @@ const initAGGrid = (gridId, statsId, rawData) => {
                 return `<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full ${color}"></div>${params.value}</div>`;
             }
         },
+        // --- METRICS (SUMMABLE) ---
         { 
-            field: "duration", 
-            headerName: "Time", 
-            width: 110,
-            aggFunc: 'sum', // Automatically Sums when grouped
-            enableValue: true,
+            field: "duration", headerName: "Time", width: 110,
+            aggFunc: 'sum', enableValue: true,
             valueFormatter: params => {
                 if (!params.value) return '';
                 const h = Math.floor(params.value / 60);
-                const m = params.value % 60;
+                const m = Math.round(params.value % 60);
                 return h > 0 ? `${h}h ${m}m` : `${m}m`;
             }
         },
         { 
-            field: "distance", 
-            headerName: "Dist (mi)", 
-            width: 110,
-            filter: 'agNumberColumnFilter',
-            aggFunc: 'sum', // Auto Sum
-            enableValue: true,
+            field: "distance", headerName: "Dist (mi)", width: 110,
+            filter: 'agNumberColumnFilter', aggFunc: 'sum', enableValue: true,
             valueFormatter: params => params.value ? params.value.toFixed(1) : ''
         },
         { 
-            field: "elevation", 
-            headerName: "Elev (ft)", 
-            width: 110,
-            filter: 'agNumberColumnFilter',
-            aggFunc: 'sum', // Auto Sum
-            enableValue: true,
+            field: "elevation", headerName: "Elev (ft)", width: 110,
+            filter: 'agNumberColumnFilter', aggFunc: 'sum', enableValue: true,
             valueFormatter: params => params.value ? params.value.toLocaleString() : ''
         },
         { 
-            field: "tss", 
-            headerName: "TSS", 
-            width: 90,
-            filter: 'agNumberColumnFilter',
-            aggFunc: 'sum',
-            enableValue: true
+            field: "tss", headerName: "TSS", width: 90,
+            filter: 'agNumberColumnFilter', aggFunc: 'sum', enableValue: true
         },
         { 
-            field: "notes", 
-            headerName: "Notes", 
-            flex: 1, 
+            field: "calories", headerName: "Cals", width: 90,
+            filter: 'agNumberColumnFilter', aggFunc: 'sum', enableValue: true
+        },
+
+        // --- METRICS (AVERAGE-ABLE) ---
+        // We set aggFunc: 'avg' because summing Heart Rate makes no sense
+        { 
+            field: "avg_hr", headerName: "Avg HR", width: 100,
+            filter: 'agNumberColumnFilter', aggFunc: 'avg', enableValue: true,
+            valueFormatter: params => params.value ? Math.round(params.value) : ''
+        },
+        { 
+            field: "watts", headerName: "Watts", width: 100,
+            filter: 'agNumberColumnFilter', aggFunc: 'avg', enableValue: true,
+            valueFormatter: params => params.value ? Math.round(params.value) : ''
+        },
+        { 
+            field: "rpe", headerName: "RPE", width: 80,
+            filter: 'agNumberColumnFilter', aggFunc: 'avg', enableValue: true,
+            valueFormatter: params => params.value ? params.value.toFixed(1) : ''
+        },
+
+        // --- EXTRAS ---
+        { 
+            field: "equipment", headerName: "Gear", width: 150,
+            enableRowGroup: true, enablePivot: true 
+        },
+        { 
+            field: "notes", headerName: "Notes", flex: 1, 
             sortable: false 
         }
     ];
 
-    // 3. Grid Options
     const gridOptions = {
         columnDefs: columnDefs,
         rowData: rowData,
         animateRows: true,
-        sideBar: true, // Shows the Pivot/Columns sidebar on the right
-        rowGroupPanelShow: 'always', // Shows the "Drag here to group" bar at top
+        sideBar: true, 
+        rowGroupPanelShow: 'always', 
         
         defaultColDef: {
             sortable: true,
@@ -176,18 +191,15 @@ const initAGGrid = (gridId, statsId, rawData) => {
             minWidth: 100
         },
 
-        // Event: Fix "Loading..." bug by waiting for Grid Ready
         onGridReady: (params) => {
             updateStats(params.api, statsId);
         },
 
-        // Event: Recalculate stats whenever the filter or data changes
         onModelUpdated: (params) => {
             updateStats(params.api, statsId);
         }
     };
 
-    // 4. Create Grid (Modern Syntax)
     agGrid.createGrid(gridDiv, gridOptions);
 };
 
@@ -198,9 +210,8 @@ const updateStats = (api, statsId) => {
     let dist = 0;
     let elev = 0;
 
-    // Loop through currently visible rows (respects filters & groups)
     api.forEachNodeAfterFilter(node => {
-        // Only count leaf nodes (actual data rows), ignore group headers for stats
+        // Only count leaf nodes to avoid double counting groups
         if (!node.group && node.data) {
             count++;
             dur += node.data.duration || 0;
@@ -210,7 +221,7 @@ const updateStats = (api, statsId) => {
     });
 
     const hours = Math.floor(dur / 60);
-    const mins = dur % 60;
+    const mins = Math.round(dur % 60);
     
     const card = (label, val, unit, color) => `
         <div class="flex flex-col">

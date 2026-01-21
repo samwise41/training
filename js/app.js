@@ -4,7 +4,6 @@
     console.log("🚀 Booting App (JSON Mode)...");
     const cacheBuster = Date.now();
 
-    // --- RESTORED CONFIG (For Weather Icons) ---
     const CONFIG = {
         WEATHER_MAP: {
             0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
@@ -67,8 +66,6 @@
         async init() {
             await this.loadData();
             this.setupNavigation();
-            
-            // --- FIX: Fetch Weather on Init ---
             this.fetchWeather(); 
 
             const savedView = localStorage.getItem('currentView') || 'dashboard';
@@ -94,12 +91,8 @@
                 this.plannedData = await plannedRes.json();
                 this.garminData = await garminRes.json();
                 
-                if (gearRes.ok) {
-                    this.gearData = await gearRes.json();
-                } else {
-                    console.warn("⚠️ gear.json not found.");
-                    this.gearData = { bike: [], run: [] };
-                }
+                if (gearRes.ok) this.gearData = await gearRes.json();
+                else this.gearData = { bike: [], run: [] };
 
                 if (profileRes.ok) this.profileData = await profileRes.json();
                 else this.profileData = {}; 
@@ -117,7 +110,6 @@
             }
         },
 
-        // --- RESTORED: Weather Fetcher ---
         async fetchWeather() {
             try {
                 const locRes = await fetch('https://ipapi.co/json/');
@@ -126,20 +118,44 @@
                     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
                     const weatherData = await weatherRes.json();
                     
-                    // Map to new state structure
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     
-                    // Optional: Update UI if elements exist (ported from old code)
-                    const code = weatherData.current_weather.weathercode;
-                    const condition = CONFIG.WEATHER_MAP[code] || ["Cloudy", "☁️"];
-                    const wInfo = document.getElementById('weather-info');
-                    if(wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
+                    // Store condition code for UI updates
+                    this.weather.code = weatherData.current_weather.weathercode;
+                    
+                    // If we are already running, update the header immediately
+                    this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
-        // --- RESTORED: Stats Bar HTML Generator ---
+        // --- NEW HELPER: Updates Top Bar Title & Weather ---
+        updateHeaderUI(viewName) {
+            // 1. Update Title
+            const titles = { 
+                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', logbook: 'Logbook', 
+                roadmap: 'Season Roadmap', gear: 'Gear Choice', zones: 'Training Zones', 
+                ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics'
+            };
+            
+            // Only update title if viewName is passed (otherwise just update weather)
+            if (viewName) {
+                const titleEl = document.getElementById('header-title-dynamic');
+                if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
+            }
+
+            // 2. Update Weather (if data exists)
+            if (this.weather.current !== null) {
+                const condition = CONFIG.WEATHER_MAP[this.weather.code] || ["Cloudy", "☁️"];
+                const wInfo = document.getElementById('weather-info');
+                const wIcon = document.getElementById('weather-icon-top');
+                
+                if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
+                if (wIcon) wIcon.innerText = condition[1];
+            }
+        },
+
         getStatsBar() {
             return `
                 <div id="stats-bar" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -177,11 +193,9 @@
             `;
         },
 
-        // --- RESTORED: Update Stats Logic ---
         updateStats() {
             if (!this.planMd) return;
             
-            // Regex from old code to parse Status from MD
             const statusMatch = this.planMd.match(/\*\*Status:\*\*\s*(.*?)\s+-\s+(.*)/i);
             const currentPhaseRaw = statusMatch ? statusMatch[1].trim() : "Plan Active";
             const currentWeek = statusMatch ? statusMatch[2].trim() : "";
@@ -192,7 +206,6 @@
             const weekEl = document.getElementById('stat-week');
             if (weekEl) weekEl.innerText = currentWeek;
 
-            // Event Parsing Logic
             const lines = this.planMd.split('\n');
             let nextEvent = null;
             let inTable = false;
@@ -231,7 +244,6 @@
                 const cdEl = document.getElementById('stat-event-countdown');
                 if(cdEl) cdEl.innerHTML = `<i class="fa-solid fa-hourglass-half mr-1"></i> ${timeStr}`;
 
-                // Readiness Calculation (using this.parsedLogData)
                 if (this.parsedLogData && this.parsedLogData.length > 0) {
                     const parseDur = (str) => {
                         if(!str || str.includes('km') || str.includes('mi')) return 0;
@@ -302,21 +314,33 @@
             }
         },
 
+        // --- FIXED: Mobile Navigation (Restored Old Logic) ---
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
+            const btnClose = document.getElementById('btn-sidebar-close'); // Added this in case it exists
+
+            // Helper to toggle menu
+            const toggleSidebar = () => {
+                // Try both the new way and the old way to be safe
+                sidebar.classList.toggle('-translate-x-full'); // Tailwind way
+                sidebar.classList.toggle('sidebar-closed');    // Old CSS way
+                sidebar.classList.toggle('sidebar-open');      // Old CSS way
+                
+                overlay.classList.toggle('hidden');
+            };
 
             if (menuBtn) {
-                menuBtn.addEventListener('click', () => {
-                    sidebar.classList.remove('-translate-x-full');
-                    overlay.classList.remove('hidden');
-                });
-                overlay.addEventListener('click', () => {
-                    sidebar.classList.add('-translate-x-full');
-                    overlay.classList.add('hidden');
+                menuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSidebar();
                 });
             }
+            
+            // Allow clicking overlay or close button to close
+            if (overlay) overlay.addEventListener('click', toggleSidebar);
+            if (btnClose) btnClose.addEventListener('click', toggleSidebar);
 
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -331,15 +355,18 @@
                     localStorage.setItem('currentView', view);
                     this.renderCurrentView(view);
 
-                    if (window.innerWidth < 1024 && sidebar) {
-                        sidebar.classList.add('-translate-x-full');
-                        overlay.classList.add('hidden');
+                    // Close sidebar on selection if on mobile
+                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
+                        toggleSidebar();
                     }
                 });
             });
         },
 
         renderCurrentView(view) {
+            // --- FIX: Update Header Title & Weather Logic ---
+            this.updateHeaderUI(view);
+
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
@@ -348,16 +375,12 @@
                 try {
                     switch (view) {
                         case 'dashboard':
-                            // --- FIX: Combine Stats Bar + Dashboard Content ---
                             const statsHtml = this.getStatsBar();
                             const dashHtml = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
                             content.innerHTML = statsHtml + dashHtml;
-                            
-                            // Call updateStats to populate the data in the header
                             this.updateStats();
                             break;
                         case 'trends':
-                            // Pass trendsData to the view
                             content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
                             break;
                         case 'metrics':
@@ -391,6 +414,8 @@
                     content.innerHTML = `<div class="p-10 text-red-500">Render Error: ${e.message}</div>`;
                 }
                 content.classList.remove('opacity-0');
+                
+                // Ensure active state is set correctly on reload
                 document.querySelectorAll('.nav-item').forEach(b => {
                     if (b.dataset.view === view) {
                         b.classList.remove('text-slate-400', 'border-transparent');

@@ -16,7 +16,7 @@ const chartState = {
     show90d: false,
 
     // X-Axis Zoom
-    dateRange: '6m' 
+    dateRange: '90d' 
 };
 
 let currentRollingData = [];

@@ -248,8 +248,8 @@ export function renderFTP(profileData) {
     };
     
     const style = getComputedStyle(document.documentElement);
-    const bikeColor = style.getPropertyValue('--color-bike').trim() || getColor('--color-bike'),; 
-    const runColor = style.getPropertyValue('--color-run').trim() || getColor('--color-run'),;   
+    const bikeColor = style.getPropertyValue('--color-bike').trim() || getColor('--color-bike'); 
+    const runColor = style.getPropertyValue('--color-run').trim() || getColor('--color-run');   
     
     const gaugeHtml = renderGauge(bio.wkg, bio.gauge_percent, bio.category);
     const cyclingStatsHtml = renderCyclingStats(bio);

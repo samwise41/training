@@ -1,0 +1,1 @@
+safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- ADD THIS

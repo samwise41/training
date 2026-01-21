@@ -16,15 +16,13 @@ let adherenceData = null; // New state for pre-calculated json
 window.App = window.App || {};
 window.App.updateDurationAnalysis = updateDurationAnalysis;
 
-// We now fetch adherence.json locally if it's not passed in (or handle it in App.js)
-// For now, assuming App.js might not pass it yet, we can fetch it here or modify App.js
-// To be safe/fast, let's fetch it if missing.
 async function fetchAdherence() {
     try {
         const res = await fetch('./data/trends/adherence.json');
+        if (!res.ok) throw new Error("404");
         return await res.json();
     } catch(e) {
-        console.error("Failed to load adherence.json", e);
+        console.warn("Adherence data missing, using empty default.");
         return null;
     }
 }
@@ -49,7 +47,6 @@ export function renderTrends(mergedLogData, _trendsData) {
     const trendsSection = buildCollapsibleSection('trends-section', 'Adherence Trends', trendContainerHtml, true);
 
     // --- ADHERENCE OVERVIEW (Placeholder) ---
-    // We will inject this after fetch
     const adherenceContainerHtml = `<div id="compliance-container"><div class="p-4 text-slate-500 italic">Loading compliance data...</div></div>`;
     const adherenceSection = buildCollapsibleSection('adherence-section', 'Compliance Overview', adherenceContainerHtml, true);
 
@@ -57,7 +54,7 @@ export function renderTrends(mergedLogData, _trendsData) {
     const durationHtml = renderDurationTool(logData);
     const durationSection = buildCollapsibleSection('duration-section', 'Deep Dive Analysis', durationHtml, true);
 
-    // 3. Post-Render: Initialize Dynamic Charts
+    // 3. Post-Render: Fetch & Initialize
     setTimeout(async () => {
         if (!adherenceData) {
             adherenceData = await fetchAdherence();
@@ -72,6 +69,9 @@ export function renderTrends(mergedLogData, _trendsData) {
             if (complianceDiv) {
                 complianceDiv.innerHTML = renderComplianceSection(adherenceData.compliance);
             }
+        } else {
+             const tDiv = document.getElementById('trend-charts-container');
+             if(tDiv) tDiv.innerHTML = '<div class="p-4 text-red-400">Adherence data not found. Run python generation script.</div>';
         }
     }, 50);
 

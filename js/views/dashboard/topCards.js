@@ -1,132 +1,47 @@
-// js/views/dashboard/topCards.js
-
-// --- Local Helpers (to avoid import errors) ---
-function parseDate(dateStr) {
-    if (!dateStr) return null;
-    const parts = dateStr.split('-');
-    // Create date in local time (Year, MonthIndex, Day)
-    return new Date(parts[0], parts[1] - 1, parts[2]);
-}
-
-function formatDate(dateStr) {
-    const d = parseDate(dateStr);
-    if (!d) return '';
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-function getDaysDiff(d1, d2) {
-    const oneDay = 24 * 60 * 60 * 1000;
-    return Math.round((d2 - d1) / oneDay);
-}
-
 export function renderTopCards() {
-    // 1. Access Data from Global State (Synchronously)
-    const planMd = window.App?.planMd || '';
-    const trendsData = window.App?.trendsData || null;
+    const containerId = 'top-cards-container';
 
-    // 2. Parse Plan for Next Event
-    let currentPhase = 'Unknown';
-    let nextEvent = null;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Initiate the fetch for pre-calculated event and phase data
+    setTimeout(async () => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
 
-    if (planMd) {
-        const lines = planMd.split('\n');
-        for (const line of lines) {
-            // Parse Phase
-            const phaseMatch = line.match(/^##\s+(.+)/);
-            if (phaseMatch) {
-                currentPhase = phaseMatch[1].trim();
-            }
+        try {
+            const response = await fetch('data/dashboard/top_cards.json');
+            if (!response.ok) throw new Error("Top cards data not found");
+            const data = await response.json();
 
-            // Parse Event (- YYYY-MM-DD: Name)
-            const eventMatch = line.match(/^-\s+(\d{4}-\d{2}-\d{2}):\s+(.+)/);
-            if (eventMatch) {
-                const eventDate = parseDate(eventMatch[1]);
-                // We want the first event that is today or in the future
-                if (eventDate && eventDate >= today && !nextEvent) {
-                    nextEvent = {
-                        date: eventMatch[1],
-                        name: eventMatch[2],
-                        daysToGo: getDaysDiff(today, eventDate)
-                    };
-                }
-            }
-        }
-    }
-
-    // 3. Readiness / Performance Logic
-    // We pull from Trends Data to find the lowest performing discipline vs Plan
-    let readinessHtml = '<span class="text-gray-500 text-xs">No Data</span>';
-
-    if (trendsData && trendsData.data && trendsData.data.length > 0) {
-        // Get the most recent week of data
-        const lastWeek = trendsData.data[trendsData.data.length - 1];
-        const cats = lastWeek.categories;
-
-        if (cats) {
-            const sports = [
-                { name: 'Swim', val: cats.swimming?.actual_growth || 0 },
-                { name: 'Bike', val: cats.cycling?.actual_growth || 0 },
-                { name: 'Run',  val: cats.running?.actual_growth || 0 }
-            ];
-
-            // Find lowest performing discipline
-            const lowest = sports.reduce((prev, curr) => prev.val < curr.val ? prev : curr);
-
-            // Format for display
-            const pct = Math.round(lowest.val * 100);
-            
-            // Color Logic: Negative/Low is Red (Warning), Positive is Green
-            let colorClass = 'text-green-400';
-            let icon = '📈';
-            
-            if (pct < -10) {
-                colorClass = 'text-red-400';
-                icon = '📉';
-            } else if (pct < 0) {
-                colorClass = 'text-orange-400';
-                icon = '📉';
-            }
-
-            readinessHtml = `
-                <div class="mt-2 text-sm font-medium ${colorClass} flex items-center gap-1">
-                    <span>${icon}</span>
-                    <span>${lowest.name}: ${pct > 0 ? '+' : ''}${pct}% (vs Plan)</span>
-                </div>
-            `;
-        }
-    }
-
-    // 4. Return HTML String (Synchronous)
-    return `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
-                <h3 class="text-gray-400 text-xs uppercase font-bold mb-1">Current Phase</h3>
-                <p class="text-2xl font-bold text-white">${currentPhase}</p>
-                <div class="mt-2 text-xs text-blue-400">
-                    Focus: Base Building
-                </div>
-            </div>
-
-            <div class="bg-gray-800 p-4 rounded-lg shadow border border-gray-700">
-                <h3 class="text-gray-400 text-xs uppercase font-bold mb-1">Next Priority Event</h3>
-                ${nextEvent ? `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-xl font-bold text-white truncate max-w-[200px]" title="${nextEvent.name}">${nextEvent.name}</p>
-                            <p class="text-sm text-gray-400">${formatDate(nextEvent.date)}</p>
-                            ${readinessHtml}
-                        </div>
-                        <div class="text-right">
-                            <span class="text-3xl font-bold text-blue-500">${nextEvent.daysToGo}</span>
-                            <p class="text-xs text-gray-500 uppercase">Days Out</p>
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Current Training Status</span>
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-layer-group text-2xl text-blue-400 mt-1"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xl font-bold text-white leading-tight">${data.phase}</span>
+                                <span class="text-sm font-medium text-slate-400 mt-0.5">${data.block}</span>
+                            </div>
                         </div>
                     </div>
-                ` : `
-                    <p class="text-gray-500 mt-2">No upcoming events planned.</p>
-                `}
-            </div>
-        </div>
-    `;
+
+                    <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm relative overflow-hidden">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Next Priority Event</span>
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-flag-checkered text-2xl text-emerald-400 mt-1"></i>
+                            <div class="flex flex-col">
+                                <span class="text-xl font-bold text-white leading-tight">${data.next_event}</span>
+                                <span class="text-xs text-slate-400 font-mono mt-1">${data.days_to_go} days to go</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } catch (err) {
+            console.error("Top Cards Error:", err);
+            container.innerHTML = `<p class="text-slate-500 italic p-4 text-center">Event data temporarily unavailable.</p>`;
+        }
+    }, 50);
+
+    // Initial loading state
+    return `<div id="${containerId}" class="min-h-[100px] bg-slate-800 rounded-xl mb-6"></div>`;
 }

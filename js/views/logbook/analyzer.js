@@ -1,7 +1,6 @@
 // js/views/logbook/analyzer.js
 
 export const renderAnalyzer = (rawLogData) => {
-    // 1. Container Structure
     const containerId = 'ag-grid-container';
     const statsId = 'ag-stats-bar';
 
@@ -12,13 +11,13 @@ export const renderAnalyzer = (rawLogData) => {
         <div class="flex flex-col gap-6 h-[calc(100vh-140px)]">
             
             <div id="${statsId}" class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700 shrink-0">
-                <div class="text-center text-slate-500 text-sm">Loading Stats...</div>
+                <div class="text-center text-slate-500 text-sm">Initializing Grid...</div>
             </div>
 
             <div id="${containerId}" class="ag-theme-alpine-dark flex-1 w-full rounded-xl overflow-hidden border border-slate-700"></div>
             
             <div class="text-[10px] text-slate-500 text-right pr-2">
-                * Hold SHIFT to sort by multiple columns
+                * Drag columns to top to Group • Right Sidebar for Pivot Mode
             </div>
         </div>
     `;
@@ -28,7 +27,7 @@ export const renderAnalyzer = (rawLogData) => {
 const initAGGrid = (gridId, statsId, rawData) => {
     const gridDiv = document.getElementById(gridId);
     
-    // 1. Data Parsing Helper (Same logic, new destination)
+    // 1. Data Parsing Helper
     const rowData = rawData.map(d => {
         // Parse Duration
         let min = 0;
@@ -52,8 +51,15 @@ const initAGGrid = (gridId, statsId, rawData) => {
             elev = parseInt(d.elevation.replace(/[^\d]/g, '')) || 0;
         } else { elev = d.elevation || 0; }
 
+        // Add Year/Month for better Grouping
+        const dateObj = new Date(d.date);
+        const year = isNaN(dateObj) ? 'Unknown' : dateObj.getFullYear();
+        const month = isNaN(dateObj) ? 'Unknown' : dateObj.toLocaleString('default', { month: 'short' });
+
         return {
-            date: d.date, // Keep string for display, use comparator for sort
+            date: d.date, 
+            year: year,
+            month: month,
             type: d.type,
             distance: dist,
             elevation: elev,
@@ -63,34 +69,39 @@ const initAGGrid = (gridId, statsId, rawData) => {
         };
     });
 
-    // 2. Column Definitions
+    // 2. Column Definitions (Enterprise Features Enabled)
     const columnDefs = [
         { 
             field: "date", 
             headerName: "Date", 
             width: 120,
             sort: 'desc',
-            comparator: (valueA, valueB) => {
-                return new Date(valueA) - new Date(valueB);
-            },
             filter: 'agDateColumnFilter',
-            filterParams: {
-                comparator: (filterLocalDateAtMidnight, cellValue) => {
-                    const dateParts = cellValue.split("-"); // Assuming YYYY-MM-DD
-                    const cellDate = new Date(Number(dateParts[0]), Number(dateParts[1]) - 1, Number(dateParts[2]));
-                    if (cellDate < filterLocalDateAtMidnight) return -1;
-                    if (cellDate > filterLocalDateAtMidnight) return 1;
-                    return 0;
-                }
-            }
+            comparator: (valueA, valueB) => new Date(valueA) - new Date(valueB)
+        },
+        { 
+            field: "year", 
+            headerName: "Year", 
+            width: 90,
+            enableRowGroup: true, // Allows grouping by Year
+            hide: true // Hidden by default (useful when dragging to group)
+        },
+        { 
+            field: "month", 
+            headerName: "Month", 
+            width: 90,
+            enableRowGroup: true,
+            hide: true 
         },
         { 
             field: "type", 
             headerName: "Sport", 
-            width: 110,
+            width: 140,
             filter: true,
+            enableRowGroup: true, // Allows grouping by Sport
+            enablePivot: true,    // Allows pivoting
             cellRenderer: params => {
-                // Add color dots based on sport
+                if (!params.value) return '';
                 const s = params.value.toLowerCase();
                 let color = 'bg-slate-500';
                 if(s.includes('run')) color = 'bg-pink-500';
@@ -102,9 +113,11 @@ const initAGGrid = (gridId, statsId, rawData) => {
         { 
             field: "duration", 
             headerName: "Time", 
-            width: 100,
-            aggFunc: 'sum',
+            width: 110,
+            aggFunc: 'sum', // Automatically Sums when grouped
+            enableValue: true,
             valueFormatter: params => {
+                if (!params.value) return '';
                 const h = Math.floor(params.value / 60);
                 const m = params.value % 60;
                 return h > 0 ? `${h}h ${m}m` : `${m}m`;
@@ -115,20 +128,26 @@ const initAGGrid = (gridId, statsId, rawData) => {
             headerName: "Dist (mi)", 
             width: 110,
             filter: 'agNumberColumnFilter',
-            valueFormatter: params => params.value.toFixed(1)
+            aggFunc: 'sum', // Auto Sum
+            enableValue: true,
+            valueFormatter: params => params.value ? params.value.toFixed(1) : ''
         },
         { 
             field: "elevation", 
             headerName: "Elev (ft)", 
             width: 110,
             filter: 'agNumberColumnFilter',
-            valueFormatter: params => params.value.toLocaleString()
+            aggFunc: 'sum', // Auto Sum
+            enableValue: true,
+            valueFormatter: params => params.value ? params.value.toLocaleString() : ''
         },
         { 
             field: "tss", 
             headerName: "TSS", 
             width: 90,
-            filter: 'agNumberColumnFilter'
+            filter: 'agNumberColumnFilter',
+            aggFunc: 'sum',
+            enableValue: true
         },
         { 
             field: "notes", 
@@ -143,20 +162,30 @@ const initAGGrid = (gridId, statsId, rawData) => {
         columnDefs: columnDefs,
         rowData: rowData,
         animateRows: true,
+        sideBar: true, // Shows the Pivot/Columns sidebar on the right
+        rowGroupPanelShow: 'always', // Shows the "Drag here to group" bar at top
+        
         defaultColDef: {
             sortable: true,
             filter: true,
             resizable: true,
+            flex: 1,
+            minWidth: 100
         },
-        // Event Listener: Recalculate stats whenever the filter changes
-        onModelUpdated: () => updateStats(gridOptions.api, statsId),
+
+        // Event: Fix "Loading..." bug by waiting for Grid Ready
+        onGridReady: (params) => {
+            updateStats(params.api, statsId);
+        },
+
+        // Event: Recalculate stats whenever the filter or data changes
+        onModelUpdated: (params) => {
+            updateStats(params.api, statsId);
+        }
     };
 
-    // 4. Create Grid
-    new agGrid.Grid(gridDiv, gridOptions);
-    
-    // Initial Stat Calc
-    updateStats(gridOptions.api, statsId);
+    // 4. Create Grid (Modern Syntax)
+    agGrid.createGrid(gridDiv, gridOptions);
 };
 
 // --- STATS ENGINE ---
@@ -166,13 +195,15 @@ const updateStats = (api, statsId) => {
     let dist = 0;
     let elev = 0;
 
-    // Loop through only the rows CURRENTLY visible after filtering
+    // Loop through currently visible rows (respects filters & groups)
     api.forEachNodeAfterFilter(node => {
-        const d = node.data;
-        count++;
-        dur += d.duration;
-        dist += d.distance;
-        elev += d.elevation;
+        // Only count leaf nodes (actual data rows), ignore group headers for stats
+        if (!node.group && node.data) {
+            count++;
+            dur += node.data.duration || 0;
+            dist += node.data.distance || 0;
+            elev += node.data.elevation || 0;
+        }
     });
 
     const hours = Math.floor(dur / 60);
@@ -186,10 +217,13 @@ const updateStats = (api, statsId) => {
         </div>
     `;
 
-    document.getElementById(statsId).innerHTML = `
-        ${card('Activities', count, 'Filtered Rows', 'text-white')}
-        ${card('Duration', `${hours}h ${mins}m`, 'Total Time', 'text-blue-400')}
-        ${card('Distance', dist.toFixed(1), 'Miles', 'text-pink-400')}
-        ${card('Elevation', elev.toLocaleString(), 'Feet', 'text-purple-400')}
-    `;
+    const container = document.getElementById(statsId);
+    if (container) {
+        container.innerHTML = `
+            ${card('Activities', count, 'Visible Rows', 'text-white')}
+            ${card('Duration', `${hours}h ${mins}m`, 'Total Time', 'text-blue-400')}
+            ${card('Distance', dist.toFixed(1), 'Miles', 'text-pink-400')}
+            ${card('Elevation', elev.toLocaleString(), 'Feet', 'text-purple-400')}
+        `;
+    }
 };

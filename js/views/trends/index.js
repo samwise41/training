@@ -38,10 +38,6 @@ export function renderTrends(mergedLogData, trendsData) {
     const trendContainerHtml = `<div id="trend-charts-container"></div>`;
     const trendsSection = buildCollapsibleSection('trends-section', 'Adherence Trends', trendContainerHtml, true);
 
-    // --- FTP SECTION ---
-    const ftpHtml = buildFTPChart(planMdContent);
-    const ftpSection = buildCollapsibleSection('ftp-section', 'Fitness Progression', ftpHtml, true);
-
     // --- ADHERENCE OVERVIEW ---
     const adherenceHtml = renderComplianceSection(logData);
     const adherenceSection = buildCollapsibleSection('adherence-section', 'Compliance Overview', adherenceHtml, true);
@@ -55,7 +51,7 @@ export function renderTrends(mergedLogData, trendsData) {
         renderDynamicCharts('trend-charts-container', logData);
     }, 0);
 
-    return { html: volumeSection + trendsSection + ftpSection + adherenceSection + durationSection };
+    return { html: volumeSection + trendsSection  + adherenceSection + durationSection };
 }
 
 // Re-export for App.js import destructuring

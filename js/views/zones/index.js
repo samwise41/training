@@ -1,75 +1,64 @@
-import { buildCollapsibleSection } from '../dashboard/utils.js';
+// js/views/zones/index.js
 
-export function renderZones() {
+export async function renderZonesTab() {
+    const containerId = 'zones-tab-content';
+    
     setTimeout(async () => {
-        const container = document.getElementById('zones-content');
+        const container = document.getElementById(containerId);
         if (!container) return;
 
         try {
-            const response = await fetch('data/zones/zones.json');
-            if (!response.ok) throw new Error("Zones data not found");
-
+            const cacheBuster = new Date().getTime();
+            const response = await fetch(`data/zones/zones.json?t=${cacheBuster}`);
+            if (!response.ok) throw new Error("Zones JSON not found");
             const data = await response.json();
-            container.innerHTML = generateZonesHTML(data);
 
-        } catch (error) {
-            console.error("Failed to load zones:", error);
-            container.innerHTML = `<p class="text-slate-500 italic">Unable to load zones data.</p>`;
+            container.innerHTML = `
+                <div class="zones-layout grid grid-cols-1 lg:grid-cols-2 gap-6 p-4">
+                    ${renderZoneCard("Cycling Power Zones", data.cycling)}
+                    ${renderZoneCard("Running Heart Rate Zones", data.running)}
+                </div>
+            `;
+        } catch (err) {
+            console.error("Zones Load Error:", err);
+            container.innerHTML = `<div class="p-12 text-center text-slate-500 italic">Unable to load zones.</div>`;
         }
     }, 50);
 
-    const loadingHtml = `<div id="zones-content" class="min-h-[100px] flex items-center justify-center text-slate-500">
-        <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Loading Zones...
-    </div>`;
-
-    return buildCollapsibleSection('zones-section', 'Training Zones', loadingHtml, true);
+    return `<div id="${containerId}" class="min-h-[400px]"></div>`;
 }
 
-function generateZonesHTML(data) {
-    if (!data || Object.keys(data).length === 0) {
-        return '<p class="text-slate-500 italic">No zone data available.</p>';
-    }
+function renderZoneCard(title, sportData) {
+    if (!sportData || !sportData.zones) return '';
 
-    let html = '';
-
-    // FIX: Added 'grid' container for even spacing
-    html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-6">';
-
-    // Iterate through each zone category (e.g., "Heart Rate", "Power")
-    for (const [category, zones] of Object.entries(data)) {
+    const rows = sportData.zones.map(z => {
+        // Determine the CSS class for the color border based on zone name
+        let zClass = 'border-slate-500'; // Default
+        const name = z.name.toLowerCase();
         
-        // FIX: Applied 'bubble' card styling (bg-slate-800, rounded-xl, etc.)
-        html += `
-            <div class="bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-700 relative overflow-hidden">
-                <h3 class="text-lg font-bold text-white mb-4 capitalize border-b border-slate-700 pb-2">
-                    ${category.replace(/_/g, ' ')}
-                </h3>
-                
-                <div class="space-y-3">
-                    ${renderZoneRows(zones)}
-                </div>
+        if (name.includes('zone 1')) zClass = 'border-slate-400';
+        else if (name.includes('zone 2')) zClass = 'border-blue-500';
+        else if (name.includes('zone 3')) zClass = 'border-emerald-500';
+        else if (name.includes('sweet spot')) zClass = 'border-yellow-500';
+        else if (name.includes('zone 4')) zClass = 'border-orange-500';
+        else if (name.includes('zone 5')) zClass = 'border-red-500';
+
+        // Adjusted row bg to bg-slate-700/40 so it stands out against the card's bg-slate-800
+        return `
+            <div class="flex justify-between items-center bg-slate-700/40 p-4 rounded-lg border-l-4 ${zClass} mb-3 shadow-sm">
+                <span class="text-sm font-bold text-slate-100">${z.name}</span>
+                <span class="text-sm font-mono text-slate-400">${z.range}</span>
             </div>
         `;
-    }
+    }).join('');
 
-    html += '</div>';
-    return html;
-}
-
-function renderZoneRows(zones) {
-    if (!Array.isArray(zones)) return '';
-
-    return zones.map(z => `
-        <div class="flex justify-between items-center bg-slate-700/30 rounded-lg p-3">
-            <div class="flex flex-col">
-                <span class="text-sm font-bold text-slate-200">${z.name || 'Zone'}</span>
-                <span class="text-xs text-slate-400">${z.description || ''}</span>
-            </div>
-            <div class="text-right">
-                <span class="text-sm font-mono font-bold text-emerald-400">
-                    ${z.min} - ${z.max} ${z.unit || ''}
-                </span>
+    // Added the requested "bubble" card styling here
+    return `
+        <div class="bg-slate-800 rounded-xl p-6 shadow-lg border border-slate-700 flex flex-col h-full">
+            <h3 class="text-xs font-black uppercase tracking-widest text-white mb-6 opacity-80 border-b border-slate-700 pb-2">${title}</h3>
+            <div class="space-y-1">
+                ${rows}
             </div>
         </div>
-    `).join('');
+    `;
 }

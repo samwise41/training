@@ -162,31 +162,35 @@
         },
 
         // --- Mobile Navigation ---
-        setupNavigation() {
+    setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             const btnClose = document.getElementById('btn-sidebar-close'); 
 
+            // FIXED: Only toggle the custom classes found in your HTML
             const toggleSidebar = () => {
-                sidebar.classList.toggle('-translate-x-full'); // Tailwind way
-                sidebar.classList.toggle('sidebar-closed');    // Old CSS way
-                sidebar.classList.toggle('sidebar-open');      // Old CSS way
+                sidebar.classList.toggle('sidebar-closed'); 
+                sidebar.classList.toggle('sidebar-open');   
                 overlay.classList.toggle('hidden');
             };
 
             if (menuBtn) {
+                // Use 'click' and stopPropagation to prevent immediate closing
                 menuBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleSidebar();
                 });
             }
             
+            // Allow closing via overlay or X button
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
 
+            // Close sidebar when a navigation item is clicked
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
+                    // 1. Update Visuals
                     document.querySelectorAll('.nav-item').forEach(b => {
                         b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
                         b.classList.add('text-slate-400', 'border-transparent');
@@ -194,10 +198,12 @@
                     e.currentTarget.classList.remove('text-slate-400', 'border-transparent');
                     e.currentTarget.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
 
+                    // 2. Render View
                     const view = e.currentTarget.dataset.view;
                     localStorage.setItem('currentView', view);
                     this.renderCurrentView(view);
 
+                    // 3. Close Mobile Menu (Check if overlay is visible)
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }

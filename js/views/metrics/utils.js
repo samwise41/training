@@ -1,6 +1,13 @@
 // js/views/metrics/utils.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 
+const getColor = (varName) => {
+    if (typeof window !== "undefined" && window.getComputedStyle) {
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+    return '#888888'; // Fallback
+};
+
 export const checkSport = (activity, sportKey) => {
     // STRICT RULE: ONLY USE 'actualSport' FIELD
     const sport = String(activity.actualSport || "").toUpperCase().trim();

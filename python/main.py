@@ -6,18 +6,19 @@ import time
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(SCRIPT_DIR)
 
-# --- Original Imports ---
+# --- Existing Imports ---
 from sync_modules import fetch_garmin, sync_database, analyze_trends, update_visuals, git_ops
 
-# --- New Dashboard Tab Imports ---
-# These assume the folders (readiness, gear, dashboard, Trends) are in the same directory as main.py
+# --- New Generator Imports ---
+# We wrap these in try/except to prevent the whole pipeline from crashing if one script fails
 try:
-    from readiness import createReadiness
+    from zones import createZones
     from gear import createGear
-    from dashboard import calculateHeatmaps, calculate_streaks, generate_plannedWorkouts, generate_top_cards
+    from readiness import createReadiness
     from Trends import createTrends
+    from dashboard import calculateHeatmaps, calculate_streaks, generate_plannedWorkouts, generate_top_cards
 except ImportError as e:
-    print(f"⚠️ Import Warning: Could not import one or more dashboard modules. {e}")
+    print(f"⚠️ Import Warning: {e}")
 
 def main():
     print("🚀 STARTING DAILY TRAINING SYNC PIPELINE")
@@ -36,27 +37,28 @@ def main():
         sync_database.main()
     except Exception as e:
         print(f"❌ Database Sync Failed: {e}")
-        # We generally stop here if the DB fails as downstream depends on it
         return 
 
-    # STEP 2.5: Generate Dashboard JSONs
-    # These scripts rely on the updated training_log.json from Step 2
-    print("\n[STEP 2.5] Generating Dashboard Tab Data...")
+    # STEP 2.5: Generate Dashboard Data (The Missing Link)
+    print("\n[STEP 2.5] Generating Dashboard & Tab Data...")
     try:
-        print("   -> Running Readiness...")
-        createReadiness.main()
+        print("   -> Running Zones...")
+        createZones.main()
         
         print("   -> Running Gear...")
         createGear.main()
         
-        print("   -> Running Dashboard Widgets (Heatmaps, Streaks, Workouts, Top Cards)...")
+        print("   -> Running Readiness...")
+        createReadiness.main()
+        
+        print("   -> Running Trends...")
+        createTrends.main()
+        
+        print("   -> Running Dashboard Widgets (Heatmaps, Streaks, Workouts, Cards)...")
         calculateHeatmaps.main()
         calculate_streaks.main()
         generate_plannedWorkouts.main()
         generate_top_cards.main()
-        
-        print("   -> Running Trends...")
-        createTrends.main()
         
     except Exception as e:
         print(f"⚠️ Dashboard Generation Warning: {e}")
@@ -78,8 +80,6 @@ def main():
     # STEP 5: Git Operations
     print("\n[STEP 5] Saving to Git...")
     try:
-        # Note: Ensure git_ops.py is configured to add the new JSON files in data/ 
-        # (readiness/, gear/, dashboard/, trends/) or use 'git add .'
         git_ops.main()
     except Exception as e:
         print(f"⚠️ Git Warning: {e}")

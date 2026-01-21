@@ -49,14 +49,12 @@ export function renderTopCards() {
             let readinessHtml = '';
             
             if (readinessData && readinessData.upcomingEvents) {
-                // 1. Find the matching event
                 const targetEvent = readinessData.upcomingEvents.find(e => e.name === data.next_event) 
-                                    || readinessData.upcomingEvents[0]; // Fallback to first if name mismatch
+                                    || readinessData.upcomingEvents[0]; 
 
                 if (targetEvent) {
                     const stats = readinessData.trainingStats || {};
                     
-                    // 2. Define Goals & Current Stats
                     const metrics = [
                         { name: 'Swim',       current: stats.maxSwim || 0,     target: parseDur(targetEvent.swimGoal) },
                         { name: 'Bike',       current: stats.maxBike || 0,     target: parseDur(targetEvent.bikeGoal) },
@@ -64,7 +62,6 @@ export function renderTopCards() {
                         { name: 'Bike Climb', current: stats.maxBikeElev || 0, target: parseElev(targetEvent.bikeElevGoal) }
                     ];
 
-                    // 3. Calculate Percentages & Find Lowest
                     let lowestMetric = null;
                     let lowestPct = 999;
 
@@ -78,32 +75,23 @@ export function renderTopCards() {
                         }
                     });
 
-                    // 4. Generate HTML if we found a valid metric
                     if (lowestMetric) {
                         let colorClass = "text-emerald-400";
-                        let label = "Race Ready";
-                        let icon = "📈";
+                        let icon = "fa-circle-check";
 
                         if (lowestPct < 60) {
                             colorClass = "text-red-500";
-                            label = "Warning";
-                            icon = "📉";
+                            icon = "fa-circle-exclamation";
                         } else if (lowestPct < 85) {
                             colorClass = "text-yellow-500";
-                            label = "Developing";
-                            icon = "⚠️";
+                            icon = "fa-triangle-exclamation";
                         }
 
+                        // Formatted exactly like the requested style (Line item below days)
                         readinessHtml = `
-                            <div class="mt-2 pt-2 border-t border-slate-700/50">
-                                <div class="flex items-center justify-between text-xs">
-                                    <span class="text-slate-400">Readiness Score:</span>
-                                    <span class="font-bold ${colorClass}">${lowestPct}% (${label})</span>
-                                </div>
-                                <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
-                                    <span>${icon} Limiter:</span>
-                                    <span class="font-mono text-slate-300 uppercase">${lowestMetric.name}</span>
-                                </div>
+                            <div class="mt-1 text-xs font-bold ${colorClass} flex items-center gap-1.5">
+                                <i class="fa-solid ${icon}"></i>
+                                <span>${lowestMetric.name}: ${lowestPct}% Ready</span>
                             </div>
                         `;
                     }
@@ -127,9 +115,9 @@ export function renderTopCards() {
                         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Next Priority Event</span>
                         <div class="flex items-start gap-3">
                             <i class="fa-solid fa-flag-checkered text-2xl text-emerald-400 mt-1"></i>
-                            <div class="w-full">
-                                <span class="text-xl font-bold text-white leading-tight block truncate">${data.next_event}</span>
-                                <span class="text-xs text-slate-400 font-mono mt-1 block">${data.days_to_go} days to go</span>
+                            <div class="flex flex-col">
+                                <span class="text-xl font-bold text-white leading-tight">${data.next_event}</span>
+                                <span class="text-xs text-slate-400 font-mono mt-1">${data.days_to_go} days to go</span>
                                 ${readinessHtml}
                             </div>
                         </div>
@@ -142,6 +130,5 @@ export function renderTopCards() {
         }
     }, 50);
 
-    // Initial loading state
     return `<div id="${containerId}" class="min-h-[100px] bg-slate-800 rounded-xl mb-6"></div>`;
 }

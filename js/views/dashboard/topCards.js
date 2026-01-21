@@ -27,16 +27,6 @@ export function renderTopCards() {
         return match ? parseFloat(match[0]) : 0;
     };
 
-    // Sport Color Mapping
-    const getSportColor = (name) => {
-        const n = name.toLowerCase();
-        if (n.includes('swim')) return 'text-sky-400';
-        if (n.includes('bike') || n.includes('cycling')) return 'text-orange-400';
-        if (n.includes('run')) return 'text-teal-400';
-        if (n.includes('climb')) return 'text-fuchsia-400';
-        return 'text-slate-400';
-    };
-
     // --- Main Render Logic ---
     setTimeout(async () => {
         const container = document.getElementById(containerId);
@@ -63,11 +53,12 @@ export function renderTopCards() {
                 if (targetEvent) {
                     const stats = readinessData.trainingStats || {};
                     
+                    // Define metrics with CSS classes from styles.css
                     const metrics = [
-                        { name: 'Swim',       current: stats.maxSwim || 0,     target: parseDur(targetEvent.swimGoal), icon: 'fa-person-swimming' },
-                        { name: 'Bike',       current: stats.maxBike || 0,     target: parseDur(targetEvent.bikeGoal), icon: 'fa-person-biking' },
-                        { name: 'Run',        current: stats.maxRun || 0,      target: parseDur(targetEvent.runGoal),  icon: 'fa-person-running' },
-                        { name: 'Climb',      current: stats.maxBikeElev || 0, target: parseElev(targetEvent.bikeElevGoal), icon: 'fa-mountain' }
+                        { name: 'Swim',       current: stats.maxSwim || 0,     target: parseDur(targetEvent.swimGoal), icon: 'fa-person-swimming', cssClass: 'icon-swim' },
+                        { name: 'Bike',       current: stats.maxBike || 0,     target: parseDur(targetEvent.bikeGoal), icon: 'fa-person-biking',   cssClass: 'icon-bike' },
+                        { name: 'Run',        current: stats.maxRun || 0,      target: parseDur(targetEvent.runGoal),  icon: 'fa-person-running',  cssClass: 'icon-run' },
+                        { name: 'Climb',      current: stats.maxBikeElev || 0, target: parseElev(targetEvent.bikeElevGoal), icon: 'fa-mountain',   cssClass: 'icon-bike' } // Uses bike color for climb
                     ];
 
                     let lowestMetric = null;
@@ -95,16 +86,14 @@ export function renderTopCards() {
                             label = "Developing";
                         }
 
-                        const sportColor = getSportColor(lowestMetric.name);
-
-                        // Right-aligned readiness block with added margin-right (mr-4) to scoot left
+                        // Right-aligned readiness block with increased margin (mr-8)
                         readinessHtml = `
-                            <div class="flex flex-col items-end text-right mr-6">
+                            <div class="flex flex-col items-end text-right mr-8">
                                 <div class="text-3xl font-black ${colorClass} tracking-tighter leading-none">${lowestPct}%</div>
                                 <div class="text-[10px] font-bold ${colorClass} uppercase leading-tight mt-1">${label}</div>
                                 <div class="text-[10px] text-slate-500 font-mono mt-1 flex items-center gap-1.5 justify-end">
                                     <span class="text-slate-600">Weakness:</span> 
-                                    <span class="flex items-center gap-1 ${sportColor}">
+                                    <span class="flex items-center gap-1 ${lowestMetric.cssClass}">
                                         <i class="fa-solid ${lowestMetric.icon}"></i>
                                         <span>${lowestMetric.name}</span>
                                     </span>

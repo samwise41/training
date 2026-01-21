@@ -169,39 +169,43 @@ body {
 }
 
 
-/* --- AG GRID SIDEBAR CONTRAST FIX --- */
+/* --- AG GRID: HYBRID THEME (Dark Grid / Light Sidebar) --- */
 
-/* --- AG GRID SIDEBAR & CHART FIXES --- */
-
-/* 1. Brighten the Sidebar Background & Text */
+/* 1. Force the Sidebar & Tool Panels to be WHITE */
 .ag-theme-quartz-dark .ag-side-bar,
-.ag-theme-quartz-dark .ag-tool-panel-wrapper {
-    background-color: #1e293b !important; /* Slate 800 (Lighter than grid) */
-    color: #f1f5f9 !important; /* White Text */
+.ag-theme-quartz-dark .ag-tool-panel-wrapper,
+.ag-theme-quartz-dark .ag-side-buttons {
+    background-color: #ffffff !important; /* Pure White */
+    color: #0f172a !important; /* Dark Slate Text */
+    border-left: 1px solid #cbd5e1 !important; /* Light Border */
 }
 
-/* 2. Fix the "Search" Box (Make it visible!) */
-.ag-theme-quartz-dark .ag-text-field-input {
-    background-color: #0f172a !important; /* Dark Slate background */
-    color: #ffffff !important; /* Bright White text */
-    border: 1px solid #475569 !important; /* Visible Border */
-}
-
-/* 3. Make Column Labels Bright */
+/* 2. Fix the Column/Filter Text inside the sidebar */
 .ag-theme-quartz-dark .ag-column-select-column-label, 
-.ag-theme-quartz-dark .ag-group-component-title {
-    color: #e2e8f0 !important; /* Slate 200 */
-    font-weight: 500;
+.ag-theme-quartz-dark .ag-group-component-title,
+.ag-theme-quartz-dark .ag-filter-toolpanel-header,
+.ag-theme-quartz-dark .ag-header-cell-text {
+    color: #334155 !important; /* Slate 700 Text */
 }
 
-/* 4. Fix Checkboxes (Make them Cyan) */
-.ag-theme-quartz-dark .ag-checkbox-input-wrapper.ag-checked::after {
-    color: #22d3ee !important; /* Cyan 400 */
+/* 3. Fix Input Boxes (Search Bar) to look normal on white */
+.ag-theme-quartz-dark .ag-text-field-input {
+    background-color: #f1f5f9 !important; /* Light Grey Input */
+    color: #0f172a !important; /* Dark Text */
+    border: 1px solid #94a3b8 !important;
 }
 
-/* 5. Chart Menu Context Fix */
-.ag-theme-quartz-dark .ag-menu,
-.ag-theme-quartz-dark .ag-popup-child {
-    background-color: #1e293b !important;
-    border: 1px solid #475569 !important;
+/* 4. Sidebar Tabs (Columns/Filters buttons) */
+.ag-theme-quartz-dark .ag-side-button-button {
+    color: #64748b !important; /* Slate 500 (Inactive) */
+}
+.ag-theme-quartz-dark .ag-side-button-button.ag-selected {
+    color: #0f172a !important; /* Dark (Active) */
+    border-left-color: #22d3ee !important; /* Cyan Accent */
+}
+
+/* 5. Force the Context Menu (Right Click) to be Visible */
+.ag-theme-quartz-dark .ag-menu {
+    background-color: #1e293b !important; /* Keep Menu Dark */
+    color: #f8fafc !important;
 }

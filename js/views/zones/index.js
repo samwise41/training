@@ -45,7 +45,7 @@ function renderZoneCard(title, sportData) {
 
         // Adjusted row bg to bg-slate-700/40 so it stands out against the card's bg-slate-800
         return `
-            <div class="flex justify-between items-center bg-slate-700/40 p-4 rounded-lg border-l-4 ${zClass} mb-3 shadow-sm">
+            <div class="flex justify-between items-center bg-slate-700/40 p-4 rounded-lg border-l-4 ${zClass} shadow-sm">
                 <span class="text-sm font-bold text-slate-100">${z.name}</span>
                 <span class="text-sm font-mono text-slate-400">${z.range}</span>
             </div>

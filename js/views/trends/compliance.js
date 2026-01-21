@@ -40,7 +40,7 @@ const buildConcentricChart = (d30, d60, centerLabel) => {
                         <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${color1}"></span> 30d
                     </span>
                     <span class="font-mono text-white flex items-center gap-1">
-                        ${d30.pct}% <span class="text-slate-500 opacity-80">(${d30.label})</span>
+                        ${d30.pct}% <span class="text-slate-500 opacity-90">(${d30.label})</span>
                     </span>
                 </div>
                 
@@ -49,7 +49,7 @@ const buildConcentricChart = (d30, d60, centerLabel) => {
                         <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${color2}"></span> 60d
                     </span>
                     <span class="font-mono text-slate-300 flex items-center gap-1">
-                        ${d60.pct}% <span class="text-slate-500 opacity-80">(${d60.label})</span>
+                        ${d60.pct}% <span class="text-slate-500 opacity-90">(${d60.label})</span>
                     </span>
                 </div>
             </div>

@@ -4,7 +4,6 @@ export const renderAnalyzer = (rawLogData) => {
     const containerId = 'ag-grid-container';
     const statsId = 'ag-stats-bar';
 
-    // Delayed init to let HTML render first
     setTimeout(() => initAGGrid(containerId, statsId, rawLogData), 0);
 
     return `
@@ -17,7 +16,7 @@ export const renderAnalyzer = (rawLogData) => {
             <div id="${containerId}" class="ag-theme-alpine-dark flex-1 w-full rounded-xl overflow-hidden border border-slate-700"></div>
             
             <div class="text-[10px] text-slate-500 text-right pr-2">
-                * Drag columns to top to Group • Right Sidebar for Pivot Mode
+                * Toggle "Pivot Mode" in the right sidebar to analyze data
             </div>
         </div>
     `;
@@ -34,28 +33,20 @@ const initAGGrid = (gridId, statsId, rawData) => {
 
     const gridDiv = document.getElementById(gridId);
     
-    // 1. ROBUST DATA PARSER (Handles your full JSON structure)
+    // 1. DATA PARSER
     const rowData = rawData.map(d => {
-        // --- Dates ---
         const dateObj = new Date(d.date);
         const year = isNaN(dateObj) ? 'Unknown' : dateObj.getFullYear();
         const month = isNaN(dateObj) ? 'Unknown' : dateObj.toLocaleString('default', { month: 'short' });
         
-        // --- Metrics Conversions ---
-        // Duration: Seconds -> Minutes
+        // Conversions
         const durMins = (d.duration || d.actualDuration * 60 || 0) / 60;
-        
-        // Distance: Meters -> Miles (1 mi = 1609.34 m)
         const distMiles = (d.distance || 0) / 1609.34;
-        
-        // Elevation: Meters -> Feet (1 m = 3.28084 ft)
         const elevFeet = (d.elevationGain || 0) * 3.28084;
-
-        // Speed: Meters/Sec -> MPH (1 m/s = 2.23694 mph)
         const speedMph = (d.averageSpeed || 0) * 2.23694;
 
         return {
-            // -- Identity --
+            // Identity
             date: d.date, 
             day: d.day,
             year: year,
@@ -67,14 +58,14 @@ const initAGGrid = (gridId, statsId, rawData) => {
             match: d.matchStatus,
             notes: d.notes || '',
 
-            // -- Volume (Sum) --
+            // Volume (Sum)
             duration: durMins,
             distance: distMiles,
             elevation: elevFeet,
             calories: d.calories || 0,
             tss: d.trainingStressScore || 0,
 
-            // -- Intensity (Avg) --
+            // Intensity (Avg)
             if: d.intensityFactor || 0,
             avg_hr: d.averageHR || 0,
             max_hr: d.maxHR || 0,
@@ -83,22 +74,17 @@ const initAGGrid = (gridId, statsId, rawData) => {
             norm_pwr: d.normPower || 0,
             avg_spd: speedMph,
             
-            // -- Running Dynamics --
+            // Dynamics
             cadence_run: d.averageRunningCadenceInStepsPerMinute || 0,
             stride: d.avgStrideLength || 0,
             vert_osc: d.avgVerticalOscillation || 0,
             gct: d.avgGroundContactTime || 0,
-
-            // -- Cycling Dynamics --
             cadence_bike: d.averageBikingCadenceInRevPerMinute || 0,
 
-            // -- Physio --
+            // Physio
             aerobic_te: d.aerobicTrainingEffect || 0,
             anaerobic_te: d.anaerobicTrainingEffect || 0,
-            te_label: d.trainingEffectLabel || '',
             vo2: d.vO2MaxValue || 0,
-
-            // -- Subjective --
             rpe: d.RPE || 0,
             feeling: d.Feeling || 0
         };
@@ -106,13 +92,13 @@ const initAGGrid = (gridId, statsId, rawData) => {
 
     // 2. COLUMN DEFINITIONS
     const columnDefs = [
-        // --- DIMENSIONS (Grouping) ---
+        // --- Dimensions ---
         { field: "date", headerName: "Date", width: 110, sort: 'desc', comparator: (a,b) => new Date(a) - new Date(b) },
-        { field: "year", headerName: "Year", width: 80, enableRowGroup: true, hide: true },
-        { field: "month", headerName: "Month", width: 80, enableRowGroup: true, hide: true },
-        { field: "day", headerName: "Day", width: 100, enableRowGroup: true, hide: true },
+        { field: "year", headerName: "Year", width: 80, enableRowGroup: true, enablePivot: true },
+        { field: "month", headerName: "Month", width: 80, enableRowGroup: true, enablePivot: true },
+        { field: "day", headerName: "Day", width: 100, enableRowGroup: true, enablePivot: true },
         { 
-            field: "type", headerName: "Sport", width: 110, enableRowGroup: true, enablePivot: true,
+            field: "type", headerName: "Sport", width: 110, enableRowGroup: true, enablePivot: true, rowGroup: true, // Auto-group by Sport
             cellRenderer: p => {
                 if(!p.value) return '';
                 const c = p.value.toLowerCase().includes('run') ? 'bg-pink-500' : p.value.toLowerCase().includes('bike') ? 'bg-purple-500' : 'bg-blue-500';
@@ -120,56 +106,45 @@ const initAGGrid = (gridId, statsId, rawData) => {
             }
         },
         { field: "workout", headerName: "Workout Name", width: 200, tooltipField: "notes" },
-        { field: "status", headerName: "Status", width: 100, enableRowGroup: true, hide: true },
+        { field: "status", headerName: "Status", width: 100, enableRowGroup: true, enablePivot: true },
 
-        // --- VOLUME METRICS (Sum) ---
-        { 
-            field: "duration", headerName: "Time (hr)", width: 100, aggFunc: 'sum', enableValue: true,
-            valueFormatter: p => {
-                if(!p.value) return '';
-                const h = Math.floor(p.value / 60);
-                const m = Math.round(p.value % 60);
-                return h>0 ? `${h}h ${m}m` : `${m}m`;
-            }
-        },
+        // --- Metrics (Sum) ---
+        { field: "duration", headerName: "Time (hr)", width: 100, aggFunc: 'sum', enableValue: true, valueFormatter: p => p.value?.toFixed(1) },
         { field: "distance", headerName: "Dist (mi)", width: 100, aggFunc: 'sum', enableValue: true, valueFormatter: p => p.value?.toFixed(1) },
         { field: "elevation", headerName: "Elev (ft)", width: 100, aggFunc: 'sum', enableValue: true, valueFormatter: p => Math.round(p.value).toLocaleString() },
-        { field: "calories", headerName: "Cals", width: 90, aggFunc: 'sum', enableValue: true, hide: true },
+        { field: "calories", headerName: "Cals", width: 90, aggFunc: 'sum', enableValue: true },
         { field: "tss", headerName: "TSS", width: 80, aggFunc: 'sum', enableValue: true },
 
-        // --- INTENSITY METRICS (Avg) ---
+        // --- Metrics (Avg) ---
         { field: "avg_hr", headerName: "Avg HR", width: 90, aggFunc: 'avg', enableValue: true, valueFormatter: p => Math.round(p.value) },
         { field: "avg_pwr", headerName: "Watts", width: 90, aggFunc: 'avg', enableValue: true, valueFormatter: p => Math.round(p.value) },
-        { field: "norm_pwr", headerName: "Norm Pwr", width: 90, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => Math.round(p.value) },
-        { field: "if", headerName: "IF", width: 80, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => p.value?.toFixed(2) },
-        { field: "avg_spd", headerName: "MPH", width: 80, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => p.value?.toFixed(1) },
-
-        // --- RUN DYNAMICS ---
-        { field: "cadence_run", headerName: "Run Cad", width: 90, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => Math.round(p.value) },
-        { field: "gct", headerName: "GCT", width: 80, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => Math.round(p.value) },
-        
-        // --- PHYSIO ---
-        { field: "aerobic_te", headerName: "Aerobic", width: 90, aggFunc: 'avg', enableValue: true, valueFormatter: p => p.value?.toFixed(1) },
-        { field: "anaerobic_te", headerName: "Anaerobic", width: 90, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => p.value?.toFixed(1) },
+        { field: "norm_pwr", headerName: "Norm Pwr", width: 90, aggFunc: 'avg', enableValue: true, valueFormatter: p => Math.round(p.value) },
+        { field: "if", headerName: "IF", width: 80, aggFunc: 'avg', enableValue: true, valueFormatter: p => p.value?.toFixed(2) },
+        { field: "avg_spd", headerName: "MPH", width: 80, aggFunc: 'avg', enableValue: true, valueFormatter: p => p.value?.toFixed(1) },
+        { field: "cadence_run", headerName: "Run Cad", width: 90, aggFunc: 'avg', enableValue: true, valueFormatter: p => Math.round(p.value) },
         { field: "rpe", headerName: "RPE", width: 80, aggFunc: 'avg', enableValue: true, valueFormatter: p => p.value?.toFixed(1) },
-        { field: "feeling", headerName: "Feel", width: 80, aggFunc: 'avg', enableValue: true, hide: true, valueFormatter: p => p.value?.toFixed(1) }
+        { field: "feeling", headerName: "Feel", width: 80, aggFunc: 'avg', enableValue: true, valueFormatter: p => p.value?.toFixed(1) }
     ];
 
+    // 3. GRID OPTIONS
     const gridOptions = {
         columnDefs: columnDefs,
         rowData: rowData,
         animateRows: true,
-        sideBar: {
-            toolPanels: ['columns', 'filters'],
-            defaultToolPanel: ''
-        },
-        rowGroupPanelShow: 'always', 
+        
+        // --- THIS ENABLES THE SIDEBAR ---
+        sideBar: 'columns',  
+        pivotMode: true,     // Starts in Pivot Mode automatically
+
         defaultColDef: {
             sortable: true,
             filter: true,
             resizable: true,
             flex: 1,
-            minWidth: 100
+            minWidth: 100,
+            enableValue: true,
+            enableRowGroup: true,
+            enablePivot: true,
         },
         autoGroupColumnDef: {
             headerName: 'Group',
@@ -189,7 +164,7 @@ const initAGGrid = (gridId, statsId, rawData) => {
     agGrid.createGrid(gridDiv, gridOptions);
 };
 
-// --- STATS ENGINE (Updates Top Bar) ---
+// --- STATS ENGINE ---
 const updateStats = (api, statsId) => {
     let count = 0;
     let dur = 0;
@@ -197,8 +172,9 @@ const updateStats = (api, statsId) => {
     let elev = 0;
     let tss = 0;
 
+    // Use loop through displayed rows to respect pivot/grouping
     api.forEachNodeAfterFilter(node => {
-        // Only sum leaf nodes to prevent double counting group headers
+        // Only count LEAF nodes (actual activities) to avoid double counting
         if (!node.group && node.data) {
             count++;
             dur += node.data.duration || 0;
@@ -208,8 +184,8 @@ const updateStats = (api, statsId) => {
         }
     });
 
-    const hours = Math.floor(dur / 60);
-    const mins = Math.round(dur % 60);
+    const hours = Math.floor(dur);
+    const mins = Math.round((dur - hours) * 60);
     
     const card = (label, val, unit, color) => `
         <div class="flex flex-col items-center md:items-start">

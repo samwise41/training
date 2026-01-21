@@ -87,17 +87,16 @@ export function renderTopCards() {
                             label = "Developing";
                         }
 
-                        // --- NEW FORMATTING ---
-                        // Large % on the left, Status and Weakness stacked on the right
+                        // --- NEW FORMATTING: Percentage on Right ---
                         readinessHtml = `
-                            <div class="mt-3 pt-3 border-t border-slate-700/50 flex items-center gap-4">
-                                <div class="text-3xl font-black ${colorClass} tracking-tighter">${lowestPct}%</div>
+                            <div class="mt-3 pt-3 border-t border-slate-700/50 flex items-center justify-between">
                                 <div class="flex flex-col">
                                     <span class="text-xs font-bold ${colorClass} uppercase leading-none mb-1">${label}</span>
                                     <span class="text-[10px] text-slate-500 font-mono flex items-center gap-1">
                                         Weakness: <i class="fa-solid ${lowestMetric.icon} text-slate-400"></i> <span class="text-slate-300">${lowestMetric.name}</span>
                                     </span>
                                 </div>
+                                <div class="text-3xl font-black ${colorClass} tracking-tighter">${lowestPct}%</div>
                             </div>
                         `;
                     }

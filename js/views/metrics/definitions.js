@@ -1,10 +1,18 @@
 // js/views/metrics/definitions.js
 
 const getColor = (varName) => {
+    // Check if we are in a browser environment to avoid crashes during build
     if (typeof window !== "undefined" && window.getComputedStyle) {
         return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
     }
-    return '#888888'; // Fallback
+    // Fallback colors if CSS isn't loaded yet
+    const defaults = {
+        '--color-swim': '#22d3ee',
+        '--color-bike': '#c084fc',
+        '--color-run': '#f472b6',
+        '--color-strength': '#94a3b8'
+    };
+    return defaults[varName] || '#888888';
 };
 
 // UPDATED: Using Hex Codes to ensure charts are not black

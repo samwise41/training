@@ -225,7 +225,7 @@
                         case 'dashboard':
                             // --- CHANGED: Just render the dashboard content ---
                             // Your new topCards.js logic is assumed to be inside renderDashboard now
-                            content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd);
+                            content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
                             content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;

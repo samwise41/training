@@ -1,6 +1,23 @@
 // js/views/ftp/index.js
 
 // --- DATA FETCHING FOR CHARTS (Keeps Strava Logic) ---
+
+const getColor = (varName) => {
+    // Check if we are in a browser environment
+    if (typeof window !== "undefined" && window.getComputedStyle) {
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    }
+    // Fallback colors if CSS isn't loaded yet
+    const defaults = {
+        '--color-swim': '#22d3ee',     // Cyan-400
+        '--color-bike': '#c084fc',     // Purple-400
+        '--color-run': '#f472b6',      // Pink-400
+        '--color-strength': '#94a3b8', // Slate-400
+        '--color-all': '#34d399'       // Emerald-400 (New for General metrics)
+    };
+    return defaults[varName] || '#888888';
+};
+
 const fetchCyclingData = async () => {
     try {
         const res = await fetch('strava_data/cycling/power_curve_graph.json');
@@ -231,8 +248,8 @@ export function renderFTP(profileData) {
     };
     
     const style = getComputedStyle(document.documentElement);
-    const bikeColor = style.getPropertyValue('--color-bike').trim() || '#a855f7'; 
-    const runColor = style.getPropertyValue('--color-run').trim() || '#ec4899';   
+    const bikeColor = style.getPropertyValue('--color-bike').trim() || getColor('--color-bike'),; 
+    const runColor = style.getPropertyValue('--color-run').trim() || getColor('--color-run'),;   
     
     const gaugeHtml = renderGauge(bio.wkg, bio.gauge_percent, bio.category);
     const cyclingStatsHtml = renderCyclingStats(bio);

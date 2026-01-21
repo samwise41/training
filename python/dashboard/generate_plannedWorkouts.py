@@ -10,7 +10,7 @@ root_dir = os.path.dirname(os.path.dirname(current_dir))
 data_dir = os.path.join(root_dir, 'data')
 dashboard_dir = os.path.join(data_dir, 'dashboard')
 
-PLANNED_FILE = os.path.join(data_dir, 'planned.json')
+PLANNED_FILE = os.path.join(dashboard_dir, 'planned.json')
 LOG_FILE = os.path.join(data_dir, 'training_log.json')
 OUTPUT_FILE = os.path.join(dashboard_dir, 'plannedWorkouts.json')
 

@@ -27,6 +27,16 @@ export function renderTopCards() {
         return match ? parseFloat(match[0]) : 0;
     };
 
+    // Sport Color Mapping
+    const getSportColor = (name) => {
+        const n = name.toLowerCase();
+        if (n.includes('swim')) return 'text-sky-400';
+        if (n.includes('bike') || n.includes('cycling')) return 'text-orange-400';
+        if (n.includes('run')) return 'text-teal-400';
+        if (n.includes('climb')) return 'text-fuchsia-400';
+        return 'text-slate-400';
+    };
+
     // --- Main Render Logic ---
     setTimeout(async () => {
         const container = document.getElementById(containerId);
@@ -85,14 +95,19 @@ export function renderTopCards() {
                             label = "Developing";
                         }
 
-                        // Right-aligned readiness block
+                        const sportColor = getSportColor(lowestMetric.name);
+
+                        // Right-aligned readiness block with added margin-right (mr-4) to scoot left
                         readinessHtml = `
-                            <div class="flex flex-col items-end text-right">
+                            <div class="flex flex-col items-end text-right mr-6">
                                 <div class="text-3xl font-black ${colorClass} tracking-tighter leading-none">${lowestPct}%</div>
                                 <div class="text-[10px] font-bold ${colorClass} uppercase leading-tight mt-1">${label}</div>
-                                <div class="text-[10px] text-slate-500 font-mono mt-0.5 flex items-center gap-1 justify-end">
+                                <div class="text-[10px] text-slate-500 font-mono mt-1 flex items-center gap-1.5 justify-end">
                                     <span class="text-slate-600">Weakness:</span> 
-                                    <i class="fa-solid ${lowestMetric.icon} text-slate-400"></i>
+                                    <span class="flex items-center gap-1 ${sportColor}">
+                                        <i class="fa-solid ${lowestMetric.icon}"></i>
+                                        <span>${lowestMetric.name}</span>
+                                    </span>
                                 </div>
                             </div>
                         `;

@@ -19,25 +19,31 @@ const buildMetricChart = (displayData, fullData, key) => {
     
     const vals = displayData.map(d => d.val);
     let minV = Math.min(...vals), maxV = Math.max(...vals);
-    
-    // Ensure the chart scale includes the target zones
     if (def.refMin) minV = Math.min(minV, def.refMin);
     if (def.refMax) maxV = Math.max(maxV, def.refMax);
-    
     const range = maxV - minV || 1;
     const dMin = Math.max(0, minV - range * 0.1);
     const dMax = maxV + range * 0.1;
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
     // --- Build Target Lines ---
+    // Rule: Higher is Good -> Top Green, Bottom Red
+    //       Lower is Good  -> Top Red, Bottom Green
+    const isInverted = def.invertRanges;
+    const colorGood = '#34d399'; // Emerald-400
+    const colorBad = '#f87171';  // Red-400
+    
+    const maxLineColor = isInverted ? colorBad : colorGood;
+    const minLineColor = isInverted ? colorGood : colorBad;
+
     let targetsHtml = '';
     if (def.refMin !== undefined) {
         const yVal = getY(def.refMin);
-        targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />`;
+        targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${minLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
     if (def.refMax !== undefined) {
         const yVal = getY(def.refMax);
-        targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" opacity="0.4" />`;
+        targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${maxLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
 
     let pathD = `M ${getX(displayData[0], 0)} ${getY(displayData[0].val)}`;

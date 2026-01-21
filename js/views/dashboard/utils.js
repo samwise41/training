@@ -93,12 +93,11 @@ export function mergeAndDeduplicate(planned, actuals) {
     return Array.from(map.values());
 }
 
-// --- STYLE & ICON HELPERS ---
-const getColor = (varName) => {
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-};
 
 export const getSportColorVar = (type) => {
+    const getColor = (varName) => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        
     const t = String(type || '').toLowerCase();
     
     if (t.includes('bike') || t.includes('cycl') || t.includes('ride')) return getColor('--color-bike'); // Purple

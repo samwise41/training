@@ -1,12 +1,5 @@
 // js/views/metrics/utils.js
 
-const getColor = (varName) => {
-    if (typeof window !== "undefined" && window.getComputedStyle) {
-        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-    }
-    return '#888888'; // Fallback
-};
-
 import { METRIC_DEFINITIONS } from './definitions.js';
 
 

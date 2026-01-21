@@ -169,28 +169,19 @@ body {
 }
 
 
-/* AG Grid Overrides for Neon/Slate Theme */
-.ag-theme-alpine-dark {
-    --ag-background-color: #0f172a !important; /* Matches bg-slate-900 */
+/* Force AG Grid Quartz to match your App Background */
+.ag-theme-quartz-dark {
+    --ag-background-color: #0f172a !important; /* bg-slate-900 */
+    --ag-header-background-color: #1e293b !important; /* bg-slate-800 */
+    --ag-row-hover-color: #334155 !important;
+    --ag-odd-row-background-color: #0f172a !important;
     --ag-foreground-color: #e2e8f0 !important;
     --ag-border-color: #334155 !important;
-    --ag-header-background-color: #1e293b !important; /* Matches bg-slate-800 */
-    --ag-row-hover-color: #1e293b !important;
-    --ag-odd-row-background-color: #0f172a !important;
-    --ag-font-family: inherit !important;
-    --ag-header-foreground-color: #94a3b8 !important; /* Slate-400 */
+    font-family: inherit !important; /* Use your app's font */
 }
 
-.ag-theme-alpine-dark .ag-root-wrapper {
-    border: none !important;
-}
-
-/* Custom Scrollbars inside the Grid */
-.ag-body-viewport::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-.ag-body-viewport::-webkit-scrollbar-thumb {
-    background-color: #334155;
-    border-radius: 4px;
+/* Make the Pivot Sidebar blend in */
+.ag-theme-quartz-dark .ag-side-bar {
+    background-color: #1e293b !important;
+    border-left: 1px solid #334155 !important;
 }

@@ -1,11 +1,7 @@
 // js/app.js
 
-(async function initApp() {
-    console.log("🚀 Booting App (JSON Mode)...");
-    const cacheBuster = Date.now();
-
     // Add this method to the App object
-    async fetchWeather() {
+async fetchWeather() {
     try {
         // Simple location approximation (or hardcode your lat/lon if preferred)
         const locRes = await fetch('https://ipapi.co/json/');
@@ -22,7 +18,13 @@
     } catch (e) {
         console.warn("Weather fetch failed:", e);
     }
-    },
+},
+
+(async function initApp() {
+    console.log("🚀 Booting App (JSON Mode)...");
+    const cacheBuster = Date.now();
+
+
 
     
     // --- 1. DYNAMIC IMPORTS ---

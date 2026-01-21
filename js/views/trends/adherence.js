@@ -1,3 +1,7 @@
+{
+type: uploaded file
+fileName: samwise41/training/training-01_12_Bug_Fixes/js/views/trends/adherence.js
+fullContent:
 import { COLOR_MAP } from './utils.js';
 
 // --- LOCAL STATE ---
@@ -29,7 +33,6 @@ window.toggleTrendSeries = (type) => {
 };
 
 window.toggleTrendMetric = (metric) => {
-    // metric: 'show7d', 'show30d', etc.
     if (chartState.hasOwnProperty(metric)) {
         chartState[metric] = !chartState[metric];
         renderDynamicCharts('trend-charts-container', currentRollingData);
@@ -61,7 +64,6 @@ window.resetTrendDefaults = () => {
 const filterDataByDate = (data, range) => {
     if (!data || data.length === 0) return [];
     
-    // Deep copy to avoid mutating original
     const fullData = [...data]; 
     const now = new Date();
     let cutoff = new Date();
@@ -115,7 +117,6 @@ const buildTrendChart = (title, isCount, rawData) => {
     let spread = dataMax - dataMin;
     if (spread < 20) spread = 20;
     
-    // Add buffer
     const domainMin = Math.max(0, dataMin - (spread * 0.1)); 
     const domainMax = dataMax + (spread * 0.1);
 
@@ -148,15 +149,15 @@ const buildTrendChart = (title, isCount, rawData) => {
         const color = COLOR_MAP[sport];
         
         activeMetrics.forEach(metric => {
-            // Style Logic per user request
+            // Style Logic: 7d Solid, 30d Dotted, 90d Dashed
             let dashArray = 'none';
             let strokeWidth = '2';
             let opacity = '1';
 
-            if (metric === '7d') { strokeWidth = '1'; opacity = '0.6'; } // Thin solid
-            if (metric === '30d') { strokeWidth = '2.5'; } // Thick solid
-            if (metric === '60d') { dashArray = '2,2'; strokeWidth = '2'; } // Dotted
-            if (metric === '90d') { dashArray = '6,4'; strokeWidth = '2'; } // Dashed
+            if (metric === '7d') { dashArray = 'none'; strokeWidth = '2'; opacity = '0.9'; } 
+            if (metric === '30d') { dashArray = '2,2'; strokeWidth = '2'; opacity = '0.8'; } 
+            if (metric === '60d') { dashArray = '4,2,1,2'; strokeWidth = '1.5'; opacity = '0.6'; } // Dash-Dot fallback
+            if (metric === '90d') { dashArray = '8,4'; strokeWidth = '2'; opacity = '0.7'; } 
 
             let dPath = '';
             
@@ -172,9 +173,7 @@ const buildTrendChart = (title, isCount, rawData) => {
                 if (i === 0) dPath = `M ${x} ${y}`;
                 else dPath += ` L ${x} ${y}`;
 
-                // Only draw dots for the primary lines to avoid clutter, or on hover
-                // Drawing dots for all selected metrics
-                circlesHtml += `<circle cx="${x}" cy="${y}" r="2" fill="${color}" stroke="none" opacity="${opacity}" class="cursor-pointer hover:r-4 transition-all" onclick="window.showTrendTooltip(event, '${pt.display_date}', '${sport} ${metric}', '${val}%', '${color}', '${label}')"></circle>`;
+                circlesHtml += `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" stroke="none" opacity="${opacity}" class="cursor-pointer hover:r-4 transition-all" onclick="window.showTrendTooltip(event, '${pt.display_date}', '${sport} ${metric}', '${val}%', '${color}', '${label}')"></circle>`;
             });
 
             pathsHtml += `<path d="${dPath}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-dasharray="${dashArray}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}" />`;
@@ -183,7 +182,6 @@ const buildTrendChart = (title, isCount, rawData) => {
 
     // 5. Draw X-Axis Labels
     let labelsHtml = '';
-    // Dynamic Label Frequency based on zoom
     let modVal = 4;
     if (chartState.dateRange === '30d') modVal = 1;
     else if (chartState.dateRange === '60d') modVal = 2;
@@ -257,22 +255,23 @@ export const renderDynamicCharts = (containerId, rollingData) => {
                 </div>
 
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-1">Averages</span>
-                    ${buildToggle('show7d', '7d', 'metric', 'bg-slate-200')}
-                    ${buildToggle('show30d', '30d', 'metric', 'bg-slate-200')}
-                    ${buildToggle('show60d', '60d', 'metric', 'bg-slate-200')}
-                    ${buildToggle('show90d', '90d', 'metric', 'bg-slate-200')}
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-700/50 pt-3">
-                <div class="flex items-center gap-2 flex-wrap">
                     <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-1">Zoom</span>
                     ${buildDateToggle('30d', '30d')}
                     ${buildDateToggle('60d', '60d')}
                     ${buildDateToggle('90d', '90d')}
                     ${buildDateToggle('6m', '6m')}
                     ${buildDateToggle('1y', '1y')}
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-700/50 pt-3">
+                
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-1">Averages</span>
+                    ${buildToggle('show7d', '7d', 'metric', 'bg-slate-200')}
+                    ${buildToggle('show30d', '30d', 'metric', 'bg-slate-200')}
+                    ${buildToggle('show60d', '60d', 'metric', 'bg-slate-200')}
+                    ${buildToggle('show90d', '90d', 'metric', 'bg-slate-200')}
                 </div>
 
                 <button onclick="window.resetTrendDefaults()" class="text-xs text-slate-500 hover:text-white flex items-center gap-1 transition-colors">
@@ -283,8 +282,7 @@ export const renderDynamicCharts = (containerId, rollingData) => {
         
         <div class="flex justify-end gap-4 text-[10px] text-slate-400 font-mono mb-2 px-2">
             <span class="flex items-center gap-1"><div class="w-6 h-0.5 bg-slate-400"></div> 7d</span>
-            <span class="flex items-center gap-1"><div class="w-6 h-1 bg-slate-400"></div> 30d</span>
-            <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dotted border-slate-400"></div> 60d</span>
+            <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dotted border-slate-400"></div> 30d</span>
             <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dashed border-slate-400"></div> 90d</span>
         </div>
 
@@ -296,3 +294,4 @@ export const renderDynamicCharts = (containerId, rollingData) => {
 
     container.innerHTML = `${controlsHtml}${chart1}${chart2}`;
 };
+}

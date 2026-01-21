@@ -12,11 +12,19 @@ export function renderProgressWidget() {
         if (!container) return;
         
         try {
-            const response = await fetch('data/dashboard/plannedWorkouts.json');
-            if (!response.ok) throw new Error("Data not found");
+            // FIX: Fetch both Planned Workouts and Streaks JSON
+            const [workoutsResponse, streaksResponse] = await Promise.all([
+                fetch('data/dashboard/plannedWorkouts.json'),
+                fetch('data/dashboard/streaks.json')
+            ]);
+
+            if (!workoutsResponse.ok) throw new Error("Data not found");
             
-            const data = await response.json();
-            container.innerHTML = generateWidgetHTML(data);
+            const data = await workoutsResponse.json();
+            // Handle streaks gracefully if file missing, though user confirms it exists
+            const streaksData = streaksResponse.ok ? await streaksResponse.json() : null;
+
+            container.innerHTML = generateWidgetHTML(data, streaksData);
             
         } catch (error) {
             console.error("Widget Error:", error);
@@ -28,7 +36,7 @@ export function renderProgressWidget() {
 }
 
 // --- LOGIC ADAPTER ---
-function generateWidgetHTML(data) {
+function generateWidgetHTML(data, streaksData) {
     if (!data || data.length === 0) return '';
 
     // 1. Date Setup
@@ -61,41 +69,13 @@ function generateWidgetHTML(data) {
         }
     };
 
-    // Helper for Streaks
-    const weeksMap = {}; // Key: "YYYY-Www" -> { planned, actual, totalItems, completedItems, missed }
-
     // 3. Process Data Loop
     data.forEach(w => {
         const wDate = new Date(w.date.replace(/-/g, '/')); // Fix for some browser parsing
         const dateKey = w.date;
         
-        // --- A. Build Weeks Map for Streaks ---
-        // Get Monday of that week
-        const dDay = wDate.getDay();
-        const dDiff = wDate.getDate() - dDay + (dDay === 0 ? -6 : 1);
-        const wMonday = new Date(wDate);
-        wMonday.setDate(dDiff);
-        const weekKey = wMonday.toISOString().split('T')[0];
-
-        if (!weeksMap[weekKey]) {
-            weeksMap[weekKey] = { planned: 0, actual: 0, items: 0, completed: 0, failed: false };
-        }
-
         const planDur = w.plannedDuration || 0;
         const actDur = w.actualDuration || 0;
-
-        weeksMap[weekKey].planned += planDur;
-        weeksMap[weekKey].actual += actDur;
-        
-        if (planDur > 0) {
-            weeksMap[weekKey].items++;
-            // Strict completion check
-            if (w.status === 'COMPLETED' || (actDur / planDur) >= 0.8) {
-                weeksMap[weekKey].completed++;
-            } else if (w.status === 'MISSED') {
-                weeksMap[weekKey].failed = true;
-            }
-        }
 
         // --- B. Process Current Week Stats ---
         if (wDate >= monday && wDate <= sunday) {
@@ -125,38 +105,9 @@ function generateWidgetHTML(data) {
         }
     });
 
-    // 4. Calculate Streaks
-    // Sort weeks descending
-    const sortedWeeks = Object.keys(weeksMap).sort((a, b) => new Date(b) - new Date(a));
-    const thisWeekKey = monday.toISOString().split('T')[0];
-
-    let dailyStreak = 0;
-    let volumeStreak = 0;
-
-    // Start looking from LAST week (ignore current incomplete week)
-    let startIndex = sortedWeeks.indexOf(thisWeekKey);
-    // If current week not found (no data yet), start at 0, else start at index + 1
-    startIndex = (startIndex === -1) ? 0 : startIndex + 1;
-
-    // Daily Streak: No "Missed" workouts AND 100% completion of planned items
-    for (let i = startIndex; i < sortedWeeks.length; i++) {
-        const wk = weeksMap[sortedWeeks[i]];
-        if (!wk.failed && wk.items > 0 && wk.completed === wk.items) {
-            dailyStreak++;
-        } else {
-            break;
-        }
-    }
-
-    // Volume Streak: >90% volume compliance
-    for (let i = startIndex; i < sortedWeeks.length; i++) {
-        const wk = weeksMap[sortedWeeks[i]];
-        if (wk.planned > 0 && (wk.actual / wk.planned) >= 0.90) {
-            volumeStreak++;
-        } else {
-            break;
-        }
-    }
+    // 4. Streaks (Loaded directly from JSON now)
+    const dailyStreak = streaksData ? streaksData.daily_streak : 0;
+    const volumeStreak = streaksData ? streaksData.volume_streak : 0;
 
     // 5. Render HTML Helper
     const generateBarHtml = (label, iconClass, actual, planned, dailyMap, isMain = false, sportType = 'Other') => {

@@ -1,6 +1,5 @@
 import { buildCollapsibleSection } from './utils.js';
 import { renderVolumeChart } from './volume.js';
-import { buildFTPChart } from './ftp.js';
 import { renderDynamicCharts } from './adherence.js';
 import { renderComplianceSection } from './compliance.js';
 import { renderDurationTool, updateDurationAnalysis } from './duration.js';
@@ -24,7 +23,6 @@ export function renderTrends(mergedLogData, trendsData) {
     // 2. Build Sections
     
     // --- VOLUME SECTION ---
-    // Pass safeTrendsData instead of logData/planMdContent
     const volumeChartsHtml = `
         ${renderVolumeChart(safeTrendsData, 'All', 'Total Weekly Volume')}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-0">
@@ -37,10 +35,6 @@ export function renderTrends(mergedLogData, trendsData) {
     // --- TRENDS SECTION (Container Only) ---
     const trendContainerHtml = `<div id="trend-charts-container"></div>`;
     const trendsSection = buildCollapsibleSection('trends-section', 'Adherence Trends', trendContainerHtml, true);
-
-    // --- FTP SECTION ---
-    const ftpHtml = buildFTPChart(planMdContent);
-    const ftpSection = buildCollapsibleSection('ftp-section', 'Fitness Progression', ftpHtml, true);
 
     // --- ADHERENCE OVERVIEW ---
     const adherenceHtml = renderComplianceSection(logData);
@@ -55,7 +49,7 @@ export function renderTrends(mergedLogData, trendsData) {
         renderDynamicCharts('trend-charts-container', logData);
     }, 0);
 
-    return { html: volumeSection + trendsSection + ftpSection + adherenceSection + durationSection };
+    return { html: volumeSection + trendsSection + adherenceSection + durationSection };
 }
 
 // Re-export for App.js import destructuring

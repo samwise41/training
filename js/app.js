@@ -37,7 +37,7 @@
         safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
-        safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- NEW MODULE
+        safeImport('./views/logbook/analyzer.js', 'Analyzer')
     ]);
 
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
@@ -50,7 +50,7 @@
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
-    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing"); // <--- NEW RENDERER
+    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
 
     // --- 2. APP STATE ---
     const App = {
@@ -71,21 +71,27 @@
             this.setupNavigation();
             this.fetchWeather(); 
 
-            const savedView = localStorage.getItem('currentView') || 'dashboard';
-            this.renderCurrentView(savedView);
-        },
+            // --- HASH ROUTING INITIALIZATION ---
+            // 1. Check URL Hash first, then LocalStorage, then Default
+            const hashView = window.location.hash.replace('#', '');
+            const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
 
-        // js/app.js
+            // 2. Ensure URL matches the decided view (handles empty hash case)
+            if (window.location.hash !== `#${initialView}`) {
+                window.location.hash = initialView; 
+            } else {
+                // If hash was already present, render it directly
+                this.renderCurrentView(initialView);
+            }
+        },
 
         async loadData() {
             try {
                 console.log("📡 Fetching Data (Isolated Mode)...");
 
-                // 1. Define sources map (Order no longer matters!)
                 const sources = {
                     planMd: './endurance_plan.md',
                     log: './data/training_log.json',
-                    // planned: './data/planned.json', // Safe to comment out now
                     gear: './data/gear/gear.json',
                     garmin: './data/my_garmin_data_ALL.json',
                     profile: './data/profile.json',
@@ -93,7 +99,6 @@
                     trends: './data/trends/trends.json'
                 };
 
-                // 2. Fetch all keys in parallel
                 const requests = Object.entries(sources).map(async ([key, url]) => {
                     try {
                         const res = await fetch(url);
@@ -106,14 +111,11 @@
 
                 const results = await Promise.all(requests);
                 
-                // Convert array back to a lookup object
                 const dataMap = results.reduce((acc, item) => {
                     acc[item.key] = item;
                     return acc;
                 }, {});
 
-                // 3. Assign Data Safely (Isolation guaranteed)
-                
                 // -- Text Files --
                 if (dataMap.planMd?.ok) this.planMd = await dataMap.planMd.res.text();
 
@@ -161,9 +163,7 @@
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
-        // --- HELPER: Updates Top Bar Title & Weather ---
         updateHeaderUI(viewName) {
-            // 1. Update Title
             const titles = { 
                 dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', 
                 roadmap: 'Season Roadmap', gear: 'Gear Choice', zones: 'Training Zones', 
@@ -175,7 +175,6 @@
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
             }
 
-            // 2. Update Weather (if data exists)
             if (this.weather.current !== null) {
                 const condition = CONFIG.WEATHER_MAP[this.weather.code] || ["Cloudy", "☁️"];
                 const wInfo = document.getElementById('weather-info');
@@ -192,54 +191,66 @@
             }
         },
 
-        // --- Mobile Navigation (Fixed Logic) ---
+        // --- HASH-BASED NAVIGATION ---
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             const btnClose = document.getElementById('btn-sidebar-close'); 
 
-            // FIXED: Toggles the exact classes found in your HTML
             const toggleSidebar = () => {
                 sidebar.classList.toggle('sidebar-closed'); 
                 sidebar.classList.toggle('sidebar-open');   
                 overlay.classList.toggle('hidden');
             };
 
+            // 1. Global Hash Change Listener (The Source of Truth)
+            window.addEventListener('hashchange', () => {
+                const view = window.location.hash.replace('#', '');
+                this.renderCurrentView(view || 'dashboard');
+            });
+
+            // 2. Click Handlers just update the Hash
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const view = e.currentTarget.dataset.view;
+                    window.location.hash = view; // Triggers 'hashchange'
+
+                    // Close mobile menu if open
+                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
+                        toggleSidebar();
+                    }
+                });
+            });
+
+            // 3. Mobile Menu Handlers
             if (menuBtn) {
                 menuBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     toggleSidebar();
                 });
             }
-            
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
-
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.nav-item').forEach(b => {
-                        b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
-                        b.classList.add('text-slate-400', 'border-transparent');
-                    });
-                    e.currentTarget.classList.remove('text-slate-400', 'border-transparent');
-                    e.currentTarget.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
-
-                    const view = e.currentTarget.dataset.view;
-                    localStorage.setItem('currentView', view);
-                    this.renderCurrentView(view);
-
-                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
-                        toggleSidebar();
-                    }
-                });
-            });
         },
 
         renderCurrentView(view) {
-            // Update Header Title & Weather
+            // 1. Persistence & Header
+            localStorage.setItem('currentView', view);
             this.updateHeaderUI(view);
 
+            // 2. Update Navigation Active States
+            document.querySelectorAll('.nav-item').forEach(b => {
+                if (b.dataset.view === view) {
+                    b.classList.remove('text-slate-400', 'border-transparent');
+                    b.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
+                } else {
+                    b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
+                    b.classList.add('text-slate-400', 'border-transparent');
+                }
+            });
+
+            // 3. Render Content
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
@@ -248,7 +259,6 @@
                 try {
                     switch (view) {
                         case 'dashboard':
-                            // Pass Readiness Data here (4th argument)
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
@@ -274,8 +284,6 @@
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);
                             break;
                         case 'plan':
-                            // --- NEW ANALYZER TOOL ---
-                            // Uses rawLogData for the pivot calculations
                             content.innerHTML = renderAnalyzer(this.rawLogData);
                             break;
                         default:
@@ -286,13 +294,6 @@
                     content.innerHTML = `<div class="p-10 text-red-500">Render Error: ${e.message}</div>`;
                 }
                 content.classList.remove('opacity-0');
-                
-                document.querySelectorAll('.nav-item').forEach(b => {
-                    if (b.dataset.view === view) {
-                        b.classList.remove('text-slate-400', 'border-transparent');
-                        b.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
-                    }
-                });
             }, 150);
         }
     };

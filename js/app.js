@@ -37,6 +37,7 @@
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness')
     ]);
+        safeImport('./views/logbook/analyzer.js', 'Analyzer') // <--- ADD THIS
 
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
@@ -48,6 +49,7 @@
     const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
+    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing"); // <--- ADD THIS
 
     // --- 2. APP STATE ---
     const App = {
@@ -250,7 +252,7 @@
                             content.innerHTML = renderRoadmap(this.garminData, this.planMd);
                             break;
                         case 'plan':
-                            const md = Parser.getSection(this.planMd, "Weekly Schedule") || "No plan found.";
+                            const md = Parser.getSection(this.planMd, "Weekly Schedule", this.rawLogData)) || "No plan found.";
                             content.innerHTML = `<div class="markdown-body p-6 bg-slate-900 rounded-xl border border-slate-700">${window.marked.parse(md)}</div>`;
                             break;
                         default:

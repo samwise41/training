@@ -171,34 +171,37 @@ body {
 
 /* --- AG GRID SIDEBAR CONTRAST FIX --- */
 
-/* 1. Make the Sidebar Panel Lighter (Slate 800) so it stands out from the Grid (Slate 900) */
-.ag-theme-quartz-dark .ag-side-bar {
-    background-color: #1e293b !important; 
-    border-left: 1px solid #475569 !important; /* Stronger Border Line */
+/* --- AG GRID SIDEBAR & CHART FIXES --- */
+
+/* 1. Brighten the Sidebar Background & Text */
+.ag-theme-quartz-dark .ag-side-bar,
+.ag-theme-quartz-dark .ag-tool-panel-wrapper {
+    background-color: #1e293b !important; /* Slate 800 (Lighter than grid) */
+    color: #f1f5f9 !important; /* White Text */
 }
 
-/* 2. Style the Tab Strip (The vertical strip with "Columns" / "Filters" text) */
-.ag-theme-quartz-dark .ag-side-buttons {
-    background-color: #0f172a !important; /* Darker strip for contrast */
-    border-left: 1px solid #334155 !important;
+/* 2. Fix the "Search" Box (Make it visible!) */
+.ag-theme-quartz-dark .ag-text-field-input {
+    background-color: #0f172a !important; /* Dark Slate background */
+    color: #ffffff !important; /* Bright White text */
+    border: 1px solid #475569 !important; /* Visible Border */
 }
 
-/* 3. Make the Sidebar Text/Icons Bright */
-.ag-theme-quartz-dark .ag-side-button-button {
-    color: #94a3b8 !important; /* Slate 400 (Inactive) */
+/* 3. Make Column Labels Bright */
+.ag-theme-quartz-dark .ag-column-select-column-label, 
+.ag-theme-quartz-dark .ag-group-component-title {
+    color: #e2e8f0 !important; /* Slate 200 */
+    font-weight: 500;
 }
 
-/* 4. Highlight the Active Tab (Cyan Border) */
-.ag-theme-quartz-dark .ag-side-button-button.ag-selected {
+/* 4. Fix Checkboxes (Make them Cyan) */
+.ag-theme-quartz-dark .ag-checkbox-input-wrapper.ag-checked::after {
+    color: #22d3ee !important; /* Cyan 400 */
+}
+
+/* 5. Chart Menu Context Fix */
+.ag-theme-quartz-dark .ag-menu,
+.ag-theme-quartz-dark .ag-popup-child {
     background-color: #1e293b !important;
-    color: #ffffff !important; /* White text when active */
-    border-left: 3px solid #22d3ee !important; /* Cyan accent line */
-}
-
-/* 5. Headers inside the sidebar */
-.ag-theme-quartz-dark .ag-tool-panel-wrapper .ag-panel-title-bar {
-    background-color: #1e293b !important;
-    border-bottom: 1px solid #334155 !important;
-    color: #f1f5f9 !important; /* White text */
-    font-weight: bold;
+    border: 1px solid #475569 !important;
 }

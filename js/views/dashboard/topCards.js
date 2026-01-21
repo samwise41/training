@@ -1,7 +1,7 @@
 export function renderTopCards() {
     const containerId = 'top-cards-container';
 
-    // Helper: Parse Duration Strings (e.g. "1h 30m", "45m")
+    // --- Helpers ---
     const parseDur = (str) => {
         if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
         if (typeof str === 'number') return str;
@@ -20,7 +20,6 @@ export function renderTopCards() {
         return Math.round(mins);
     };
 
-    // Helper: Parse Elevation Strings (e.g. "5,000 ft")
     const parseElev = (str) => {
         if (!str) return 0;
         const cleanStr = str.toString().replace(/,/g, ''); 
@@ -28,13 +27,12 @@ export function renderTopCards() {
         return match ? parseFloat(match[0]) : 0;
     };
 
-    // Initiate the fetch
+    // --- Main Render Logic ---
     setTimeout(async () => {
         const container = document.getElementById(containerId);
         if (!container) return;
 
         try {
-            // Fetch both Top Cards (summary) and Readiness (logic/stats)
             const [cardsRes, readinessRes] = await Promise.all([
                 fetch('data/dashboard/top_cards.json'),
                 fetch('data/readiness/readiness.json')
@@ -45,9 +43,9 @@ export function renderTopCards() {
             const data = await cardsRes.json();
             const readinessData = readinessRes.ok ? await readinessRes.json() : null;
 
-            // --- Readiness Calculation Logic ---
             let readinessHtml = '';
             
+            // --- Calculate Readiness ---
             if (readinessData && readinessData.upcomingEvents) {
                 const targetEvent = readinessData.upcomingEvents.find(e => e.name === data.next_event) 
                                     || readinessData.upcomingEvents[0]; 
@@ -87,22 +85,22 @@ export function renderTopCards() {
                             label = "Developing";
                         }
 
-                        // --- NEW FORMATTING: Percentage on Right ---
+                        // Right-aligned readiness block
                         readinessHtml = `
-                            <div class="mt-3 pt-3 border-t border-slate-700/50 flex items-center justify-between">
-                                <div class="flex flex-col">
-                                    <span class="text-xs font-bold ${colorClass} uppercase leading-none mb-1">${label}</span>
-                                    <span class="text-[10px] text-slate-500 font-mono flex items-center gap-1">
-                                        Weakness: <i class="fa-solid ${lowestMetric.icon} text-slate-400"></i> <span class="text-slate-300">${lowestMetric.name}</span>
-                                    </span>
+                            <div class="flex flex-col items-end text-right">
+                                <div class="text-3xl font-black ${colorClass} tracking-tighter leading-none">${lowestPct}%</div>
+                                <div class="text-[10px] font-bold ${colorClass} uppercase leading-tight mt-1">${label}</div>
+                                <div class="text-[10px] text-slate-500 font-mono mt-0.5 flex items-center gap-1 justify-end">
+                                    <span class="text-slate-600">Weakness:</span> 
+                                    <i class="fa-solid ${lowestMetric.icon} text-slate-400"></i>
                                 </div>
-                                <div class="text-3xl font-black ${colorClass} tracking-tighter">${lowestPct}%</div>
                             </div>
                         `;
                     }
                 }
             }
 
+            // --- Render HTML ---
             container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm">
@@ -118,11 +116,19 @@ export function renderTopCards() {
 
                     <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm relative overflow-hidden">
                         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Next Priority Event</span>
-                        <div class="flex items-start gap-3">
-                            <i class="fa-solid fa-flag-checkered text-2xl text-emerald-400 mt-1"></i>
-                            <div class="w-full">
-                                <span class="text-xl font-bold text-white leading-tight block truncate">${data.next_event}</span>
-                                <span class="text-xs text-slate-400 font-mono mt-1 block">${data.days_to_go} days to go</span>
+                        
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <div class="shrink-0">
+                                    <i class="fa-solid fa-flag-checkered text-2xl text-emerald-400"></i>
+                                </div>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-xl font-bold text-white leading-tight truncate pr-2" title="${data.next_event}">${data.next_event}</span>
+                                    <span class="text-xs text-slate-400 font-mono mt-0.5">${data.days_to_go} days to go</span>
+                                </div>
+                            </div>
+
+                            <div class="shrink-0">
                                 ${readinessHtml}
                             </div>
                         </div>
@@ -135,6 +141,5 @@ export function renderTopCards() {
         }
     }, 50);
 
-    // Initial loading state
     return `<div id="${containerId}" class="min-h-[100px] bg-slate-800 rounded-xl mb-6"></div>`;
 }

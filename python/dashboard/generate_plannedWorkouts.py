@@ -33,7 +33,7 @@ def get_day_name(date_str):
         return ""
 
 def main():
-    print("   -> Generating Dashboard Data (Aggregation + Unplanned Handling)...")
+    print("   -> Generating Dashboard Data (Duration Aggregation Mode)...")
 
     # 1. Load Files
     if not os.path.exists(PLANNED_FILE):
@@ -55,7 +55,7 @@ def main():
         except Exception as e:
             print(f"   -> Warning: Could not read training log: {e}")
 
-    # 2. Build Aggregated Actuals Map
+    # 2. Build Aggregated Actuals Bucket
     # Group ALL completed actuals by Date + Sport
     # Key: "YYYY-MM-DD|Sport" -> Value: { duration: 0.0, names: [], sport: "", date: "" }
     actuals_map = {}
@@ -99,7 +99,7 @@ def main():
         if w_name not in actuals_map[key]['names']:
             actuals_map[key]['names'].append(w_name)
 
-    # 3. Match Plans to Actuals (Consume the Buckets)
+    # 3. Process Plans & Consume Bucket Data
     output_list = []
     today_str = datetime.now().strftime('%Y-%m-%d')
 
@@ -138,7 +138,7 @@ def main():
             data = actuals_map[key]
             
             # 1. Assign TOTAL duration from the logs to this plan
-            # This handles cases where you did 60m instead of 45m, or 2 runs totaling 60m.
+            # (Matches requirement: "sum all values... adds that to the total")
             item['actualDuration'] = round(data['duration'], 1)
             
             # 2. Combine names
@@ -165,7 +165,7 @@ def main():
 
     # 4. Handle Leftovers (Unplanned)
     # Any keys remaining in actuals_map were NOT matched to a plan.
-    # This specifically addresses your requirement: "add that as a record... plannedDuration blank"
+    # Requirement: "add that as a record... plannedDuration blank"
     for key, data in actuals_map.items():
         # Skip future dates if any crept in
         if data['date'] > today_str: continue
@@ -173,8 +173,8 @@ def main():
         extra_item = {
             "date": data['date'],
             "day": get_day_name(data['date']),
-            "plannedWorkout": "Unplanned Activity", # Placeholder title
-            "plannedDuration": 0,                   # BLANK duration (as requested)
+            "plannedWorkout": "Unplanned Activity", # Title indicates it wasn't in plan
+            "plannedDuration": 0,                   # "Blank" (Zero) as requested
             "notes": f"Unplanned {data['sport']} volume",
             "actualSport": data['sport'],
             "status": "UNPLANNED",

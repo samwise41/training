@@ -2515,8 +2515,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 68.9,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2589,8 +2589,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2613,8 +2613,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 95.9,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2809,8 +2809,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3339,8 +3339,8 @@
         "plannedDuration": 150.0,
         "actualDuration": 144.9,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3435,8 +3435,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 91.0,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3637,8 +3637,8 @@
         "plannedDuration": 120.0,
         "actualDuration": 142.2,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3661,8 +3661,8 @@
         "plannedDuration": 40.0,
         "actualDuration": 77.80000000000001,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3757,9 +3757,8 @@
         "plannedDuration": 75.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
             "Swim",
-            "Run"
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3772,11 +3771,6 @@
             {
                 "name": "[SWIM] Pool Swim",
                 "sport": "Swim",
-                "actual": 25.7
-            },
-            {
-                "name": "[Run] Run",
-                "sport": "Run",
                 "actual": 25.7
             }
         ]
@@ -3876,6 +3870,26 @@
         "sports": [],
         "isSunday": false,
         "eventName": "Jordanelle Olympic Triathlon",
+        "activities": []
+    },
+    {
+        "date": "2026-08-15",
+        "complianceStatus": "Event",
+        "plannedDuration": 0,
+        "actualDuration": 0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": "CF Ride for Life Century Ride",
+        "activities": []
+    },
+    {
+        "date": "2026-09-11",
+        "complianceStatus": "Event",
+        "plannedDuration": 0,
+        "actualDuration": 0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": "Brineman 70.3 Triathlon",
         "activities": []
     }
 ]

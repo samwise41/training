@@ -70,10 +70,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    // --- PIXEL PERFECT LAYOUT ---
-    const CELL_PX = 12; // 12px cells
-    const GAP_PX = 3;   // 3px gap
-    const STRIDE_PX = CELL_PX + GAP_PX; // 15px per column
+    // --- EXACT SPACING CONFIGURATION ---
+    const CELL_SIZE = 12; // px
+    const GAP_SIZE = 3;   // px (Applies to both Row and Column gap)
+    const STRIDE = CELL_SIZE + GAP_SIZE; // 15px
 
     // Month Label Logic
     let monthLabels = '';
@@ -93,14 +93,15 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isSunday = curr.getDay() === 0;
         
         // --- Month Labels ---
+        // Add label if it's the 1st of month OR if it's the very first week block
         if (curr.getDate() === 1 || (dayCount === 0 && curr.getDate() <= 7)) {
             const mStr = curr.toLocaleString('default', { month: 'short' });
             const colIndex = Math.floor(dayCount / 7);
             const monthKey = mStr + curr.getFullYear();
             
             if (!addedMonths.has(monthKey)) {
-                // Calculate position exactly matching the column stride
-                const leftPos = colIndex * STRIDE_PX;
+                // Precise pixel positioning
+                const leftPos = colIndex * STRIDE;
                 monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}px; top: 0;">${mStr}</span>`;
                 addedMonths.add(monthKey);
             }
@@ -116,12 +117,12 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
-        // 1. Hide Prior Year
+        // Hide Prior Year
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
-        // 2. Hide Sunday if no actual workout
+        // Hide Sunday if no actual workout
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
@@ -185,10 +186,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     label = "Unplanned";
                 }
             } else {
-                // Activity View
                 if (act > 0) {
                     const sports = entry.sports || [];
                     if (sports.length > 1) {
+                        // Hard Stops
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -212,10 +213,9 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
-        // INLINE STYLES FOR SIZE AND GAP
         gridCells += `
             <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
-                 style="width: ${CELL_PX}px; height: ${CELL_PX}px; opacity: ${opacity}; ${styleOverride} ${visibility}"
+                 style="width: ${CELL_SIZE}px; height: ${CELL_SIZE}px; opacity: ${opacity}; ${styleOverride} ${visibility}"
                  title="${dateStr}: ${label}"
                  onclick="${clickFn}">
             </div>
@@ -239,7 +239,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     ${monthLabels}
                 </div>
                 
-                <div style="display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: ${GAP_PX}px;">
+                <div style="display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: ${GAP_SIZE}px;">
                     ${gridCells}
                 </div>
             </div>

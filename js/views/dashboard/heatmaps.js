@@ -1,7 +1,9 @@
 import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.js';
 
 export function renderHeatmaps() {
+    // Immediate execution
     setTimeout(initHeatmaps, 0);
+    
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
@@ -16,6 +18,7 @@ async function initHeatmaps() {
     if (!container) return;
 
     try {
+        // Cache bust
         const response = await fetch(`data/dashboard/heatmaps.json?t=${Date.now()}`);
         if (!response.ok) throw new Error("Heatmap file not found");
         const rawData = await response.json();
@@ -28,6 +31,7 @@ async function initHeatmaps() {
         const today = new Date();
         const currentYear = today.getFullYear();
         
+        // Ranges
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
@@ -40,6 +44,7 @@ async function initHeatmaps() {
         startYear.setDate(startYear.getDate() - startYear.getDay());
         const endYear = new Date(currentYear, 11, 31);
 
+        // Render Structure
         container.innerHTML = `
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true, null)}
@@ -50,6 +55,10 @@ async function initHeatmaps() {
             </div>
         `;
 
+        // Setup Interaction (Event Delegation)
+        setupDelegation(container);
+
+        // Scroll to end
         setTimeout(() => {
             ['hm-consistency', 'hm-activity'].forEach(id => {
                 const el = document.getElementById(id);
@@ -61,6 +70,39 @@ async function initHeatmaps() {
         console.error("Heatmap Error:", err);
         container.innerHTML = `<p class="text-slate-500 text-xs p-4">Error: ${err.message}</p>`;
     }
+}
+
+// --- EVENT DELEGATION (Fixes Tooltip Issues) ---
+function setupDelegation(container) {
+    // Handle Hover (Tooltip Show)
+    container.addEventListener('mouseover', (e) => {
+        const cell = e.target.closest('.heatmap-cell');
+        if (cell) {
+            const d = cell.dataset;
+            // Call global tooltip helper safely
+            if (window.showTooltip) {
+                // Pass data pulled from attributes
+                window.showTooltip(e, d.date, d.act, d.label, d.color);
+            }
+        }
+    });
+
+    // Handle Leave (Tooltip Hide)
+    container.addEventListener('mouseout', (e) => {
+        if (window.hideTooltip) window.hideTooltip();
+    });
+
+    // Handle Click (Modal/Action)
+    container.addEventListener('click', (e) => {
+        const cell = e.target.closest('.heatmap-cell');
+        if (cell) {
+            const d = cell.dataset;
+            if (window.handleHeatmapClick) {
+                // Parse numbers back from strings
+                window.handleHeatmapClick(e, d.date, parseInt(d.plan), parseInt(d.act), d.label, d.color, '', d.details);
+            }
+        }
+    });
 }
 
 function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, targetYear) {
@@ -102,7 +144,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
         }
 
-        // --- Cell Logic ---
+        // --- Styles ---
         let bgColor = 'bg-slate-800/50'; 
         let opacity = '1'; 
         let styleOverride = '';
@@ -141,7 +183,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         let plan = 0;
         let act = 0;
         let detailsJson = '';
-        let tooltipColor = '#64748b'; // Default
+        let tooltipColor = '#64748b'; 
 
         if (entry) {
             plan = entry.plannedDuration || 0;
@@ -211,20 +253,16 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
         }
 
-        // --- SAFE STRING ESCAPING ---
-        const safeLabel = label.replace(/'/g, "\\'");
-        const safeColor = String(tooltipColor).replace(/'/g, "\\'");
-
-        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${safeLabel}', '', '', '${detailsJson}')`;
-        const hoverFn = `window.showTooltip(event, '${dateStr}', '${Math.round(act)}', '${safeLabel}', '${safeColor}')`;
-        const leaveFn = `window.hideTooltip()`;
-
+        // DATA ATTRIBUTES for delegation (Safe)
         gridCells += `
-            <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
+            <div class="heatmap-cell rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="width: ${CELL_PX}px !important; height: ${CELL_PX}px !important; opacity: ${opacity}; ${styleOverride} ${visibility}"
-                 onclick="${clickFn}"
-                 onmousemove="${hoverFn}"
-                 onmouseleave="${leaveFn}">
+                 data-date="${dateStr}"
+                 data-plan="${Math.round(plan)}"
+                 data-act="${Math.round(act)}"
+                 data-label="${label.replace(/"/g, '&quot;')}" 
+                 data-color="${tooltipColor}"
+                 data-details="${detailsJson}">
             </div>
         `;
 

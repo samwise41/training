@@ -2,6 +2,7 @@ import json
 import os
 import pandas as pd
 from datetime import datetime
+from zoneinfo import ZoneInfo # Standard in Python 3.9+
 from . import config, build_plan
 
 def load_json(path):
@@ -117,7 +118,15 @@ def main():
     garmin_data = load_json(config.GARMIN_JSON)
     master_log = load_json(config.MASTER_DB_JSON)
     
-    today_str = datetime.now().strftime('%Y-%m-%d')
+    # FIX: Use configured timezone name to automatically calculate local date
+    # This handles DST and offsets automatically
+    try:
+        user_tz = ZoneInfo(config.USER_TIMEZONE)
+    except Exception as e:
+        print(f"Warning: Could not load timezone '{config.USER_TIMEZONE}'. Falling back to UTC. Error: {e}")
+        user_tz = ZoneInfo("UTC")
+
+    today_str = datetime.now(user_tz).strftime('%Y-%m-%d')
 
     # --- BUILD LOG MAP & CLAIMED IDs ---
     log_map = {}

@@ -70,18 +70,17 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    // Spacing Configuration
-    // w-3 = 0.75rem
-    // gap-2 = 0.5rem (Doubled gap)
-    // Stride = 1.25rem per column
-    const COL_WIDTH_REM = .75; 
+    // --- LAYOUT CONSTANTS ---
+    // Cell: w-3 = 0.75rem
+    // Gap: gap-1 = 0.25rem (This is double the original gap-0.5)
+    // Stride: 1rem (0.75 + 0.25)
+    const COL_WIDTH_REM = 1.0; 
 
     // Month Label Logic
     let monthLabels = '';
     let dayCount = 0;
     const addedMonths = new Set();
 
-    // Current Week Logic
     const currentWeekStart = new Date(today);
     currentWeekStart.setDate(today.getDate() - today.getDay());
     currentWeekStart.setHours(0,0,0,0);
@@ -95,13 +94,11 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isSunday = curr.getDay() === 0;
         
         // --- Month Labels ---
-        // If it's the 1st of the month, or the very first column, add label
+        // Label on the 1st of the month OR if it's the first visible week
         if (curr.getDate() === 1 || (dayCount === 0 && curr.getDate() <= 7)) {
             const mStr = curr.toLocaleString('default', { month: 'short' });
             const colIndex = Math.floor(dayCount / 7);
-            const key = `${mStr}-${colIndex}`; // weak dedup
             
-            // Only add if we haven't labeled this month recently (simple check)
             if (!addedMonths.has(mStr + curr.getFullYear())) {
                 const leftPos = colIndex * COL_WIDTH_REM;
                 monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider" style="left: ${leftPos}rem">${mStr}</span>`;
@@ -109,7 +106,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
         }
 
-        // --- Cell Rendering ---
+        // --- Cell Logic ---
         let bgColor = 'bg-slate-800/50'; 
         let opacity = '1'; 
         let styleOverride = '';
@@ -119,12 +116,12 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
-        // Hide prior year dates in Annual View
+        // 1. Hide Prior Year dates in Annual View
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
-        // Hide Sunday if no actual workout
+        // 2. Hide Sunday if no actual workout (Requirement)
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
@@ -165,7 +162,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
 
             if (isConsistencyMode) {
-                // Priority: Event -> Completed/Missed -> Unplanned
+                // Priority Check: Event takes precedence
                 if (status === 'Event') {
                     bgColor = 'bg-purple-600';
                     opacity = '1';
@@ -189,10 +186,11 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     label = "Unplanned";
                 }
             } else {
+                // Activity View
                 if (act > 0) {
                     const sports = entry.sports || [];
                     if (sports.length > 1) {
-                        // Hard Stop Gradient for multi-sport
+                        // Multi-sport: Hard Stops (No Gradient)
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -200,6 +198,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                             const endPct = ((i + 1) / count) * 100;
                             return `${c} ${startPct}%, ${c} ${endPct}%`;
                         });
+                        // Standard linear gradient with hard stops creates distinct bands
                         styleOverride = `background: linear-gradient(135deg, ${stops.join(', ')});`;
                         label = "Multi-Sport";
                     } else if (sports.length === 1) {
@@ -216,6 +215,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
+        // Used gap-1 (4px)
         gridCells += `
             <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="opacity: ${opacity}; ${styleOverride} ${visibility}"
@@ -241,8 +241,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 <div class="relative h-5 w-full mb-1">
                     ${monthLabels}
                 </div>
-                
-                <div class="grid grid-rows-7 grid-flow-col gap-2">
+                <div class="grid grid-rows-7 grid-flow-col gap-1">
                     ${gridCells}
                 </div>
             </div>

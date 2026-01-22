@@ -43,7 +43,7 @@ async function initHeatmaps() {
         const endYear = new Date(currentYear, 11, 31);
 
         container.innerHTML = `
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-2">
                 ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true, null)}
                 ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false, null)}
             </div>

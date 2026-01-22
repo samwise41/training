@@ -26,6 +26,7 @@ async function initHeatmaps() {
         }
 
         const today = new Date();
+        const currentYear = today.getFullYear();
         
         // A. Trailing 6 Months
         const endTrailing = new Date(today); 
@@ -34,20 +35,21 @@ async function initHeatmaps() {
 
         const startTrailing = new Date(endTrailing); 
         startTrailing.setMonth(startTrailing.getMonth() - 6);
-        startTrailing.setDate(startTrailing.getDate() - startTrailing.getDay()); // Start on Sunday
+        startTrailing.setDate(startTrailing.getDate() - startTrailing.getDay());
 
         // B. Annual View
-        const startYear = new Date(today.getFullYear(), 0, 1);
+        const startYear = new Date(currentYear, 0, 1);
         startYear.setDate(startYear.getDate() - startYear.getDay()); // Start on Sunday
-        const endYear = new Date(today.getFullYear(), 11, 31);
+        const endYear = new Date(currentYear, 11, 31);
 
+        // Render Grids
         container.innerHTML = `
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true)}
-                ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false)}
+                ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true, null)}
+                ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false, null)}
             </div>
             <div class="mt-4">
-                ${buildGrid(dateMap, startYear, endYear, `Annual Overview (${today.getFullYear()})`, null, true)}
+                ${buildGrid(dateMap, startYear, endYear, `Annual Overview (${currentYear})`, null, true, currentYear)}
             </div>
         `;
 
@@ -64,12 +66,13 @@ async function initHeatmaps() {
     }
 }
 
-function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
+// targetYear is optional, used for hiding prior-year boxes in Annual View
+function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, targetYear) {
     let gridCells = '';
     let curr = new Date(start);
     const today = new Date();
     
-    // Define current week range for specific styling
+    // Define current week range
     const currentWeekStart = new Date(today);
     currentWeekStart.setDate(today.getDate() - today.getDay());
     currentWeekStart.setHours(0,0,0,0);
@@ -85,16 +88,21 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
         let opacity = '1'; 
         let styleOverride = '';
         let extraClasses = '';
-        let visibility = ''; // For hiding Sundays
+        let visibility = ''; 
         
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
         const isSunday = curr.getDay() === 0;
 
-        // --- SUNDAY VISIBILITY LOGIC ---
-        // "Sunday should be totally hidden unless there is workout with an actualDuration>0"
+        // --- VISIBILITY RULES ---
+        
+        // 1. Annual View: Hide previous year dates (e.g. Dec 2025 showing in 2026 view)
+        if (targetYear && curr.getFullYear() < targetYear) {
+            visibility = 'opacity: 0; pointer-events: none;';
+        }
+
+        // 2. Sunday Rule: Totally hidden unless actualDuration > 0
         if (isSunday) {
-            // Check if we have an entry with actual duration
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
             }
@@ -111,9 +119,8 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
                     opacity = '0.3';
                 }
             } else {
-                // Past dates with no record -> Rest
                 bgColor = 'bg-emerald-500';
-                opacity = '0.2'; 
+                opacity = '0.2'; // "Rest" opacity
             }
         }
 
@@ -136,7 +143,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
                 detailsJson = encodeURIComponent(lines);
             }
 
-            // --- CONSISTENCY VIEW ---
             if (isConsistencyMode) {
                 if (status === 'Event') {
                     bgColor = 'bg-purple-600';
@@ -160,9 +166,8 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
                     opacity = '1';
                     label = "Unplanned";
                 }
-            } 
-            // --- ACTIVITY LOG VIEW ---
-            else {
+            } else {
+                // Activity Mode
                 if (act > 0) {
                     const sports = entry.sports || [];
                     
@@ -175,7 +180,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
                             const endPct = ((i + 1) / count) * 100;
                             return `${c} ${startPct}%, ${c} ${endPct}%`;
                         });
-                        
                         styleOverride = `background: linear-gradient(135deg, ${stops.join(', ')});`;
                         label = "Multi-Sport";
                     } else if (sports.length === 1) {
@@ -194,6 +198,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
+        // Updated GAP to gap-1 (4px spacing)
         gridCells += `
             <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="opacity: ${opacity}; ${styleOverride} ${visibility}"
@@ -212,11 +217,13 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
         <h3 class="text-xs font-bold text-slate-300 uppercase mb-3 flex items-center gap-2">
             <i class="fa-solid ${isConsistencyMode ? 'fa-calendar-check text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
         </h3>
+        
         <div class="flex-1 overflow-x-auto pb-2 custom-scrollbar flex justify-center" ${idAttr}>
-            <div class="grid grid-rows-7 grid-flow-col gap-0.5 w-max">
+            <div class="grid grid-rows-7 grid-flow-col gap-1 w-max">
                 ${gridCells}
             </div>
         </div>
+        
         ${renderLegend(isConsistencyMode)}
     </div>`;
 }

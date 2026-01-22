@@ -60,6 +60,9 @@ def main():
                 log_map[l_date] = []
             log_map[l_date].append(l)
 
+    # Track which log IDs are matched to a plan
+    matched_log_ids = set()
+
     # 3. Process Plan
     output_list = []
     today_str = datetime.now().strftime('%Y-%m-%d')
@@ -83,14 +86,27 @@ def main():
         
         if log_entries:
             for log in log_entries:
+                # SKIP if already used
+                if log.get('id') in matched_log_ids:
+                    continue
+                
+                # SKIP placeholder/future logs
+                if log.get('status') == 'PLANNED' or str(log.get('id', '')).startswith('PLAN-'):
+                    continue
+
                 log_sport_norm = normalize_sport(log.get('actualSport') or log.get('activityType'))
+                
                 if log_sport_norm == plan_sport_norm:
                     match = log
+                    matched_log_ids.add(log.get('id'))
                     break
             
-            # If no strict sport match, but only 1 log exists and it's not a rest day, assume it's the one
-            if not match and len(log_entries) == 1 and plan_sport_norm != 'Rest':
-                match = log_entries[0]
+            # If no strict sport match, but only 1 unused log exists and it's not a rest day, assume it's the one
+            if not match and plan_sport_norm != 'Rest':
+                unused = [l for l in log_entries if l.get('id') not in matched_log_ids]
+                if len(unused) == 1:
+                    match = unused[0]
+                    matched_log_ids.add(match.get('id'))
 
         # --- Build Output Object ---
         
@@ -143,11 +159,50 @@ def main():
 
         output_list.append(item)
 
-    # 4. Sort & Save
-    # Sort descending (Newest first) or Ascending? 
-    # Usually lists are better Ascending (Oldest -> Newest) or just Newest at top.
-    # Let's do Standard Chronological (Ascending) so user sees the flow of the week
-    output_list.sort(key=lambda x: x['date'])
+    # --- 4. Find Unplanned / Extra Workouts ---
+    # Iterate through ALL logs. If ID not in matched_log_ids, add as separate entry.
+    for log in logs:
+        # Skip if already matched
+        if log.get('id') in matched_log_ids:
+            continue
+        
+        # Skip placeholder/future logs
+        if log.get('status') == 'PLANNED' or str(log.get('id', '')).startswith('PLAN-'):
+            continue
+
+        # Skip future dates (just in case)
+        if log.get('date') > today_str:
+            continue
+
+        # Build "Unplanned" Item
+        date_str = log.get('date')
+        try:
+            day_name = datetime.strptime(date_str, '%Y-%m-%d').strftime('%A')
+        except:
+            day_name = ""
+
+        raw_act_dur = log.get('actualDuration')
+        if raw_act_dur is None:
+            raw_act_dur = log.get('duration', 0) / 60
+        
+        extra_item = {
+            "date": date_str,
+            "day": day_name,
+            "plannedWorkout": "Unplanned Activity", # Or "Extra: " + log name
+            "plannedDuration": 0,
+            "notes": "Extra workout not in original plan.",
+            "status": "COMPLETED", # It's done, so it's completed
+            "actualWorkout": log.get('actualWorkout') or log.get('activityName'),
+            "actualDuration": round(float(raw_act_dur), 1),
+            "actualSport": log.get('actualSport') or normalize_sport(log.get('activityType')),
+            "compliance": 100 # Or 0? Usually extra work is good!
+        }
+        output_list.append(extra_item)
+
+    # 5. Sort & Save
+    # Sort by Date, then by Status (Planned first, then Extra?)
+    output_list.sort(key=lambda x: (x['date'], x['plannedDuration'] == 0)) 
+    # Logic: Date ascending. For same date, items with 0 planned duration (Extra) go to bottom.
 
     if not os.path.exists(dashboard_dir):
         os.makedirs(dashboard_dir)
@@ -155,7 +210,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output_list, f, indent=4)
         
-    print(f"   -> Success! Processed {len(output_list)} records.")
+    print(f"   -> Success! Processed {len(output_list)} records (including extras).")
     print(f"   -> Saved to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":

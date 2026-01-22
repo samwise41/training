@@ -13,6 +13,8 @@
     --color-bike: #8b5cf6; 
     --color-run:  #ec4899; 
     --color-swim: #0ea5e9;  
+    --color-strength: #f59e0b; /* Amber for Gym */
+    --color-other: #94a3b8;
 }
 
 /* You can still use your classes for icons */
@@ -27,6 +29,21 @@
 .bg-icon-bike { background-color: var(--color-bike) !important; }
 .bg-icon-run  { background-color: var(--color-run) !important; }
 .bg-icon-swim { background-color: var(--color-swim) !important; }
+
+/* --- STRIPED PATTERN FOR UNPLANNED --- */
+.bg-striped {
+    background-image: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 6px 6px;
+}
 
 body {
     background-color: var(--bg-dark);

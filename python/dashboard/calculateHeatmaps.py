@@ -8,6 +8,46 @@ LOG_FILE = os.path.join(BASE_DIR, 'data', 'training_log.json')
 READINESS_FILE = os.path.join(BASE_DIR, 'data', 'readiness', 'readiness.json')
 OUTPUT_FILE = os.path.join(BASE_DIR, 'data', 'dashboard', 'heatmaps.json')
 
+def parse_event_date(date_str):
+    """
+    Parses dates like 'May 5, 2026', 'Aug 15, 2026', 'Sept 11, 2026'.
+    Handles common abbreviations that %B doesn't catch by default.
+    """
+    # Clean up string
+    date_str = date_str.strip()
+    
+    # Manual mapping for non-standard abbreviations if standard parse fails
+    replacements = {
+        "Sept ": "September ",
+        "Aug ": "August ",
+        "Oct ": "October ",
+        "Nov ": "November ",
+        "Dec ": "December ",
+        "Jan ": "January ",
+        "Feb ": "February ",
+        "Mar ": "March ",
+        "Apr ": "April ",
+        "Jun ": "June ",
+        "Jul ": "July "
+    }
+    
+    # Try standard parse first
+    try:
+        return datetime.strptime(date_str, "%B %d, %Y")
+    except ValueError:
+        pass
+        
+    # Try replacing abbreviations
+    for abbr, full in replacements.items():
+        if date_str.startswith(abbr):
+            date_str = date_str.replace(abbr, full)
+            break
+            
+    try:
+        return datetime.strptime(date_str, "%B %d, %Y")
+    except ValueError:
+        return None
+
 def main():
     if not os.path.exists(LOG_FILE):
         print(f"Error: {LOG_FILE} not found.")
@@ -25,13 +65,10 @@ def main():
                 readiness = json.load(f)
                 for event in readiness.get('upcomingEvents', []):
                     d_str = event.get('dateStr')
-                    # Parse "May 5, 2026"
-                    try:
-                        dt = datetime.strptime(d_str, "%B %d, %Y")
+                    dt = parse_event_date(d_str)
+                    if dt:
                         date_key = dt.strftime("%Y-%m-%d")
                         events_map[date_key] = event.get('name', 'Race')
-                    except (ValueError, TypeError):
-                        pass
         except Exception as e:
             print(f"Warning: Could not load readiness events: {e}")
 
@@ -54,28 +91,26 @@ def main():
         
         day = daily_map[date_str]
         
-        # Sum Durations
         p_dur = float(entry.get('plannedDuration') or 0)
         a_dur = float(entry.get('actualDuration') or 0)
         day['plannedDuration'] += p_dur
         day['actualDuration'] += a_dur
         
-        # Track Sport if activity occurred
         sport = entry.get('actualSport', 'Other')
+        # Only add sport if it was actually done
         if a_dur > 0:
             day['sports'].add(sport)
             
-        # Keep details for tooltip
         day['activities'].append({
             "name": entry.get('actualWorkout') or entry.get('plannedWorkout') or "Activity",
             "sport": sport,
             "actual": a_dur
         })
 
-    # 4. Generate Final List with Compliance Logic
+    # 4. Generate Final List
     heatmap_data = []
     
-    # We want a record for every day we have data OR an event
+    # Union of all relevant dates
     all_dates = set(daily_map.keys()) | set(events_map.keys())
     sorted_dates = sorted(list(all_dates))
 
@@ -88,34 +123,30 @@ def main():
         actual = day_data['actualDuration']
         event_name = events_map.get(date_str)
         
-        # --- Compliance Logic ---
-        # Default
+        # --- Compliance / Coloring Priority ---
+        # 1. EVENT (Highest Priority - shows Purple)
+        # 2. Missed / Completed / Partial / Unplanned
+        
         status = "Rest"
         
         if event_name:
             status = "Event"
         elif planned > 0:
             if actual == 0:
-                # planned > 0 and actual = 0 -> Missed
                 status = "Missed"
             else:
-                # planned > 0 and actual > 0
                 ratio = actual / planned
-                if ratio >= 0.90:
-                    status = "Completed" # Green
-                else:
-                    status = "Partial"   # Yellow
+                status = "Completed" if ratio >= 0.90 else "Partial"
         elif actual > 0:
-            # planned = 0 and actual > 0 -> Unplanned
             status = "Unplanned"
 
-        # --- Sunday Filtering ---
-        # Requirement: don't show sunday unless there is a workout on sunday.
+        # --- Sunday Filtering Logic ---
         dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
         is_sunday = dt_obj.weekday() == 6
-        has_activity = (planned > 0 or actual > 0 or event_name)
         
-        if is_sunday and not has_activity:
+        # Sunday is totally hidden unless there is an ACTUAL workout > 0
+        # (Even if there is an event or a plan, we hide it if no actual work was done, per instructions)
+        if is_sunday and actual <= 0:
             continue
 
         heatmap_data.append({
@@ -123,13 +154,12 @@ def main():
             "complianceStatus": status,
             "plannedDuration": planned,
             "actualDuration": actual,
-            "sports": list(day_data['sports']), # List for multi-color logic
+            "sports": list(day_data['sports']),
             "isSunday": is_sunday,
             "eventName": event_name,
             "activities": day_data['activities']
         })
 
-    # 5. Output
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(heatmap_data, f, indent=4)

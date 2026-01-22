@@ -76,7 +76,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     
     // --- EXACT PIXEL LAYOUT ---
     // Using inline-grid relies on exact pixels to prevent browser sub-pixel rendering issues
-    const CELL_PX = 12; 
+    const CELL_PX = 14; 
     const GAP_PX = 2;   
     const STRIDE_PX = CELL_PX + GAP_PX; // 14px
 

@@ -28,12 +28,17 @@ def normalize_sport(val):
     return 'Other'
 
 def main():
-    target_id = input("Enter Garmin Activity ID to hydrate: ").strip()
+    if len(sys.argv) > 1:
+        target_id = sys.argv[1]
+        print(f"🔧 Received Activity ID from arguments: {target_id}")
+    else:
+        # Fallback for local testing
+        target_id = input("Enter Garmin Activity ID to hydrate: ").strip()
     
     if not target_id:
         print("❌ No ID provided.")
         return
-
+    
     # 1. Find Activity
     garmin_data = load_json(GARMIN_FILE)
     activity = next((a for a in garmin_data if str(a.get('activityId')) == target_id), None)

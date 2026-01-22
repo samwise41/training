@@ -1,2009 +1,3875 @@
 [
     {
-        "date": "2026-01-22",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 90.0,
-        "actualDuration": 87.0,
-        "isSunday": false,
-        "activityName": "Innsbruck Virtual Cycling"
-    },
-    {
-        "date": "2026-01-21",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 47.3,
-        "isSunday": false,
-        "activityName": "Roy - Zone 2 with Strides"
-    },
-    {
-        "date": "2026-01-21",
-        "actualSport": "Run",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 11.2,
-        "isSunday": false,
-        "activityName": "Indoor Running"
-    },
-    {
-        "date": "2026-01-20",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 46.6,
-        "isSunday": false,
-        "activityName": "Pool Swim"
-    },
-    {
-        "date": "2026-01-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 60.2,
-        "isSunday": false,
-        "activityName": "Zwift - Sweet Spot - 2 x 15 on Jurassic Coast in Watopia"
-    },
-    {
-        "date": "2026-01-17",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 75.0,
-        "actualDuration": 76.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Thio Virtual Cycling"
-    },
-    {
-        "date": "2026-01-17",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 25.7,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2026-01-16",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 25.0,
-        "actualDuration": 27.3,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - 25 Min at high cadence"
-    },
-    {
-        "date": "2026-01-15",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] North Ayrshire Virtual Cycling"
-    },
-    {
-        "date": "2026-01-14",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 53.7,
-        "isSunday": false,
-        "activityName": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (D) on Avon Flyer in New York"
-    },
-    {
-        "date": "2026-01-13",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 30.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Swim coaching session"
-    },
-    {
-        "date": "2026-01-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 45.7,
-        "isSunday": false,
-        "activityName": "[BIKE] North Ayrshire Virtual Cycling"
-    },
-    {
-        "date": "2026-01-12",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 32.1,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2026-01-10",
-        "actualSport": "Bike",
+        "date": "1900-01-01",
         "complianceStatus": "Completed",
         "plannedDuration": 120.0,
         "actualDuration": 120.6,
-        "isSunday": false,
-        "activityName": "[BIKE] Richmond Virtual Cycling"
-    },
-    {
-        "date": "2026-01-10",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 21.6,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2026-01-09",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 51.8,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Zone 2 - 45 Minutes"
-    },
-    {
-        "date": "2026-01-08",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 90.0,
-        "actualDuration": 85.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Harrogate Virtual Cycling"
-    },
-    {
-        "date": "2026-01-07",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 46.6,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Zone 3 - Tempo - 45 minutes"
-    },
-    {
-        "date": "2026-01-06",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 37.9,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2026-01-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 2 x 15 on Richmond Rollercoaster in Richmond"
-    },
-    {
-        "date": "2026-01-03",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 120.0,
-        "actualDuration": 122.9,
-        "isSunday": false,
-        "activityName": "[BIKE] Virtual Cycling"
-    },
-    {
-        "date": "2026-01-02",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 51.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Zone 2 - 45 Minutes"
-    },
-    {
-        "date": "2025-12-31",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 61.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Innsbruck Virtual Cycling"
-    },
-    {
-        "date": "2025-12-30",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 50.0,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Zone 2 - 45 Minutes"
-    },
-    {
-        "date": "2025-12-29",
-        "actualSport": "Swim",
-        "complianceStatus": "Missed",
-        "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Technique Focus"
-    },
-    {
-        "date": "2025-12-27",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 180.0,
-        "actualDuration": 60.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Virtual Cycling"
-    },
-    {
-        "date": "2025-12-27",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 30.3,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-12-26",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Lactate Threshold Heart Rate Tes"
-    },
-    {
-        "date": "2025-12-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Innsbruck Virtual Cycling"
-    },
-    {
-        "date": "2025-12-24",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 43.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Mend (1) on Cobbled Climbs in Richmond"
-    },
-    {
-        "date": "2025-12-23",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 10.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Cool down"
-    },
-    {
-        "date": "2025-12-20",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 150.0,
-        "actualDuration": 113.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Roy Road Cycling"
-    },
-    {
-        "date": "2025-12-20",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 31.2,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-12-19",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 76.0,
-        "actualDuration": 88.0,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - 9 mile Endurance Run - Zone 2"
-    },
-    {
-        "date": "2025-12-18",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 50.9,
-        "isSunday": false,
-        "activityName": "[BIKE] Richmond Virtual Cycling"
-    },
-    {
-        "date": "2025-12-17",
-        "actualSport": "Swim",
-        "complianceStatus": "Missed",
-        "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Swim: Active Recovery"
-    },
-    {
-        "date": "2025-12-16",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 90.0,
-        "actualDuration": 85.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Gentil 8 in France"
-    },
-    {
-        "date": "2025-12-15",
-        "actualSport": "Swim",
-        "complianceStatus": "Missed",
-        "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Swim: Base Endurance"
-    },
-    {
-        "date": "2025-12-13",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 180.0,
-        "actualDuration": 51.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Virtual Cycling"
-    },
-    {
-        "date": "2025-12-12",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 64.75,
-        "actualDuration": 76.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Endurance Run - Zone 2 - 8 miles"
-    },
-    {
-        "date": "2025-12-11",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 90.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Richmond Virtual Cycling"
-    },
-    {
-        "date": "2025-12-10",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 35.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - 30 minute Base Run"
-    },
-    {
-        "date": "2025-12-09",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 61.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 2 x 15 on The Muckle Yin in Scotland"
-    },
-    {
-        "date": "2025-12-08",
-        "actualSport": "Swim",
-        "complianceStatus": "Partial",
-        "plannedDuration": 45.0,
-        "actualDuration": 34.9,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-12-06",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 38.2,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-12-06",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 64.75,
-        "actualDuration": 67.5,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-12-05",
-        "actualSport": "Swim",
-        "complianceStatus": "Partial",
-        "plannedDuration": 150.0,
-        "actualDuration": 44.5,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-12-04",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 90.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] City of Westminster Virtual Cycling"
-    },
-    {
-        "date": "2025-12-03",
-        "actualSport": "Run",
-        "complianceStatus": "Partial",
-        "plannedDuration": 45.0,
-        "actualDuration": 38.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Tempo Intervals - 6 x 3 minutes"
-    },
-    {
-        "date": "2025-12-02",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 70.0,
-        "actualDuration": 80.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 2 x 20 on Chain Chomper in Makuri Islands"
-    },
-    {
-        "date": "2025-12-01",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 34.5,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-28",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 49.5167,
-        "actualDuration": 49.5,
-        "isSunday": false,
-        "activityName": "[RUN] Rich County Running"
-    },
-    {
-        "date": "2025-11-27",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 58.4167,
-        "actualDuration": 58.4,
-        "isSunday": false,
-        "activityName": "[RUN] Rich County Running"
-    },
-    {
-        "date": "2025-11-26",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 33.5833,
-        "actualDuration": 33.4,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 90.9667,
-        "actualDuration": 90.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Innsbruck Virtual Cycling"
-    },
-    {
-        "date": "2025-11-24",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 32.1,
-        "actualDuration": 31.9,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-22",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 65.9667,
-        "actualDuration": 65.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Roy Road Cycling"
-    },
-    {
-        "date": "2025-11-21",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 54.3,
-        "actualDuration": 54.3,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-11-20",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.4667,
-        "actualDuration": 44.6,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - FTP Test [Standard] on Queen s Highway in Yorkshire"
-    },
-    {
-        "date": "2025-11-19",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 37.6833,
-        "actualDuration": 37.5,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-18",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 53.7167,
-        "actualDuration": 53.7,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-11-17",
-        "actualSport": "Swim",
-        "complianceStatus": "Partial",
-        "plannedDuration": 37.05,
-        "actualDuration": 29.6,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-15",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 41.6,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-15",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 180.0,
-        "actualDuration": 60.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sugar Cookie in Watopia"
-    },
-    {
-        "date": "2025-11-14",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 44.3,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-11-13",
-        "actualSport": "Run",
-        "complianceStatus": "Missed",
-        "plannedDuration": 25.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[RUN] Easy Run"
-    },
-    {
-        "date": "2025-11-12",
-        "actualSport": "Swim",
-        "complianceStatus": "Missed",
-        "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Endurance Focus"
-    },
-    {
-        "date": "2025-11-11",
-        "actualSport": "Swim",
-        "complianceStatus": "Partial",
-        "plannedDuration": 60.0,
-        "actualDuration": 27.2,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-10",
-        "actualSport": "Swim",
-        "complianceStatus": "Missed",
-        "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Form Focus"
-    },
-    {
-        "date": "2025-11-07",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 120.0,
-        "actualDuration": 161.8,
-        "isSunday": false,
-        "activityName": "Grand County Road Cycling"
-    },
-    {
-        "date": "2025-11-06",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 25.0,
-        "actualDuration": 46.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-11-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Flat Route in Watopia with Miguel"
-    },
-    {
-        "date": "2025-11-04",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 60.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Sweet Spot Intervals"
-    },
-    {
-        "date": "2025-11-03",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 47.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-11-01",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Castle to Castle in Makuri Islands with Miguel"
-    },
-    {
-        "date": "2025-11-01",
-        "actualSport": "Swim",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 35.6,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-10-31",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 34.2,
-        "isSunday": false,
-        "activityName": "[SWIM] Pool Swim"
-    },
-    {
-        "date": "2025-10-31",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 62.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Race: Foudre Friday Apero League Race (C) on Tempus Fugit in Watopia"
-    },
-    {
-        "date": "2025-10-30",
-        "actualSport": "Swim",
-        "complianceStatus": "Missed",
-        "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Drill Session"
-    },
-    {
-        "date": "2025-10-29",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 90.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Zone 2 Endurance"
-    },
-    {
-        "date": "2025-10-28",
-        "actualSport": "Run",
-        "complianceStatus": "Partial",
-        "plannedDuration": 60.0,
-        "actualDuration": 24.4,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-10-27",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 38.9,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Race: SAZ speed race on Ocean Lava Cliffside Loop in Watopia"
-    },
-    {
-        "date": "2025-10-27",
-        "actualSport": "Swim",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 30.0,
-        "isSunday": false,
-        "activityName": "[SWIM] Swim training"
-    },
-    {
-        "date": "2025-10-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 90.9,
-        "isSunday": false,
-        "activityName": "[BIKE] Harrogate Virtual Cycling"
-    },
-    {
-        "date": "2025-10-24",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Harrogate Virtual Cycling"
-    },
-    {
-        "date": "2025-10-23",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 3 x 10 on Tour Of Tewit Well in Yorkshire"
-    },
-    {
-        "date": "2025-10-18",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 150.0,
-        "actualDuration": 187.6,
-        "isSunday": false,
-        "activityName": "St George Road Cycling"
-    },
-    {
-        "date": "2025-10-16",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 60.6,
-        "isSunday": false,
-        "activityName": "[RUN] St George Running"
-    },
-    {
-        "date": "2025-10-15",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 1 x 15 on 2018 Worlds Short Lap in Innsbruck"
-    },
-    {
-        "date": "2025-10-14",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 60.0,
-        "actualDuration": 56.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Innsbruck Virtual Cycling"
-    },
-    {
-        "date": "2025-10-13",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel"
-    },
-    {
-        "date": "2025-10-11",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Post-Race Active Recovery Ride"
-    },
-    {
-        "date": "2025-10-10",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 50.0,
-        "actualDuration": 50.5,
-        "isSunday": false,
-        "activityName": "[RUN] Davis County Running"
-    },
-    {
-        "date": "2025-10-08",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 10.0,
-        "actualDuration": 9.6,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-10-07",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 20.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - New Workout on Innsbruckring in Innsbruck"
-    },
-    {
-        "date": "2025-10-06",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 15.0,
-        "actualDuration": 27.7,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-10-04",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 20.0,
-        "actualDuration": 31.1,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Base"
-    },
-    {
-        "date": "2025-10-03",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 20.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Short Zone 2 Ride (Tapered)"
-    },
-    {
-        "date": "2025-10-01",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 20.0,
-        "actualDuration": 28.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Base"
-    },
-    {
-        "date": "2025-09-30",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 35.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 2 x 25 on Mountain Mash in Watopia"
-    },
-    {
-        "date": "2025-09-29",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Active Recovery Ride (Taper)"
-    },
-    {
-        "date": "2025-09-27",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 55.0,
-        "actualDuration": 68.2,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-09-26",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 60.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Thio Virtual Cycling"
-    },
-    {
-        "date": "2025-09-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 90.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 2 x 25 on Knickerbocker in New York"
-    },
-    {
-        "date": "2025-09-24",
-        "actualSport": "Run",
-        "complianceStatus": "Partial",
-        "plannedDuration": 30.0,
-        "actualDuration": 28.4,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Running"
-    },
-    {
-        "date": "2025-09-22",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 40.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Cadence Pyramid on Tempus Fugit in Watopia"
-    },
-    {
-        "date": "2025-09-20",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 36.0,
-        "actualDuration": 40.6,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Base"
-    },
-    {
-        "date": "2025-09-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 32.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Race: Zwift Crit Racing Club - Downtown Dolphin (D) on Downtown Dolphin in Crit City"
-    },
-    {
-        "date": "2025-09-17",
-        "actualSport": "Run",
-        "complianceStatus": "Partial",
-        "plannedDuration": 30.0,
-        "actualDuration": 28.1,
-        "isSunday": false,
-        "activityName": "[RUN] Roy - Base"
-    },
-    {
-        "date": "2025-09-16",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 3 x 10 on The Highline in New York"
-    },
-    {
-        "date": "2025-09-15",
-        "actualSport": "Bike",
-        "complianceStatus": "Partial",
-        "plannedDuration": 55.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Active Recovery on Figure 8 in Watopia"
-    },
-    {
-        "date": "2025-09-13",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 8.8,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-09-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 89.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Road to Sky in Watopia"
-    },
-    {
-        "date": "2025-09-10",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 30.9,
-        "isSunday": false,
-        "activityName": "[RUN] Morning Run"
-    },
-    {
-        "date": "2025-09-09",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 75.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Sweet Spot - 3 x 10 on Whole Lotta Lava in Watopia"
-    },
-    {
-        "date": "2025-09-08",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 60.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Virtual Cycling"
-    },
-    {
-        "date": "2025-09-06",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 140.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Zone 2 Long Endurance w/ Tempo on Makuri Pretzel in Makuri Islands"
-    },
-    {
-        "date": "2025-09-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 10.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Two Bridges Loop in Watopia"
-    },
-    {
-        "date": "2025-09-04",
-        "actualSport": "Run",
-        "complianceStatus": "Completed",
-        "plannedDuration": 25.0,
-        "actualDuration": 30.8,
-        "isSunday": false,
-        "activityName": "[RUN] Roy Other"
-    },
-    {
-        "date": "2025-09-03",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.6,
-        "isSunday": false,
-        "activityName": "[BIKE] Virtual Cycling"
-    },
-    {
-        "date": "2025-09-02",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 68.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - 3x30 Sprints with Zone 2 on Suki s Playground in Makuri Islands"
-    },
-    {
-        "date": "2025-09-01",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 43.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Mend (1) on London 8 in London"
-    },
-    {
-        "date": "2025-08-30",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 153.0,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-08-29",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 68.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - 3x30 Sprints with Zone 2 on Mighty Metropolitan in New York"
-    },
-    {
-        "date": "2025-08-27",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Virtual Cycling"
-    },
-    {
-        "date": "2025-08-26",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Garmin UNBOUND Gravel Training Plan / Dirty Teeth Drills on Loopin Lava in Watopia"
-    },
-    {
-        "date": "2025-08-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Active Recovery on Flat Route in Watopia"
-    },
-    {
-        "date": "2025-08-23",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 151.3,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-08-22",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 25.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - FTP Test [Standard] on Queen s Highway After Party in Yorkshire"
-    },
-    {
-        "date": "2025-08-21",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 60.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Zone 2 Endurance Ride"
-    },
-    {
-        "date": "2025-08-20",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 65.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Classique in London with Miguel"
-    },
-    {
-        "date": "2025-08-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 29.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Bernie"
-    },
-    {
-        "date": "2025-08-18",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
-        "actualDuration": 62.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - 6x2 VO2 Max on Ocean Lava Cliffside Loop in Watopia"
-    },
-    {
-        "date": "2025-08-16",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 3.3,
-        "isSunday": false,
-        "activityName": "Richfield Road Cycling"
-    },
-    {
-        "date": "2025-08-15",
-        "actualSport": "Run",
-        "complianceStatus": "Partial",
-        "plannedDuration": 20.0,
-        "actualDuration": 18.0,
-        "isSunday": false,
-        "activityName": "[RUN] Morning Run"
-    },
-    {
-        "date": "2025-08-14",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 60.0,
-        "actualDuration": 60.8,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-08-13",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel"
-    },
-    {
-        "date": "2025-08-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 30.0,
-        "actualDuration": 60.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel"
-    },
-    {
-        "date": "2025-08-11",
-        "actualSport": "Bike",
-        "complianceStatus": "Missed",
-        "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Active Recovery Ride"
-    },
-    {
-        "date": "2025-08-09",
-        "actualSport": "Run",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 17.0,
-        "isSunday": false,
-        "activityName": "[RUN] Morning Run"
-    },
-    {
-        "date": "2025-08-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 194.0,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-08-01",
-        "actualSport": "Bike",
-        "complianceStatus": "Completed",
-        "plannedDuration": 15.0,
-        "actualDuration": 85.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Douce France in France with Miguel"
-    },
-    {
-        "date": "2025-07-31",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 104.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Tick Tock in Watopia with Miguel"
-    },
-    {
-        "date": "2025-07-30",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 4.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Volcano Circuit CCW in Watopia"
-    },
-    {
-        "date": "2025-07-29",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 17.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - FTP Ramp Test on Volcano Circuit in Watopia"
-    },
-    {
-        "date": "2025-07-28",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 61.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Watopia s Waistband in Watopia with Bernie"
-    },
-    {
-        "date": "2025-07-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 8.9,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Repack Rush in Watopia"
-    },
-    {
-        "date": "2025-07-23",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 122.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Thio Virtual Cycling"
-    },
-    {
-        "date": "2025-07-22",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 116.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Thio Virtual Cycling"
-    },
-    {
-        "date": "2025-07-21",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 122.2,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-07-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 170.6,
-        "isSunday": false,
-        "activityName": "Salt Lake City Road Cycling"
-    },
-    {
-        "date": "2025-07-17",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 70.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Sugar Cookie in Watopia with Bernie"
-    },
-    {
-        "date": "2025-07-16",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 90.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Sugar Cookie in Watopia with Bernie"
-    },
-    {
-        "date": "2025-07-15",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 61.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Microbursts on Going Coastal in Watopia"
-    },
-    {
-        "date": "2025-07-14",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 48.6,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Recovery Spin on Beach Island Loop in Watopia"
-    },
-    {
-        "date": "2025-07-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 141.7,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-07-10",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 47.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Climb Portal - Mont Saint-Michel in France"
-    },
-    {
-        "date": "2025-07-09",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 64.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Volcano Flat in Watopia with Maria"
-    },
-    {
-        "date": "2025-07-08",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Thio Virtual Cycling"
-    },
-    {
-        "date": "2025-07-07",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 61.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Thio Virtual Cycling"
-    },
-    {
-        "date": "2025-07-04",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 32.8,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-07-03",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 55.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Lionel Sanders  Yellow Day Workout on Classique in London"
-    },
-    {
-        "date": "2025-07-02",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 6.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Climb Portal - Mont Saint-Michel in France"
-    },
-    {
-        "date": "2025-07-01",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Group Ride: Hong Kong Cycling Group Ride (C) on Tick Tock in Watopia"
-    },
-    {
-        "date": "2025-06-30",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 62.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Endurance #2 on Champs-lyses in Paris"
-    },
-    {
-        "date": "2025-06-28",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 36.0,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-06-27",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 82.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Casse-Pattes in France with Miguel"
-    },
-    {
-        "date": "2025-06-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.8,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Amalgam on Achterbahn in Innsbruck"
-    },
-    {
-        "date": "2025-06-24",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Workout 3 on Ven-10 in France"
-    },
-    {
-        "date": "2025-06-23",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 14.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Loch Loop in Scotland"
-    },
-    {
-        "date": "2025-06-21",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 136.7,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-06-20",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 120.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Road to Sky in Watopia"
-    },
-    {
-        "date": "2025-06-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 120.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: The Big Ring in Watopia with Miguel"
-    },
-    {
-        "date": "2025-06-18",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 67.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Pacer Group Ride: Lutece Express in Paris with Miguel"
-    },
-    {
-        "date": "2025-06-17",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 36.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Race: Stage 3: Cityscapes: Richmond Worlds (E) on 2015 Worlds Course in Richmond"
-    },
-    {
-        "date": "2025-06-16",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 27.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - FTP Ramp Test on Rising Empire in New York"
-    },
-    {
-        "date": "2025-06-14",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 132.9,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-06-13",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 45.1,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - EF Pro Cycling s Red Day Workout on Mayan 8 in Watopia"
-    },
-    {
-        "date": "2025-06-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 60.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Zone 2 #1 on Scotland Smash in Scotland"
-    },
-    {
-        "date": "2025-06-11",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 40.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Race: Stage 2: Cityscapes: Park Perimeter Loop (D) on Park Perimeter Loop in New York"
-    },
-    {
-        "date": "2025-06-10",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 67.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Group Workout:  Mountain Standard Dreams - Power2Tri Endurance Coaching (E) on Big Flat 8 in Watopia"
-    },
-    {
-        "date": "2025-06-09",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 55.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Extensive Anaerobic x 6 on Downtown Eruption in Watopia"
-    },
-    {
-        "date": "2025-06-07",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 136.5,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-06-06",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 80.3,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - 2x20 FTP Intervals on 2019 Worlds Harrogate Circuit in Yorkshire"
-    },
-    {
-        "date": "2025-06-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 45.2,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - FTP Test [Standard] on Mighty Metropolitan in New York"
-    },
-    {
-        "date": "2025-06-04",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 65.7,
-        "isSunday": false,
-        "activityName": "[BIKE] Zwift - Group Ride: BMTR Short Adventure (D) on Makuri Madness in Makuri Islands"
-    },
-    {
-        "date": "2025-05-31",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 371.1,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-05-29",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 33.6,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-05-27",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 43.4,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-05-26",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 38.5,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-05-24",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 186.7,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-05-23",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 80.5,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-05-21",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 65.3,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-05-20",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 70.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-05-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 64.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-05-10",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 206.7,
-        "isSunday": false,
-        "activityName": "Salt Lake County Road Cycling"
-    },
-    {
-        "date": "2025-04-28",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 69.6,
-        "isSunday": false,
-        "activityName": "Roy - Base"
-    },
-    {
-        "date": "2025-04-26",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 159.9,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-04-21",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 65.2,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-04-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 155.7,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-04-09",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 114.4,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-04-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 61.2,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-04-02",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 70.0,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-03-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 68.1,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-03-22",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 100.6,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-03-01",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 151.3,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2025-02-25",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 45.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-02-24",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 93.9,
-        "isSunday": false,
-        "activityName": "Clinton Road Cycling"
-    },
-    {
-        "date": "2025-02-18",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 73.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-02-15",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 69.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-01-20",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 35.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-01-18",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 75.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-01-13",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 62.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-01-11",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 61.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2025-01-09",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 53.0,
-        "isSunday": false,
-        "activityName": "[BIKE] Manual Ride"
-    },
-    {
-        "date": "2024-12-31",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 57.2,
-        "isSunday": false,
-        "activityName": "West Point Road Cycling"
-    },
-    {
-        "date": "2024-10-19",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 180.9,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2024-10-12",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 58.7,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2024-10-05",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 21.2,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2024-10-03",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 57.9,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
-    },
-    {
-        "date": "2024-10-01",
-        "actualSport": "Bike",
-        "complianceStatus": "Unplanned",
-        "plannedDuration": 0.0,
-        "actualDuration": 57.0,
-        "isSunday": false,
-        "activityName": "Roy Road Cycling"
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Richmond Virtual Cycling",
+                "sport": "Bike",
+                "actual": 120.6
+            }
+        ]
     },
     {
         "date": "2024-09-28",
-        "actualSport": "Bike",
         "complianceStatus": "Unplanned",
         "plannedDuration": 0.0,
         "actualDuration": 191.3,
+        "sports": [
+            "Bike"
+        ],
         "isSunday": false,
-        "activityName": "Roy Road Cycling"
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 191.3
+            }
+        ]
     },
     {
-        "date": "1900-01-01",
-        "actualSport": "Bike",
+        "date": "2024-10-01",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 57.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 57.0
+            }
+        ]
+    },
+    {
+        "date": "2024-10-03",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 57.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 57.9
+            }
+        ]
+    },
+    {
+        "date": "2024-10-05",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 21.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 21.2
+            }
+        ]
+    },
+    {
+        "date": "2024-10-12",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 58.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 58.7
+            }
+        ]
+    },
+    {
+        "date": "2024-10-19",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 180.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 180.9
+            }
+        ]
+    },
+    {
+        "date": "2024-12-31",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 57.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "West Point Road Cycling",
+                "sport": "Bike",
+                "actual": 57.2
+            }
+        ]
+    },
+    {
+        "date": "2025-01-09",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 53.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 53.0
+            }
+        ]
+    },
+    {
+        "date": "2025-01-11",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 61.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 61.0
+            }
+        ]
+    },
+    {
+        "date": "2025-01-13",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 62.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 62.0
+            }
+        ]
+    },
+    {
+        "date": "2025-01-18",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 75.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 75.0
+            }
+        ]
+    },
+    {
+        "date": "2025-01-20",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 35.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 35.0
+            }
+        ]
+    },
+    {
+        "date": "2025-02-15",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 69.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 69.0
+            }
+        ]
+    },
+    {
+        "date": "2025-02-18",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 73.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 73.0
+            }
+        ]
+    },
+    {
+        "date": "2025-02-24",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 93.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Clinton Road Cycling",
+                "sport": "Bike",
+                "actual": 93.9
+            }
+        ]
+    },
+    {
+        "date": "2025-02-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 45.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 45.0
+            }
+        ]
+    },
+    {
+        "date": "2025-03-01",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 151.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 151.3
+            }
+        ]
+    },
+    {
+        "date": "2025-03-22",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 100.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 100.6
+            }
+        ]
+    },
+    {
+        "date": "2025-03-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 68.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 68.1
+            }
+        ]
+    },
+    {
+        "date": "2025-04-02",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 70.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 70.0
+            }
+        ]
+    },
+    {
+        "date": "2025-04-05",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 61.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 61.2
+            }
+        ]
+    },
+    {
+        "date": "2025-04-09",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 114.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 114.4
+            }
+        ]
+    },
+    {
+        "date": "2025-04-12",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 155.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 155.7
+            }
+        ]
+    },
+    {
+        "date": "2025-04-21",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 65.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 65.2
+            }
+        ]
+    },
+    {
+        "date": "2025-04-26",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 159.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 159.9
+            }
+        ]
+    },
+    {
+        "date": "2025-04-28",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 69.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy - Base",
+                "sport": "Bike",
+                "actual": 69.6
+            }
+        ]
+    },
+    {
+        "date": "2025-05-10",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 206.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Salt Lake County Road Cycling",
+                "sport": "Bike",
+                "actual": 206.7
+            }
+        ]
+    },
+    {
+        "date": "2025-05-19",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 64.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 64.0
+            }
+        ]
+    },
+    {
+        "date": "2025-05-20",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 70.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 70.0
+            }
+        ]
+    },
+    {
+        "date": "2025-05-21",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 65.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 65.3
+            }
+        ]
+    },
+    {
+        "date": "2025-05-23",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 80.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 80.5
+            }
+        ]
+    },
+    {
+        "date": "2025-05-24",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 186.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 186.7
+            }
+        ]
+    },
+    {
+        "date": "2025-05-26",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 38.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 38.5
+            }
+        ]
+    },
+    {
+        "date": "2025-05-27",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 43.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Manual Ride",
+                "sport": "Bike",
+                "actual": 43.4
+            }
+        ]
+    },
+    {
+        "date": "2025-05-29",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 33.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 33.6
+            }
+        ]
+    },
+    {
+        "date": "2025-05-31",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 371.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 371.1
+            }
+        ]
+    },
+    {
+        "date": "2025-06-04",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 65.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Group Ride: BMTR Short Adventure (D) on Makuri Madness in Makuri Islands",
+                "sport": "Bike",
+                "actual": 65.7
+            }
+        ]
+    },
+    {
+        "date": "2025-06-05",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - FTP Test [Standard] on Mighty Metropolitan in New York",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2025-06-06",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 80.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - 2x20 FTP Intervals on 2019 Worlds Harrogate Circuit in Yorkshire",
+                "sport": "Bike",
+                "actual": 80.3
+            }
+        ]
+    },
+    {
+        "date": "2025-06-07",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 136.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 136.5
+            }
+        ]
+    },
+    {
+        "date": "2025-06-09",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 55.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Extensive Anaerobic x 6 on Downtown Eruption in Watopia",
+                "sport": "Bike",
+                "actual": 55.4
+            }
+        ]
+    },
+    {
+        "date": "2025-06-10",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 67.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Group Workout:  Mountain Standard Dreams - Power2Tri Endurance Coaching (E) on Big Flat 8 in Watopia",
+                "sport": "Bike",
+                "actual": 67.0
+            }
+        ]
+    },
+    {
+        "date": "2025-06-11",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 40.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Race: Stage 2: Cityscapes: Park Perimeter Loop (D) on Park Perimeter Loop in New York",
+                "sport": "Bike",
+                "actual": 40.5
+            }
+        ]
+    },
+    {
+        "date": "2025-06-12",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Zone 2 #1 on Scotland Smash in Scotland",
+                "sport": "Bike",
+                "actual": 60.2
+            }
+        ]
+    },
+    {
+        "date": "2025-06-13",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 45.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - EF Pro Cycling s Red Day Workout on Mayan 8 in Watopia",
+                "sport": "Bike",
+                "actual": 45.1
+            }
+        ]
+    },
+    {
+        "date": "2025-06-14",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 132.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 132.9
+            }
+        ]
+    },
+    {
+        "date": "2025-06-16",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 27.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - FTP Ramp Test on Rising Empire in New York",
+                "sport": "Bike",
+                "actual": 27.0
+            }
+        ]
+    },
+    {
+        "date": "2025-06-17",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 36.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Race: Stage 3: Cityscapes: Richmond Worlds (E) on 2015 Worlds Course in Richmond",
+                "sport": "Bike",
+                "actual": 36.4
+            }
+        ]
+    },
+    {
+        "date": "2025-06-18",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 67.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Lutece Express in Paris with Miguel",
+                "sport": "Bike",
+                "actual": 67.4
+            }
+        ]
+    },
+    {
+        "date": "2025-06-19",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 120.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: The Big Ring in Watopia with Miguel",
+                "sport": "Bike",
+                "actual": 120.2
+            }
+        ]
+    },
+    {
+        "date": "2025-06-20",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 120.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Road to Sky in Watopia",
+                "sport": "Bike",
+                "actual": 120.2
+            }
+        ]
+    },
+    {
+        "date": "2025-06-21",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 136.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 136.7
+            }
+        ]
+    },
+    {
+        "date": "2025-06-23",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 14.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Loch Loop in Scotland",
+                "sport": "Bike",
+                "actual": 14.5
+            }
+        ]
+    },
+    {
+        "date": "2025-06-24",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Workout 3 on Ven-10 in France",
+                "sport": "Bike",
+                "actual": 60.5
+            }
+        ]
+    },
+    {
+        "date": "2025-06-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Amalgam on Achterbahn in Innsbruck",
+                "sport": "Bike",
+                "actual": 60.8
+            }
+        ]
+    },
+    {
+        "date": "2025-06-27",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 82.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Casse-Pattes in France with Miguel",
+                "sport": "Bike",
+                "actual": 82.3
+            }
+        ]
+    },
+    {
+        "date": "2025-06-28",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 36.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 36.0
+            }
+        ]
+    },
+    {
+        "date": "2025-06-30",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 62.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Endurance #2 on Champs-lyses in Paris",
+                "sport": "Bike",
+                "actual": 62.8
+            }
+        ]
+    },
+    {
+        "date": "2025-07-01",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Group Ride: Hong Kong Cycling Group Ride (C) on Tick Tock in Watopia",
+                "sport": "Bike",
+                "actual": 60.2
+            }
+        ]
+    },
+    {
+        "date": "2025-07-02",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 6.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Climb Portal - Mont Saint-Michel in France",
+                "sport": "Bike",
+                "actual": 6.2
+            }
+        ]
+    },
+    {
+        "date": "2025-07-03",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 55.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Lionel Sanders  Yellow Day Workout on Classique in London",
+                "sport": "Bike",
+                "actual": 55.3
+            }
+        ]
+    },
+    {
+        "date": "2025-07-04",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 32.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 32.8
+            }
+        ]
+    },
+    {
+        "date": "2025-07-07",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 61.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Thio Virtual Cycling",
+                "sport": "Bike",
+                "actual": 61.3
+            }
+        ]
+    },
+    {
+        "date": "2025-07-08",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Thio Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.4
+            }
+        ]
+    },
+    {
+        "date": "2025-07-09",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 64.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Volcano Flat in Watopia with Maria",
+                "sport": "Bike",
+                "actual": 64.5
+            }
+        ]
+    },
+    {
+        "date": "2025-07-10",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 47.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Climb Portal - Mont Saint-Michel in France",
+                "sport": "Bike",
+                "actual": 47.0
+            }
+        ]
+    },
+    {
+        "date": "2025-07-12",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 141.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 141.7
+            }
+        ]
+    },
+    {
+        "date": "2025-07-14",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 48.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Recovery Spin on Beach Island Loop in Watopia",
+                "sport": "Bike",
+                "actual": 48.6
+            }
+        ]
+    },
+    {
+        "date": "2025-07-15",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 61.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Microbursts on Going Coastal in Watopia",
+                "sport": "Bike",
+                "actual": 61.1
+            }
+        ]
+    },
+    {
+        "date": "2025-07-16",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 90.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Sugar Cookie in Watopia with Bernie",
+                "sport": "Bike",
+                "actual": 90.3
+            }
+        ]
+    },
+    {
+        "date": "2025-07-17",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 70.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Sugar Cookie in Watopia with Bernie",
+                "sport": "Bike",
+                "actual": 70.7
+            }
+        ]
+    },
+    {
+        "date": "2025-07-19",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 170.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Salt Lake City Road Cycling",
+                "sport": "Bike",
+                "actual": 170.6
+            }
+        ]
+    },
+    {
+        "date": "2025-07-21",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 122.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 122.2
+            }
+        ]
+    },
+    {
+        "date": "2025-07-22",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 116.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Thio Virtual Cycling",
+                "sport": "Bike",
+                "actual": 116.3
+            }
+        ]
+    },
+    {
+        "date": "2025-07-23",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 122.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Thio Virtual Cycling",
+                "sport": "Bike",
+                "actual": 122.2
+            }
+        ]
+    },
+    {
+        "date": "2025-07-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 8.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Repack Rush in Watopia",
+                "sport": "Bike",
+                "actual": 8.9
+            }
+        ]
+    },
+    {
+        "date": "2025-07-28",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 61.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Watopia s Waistband in Watopia with Bernie",
+                "sport": "Bike",
+                "actual": 61.3
+            }
+        ]
+    },
+    {
+        "date": "2025-07-29",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 17.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - FTP Ramp Test on Volcano Circuit in Watopia",
+                "sport": "Bike",
+                "actual": 17.4
+            }
+        ]
+    },
+    {
+        "date": "2025-07-30",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 4.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Volcano Circuit CCW in Watopia",
+                "sport": "Bike",
+                "actual": 4.5
+            }
+        ]
+    },
+    {
+        "date": "2025-07-31",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 104.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Tick Tock in Watopia with Miguel",
+                "sport": "Bike",
+                "actual": 104.4
+            }
+        ]
+    },
+    {
+        "date": "2025-08-01",
+        "complianceStatus": "Completed",
+        "plannedDuration": 15.0,
+        "actualDuration": 85.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Douce France in France with Miguel",
+                "sport": "Bike",
+                "actual": 85.0
+            }
+        ]
+    },
+    {
+        "date": "2025-08-05",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 194.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 194.0
+            }
+        ]
+    },
+    {
+        "date": "2025-08-09",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 17.0,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Morning Run",
+                "sport": "Run",
+                "actual": 17.0
+            }
+        ]
+    },
+    {
+        "date": "2025-08-11",
+        "complianceStatus": "Missed",
+        "plannedDuration": 45.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Active Recovery Ride",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-08-12",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 60.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel",
+                "sport": "Bike",
+                "actual": 60.4
+            }
+        ]
+    },
+    {
+        "date": "2025-08-13",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-08-14",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 60.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 60.8
+            }
+        ]
+    },
+    {
+        "date": "2025-08-15",
+        "complianceStatus": "Completed",
+        "plannedDuration": 20.0,
+        "actualDuration": 18.0,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Morning Run",
+                "sport": "Run",
+                "actual": 18.0
+            }
+        ]
+    },
+    {
+        "date": "2025-08-16",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 3.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Richfield Road Cycling",
+                "sport": "Bike",
+                "actual": 3.3
+            }
+        ]
+    },
+    {
+        "date": "2025-08-18",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 62.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - 6x2 VO2 Max on Ocean Lava Cliffside Loop in Watopia",
+                "sport": "Bike",
+                "actual": 62.1
+            }
+        ]
+    },
+    {
+        "date": "2025-08-19",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 29.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Bernie",
+                "sport": "Bike",
+                "actual": 29.8
+            }
+        ]
+    },
+    {
+        "date": "2025-08-20",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 65.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Classique in London with Miguel",
+                "sport": "Bike",
+                "actual": 65.1
+            }
+        ]
+    },
+    {
+        "date": "2025-08-21",
+        "complianceStatus": "Missed",
+        "plannedDuration": 60.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zone 2 Endurance Ride",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-08-22",
+        "complianceStatus": "Completed",
+        "plannedDuration": 25.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - FTP Test [Standard] on Queen s Highway After Party in Yorkshire",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2025-08-23",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 151.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 151.3
+            }
+        ]
+    },
+    {
+        "date": "2025-08-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Active Recovery on Flat Route in Watopia",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2025-08-26",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Garmin UNBOUND Gravel Training Plan / Dirty Teeth Drills on Loopin Lava in Watopia",
+                "sport": "Bike",
+                "actual": 60.1
+            }
+        ]
+    },
+    {
+        "date": "2025-08-27",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-08-29",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 68.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - 3x30 Sprints with Zone 2 on Mighty Metropolitan in New York",
+                "sport": "Bike",
+                "actual": 68.2
+            }
+        ]
+    },
+    {
+        "date": "2025-08-30",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 153.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 153.0
+            }
+        ]
+    },
+    {
+        "date": "2025-09-01",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 43.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Mend (1) on London 8 in London",
+                "sport": "Bike",
+                "actual": 43.2
+            }
+        ]
+    },
+    {
+        "date": "2025-09-02",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 68.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - 3x30 Sprints with Zone 2 on Suki s Playground in Makuri Islands",
+                "sport": "Bike",
+                "actual": 68.7
+            }
+        ]
+    },
+    {
+        "date": "2025-09-03",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.6
+            }
+        ]
+    },
+    {
+        "date": "2025-09-04",
+        "complianceStatus": "Completed",
+        "plannedDuration": 25.0,
+        "actualDuration": 30.8,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Other",
+                "sport": "Run",
+                "actual": 30.8
+            }
+        ]
+    },
+    {
+        "date": "2025-09-05",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 10.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Two Bridges Loop in Watopia",
+                "sport": "Bike",
+                "actual": 10.5
+            }
+        ]
+    },
+    {
+        "date": "2025-09-06",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 140.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Zone 2 Long Endurance w/ Tempo on Makuri Pretzel in Makuri Islands",
+                "sport": "Bike",
+                "actual": 140.7
+            }
+        ]
+    },
+    {
+        "date": "2025-09-08",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 60.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.5
+            }
+        ]
+    },
+    {
+        "date": "2025-09-09",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 75.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 3 x 10 on Whole Lotta Lava in Watopia",
+                "sport": "Bike",
+                "actual": 75.3
+            }
+        ]
+    },
+    {
+        "date": "2025-09-10",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 30.9,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Morning Run",
+                "sport": "Run",
+                "actual": 30.9
+            }
+        ]
+    },
+    {
+        "date": "2025-09-12",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 89.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Road to Sky in Watopia",
+                "sport": "Bike",
+                "actual": 89.5
+            }
+        ]
+    },
+    {
+        "date": "2025-09-13",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 8.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 8.8
+            }
+        ]
+    },
+    {
+        "date": "2025-09-15",
+        "complianceStatus": "Partial",
+        "plannedDuration": 55.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Active Recovery on Figure 8 in Watopia",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2025-09-16",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 3 x 10 on The Highline in New York",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-09-17",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 28.1,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Base",
+                "sport": "Run",
+                "actual": 28.1
+            }
+        ]
+    },
+    {
+        "date": "2025-09-19",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 32.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Race: Zwift Crit Racing Club - Downtown Dolphin (D) on Downtown Dolphin in Crit City",
+                "sport": "Bike",
+                "actual": 32.8
+            }
+        ]
+    },
+    {
+        "date": "2025-09-20",
+        "complianceStatus": "Completed",
+        "plannedDuration": 36.0,
+        "actualDuration": 40.6,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Base",
+                "sport": "Run",
+                "actual": 40.6
+            }
+        ]
+    },
+    {
+        "date": "2025-09-22",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Cadence Pyramid on Tempus Fugit in Watopia",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2025-09-24",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 28.4,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 28.4
+            }
+        ]
+    },
+    {
+        "date": "2025-09-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 90.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 2 x 25 on Knickerbocker in New York",
+                "sport": "Bike",
+                "actual": 90.4
+            }
+        ]
+    },
+    {
+        "date": "2025-09-26",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 60.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Thio Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.2
+            }
+        ]
+    },
+    {
+        "date": "2025-09-27",
+        "complianceStatus": "Completed",
+        "plannedDuration": 55.0,
+        "actualDuration": 68.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 68.2
+            }
+        ]
+    },
+    {
+        "date": "2025-09-29",
+        "complianceStatus": "Missed",
+        "plannedDuration": 45.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Active Recovery Ride (Taper)",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-09-30",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 35.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 2 x 25 on Mountain Mash in Watopia",
+                "sport": "Bike",
+                "actual": 35.5
+            }
+        ]
+    },
+    {
+        "date": "2025-10-01",
+        "complianceStatus": "Completed",
+        "plannedDuration": 20.0,
+        "actualDuration": 28.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Base",
+                "sport": "Run",
+                "actual": 28.2
+            }
+        ]
+    },
+    {
+        "date": "2025-10-03",
+        "complianceStatus": "Missed",
+        "plannedDuration": 20.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Short Zone 2 Ride (Tapered)",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-10-04",
+        "complianceStatus": "Completed",
+        "plannedDuration": 20.0,
+        "actualDuration": 31.1,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Base",
+                "sport": "Run",
+                "actual": 31.1
+            }
+        ]
+    },
+    {
+        "date": "2025-10-06",
+        "complianceStatus": "Completed",
+        "plannedDuration": 15.0,
+        "actualDuration": 27.7,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 27.7
+            }
+        ]
+    },
+    {
+        "date": "2025-10-07",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 20.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - New Workout on Innsbruckring in Innsbruck",
+                "sport": "Bike",
+                "actual": 20.2
+            }
+        ]
+    },
+    {
+        "date": "2025-10-08",
+        "complianceStatus": "Completed",
+        "plannedDuration": 10.0,
+        "actualDuration": 9.6,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 9.6
+            }
+        ]
+    },
+    {
+        "date": "2025-10-10",
+        "complianceStatus": "Completed",
+        "plannedDuration": 50.0,
+        "actualDuration": 50.5,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Davis County Running",
+                "sport": "Run",
+                "actual": 50.5
+            }
+        ]
+    },
+    {
+        "date": "2025-10-11",
+        "complianceStatus": "Missed",
+        "plannedDuration": 30.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Post-Race Active Recovery Ride",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-10-13",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-10-14",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 56.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Innsbruck Virtual Cycling",
+                "sport": "Bike",
+                "actual": 56.5
+            }
+        ]
+    },
+    {
+        "date": "2025-10-15",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 1 x 15 on 2018 Worlds Short Lap in Innsbruck",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2025-10-16",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 60.6,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] St George Running",
+                "sport": "Run",
+                "actual": 60.6
+            }
+        ]
+    },
+    {
+        "date": "2025-10-18",
+        "complianceStatus": "Completed",
+        "plannedDuration": 150.0,
+        "actualDuration": 187.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "St George Road Cycling",
+                "sport": "Bike",
+                "actual": 187.6
+            }
+        ]
+    },
+    {
+        "date": "2025-10-23",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 3 x 10 on Tour Of Tewit Well in Yorkshire",
+                "sport": "Bike",
+                "actual": 60.5
+            }
+        ]
+    },
+    {
+        "date": "2025-10-24",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 60.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Harrogate Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.4
+            }
+        ]
+    },
+    {
+        "date": "2025-10-25",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 90.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Harrogate Virtual Cycling",
+                "sport": "Bike",
+                "actual": 90.9
+            }
+        ]
+    },
+    {
+        "date": "2025-10-27",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 68.9,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Race: SAZ speed race on Ocean Lava Cliffside Loop in Watopia",
+                "sport": "Bike",
+                "actual": 38.9
+            },
+            {
+                "name": "[SWIM] Swim training",
+                "sport": "Swim",
+                "actual": 30.0
+            }
+        ]
+    },
+    {
+        "date": "2025-10-28",
+        "complianceStatus": "Partial",
+        "plannedDuration": 60.0,
+        "actualDuration": 24.4,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 24.4
+            }
+        ]
+    },
+    {
+        "date": "2025-10-29",
+        "complianceStatus": "Missed",
+        "plannedDuration": 90.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zone 2 Endurance",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-10-30",
+        "complianceStatus": "Missed",
+        "plannedDuration": 30.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Drill Session",
+                "sport": "Swim",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-10-31",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 96.4,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 34.2
+            },
+            {
+                "name": "[BIKE] Zwift - Race: Foudre Friday Apero League Race (C) on Tempus Fugit in Watopia",
+                "sport": "Bike",
+                "actual": 62.2
+            }
+        ]
+    },
+    {
+        "date": "2025-11-01",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 95.9,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Castle to Castle in Makuri Islands with Miguel",
+                "sport": "Bike",
+                "actual": 60.3
+            },
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 35.6
+            }
+        ]
+    },
+    {
+        "date": "2025-11-03",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 47.0,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 47.0
+            }
+        ]
+    },
+    {
+        "date": "2025-11-04",
+        "complianceStatus": "Missed",
+        "plannedDuration": 60.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Sweet Spot Intervals",
+                "sport": "Bike",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-11-05",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Pacer Group Ride: Flat Route in Watopia with Miguel",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-11-06",
+        "complianceStatus": "Completed",
+        "plannedDuration": 25.0,
+        "actualDuration": 46.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 46.2
+            }
+        ]
+    },
+    {
+        "date": "2025-11-07",
         "complianceStatus": "Completed",
         "plannedDuration": 120.0,
-        "actualDuration": 120.6,
+        "actualDuration": 161.8,
+        "sports": [
+            "Bike"
+        ],
         "isSunday": false,
-        "activityName": "[BIKE] Richmond Virtual Cycling"
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Grand County Road Cycling",
+                "sport": "Bike",
+                "actual": 161.8
+            }
+        ]
+    },
+    {
+        "date": "2025-11-10",
+        "complianceStatus": "Missed",
+        "plannedDuration": 30.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Form Focus",
+                "sport": "Swim",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-11-11",
+        "complianceStatus": "Partial",
+        "plannedDuration": 60.0,
+        "actualDuration": 27.2,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 27.2
+            }
+        ]
+    },
+    {
+        "date": "2025-11-12",
+        "complianceStatus": "Missed",
+        "plannedDuration": 45.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Endurance Focus",
+                "sport": "Swim",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-11-13",
+        "complianceStatus": "Missed",
+        "plannedDuration": 25.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Easy Run",
+                "sport": "Run",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-11-14",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 44.3,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 44.3
+            }
+        ]
+    },
+    {
+        "date": "2025-11-15",
+        "complianceStatus": "Partial",
+        "plannedDuration": 180.0,
+        "actualDuration": 101.7,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 41.6
+            },
+            {
+                "name": "[BIKE] Zwift - Sugar Cookie in Watopia",
+                "sport": "Bike",
+                "actual": 60.1
+            }
+        ]
+    },
+    {
+        "date": "2025-11-17",
+        "complianceStatus": "Partial",
+        "plannedDuration": 37.05,
+        "actualDuration": 29.6,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 29.6
+            }
+        ]
+    },
+    {
+        "date": "2025-11-18",
+        "complianceStatus": "Completed",
+        "plannedDuration": 53.7167,
+        "actualDuration": 53.7,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 53.7
+            }
+        ]
+    },
+    {
+        "date": "2025-11-19",
+        "complianceStatus": "Completed",
+        "plannedDuration": 37.6833,
+        "actualDuration": 37.5,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 37.5
+            }
+        ]
+    },
+    {
+        "date": "2025-11-20",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.4667,
+        "actualDuration": 44.6,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - FTP Test [Standard] on Queen s Highway in Yorkshire",
+                "sport": "Bike",
+                "actual": 44.6
+            }
+        ]
+    },
+    {
+        "date": "2025-11-21",
+        "complianceStatus": "Completed",
+        "plannedDuration": 54.3,
+        "actualDuration": 54.3,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 54.3
+            }
+        ]
+    },
+    {
+        "date": "2025-11-22",
+        "complianceStatus": "Completed",
+        "plannedDuration": 65.9667,
+        "actualDuration": 65.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 65.8
+            }
+        ]
+    },
+    {
+        "date": "2025-11-24",
+        "complianceStatus": "Completed",
+        "plannedDuration": 32.1,
+        "actualDuration": 31.9,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 31.9
+            }
+        ]
+    },
+    {
+        "date": "2025-11-25",
+        "complianceStatus": "Completed",
+        "plannedDuration": 90.9667,
+        "actualDuration": 90.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Innsbruck Virtual Cycling",
+                "sport": "Bike",
+                "actual": 90.7
+            }
+        ]
+    },
+    {
+        "date": "2025-11-26",
+        "complianceStatus": "Completed",
+        "plannedDuration": 33.5833,
+        "actualDuration": 33.4,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 33.4
+            }
+        ]
+    },
+    {
+        "date": "2025-11-27",
+        "complianceStatus": "Completed",
+        "plannedDuration": 58.4167,
+        "actualDuration": 58.4,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Rich County Running",
+                "sport": "Run",
+                "actual": 58.4
+            }
+        ]
+    },
+    {
+        "date": "2025-11-28",
+        "complianceStatus": "Completed",
+        "plannedDuration": 49.5167,
+        "actualDuration": 49.5,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Rich County Running",
+                "sport": "Run",
+                "actual": 49.5
+            }
+        ]
+    },
+    {
+        "date": "2025-12-01",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 34.5,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 34.5
+            }
+        ]
+    },
+    {
+        "date": "2025-12-02",
+        "complianceStatus": "Completed",
+        "plannedDuration": 70.0,
+        "actualDuration": 80.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 2 x 20 on Chain Chomper in Makuri Islands",
+                "sport": "Bike",
+                "actual": 80.4
+            }
+        ]
+    },
+    {
+        "date": "2025-12-03",
+        "complianceStatus": "Partial",
+        "plannedDuration": 45.0,
+        "actualDuration": 38.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Tempo Intervals - 6 x 3 minutes",
+                "sport": "Run",
+                "actual": 38.2
+            }
+        ]
+    },
+    {
+        "date": "2025-12-04",
+        "complianceStatus": "Partial",
+        "plannedDuration": 90.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] City of Westminster Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-12-05",
+        "complianceStatus": "Partial",
+        "plannedDuration": 150.0,
+        "actualDuration": 44.5,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 44.5
+            }
+        ]
+    },
+    {
+        "date": "2025-12-06",
+        "complianceStatus": "Completed",
+        "plannedDuration": 64.75,
+        "actualDuration": 105.7,
+        "sports": [
+            "Swim",
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 38.2
+            },
+            {
+                "name": "[RUN] Roy Running",
+                "sport": "Run",
+                "actual": 67.5
+            }
+        ]
+    },
+    {
+        "date": "2025-12-08",
+        "complianceStatus": "Partial",
+        "plannedDuration": 45.0,
+        "actualDuration": 34.9,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 34.9
+            }
+        ]
+    },
+    {
+        "date": "2025-12-09",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 61.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 2 x 15 on The Muckle Yin in Scotland",
+                "sport": "Bike",
+                "actual": 61.3
+            }
+        ]
+    },
+    {
+        "date": "2025-12-10",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 35.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - 30 minute Base Run",
+                "sport": "Run",
+                "actual": 35.2
+            }
+        ]
+    },
+    {
+        "date": "2025-12-11",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 90.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Richmond Virtual Cycling",
+                "sport": "Bike",
+                "actual": 90.3
+            }
+        ]
+    },
+    {
+        "date": "2025-12-12",
+        "complianceStatus": "Completed",
+        "plannedDuration": 64.75,
+        "actualDuration": 76.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Endurance Run - Zone 2 - 8 miles",
+                "sport": "Run",
+                "actual": 76.2
+            }
+        ]
+    },
+    {
+        "date": "2025-12-13",
+        "complianceStatus": "Partial",
+        "plannedDuration": 180.0,
+        "actualDuration": 51.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Virtual Cycling",
+                "sport": "Bike",
+                "actual": 51.8
+            }
+        ]
+    },
+    {
+        "date": "2025-12-15",
+        "complianceStatus": "Missed",
+        "plannedDuration": 45.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Swim: Base Endurance",
+                "sport": "Swim",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-12-16",
+        "complianceStatus": "Completed",
+        "plannedDuration": 90.0,
+        "actualDuration": 85.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Gentil 8 in France",
+                "sport": "Bike",
+                "actual": 85.8
+            }
+        ]
+    },
+    {
+        "date": "2025-12-17",
+        "complianceStatus": "Missed",
+        "plannedDuration": 30.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Swim: Active Recovery",
+                "sport": "Swim",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-12-18",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 50.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Richmond Virtual Cycling",
+                "sport": "Bike",
+                "actual": 50.9
+            }
+        ]
+    },
+    {
+        "date": "2025-12-19",
+        "complianceStatus": "Completed",
+        "plannedDuration": 76.0,
+        "actualDuration": 88.0,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - 9 mile Endurance Run - Zone 2",
+                "sport": "Run",
+                "actual": 88.0
+            }
+        ]
+    },
+    {
+        "date": "2025-12-20",
+        "complianceStatus": "Completed",
+        "plannedDuration": 150.0,
+        "actualDuration": 144.9,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Roy Road Cycling",
+                "sport": "Bike",
+                "actual": 113.7
+            },
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 31.2
+            }
+        ]
+    },
+    {
+        "date": "2025-12-23",
+        "complianceStatus": "Unplanned",
+        "plannedDuration": 0.0,
+        "actualDuration": 10.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Cool down",
+                "sport": "Bike",
+                "actual": 10.5
+            }
+        ]
+    },
+    {
+        "date": "2025-12-24",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 43.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Mend (1) on Cobbled Climbs in Richmond",
+                "sport": "Bike",
+                "actual": 43.2
+            }
+        ]
+    },
+    {
+        "date": "2025-12-25",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Innsbruck Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-12-26",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Lactate Threshold Heart Rate Tes",
+                "sport": "Run",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2025-12-27",
+        "complianceStatus": "Partial",
+        "plannedDuration": 180.0,
+        "actualDuration": 91.0,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.7
+            },
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 30.3
+            }
+        ]
+    },
+    {
+        "date": "2025-12-29",
+        "complianceStatus": "Missed",
+        "plannedDuration": 30.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Technique Focus",
+                "sport": "Swim",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
+        "date": "2025-12-30",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 50.0,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Zone 2 - 45 Minutes",
+                "sport": "Run",
+                "actual": 50.0
+            }
+        ]
+    },
+    {
+        "date": "2025-12-31",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 61.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Innsbruck Virtual Cycling",
+                "sport": "Bike",
+                "actual": 61.1
+            }
+        ]
+    },
+    {
+        "date": "2026-01-02",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 51.2,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Zone 2 - 45 Minutes",
+                "sport": "Run",
+                "actual": 51.2
+            }
+        ]
+    },
+    {
+        "date": "2026-01-03",
+        "complianceStatus": "Completed",
+        "plannedDuration": 120.0,
+        "actualDuration": 122.9,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Virtual Cycling",
+                "sport": "Bike",
+                "actual": 122.9
+            }
+        ]
+    },
+    {
+        "date": "2026-01-05",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 60.3,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Zwift - Sweet Spot - 2 x 15 on Richmond Rollercoaster in Richmond",
+                "sport": "Bike",
+                "actual": 60.3
+            }
+        ]
+    },
+    {
+        "date": "2026-01-06",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 37.9,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 37.9
+            }
+        ]
+    },
+    {
+        "date": "2026-01-07",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 46.6,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Zone 3 - Tempo - 45 minutes",
+                "sport": "Run",
+                "actual": 46.6
+            }
+        ]
+    },
+    {
+        "date": "2026-01-08",
+        "complianceStatus": "Completed",
+        "plannedDuration": 90.0,
+        "actualDuration": 85.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Harrogate Virtual Cycling",
+                "sport": "Bike",
+                "actual": 85.7
+            }
+        ]
+    },
+    {
+        "date": "2026-01-09",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 51.8,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - Zone 2 - 45 Minutes",
+                "sport": "Run",
+                "actual": 51.8
+            }
+        ]
+    },
+    {
+        "date": "2026-01-10",
+        "complianceStatus": "Completed",
+        "plannedDuration": 120.0,
+        "actualDuration": 142.2,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Richmond Virtual Cycling",
+                "sport": "Bike",
+                "actual": 120.6
+            },
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 21.6
+            }
+        ]
+    },
+    {
+        "date": "2026-01-12",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 77.80000000000001,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] North Ayrshire Virtual Cycling",
+                "sport": "Bike",
+                "actual": 45.7
+            },
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 32.1
+            }
+        ]
+    },
+    {
+        "date": "2026-01-13",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 30.0,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[SWIM] Swim coaching session",
+                "sport": "Swim",
+                "actual": 30.0
+            }
+        ]
+    },
+    {
+        "date": "2026-01-14",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 53.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (D) on Avon Flyer in New York",
+                "sport": "Bike",
+                "actual": 53.7
+            }
+        ]
+    },
+    {
+        "date": "2026-01-15",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 45.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] North Ayrshire Virtual Cycling",
+                "sport": "Bike",
+                "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2026-01-16",
+        "complianceStatus": "Completed",
+        "plannedDuration": 25.0,
+        "actualDuration": 27.3,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Roy - 25 Min at high cadence",
+                "sport": "Run",
+                "actual": 27.3
+            }
+        ]
+    },
+    {
+        "date": "2026-01-17",
+        "complianceStatus": "Completed",
+        "plannedDuration": 75.0,
+        "actualDuration": 101.7,
+        "sports": [
+            "Bike",
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Thio Virtual Cycling",
+                "sport": "Bike",
+                "actual": 76.0
+            },
+            {
+                "name": "[SWIM] Pool Swim",
+                "sport": "Swim",
+                "actual": 25.7
+            }
+        ]
+    },
+    {
+        "date": "2026-01-19",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 60.2,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Zwift - Sweet Spot - 2 x 15 on Jurassic Coast in Watopia",
+                "sport": "Bike",
+                "actual": 60.2
+            }
+        ]
+    },
+    {
+        "date": "2026-01-20",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 46.6,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 46.6
+            }
+        ]
+    },
+    {
+        "date": "2026-01-21",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 58.5,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Roy - Zone 2 with Strides",
+                "sport": "Run",
+                "actual": 47.3
+            },
+            {
+                "name": "Indoor Running",
+                "sport": "Run",
+                "actual": 11.2
+            }
+        ]
+    },
+    {
+        "date": "2026-01-22",
+        "complianceStatus": "Completed",
+        "plannedDuration": 90.0,
+        "actualDuration": 87.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Innsbruck Virtual Cycling",
+                "sport": "Bike",
+                "actual": 87.0
+            }
+        ]
+    },
+    {
+        "date": "2026-05-05",
+        "complianceStatus": "Event",
+        "plannedDuration": 0,
+        "actualDuration": 0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": "East Canyon and Back",
+        "activities": []
+    },
+    {
+        "date": "2026-06-20",
+        "complianceStatus": "Event",
+        "plannedDuration": 0,
+        "actualDuration": 0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": "Jordanelle Olympic Triathlon",
+        "activities": []
     }
 ]

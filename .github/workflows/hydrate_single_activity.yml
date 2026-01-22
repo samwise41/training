@@ -1,16 +1,54 @@
-name: Add Single Unplanned Activity
+name: 03.1 Manual Activity Hydration
+
 on:
-  schedule:
-    # Run at 6:00, 7:00, 8:00, 9:00, 10:00, 11:00 MST
-    - cron: '0 13,14,15,16,17,18 * * *'
+  # This section defines the input box in the GitHub Actions UI
   workflow_dispatch:
+    inputs:
+      activity_id:
+        description: 'Garmin Activity ID to Hydrate'
+        required: true
+        type: string
 
 permissions:
   contents: write
 
+jobs:
+  hydrate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas garminconnect tabulate
+
+    - name: Run Hydrator
       env:
         GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
         GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
       run: |
         # Pass the input ID as an argument to the script
         python python/utils/hydrate_activity.py "${{ github.event.inputs.activity_id }}"
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        
+        # Stage potential changes
+        git add data/training_log.json
+        
+        # Commit if changes exist
+        git commit -m "Manual Hydrate: Activity ${{ github.event.inputs.activity_id }}" || echo "No changes to commit"
+        
+        # Pull/Rebase/Push to avoid conflicts
+        git pull --rebase
+        git push

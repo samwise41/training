@@ -1,7 +1,10 @@
 import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.js';
 
 export function renderHeatmaps() {
+    // 1. Force a reload with a console log to verify the new code is running
+    console.log("Initializing Heatmaps v4 (Explicit Spacing)...");
     setTimeout(initHeatmaps, 0);
+    
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
@@ -16,7 +19,7 @@ async function initHeatmaps() {
     if (!container) return;
 
     try {
-        // Cache bust the JSON to ensure fresh data
+        // Cache bust
         const response = await fetch(`data/dashboard/heatmaps.json?t=${Date.now()}`);
         if (!response.ok) throw new Error("Heatmap file not found");
         const rawData = await response.json();
@@ -29,7 +32,7 @@ async function initHeatmaps() {
         const today = new Date();
         const currentYear = today.getFullYear();
         
-        // --- Ranges ---
+        // Ranges
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
@@ -70,12 +73,16 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    // --- PIXEL PERFECT CONFIGURATION ---
-    // These match the inline styles below exactly
-    const CELL_PX = 12;
-    const GAP_PX = 2;
-    const STRIDE_PX = CELL_PX + GAP_PX; // 14px
+    // --- EXACT SPACING CONSTANTS ---
+    // Change these values here to update BOTH Grid and Month Labels instantly
+    const CELL_PX = 12;  // Size of the box
+    const GAP_PX = 3;    // Size of the space between boxes (Rows AND Columns)
+    
+    // This stride MUST be Cell + Gap. 
+    // If Cell=12 and Gap=3, Stride=15.
+    const STRIDE_PX = CELL_PX + GAP_PX; 
 
+    // Month Label Logic
     let monthLabels = '';
     let dayCount = 0;
     const addedMonths = new Set();
@@ -99,7 +106,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             const monthKey = mStr + curr.getFullYear();
             
             if (!addedMonths.has(monthKey)) {
-                // Precision absolute positioning
                 const leftPos = colIndex * STRIDE_PX;
                 monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}px; top: 0;">${mStr}</span>`;
                 addedMonths.add(monthKey);
@@ -116,12 +122,11 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
-        // Hide Prior Year
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
-        // Hide Sunday if no actual workout
+        // Sunday Rule: Completely invisible unless actual workout exists
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
@@ -188,7 +193,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 if (act > 0) {
                     const sports = entry.sports || [];
                     if (sports.length > 1) {
-                        // Hard Stop Gradient
+                        // Multi-Sport Hard Split
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -212,7 +217,8 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
-        // Explicit width/height to force shape
+        // Render Cell
+        // Using !important on dimensions ensures external CSS doesn't override sizes
         gridCells += `
             <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="width: ${CELL_PX}px !important; height: ${CELL_PX}px !important; opacity: ${opacity}; ${styleOverride} ${visibility}"
@@ -234,12 +240,18 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         </h3>
         
         <div class="flex-1 overflow-x-auto pb-3 custom-scrollbar" ${idAttr}>
-            <div class="min-w-max">
+            <div style="min-width: max-content;">
                 <div class="relative h-5 w-full mb-1">
                     ${monthLabels}
                 </div>
                 
-                <div style="display: grid; grid-template-rows: repeat(7, ${CELL_PX}px); grid-auto-flow: column; gap: ${GAP_PX}px !important;">
+                <div style="
+                    display: grid; 
+                    grid-template-rows: repeat(7, ${CELL_PX}px); 
+                    grid-auto-flow: column; 
+                    grid-auto-columns: ${CELL_PX}px; 
+                    gap: ${GAP_PX}px !important;
+                ">
                     ${gridCells}
                 </div>
             </div>

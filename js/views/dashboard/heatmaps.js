@@ -70,11 +70,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    // --- EXACT SPACING MATH ---
-    // Cell: w-3 = 0.75rem (12px)
-    // Gap: 3px = 0.1875rem
-    // Stride: 0.9375rem
-    const COL_WIDTH_REM = 0.9375; 
+    // --- PIXEL PERFECT LAYOUT ---
+    const CELL_PX = 12; // 12px cells
+    const GAP_PX = 3;   // 3px gap
+    const STRIDE_PX = CELL_PX + GAP_PX; // 15px per column
 
     // Month Label Logic
     let monthLabels = '';
@@ -100,8 +99,9 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             const monthKey = mStr + curr.getFullYear();
             
             if (!addedMonths.has(monthKey)) {
-                const leftPos = colIndex * COL_WIDTH_REM;
-                monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}rem">${mStr}</span>`;
+                // Calculate position exactly matching the column stride
+                const leftPos = colIndex * STRIDE_PX;
+                monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}px; top: 0;">${mStr}</span>`;
                 addedMonths.add(monthKey);
             }
         }
@@ -116,12 +116,12 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
-        // Hide Prior Year
+        // 1. Hide Prior Year
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
-        // Hide Sunday if no actual workout
+        // 2. Hide Sunday if no actual workout
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
@@ -185,10 +185,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     label = "Unplanned";
                 }
             } else {
+                // Activity View
                 if (act > 0) {
                     const sports = entry.sports || [];
                     if (sports.length > 1) {
-                        // Hard Stops Gradient
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -212,10 +212,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
-        // Updated GAP to exactly 3px
+        // INLINE STYLES FOR SIZE AND GAP
         gridCells += `
-            <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
-                 style="opacity: ${opacity}; ${styleOverride} ${visibility}"
+            <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
+                 style="width: ${CELL_PX}px; height: ${CELL_PX}px; opacity: ${opacity}; ${styleOverride} ${visibility}"
                  title="${dateStr}: ${label}"
                  onclick="${clickFn}">
             </div>
@@ -238,7 +238,8 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 <div class="relative h-5 w-full mb-1">
                     ${monthLabels}
                 </div>
-                <div class="grid grid-rows-7 grid-flow-col gap-[3px]">
+                
+                <div style="display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: ${GAP_PX}px;">
                     ${gridCells}
                 </div>
             </div>

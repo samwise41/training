@@ -1,180 +1,223 @@
-// js/views/gear/index.js
-
-// --- 1. UTILS ---
-const WEATHER_MAP = {
-    0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
-    45: ["Foggy", "🌫️"], 48: ["Foggy", "🌫️"], 51: ["Drizzle", "🌦️"], 61: ["Rain", "🌧️"], 63: ["Rain", "🌧️"],
-    71: ["Snow", "❄️"], 95: ["Storm", "⛈️"]
-};
-
-// --- 2. COMPONENTS ---
-const buildHourlyForecast = (hourlyWeather) => {
-    // If no weather data, show a placeholder or empty string
-    if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
-        return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
-    }
-
-    const times = hourlyWeather.time.slice(0, 24); 
-    const temps = hourlyWeather.temperature_2m;
-    const codes = hourlyWeather.weathercode;
-    
-    let itemsHtml = '';
-    
-    times.forEach((t, index) => {
-        const date = new Date(t);
-        if (index < 24 && temps[index] !== undefined) { 
-            const h = date.getHours();
-            const ampm = h >= 12 ? 'PM' : 'AM';
-            const hourLabel = h % 12 === 0 ? 12 : h % 12;
-            const icon = (WEATHER_MAP[codes[index]] || ["", "☁️"])[1];
-            itemsHtml += `
-                <div class="hourly-item">
-                    <span class="text-[10px] text-slate-400 font-bold">${hourLabel} ${ampm}</span>
-                    <span class="text-lg">${icon}</span>
-                    <span class="text-xs font-bold text-slate-200">${Math.round(temps[index])}°</span>
-                </div>
-            `;
-        }
-    });
-
-    return `<div class="mb-6">
-        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p>
-        <div class="hourly-scroll">${itemsHtml}</div>
-    </div>`;
-};
-
-const buildTempOptions = (defaultVal) => {
-    let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
-    for (let i = 30; i <= 70; i++) {
-        tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
-    }
-    tempOptions += `<option value="75" ${defaultVal === 75 ? 'selected' : ''}>70°F+</option>`;
-    return tempOptions;
-};
-
-// --- FIX: Forced Tailwind classes to ensure Matrix Layout on tablet+ ---
-const generateRow = (idPrefix, iconClass, label, colorClass) => `
-    <div class="gear-row-container flex flex-col md:flex-row gap-4 items-stretch mb-4">
-        <div class="activity-header min-w-[140px] flex items-center gap-3 p-4 bg-slate-800/40 rounded-lg border border-slate-700">
-            <i class="${iconClass} ${colorClass} text-lg"></i>
-            <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
-        </div>
-        
-        <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span>
-                <p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span>
-                <p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span>
-                <p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-        </div>
-    </div>
-`;
-
-const renderLayout = (hourlyHtml, tempOptions) => {
-    return `
-        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
-            ${hourlyHtml}
-            
-            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto">
-                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Temperature</label>
-                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">
-                    ${tempOptions}
-                </select>
-            </div>
-
-            <div class="mb-10">
-                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions
-                </h3>
-                <div class="flex flex-col gap-4">
-                    ${generateRow('bike-standard', 'fa-solid fa-bicycle', 'Cycling', 'icon-bike')}
-                    ${generateRow('run-standard', 'fa-solid fa-person-running', 'Running', 'icon-run')}
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)
-                </h3>
-                <div class="flex flex-col gap-4">
-                    ${generateRow('bike-weather', 'fa-solid fa-bicycle', 'Cycling', 'icon-bike')}
-                    ${generateRow('run-weather', 'fa-solid fa-person-running', 'Running', 'icon-run')}
-                </div>
-            </div>
-        </div>
-        
-        <div class="text-center text-xs text-slate-500 mt-4">
-            <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="hover:text-blue-400 underline">
-                View Source Documentation (Gear.md)
-            </a>
-        </div>
-    `;
-};
-
-// --- 3. LOGIC ---
-function updateGearUI(gearData) {
-    if (!gearData) return;
-    
-    const tempSelect = document.getElementById('gear-temp');
-    if (!tempSelect) return;
-    const temp = parseInt(tempSelect.value);
-    
-    const processActivity = (activity, prefixBase) => {
-        const list = gearData[activity] || [];
-        
-        const findMatch = (t) => {
-            const match = list.find(r => {
-                if (r.min === -999) return t < r.max;
-                if (r.max === 999) return t >= r.min;
-                return t >= r.min && t <= r.max;
-            });
-            return match || { upper: "—", lower: "—", extremities: "—" };
-        };
-
-        const standard = findMatch(temp);
-        const weather = findMatch(temp - 10);
-
-        const updateUI = (prefix, data) => {
-            const u = document.getElementById(`${prefix}-upper`);
-            const l = document.getElementById(`${prefix}-lower`);
-            const e = document.getElementById(`${prefix}-extremities`);
-            if (u) u.innerHTML = data.upper;
-            if (l) l.innerHTML = data.lower;
-            if (e) e.innerHTML = data.extremities;
-        };
-
-        updateUI(`${prefixBase}-standard`, standard);
-        updateUI(`${prefixBase}-weather`, weather);
-    };
-
-    processActivity('bike', 'bike');
-    processActivity('run', 'run');
+:root {
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.3);
+    --border-slate: #1e293b;
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
 }
 
-// --- 4. EXPORTS ---
-export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // Default Temp Logic
-    let defaultVal = 50;
-    if (currentTemp !== null && currentTemp !== undefined) {
-        if (currentTemp < 30) defaultVal = 25;
-        else if (currentTemp > 70) defaultVal = 75;
-        else defaultVal = currentTemp;
-    }
-
-    const tempOptions = buildTempOptions(defaultVal);
-    const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    const html = renderLayout(hourlyHtml, tempOptions);
-
-    return html;
+/* Activity Icon Theme Colors */
+:root {
+    --color-all:  #14b8a6; 
+    --color-bike: #8b5cf6; 
+    --color-run:  #ec4899; 
+    --color-swim: #0ea5e9;  
+    --color-strength: #f59e0b;
+    --color-other: #94a3b8;
 }
 
-export function updateGearResult(gearData) {
-    updateGearUI(gearData);
+/* Icon Classes */
+.icon-bike { color: var(--color-bike) !important; }
+.icon-run  { color: var(--color-run) !important; }
+.icon-swim { color: var(--color-swim) !important; }
+.icon-all { color: var(--color-all) !important; }
+
+/* Background Classes */
+.bg-icon-all { background-color: var(--color-all) !important; }
+.bg-icon-bike { background-color: var(--color-bike) !important; }
+.bg-icon-run  { background-color: var(--color-run) !important; }
+.bg-icon-swim { background-color: var(--color-swim) !important; }
+
+/* --- STRIPED PATTERN FOR UNPLANNED --- */
+/* High contrast, sharp diagonal stripes (White 50% opacity) */
+.bg-striped {
+    background-image: repeating-linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.5) 0px,   /* Start bright white */
+        rgba(255, 255, 255, 0.5) 2px,   /* Hard stop white at 2px */
+        transparent 2px,                  /* Start transparent immediately */
+        transparent 4px                   /* End transparent at 4px (2px gap) */
+    ) !important;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+}
+
+.nav-link.active {
+    color: #3b82f6;
+    background-color: #1e293b;
+    border-right: 4px solid #3b82f6;
+}
+
+#sidebar { transition: transform 0.3s ease-in-out; z-index: 60; }
+.sidebar-open { transform: translateX(0); }
+.sidebar-closed { transform: translateX(-100%); }
+
+@media (min-width: 1024px) {
+    #sidebar { transform: translateX(0); }
+    .main-content { margin-left: 260px; }
+}
+
+.markdown-body {
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+}
+.markdown-body table {
+    display: table !important;
+    width: 100% !important; 
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border: 1px solid #334155 !important; 
+    border-radius: 8px !important; 
+    overflow: hidden !important;
+    margin-bottom: 2rem !important;
+}
+.markdown-body table th { 
+    background-color: #1e293b !important; 
+    color: #3b82f6 !important; 
+    padding: 12px !important; 
+    text-align: left !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05em !important;
+}
+.markdown-body table td {
+    padding: 12px !important;
+    border-top: 1px solid #334155 !important;
+}
+.markdown-body table tr { background-color: var(--bg-dark) !important; }
+
+.gauge-wrapper { width: 100%; max-width: 400px; margin: 0 auto 1rem; text-align: center; }
+.gauge-needle { transition: transform 2s cubic-bezier(0.17, 0.67, 0.38, 1); transform-origin: 150px 150px; }
+
+#zone-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 768px) { #zone-grid { grid-template-columns: 1fr 1fr; } }
+
+.zone-card { background-color: var(--bg-card); border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem; }
+.zone-card-title {
+    font-size: 1.1rem; font-weight: 800; color: var(--text-main);
+    margin-bottom: 1.5rem; border-bottom: 1px solid #1e293b;
+    padding-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.zone-row {
+    margin-bottom: 0.75rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #64748b;
+}
+.z-1 { border-left-color: #94a3b8; } /* Grey (Recovery) */
+.z-2 { border-left-color: #3b82f6; } /* Blue (Endurance) */
+.z-3 { border-left-color: #22c55e; } /* Green (Tempo) */
+.z-ss { border-left-color: #eab308; } /* Yellow (Sweet Spot) */
+.z-4 { border-left-color: #f97316; } /* Orange (Threshold) */
+.z-5 { border-left-color: #ef4444; } /* Red (VO2 Max) */
+
+.gear-select {
+    background-color: #1e293b;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+    width: 100%;
+}
+
+.gear-row-container { display: flex; flex-direction: column; gap: 1rem; }
+@media (min-width: 1024px) { .gear-row-container { flex-direction: row; align-items: stretch; } }
+
+.activity-header {
+    min-width: 140px; display: flex; align-items: center; gap: 0.75rem;
+    padding: 1rem; background: rgba(30, 41, 59, 0.4); border-radius: 0.5rem; border: 1px solid #1e293b;
+}
+
+.gear-bubbles-row { display: grid; grid-template-columns: 1fr; gap: 0.75rem; flex: 1; }
+@media (min-width: 640px) { .gear-bubbles-row { grid-template-columns: repeat(3, 1fr); } }
+
+.gear-bubble {
+    background: rgba(15, 23, 42, 0.6); border: 1px solid #1e293b; padding: 1rem;
+    border-radius: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; height: 100%;
+}
+
+/* KPI Styles */
+.kpi-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 768px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+
+.kpi-card { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem; }
+.kpi-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #334155; }
+.kpi-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+
+/* Updated Pie/Donut Chart Styles - LARGER SIZE */
+.charts-row { display: flex; justify-content: space-around; gap: 1rem; align-items: flex-start; }
+.chart-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 120px; }
+.chart-label { margin-top: 0.75rem; font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
+
+.donut-svg { transform: rotate(-90deg); }
+.donut-bg { fill: none; stroke: #1e293b; stroke-width: 2.8; }
+.donut-segment { fill: none; stroke-width: 2.8; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
+
+.donut-text {
+    position: absolute; top: 0; left: 0; width: 100%; height: 120px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.donut-percent { font-size: 1.5rem; font-weight: 800; color: #f8fafc; line-height: 1; }
+.donut-fraction { font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 2px; }
+
+/* Hourly Scroll - Keeping this class definition just in case */
+.hourly-scroll {
+    display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem;
+    scrollbar-width: thin; scrollbar-color: #334155 transparent;
+}
+.hourly-scroll::-webkit-scrollbar { height: 6px; }
+.hourly-scroll::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 3px; }
+.hourly-item {
+    min-width: 70px; display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+    padding: 0.75rem; background: #0f172a; border-radius: 0.5rem; border: 1px solid #1e293b;
+}
+
+
+/* --- AG GRID: HYBRID THEME (Dark Grid / Light Sidebar) --- */
+
+/* 1. Force the Sidebar & Tool Panels to be WHITE */
+.ag-theme-quartz-dark .ag-side-bar,
+.ag-theme-quartz-dark .ag-tool-panel-wrapper,
+.ag-theme-quartz-dark .ag-side-buttons {
+    background-color: #ffffff !important; /* Pure White */
+    color: #0f172a !important; /* Dark Slate Text */
+    border-left: 1px solid #cbd5e1 !important; /* Light Border */
+}
+
+/* 2. Fix the Column/Filter Text inside the sidebar */
+.ag-theme-quartz-dark .ag-column-select-column-label, 
+.ag-theme-quartz-dark .ag-group-component-title,
+.ag-theme-quartz-dark .ag-filter-toolpanel-header,
+.ag-theme-quartz-dark .ag-header-cell-text {
+    color: #334155 !important; /* Slate 700 Text */
+}
+
+/* 3. Fix Input Boxes (Search Bar) to look normal on white */
+.ag-theme-quartz-dark .ag-text-field-input {
+    background-color: #f1f5f9 !important; /* Light Grey Input */
+    color: #0f172a !important; /* Dark Text */
+    border: 1px solid #94a3b8 !important;
+}
+
+/* 4. Sidebar Tabs (Columns/Filters buttons) */
+.ag-theme-quartz-dark .ag-side-button-button {
+    color: #64748b !important; /* Slate 500 (Inactive) */
+}
+.ag-theme-quartz-dark .ag-side-button-button.ag-selected {
+    color: #0f172a !important; /* Dark (Active) */
+    border-left-color: #22d3ee !important; /* Cyan Accent */
+}
+
+/* 5. Force the Context Menu (Right Click) to be Visible */
+.ag-theme-quartz-dark .ag-menu {
+    background-color: #1e293b !important; /* Keep Menu Dark */
+    color: #f8fafc !important;
 }

@@ -30,15 +30,13 @@
 
 /* --- STRIPED PATTERN FOR UNPLANNED --- */
 /* High Contrast Diagonal Stripes */
-.bg-striped-dark {
-    /* 1. Use a DARK color (black with opacity) instead of white */
-    /* 2. Increase the width to 5px (or 4px) for that chunky look */
+.bg-striped {
     background-image: repeating-linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.15) 0px,
-        rgba(0, 0, 0, 0.15) 5px,
-        transparent 5px,
-        transparent 10px
+        45deg,
+        rgba(255, 255, 255, 0.5) 0px,   /* Start bright white */
+        rgba(255, 255, 255, 0.5) 2px,   /* Hard stop white at 2px */
+        transparent 2px,                  /* Start transparent immediately */
+        transparent 4px                   /* End transparent at 4px (2px gap) */
     ) !important;
 }
 

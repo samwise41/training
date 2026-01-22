@@ -33,30 +33,16 @@ async function initHeatmaps() {
         if (!response.ok) throw new Error("Heatmap file not found");
         const rawData = await response.json();
 
-        // --- PRE-PROCESSING DATA ---
-        
-        // 1. Activity Map: Contains EVERYTHING (for "Activity Log")
-        const activityMap = {};
+        // Map Data for Lookup
+        const dateMap = {};
         if (Array.isArray(rawData)) {
-            rawData.forEach(d => { activityMap[d.date] = d; });
-        }
-
-        // 2. Consistency Map: FILTERED (Only days where a workout was PLANNED)
-        // This ensures the Consistency charts only show planned days.
-        const consistencyMap = {};
-        if (Array.isArray(rawData)) {
-            rawData.forEach(d => {
-                // The Filter: Must have planned minutes to appear in Consistency/Annual Plan view
-                if (d.plannedDuration > 0) {
-                    consistencyMap[d.date] = d;
-                }
-            });
+            rawData.forEach(d => { dateMap[d.date] = d; });
         }
 
         // --- DATE RANGES ---
         const today = new Date();
         
-        // Trailing 6 Months
+        // A. Trailing 6 Months (Activity View)
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
@@ -66,7 +52,7 @@ async function initHeatmaps() {
         const day = startTrailing.getDay();
         startTrailing.setDate(startTrailing.getDate() - day); // Align to Sunday
 
-        // Annual View
+        // B. Annual View (Consistency)
         const startYear = new Date(today.getFullYear(), 0, 1);
         const yearDay = startYear.getDay();
         startYear.setDate(startYear.getDate() - yearDay); // Align to Sunday
@@ -75,11 +61,11 @@ async function initHeatmaps() {
         // --- RENDER ---
         container.innerHTML = `
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                ${buildGrid(consistencyMap, startTrailing, endTrailing, "Recent Consistency (Plan Only)", "hm-consistency", true)}
-                ${buildGrid(activityMap, startTrailing, endTrailing, "Activity Log (All Activity)", "hm-activity", false)}
+                ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency (Plan vs Actual)", "hm-consistency", true)}
+                ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log (Duration & Sport)", "hm-activity", false)}
             </div>
             <div>
-                ${buildGrid(consistencyMap, startYear, endYear, `Annual Overview (${today.getFullYear()})`, null, true)}
+                ${buildGrid(dateMap, startYear, endYear, `Annual Overview (${today.getFullYear()})`, null, true)}
             </div>
         `;
 
@@ -105,60 +91,86 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
     // Loop through days
     while (curr <= end) {
         const dateStr = toLocalYMD(curr);
-        const entry = dataMap[dateStr]; // This is now pre-filtered based on the mode
+        const entry = dataMap[dateStr]; 
         
-        let bgColor = 'bg-slate-800/50'; // Default empty
+        let bgColor = 'bg-slate-800/50'; 
         let opacity = '0.3'; 
         let styleOverride = '';
-        let tooltipColor = '#1e293b';
+        let extraClasses = '';
         
-        // Metadata for Tooltip
+        // Metadata for Tooltip logic
         const status = entry ? entry.complianceStatus : null;
-        const sport = entry ? entry.actualSport : null;
-        const activityName = entry ? (entry.activityName || status) : 'No Activity';
-        const actMins = entry ? (entry.actualDuration || 0) : 0;
-        const planMins = entry ? (entry.plannedDuration || 0) : 0;
+        
+        // Default Tooltip Params
+        let label = 'No Activity';
+        let plan = 0;
+        let act = 0;
+        let color = '#1e293b';
+        let sport = 'Rest';
+        let detailsJson = '';
 
-        // --- COLOR LOGIC ---
         if (entry) {
+            plan = entry.plannedDuration || 0;
+            act = entry.actualDuration || 0;
+            sport = entry.dominantSport || 'Other';
+            label = status; // e.g. "Completed" or "Run"
+
+            // Prepare Details List for Tooltip (JSON stringified)
+            if (entry.activities && entry.activities.length > 0) {
+                const lines = entry.activities.map(a => {
+                    const icon = getIconForSport(a.sport); 
+                    return `<div class='flex justify-between items-center gap-2'><span>${icon} ${a.name}</span><span class='font-mono text-emerald-400'>${Math.round(a.actual)}m</span></div>`;
+                }).join('');
+                detailsJson = encodeURIComponent(lines);
+            }
+
+            // --- COLOR LOGIC ---
             if (isConsistencyMode) {
-                // DATASET IS ALREADY FILTERED to Planned > 0.
-                // Just map status to color.
-                if (status === 'Completed') {
-                    bgColor = 'bg-emerald-500';
-                    tooltipColor = '#10b981';
-                    opacity = '1';
-                } else if (status === 'Partial') {
-                    bgColor = 'bg-yellow-500';
-                    tooltipColor = '#eab308';
-                    opacity = '0.9';
-                } else if (status === 'Missed') {
-                    bgColor = 'bg-red-500';
-                    tooltipColor = '#ef4444';
-                    opacity = '0.4';
-                } else {
-                    // Fallback (e.g. if status is weird but plan > 0)
-                    bgColor = 'bg-slate-700'; 
-                    opacity = '0.5';
+                // Consistency View: Focus on Plan Compliance
+                if (plan > 0) {
+                    if (status === 'Completed') {
+                        bgColor = 'bg-emerald-500';
+                        color = '#10b981';
+                        opacity = '1';
+                    } else if (status === 'Partial') {
+                        bgColor = 'bg-yellow-500';
+                        color = '#eab308';
+                        opacity = '0.9';
+                    } else if (status === 'Missed') {
+                        bgColor = 'bg-red-500';
+                        color = '#ef4444';
+                        opacity = '0.4';
+                    } else {
+                        bgColor = 'bg-slate-700'; // Planned but weird status
+                        opacity = '0.5';
+                    }
                 }
             } else {
-                // Activity Mode (Unfiltered)
-                // Only color if there was movement
-                if (actMins > 0 && sport) {
-                    const sportColor = getSportColorVar(sport); 
+                // Activity View: Focus on Actual Activity (Sport Color)
+                if (act > 0) {
+                    const sportColor = getSportColorVar(sport);
                     styleOverride = `background-color: ${sportColor};`;
-                    tooltipColor = sportColor;
+                    color = sportColor;
                     opacity = '0.9';
+                    label = sport; // Show "Run" instead of "Completed"
+                    
+                    // STRIPED LOGIC: Unplanned activities get striped
+                    if (entry.hasUnplanned || status === 'Unplanned') {
+                        extraClasses = 'bg-striped';
+                    }
                 }
             }
         }
 
+        // --- CLICK EVENT ---
+        // We pass the detailsJson (encoded) so the global handler can decode it
+        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '${color}', '${sport}', '${detailsJson}')`;
+
         // --- CELL RENDER ---
         gridCells += `
-            <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative ${styleOverride ? '' : bgColor}"
+            <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="opacity: ${opacity}; ${styleOverride}"
-                 onmouseover="window.showDashboardTooltip(event, '${dateStr}', ${Math.round(planMins)}, '${Math.round(actMins)}', '${activityName}', '${tooltipColor}', '${isConsistencyMode ? (status || 'Rest') : (sport || 'Rest')}', '')"
-                 onmouseout="document.getElementById('dashboard-tooltip-popup').classList.add('opacity-0')">
+                 onclick="${clickFn}">
             </div>
         `;
 
@@ -167,13 +179,14 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
 
     const idAttr = containerId ? `id="${containerId}"` : '';
 
+    // Added justify-center to flex container for centering
     return `
     <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-5 flex flex-col backdrop-blur-sm">
         <h3 class="text-xs font-bold text-slate-300 uppercase mb-3 flex items-center gap-2">
-            <i class="fa-solid ${isConsistencyMode ? 'fa-fire text-orange-400' : 'fa-layer-group text-blue-400'}"></i> ${title}
+            <i class="fa-solid ${isConsistencyMode ? 'fa-check-circle text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
         </h3>
         
-        <div class="flex-1 overflow-x-auto pb-1 custom-scrollbar" ${idAttr}>
+        <div class="flex-1 overflow-x-auto pb-1 custom-scrollbar flex justify-center" ${idAttr}>
             <div class="grid grid-rows-7 grid-flow-col gap-0.5 w-max">
                 ${gridCells}
             </div>
@@ -183,10 +196,18 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
     </div>`;
 }
 
+function getIconForSport(sport) {
+    const s = (sport || '').toLowerCase();
+    if(s.includes('run')) return '<i class="fa-solid fa-person-running"></i>';
+    if(s.includes('bike')) return '<i class="fa-solid fa-bicycle"></i>';
+    if(s.includes('swim')) return '<i class="fa-solid fa-person-swimming"></i>';
+    return '<i class="fa-solid fa-dumbbell"></i>';
+}
+
 function renderLegend(isConsistencyMode) {
     if (isConsistencyMode) {
         return `
-            <div class="flex flex-wrap gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
+            <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-500"></div> Done</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-yellow-500"></div> Partial</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-red-500 opacity-40"></div> Missed</div>
@@ -194,10 +215,11 @@ function renderLegend(isConsistencyMode) {
         `;
     } else {
         return `
-            <div class="flex flex-wrap gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
+            <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-run)"></div> Run</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
+                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-striped" style="background-color:var(--color-other)"></div> Unplanned</div>
             </div>
         `;
     }

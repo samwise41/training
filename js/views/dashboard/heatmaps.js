@@ -3,7 +3,7 @@ import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.j
 export function renderHeatmaps() {
     setTimeout(initHeatmaps, 0);
     const loadingHtml = `
-    <div id="heatmaps-container" class="flex flex-col gap-4">
+    <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
             <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps...</span>
         </div>
@@ -39,12 +39,11 @@ async function initHeatmaps() {
 
         // B. Annual View
         const startYear = new Date(currentYear, 0, 1);
-        startYear.setDate(startYear.getDate() - startYear.getDay()); // Start on Sunday
+        startYear.setDate(startYear.getDate() - startYear.getDay());
         const endYear = new Date(currentYear, 11, 31);
 
-        // Render Grids
         container.innerHTML = `
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true, null)}
                 ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false, null)}
             </div>
@@ -66,13 +65,23 @@ async function initHeatmaps() {
     }
 }
 
-// targetYear is optional, used for hiding prior-year boxes in Annual View
 function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, targetYear) {
     let gridCells = '';
     let curr = new Date(start);
     const today = new Date();
     
-    // Define current week range
+    // Spacing Configuration
+    // w-3 = 0.75rem
+    // gap-2 = 0.5rem (Doubled gap)
+    // Stride = 1.25rem per column
+    const COL_WIDTH_REM = 1.25; 
+
+    // Month Label Logic
+    let monthLabels = '';
+    let dayCount = 0;
+    const addedMonths = new Set();
+
+    // Current Week Logic
     const currentWeekStart = new Date(today);
     currentWeekStart.setDate(today.getDate() - today.getDay());
     currentWeekStart.setHours(0,0,0,0);
@@ -83,7 +92,24 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     while (curr <= end) {
         const dateStr = toLocalYMD(curr);
         const entry = dataMap[dateStr];
+        const isSunday = curr.getDay() === 0;
         
+        // --- Month Labels ---
+        // If it's the 1st of the month, or the very first column, add label
+        if (curr.getDate() === 1 || (dayCount === 0 && curr.getDate() <= 7)) {
+            const mStr = curr.toLocaleString('default', { month: 'short' });
+            const colIndex = Math.floor(dayCount / 7);
+            const key = `${mStr}-${colIndex}`; // weak dedup
+            
+            // Only add if we haven't labeled this month recently (simple check)
+            if (!addedMonths.has(mStr + curr.getFullYear())) {
+                const leftPos = colIndex * COL_WIDTH_REM;
+                monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider" style="left: ${leftPos}rem">${mStr}</span>`;
+                addedMonths.add(mStr + curr.getFullYear());
+            }
+        }
+
+        // --- Cell Rendering ---
         let bgColor = 'bg-slate-800/50'; 
         let opacity = '1'; 
         let styleOverride = '';
@@ -92,23 +118,19 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
-        const isSunday = curr.getDay() === 0;
 
-        // --- VISIBILITY RULES ---
-        
-        // 1. Annual View: Hide previous year dates (e.g. Dec 2025 showing in 2026 view)
+        // Hide prior year dates in Annual View
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
-        // 2. Sunday Rule: Totally hidden unless actualDuration > 0
+        // Hide Sunday if no actual workout
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
             }
         }
 
-        // --- BACKGROUND LOGIC ---
         if (isConsistencyMode) {
             if (isFuture) {
                 if (isCurrentWeek) {
@@ -120,7 +142,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 }
             } else {
                 bgColor = 'bg-emerald-500';
-                opacity = '0.2'; // "Rest" opacity
+                opacity = '0.2'; 
             }
         }
 
@@ -134,7 +156,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             act = entry.actualDuration || 0;
             const status = entry.complianceStatus;
             
-            // Build Tooltip
             if (entry.activities && entry.activities.length > 0) {
                 const lines = entry.activities.map(a => {
                     const icon = getIconForSport(a.sport); 
@@ -144,6 +165,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
 
             if (isConsistencyMode) {
+                // Priority: Event -> Completed/Missed -> Unplanned
                 if (status === 'Event') {
                     bgColor = 'bg-purple-600';
                     opacity = '1';
@@ -167,12 +189,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     label = "Unplanned";
                 }
             } else {
-                // Activity Mode
                 if (act > 0) {
                     const sports = entry.sports || [];
-                    
                     if (sports.length > 1) {
-                        // Multi-sport: Hard Stops (No Gradient)
+                        // Hard Stop Gradient for multi-sport
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -185,9 +205,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     } else if (sports.length === 1) {
                         const s = sports[0];
                         let colorVar = getSportColorVar(s);
-                        if (!['Run','Bike','Swim'].includes(s)) {
-                            colorVar = 'var(--color-all)'; 
-                        }
+                        if (!['Run','Bike','Swim'].includes(s)) colorVar = 'var(--color-all)'; 
                         styleOverride = `background-color: ${colorVar};`;
                         label = s;
                     }
@@ -198,7 +216,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
-        // Updated GAP to gap-1 (4px spacing)
         gridCells += `
             <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="opacity: ${opacity}; ${styleOverride} ${visibility}"
@@ -208,19 +225,26 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         `;
 
         curr.setDate(curr.getDate() + 1);
+        dayCount++;
     }
 
     const idAttr = containerId ? `id="${containerId}"` : '';
 
     return `
     <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-5 flex flex-col backdrop-blur-sm">
-        <h3 class="text-xs font-bold text-slate-300 uppercase mb-3 flex items-center gap-2">
+        <h3 class="text-xs font-bold text-slate-300 uppercase mb-4 flex items-center gap-2">
             <i class="fa-solid ${isConsistencyMode ? 'fa-calendar-check text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
         </h3>
         
-        <div class="flex-1 overflow-x-auto pb-2 custom-scrollbar flex justify-center" ${idAttr}>
-            <div class="grid grid-rows-7 grid-flow-col gap-1 w-max">
-                ${gridCells}
+        <div class="flex-1 overflow-x-auto pb-3 custom-scrollbar" ${idAttr}>
+            <div class="min-w-max">
+                <div class="relative h-5 w-full mb-1">
+                    ${monthLabels}
+                </div>
+                
+                <div class="grid grid-rows-7 grid-flow-col gap-2">
+                    ${gridCells}
+                </div>
             </div>
         </div>
         
@@ -240,21 +264,20 @@ function renderLegend(isConsistencyMode) {
     if (isConsistencyMode) {
         return `
             <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-500"></div> Done</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-yellow-500"></div> Partial</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-red-600"></div> Missed</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-purple-600"></div> Event</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-500 opacity-20"></div> Rest</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-500"></div> Done</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-yellow-500"></div> Partial</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-red-600"></div> Missed</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-purple-600"></div> Event</div>
             </div>
         `;
     } else {
         return `
             <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-run)"></div> Run</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-all)"></div> Other</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-run)"></div> Run</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
+                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-all)"></div> Other</div>
             </div>
         `;
     }

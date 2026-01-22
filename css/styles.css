@@ -34,7 +34,7 @@
     background-image: repeating-linear-gradient(
         45deg,
         rgba(0, 0, 0, 0.5) 0px,   /* Start bright white */
-        rgba(255, 255, 255, 0.5) 2px,   /* Hard stop white at 2px */
+        rgba(0, 0, 0, 0.5) 2px,   /* Hard stop white at 2px */
         transparent 2px,                  /* Start transparent immediately */
         transparent 4px                   /* End transparent at 4px (2px gap) */
     ) !important;

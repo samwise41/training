@@ -60,7 +60,7 @@ def main():
                 log_map[l_date] = []
             log_map[l_date].append(l)
 
-    # Track which log IDs are matched to a plan
+    # Track which log IDs are matched to a plan (to find the extras later)
     matched_log_ids = set()
 
     # 3. Process Plan
@@ -159,8 +159,7 @@ def main():
 
         output_list.append(item)
 
-    # --- 4. Find Unplanned / Extra Workouts (NEW LOGIC) ---
-    # Iterate through ALL logs. If ID not in matched_log_ids, add as separate entry.
+    # --- 4. Find Unplanned / Extra Workouts (THIS IS THE CRITICAL MISSING PART) ---
     for log in logs:
         # Skip if already matched
         if log.get('id') in matched_log_ids:
@@ -170,7 +169,7 @@ def main():
         if log.get('status') == 'PLANNED' or str(log.get('id', '')).startswith('PLAN-'):
             continue
 
-        # Skip future dates (just in case)
+        # Skip future dates
         if log.get('date') > today_str:
             continue
 
@@ -188,7 +187,7 @@ def main():
         extra_item = {
             "date": date_str,
             "day": day_name,
-            "plannedWorkout": "Unplanned Activity", # Or "Extra: " + log name
+            "plannedWorkout": "Unplanned Activity",
             "plannedDuration": 0,
             "notes": "Extra workout not in original plan.",
             "status": "COMPLETED", # It's done, so it's completed
@@ -200,9 +199,8 @@ def main():
         output_list.append(extra_item)
 
     # 5. Sort & Save
-    # Sort by Date, then by Status (Planned first, then Extra?)
+    # Sort by Date, then by Status (Planned first, then Extra)
     output_list.sort(key=lambda x: (x['date'], x['plannedDuration'] == 0)) 
-    # Logic: Date ascending. For same date, items with 0 planned duration (Extra) go to bottom.
 
     if not os.path.exists(dashboard_dir):
         os.makedirs(dashboard_dir)

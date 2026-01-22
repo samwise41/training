@@ -1,4 +1,12 @@
 name: Add Single Unplanned Activity
+on:
+  schedule:
+    # Run at 6:00, 7:00, 8:00, 9:00, 10:00, 11:00 MST
+    - cron: '0 13,14,15,16,17,18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
       env:
         GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}

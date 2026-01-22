@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 from datetime import datetime
 
 # --- SETUP PATHS ---
@@ -18,6 +17,7 @@ OUTPUT_FILE = os.path.join(dashboard_dir, 'plannedWorkouts.json')
 
 def normalize_sport(sport_str):
     """Normalizes sport names to standard categories."""
+    if not sport_str: return 'Other'
     s = str(sport_str).lower()
     if 'run' in s: return 'Run'
     if 'bik' in s or 'cycl' in s or 'ride' in s: return 'Bike'
@@ -26,22 +26,14 @@ def normalize_sport(sport_str):
     if 'rest' in s: return 'Rest'
     return 'Other'
 
-def is_valid_log(log):
-    """Checks if a log entry is a real workout and not a plan placeholder."""
-    if not log: return False
-    
-    # Only rely on the STATUS field. 
-    # If the status is 'PLANNED', it's a placeholder. 
-    # If it is 'COMPLETED', it is a real workout, regardless of its ID.
-    if log.get('status') == 'PLANNED': return False
-    
-    # REMOVE THIS LINE:
-    # if str(log.get('id', '')).startswith('PLAN-'): return False
-    
-    return True
+def get_day_name(date_str):
+    try:
+        return datetime.strptime(date_str, '%Y-%m-%d').strftime('%A')
+    except:
+        return ""
 
 def main():
-    print("   -> Generating Dashboard Data from planned.json...")
+    print("   -> Generating Dashboard Data (Aggregation + Unplanned Handling)...")
 
     # 1. Load Files
     if not os.path.exists(PLANNED_FILE):
@@ -63,21 +55,51 @@ def main():
         except Exception as e:
             print(f"   -> Warning: Could not read training log: {e}")
 
-    # 2. Create Log Lookup Map
-    # Key: "YYYY-MM-DD" -> List of log entries for that day
-    log_map = {}
-    for l in logs:
-        # Handle date string variations (e.g. 2023-10-25T14:30:00)
-        l_date = l.get('date', '').split('T')[0]
-        if l_date:
-            if l_date not in log_map: 
-                log_map[l_date] = []
-            log_map[l_date].append(l)
+    # 2. Build Aggregated Actuals Map
+    # Group ALL completed actuals by Date + Sport
+    # Key: "YYYY-MM-DD|Sport" -> Value: { duration: 0.0, names: [], sport: "", date: "" }
+    actuals_map = {}
 
-    # Track which log IDs are matched to a plan
-    matched_log_ids = set()
+    for log in logs:
+        # Ignore placeholders or non-completed items
+        if log.get('status') == 'PLANNED': continue
+        
+        # Get Date
+        l_date = log.get('date', '').split('T')[0]
+        if not l_date: continue
 
-    # 3. Process Plan
+        # Get Sport
+        raw_sport = log.get('actualSport') or log.get('activityType')
+        sport_norm = normalize_sport(raw_sport)
+
+        # Create Unique Key for this Day + Sport combo
+        key = f"{l_date}|{sport_norm}"
+
+        # Get Duration (prefer actualDuration, fallback to duration/60)
+        dur = log.get('actualDuration')
+        if dur is None:
+            dur = float(log.get('duration', 0)) / 60.0
+        else:
+            dur = float(dur)
+
+        # Initialize bucket if new
+        if key not in actuals_map:
+            actuals_map[key] = {
+                'duration': 0.0,
+                'names': [],
+                'sport': sport_norm, 
+                'date': l_date
+            }
+
+        # Add to bucket
+        actuals_map[key]['duration'] += dur
+        
+        # Track activity name
+        w_name = log.get('actualWorkout') or log.get('activityName') or "Activity"
+        if w_name not in actuals_map[key]['names']:
+            actuals_map[key]['names'].append(w_name)
+
+    # 3. Match Plans to Actuals (Consume the Buckets)
     output_list = []
     today_str = datetime.now().strftime('%Y-%m-%d')
 
@@ -85,140 +107,94 @@ def main():
         date_str = plan.get('date')
         if not date_str: continue
 
-        # Format friendly Day name
-        try:
-            day_name = datetime.strptime(date_str, '%Y-%m-%d').strftime('%A')
-        except:
-            day_name = ""
+        plan_sport = normalize_sport(plan.get('activityType', 'Other'))
+        plan_dur = float(plan.get('plannedDuration', 0) or 0)
         
-        # --- Find Match ---
-        log_entries = log_map.get(date_str, [])
-        match = None
-        
-        # Strategy: Try to match by sport first
-        plan_sport_norm = normalize_sport(plan.get('activityType'))
-        
-        if log_entries:
-            for log in log_entries:
-                # SKIP if already used
-                if log.get('id') in matched_log_ids: continue
-                
-                # SKIP placeholder/future logs
-                if not is_valid_log(log): continue
+        # Construct Key to look for matching Actuals
+        key = f"{date_str}|{plan_sport}"
 
-                log_sport_norm = normalize_sport(log.get('actualSport') or log.get('activityType'))
-                
-                if log_sport_norm == plan_sport_norm:
-                    match = log
-                    matched_log_ids.add(log.get('id'))
-                    break
-            
-            # Fallback: If no strict sport match, but unused logs exist, check them
-            if not match and plan_sport_norm != 'Rest':
-                # FIX: Ensure we only consider VALID logs for fallback too!
-                unused = [l for l in log_entries if l.get('id') not in matched_log_ids and is_valid_log(l)]
-                if len(unused) == 1:
-                    match = unused[0]
-                    matched_log_ids.add(match.get('id'))
-
-        # --- Build Output Object ---
-        
-        # 1. Defaults from Plan
-        planned_sport_raw = plan.get('activityType', 'Other')
-        
+        # Default Item Structure
         item = {
             "date": date_str,
-            "day": day_name,
-            "plannedWorkout": plan.get('plannedWorkout') or plan.get('title') or "Workout",
-            "plannedDuration": float(plan.get('plannedDuration', 0) or 0),
+            "day": get_day_name(date_str),
+            "plannedWorkout": plan.get('plannedWorkout') or "Workout",
+            "plannedDuration": plan_dur,
             "notes": plan.get('notes', ''),
-            # This will be overwritten if match is found
-            "actualSport": normalize_sport(planned_sport_raw) 
+            "actualSport": plan_sport,
+            "actualDuration": 0.0,
+            "actualWorkout": None,
+            "status": "PLANNED",
+            "compliance": 0
         }
 
-        # 2. Apply Status & Match Data
-        if match:
-            item["status"] = "COMPLETED"
-            
-            # Get actual duration (prefer 'actualDuration', fallback to 'duration')
-            raw_act_dur = match.get('actualDuration')
-            if raw_act_dur is None:
-                raw_act_dur = match.get('duration', 0) / 60
-            item["actualDuration"] = round(float(raw_act_dur), 1)
-            
-            item["actualWorkout"] = match.get('actualWorkout') or match.get('activityName')
-            
-            # USE LOG SPORT if available
-            item["actualSport"] = match.get('actualSport') or normalize_sport(match.get('activityType'))
+        if plan_sport == 'Rest':
+            item['status'] = 'REST'
+            output_list.append(item)
+            continue
 
-            # Compliance
-            if item["plannedDuration"] > 0:
-                item["compliance"] = round((item["actualDuration"] / item["plannedDuration"]) * 100)
+        # --- MATCHING LOGIC ---
+        if key in actuals_map:
+            # We found actuals for this Planned Day & Sport!
+            data = actuals_map[key]
+            
+            # 1. Assign TOTAL duration from the logs to this plan
+            # This handles cases where you did 60m instead of 45m, or 2 runs totaling 60m.
+            item['actualDuration'] = round(data['duration'], 1)
+            
+            # 2. Combine names
+            item['actualWorkout'] = ", ".join(data['names'])
+            
+            # 3. Mark Completed
+            item['status'] = 'COMPLETED'
+            
+            # 4. Calc Compliance
+            if plan_dur > 0:
+                item['compliance'] = round((item['actualDuration'] / plan_dur) * 100)
             else:
-                item["compliance"] = 0 # Unplanned or Rest
+                item['compliance'] = 100
+
+            # 5. CRITICAL: Remove from map so it doesn't get processed again as "Unplanned"
+            del actuals_map[key]
         
         else:
             # No match found
-            item["actualDuration"] = 0
-            item["actualWorkout"] = None
-            item["compliance"] = 0
-
-            if plan_sport_norm == 'Rest':
-                 item["status"] = "REST"
-            elif date_str < today_str:
-                item["status"] = "MISSED"
-            else:
-                item["status"] = "PLANNED"
-
+            if date_str < today_str:
+                item['status'] = 'MISSED'
+        
         output_list.append(item)
 
-    # --- 4. Find Unplanned / Extra Workouts ---
-    for log in logs:
-        # Skip if already matched
-        if log.get('id') in matched_log_ids: continue
-        
-        # Skip placeholder/future logs
-        if not is_valid_log(log): continue
+    # 4. Handle Leftovers (Unplanned)
+    # Any keys remaining in actuals_map were NOT matched to a plan.
+    # This specifically addresses your requirement: "add that as a record... plannedDuration blank"
+    for key, data in actuals_map.items():
+        # Skip future dates if any crept in
+        if data['date'] > today_str: continue
 
-        # Skip future dates
-        if log.get('date') > today_str: continue
-
-        # Build "Unplanned" Item
-        date_str = log.get('date')
-        try:
-            day_name = datetime.strptime(date_str, '%Y-%m-%d').strftime('%A')
-        except:
-            day_name = ""
-
-        raw_act_dur = log.get('actualDuration')
-        if raw_act_dur is None:
-            raw_act_dur = log.get('duration', 0) / 60
-        
         extra_item = {
-            "date": date_str,
-            "day": day_name,
-            "plannedWorkout": "Unplanned Activity",
-            "plannedDuration": 0,
-            "notes": "Extra workout not in original plan.",
-            "status": "COMPLETED",
-            "actualWorkout": log.get('actualWorkout') or log.get('activityName'),
-            "actualDuration": round(float(raw_act_dur), 1),
-            "actualSport": log.get('actualSport') or normalize_sport(log.get('activityType')),
-            "compliance": 100 
+            "date": data['date'],
+            "day": get_day_name(data['date']),
+            "plannedWorkout": "Unplanned Activity", # Placeholder title
+            "plannedDuration": 0,                   # BLANK duration (as requested)
+            "notes": f"Unplanned {data['sport']} volume",
+            "actualSport": data['sport'],
+            "status": "UNPLANNED",
+            "actualDuration": round(data['duration'], 1),
+            "actualWorkout": ", ".join(data['names']),
+            "compliance": 100
         }
         output_list.append(extra_item)
 
     # 5. Sort & Save
-    # Sort by Date, then by Status (Planned first, then Extra)
-    output_list.sort(key=lambda x: (x['date'], x['plannedDuration'] == 0)) 
+    # Sort by Date, then put Planned items before Unplanned items
+    output_list.sort(key=lambda x: (x['date'], x['plannedDuration'] == 0))
 
     if not os.path.exists(dashboard_dir):
         os.makedirs(dashboard_dir)
 
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output_list, f, indent=4)
-        
-    print(f"   -> Success! Processed {len(output_list)} records (including extras).")
+
+    print(f"   -> Success! Processed {len(output_list)} records.")
     print(f"   -> Saved to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":

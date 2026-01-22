@@ -29,8 +29,15 @@ def normalize_sport(sport_str):
 def is_valid_log(log):
     """Checks if a log entry is a real workout and not a plan placeholder."""
     if not log: return False
+    
+    # Only rely on the STATUS field. 
+    # If the status is 'PLANNED', it's a placeholder. 
+    # If it is 'COMPLETED', it is a real workout, regardless of its ID.
     if log.get('status') == 'PLANNED': return False
-    if str(log.get('id', '')).startswith('PLAN-'): return False
+    
+    # REMOVE THIS LINE:
+    # if str(log.get('id', '')).startswith('PLAN-'): return False
+    
     return True
 
 def main():

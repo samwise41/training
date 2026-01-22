@@ -2,7 +2,6 @@ import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.j
 
 export function renderHeatmaps() {
     setTimeout(initHeatmaps, 0);
-    
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
@@ -29,7 +28,6 @@ async function initHeatmaps() {
         const today = new Date();
         const currentYear = today.getFullYear();
         
-        // --- Ranges ---
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
@@ -72,8 +70,8 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     
     // --- EXACT PIXEL LAYOUT ---
     const CELL_PX = 12; 
-    const GAP_PX = 3;   
-    const STRIDE_PX = CELL_PX + GAP_PX; // 15px
+    const GAP_PX = 2;   
+    const STRIDE_PX = CELL_PX + GAP_PX; // 14px
 
     let monthLabels = '';
     let dayCount = 0;
@@ -143,7 +141,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         let plan = 0;
         let act = 0;
         let detailsJson = '';
-        let tooltipColor = '#64748b'; // Default slate
+        let tooltipColor = '#64748b'; // Default
 
         if (entry) {
             plan = entry.plannedDuration || 0;
@@ -161,28 +159,28 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             if (isConsistencyMode) {
                 if (status === 'Event') {
                     bgColor = 'bg-purple-600';
-                    tooltipColor = '#9333ea'; // Purple-600
+                    tooltipColor = '#9333ea';
                     opacity = '1';
                     label = `Event: ${entry.eventName}`;
                 } else if (status === 'Completed') {
                     bgColor = 'bg-emerald-500';
-                    tooltipColor = '#10b981'; // Emerald-500
+                    tooltipColor = '#10b981';
                     opacity = '1';
                     label = "Completed";
                 } else if (status === 'Partial') {
                     bgColor = 'bg-yellow-500';
-                    tooltipColor = '#eab308'; // Yellow-500
+                    tooltipColor = '#eab308';
                     opacity = '1';
                     label = "Partial";
                 } else if (status === 'Missed') {
                     bgColor = 'bg-red-600';
-                    tooltipColor = '#dc2626'; // Red-600
+                    tooltipColor = '#dc2626';
                     opacity = '1';
                     label = "Missed";
                 } else if (status === 'Unplanned') {
                     bgColor = 'bg-emerald-600';
-                    tooltipColor = '#059669'; // Emerald-600
                     extraClasses = 'bg-striped'; 
+                    tooltipColor = '#059669';
                     opacity = '1';
                     label = "Unplanned";
                 }
@@ -190,7 +188,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 if (act > 0) {
                     const sports = entry.sports || [];
                     if (sports.length > 1) {
-                        // Multi-Sport Hard Stops
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -200,22 +197,26 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                         });
                         styleOverride = `background: linear-gradient(135deg, ${stops.join(', ')});`;
                         label = "Multi-Sport";
-                        tooltipColor = '#fff'; // White for multi
+                        tooltipColor = '#ffffff';
                     } else if (sports.length === 1) {
                         const s = sports[0];
                         let colorVar = getSportColorVar(s);
                         if (!['Run','Bike','Swim'].includes(s)) colorVar = 'var(--color-all)'; 
                         styleOverride = `background-color: ${colorVar};`;
                         label = s;
-                        tooltipColor = colorVar; // Use variable directly (browser handles it)
+                        tooltipColor = colorVar; 
                     }
                     opacity = '1';
                 }
             }
         }
 
-        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
-        const hoverFn = `window.showTooltip(event, '${dateStr}', '${Math.round(act)}', '${label}', '${tooltipColor}')`;
+        // --- SAFE STRING ESCAPING ---
+        const safeLabel = label.replace(/'/g, "\\'");
+        const safeColor = String(tooltipColor).replace(/'/g, "\\'");
+
+        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${safeLabel}', '', '', '${detailsJson}')`;
+        const hoverFn = `window.showTooltip(event, '${dateStr}', '${Math.round(act)}', '${safeLabel}', '${safeColor}')`;
         const leaveFn = `window.hideTooltip()`;
 
         gridCells += `

@@ -61,12 +61,16 @@ def main():
     actuals_map = {}
 
     for log in logs:
-        # Ignore placeholders or non-completed items
-        if log.get('status') == 'PLANNED': continue
+        # Robust Status Check (Handle 'status' vs 'Status')
+        status = (log.get('status') or log.get('Status') or '').upper()
+        
+        # Skip PLANNED, MISSED, or SKIPPED
+        if status in ['PLANNED', 'MISSED', 'SKIPPED']: continue
         
         # Get Date
-        l_date = log.get('date', '').split('T')[0]
-        if not l_date: continue
+        date_raw = log.get('date')
+        if not date_raw: continue
+        l_date = date_raw.split('T')[0]
 
         # Get Sport
         raw_sport = log.get('actualSport') or log.get('activityType')
@@ -75,12 +79,18 @@ def main():
         # Create Unique Key for this Day + Sport combo
         key = f"{l_date}|{sport_norm}"
 
-        # Get Duration (prefer actualDuration, fallback to duration/60)
-        dur = log.get('actualDuration')
-        if dur is None:
-            dur = float(log.get('duration', 0)) / 60.0
-        else:
-            dur = float(dur)
+        # SAFE Duration Get (Fixes the "float() argument must be..." error)
+        dur = 0.0
+        
+        # 1. Try explicit 'actualDuration' (usually in minutes)
+        if log.get('actualDuration') is not None:
+            dur = float(log.get('actualDuration'))
+        
+        # 2. Fallback to 'duration' (usually in seconds), handle None/Null safely
+        elif log.get('duration') is not None:
+            dur = float(log.get('duration')) / 60.0
+            
+        # 3. If both are missing/null, dur stays 0.0
 
         # Initialize bucket if new
         if key not in actuals_map:
@@ -108,7 +118,14 @@ def main():
         if not date_str: continue
 
         plan_sport = normalize_sport(plan.get('activityType', 'Other'))
-        plan_dur = float(plan.get('plannedDuration', 0) or 0)
+        
+        # Safe Get for Planned Duration
+        plan_dur = 0.0
+        if plan.get('plannedDuration'):
+            try:
+                plan_dur = float(plan.get('plannedDuration'))
+            except:
+                plan_dur = 0.0
         
         # Construct Key to look for matching Actuals
         key = f"{date_str}|{plan_sport}"
@@ -138,7 +155,6 @@ def main():
             data = actuals_map[key]
             
             # 1. Assign TOTAL duration from the logs to this plan
-            # (Matches requirement: "sum all values... adds that to the total")
             item['actualDuration'] = round(data['duration'], 1)
             
             # 2. Combine names
@@ -153,7 +169,7 @@ def main():
             else:
                 item['compliance'] = 100
 
-            # 5. CRITICAL: Remove from map so it doesn't get processed again as "Unplanned"
+            # 5. Consume data so it doesn't appear as Unplanned
             del actuals_map[key]
         
         else:
@@ -164,17 +180,18 @@ def main():
         output_list.append(item)
 
     # 4. Handle Leftovers (Unplanned)
-    # Any keys remaining in actuals_map were NOT matched to a plan.
-    # Requirement: "add that as a record... plannedDuration blank"
     for key, data in actuals_map.items():
         # Skip future dates if any crept in
         if data['date'] > today_str: continue
+        
+        # Optional: Skip entries with 0 duration (e.g. error logs)
+        if data['duration'] <= 0.1: continue
 
         extra_item = {
             "date": data['date'],
             "day": get_day_name(data['date']),
-            "plannedWorkout": "Unplanned Activity", # Title indicates it wasn't in plan
-            "plannedDuration": 0,                   # "Blank" (Zero) as requested
+            "plannedWorkout": "Unplanned Activity", 
+            "plannedDuration": 0,                   
             "notes": f"Unplanned {data['sport']} volume",
             "actualSport": data['sport'],
             "status": "UNPLANNED",
@@ -185,7 +202,6 @@ def main():
         output_list.append(extra_item)
 
     # 5. Sort & Save
-    # Sort by Date, then put Planned items before Unplanned items
     output_list.sort(key=lambda x: (x['date'], x['plannedDuration'] == 0))
 
     if not os.path.exists(dashboard_dir):

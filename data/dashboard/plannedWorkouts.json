@@ -42,10 +42,10 @@
         "plannedDuration": 90.0,
         "notes": "**File:** `Zone_2___71___90_min_.zwo`. **Winter Strategy:** Volume re-allocated here. Strict Zone 2 (134-180W).",
         "actualSport": "Bike",
-        "status": "PLANNED",
-        "actualDuration": 0.0,
+        "actualDuration": 0,
         "actualWorkout": null,
-        "compliance": 0
+        "compliance": 0,
+        "status": "PLANNED"
     },
     {
         "date": "2026-01-23",

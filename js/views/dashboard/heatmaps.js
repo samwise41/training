@@ -74,7 +74,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     // Cell: w-3 = 0.75rem
     // Gap: gap-1 = 0.25rem (This is double the original gap-0.5)
     // Stride: 1rem (0.75 + 0.25)
-    const COL_WIDTH_REM = 1.0; 
+    const COL_WIDTH_REM = .5; 
 
     // Month Label Logic
     let monthLabels = '';

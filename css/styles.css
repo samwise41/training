@@ -32,10 +32,10 @@
 /* High Contrast Diagonal Stripes */
 .bg-striped {
     background-image: repeating-linear-gradient(
-        135deg,
+        45deg,
         rgba(255, 255, 255, 0.3) 0px,
         rgba(255, 255, 255, 0.3) 2px,
-        transparent 2px,
+        transparent 0px,
         transparent 5px
     ) !important;
 }

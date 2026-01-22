@@ -1,13 +1,13 @@
 import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.js';
 
 export function renderHeatmaps() {
-    // Immediate execution
+    // Initiate execution
     setTimeout(initHeatmaps, 0);
     
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
-            <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps (v2)...</span>
+            <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps...</span>
         </div>
     </div>`;
     return buildCollapsibleSection('heatmaps-section', 'Training Heatmaps', loadingHtml, true);
@@ -31,7 +31,7 @@ async function initHeatmaps() {
         const today = new Date();
         const currentYear = today.getFullYear();
         
-        // --- Ranges ---
+        // --- Date Ranges ---
         // A. Recent History (Trailing 6 Months)
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
@@ -41,7 +41,7 @@ async function initHeatmaps() {
         startTrailing.setMonth(startTrailing.getMonth() - 6);
         startTrailing.setDate(startTrailing.getDate() - startTrailing.getDay()); // Align to Sunday
 
-        // B. Annual View
+        // B. Annual View (Current Year)
         const startYear = new Date(currentYear, 0, 1);
         startYear.setDate(startYear.getDate() - startYear.getDay()); // Align to Sunday
         const endYear = new Date(currentYear, 11, 31);
@@ -76,20 +76,17 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    // --- EXACT PIXEL MATH ---
-    // Cell size: 12px
-    // Gap size: 2px (Matches row gap)
-    // Stride: 14px (12 + 2)
-    const CELL_PX = 12;
-    const GAP_PX = 2;
-    const STRIDE_PX = 14; 
+    // --- EXACT LAYOUT CONSTANTS (PX) ---
+    const CELL_SIZE = 12; // 12px square cells
+    const GRID_GAP = 2;   // 2px gap for BOTH rows and columns
+    const STRIDE = CELL_SIZE + GRID_GAP; // 14px total width per column
 
     // Month Label Vars
     let monthLabels = '';
     let dayCount = 0;
     const addedMonths = new Set();
 
-    // Week boundaries for "Future" styling
+    // "Future" Logic (Current Week)
     const currentWeekStart = new Date(today);
     currentWeekStart.setDate(today.getDate() - today.getDay());
     currentWeekStart.setHours(0,0,0,0);
@@ -102,36 +99,37 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const entry = dataMap[dateStr];
         const isSunday = curr.getDay() === 0;
         
-        // --- Month Labels ---
+        // --- Month Labels (Absolute Positioning) ---
+        // Label on the 1st of the month OR if it's the very first week block
         if (curr.getDate() === 1 || (dayCount === 0 && curr.getDate() <= 7)) {
             const mStr = curr.toLocaleString('default', { month: 'short' });
             const colIndex = Math.floor(dayCount / 7);
             const monthKey = mStr + curr.getFullYear();
             
             if (!addedMonths.has(monthKey)) {
-                // Exact pixel positioning
-                const leftPos = colIndex * STRIDE_PX;
+                // Calculate exact pixel position
+                const leftPos = colIndex * STRIDE;
                 monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}px; top: 0;">${mStr}</span>`;
                 addedMonths.add(monthKey);
             }
         }
 
-        // --- Cell Styling ---
+        // --- Cell Logic ---
         let bgColor = 'bg-slate-800/50'; 
         let opacity = '1'; 
         let styleOverride = '';
         let extraClasses = '';
-        let visibility = ''; // Used to hide cells (opacity:0)
+        let visibility = ''; // Used to hide cells fully (opacity:0)
         
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
-        // 1. Hide Prior Year Dates in Annual View (e.g. Dec 2025 in 2026 grid)
+        // 1. Hide Prior Year Dates in Annual View
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
-        // 2. Hide Sunday if no actual workout (Preserves grid structure but invisible)
+        // 2. Hide Sunday if no actual workout
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
@@ -163,6 +161,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             act = entry.actualDuration || 0;
             const status = entry.complianceStatus;
             
+            // Build Tooltip
             if (entry.activities && entry.activities.length > 0) {
                 const lines = entry.activities.map(a => {
                     const icon = getIconForSport(a.sport); 
@@ -198,7 +197,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 // Activity Mode
                 if (act > 0) {
                     const sports = entry.sports || [];
-                    
                     if (sports.length > 1) {
                         // Multi-Sport: Hard Stops (No Gradient)
                         const count = sports.length;
@@ -226,10 +224,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
         const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
 
-        // Render Cell with Explicit Dimensions
+        // Render Cell with Explicit Pixel Dimensions
         gridCells += `
             <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
-                 style="width: ${CELL_PX}px; height: ${CELL_PX}px; opacity: ${opacity}; ${styleOverride} ${visibility}"
+                 style="width: ${CELL_SIZE}px; height: ${CELL_SIZE}px; opacity: ${opacity}; ${styleOverride} ${visibility}"
                  title="${dateStr}: ${label}"
                  onclick="${clickFn}">
             </div>
@@ -253,7 +251,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     ${monthLabels}
                 </div>
                 
-                <div style="display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: ${GAP_PX}px;">
+                <div style="display: grid; grid-template-rows: repeat(7, ${CELL_SIZE}px); grid-auto-flow: column; column-gap: ${GRID_GAP}px; row-gap: ${GRID_GAP}px;">
                     ${gridCells}
                 </div>
             </div>

@@ -3,9 +3,99 @@ import { buildCollapsibleSection } from './utils.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
 import { normalizeMetricsData } from './parser.js';
+import { METRIC_DEFINITIONS } from './definitions.js';
 
 let metricsState = { timeRange: '6m' };
 let cleanData = [];
+
+// --- Global Interactive Handlers ---
+
+// 1. Chart Data Point Tooltip
+window.showMetricTooltip = (e, date, name, val, unit, breakdown, color) => {
+    e.stopPropagation(); // Prevent global click from closing immediately
+    
+    // Close the other popup if open
+    const infoPopup = document.getElementById('metric-info-popup');
+    if (infoPopup) infoPopup.style.opacity = '0';
+
+    const el = document.getElementById('metric-tooltip-popup');
+    if (!el) return;
+    
+    el.innerHTML = `
+        <div class="font-bold text-slate-200 mb-1 border-b border-slate-700 pb-1">${name}</div>
+        <div class="flex justify-between items-end mb-1 gap-4">
+            <span class="text-[10px] text-slate-400">${date}</span>
+            <span class="text-lg font-bold" style="color: ${color}">${val} <span class="text-[10px] text-slate-500">${unit}</span></span>
+        </div>
+        ${breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : ''}
+    `;
+    
+    // Simple positioning relative to cursor
+    el.style.left = `${e.pageX + 10}px`;
+    el.style.top = `${e.pageY + 10}px`;
+    el.style.opacity = '1';
+};
+
+// 2. Metric Info Tooltip (The 'i' icon)
+window.showAnalysisTooltip = (e, key) => {
+    e.stopPropagation();
+    
+    // Close the other popup if open
+    const chartPopup = document.getElementById('metric-tooltip-popup');
+    if (chartPopup) chartPopup.style.opacity = '0';
+
+    const el = document.getElementById('metric-info-popup');
+    const def = METRIC_DEFINITIONS[key];
+    if (!el || !def) return;
+
+    el.innerHTML = `
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-blue-500/30">
+            <i class="fa-solid ${def.icon}" style="color: ${def.colorVar}"></i>
+            <h3 class="font-bold text-white uppercase tracking-wider">${def.title}</h3>
+        </div>
+        <div class="space-y-2 text-slate-300">
+            <p>${def.description}</p>
+            <div class="bg-slate-900/50 p-2 rounded">
+                <div class="text-[10px] text-slate-500 uppercase font-bold">Target Range</div>
+                <div class="font-mono text-emerald-400">${def.rangeInfo}</div>
+            </div>
+            <div>
+                <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">To Improve</div>
+                <div class="text-xs text-slate-400 pl-2 border-l-2 border-slate-600">${def.improvement}</div>
+            </div>
+        </div>
+    `;
+    
+    // Position slightly to the left/bottom to avoid covering the icon too much
+    // Adjust based on screen width if needed, but basic offset:
+    const leftPos = Math.max(10, e.pageX - 300); 
+    el.style.left = `${leftPos}px`;
+    el.style.top = `${e.pageY + 10}px`;
+    el.style.opacity = '1';
+};
+
+// 3. Scroll Handler (From Table click)
+window.scrollToMetric = (key) => {
+    const el = document.getElementById(`metric-chart-${key}`);
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Visual cue
+        const container = el.closest('.bg-slate-800\\/30'); // Find the card container
+        if (container) {
+            container.classList.add('ring-2', 'ring-blue-500');
+            setTimeout(() => container.classList.remove('ring-2', 'ring-blue-500'), 1500);
+        }
+    }
+};
+
+// 4. Global Click Listener (Close all popups)
+document.addEventListener('click', () => {
+    const t1 = document.getElementById('metric-tooltip-popup');
+    const t2 = document.getElementById('metric-info-popup');
+    if (t1) t1.style.opacity = '0';
+    if (t2) t2.style.opacity = '0';
+});
+
 
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;

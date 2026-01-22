@@ -1,39 +1,44 @@
+
 import { COLOR_MAP } from './utils.js';
-import { getRollingPoints } from './analysis.js';
 
 // --- LOCAL STATE ---
 const chartState = {
+    // Sport Toggles
     All: true,
     Bike: false,
     Run: false,
     Swim: false,
-    timeRange: '60d',
-    showWeekly: true, 
-    show30d: true,    
-    show60d: false    
+    
+    // Line Toggles (Metrics)
+    show7d: true,
+    show30d: true,
+    show60d: false,
+    show90d: false,
+
+    // X-Axis Zoom
+    dateRange: '90d' 
 };
 
-let currentLogData = [];
+let currentRollingData = [];
 
 // --- TOGGLE HANDLERS ---
-// Attached to window for HTML access
 window.toggleTrendSeries = (type) => {
     if (chartState.hasOwnProperty(type)) {
         chartState[type] = !chartState[type];
-        renderDynamicCharts('trend-charts-container', currentLogData); 
+        renderDynamicCharts('trend-charts-container', currentRollingData); 
     }
 };
 
-window.toggleTrendTime = (range) => {
-    chartState.timeRange = range;
-    renderDynamicCharts('trend-charts-container', currentLogData);
+window.toggleTrendMetric = (metric) => {
+    if (chartState.hasOwnProperty(metric)) {
+        chartState[metric] = !chartState[metric];
+        renderDynamicCharts('trend-charts-container', currentRollingData);
+    }
 };
 
-window.toggleTrendLine = (lineType) => {
-    if (chartState.hasOwnProperty(lineType)) {
-        chartState[lineType] = !chartState[lineType];
-        renderDynamicCharts('trend-charts-container', currentLogData);
-    }
+window.toggleTrendDateRange = (range) => {
+    chartState.dateRange = range;
+    renderDynamicCharts('trend-charts-container', currentRollingData);
 };
 
 window.resetTrendDefaults = () => {
@@ -41,39 +46,73 @@ window.resetTrendDefaults = () => {
     chartState.Bike = false;
     chartState.Run = false;
     chartState.Swim = false;
-    chartState.timeRange = '60d';
-    chartState.showWeekly = true;
+    
+    chartState.show7d = true;
     chartState.show30d = true;
-    chartState.show60d = false; 
-    renderDynamicCharts('trend-charts-container', currentLogData);
+    chartState.show60d = false;
+    chartState.show90d = false;
+    
+    chartState.dateRange = '6m';
+    
+    renderDynamicCharts('trend-charts-container', currentRollingData);
 };
 
+// --- HELPER: Filter Data by Date Range ---
+const filterDataByDate = (data, range) => {
+    if (!data || data.length === 0) return [];
+    
+    const fullData = [...data]; 
+    const now = new Date();
+    let cutoff = new Date();
+
+    switch(range) {
+        case '30d': cutoff.setDate(now.getDate() - 30); break;
+        case '60d': cutoff.setDate(now.getDate() - 60); break;
+        case '90d': cutoff.setDate(now.getDate() - 90); break;
+        case '6m': cutoff.setMonth(now.getMonth() - 6); break;
+        case '1y': cutoff.setFullYear(now.getFullYear() - 1); break;
+        default: cutoff.setMonth(now.getMonth() - 6);
+    }
+
+    return fullData.filter(d => {
+        const date = new Date(d.week_ending);
+        return date >= cutoff;
+    });
+};
 
 // --- CHART BUILDER ---
-const buildTrendChart = (title, isCount, logData) => {
+const buildTrendChart = (title, isCount, rawData) => {
     const height = 200; const width = 800; 
     const padding = { top: 20, bottom: 30, left: 40, right: 20 };
     const chartW = width - padding.left - padding.right; const chartH = height - padding.top - padding.bottom;
 
-    const activeTypes = Object.keys(chartState).filter(k => chartState[k] && k !== 'timeRange' && !k.startsWith('show')); 
+    // 1. Filter Data (X-Axis Zoom)
+    const displayData = filterDataByDate(rawData, chartState.dateRange);
+    if (displayData.length < 2) return `<div class="p-4 text-slate-500 italic text-xs">Not enough data for this range</div>`;
+
+    const activeSports = Object.keys(chartState).filter(k => ['All','Bike','Run','Swim'].includes(k) && chartState[k]); 
+    const activeMetrics = ['7d', '30d', '60d', '90d'].filter(m => chartState[`show${m}`]);
+
+    // 2. Determine Y-Axis Scale
+    const targetKey = isCount ? 'count_pct' : 'duration_pct';
     let allValues = [];
     
-    activeTypes.forEach(type => {
-        const pts = getRollingPoints(logData, type, isCount, chartState.timeRange);
-        pts.forEach(p => {
-            if(chartState.showWeekly && p.val7 > 0) allValues.push(p.val7);
-            if(chartState.show30d && p.val30 > 0) allValues.push(p.val30);
-            if(chartState.show60d && p.val60 > 0) allValues.push(p.val60);
+    activeSports.forEach(sport => {
+        displayData.forEach(pt => {
+            activeMetrics.forEach(metric => {
+                if (pt[sport] && pt[sport][metric]) {
+                    allValues.push(pt[sport][metric][targetKey]);
+                }
+            });
         });
     });
 
-    if (allValues.length === 0) allValues = [0, 10]; 
+    if (allValues.length === 0) allValues = [0, 100];
 
     const dataMin = Math.min(...allValues);
     const dataMax = Math.max(...allValues);
-    
     let spread = dataMax - dataMin;
-    if (spread < 20) spread = 20; 
+    if (spread < 20) spread = 20;
     
     const domainMin = Math.max(0, dataMin - (spread * 0.1)); 
     const domainMax = dataMax + (spread * 0.1);
@@ -81,10 +120,11 @@ const buildTrendChart = (title, isCount, logData) => {
     const getY = (val) => padding.top + chartH - ((val - domainMin) / (domainMax - domainMin)) * chartH;
     const getX = (idx, total) => padding.left + (idx / (total - 1)) * chartW;
 
+    // 3. Draw Grid
     const gridLinesDef = [
-        { val: 100, color: '#ffffff' }, // White
-        { val: 80, color: '#eab308' },  // Yellow
-        { val: 60, color: '#ef4444' }   // Red
+        { val: 100, color: '#ffffff' }, 
+        { val: 80, color: '#eab308' },  
+        { val: 50, color: '#ef4444' }   
     ];
 
     let gridHtml = '';
@@ -98,55 +138,57 @@ const buildTrendChart = (title, isCount, logData) => {
         }
     });
 
+    // 4. Draw Lines & Points
     let pathsHtml = '';
     let circlesHtml = '';
 
-    activeTypes.forEach(type => {
-        const dataPoints = getRollingPoints(logData, type, isCount, chartState.timeRange);
-        const color = COLOR_MAP[type]; 
-        if (dataPoints.length < 2) return;
-
-        let d7 = `M ${getX(0, dataPoints.length)} ${getY(dataPoints[0].val7)}`;
-        let d30 = `M ${getX(0, dataPoints.length)} ${getY(dataPoints[0].val30)}`;
-        let d60 = `M ${getX(0, dataPoints.length)} ${getY(dataPoints[0].val60)}`;
+    activeSports.forEach(sport => {
+        const color = COLOR_MAP[sport];
         
-        dataPoints.forEach((p, i) => {
-            const x = getX(i, dataPoints.length);
-            const y7 = getY(p.val7);
-            const y30 = getY(p.val30);
-            const y60 = getY(p.val60);
+        activeMetrics.forEach(metric => {
+            // Style Logic: 7d Solid, 30d Dotted, 90d Dashed
+            let dashArray = 'none';
+            let strokeWidth = '2';
+            let opacity = '1';
 
-            d7 += ` L ${x} ${y7}`;
-            d30 += ` L ${x} ${y30}`;
-            d60 += ` L ${x} ${y60}`;
+            if (metric === '7d') { dashArray = 'none'; strokeWidth = '2'; opacity = '0.9'; } 
+            if (metric === '30d') { dashArray = '1,3'; strokeWidth = '1.5'; opacity = '0.75'; } 
+            if (metric === '60d') { dashArray = '4,3,1,2'; strokeWidth = '1'; opacity = '0.55'; } // Dash-Dot fallback
+            if (metric === '90d') { dashArray = '15,10,5,10,15'; strokeWidth = '.6'; opacity = '0.45'; } 
 
-            if (chartState.showWeekly) {
-                circlesHtml += `<circle cx="${x}" cy="${y7}" r="2.5" fill="${color}" stroke="#1e293b" stroke-width="1" class="cursor-pointer hover:r-4 transition-all" onclick="window.showTrendTooltip(event, '${p.label}', 'Weekly (${type})', ${p.val7}, '${color}')"></circle>`;
-            }
-            if (chartState.show30d) {
-                circlesHtml += `<circle cx="${x}" cy="${y30}" r="2" fill="${color}" stroke="none" opacity="0.6" class="cursor-pointer hover:r-5 transition-all" onclick="window.showTrendTooltip(event, '${p.label}', '30d (${type})', ${p.val30}, '${color}')"></circle>`;
-            }
-            if (chartState.show60d) {
-                circlesHtml += `<circle cx="${x}" cy="${y60}" r="2" fill="${color}" stroke="none" opacity="0.3" class="cursor-pointer hover:r-5 transition-all" onclick="window.showTrendTooltip(event, '${p.label}', '60d (${type})', ${p.val60}, '${color}')"></circle>`;
-            }
+            let dPath = '';
+            
+            displayData.forEach((pt, i) => {
+                if (!pt[sport] || !pt[sport][metric]) return;
+                
+                const val = pt[sport][metric][targetKey];
+                const label = pt[sport][metric][isCount ? 'count_label' : 'duration_label'];
+                
+                const x = getX(i, displayData.length);
+                const y = getY(val);
+
+                if (i === 0) dPath = `M ${x} ${y}`;
+                else dPath += ` L ${x} ${y}`;
+
+                circlesHtml += `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" stroke="none" opacity="${opacity}" class="cursor-pointer hover:r-4 transition-all" onclick="window.showTrendTooltip(event, '${pt.display_date}', '${sport} ${metric}', '${val}%', '${color}', '${label}')"></circle>`;
+            });
+
+            pathsHtml += `<path d="${dPath}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-dasharray="${dashArray}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}" />`;
         });
-
-        if (chartState.showWeekly) pathsHtml += `<path d="${d7}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />`;
-        if (chartState.show30d) pathsHtml += `<path d="${d30}" fill="none" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" stroke-linecap="round" stroke-linejoin="round" opacity="0.7" />`;
-        if (chartState.show60d) pathsHtml += `<path d="${d60}" fill="none" stroke="${color}" stroke-width="1.5" stroke-dasharray="2,2" stroke-linecap="round" stroke-linejoin="round" opacity="0.4" />`;
     });
 
-    const axisPoints = getRollingPoints(logData, 'All', isCount, chartState.timeRange);
+    // 5. Draw X-Axis Labels
     let labelsHtml = '';
     let modVal = 4;
-    if (chartState.timeRange === '30d') modVal = 1;
-    else if (chartState.timeRange === '60d') modVal = 2;
-    else if (chartState.timeRange === '90d') modVal = 3;
-    else if (chartState.timeRange === '1y') modVal = 8;
-    
-    axisPoints.forEach((p, i) => {
-        if (i % modVal === 0 || i === axisPoints.length - 1) {
-            labelsHtml += `<text x="${getX(i, axisPoints.length)}" y="${height - 10}" text-anchor="middle" font-size="10" fill="#64748b">${p.label}</text>`;
+    if (chartState.dateRange === '30d') modVal = 1;
+    else if (chartState.dateRange === '60d') modVal = 2;
+    else if (chartState.dateRange === '90d') modVal = 2;
+    else if (chartState.dateRange === '6m') modVal = 4;
+    else modVal = 8;
+
+    displayData.forEach((p, i) => {
+        if (i % modVal === 0 || i === displayData.length - 1) {
+            labelsHtml += `<text x="${getX(i, displayData.length)}" y="${height - 10}" text-anchor="middle" font-size="10" fill="#64748b">${p.display_date}</text>`;
         }
     });
 
@@ -172,82 +214,80 @@ const buildTrendChart = (title, isCount, logData) => {
 };
 
 
-export const renderDynamicCharts = (containerId, logData) => {
-    currentLogData = logData; // Update local ref
+export const renderDynamicCharts = (containerId, rollingData) => {
+    currentRollingData = rollingData;
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    const buildSportToggle = (type, label, colorClass) => {
-        const isActive = chartState[type];
-        const bg = isActive ? colorClass : 'bg-slate-800';
+    // --- BUTTON BUILDERS ---
+    const buildToggle = (key, label, type, activeClass) => {
+        const isActive = chartState[key];
+        const bg = isActive ? activeClass : 'bg-slate-800';
         const text = isActive ? 'text-slate-900 font-bold' : 'text-slate-400';
         const border = isActive ? 'border-transparent' : 'border-slate-600';
-        return `<button onclick="window.toggleTrendSeries('${type}')" class="${bg} ${text} ${border} border px-3 py-1 rounded text-xs transition-all hover:opacity-90">${label}</button>`;
+        const fn = type === 'sport' ? `window.toggleTrendSeries('${key}')` : `window.toggleTrendMetric('${key}')`;
+        
+        return `<button onclick="${fn}" class="${bg} ${text} ${border} border px-3 py-1 rounded text-xs transition-all hover:opacity-90 shadow-sm">${label}</button>`;
     };
 
-    const buildTimeToggle = (range, label) => {
-        const isActive = chartState.timeRange === range;
-        const bg = isActive ? 'bg-slate-200' : 'bg-slate-800';
-        const text = isActive ? 'text-slate-900 font-bold' : 'text-slate-400';
-        const border = isActive ? 'border-transparent' : 'border-slate-600';
-        return `<button onclick="window.toggleTrendTime('${range}')" class="${bg} ${text} ${border} border px-3 py-1 rounded text-xs transition-all hover:opacity-90">${label}</button>`;
-    };
-
-    const buildLineToggle = (lineType, label) => {
-        const isActive = chartState[lineType];
-        const bg = isActive ? 'bg-slate-600' : 'bg-slate-800';
+    const buildDateToggle = (range, label) => {
+        const isActive = chartState.dateRange === range;
+        const bg = isActive ? 'bg-blue-500' : 'bg-slate-800';
         const text = isActive ? 'text-white font-bold' : 'text-slate-400';
         const border = isActive ? 'border-transparent' : 'border-slate-600';
-        return `<button onclick="window.toggleTrendLine('${lineType}')" class="${bg} ${text} ${border} border px-3 py-1 rounded text-xs transition-all hover:opacity-90">${label}</button>`;
+        return `<button onclick="window.toggleTrendDateRange('${range}')" class="${bg} ${text} ${border} border px-3 py-1 rounded text-xs transition-all hover:opacity-90 shadow-sm">${label}</button>`;
     };
 
     const controlsHtml = `
-        <div class="flex flex-col gap-4 mb-6">
-            <div class="flex flex-col sm:flex-row gap-4 justify-between">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-2">Sports:</span>
-                    ${buildSportToggle('All', 'All', 'bg-icon-all')}
-                    ${buildSportToggle('Bike', 'Bike', 'bg-icon-bike')}
-                    ${buildSportToggle('Run', 'Run', 'bg-icon-run')}
-                    ${buildSportToggle('Swim', 'Swim', 'bg-icon-swim')}
-                    
-                    <div class="w-px h-4 bg-slate-700 mx-1"></div>
-                    <button onclick="window.resetTrendDefaults()" class="flex items-center gap-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-600 px-3 py-1 rounded text-xs transition-all shadow-sm" title="Reset to Defaults">
-                        <i class="fa-solid fa-rotate-left text-[10px]"></i> Default
-                    </button>
-                </div>
-                <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-2">Range:</span>
-                    ${buildTimeToggle('30d', '30d')}
-                    ${buildTimeToggle('60d', '60d')}
-                    ${buildTimeToggle('90d', '90d')}
-                    ${buildTimeToggle('6m', '6m')}
-                    ${buildTimeToggle('1y', '1y')}
-                </div>
-            </div>
+        <div class="flex flex-col gap-4 mb-6 bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 backdrop-blur-sm">
             
-            <div class="flex items-center justify-between border-t border-slate-700 pt-3 mt-2">
+            <div class="flex flex-col md:flex-row justify-between gap-4">
+                
                 <div class="flex items-center gap-2 flex-wrap">
-                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-2">Lines:</span>
-                    ${buildLineToggle('showWeekly', 'Weekly')}
-                    ${buildLineToggle('show30d', '30d Avg')}
-                    ${buildLineToggle('show60d', '60d Avg')}
+                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-1">Sports</span>
+                    ${buildToggle('All', 'All', 'sport', 'bg-icon-all')}
+                    ${buildToggle('Bike', 'Bike', 'sport', 'bg-icon-bike')}
+                    ${buildToggle('Run', 'Run', 'sport', 'bg-icon-run')}
+                    ${buildToggle('Swim', 'Swim', 'sport', 'bg-icon-swim')}
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-1">Zoom</span>
+                    ${buildDateToggle('30d', '30d')}
+                    ${buildDateToggle('60d', '60d')}
+                    ${buildDateToggle('90d', '90d')}
+                    ${buildDateToggle('6m', '6m')}
+                    ${buildDateToggle('1y', '1y')}
                 </div>
             </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-slate-700/50 pt-3">
+                
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mr-1">Averages</span>
+                    ${buildToggle('show7d', '7d', 'metric', 'bg-slate-200')}
+                    ${buildToggle('show30d', '30d', 'metric', 'bg-slate-200')}
+                    ${buildToggle('show60d', '60d', 'metric', 'bg-slate-200')}
+                    ${buildToggle('show90d', '90d', 'metric', 'bg-slate-200')}
+                </div>
+
+                <button onclick="window.resetTrendDefaults()" class="text-xs text-slate-500 hover:text-white flex items-center gap-1 transition-colors">
+                    <i class="fa-solid fa-rotate-left"></i> Reset View
+                </button>
+            </div>
         </div>
-        <div id="trend-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-2 rounded shadow-xl text-xs pointer-events-none opacity-0 transition-opacity"></div>
+        
+        <div class="flex justify-end gap-4 text-[10px] text-slate-400 font-mono mb-2 px-2">
+            <span class="flex items-center gap-1"><div class="w-6 h-0.5 bg-slate-400"></div> 7d</span>
+            <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dotted border-slate-400"></div> 30d</span>
+            <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dashed border-slate-400"></div> 90d</span>
+        </div>
+
+        <div id="trend-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-3 rounded-lg shadow-xl text-xs pointer-events-none opacity-0 transition-opacity"></div>
     `;
 
-    const legendHtml = `
-        <div class="flex gap-4 text-[10px] text-slate-400 font-mono justify-end mb-2">
-            <span class="flex items-center gap-1"><div class="w-4 h-0.5 bg-slate-400"></div> Weekly</span>
-            <span class="flex items-center gap-1"><div class="w-4 h-0.5 border-t-2 border-dashed border-slate-400"></div> 30d Avg</span>
-            <span class="flex items-center gap-1"><div class="w-4 h-0.5 border-t-2 border-dotted border-slate-400"></div> 60d Avg</span>
-        </div>
-    `;
+    const chart1 = buildTrendChart("Adherence % (Duration)", false, rollingData);
+    const chart2 = buildTrendChart("Adherence % (Count)", true, rollingData);
 
-    const chart1 = buildTrendChart("Rolling Adherence (Duration Based)", false, logData);
-    const chart2 = buildTrendChart("Rolling Adherence (Count Based)", true, logData);
-
-    container.innerHTML = `${controlsHtml}${legendHtml}${chart1}${chart2}`;
+    container.innerHTML = `${controlsHtml}${chart1}${chart2}`;
 };

@@ -1,281 +1,151 @@
-import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.js';
+import json
+import os
+from datetime import datetime
 
-export function renderHeatmaps() {
-    setTimeout(initHeatmaps, 0);
-    const loadingHtml = `
-    <div id="heatmaps-container" class="flex flex-col gap-6">
-        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
-            <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps...</span>
-        </div>
-    </div>`;
-    return buildCollapsibleSection('heatmaps-section', 'Training Heatmaps', loadingHtml, true);
-}
+# --- CONFIGURATION ---
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+LOG_FILE = os.path.join(BASE_DIR, 'data', 'training_log.json')
+READINESS_FILE = os.path.join(BASE_DIR, 'data', 'readiness', 'readiness.json')
+OUTPUT_FILE = os.path.join(BASE_DIR, 'data', 'dashboard', 'heatmaps.json')
 
-async function initHeatmaps() {
-    const container = document.getElementById('heatmaps-container');
-    if (!container) return;
-
-    try {
-        const response = await fetch('data/dashboard/heatmaps.json');
-        if (!response.ok) throw new Error("Heatmap file not found");
-        const rawData = await response.json();
-
-        const dateMap = {};
-        if (Array.isArray(rawData)) {
-            rawData.forEach(d => { dateMap[d.date] = d; });
-        }
-
-        const today = new Date();
-        const currentYear = today.getFullYear();
-        
-        // A. Trailing 6 Months
-        const endTrailing = new Date(today); 
-        const distToSaturday = 6 - today.getDay(); 
-        endTrailing.setDate(today.getDate() + distToSaturday); 
-
-        const startTrailing = new Date(endTrailing); 
-        startTrailing.setMonth(startTrailing.getMonth() - 6);
-        startTrailing.setDate(startTrailing.getDate() - startTrailing.getDay());
-
-        // B. Annual View
-        const startYear = new Date(currentYear, 0, 1);
-        startYear.setDate(startYear.getDate() - startYear.getDay());
-        const endYear = new Date(currentYear, 11, 31);
-
-        container.innerHTML = `
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true, null)}
-                ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false, null)}
-            </div>
-            <div class="mt-4">
-                ${buildGrid(dateMap, startYear, endYear, `Annual Overview (${currentYear})`, null, true, currentYear)}
-            </div>
-        `;
-
-        setTimeout(() => {
-            ['hm-consistency', 'hm-activity'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.scrollLeft = el.scrollWidth;
-            });
-        }, 50);
-
-    } catch (err) {
-        console.error("Heatmap Error:", err);
-        container.innerHTML = `<p class="text-slate-500 text-xs p-4">Error: ${err.message}</p>`;
-    }
-}
-
-function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, targetYear) {
-    let gridCells = '';
-    let curr = new Date(start);
-    const today = new Date();
+def parse_event_date(date_str):
+    """
+    Robust date parsing for events (handling Sept, Aug, etc.)
+    """
+    date_str = date_str.strip()
     
-    // --- EXACT SPACING CONFIGURATION ---
-    const CELL_SIZE = 12; // px
-    const GAP_SIZE = 3;   // px (Applies to both Row and Column gap)
-    const STRIDE = CELL_SIZE + GAP_SIZE; // 15px
-
-    // Month Label Logic
-    let monthLabels = '';
-    let dayCount = 0;
-    const addedMonths = new Set();
-
-    const currentWeekStart = new Date(today);
-    currentWeekStart.setDate(today.getDate() - today.getDay());
-    currentWeekStart.setHours(0,0,0,0);
-    const currentWeekEnd = new Date(currentWeekStart);
-    currentWeekEnd.setDate(currentWeekStart.getDate() + 6);
-    currentWeekEnd.setHours(23,59,59,999);
-
-    while (curr <= end) {
-        const dateStr = toLocalYMD(curr);
-        const entry = dataMap[dateStr];
-        const isSunday = curr.getDay() === 0;
-        
-        // --- Month Labels ---
-        // Add label if it's the 1st of month OR if it's the very first week block
-        if (curr.getDate() === 1 || (dayCount === 0 && curr.getDate() <= 7)) {
-            const mStr = curr.toLocaleString('default', { month: 'short' });
-            const colIndex = Math.floor(dayCount / 7);
-            const monthKey = mStr + curr.getFullYear();
-            
-            if (!addedMonths.has(monthKey)) {
-                // Precise pixel positioning
-                const leftPos = colIndex * STRIDE;
-                monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}px; top: 0;">${mStr}</span>`;
-                addedMonths.add(monthKey);
-            }
-        }
-
-        // --- Cell Logic ---
-        let bgColor = 'bg-slate-800/50'; 
-        let opacity = '1'; 
-        let styleOverride = '';
-        let extraClasses = '';
-        let visibility = ''; 
-        
-        const isFuture = curr > today;
-        const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
-
-        // Hide Prior Year
-        if (targetYear && curr.getFullYear() < targetYear) {
-            visibility = 'opacity: 0; pointer-events: none;';
-        }
-
-        // Hide Sunday if no actual workout
-        if (isSunday) {
-            if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
-                visibility = 'opacity: 0; pointer-events: none;';
-            }
-        }
-
-        if (isConsistencyMode) {
-            if (isFuture) {
-                if (isCurrentWeek) {
-                    bgColor = 'bg-slate-700'; 
-                    opacity = '0.5';
-                } else {
-                    bgColor = 'bg-slate-800/30';
-                    opacity = '0.3';
-                }
-            } else {
-                bgColor = 'bg-emerald-500';
-                opacity = '0.2'; 
-            }
-        }
-
-        let label = isFuture ? 'Future' : 'Rest';
-        let plan = 0;
-        let act = 0;
-        let detailsJson = '';
-
-        if (entry) {
-            plan = entry.plannedDuration || 0;
-            act = entry.actualDuration || 0;
-            const status = entry.complianceStatus;
-            
-            if (entry.activities && entry.activities.length > 0) {
-                const lines = entry.activities.map(a => {
-                    const icon = getIconForSport(a.sport); 
-                    return `<div class='flex justify-between items-center gap-2 text-xs'><span>${icon} ${a.name}</span><span class='font-mono text-emerald-400'>${Math.round(a.actual)}m</span></div>`;
-                }).join('');
-                detailsJson = encodeURIComponent(lines);
-            }
-
-            if (isConsistencyMode) {
-                if (status === 'Event') {
-                    bgColor = 'bg-purple-600';
-                    opacity = '1';
-                    label = `Event: ${entry.eventName}`;
-                } else if (status === 'Completed') {
-                    bgColor = 'bg-emerald-500';
-                    opacity = '1';
-                    label = "Completed";
-                } else if (status === 'Partial') {
-                    bgColor = 'bg-yellow-500';
-                    opacity = '1';
-                    label = "Partial";
-                } else if (status === 'Missed') {
-                    bgColor = 'bg-red-600';
-                    opacity = '1';
-                    label = "Missed";
-                } else if (status === 'Unplanned') {
-                    bgColor = 'bg-emerald-600';
-                    extraClasses = 'bg-striped'; 
-                    opacity = '1';
-                    label = "Unplanned";
-                }
-            } else {
-                if (act > 0) {
-                    const sports = entry.sports || [];
-                    if (sports.length > 1) {
-                        // Hard Stops
-                        const count = sports.length;
-                        const stops = sports.map((s, i) => {
-                            let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
-                            const startPct = (i / count) * 100;
-                            const endPct = ((i + 1) / count) * 100;
-                            return `${c} ${startPct}%, ${c} ${endPct}%`;
-                        });
-                        styleOverride = `background: linear-gradient(135deg, ${stops.join(', ')});`;
-                        label = "Multi-Sport";
-                    } else if (sports.length === 1) {
-                        const s = sports[0];
-                        let colorVar = getSportColorVar(s);
-                        if (!['Run','Bike','Swim'].includes(s)) colorVar = 'var(--color-all)'; 
-                        styleOverride = `background-color: ${colorVar};`;
-                        label = s;
-                    }
-                    opacity = '1';
-                }
-            }
-        }
-
-        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
-
-        gridCells += `
-            <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
-                 style="width: ${CELL_SIZE}px; height: ${CELL_SIZE}px; opacity: ${opacity}; ${styleOverride} ${visibility}"
-                 title="${dateStr}: ${label}"
-                 onclick="${clickFn}">
-            </div>
-        `;
-
-        curr.setDate(curr.getDate() + 1);
-        dayCount++;
+    # Map common abbreviations to full names
+    replacements = {
+        "Sept": "September",
+        "Aug": "August",
+        "Oct": "October",
+        "Nov": "November",
+        "Dec": "December",
+        "Jan": "January",
+        "Feb": "February",
+        "Mar": "March",
+        "Apr": "April",
+        "Jun": "June",
+        "Jul": "July"
     }
+    
+    for abbr, full in replacements.items():
+        if date_str.startswith(abbr + " ") or date_str.startswith(abbr + "."):
+            date_str = date_str.replace(abbr, full, 1)
+            break
+            
+    # Try standard formats
+    for fmt in ["%B %d, %Y", "%b %d, %Y", "%Y-%m-%d"]:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    return None
 
-    const idAttr = containerId ? `id="${containerId}"` : '';
+def main():
+    if not os.path.exists(LOG_FILE):
+        print(f"Error: {LOG_FILE} not found.")
+        return
 
-    return `
-    <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-5 flex flex-col backdrop-blur-sm">
-        <h3 class="text-xs font-bold text-slate-300 uppercase mb-4 flex items-center gap-2">
-            <i class="fa-solid ${isConsistencyMode ? 'fa-calendar-check text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
-        </h3>
+    # 1. Load Data
+    with open(LOG_FILE, 'r', encoding='utf-8') as f:
+        logs = json.load(f)
+
+    # 2. Load Events
+    events_map = {}
+    if os.path.exists(READINESS_FILE):
+        try:
+            with open(READINESS_FILE, 'r', encoding='utf-8') as f:
+                readiness = json.load(f)
+                for event in readiness.get('upcomingEvents', []):
+                    d_str = event.get('dateStr')
+                    if not d_str: continue
+                    dt = parse_event_date(d_str)
+                    if dt:
+                        date_key = dt.strftime("%Y-%m-%d")
+                        events_map[date_key] = event.get('name', 'Race')
+        except Exception as e:
+            print(f"Warning: Could not load readiness events: {e}")
+
+    # 3. Aggregate Logs
+    daily_map = {}
+    for entry in logs:
+        date_str = entry.get('date', '').split('T')[0]
+        if not date_str: continue
+
+        if date_str not in daily_map:
+            daily_map[date_str] = {
+                "date": date_str, "plannedDuration": 0.0, "actualDuration": 0.0, "sports": set(), "activities": []
+            }
         
-        <div class="flex-1 overflow-x-auto pb-3 custom-scrollbar" ${idAttr}>
-            <div class="min-w-max">
-                <div class="relative h-5 w-full mb-1">
-                    ${monthLabels}
-                </div>
-                
-                <div style="display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: ${GAP_SIZE}px;">
-                    ${gridCells}
-                </div>
-            </div>
-        </div>
+        day = daily_map[date_str]
+        p_dur = float(entry.get('plannedDuration') or 0)
+        a_dur = float(entry.get('actualDuration') or 0)
+        day['plannedDuration'] += p_dur
+        day['actualDuration'] += a_dur
         
-        ${renderLegend(isConsistencyMode)}
-    </div>`;
-}
+        sport = entry.get('actualSport', 'Other')
+        if a_dur > 0:
+            day['sports'].add(sport)
+            
+        day['activities'].append({
+            "name": entry.get('actualWorkout') or entry.get('plannedWorkout') or "Activity",
+            "sport": sport,
+            "actual": a_dur
+        })
 
-function getIconForSport(sport) {
-    const s = (sport || '').toLowerCase();
-    if(s.includes('run')) return '<i class="fa-solid fa-person-running"></i>';
-    if(s.includes('bike')) return '<i class="fa-solid fa-bicycle"></i>';
-    if(s.includes('swim')) return '<i class="fa-solid fa-person-swimming"></i>';
-    return '<i class="fa-solid fa-dumbbell"></i>';
-}
+    # 4. Generate Heatmap Data
+    heatmap_data = []
+    all_dates = set(daily_map.keys()) | set(events_map.keys())
+    sorted_dates = sorted(list(all_dates))
 
-function renderLegend(isConsistencyMode) {
-    if (isConsistencyMode) {
-        return `
-            <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-500"></div> Done</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-yellow-500"></div> Partial</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-red-600"></div> Missed</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-purple-600"></div> Event</div>
-            </div>
-        `;
-    } else {
-        return `
-            <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-run)"></div> Run</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-all)"></div> Other</div>
-            </div>
-        `;
-    }
-}
+    for date_str in sorted_dates:
+        day_data = daily_map.get(date_str, {
+            "date": date_str, "plannedDuration": 0, "actualDuration": 0, "sports": set(), "activities": []
+        })
+        
+        planned = day_data['plannedDuration']
+        actual = day_data['actualDuration']
+        event_name = events_map.get(date_str)
+        
+        # --- PRIORITY LOGIC (Highest to Lowest) ---
+        status = "Rest"
+        
+        if event_name:
+            status = "Event"  # Purple overrides everything
+        elif planned > 0:
+            if actual == 0:
+                status = "Missed"
+            else:
+                ratio = actual / planned
+                status = "Completed" if ratio >= 0.90 else "Partial"
+        elif actual > 0:
+            status = "Unplanned"
+
+        # --- Sunday Logic ---
+        # "Sunday should be totally hidden unless there is workout with an actualDuration>0"
+        dt_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        is_sunday = dt_obj.weekday() == 6
+        
+        if is_sunday and actual <= 0:
+            continue
+
+        heatmap_data.append({
+            "date": date_str,
+            "complianceStatus": status,
+            "plannedDuration": planned,
+            "actualDuration": actual,
+            "sports": list(day_data['sports']),
+            "isSunday": is_sunday,
+            "eventName": event_name,
+            "activities": day_data['activities']
+        })
+
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        json.dump(heatmap_data, f, indent=4)
+        
+    print(f"✅ Heatmap data generated: {len(heatmap_data)} records saved to {OUTPUT_FILE}")
+
+if __name__ == "__main__":
+    main()

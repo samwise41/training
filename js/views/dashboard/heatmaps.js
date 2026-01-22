@@ -2,21 +2,14 @@ import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.j
 
 // --- 1. Main Render Function ---
 export function renderHeatmaps() {
-    // Initiate async fetch immediately
     setTimeout(initHeatmaps, 0);
 
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[200px]">
-                <span class="text-slate-500 text-xs animate-pulse">Loading Consistency...</span>
+                <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps...</span>
             </div>
-            <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[200px]">
-                <span class="text-slate-500 text-xs animate-pulse">Loading Activity...</span>
-            </div>
-        </div>
-        <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[200px]">
-            <span class="text-slate-500 text-xs animate-pulse">Loading Annual View...</span>
         </div>
     </div>`;
 
@@ -42,34 +35,34 @@ async function initHeatmaps() {
         // --- DATE RANGES ---
         const today = new Date();
         
-        // A. Trailing 6 Months (Activity View)
+        // A. Trailing 6 Months (Activity Log & Consistency)
         const endTrailing = new Date(today); 
+        // Align end to next Saturday
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
 
         const startTrailing = new Date(endTrailing); 
         startTrailing.setMonth(startTrailing.getMonth() - 6);
-        const day = startTrailing.getDay();
-        startTrailing.setDate(startTrailing.getDate() - day); // Align to Sunday
+        // Align start to Sunday
+        startTrailing.setDate(startTrailing.getDate() - startTrailing.getDay());
 
         // B. Annual View (Consistency)
         const startYear = new Date(today.getFullYear(), 0, 1);
-        const yearDay = startYear.getDay();
-        startYear.setDate(startYear.getDate() - yearDay); // Align to Sunday
+        startYear.setDate(startYear.getDate() - startYear.getDay()); // Align to Sunday
         const endYear = new Date(today.getFullYear(), 11, 31);
 
         // --- RENDER ---
         container.innerHTML = `
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency (Plan vs Actual)", "hm-consistency", true)}
-                ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log (Duration & Sport)", "hm-activity", false)}
+                ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true)}
+                ${buildGrid(dateMap, startTrailing, endTrailing, "Activity Log", "hm-activity", false)}
             </div>
-            <div>
+            <div class="mt-4">
                 ${buildGrid(dateMap, startYear, endYear, `Annual Overview (${today.getFullYear()})`, null, true)}
             </div>
         `;
 
-        // Auto-scroll to end
+        // Auto-scroll to current date/end
         setTimeout(() => {
             ['hm-consistency', 'hm-activity'].forEach(id => {
                 const el = document.getElementById(id);
@@ -83,10 +76,20 @@ async function initHeatmaps() {
     }
 }
 
-// --- 3. Generic Grid Builder ---
+// --- 3. Grid Builder ---
 function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
     let gridCells = '';
     let curr = new Date(start);
+    const today = new Date();
+    
+    // Determine Current Week Boundaries (Sun - Sat)
+    const currentWeekStart = new Date(today);
+    currentWeekStart.setDate(today.getDate() - today.getDay());
+    currentWeekStart.setHours(0,0,0,0);
+    
+    const currentWeekEnd = new Date(currentWeekStart);
+    currentWeekEnd.setDate(currentWeekStart.getDate() + 6);
+    currentWeekEnd.setHours(23,59,59,999);
 
     // Loop through days
     while (curr <= end) {
@@ -94,82 +97,112 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
         const entry = dataMap[dateStr]; 
         
         let bgColor = 'bg-slate-800/50'; 
-        let opacity = '0.3'; 
+        let opacity = '1'; 
         let styleOverride = '';
         let extraClasses = '';
         
-        // Metadata for Tooltip logic
-        const status = entry ? entry.complianceStatus : null;
-        
-        // Default Tooltip Params
-        let label = 'No Activity';
+        // --- LOGIC: Future vs Past ---
+        const isFuture = curr > today;
+        const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
+
+        // Default: Rest/Empty
+        if (isConsistencyMode) {
+            if (isFuture) {
+                if (isCurrentWeek) {
+                    bgColor = 'bg-slate-700'; // Grey for current week future
+                    opacity = '0.5';
+                } else {
+                    bgColor = 'bg-slate-800/30'; // Lighter/Blank for future
+                    opacity = '0.3';
+                }
+            } else {
+                // Past "Rest" days
+                bgColor = 'bg-emerald-500';
+                opacity = '0.2'; // "green but 50% opacity" (0.2 blends well to look like 50% on dark)
+            }
+        }
+
+        // Data for Tooltip
+        let label = isFuture ? 'Future' : 'Rest';
         let plan = 0;
         let act = 0;
-        let color = '#1e293b';
-        let sport = 'Rest';
         let detailsJson = '';
 
         if (entry) {
             plan = entry.plannedDuration || 0;
             act = entry.actualDuration || 0;
-            sport = entry.dominantSport || 'Other';
-            label = status; // e.g. "Completed" or "Run"
-
-            // Prepare Details List for Tooltip (JSON stringified)
+            const status = entry.complianceStatus;
+            
+            // Build Tooltip
             if (entry.activities && entry.activities.length > 0) {
                 const lines = entry.activities.map(a => {
                     const icon = getIconForSport(a.sport); 
-                    return `<div class='flex justify-between items-center gap-2'><span>${icon} ${a.name}</span><span class='font-mono text-emerald-400'>${Math.round(a.actual)}m</span></div>`;
+                    return `<div class='flex justify-between items-center gap-2 text-xs'><span>${icon} ${a.name}</span><span class='font-mono text-emerald-400'>${Math.round(a.actual)}m</span></div>`;
                 }).join('');
                 detailsJson = encodeURIComponent(lines);
             }
 
-            // --- COLOR LOGIC ---
+            // --- CONSISTENCY VIEW ---
             if (isConsistencyMode) {
-                // Consistency View: Focus on Plan Compliance
-                if (plan > 0) {
-                    if (status === 'Completed') {
-                        bgColor = 'bg-emerald-500';
-                        color = '#10b981';
-                        opacity = '1';
-                    } else if (status === 'Partial') {
-                        bgColor = 'bg-yellow-500';
-                        color = '#eab308';
-                        opacity = '0.9';
-                    } else if (status === 'Missed') {
-                        bgColor = 'bg-red-500';
-                        color = '#ef4444';
-                        opacity = '0.4';
-                    } else {
-                        bgColor = 'bg-slate-700'; // Planned but weird status
-                        opacity = '0.5';
-                    }
+                if (status === 'Event') {
+                    bgColor = 'bg-purple-600';
+                    opacity = '1';
+                    label = `Event: ${entry.eventName}`;
+                } else if (status === 'Completed') {
+                    bgColor = 'bg-emerald-500'; // Green
+                    opacity = '1';
+                    label = "Completed";
+                } else if (status === 'Partial') {
+                    bgColor = 'bg-yellow-500'; // Yellow
+                    opacity = '1';
+                    label = "Partial";
+                } else if (status === 'Missed') {
+                    bgColor = 'bg-red-600'; // Red
+                    opacity = '1';
+                    label = "Missed";
+                } else if (status === 'Unplanned') {
+                    bgColor = 'bg-emerald-600';
+                    extraClasses = 'bg-striped'; // Green Striped
+                    opacity = '1';
+                    label = "Unplanned";
                 }
-            } else {
-                // Activity View: Focus on Actual Activity (Sport Color)
+            } 
+            // --- ACTIVITY LOG VIEW ---
+            else {
                 if (act > 0) {
-                    const sportColor = getSportColorVar(sport);
-                    styleOverride = `background-color: ${sportColor};`;
-                    color = sportColor;
-                    opacity = '0.9';
-                    label = sport; // Show "Run" instead of "Completed"
+                    const sports = entry.sports || [];
                     
-                    // STRIPED LOGIC: Unplanned activities get striped
-                    if (entry.hasUnplanned || status === 'Unplanned') {
-                        extraClasses = 'bg-striped';
+                    if (sports.length > 1) {
+                        // Multi-sport Gradient
+                        const colors = sports.map(s => {
+                            // Default to 'All' color if not specific
+                            if(['Run','Bike','Swim'].includes(s)) return getSportColorVar(s);
+                            return 'var(--color-all)';
+                        });
+                        styleOverride = `background: linear-gradient(135deg, ${colors.join(', ')});`;
+                        label = "Multi-Sport";
+                    } else if (sports.length === 1) {
+                        const s = sports[0];
+                        let colorVar = getSportColorVar(s);
+                        // Requirement: If sport is NOT Run/Bike/Swim, use 'All'
+                        if (!['Run','Bike','Swim'].includes(s)) {
+                            colorVar = 'var(--color-all)'; 
+                        }
+                        styleOverride = `background-color: ${colorVar};`;
+                        label = s;
                     }
+                    opacity = '1';
                 }
             }
         }
 
-        // --- CLICK EVENT ---
-        // We pass the detailsJson (encoded) so the global handler can decode it
-        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '${color}', '${sport}', '${detailsJson}')`;
-
         // --- CELL RENDER ---
+        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
+
         gridCells += `
             <div class="w-3 h-3 rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="opacity: ${opacity}; ${styleOverride}"
+                 title="${dateStr}: ${label}"
                  onclick="${clickFn}">
             </div>
         `;
@@ -179,14 +212,13 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode) {
 
     const idAttr = containerId ? `id="${containerId}"` : '';
 
-    // Added justify-center to flex container for centering
     return `
     <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-5 flex flex-col backdrop-blur-sm">
         <h3 class="text-xs font-bold text-slate-300 uppercase mb-3 flex items-center gap-2">
-            <i class="fa-solid ${isConsistencyMode ? 'fa-check-circle text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
+            <i class="fa-solid ${isConsistencyMode ? 'fa-calendar-check text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
         </h3>
         
-        <div class="flex-1 overflow-x-auto pb-1 custom-scrollbar flex justify-center" ${idAttr}>
+        <div class="flex-1 overflow-x-auto pb-2 custom-scrollbar flex justify-center" ${idAttr}>
             <div class="grid grid-rows-7 grid-flow-col gap-0.5 w-max">
                 ${gridCells}
             </div>
@@ -210,7 +242,10 @@ function renderLegend(isConsistencyMode) {
             <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-500"></div> Done</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-yellow-500"></div> Partial</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-red-500 opacity-40"></div> Missed</div>
+                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-red-600"></div> Missed</div>
+                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
+                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-purple-600"></div> Event</div>
+                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-[2px] bg-emerald-500 opacity-20"></div> Rest</div>
             </div>
         `;
     } else {
@@ -219,7 +254,7 @@ function renderLegend(isConsistencyMode) {
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-run)"></div> Run</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
                 <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
-                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-striped" style="background-color:var(--color-other)"></div> Unplanned</div>
+                <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-full" style="background:var(--color-all)"></div> Other</div>
             </div>
         `;
     }

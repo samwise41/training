@@ -134,6 +134,11 @@ def main():
 
     for row in master_log:
         key = get_record_key(row)
+        original_key = key
+        counter = 2
+        while key in log_map:
+            key = f"{original_key}_{counter}"
+            counter += 1
         log_map[key] = row
         
         r_id = row.get('id')

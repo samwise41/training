@@ -33,7 +33,7 @@ def get_day_name(date_str):
         return ""
 
 def main():
-    print("   -> Generating Dashboard Data (Duration Aggregation Mode)...")
+    print("   -> Generating Dashboard Data (Date-Filtered Aggregation)...")
 
     # 1. Load Files
     if not os.path.exists(PLANNED_FILE):
@@ -55,16 +55,27 @@ def main():
         except Exception as e:
             print(f"   -> Warning: Could not read training log: {e}")
 
-    # 2. Build Aggregated Actuals Bucket
-    # Group ALL completed actuals by Date + Sport
+    # 2. Determine Plan Date Range
+    # We only want logs that occur within the start/end of the plan
+    plan_dates = [p.get('date') for p in full_plan if p.get('date')]
+    if not plan_dates:
+        print("   -> Error: No dates found in planned.json")
+        return
+
+    PLAN_START = min(plan_dates)
+    PLAN_END = max(plan_dates)
+    print(f"   -> Date Range: {PLAN_START} to {PLAN_END}")
+
+    # 3. Build Aggregated Actuals Bucket
     # Key: "YYYY-MM-DD|Sport" -> Value: { duration: 0.0, names: [], sport: "", date: "" }
     actuals_map = {}
 
     for log in logs:
-        # Robust Status Check (Handle 'status' vs 'Status')
-        status = (log.get('status') or log.get('Status') or '').upper()
-        
-        # Skip PLANNED, MISSED, or SKIPPED
+        # --- FIX: Handle "Status" vs "status" inconsistency ---
+        raw_status = log.get('status') or log.get('Status') or ''
+        status = raw_status.upper()
+
+        # Skip non-completed items
         if status in ['PLANNED', 'MISSED', 'SKIPPED']: continue
         
         # Get Date
@@ -72,27 +83,25 @@ def main():
         if not date_raw: continue
         l_date = date_raw.split('T')[0]
 
+        # --- FIX: Date Range Filtering ---
+        # Ignore logs from 1900, or historical data outside the current plan
+        if l_date < PLAN_START or l_date > PLAN_END: continue
+
         # Get Sport
         raw_sport = log.get('actualSport') or log.get('activityType')
         sport_norm = normalize_sport(raw_sport)
 
-        # Create Unique Key for this Day + Sport combo
+        # Create Unique Key
         key = f"{l_date}|{sport_norm}"
 
-        # SAFE Duration Get (Fixes the "float() argument must be..." error)
+        # Safe Duration Get
         dur = 0.0
-        
-        # 1. Try explicit 'actualDuration' (usually in minutes)
         if log.get('actualDuration') is not None:
             dur = float(log.get('actualDuration'))
-        
-        # 2. Fallback to 'duration' (usually in seconds), handle None/Null safely
         elif log.get('duration') is not None:
             dur = float(log.get('duration')) / 60.0
-            
-        # 3. If both are missing/null, dur stays 0.0
 
-        # Initialize bucket if new
+        # Initialize bucket
         if key not in actuals_map:
             actuals_map[key] = {
                 'duration': 0.0,
@@ -101,15 +110,14 @@ def main():
                 'date': l_date
             }
 
-        # Add to bucket
+        # Aggregate
         actuals_map[key]['duration'] += dur
         
-        # Track activity name
         w_name = log.get('actualWorkout') or log.get('activityName') or "Activity"
-        if w_name not in actuals_map[key]['names']:
+        if w_name and w_name not in actuals_map[key]['names']:
             actuals_map[key]['names'].append(w_name)
 
-    # 3. Process Plans & Consume Bucket Data
+    # 4. Process Plans & Consume Bucket Data
     output_list = []
     today_str = datetime.now().strftime('%Y-%m-%d')
 
@@ -151,10 +159,10 @@ def main():
 
         # --- MATCHING LOGIC ---
         if key in actuals_map:
-            # We found actuals for this Planned Day & Sport!
+            # Found actuals for this Plan!
             data = actuals_map[key]
             
-            # 1. Assign TOTAL duration from the logs to this plan
+            # 1. Assign TOTAL duration
             item['actualDuration'] = round(data['duration'], 1)
             
             # 2. Combine names
@@ -173,18 +181,17 @@ def main():
             del actuals_map[key]
         
         else:
-            # No match found
+            # No match
             if date_str < today_str:
                 item['status'] = 'MISSED'
         
         output_list.append(item)
 
-    # 4. Handle Leftovers (Unplanned)
+    # 5. Handle Leftovers (Unplanned)
+    # Any keys remaining in actuals_map are valid workouts within the date range
+    # that did not match a specific planned sport for that day.
     for key, data in actuals_map.items():
-        # Skip future dates if any crept in
-        if data['date'] > today_str: continue
-        
-        # Optional: Skip entries with 0 duration (e.g. error logs)
+        # Optional: Skip entries with ~0 duration
         if data['duration'] <= 0.1: continue
 
         extra_item = {
@@ -201,7 +208,7 @@ def main():
         }
         output_list.append(extra_item)
 
-    # 5. Sort & Save
+    # 6. Sort & Save
     output_list.sort(key=lambda x: (x['date'], x['plannedDuration'] == 0))
 
     if not os.path.exists(dashboard_dir):

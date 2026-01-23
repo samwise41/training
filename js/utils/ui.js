@@ -1,14 +1,14 @@
 // js/utils/ui.js
 
 export const UI = {
-    // 1. Builder
+    // 1. Standard HTML Builder
     buildCollapsibleSection(id, title, contentHtml, isOpen = true) {
         const contentClasses = isOpen 
             ? "max-h-[5000px] opacity-100 py-4 mb-8" 
             : "max-h-0 opacity-0 py-0 mb-0";
         const iconClasses = isOpen ? "rotate-0" : "-rotate-90";
 
-        // Note: onclick calls window.UI.toggleSection
+        // Global handler call: window.UI.toggleSection
         return `
             <div class="w-full">
                 <div class="flex items-center gap-2 cursor-pointer py-3 border-b-2 border-slate-700 hover:border-slate-500 transition-colors group select-none" 
@@ -23,7 +23,7 @@ export const UI = {
         `;
     },
 
-    // 2. Handler
+    // 2. Event Handler
     toggleSection(id) {
         const content = document.getElementById(id);
         if (!content) return;
@@ -49,7 +49,7 @@ export const UI = {
         }
     },
 
-    // 3. Init
+    // 3. Initialization
     init() {
         window.UI = this;
     }

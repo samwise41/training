@@ -7,9 +7,10 @@ const DATA_SOURCES = {
     planMd:     './endurance_plan.md',
     log:        './data/training_log.json',
     readiness:  './data/readiness/readiness.json',
-    profile:    './data/profile.json', // Moved here so Zones/FTP always have data
+    profile:    './data/zones/profile.json',
     
     // 2. VIEW SPECIFIC (Loaded only when needed)
+    zones:      './data/zones/zones.json',
     gear:       './data/gear/gear.json',
     trends:     './data/trends/trends.json',
     heatmaps:   './data/dashboard/heatmaps.json',

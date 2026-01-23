@@ -125,7 +125,7 @@ export const METRIC_DEFINITIONS = {
         title: "Weekly TSS Load", 
         sport: "All", 
         icon: "fa-layer-group", 
-        colorVar: '#f59e0b', // Amber (Specific to TSS)
+        colorVar: C.All,
         refMin: 300, refMax: 600, invertRanges: false, 
         rangeInfo: "300 – 600 TSS",
         description: "Total training stress per week.",
@@ -135,7 +135,7 @@ export const METRIC_DEFINITIONS = {
         title: "Anaerobic Impact", 
         sport: "All", 
         icon: "fa-fire", 
-        colorVar: '#ef4444', // Red (Specific to Anaerobic)
+        colorVar: C.All,
         refMin: 2.0, refMax: 4.0, invertRanges: false, 
         rangeInfo: "2.0 – 4.0",
         description: "Intensity stimulus on hard days.",

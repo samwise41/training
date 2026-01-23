@@ -1,11 +1,8 @@
 // js/views/trends/index.js
-
 import { UI } from '../../utils/ui.js';
 import { renderVolumeChart } from './volume.js';
 import { renderDynamicCharts } from './adherence.js';
 import { renderComplianceSection } from './compliance.js';
-
-// Removed: Duration Tool imports
 
 let trendsData = null;
 let adherenceData = null; 
@@ -21,8 +18,8 @@ async function fetchAdherence() {
     }
 }
 
-// mergedLogData is now unused, but kept in signature to avoid breaking app.js call
-export function renderTrends(mergedLogData, _trendsData) {
+// NOTE: mergedLogData argument is unused but kept for compatibility with app.js call
+export function renderTrends(_mergedLogData, _trendsData) {
     trendsData = _trendsData || { data: [] };
 
     // --- VOLUME SECTION ---
@@ -37,13 +34,11 @@ export function renderTrends(mergedLogData, _trendsData) {
 
     // --- TRENDS SECTION (Container Only) ---
     const trendContainerHtml = `<div id="trend-charts-container"><div class="p-4 text-slate-500 italic">Loading adherence data...</div></div>`;
-    const trendsSection = buildCollapsibleSection('trends-section', 'Adherence Trends', trendContainerHtml, true);
+    const trendsSection = UI.buildCollapsibleSection('trends-section', 'Adherence Trends', trendContainerHtml, true);
 
     // --- ADHERENCE OVERVIEW (Placeholder) ---
     const adherenceContainerHtml = `<div id="compliance-container"><div class="p-4 text-slate-500 italic">Loading compliance data...</div></div>`;
-    const adherenceSection = buildCollapsibleSection('adherence-section', 'Compliance Overview', adherenceContainerHtml, true);
-
-    // Removed: Duration Tool Section
+    const adherenceSection = UI.buildCollapsibleSection('adherence-section', 'Compliance Overview', adherenceContainerHtml, true);
 
     // 3. Post-Render: Fetch & Initialize
     setTimeout(async () => {

@@ -1,7 +1,7 @@
 // js/utils/formatting.js
 
 export const Formatters = {
-    // --- 1. Colors ---
+    // --- 1. Constants ---
     COLORS: { 
         All: 'var(--color-all)', 
         Bike: 'var(--color-bike)',
@@ -11,6 +11,7 @@ export const Formatters = {
     },
 
     // --- 2. Duration Parsing ---
+    // Handles "1h 30m", "90m", "1:30" -> Minutes (Int)
     parseDuration(str) {
         if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
         if (typeof str === 'number') return Math.round(str);
@@ -30,27 +31,28 @@ export const Formatters = {
         } else {
             mins += parseFloat(clean.replace(/[^\d.]/g, ''));
         }
+        
         return Math.round(mins);
     },
 
-    // --- 3. Date Helpers (New) ---
+    // --- 3. Date Helper ---
+    // Fixes "Yesterday" bug by handling timezone offsets for YYYY-MM-DD
     toLocalYMD(dateObj) {
         if (!dateObj) return '';
         const d = new Date(dateObj);
-        // Adjust for timezone offset to prevent "yesterday" bugs
         const offset = d.getTimezoneOffset() * 60000;
         const local = new Date(d.getTime() - offset);
         return local.toISOString().split('T')[0];
     },
 
-    // --- 4. Icons & Styles ---
+    // --- 4. Icon & Style Helpers ---
     getIconForSport(type) {
         const t = (type || '').toLowerCase();
-        if (t.includes('bike') || t.includes('cycl')) return '<i class="fa-solid fa-bicycle"></i>';
-        if (t.includes('run')) return '<i class="fa-solid fa-person-running"></i>';
-        if (t.includes('swim')) return '<i class="fa-solid fa-person-swimming"></i>';
+        if (t.includes('bike') || t.includes('cycl')) return '<i class="fa-solid fa-bicycle icon-bike"></i>';
+        if (t.includes('run')) return '<i class="fa-solid fa-person-running icon-run"></i>';
+        if (t.includes('swim')) return '<i class="fa-solid fa-person-swimming icon-swim"></i>';
         if (t.includes('gym') || t.includes('strength')) return '<i class="fa-solid fa-dumbbell"></i>';
-        return '<i class="fa-solid fa-chart-line"></i>';
+        return '<i class="fa-solid fa-chart-line icon-all"></i>';
     },
 
     getSportColorVar(type) {

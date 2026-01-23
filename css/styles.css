@@ -28,17 +28,39 @@
 .bg-icon-run  { background-color: var(--color-run) !important; }
 .bg-icon-swim { background-color: var(--color-swim) !important; }
 
-/* --- STRIPED PATTERN FOR UNPLANNED --- */
-/* High Contrast Diagonal Stripes */
-.bg-striped {
-    background-image: repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, 0.5) 0px,   /* Start bright white */
-        rgba(0, 0, 0, 0.5) 3px,   /* Hard stop white at 2px */
-        transparent 3px,                  /* Start transparent immediately */
-        transparent 6px                   /* End transparent at 4px (2px gap) */
-    ) !important;
+/* --- Heatmap Status Colors (Consistency Mode) --- */
+.hm-done { background-color: #34d399; }      /* Emerald-400 */
+.hm-partial { background-color: #facc15; }   /* Yellow-400 */
+.hm-missed { background-color: #ef4444; }    /* Red-500 */
+.hm-event { background-color: #a855f7; }     /* Purple-500 */
+
+/* Unplanned: Emerald-500 + Striped Pattern */
+.hm-unplanned {
+    background-color: #10b981;
+    background-image: linear-gradient(
+        45deg, 
+        rgba(0, 0, 0, 0.2) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(0, 0, 0, 0.5) 50%, 
+        rgba(0, 0, 0, 0.5) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 8px 8px;
 }
+
+/* --- Heatmap Sport Colors (Activity Mode) --- */
+.hm-run { background-color: #f472b6; }       /* Pink-400 */
+.hm-bike { background-color: #c084fc; }      /* Purple-400 */
+.hm-swim { background-color: #22d3ee; }      /* Cyan-400 */
+.hm-other { background-color: #34d399; }     /* Emerald-400 */
+
+/* --- Context States --- */
+.hm-future-current { background-color: #334155; opacity: 0.5; } /* Slate-700 */
+.hm-future { background-color: rgba(30, 41, 59, 0.3); opacity: 0.3; }
+.hm-rest { background-color: rgba(51, 65, 85, 0.5); opacity: 0.4; }
+.hm-empty { background-color: rgba(30, 41, 59, 0.5); }
 
 
 

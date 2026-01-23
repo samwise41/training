@@ -130,7 +130,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     currentWeekEnd.setHours(23,59,59,999);
 
     while (curr <= end) {
-        const dateStr = toLocalYMD(curr);
+        const dateStr = Formatters.toLocalYMD(curr);
         const entry = dataMap[dateStr];
         const isSunday = curr.getDay() === 0;
         

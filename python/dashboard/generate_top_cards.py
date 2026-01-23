@@ -67,6 +67,7 @@ def main():
 
     # 3. Apply Priority Logic: Earliest A -> B -> C
     next_event = "No Event"
+    next_event_name = "No Event" # RAW NAME FOR LOOKUP
     days_to_go = "--"
     
     for level in ['A', 'B', 'C']:
@@ -75,6 +76,7 @@ def main():
             level_events.sort(key=lambda x: x['date'])
             winner = level_events[0]
             next_event = f"{winner['name']} ({winner['priority']} Race)"
+            next_event_name = winner['name'] # Capture raw name
             days_to_go = winner['days_out']
             break
 
@@ -82,7 +84,8 @@ def main():
     result = {
         "phase": phase_part,
         "block": block_part,
-        "next_event": next_event,
+        "next_event": next_event,       # Display Name (e.g. "Ironman (A Race)")
+        "next_event_name": next_event_name, # Raw Name (e.g. "Ironman")
         "days_to_go": days_to_go,
         "last_updated": datetime.now().isoformat()
     }

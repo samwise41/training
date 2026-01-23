@@ -3,50 +3,22 @@
 export const TooltipManager = {
     activeElement: null,
     containerId: 'app-tooltip',
+    _isInit: false,
 
-    // Pre-bound event handlers to allow add/remove
-    _handleDocClick: null,
-    _handleResize: null,
-    _handleHash: null,
-
-    init() {
-        if (this._handleDocClick) return; // Already init
-
-        // 1. The "Click Anywhere" Handler
-        this._handleDocClick = (e) => {
-            const container = document.getElementById(this.containerId);
-            
-            // Allow interaction INSIDE the tooltip
-            if (container && container.contains(e.target)) return;
-
-            // If clicking the active trigger again, do nothing here.
-            // The trigger's own click handler (e.g. handleVolumeClick) will run 
-            // and see that 'activeElement === trigger', causing it to call .close().
-            // If we close it here first, the trigger handler might think it's closed and re-open it.
-            if (this.activeElement && this.activeElement.contains(e.target)) return;
-
-            // Otherwise (clicking whitespace or another element), close.
-            this.close();
-        };
-
-        this._handleResize = () => this.close();
-        this._handleHash = () => this.close();
-    },
-
+    /**
+     * Shows the tooltip for a specific element.
+     * RELIES ON: The trigger event (evt) must have called evt.stopPropagation() 
+     * prevents the global window listener from immediately closing it.
+     */
     show(triggerElement, contentHtml) {
-        this.init(); // Ensure handlers are created
-
-        // 1. Toggle Logic
-        // If clicking the currently active element, close it.
+        // 1. Toggle: If clicking the same active element, close it.
         if (this.activeElement === triggerElement) {
             this.close();
             return;
         }
 
-        // 2. Force Close any existing tooltip
-        if (this.activeElement) {
-            this.close();
-        }
+        // 2. Close any currently open tooltip
+        this.close();
 
         // 3. Set Active
         this.activeElement = triggerElement;
@@ -54,45 +26,26 @@ export const TooltipManager = {
         const tooltip = document.getElementById(this.containerId);
         if (!tooltip) return;
 
-        // 4. Render & Position
+        // 4. Render & Visible
         tooltip.innerHTML = contentHtml;
         tooltip.classList.remove('opacity-0', 'pointer-events-none', 'hidden');
         tooltip.classList.add('opacity-100', 'pointer-events-auto');
-        
-        this.updatePosition(triggerElement, tooltip);
 
-        // 5. DEFERRED LISTENER ATTACHMENT (The Fix)
-        // We wait 0ms to let the current click event bubble up and vanish.
-        // Then we attach the "Close" listener.
-        setTimeout(() => {
-            if (this.activeElement === triggerElement) {
-                // Use 'pointerdown' for immediate response on touch/mouse
-                document.addEventListener('pointerdown', this._handleDocClick);
-                window.addEventListener('resize', this._handleResize);
-                window.addEventListener('hashchange', this._handleHash);
-            }
-        }, 0);
+        // 5. Smart Position
+        this.updatePosition(triggerElement, tooltip);
     },
 
     close() {
         const tooltip = document.getElementById(this.containerId);
         if (tooltip) {
+            tooltip.classList.remove('opacity-100', 'pointer-events-auto');
             tooltip.classList.add('opacity-0', 'pointer-events-none');
-            tooltip.classList.remove('pointer-events-auto');
         }
-        
         this.activeElement = null;
-
-        // 6. CLEANUP
-        // Remove listeners immediately so they don't fire for other interactions
-        if (this._handleDocClick) {
-            document.removeEventListener('pointerdown', this._handleDocClick);
-            window.removeEventListener('resize', this._handleResize);
-            window.removeEventListener('hashchange', this._handleHash);
-        }
     },
 
     updatePosition(trigger, tooltip) {
+        // Safety check if element disappeared (e.g. re-render)
         if (!trigger || !trigger.isConnected) {
             this.close();
             return;
@@ -102,43 +55,81 @@ export const TooltipManager = {
         const ttRect = tooltip.getBoundingClientRect();
         
         const margin = 12;      
-        const edgePadding = 20; // Keep tooltip away from screen edge
+        const edgePadding = 20; // Safe distance from screen edge
 
-        // --- Vertical ---
+        // --- Vertical Strategy ---
+        // Default: Center vertically relative to target
         let top = rect.top + (rect.height / 2) - (ttRect.height / 2);
 
-        // Check Bottom Edge
+        // Floor Check (Bottom Edge)
         if (top + ttRect.height > window.innerHeight - edgePadding) {
             top = window.innerHeight - ttRect.height - edgePadding;
         }
-        // Check Top Edge
+        // Ceiling Check (Top Edge)
         if (top < edgePadding) {
             top = edgePadding;
         }
 
-        // --- Horizontal ---
+        // --- Horizontal Strategy ---
+        // Default: Place to the Right
         let left = rect.right + margin;
 
-        // Flip to Left if overflowing Right
+        // Right Wall Check -> Flip Left
         if (left + ttRect.width > window.innerWidth - edgePadding) {
             left = rect.left - ttRect.width - margin;
         }
 
-        // Mobile Fallback: If overflowing Left now
+        // Left Wall Check (Mobile Fallback) -> Move Below
         if (left < edgePadding) {
-            // Pin to left safety edge
+            // Pin to left edge safe zone
             left = edgePadding;
-            // Move BELOW the element
-            top = rect.bottom + margin;
             
-            // Check Bottom again
+            // Move it UNDER the element so we don't cover it
+            top = rect.bottom + margin;
+
+            // Re-verify Bottom Edge with new Y position
             if (top + ttRect.height > window.innerHeight - edgePadding) {
-                // If no room below, move ABOVE
+                // If it doesn't fit below, put it ABOVE
                 top = rect.top - ttRect.height - margin; 
             }
         }
 
         tooltip.style.top = `${top}px`;
         tooltip.style.left = `${left}px`;
+    },
+
+    initGlobalListener() {
+        if (this._isInit) return;
+        this._isInit = true;
+
+        // --- THE CLEAN LOGIC ---
+        // Since charts call stopPropagation(), this listener ONLY fires
+        // when clicking background, headers, empty space, or other UI.
+        window.addEventListener('click', (e) => {
+            // 1. If nothing is open, do nothing.
+            if (!this.activeElement) return;
+
+            // 2. Allow interaction INSIDE the tooltip (e.g. selecting text)
+            const tooltip = document.getElementById(this.containerId);
+            if (tooltip && tooltip.contains(e.target)) return;
+
+            // 3. Otherwise, Close.
+            this.close();
+        });
+
+        // Handle Page Navigation (Hash Change)
+        window.addEventListener('hashchange', () => {
+            this.close();
+        });
+
+        // Handle Window Resize (Prevents floating ghosts)
+        window.addEventListener('resize', () => {
+            if (this.activeElement) this.close();
+        });
+
+        // Handle Escape Key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.close();
+        });
     }
 };

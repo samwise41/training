@@ -40,26 +40,16 @@
 
     // App State
     const App = {
-        // Critical Data
-        planMd: "", 
-        rawLogData: [], 
-        readinessData: null, 
-        profileData: null, // Critical for Zones/FTP
-
-        // Background Data
-        gearData: null, 
-        trendsData: null, 
-        
+        planMd: "", rawLogData: [], readinessData: null, profileData: null, 
+        gearData: null, trendsData: null, 
         weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
-            await this.loadCritical(); // Blocks until Dashboard + Zones data is ready
-            
+            await this.loadCritical();
             this.setupNavigation();
             this.fetchWeather(); 
             this.handleRouting();
-
-            this.loadBackground(); // Silent load
+            this.loadBackground();
         },
 
         async loadCritical() {
@@ -73,6 +63,10 @@
             if (DataManager) {
                 const bg = await DataManager.loadBackgroundData();
                 Object.assign(this, bg);
+                // Refresh Gear if currently viewing it to populate data
+                if (window.location.hash.includes('gear')) {
+                     this.updateGearResult();
+                }
             }
         },
 
@@ -113,6 +107,12 @@
             }
         },
 
+        updateGearResult() {
+            if (this.gearData && gearMod && gearMod.updateGearResult) {
+                gearMod.updateGearResult(this.gearData);
+            }
+        },
+
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
@@ -121,14 +121,12 @@
             const toggleSidebar = () => { sidebar.classList.toggle('sidebar-closed'); sidebar.classList.toggle('sidebar-open'); overlay.classList.toggle('hidden'); };
 
             window.addEventListener('hashchange', () => this.renderCurrentView(window.location.hash.replace('#', '')));
-
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     window.location.hash = e.currentTarget.dataset.view; 
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) toggleSidebar();
                 });
             });
-
             if (menuBtn) menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
@@ -153,15 +151,12 @@
             
             setTimeout(async () => {
                 content.innerHTML = '';
-                // Fix for "is not a function" error:
-                // We ensure the module (zonesMod) AND the function (renderZonesTab) exist before calling.
                 const render = {
                     dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),
                     trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
                     metrics: () => metricsMod?.renderMetrics(this.rawLogData),
                     readiness: () => readinessMod?.renderReadiness(this.readinessData),
                     ftp: () => ftpMod?.renderFTP(this.profileData),
-                    // Check if zonesMod exists before accessing renderZonesTab
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData)
@@ -169,7 +164,14 @@
 
                 try {
                     if (render[view]) {
-                        content.innerHTML = await render[view]();
+                        // 1. Render HTML
+                        const html = await render[view]();
+                        content.innerHTML = html !== undefined ? html : `<div class="p-10 text-red-500">Error: View returned undefined (${view})</div>`;
+                        
+                        // 2. Post-Render Updates (FIX FOR GEAR BLANK BOXES)
+                        if (view === 'gear') {
+                            this.updateGearResult();
+                        }
                     } else {
                         content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }

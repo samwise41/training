@@ -13,15 +13,12 @@ const buildHourlyForecast = (hourlyWeather) => {
     const codes = hourlyWeather.weathercode;
     
     let itemsHtml = '';
-    
     times.forEach((t, index) => {
         const date = new Date(t);
         if (index < 24 && temps[index] !== undefined) { 
             const h = date.getHours();
             const ampm = h >= 12 ? 'PM' : 'AM';
             const hourLabel = h % 12 === 0 ? 12 : h % 12;
-            
-            // Use Shared Formatter for Weather Icon
             const icon = Formatters.getWeatherInfo(codes[index])[1]; 
             
             itemsHtml += `
@@ -29,28 +26,21 @@ const buildHourlyForecast = (hourlyWeather) => {
                     <span class="text-[10px] text-slate-400 font-bold">${hourLabel} ${ampm}</span>
                     <span class="text-lg">${icon}</span>
                     <span class="text-xs font-bold text-slate-200">${Math.round(temps[index])}°</span>
-                </div>
-            `;
+                </div>`;
         }
     });
 
-    return `<div class="mb-6">
-        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p>
-        <div class="hourly-scroll">${itemsHtml}</div>
-    </div>`;
+    return `<div class="mb-6"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p><div class="hourly-scroll">${itemsHtml}</div></div>`;
 };
 
 const buildTempOptions = (defaultVal) => {
     let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
-    for (let i = 30; i <= 70; i++) {
-        tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
-    }
+    for (let i = 30; i <= 70; i++) tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
     tempOptions += `<option value="75" ${defaultVal === 75 ? 'selected' : ''}>70°F+</option>`;
     return tempOptions;
 };
 
 const generateRow = (idPrefix, sportType, label) => {
-    // Use Shared Formatter for Icons and Colors
     const iconHtml = Formatters.getIconForSport(sportType);
     const colorClass = sportType === 'bike' ? 'text-blue-400' : 'text-emerald-400';
 
@@ -60,70 +50,38 @@ const generateRow = (idPrefix, sportType, label) => {
             <span class="${colorClass} text-lg">${iconHtml}</span>
             <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
         </div>
-        
         <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span>
-                <p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span>
-                <p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span>
-                <p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
+            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span><p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
+            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span><p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
+            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span><p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
         </div>
-    </div>
-    `;
+    </div>`;
 };
 
 const renderLayout = (hourlyHtml, tempOptions) => {
     return `
         <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
             ${hourlyHtml}
-            
             <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto">
                 <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Temperature</label>
-                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">
-                    ${tempOptions}
-                </select>
+                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">${tempOptions}</select>
             </div>
-
             <div class="mb-10">
-                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions
-                </h3>
-                <div class="flex flex-col gap-4">
-                    ${generateRow('bike-standard', 'bike', 'Cycling')}
-                    ${generateRow('run-standard', 'run', 'Running')}
-                </div>
+                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions</h3>
+                <div class="flex flex-col gap-4">${generateRow('bike-standard', 'bike', 'Cycling')}${generateRow('run-standard', 'run', 'Running')}</div>
             </div>
-
             <div>
-                <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)
-                </h3>
-                <div class="flex flex-col gap-4">
-                    ${generateRow('bike-weather', 'bike', 'Cycling')}
-                    ${generateRow('run-weather', 'run', 'Running')}
-                </div>
+                <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)</h3>
+                <div class="flex flex-col gap-4">${generateRow('bike-weather', 'bike', 'Cycling')}${generateRow('run-weather', 'run', 'Running')}</div>
             </div>
-        </div>
-        
-        <div class="text-center text-xs text-slate-500 mt-4">
-            <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="hover:text-blue-400 underline">
-                View Source Documentation (Gear.md)
-            </a>
-        </div>
-    `;
+        </div>`;
 };
 
 // --- LOGIC ---
 function updateGearUI(gearData) {
     if (!gearData) return;
-    
+    console.log("⚙️ Updating Gear UI with Data:", gearData); // DEBUG
+
     const tempSelect = document.getElementById('gear-temp');
     if (!tempSelect) return;
     const temp = parseInt(tempSelect.value);
@@ -161,6 +119,15 @@ function updateGearUI(gearData) {
 
 // --- EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
+    // 1. Loading State (Fix for missing data)
+    if (!gearData) {
+        return `
+            <div class="p-12 flex flex-col items-center justify-center text-slate-500 animate-pulse">
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-4"></i>
+                <div class="text-sm font-mono">Loading Gear Data...</div>
+            </div>`;
+    }
+
     // Default Temp Logic
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
@@ -171,10 +138,7 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
 
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    const html = renderLayout(hourlyHtml, tempOptions);
-
-    // If we have data, we'll auto-populate values after insertion via app.js calling updateGearResult
-    return html;
+    return renderLayout(hourlyHtml, tempOptions);
 }
 
 export function updateGearResult(gearData) {

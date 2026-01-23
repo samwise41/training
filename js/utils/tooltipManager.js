@@ -5,6 +5,7 @@ export const TooltipManager = {
     containerId: 'app-tooltip',
 
     show(triggerElement, contentHtml, evt) {
+        // Toggle Logic: If clicking the same element, close it.
         if (this.activeElement === triggerElement) {
             this.close();
             return;
@@ -35,39 +36,54 @@ export const TooltipManager = {
         const rect = trigger.getBoundingClientRect();
         const ttRect = tooltip.getBoundingClientRect();
         
-        // Settings
-        const margin = 12; // Space between element and tooltip
-        const edgePadding = 10; // Minimum distance from screen edge
+        // --- SETTINGS ---
+        const margin = 12;      // Distance from the target element
+        const edgePadding = 20; // Safe zone from screen edges (Buffer)
 
-        // Default: Right of element, centered vertically
+        // --- 1. Vertical Positioning ---
+        // Default: Center vertically relative to target
         let top = rect.top + (rect.height / 2) - (ttRect.height / 2);
+
+        // Check Bottom Edge
+        if (top + ttRect.height > window.innerHeight - edgePadding) {
+            top = window.innerHeight - ttRect.height - edgePadding;
+        }
+        // Check Top Edge
+        if (top < edgePadding) {
+            top = edgePadding;
+        }
+
+        // --- 2. Horizontal Positioning ---
+        // Default: Place to the Right
         let left = rect.right + margin;
 
-        // 1. Horizontal Checks
-        // If it goes off the RIGHT edge...
+        // Check Right Edge Collision -> Flip to Left
         if (left + ttRect.width > window.innerWidth - edgePadding) {
-            // Flip to LEFT
             left = rect.left - ttRect.width - margin;
         }
 
-        // If it now goes off the LEFT edge (mobile)...
+        // --- 3. Mobile / Narrow Screen Fallback ---
+        // If placing left causes Left Edge Collision...
         if (left < edgePadding) {
-            // Force it to stick to the left edge with padding
+            // Force "Floating Mode":
+            // 1. Pin to left edge (with buffer)
             left = edgePadding;
-            // And move it BELOW the element so it doesn't cover it
+            
+            // 2. Move BELOW the element to avoid covering it
             top = rect.bottom + margin;
+
+            // 3. Re-check Bottom Edge for this new position
+            if (top + ttRect.height > window.innerHeight - edgePadding) {
+                // If no room below, move ABOVE
+                top = rect.top - ttRect.height - margin;
+            }
         }
 
-        // 2. Vertical Checks
-        // If it goes off the BOTTOM...
-        if (top + ttRect.height > window.innerHeight - edgePadding) {
-            // Pin to bottom edge
-            top = window.innerHeight - ttRect.height - edgePadding;
-        }
-
-        // If it goes off the TOP...
-        if (top < edgePadding) {
-            top = edgePadding;
+        // --- 4. Final Safety Clamp (The Buffer Guarantee) ---
+        // Ensure the Right edge of the tooltip never exceeds the window width - padding
+        const maxLeft = window.innerWidth - ttRect.width - edgePadding;
+        if (left > maxLeft) {
+            left = maxLeft;
         }
 
         tooltip.style.top = `${top}px`;

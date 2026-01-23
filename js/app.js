@@ -1,20 +1,17 @@
+// js/app.js
+
 (async function initApp() {
-    console.log("🚀 Booting App (JSON Mode)...");
+    console.log("🚀 Booting App (Lazy Mode)...");
     const cacheBuster = Date.now();
     
     const safeImport = async (path, name) => {
-        try {
-            return await import(`${path}?t=${cacheBuster}`);
-        } catch (e) {
-            console.error(`❌ Failed to load ${name}:`, e.message);
-            return null;
-        }
+        try { return await import(`${path}?t=${cacheBuster}`); } 
+        catch (e) { console.error(`❌ Failed to load ${name}`, e); return null; }
     };
 
-    // LOAD ALL MODULES
+    // Load Modules
     const [
-        dashMod, trendsMod, gearMod, zonesMod, ftpMod, 
-        metricsMod, readinessMod, analyzerMod, 
+        dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
         tooltipMod, uiMod, dataMod, formatMod 
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
@@ -25,74 +22,67 @@
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
         safeImport('./views/logbook/analyzer.js', 'Analyzer'),
-        // Utilities
         safeImport('./utils/tooltipManager.js', 'TooltipManager'),
         safeImport('./utils/ui.js', 'UI'),
         safeImport('./utils/data.js', 'DataManager'),
         safeImport('./utils/formatting.js', 'Formatters')
     ]);
 
-    // RENDER FUNCTIONS
-    const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
-    const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
-    const renderGear = gearMod?.renderGear || (() => "Gear missing");
-    const updateGearResult = gearMod?.updateGearResult || (() => {});
-    const renderZonesTab = zonesMod?.renderZonesTab || (() => "Zones missing");
-    const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
-    const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
-    const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
-    const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
-    
-    // INITIALIZE UTILS
+    // Setup Utils
     if (tooltipMod?.TooltipManager?.initGlobalListener) {
         tooltipMod.TooltipManager.initGlobalListener();
         window.TooltipManager = tooltipMod.TooltipManager; 
     }
     if (uiMod?.UI?.init) uiMod.UI.init();
-
+    
     const DataManager = dataMod?.DataManager;
     const Formatters = formatMod?.Formatters;
 
-    // APP STATE
+    // App State
     const App = {
-        planMd: "",
-        rawLogData: [],   
-        plannedData: [],
-        gearData: null,
-        garminData: [],
-        profileData: null,
-        readinessData: null,
-        trendsData: null, 
-        
+        // Data Containers
+        planMd: "", rawLogData: [], readinessData: null, // Critical
+        gearData: null, garminData: [], profileData: null, trendsData: null, // Background
+
         weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
-            await this.loadData();
+            // 1. FAST BOOT: Load critical data only
+            await this.loadCritical();
+            
+            // 2. Setup UI
             this.setupNavigation();
             this.fetchWeather(); 
+            this.handleRouting();
 
-            const hashView = window.location.hash.replace('#', '');
-            const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
+            // 3. LAZY LOAD: Fetch the rest in background
+            this.loadBackground();
+        },
 
-            if (window.location.hash !== `#${initialView}`) {
-                window.location.hash = initialView; 
-            } else {
-                this.renderCurrentView(initialView);
+        async loadCritical() {
+            if (DataManager) {
+                const critical = await DataManager.loadCriticalData();
+                Object.assign(this, critical);
             }
         },
 
-        async loadData() {
+        async loadBackground() {
             if (DataManager) {
-                try {
-                    const coreData = await DataManager.loadCoreData();
-                    Object.assign(this, coreData);
-                    console.log("✅ Data Load Complete");
-                } catch (err) {
-                    console.error("❌ Data Load Error:", err);
+                const bg = await DataManager.loadBackgroundData();
+                Object.assign(this, bg);
+                // Re-render if the user is already on a tab that needs this data
+                const current = window.location.hash.replace('#', '');
+                if (['gear','zones','ftp','trends','roadmap'].includes(current)) {
+                    this.renderCurrentView(current);
                 }
-            } else {
-                console.error("❌ DataManager module failed to load.");
             }
+        },
+
+        handleRouting() {
+            const hashView = window.location.hash.replace('#', '');
+            const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
+            if (window.location.hash !== `#${initialView}`) window.location.hash = initialView; 
+            else this.renderCurrentView(initialView);
         },
 
         async fetchWeather() {
@@ -102,40 +92,27 @@
                 if (locData.latitude) {
                     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
                     const weatherData = await weatherRes.json();
-                    
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     this.weather.code = weatherData.current_weather.weathercode;
-                    
                     this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
         updateHeaderUI(viewName) {
-            const titles = { 
-                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', 
-                gear: 'Gear Choice', zones: 'Training Zones', ftp: 'Performance Profile', 
-                readiness: 'Race Readiness', metrics: 'Performance Metrics'
-            };
-            
+            const titles = { dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', gear: 'Gear Choice', zones: 'Training Zones', ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics' };
             if (viewName) {
                 const titleEl = document.getElementById('header-title-dynamic');
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
             }
-
             if (this.weather.current !== null && Formatters) {
                 const condition = Formatters.getWeatherInfo(this.weather.code);
                 const wInfo = document.getElementById('weather-info');
                 const wIcon = document.getElementById('weather-icon-top');
-                
                 if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
                 if (wIcon) wIcon.innerText = condition[1];
             }
-        },
-
-        updateGearResult() {
-            if (this.gearData) updateGearResult(this.gearData);
         },
 
         setupNavigation() {
@@ -143,25 +120,14 @@
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             const btnClose = document.getElementById('btn-sidebar-close'); 
+            const toggleSidebar = () => { sidebar.classList.toggle('sidebar-closed'); sidebar.classList.toggle('sidebar-open'); overlay.classList.toggle('hidden'); };
 
-            const toggleSidebar = () => {
-                sidebar.classList.toggle('sidebar-closed'); 
-                sidebar.classList.toggle('sidebar-open');   
-                overlay.classList.toggle('hidden');
-            };
-
-            window.addEventListener('hashchange', () => {
-                const view = window.location.hash.replace('#', '');
-                this.renderCurrentView(view || 'dashboard');
-            });
+            window.addEventListener('hashchange', () => this.renderCurrentView(window.location.hash.replace('#', '')));
 
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const view = e.currentTarget.dataset.view;
-                    window.location.hash = view; 
-                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
-                        toggleSidebar();
-                    }
+                    window.location.hash = e.currentTarget.dataset.view; 
+                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) toggleSidebar();
                 });
             });
 
@@ -189,38 +155,25 @@
             
             setTimeout(async () => {
                 content.innerHTML = '';
+                const render = {
+                    dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),
+                    trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
+                    metrics: () => metricsMod?.renderMetrics(this.rawLogData),
+                    readiness: () => readinessMod?.renderReadiness(this.readinessData),
+                    ftp: () => ftpMod?.renderFTP(this.profileData),
+                    zones: async () => await zonesMod?.renderZonesTab(this.profileData),
+                    gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
+                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData)
+                };
+
                 try {
-                    switch (view) {
-                        case 'dashboard':
-                            content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
-                            break;
-                        case 'trends':
-                            content.innerHTML = renderTrends(null, this.trendsData).html;
-                            break;
-                        case 'metrics':
-                            content.innerHTML = renderMetrics(this.rawLogData); 
-                            break;
-                        case 'readiness':
-                            content.innerHTML = renderReadiness(this.readinessData);
-                            break;
-                        case 'ftp':
-                            content.innerHTML = renderFTP(this.profileData); 
-                            break;
-                        case 'gear':
-                            content.innerHTML = renderGear(this.gearData, this.weather.current, this.weather.hourly);
-                            this.updateGearResult();
-                            break;
-                        case 'zones':
-                            content.innerHTML = renderZonesTab(this.profileData);
-                            break;
-                        case 'plan':
-                            content.innerHTML = renderAnalyzer(this.rawLogData);
-                            break;
-                        default:
-                            content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
+                    if (render[view]) {
+                        content.innerHTML = await render[view]();
+                    } else {
+                        content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }
                 } catch (e) {
-                    console.error(`Render Error in ${view}:`, e);
+                    console.error(`Render Error (${view}):`, e);
                     content.innerHTML = `<div class="p-10 text-red-500">Render Error: ${e.message}</div>`;
                 }
                 content.classList.remove('opacity-0');

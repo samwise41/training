@@ -1,4 +1,4 @@
-import { toLocalYMD, getSportColorVar, buildCollapsibleSection } from './utils.js';
+import { Formatters } from '../../utils/formatting.js'; and import { UI } from '../../utils/ui.js';
 
 export function renderHeatmaps() {
     setTimeout(initHeatmaps, 0);

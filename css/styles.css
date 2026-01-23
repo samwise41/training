@@ -1,256 +1,57 @@
+/* --- 1. GLOBAL VARIABLES (Single Source of Truth) --- */
 :root {
-    --bg-dark: #0f172a;
-    --bg-card: rgba(30, 41, 59, 0.3);
-    --border-slate: #1e293b;
-    --text-main: #f8fafc;
-    --text-dim: #94a3b8;
-}
-
-/* Activity Icon Theme Colors */
-:root {
+    --color-run:  #f472b6; /* Pink-400 */
+    --color-bike: #c084fc; /* Purple-400 */
+    --color-swim: #22d3ee; /* Cyan-400 */
+    --color-gym:  #94a3b8; /* Slate-400 */
+    --color-all:  #34d399; /* Emerald-400 */
     
-    --color-all:  #14b8a6; 
-    --color-bike: #8b5cf6; 
-    --color-run:  #ec4899; 
-    --color-swim: #0ea5e9;  
+    /* Consistency Colors */
+    --color-done:    #34d399; /* Emerald-400 */
+    --color-partial: #facc15; /* Yellow-400 */
+    --color-missed:  #ef4444; /* Red-500 */
+    --color-event:   #a855f7; /* Purple-500 */
 }
 
-/* You can still use your classes for icons */
-.icon-bike { color: var(--color-bike) !important; }
-.icon-run  { color: var(--color-run) !important; }
-.icon-swim { color: var(--color-swim) !important; }
-.icon-all { color: var(--color-all) !important; }
+/* --- 2. TEXT ICONS (Used in headers, tables, etc.) --- */
+.icon-run   { color: var(--color-run); }
+.icon-bike  { color: var(--color-bike); }
+.icon-swim  { color: var(--color-swim); }
+.icon-gym   { color: var(--color-gym); }
+.icon-all   { color: var(--color-all); }
 
+/* --- 3. HEATMAP SQUARES (References the variables above) --- */
 
-/* Add these new background classes */
-.bg-icon-all { background-color: var(--color-all) !important; }
-.bg-icon-bike { background-color: var(--color-bike) !important; }
-.bg-icon-run  { background-color: var(--color-run) !important; }
-.bg-icon-swim { background-color: var(--color-swim) !important; }
+/* Activity Mode */
+.hm-run   { background-color: var(--color-run); }
+.hm-bike  { background-color: var(--color-bike); }
+.hm-swim  { background-color: var(--color-swim); }
+.hm-other { background-color: var(--color-all); }
 
-/* --- Heatmap Status Colors (Consistency Mode) --- */
-.hm-done { background-color: #34d399; }      /* Emerald-400 */
-.hm-partial { background-color: #facc15; }   /* Yellow-400 */
-.hm-missed { background-color: #ef4444; }    /* Red-500 */
-.hm-event { background-color: #a855f7; }     /* Purple-500 */
+/* Consistency Mode */
+.hm-done    { background-color: var(--color-done); }
+.hm-partial { background-color: var(--color-partial); }
+.hm-missed  { background-color: var(--color-missed); }
+.hm-event   { background-color: var(--color-event); }
 
-/* Unplanned: Emerald-500 + Striped Pattern */
+/* Unplanned: Uses variable + stripe pattern */
 .hm-unplanned {
-    background-color: #10b981;
+    background-color: #10b981; /* Emerald-500 base for contrast */
     background-image: linear-gradient(
         45deg, 
         rgba(0, 0, 0, 0.2) 25%, 
         transparent 25%, 
         transparent 50%, 
-        rgba(0, 0, 0, 0.5) 50%, 
-        rgba(0, 0, 0, 0.5) 75%, 
+        rgba(0, 0, 0, 0.2) 50%, 
+        rgba(0, 0, 0, 0.2) 75%, 
         transparent 75%, 
         transparent
     );
     background-size: 8px 8px;
 }
 
-/* --- Heatmap Sport Colors (Activity Mode) --- */
-.hm-run { background-color: #f472b6; }       /* Pink-400 */
-.hm-bike { background-color: #c084fc; }      /* Purple-400 */
-.hm-swim { background-color: #22d3ee; }      /* Cyan-400 */
-.hm-other { background-color: #34d399; }     /* Emerald-400 */
-
-/* --- Context States --- */
-.hm-future-current { background-color: #334155; opacity: 0.5; } /* Slate-700 */
+/* Context States */
+.hm-future-current { background-color: #334155; opacity: 0.5; }
 .hm-future { background-color: rgba(30, 41, 59, 0.3); opacity: 0.3; }
-.hm-rest { background-color: rgba(51, 65, 85, 0.5); opacity: 0.4; }
-.hm-empty { background-color: rgba(30, 41, 59, 0.5); }
-
-
-
-/* General Styles */
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
-}
-
-.nav-link.active {
-    color: #3b82f6;
-    background-color: #1e293b;
-    border-right: 4px solid #3b82f6;
-}
-
-#sidebar { transition: transform 0.3s ease-in-out; z-index: 60; }
-.sidebar-open { transform: translateX(0); }
-.sidebar-closed { transform: translateX(-100%); }
-
-@media (min-width: 1024px) {
-    #sidebar { transform: translateX(0); }
-    .main-content { margin-left: 260px; }
-}
-
-.markdown-body {
-    background-color: transparent !important;
-    color: #cbd5e1 !important;
-}
-.markdown-body table {
-    display: table !important;
-    width: 100% !important; 
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-    border: 1px solid #334155 !important; 
-    border-radius: 8px !important; 
-    overflow: hidden !important;
-    margin-bottom: 2rem !important;
-}
-.markdown-body table th { 
-    background-color: #1e293b !important; 
-    color: #3b82f6 !important; 
-    padding: 12px !important; 
-    text-align: left !important;
-    text-transform: uppercase !important;
-    font-size: 0.75rem !important;
-    letter-spacing: 0.05em !important;
-}
-.markdown-body table td {
-    padding: 12px !important;
-    border-top: 1px solid #334155 !important;
-}
-.markdown-body table tr { background-color: var(--bg-dark) !important; }
-
-.gauge-wrapper { width: 100%; max-width: 400px; margin: 0 auto 1rem; text-align: center; }
-.gauge-needle { transition: transform 2s cubic-bezier(0.17, 0.67, 0.38, 1); transform-origin: 150px 150px; }
-
-#zone-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-@media (min-width: 768px) { #zone-grid { grid-template-columns: 1fr 1fr; } }
-
-.zone-card { background-color: var(--bg-card); border: 1px solid var(--border-slate); border-radius: 12px; padding: 1.5rem; }
-.zone-card-title {
-    font-size: 1.1rem; font-weight: 800; color: var(--text-main);
-    margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-slate);
-    padding-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
-}
-.zone-row {
-    margin-bottom: 0.75rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px;
-    display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #64748b;
-}
-.z-1 { border-left-color: #94a3b8; } /* Grey (Recovery) */
-.z-2 { border-left-color: #3b82f6; } /* Blue (Endurance) */
-.z-3 { border-left-color: #22c55e; } /* Green (Tempo) */
-.z-ss { border-left-color: #eab308; } /* Yellow (Sweet Spot) */
-.z-4 { border-left-color: #f97316; } /* Orange (Threshold) */
-.z-5 { border-left-color: #ef4444; } /* Red (VO2 Max) */
-
-.gear-select {
-    background-color: #1e293b;
-    color: #f8fafc;
-    border: 1px solid #334155;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 1rem;
-    width: 100%;
-}
-
-.gear-row-container { display: flex; flex-direction: column; gap: 1rem; }
-@media (min-width: 1024px) { .gear-row-container { flex-direction: row; align-items: stretch; } }
-
-.activity-header {
-    min-width: 140px; display: flex; align-items: center; gap: 0.75rem;
-    padding: 1rem; background: rgba(30, 41, 59, 0.4); border-radius: 0.5rem; border: 1px solid #1e293b;
-}
-
-.gear-bubbles-row { display: grid; grid-template-columns: 1fr; gap: 0.75rem; flex: 1; }
-@media (min-width: 640px) { .gear-bubbles-row { grid-template-columns: repeat(3, 1fr); } }
-
-.gear-bubble {
-    background: rgba(15, 23, 42, 0.6); border: 1px solid #1e293b; padding: 1rem;
-    border-radius: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem; height: 100%;
-}
-
-/* KPI Styles */
-.kpi-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-@media (min-width: 768px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
-
-.kpi-card { background: rgba(30, 41, 59, 0.4); border: 1px solid #1e293b; border-radius: 12px; padding: 1.5rem; }
-.kpi-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #334155; }
-.kpi-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
-
-/* Updated Pie/Donut Chart Styles - LARGER SIZE */
-.charts-row { display: flex; justify-content: space-around; gap: 1rem; align-items: flex-start; }
-.chart-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 120px; }
-.chart-label { margin-top: 0.75rem; font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
-
-.donut-svg { transform: rotate(-90deg); }
-.donut-bg { fill: none; stroke: #1e293b; stroke-width: 2.8; }
-.donut-segment { fill: none; stroke-width: 2.8; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
-
-.donut-text {
-    position: absolute; top: 0; left: 0; width: 100%; height: 120px;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-}
-.donut-percent { font-size: 1.5rem; font-weight: 800; color: #f8fafc; line-height: 1; }
-.donut-fraction { font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 2px; }
-
-/* Hourly Scroll */
-.hourly-scroll {
-    display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem;
-    scrollbar-width: thin; scrollbar-color: #334155 transparent;
-}
-.hourly-scroll::-webkit-scrollbar { height: 6px; }
-.hourly-scroll::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 3px; }
-.hourly-item {
-    min-width: 70px; display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
-    padding: 0.75rem; background: #0f172a; border-radius: 0.5rem; border: 1px solid #1e293b;
-}
-
-
-/* --- AG GRID: HYBRID THEME (Dark Grid / Light Sidebar) --- */
-
-/* 1. Force the Sidebar & Tool Panels to be WHITE */
-.ag-theme-quartz-dark .ag-side-bar,
-.ag-theme-quartz-dark .ag-tool-panel-wrapper,
-.ag-theme-quartz-dark .ag-side-buttons {
-    background-color: #ffffff !important; /* Pure White */
-    color: #0f172a !important; /* Dark Slate Text */
-    border-left: 1px solid #cbd5e1 !important; /* Light Border */
-}
-
-/* 2. Fix the Column/Filter Text inside the sidebar */
-.ag-theme-quartz-dark .ag-column-select-column-label, 
-.ag-theme-quartz-dark .ag-group-component-title,
-.ag-theme-quartz-dark .ag-filter-toolpanel-header,
-.ag-theme-quartz-dark .ag-header-cell-text {
-    color: #334155 !important; /* Slate 700 Text */
-}
-
-/* 3. Fix Input Boxes (Search Bar) to look normal on white */
-.ag-theme-quartz-dark .ag-text-field-input {
-    background-color: #f1f5f9 !important; /* Light Grey Input */
-    color: #0f172a !important; /* Dark Text */
-    border: 1px solid #94a3b8 !important;
-}
-
-/* 4. Sidebar Tabs (Columns/Filters buttons) */
-.ag-theme-quartz-dark .ag-side-button-button {
-    color: #64748b !important; /* Slate 500 (Inactive) */
-}
-.ag-theme-quartz-dark .ag-side-button-button.ag-selected {
-    color: #0f172a !important; /* Dark (Active) */
-    border-left-color: #22d3ee !important; /* Cyan Accent */
-}
-
-/* 5. Force the Context Menu (Right Click) to be Visible */
-.ag-theme-quartz-dark .ag-menu {
-    background-color: #1e293b !important; /* Keep Menu Dark */
-    color: #f8fafc !important;
-}
-
-/* Add to css/styles.css */
-#app-tooltip {
-    /* Ensure it sits above everything, including nav bars and modals */
-    z-index: 9999; 
-    /* Prevent text selection inside tooltip */
-    user-select: none;
-}
+.hm-rest   { background-color: rgba(51, 65, 85, 0.5); opacity: 0.4; }
+.hm-empty  { background-color: rgba(30, 41, 59, 0.5); }

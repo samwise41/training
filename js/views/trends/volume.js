@@ -1,3 +1,42 @@
+// js/views/trends/volume.js
+
+// --- 1. Global Click Handler for Tooltip Manager ---
+window.handleVolumeClick = (evt, date, plan, planLabel, planClass, act, actLabel, actClass, limit) => {
+    // Stop propagation to prevent immediate close
+    evt.stopPropagation();
+    const el = evt.currentTarget;
+    
+    const html = `
+        <div class="min-w-[160px]">
+            <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${date}</div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-1">
+                <div>
+                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Plan</div>
+                    <div class="text-sm font-bold text-white">${plan}m</div>
+                    <div class="text-[10px] ${planClass} font-mono mt-0.5">
+                        ${planLabel}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Actual</div>
+                    <div class="text-sm font-bold text-white">${act}m</div>
+                    <div class="text-[10px] ${actClass} font-mono mt-0.5">
+                        ${actLabel}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-2 pt-2 border-t border-slate-700 text-[9px] text-slate-500 text-center font-mono">
+                Growth Limit: <span class="text-slate-400">${limit}</span>
+            </div>
+        </div>
+    `;
+
+    if (window.TooltipManager) window.TooltipManager.show(el, html, evt);
+};
+
 export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly Volume Trend') => {
     try {
         if (!trendsJson || !trendsJson.data || trendsJson.data.length === 0) {
@@ -13,7 +52,7 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
         };
         const jsonKey = categoryMap[sportType] || 'total';
 
-        // 2. Revised Color Logic Methodology per image_e49363.png
+        // 2. Revised Color Logic Methodology
         const getStatusColor = (pctChange, key) => {
             const val = pctChange;
 
@@ -22,36 +61,36 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
 
             // --- RUNNING Thresholds ---
             if (key === 'running') {
-                if (val > 0.15) return ['bg-red-500', '#ef4444', 'text-red-400'];       // Aggressive/Risk: 15.01%+
-                if (val > 0.10) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; // Overloading: 10.01% - 15%
-                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              // Controlled: -5% - 10%
+                if (val > 0.15) return ['bg-red-500', '#ef4444', 'text-red-400'];       
+                if (val > 0.10) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; 
+                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              
             }
 
             // --- TOTAL Thresholds ---
             if (key === 'total') {
-                if (val > 0.25) return ['bg-red-500', '#ef4444', 'text-red-400'];       // Aggressive/Risk: 25.01%+
-                if (val > 0.15) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; // Overloading: 15.01% - 25%
-                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              // Controlled: -5% - 15%
+                if (val > 0.25) return ['bg-red-500', '#ef4444', 'text-red-400'];       
+                if (val > 0.15) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; 
+                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              
             }
 
-            // --- CYCLING & SWIMMING Thresholds (Kept separate as requested) ---
+            // --- CYCLING & SWIMMING Thresholds ---
             if (key === 'cycling' || key === 'swimming') {
-                if (val > 0.30) return ['bg-red-500', '#ef4444', 'text-red-400'];       // Aggressive/Risk: 30.01%+
-                if (val > 0.20) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; // Overloading: 20.01% - 30%
-                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              // Controlled: -5% - 20%
+                if (val > 0.30) return ['bg-red-500', '#ef4444', 'text-red-400'];       
+                if (val > 0.20) return ['bg-yellow-500', '#eab308', 'text-yellow-400']; 
+                return ['bg-emerald-500', '#10b981', 'text-emerald-400'];              
             }
 
             return ['bg-emerald-500', '#10b981', 'text-emerald-400'];
         };
 
-        // 3. Dynamic Threshold Label for Tooltips
+        // 3. Dynamic Threshold Label
         const getRedLimitLabel = (key) => {
             switch (key) {
-                case 'running': return "Limit: 10%";
-                case 'total': return "Limit: 20%";
+                case 'running': return "10%";
+                case 'total': return "20%";
                 case 'cycling':
-                case 'swimming': return "Limit: 15%";
-                default: return "Limit: 10%";
+                case 'swimming': return "15%";
+                default: return "10%";
             }
         };
 
@@ -82,7 +121,6 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
             const actualGrowth = cat.actual_growth !== undefined ? cat.actual_growth : 0;
             const plannedGrowth = cat.planned_growth !== undefined ? cat.planned_growth : 0;
 
-            // Apply new logic to both bar types
             const [actualClass, _, actualTextClass] = getStatusColor(actualGrowth, jsonKey);
             const [__, planHex, planTextClass] = getStatusColor(plannedGrowth, jsonKey);
 
@@ -102,7 +140,8 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
 
             const actualOpacity = isCurrentWeek ? 'opacity-90' : 'opacity-80'; 
             
-            const clickAttr = `onclick="window.showVolumeTooltip(event, '${week.week_label}', ${Math.round(plannedMins)}, '${planLabel}', '${planTextClass}', ${Math.round(actualMins)}, '${actLabel}', '${actualTextClass}', '${limitLabel}')"`;
+            // Updated OnClick Attribute
+            const clickAttr = `onclick="window.handleVolumeClick(event, '${week.week_label}', ${Math.round(plannedMins)}, '${planLabel}', '${planTextClass}', ${Math.round(actualMins)}, '${actLabel}', '${actualTextClass}', '${limitLabel}')"`;
 
             barsHtml += `
                 <div class="flex flex-col items-center gap-1 flex-1 group relative cursor-pointer" ${clickAttr}>

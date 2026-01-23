@@ -62,4 +62,16 @@ export const Formatters = {
         if (t.includes('swim')) return this.COLORS.Swim;
         return this.COLORS.All;
     }
+
+    // --- 5. NEW: Weather Map ---
+    WEATHER: {
+        0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
+        45: ["Foggy", "🌫️"], 48: ["Foggy", "🌫️"], 51: ["Drizzle", "🌦️"], 
+        61: ["Rain", "🌧️"], 63: ["Rain", "🌧️"],
+        71: ["Snow", "❄️"], 95: ["Storm", "⛈️"]
+    },
+
+    getWeatherInfo(code) {
+        return this.WEATHER[code] || ["Unknown", "qm"];
+    },
 };

@@ -2,17 +2,31 @@
 import { UI } from '../../utils/ui.js';
 
 export function renderZonesTab(profileData) {
-    // 1. Simple Check: Did the App pass us data?
-    if (!profileData || !profileData.zones) {
+    // DEBUG: Check console to see what you are receiving
+    console.log("Zones Tab Received:", profileData);
+
+    // 1. Check for data
+    if (!profileData || Object.keys(profileData).length === 0) {
         return UI.buildCollapsibleSection('zones-error', 'Training Zones', 
             `<div class="p-6 text-center text-slate-500 italic border border-dashed border-slate-700 rounded-xl">
-                Zone data not found. Please check <code>data/profile.json</code>.
+                <i class="fa-solid fa-circle-exclamation text-yellow-500 mb-2"></i><br>
+                Profile data is empty. Ensure <code>data/profile.json</code> exists and is valid JSON.
              </div>`, true);
     }
 
-    const { heartRate, power } = profileData.zones;
+    // 2. Check for 'zones' key. 
+    // If it's missing, maybe your JSON has 'heartRate' at the root level?
+    const hr = (profileData.zones && profileData.zones.heartRate) || profileData.heartRate || {};
+    const pwr = (profileData.zones && profileData.zones.power) || profileData.power || {};
 
-    // Helper to handle casing differences (z1 vs Z1)
+    if (Object.keys(hr).length === 0 && Object.keys(pwr).length === 0) {
+         return UI.buildCollapsibleSection('zones-missing', 'Training Zones', 
+            `<div class="p-4 text-slate-400">
+                Data loaded, but no zones found. <br>
+                Expected format: <code>"zones": { "heartRate": {...}, "power": {...} }</code>
+             </div>`, true);
+    }
+
     const getVal = (obj, key) => (obj && (obj[key] || obj[key.toUpperCase()])) || '-';
 
     const buildRow = (label, colorClass, desc, hrVal, pwrVal) => `
@@ -36,12 +50,12 @@ export function renderZonesTab(profileData) {
                     </tr>
                 </thead>
                 <tbody class="text-sm">
-                    ${buildRow('Z1', 'text-emerald-400', 'Recovery',      getVal(heartRate, 'z1'), getVal(power, 'z1'))}
-                    ${buildRow('Z2', 'text-blue-400',    'Endurance',     getVal(heartRate, 'z2'), getVal(power, 'z2'))}
-                    ${buildRow('Z3', 'text-green-400',   'Tempo',         getVal(heartRate, 'z3'), getVal(power, 'z3'))}
-                    ${buildRow('Z4', 'text-yellow-400',  'Threshold',     getVal(heartRate, 'z4'), getVal(power, 'z4'))}
-                    ${buildRow('Z5', 'text-orange-500',  'VO2 Max',       getVal(heartRate, 'z5'), getVal(power, 'z5'))}
-                    ${buildRow('Z6', 'text-red-500',     'Anaerobic',     getVal(heartRate, 'z6'), getVal(power, 'z6'))}
+                    ${buildRow('Z1', 'text-emerald-400', 'Recovery',      getVal(hr, 'z1'), getVal(pwr, 'z1'))}
+                    ${buildRow('Z2', 'text-blue-400',    'Endurance',     getVal(hr, 'z2'), getVal(pwr, 'z2'))}
+                    ${buildRow('Z3', 'text-green-400',   'Tempo',         getVal(hr, 'z3'), getVal(pwr, 'z3'))}
+                    ${buildRow('Z4', 'text-yellow-400',  'Threshold',     getVal(hr, 'z4'), getVal(pwr, 'z4'))}
+                    ${buildRow('Z5', 'text-orange-500',  'VO2 Max',       getVal(hr, 'z5'), getVal(pwr, 'z5'))}
+                    ${buildRow('Z6', 'text-red-500',     'Anaerobic',     getVal(hr, 'z6'), getVal(pwr, 'z6'))}
                 </tbody>
             </table>
         </div>

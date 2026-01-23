@@ -31,7 +31,7 @@ async function initHeatmaps() {
         const today = new Date();
         const currentYear = today.getFullYear();
         
-        // Ranges
+        // --- Ranges ---
         const endTrailing = new Date(today); 
         const distToSaturday = 6 - today.getDay(); 
         endTrailing.setDate(today.getDate() + distToSaturday); 
@@ -44,7 +44,7 @@ async function initHeatmaps() {
         startYear.setDate(startYear.getDate() - startYear.getDay());
         const endYear = new Date(currentYear, 11, 31);
 
-        // Render Structure
+        // --- Render ---
         container.innerHTML = `
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 ${buildGrid(dateMap, startTrailing, endTrailing, "Recent Consistency", "hm-consistency", true, null)}
@@ -54,9 +54,6 @@ async function initHeatmaps() {
                 ${buildGrid(dateMap, startYear, endYear, `Annual Overview (${currentYear})`, null, true, currentYear)}
             </div>
         `;
-
-        // Setup Interaction (Event Delegation)
-        setupDelegation(container);
 
         // Scroll to end
         setTimeout(() => {
@@ -72,46 +69,14 @@ async function initHeatmaps() {
     }
 }
 
-// --- EVENT DELEGATION (Fixes Tooltip Issues) ---
-function setupDelegation(container) {
-    // Handle Hover (Tooltip Show)
-    container.addEventListener('mouseover', (e) => {
-        const cell = e.target.closest('.heatmap-cell');
-        if (cell) {
-            const d = cell.dataset;
-            // Call global tooltip helper safely
-            if (window.showTooltip) {
-                // Pass data pulled from attributes
-                window.showTooltip(e, d.date, d.act, d.label, d.color);
-            }
-        }
-    });
-
-    // Handle Leave (Tooltip Hide)
-    container.addEventListener('mouseout', (e) => {
-        if (window.hideTooltip) window.hideTooltip();
-    });
-
-    // Handle Click (Modal/Action)
-    container.addEventListener('click', (e) => {
-        const cell = e.target.closest('.heatmap-cell');
-        if (cell) {
-            const d = cell.dataset;
-            if (window.handleHeatmapClick) {
-                // Parse numbers back from strings
-                window.handleHeatmapClick(e, d.date, parseInt(d.plan), parseInt(d.act), d.label, d.color, '', d.details);
-            }
-        }
-    });
-}
-
 function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, targetYear) {
     let gridCells = '';
     let curr = new Date(start);
     const today = new Date();
     
     // --- EXACT PIXEL LAYOUT ---
-    const CELL_PX = 12; 
+    // Using inline-grid relies on exact pixels to prevent browser sub-pixel rendering issues
+    const CELL_PX = 16; 
     const GAP_PX = 2;   
     const STRIDE_PX = CELL_PX + GAP_PX; // 14px
 
@@ -138,13 +103,14 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             const monthKey = mStr + curr.getFullYear();
             
             if (!addedMonths.has(monthKey)) {
+                // Precise positioning
                 const leftPos = colIndex * STRIDE_PX;
                 monthLabels += `<span class="absolute text-[10px] text-slate-400 font-bold uppercase tracking-wider whitespace-nowrap" style="left: ${leftPos}px; top: 0;">${mStr}</span>`;
                 addedMonths.add(monthKey);
             }
         }
 
-        // --- Styles ---
+        // --- Cell Logic ---
         let bgColor = 'bg-slate-800/50'; 
         let opacity = '1'; 
         let styleOverride = '';
@@ -154,10 +120,12 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
+        // Hide Prior Year
         if (targetYear && curr.getFullYear() < targetYear) {
             visibility = 'opacity: 0; pointer-events: none;';
         }
 
+        // Hide Sunday
         if (isSunday) {
             if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
                 visibility = 'opacity: 0; pointer-events: none;';
@@ -183,7 +151,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         let plan = 0;
         let act = 0;
         let detailsJson = '';
-        let tooltipColor = '#64748b'; 
 
         if (entry) {
             plan = entry.plannedDuration || 0;
@@ -201,28 +168,23 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             if (isConsistencyMode) {
                 if (status === 'Event') {
                     bgColor = 'bg-purple-600';
-                    tooltipColor = '#9333ea';
                     opacity = '1';
                     label = `Event: ${entry.eventName}`;
                 } else if (status === 'Completed') {
                     bgColor = 'bg-emerald-500';
-                    tooltipColor = '#10b981';
                     opacity = '1';
                     label = "Completed";
                 } else if (status === 'Partial') {
                     bgColor = 'bg-yellow-500';
-                    tooltipColor = '#eab308';
                     opacity = '1';
                     label = "Partial";
                 } else if (status === 'Missed') {
                     bgColor = 'bg-red-600';
-                    tooltipColor = '#dc2626';
                     opacity = '1';
                     label = "Missed";
                 } else if (status === 'Unplanned') {
                     bgColor = 'bg-emerald-600';
                     extraClasses = 'bg-striped'; 
-                    tooltipColor = '#059669';
                     opacity = '1';
                     label = "Unplanned";
                 }
@@ -230,6 +192,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                 if (act > 0) {
                     const sports = entry.sports || [];
                     if (sports.length > 1) {
+                        // Multi-Sport Hard Stops
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
@@ -239,30 +202,26 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                         });
                         styleOverride = `background: linear-gradient(135deg, ${stops.join(', ')});`;
                         label = "Multi-Sport";
-                        tooltipColor = '#ffffff';
                     } else if (sports.length === 1) {
                         const s = sports[0];
                         let colorVar = getSportColorVar(s);
                         if (!['Run','Bike','Swim'].includes(s)) colorVar = 'var(--color-all)'; 
                         styleOverride = `background-color: ${colorVar};`;
                         label = s;
-                        tooltipColor = colorVar; 
                     }
                     opacity = '1';
                 }
             }
         }
 
-        // DATA ATTRIBUTES for delegation (Safe)
+        const clickFn = `window.handleHeatmapClick(event, '${dateStr}', ${Math.round(plan)}, ${Math.round(act)}, '${label}', '', '', '${detailsJson}')`;
+
+        // Render Cell
         gridCells += `
-            <div class="heatmap-cell rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
+            <div class="rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="width: ${CELL_PX}px !important; height: ${CELL_PX}px !important; opacity: ${opacity}; ${styleOverride} ${visibility}"
-                 data-date="${dateStr}"
-                 data-plan="${Math.round(plan)}"
-                 data-act="${Math.round(act)}"
-                 data-label="${label.replace(/"/g, '&quot;')}" 
-                 data-color="${tooltipColor}"
-                 data-details="${detailsJson}">
+                 title="${dateStr}: ${label}"
+                 onclick="${clickFn}">
             </div>
         `;
 
@@ -279,10 +238,12 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         </h3>
         
         <div class="flex-1 overflow-x-auto pb-3 custom-scrollbar flex" ${idAttr}>
+            
             <div class="relative m-auto group">
                 <div class="relative h-5 w-full mb-1">
                     ${monthLabels}
                 </div>
+                
                 <div style="display: inline-grid; grid-template-rows: repeat(7, ${CELL_PX}px); grid-auto-flow: column; gap: ${GAP_PX}px !important;">
                     ${gridCells}
                 </div>

@@ -1,24 +1,10 @@
+// js/views/dashboard/topCards.js
+import { Formatters } from '../../utils/formatting.js'; 
+
 export function renderTopCards() {
     const containerId = 'top-cards-container';
 
-    // --- Helpers ---
-    const parseDur = (str) => {
-        if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
-        if (typeof str === 'number') return str;
-        let mins = 0;
-        const clean = str.toString().toLowerCase().trim();
-        if (clean.includes('h')) {
-            const parts = clean.split('h');
-            mins += parseInt(parts[0]) * 60;
-            if (parts[1] && parts[1].includes('m')) mins += parseInt(parts[1]);
-        } else if (clean.includes('m')) {
-            mins += parseInt(clean);
-        } else if (clean.includes(':')) {
-            const parts = clean.split(':');
-            mins += parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
-        }
-        return Math.round(mins);
-    };
+    // REMOVED: Local parseDur (Now using Formatters.parseDuration)
 
     const parseElev = (str) => {
         if (!str) return 0;
@@ -54,19 +40,18 @@ export function renderTopCards() {
                     targetName = data.next_event.replace(/\s\([ABC] Race\)$/, '');
                 }
 
-                // Find specific event or default to first if strictly no match found
                 const targetEvent = readinessData.upcomingEvents.find(e => e.name === targetName) 
                                     || readinessData.upcomingEvents[0]; 
 
                 if (targetEvent) {
                     const stats = readinessData.trainingStats || {};
                     
-                    // Define metrics with CSS classes from styles.css
+                    // USE SHARED FORMATTER
                     const metrics = [
-                        { name: 'Swim',       current: stats.maxSwim || 0,     target: parseDur(targetEvent.swimGoal), icon: 'fa-person-swimming', cssClass: 'icon-swim' },
-                        { name: 'Bike',       current: stats.maxBike || 0,     target: parseDur(targetEvent.bikeGoal), icon: 'fa-person-biking',   cssClass: 'icon-bike' },
-                        { name: 'Run',        current: stats.maxRun || 0,      target: parseDur(targetEvent.runGoal),  icon: 'fa-person-running',  cssClass: 'icon-run' },
-                        { name: 'Climb',      current: stats.maxBikeElev || 0, target: parseElev(targetEvent.bikeElevGoal), icon: 'fa-mountain',   cssClass: 'icon-bike' } // Uses bike color for climb
+                        { name: 'Swim',       current: stats.maxSwim || 0,     target: Formatters.parseDuration(targetEvent.swimGoal), icon: 'fa-person-swimming', cssClass: 'icon-swim' },
+                        { name: 'Bike',       current: stats.maxBike || 0,     target: Formatters.parseDuration(targetEvent.bikeGoal), icon: 'fa-person-biking',   cssClass: 'icon-bike' },
+                        { name: 'Run',        current: stats.maxRun || 0,      target: Formatters.parseDuration(targetEvent.runGoal),  icon: 'fa-person-running',  cssClass: 'icon-run' },
+                        { name: 'Climb',      current: stats.maxBikeElev || 0, target: parseElev(targetEvent.bikeElevGoal), icon: 'fa-mountain',   cssClass: 'icon-bike' } 
                     ];
 
                     let lowestMetric = null;

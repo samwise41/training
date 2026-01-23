@@ -34,7 +34,7 @@ const initAGGrid = (gridId, statsId, rawData) => {
     const rowData = rawData.map(d => {
         const dateObj = new Date(d.date);
         // Use logic similar to Formatters, but keep as numbers for sorting
-        const durHrs = (d.duration || d.actualDuration * 60 || 0) / 3600;
+        const durMins = Formatters.parseDuration(d.duration || d.actualDuration);
         const distMiles = (d.distance || 0) / 1609.34;
         const elevFeet = (d.elevationGain || 0) * 3.28084;
 

@@ -23,9 +23,10 @@
     };
 
     // --- LOAD ALL MODULES ---
+    // Added dataMod to the list
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, 
-        metricsMod, readinessMod, analyzerMod, tooltipMod, uiMod
+        metricsMod, readinessMod, analyzerMod, tooltipMod, uiMod, dataMod
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
@@ -36,7 +37,8 @@
         safeImport('./views/readiness/index.js', 'Readiness'),
         safeImport('./views/logbook/analyzer.js', 'Analyzer'),
         safeImport('./utils/tooltipManager.js', 'TooltipManager'),
-        safeImport('./utils/ui.js', 'UI')
+        safeImport('./utils/ui.js', 'UI'),
+        safeImport('./utils/data.js', 'DataManager')
     ]);
 
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
@@ -58,6 +60,8 @@
     if (uiMod?.UI?.init) {
         uiMod.UI.init();
     }
+
+    const DataManager = dataMod?.DataManager;
 
     // --- APP STATE ---
     const App = {
@@ -88,51 +92,20 @@
         },
 
         async loadData() {
-            try {
-                console.log("📡 Fetching Data...");
-                const sources = {
-                    planMd: './endurance_plan.md',
-                    log: './data/training_log.json',
-                    gear: './data/gear/gear.json',
-                    garmin: './data/my_garmin_data_ALL.json',
-                    profile: './data/profile.json',
-                    readiness: './data/readiness/readiness.json',
-                    trends: './data/trends/trends.json'
-                };
-
-                const requests = Object.entries(sources).map(async ([key, url]) => {
-                    try {
-                        const res = await fetch(url);
-                        return { key, res, ok: res.ok };
-                    } catch (e) {
-                        return { key, res: null, ok: false };
-                    }
-                });
-
-                const results = await Promise.all(requests);
-                const dataMap = results.reduce((acc, item) => { acc[item.key] = item; return acc; }, {});
-
-                if (dataMap.planMd?.ok) this.planMd = await dataMap.planMd.res.text();
-                if (dataMap.log?.ok) this.rawLogData = await dataMap.log.res.json();
-                
-                if (dataMap.gear?.ok) this.gearData = await dataMap.gear.res.json();
-                else this.gearData = { bike: [], run: [] };
-
-                if (dataMap.garmin?.ok) this.garminData = await dataMap.garmin.res.json();
-                else this.garminData = [];
-
-                if (dataMap.profile?.ok) this.profileData = await dataMap.profile.res.json();
-                else this.profileData = {}; 
-
-                if (dataMap.readiness?.ok) this.readinessData = await dataMap.readiness.res.json();
-                else this.readinessData = null;
-
-                if (dataMap.trends?.ok) this.trendsData = await dataMap.trends.res.json();
-                else this.trendsData = null;
-
-                console.log("✅ Data Load Complete");
-            } catch (err) {
-                console.error("❌ Data Load Error:", err);
+            if (DataManager) {
+                try {
+                    // Use DataManager to load everything at once
+                    const coreData = await DataManager.loadCoreData();
+                    
+                    // Merge into App state
+                    Object.assign(this, coreData);
+                    
+                    console.log("✅ Data Load Complete");
+                } catch (err) {
+                    console.error("❌ Data Load Error:", err);
+                }
+            } else {
+                console.error("❌ DataManager module failed to load.");
             }
         },
 

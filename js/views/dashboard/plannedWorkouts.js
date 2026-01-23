@@ -1,4 +1,4 @@
-import { getIcon, getSportColorVar, buildCollapsibleSection } from './utils.js';
+import { getIcon, getSportColorVar, buildCollapsibleSection } from ./../utils/formatting.js and ../../utils/ui.js;
 
 export function renderPlannedWorkouts() {
     setTimeout(async () => {

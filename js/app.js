@@ -23,10 +23,10 @@
         }
     };
 
-    // LOAD ALL MODULES (Including the new Analyzer)
+    // LOAD ALL MODULES (Including the new Analyzer & TooltipManager)
     const [
         parserMod, dashMod, trendsMod, gearMod, zonesMod, ftpMod, roadmapMod, 
-        metricsMod, readinessMod, analyzerMod 
+        metricsMod, readinessMod, analyzerMod, tooltipMod 
     ] = await Promise.all([
         safeImport('./parser.js', 'Parser'),
         safeImport('./views/dashboard/index.js', 'Dashboard'),
@@ -37,7 +37,8 @@
         safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
-        safeImport('./views/logbook/analyzer.js', 'Analyzer')
+        safeImport('./views/logbook/analyzer.js', 'Analyzer'),
+        safeImport('./utils/tooltipManager.js', 'TooltipManager') // <--- NEW IMPORT
     ]);
 
     const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
@@ -51,6 +52,14 @@
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
+    
+    // --- TOOLTIP INITIALIZATION ---
+    const TooltipManager = tooltipMod?.TooltipManager || { initGlobalListener: () => {} };
+    if (TooltipManager.initGlobalListener) {
+        TooltipManager.initGlobalListener();
+    }
+    // Expose to window so views can access it
+    window.TooltipManager = TooltipManager;
 
     // --- 2. APP STATE ---
     const App = {

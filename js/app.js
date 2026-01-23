@@ -9,7 +9,6 @@
         catch (e) { console.error(`❌ Failed to load ${name}`, e); return null; }
     };
 
-    // Load Modules
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
         tooltipMod, uiMod, dataMod, formatMod 
@@ -28,7 +27,6 @@
         safeImport('./utils/formatting.js', 'Formatters')
     ]);
 
-    // Setup Utils
     if (tooltipMod?.TooltipManager?.initGlobalListener) {
         tooltipMod.TooltipManager.initGlobalListener();
         window.TooltipManager = tooltipMod.TooltipManager; 
@@ -38,10 +36,18 @@
     const DataManager = dataMod?.DataManager;
     const Formatters = formatMod?.Formatters;
 
-    // App State
     const App = {
-        planMd: "", rawLogData: [], readinessData: null, profileData: null, 
-        gearData: null, trendsData: null, 
+        // Critical Data
+        planMd: "", 
+        rawLogData: [], 
+        readinessData: null, 
+        profileData: null, 
+
+        // Background Data
+        gearData: null, 
+        trendsData: null, 
+        // REMOVED: garminData (Cleanup)
+        
         weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
@@ -63,10 +69,8 @@
             if (DataManager) {
                 const bg = await DataManager.loadBackgroundData();
                 Object.assign(this, bg);
-                // Refresh Gear if currently viewing it to populate data
-                if (window.location.hash.includes('gear')) {
-                     this.updateGearResult();
-                }
+                // Refresh Gear if active to populate data
+                if (window.location.hash.includes('gear')) this.updateGearResult();
             }
         },
 
@@ -164,14 +168,9 @@
 
                 try {
                     if (render[view]) {
-                        // 1. Render HTML
                         const html = await render[view]();
                         content.innerHTML = html !== undefined ? html : `<div class="p-10 text-red-500">Error: View returned undefined (${view})</div>`;
-                        
-                        // 2. Post-Render Updates (FIX FOR GEAR BLANK BOXES)
-                        if (view === 'gear') {
-                            this.updateGearResult();
-                        }
+                        if (view === 'gear') this.updateGearResult();
                     } else {
                         content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }

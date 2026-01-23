@@ -34,7 +34,7 @@ export function renderPlannedWorkouts() {
         <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Loading Schedule...
     </div>`;
 
-    return buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', loadingHtml, true);
+    return UI.buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', loadingHtml, true);
 }
 
 function generateCardsHTML(data) {
@@ -60,7 +60,7 @@ function generateCardsHTML(data) {
         
         // Icon & Color based on Actual Sport (falls back to Plan if not completed)
         const sportType = w.actualSport || 'Other'; 
-        const titleStyle = `style="color: ${getSportColorVar(sportType)}"`;
+        const titleStyle = `style="color: ${Formatters.getSportColorVar(sportType)}"`;
         const iconHtml = getIcon(sportType);
 
         // --- 2. Status & Styling Logic ---

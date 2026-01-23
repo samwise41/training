@@ -1,8 +1,6 @@
 // js/views/readiness/index.js
-import { buildCollapsibleSection } from ../../utils/ui.js;
+import { UI } from '../../utils/ui.js';
 import { renderGuide, renderEventList } from './components.js';
-
-// Note: logic.js is no longer imported because calculations are done in Python
 
 export function renderReadiness(readinessData) {
     // New error message for the JSON data flow
@@ -20,7 +18,7 @@ export function renderReadiness(readinessData) {
     // Format generation date for display
     const genDate = new Date(generatedAt).toLocaleString();
 
-    // 3. Assemble View
+    // 3. Assemble View using UI helper
     return `
         <div class="max-w-5xl mx-auto space-y-4">
             <div class="text-right text-xs text-slate-500 mb-2">Last Updated: ${genDate}</div>

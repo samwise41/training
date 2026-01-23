@@ -1,17 +1,19 @@
 // js/utils/ui.js
 
 export const UI = {
-    // 1. Standard Section Builder
+    // 1. Standard HTML Builder
     buildCollapsibleSection(id, title, contentHtml, isOpen = true) {
         const contentClasses = isOpen 
             ? "max-h-[5000px] opacity-100 py-4 mb-8" 
             : "max-h-0 opacity-0 py-0 mb-0";
         const iconClasses = isOpen ? "rotate-0" : "-rotate-90";
 
+        // Global handler call: window.UI.toggleSection
         return `
             <div class="w-full">
                 <div class="flex items-center gap-2 cursor-pointer py-3 border-b-2 border-slate-700 hover:border-slate-500 transition-colors group select-none" 
-                     onclick="window.UI.toggleSection('${id}')"> <i class="fa-solid fa-caret-down text-slate-400 text-base transition-transform duration-300 group-hover:text-white ${iconClasses}"></i>
+                     onclick="window.UI.toggleSection('${id}')">
+                    <i class="fa-solid fa-caret-down text-slate-400 text-base transition-transform duration-300 group-hover:text-white ${iconClasses}"></i>
                     <h2 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">${title}</h2>
                 </div>
                 <div id="${id}" class="collapsible-content overflow-hidden transition-all duration-500 ease-in-out ${contentClasses}">
@@ -21,7 +23,7 @@ export const UI = {
         `;
     },
 
-    // 2. The Handler (Attached once)
+    // 2. Event Handler
     toggleSection(id) {
         const content = document.getElementById(id);
         if (!content) return;
@@ -47,8 +49,8 @@ export const UI = {
         }
     },
 
-    // Initialize globally
+    // 3. Initialization
     init() {
-        window.UI = this; 
+        window.UI = this;
     }
 };

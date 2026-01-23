@@ -1,4 +1,6 @@
-import { getIcon, getSportColorVar, buildCollapsibleSection } from './utils.js';
+// js/views/dashboard/plannedWorkouts.js
+import { Formatters } from '../../utils/formatting.js';
+import { UI } from '../../utils/ui.js';
 
 export function renderPlannedWorkouts() {
     setTimeout(async () => {
@@ -6,21 +8,16 @@ export function renderPlannedWorkouts() {
         if (!container) return;
         
         try {
-            // 1. Fetch the merged data
             const response = await fetch('data/dashboard/plannedWorkouts.json');
             if (!response.ok) throw new Error("Schedule file not found");
             
             let data = await response.json();
-            
-            // 2. Sort Chronologically (Oldest -> Newest)
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            // 3. Render
             container.innerHTML = generateCardsHTML(data);
             
-            // Scroll Today into view
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500'); // Today's marker
+                const todayCard = container.querySelector('.ring-blue-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
             
@@ -34,7 +31,7 @@ export function renderPlannedWorkouts() {
         <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Loading Schedule...
     </div>`;
 
-    return buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', loadingHtml, true);
+    return UI.buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', loadingHtml, true);
 }
 
 function generateCardsHTML(data) {
@@ -43,8 +40,6 @@ function generateCardsHTML(data) {
     }
 
     let cardsHtml = '';
-      // FIX: Use local time components instead of toISOString() (which is UTC)
-
     const d = new Date();
     const todayStr = [
         d.getFullYear(),
@@ -53,50 +48,39 @@ function generateCardsHTML(data) {
     ].join('-');
 
     data.forEach(w => {
-        // --- 1. Data Prep ---
-        const dayName = w.day || w.date; // e.g. "MONDAY"
+        const dayName = w.day || w.date; 
         const planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
         const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No specific notes.";
         
-        // Icon & Color based on Actual Sport (falls back to Plan if not completed)
         const sportType = w.actualSport || 'Other'; 
-        const titleStyle = `style="color: ${getSportColorVar(sportType)}"`;
-        const iconHtml = getIcon(sportType);
+        // USE SHARED FORMATTERS
+        const titleStyle = `style="color: ${Formatters.COLORS[sportType] || Formatters.COLORS.All}"`;
+        const iconHtml = Formatters.getIconForSport(sportType);
 
-        // --- 2. Status & Styling Logic ---
         let statusText = w.status;
         let statusColorClass = "text-slate-400";
         let cardBorderClass = "border border-slate-700 hover:border-slate-600";
         let displayDuration = Math.round(w.plannedDuration);
         let displayUnit = "min";
 
-        // Logic: Today
         if (w.date === todayStr && statusText !== 'COMPLETED') {
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900";
         }
 
-        // Logic: Completed (Green Outline)
         if (statusText === 'COMPLETED' || statusText === 'UNPLANNED') {
             statusText = "COMPLETED";
             statusColorClass = "text-emerald-400";
-            
-            // THE REQUESTED FORMATTING: Green Outline for completed
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900";
             
-            // Optionally show Actual Duration as the big number? 
-            // The snippet showed Plan usually, but let's stick to Plan as big number 
-            // and Actual in footer, unless it was Unplanned.
             if (w.plannedDuration === 0) {
                 displayDuration = Math.round(w.actualDuration);
                 statusText = "UNPLANNED";
             }
         } 
-        // Logic: Missed
         else if (statusText === 'MISSED') {
             statusColorClass = "text-red-500";
             cardBorderClass = "border border-red-900/50 opacity-75";
         }
-        // Logic: Rest
         else if (statusText === 'REST' || sportType === 'Rest') {
             statusText = "REST DAY";
             displayDuration = "--";
@@ -104,15 +88,12 @@ function generateCardsHTML(data) {
             cardBorderClass = "border border-slate-800 opacity-50";
         }
 
-        // --- 3. HTML Generation (Matching your Snippet) ---
         cardsHtml += `
             <div class="bg-slate-800 rounded-xl p-6 shadow-lg relative overflow-hidden transition-all ${cardBorderClass}">
-                
                 <div class="flex justify-between items-start mb-2">
                     <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">${dayName}</span>
                     ${iconHtml}
                 </div>
-
                 <div class="flex justify-between items-center mb-6 mt-1">
                     <div class="flex flex-col">
                         <div class="flex items-baseline gap-1">
@@ -125,19 +106,15 @@ function generateCardsHTML(data) {
                         <h3 class="text-lg font-bold leading-tight" ${titleStyle}>${planName}</h3>
                     </div>
                 </div>
-
                 <div class="h-px bg-slate-700 w-full mb-4"></div>
-
                 <div>
                     <p class="text-sm text-slate-300 leading-relaxed font-sans line-clamp-3" title="${notes}">${notes}</p>
                 </div>
-
                 ${(w.actualDuration > 0 && w.plannedDuration > 0) ? `
                 <div class="mt-4 pt-3 border-t border-slate-700/50 flex justify-between items-center">
                     <span class="text-[10px] font-bold text-slate-500 uppercase">Actual Duration</span>
                     <span class="text-sm font-mono font-bold text-emerald-400">${Math.round(w.actualDuration)} min</span>
                 </div>` : ''}
-
             </div>
         `;
     });

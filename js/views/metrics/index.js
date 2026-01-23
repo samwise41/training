@@ -1,5 +1,5 @@
 // js/views/metrics/index.js
-import { buildCollapsibleSection } from './utils.js';
+import { UI } from '../../utils/ui.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
 import { normalizeMetricsData } from './parser.js';
@@ -10,15 +10,9 @@ let cleanData = [];
 
 // --- 1. Global Handlers for TooltipManager ---
 
-// A. Chart Data Points
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     e.stopPropagation();
-    
-    // Format breakdown if present
-    const breakdownHtml = breakdown ? 
-        `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` 
-        : '';
-
+    const breakdownHtml = breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : '';
     const html = `
         <div class="min-w-[150px]">
             <div class="font-bold text-slate-200 mb-1 border-b border-slate-700 pb-1">${name}</div>
@@ -27,18 +21,14 @@ window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => 
                 <span class="text-lg font-bold" style="color: ${color}">${val} <span class="text-[10px] text-slate-500">${unit}</span></span>
             </div>
             ${breakdownHtml}
-        </div>
-    `;
-    
+        </div>`;
     if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
 };
 
-// B. Info Icons (Definitions)
 window.handleMetricInfoClick = (e, key) => {
     e.stopPropagation();
     const def = METRIC_DEFINITIONS[key];
     if (!def) return;
-
     const html = `
         <div class="max-w-[280px]">
             <div class="flex items-center gap-2 mb-2 pb-2 border-b border-blue-500/30">
@@ -47,52 +37,39 @@ window.handleMetricInfoClick = (e, key) => {
             </div>
             <div class="space-y-3 text-slate-300">
                 <p>${def.description}</p>
-                
                 <div class="bg-slate-800/80 p-2 rounded border border-slate-700">
                     <div class="text-[10px] text-slate-500 uppercase font-bold">Target Range</div>
                     <div class="font-mono text-emerald-400">${def.rangeInfo}</div>
                 </div>
-                
                 <div>
                     <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">How to Improve</div>
-                    <div class="text-xs text-slate-400 pl-2 border-l-2 border-slate-600">
-                        ${def.improvement}
-                    </div>
+                    <div class="text-xs text-slate-400 pl-2 border-l-2 border-slate-600">${def.improvement}</div>
                 </div>
             </div>
-        </div>
-    `;
-
+        </div>`;
     if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
 };
 
-// C. Table Status Pills
 window.handleMetricStatusClick = (e, key, avg, isGood) => {
     e.stopPropagation();
     const def = METRIC_DEFINITIONS[key];
     if (!def) return;
-
     const html = `
         <div class="min-w-[160px]">
             <div class="font-bold text-slate-200 mb-2 border-b border-slate-700 pb-1">30-Day Status</div>
-            
             <div class="flex justify-between items-center mb-2">
                 <span class="text-slate-400">Average:</span>
                 <span class="font-mono font-bold ${isGood ? 'text-emerald-400' : 'text-yellow-400'}">${avg}</span>
             </div>
-
             <div class="text-[10px] bg-slate-800 p-1.5 rounded text-center">
                 <span class="text-slate-500 block mb-0.5 uppercase tracking-wider">Goal</span>
                 <span class="font-mono text-white">${def.rangeInfo}</span>
             </div>
-        </div>
-    `;
-
+        </div>`;
     if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
 };
 
-// --- 2. Existing Navigation Logic ---
-
+// --- Navigation ---
 window.scrollToMetric = (key) => {
     const el = document.getElementById(`metric-chart-${key}`);
     if (el) {
@@ -133,7 +110,7 @@ export function renderMetrics(rawData) {
     } catch (e) {
         tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
     }
-    const tableSection = buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
+    const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
     const buildSectionHeader = (title, icon, color) => `
         <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
@@ -165,7 +142,7 @@ export function renderMetrics(rawData) {
             <div id="metric-chart-swim"></div> 
         </div>`;
     
-    const chartsSection = buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
+    const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
     return `
         <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">

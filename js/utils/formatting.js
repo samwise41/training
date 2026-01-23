@@ -1,17 +1,17 @@
 // js/utils/formatting.js
 
 export const Formatters = {
-    // --- 1. Centralized Colors ---
+    // --- 1. Constants ---
     COLORS: { 
         All: 'var(--color-all)', 
         Bike: 'var(--color-bike)',
         Run: 'var(--color-run)',
         Swim: 'var(--color-swim)',
-        Gym: '#94a3b8' // Slate-400
+        Gym: '#94a3b8' 
     },
 
-    // --- 2. Robust Time Parsing ---
-    // Converts "1h 30m", "90m", "1:30", or raw numbers into MINUTES (Int)
+    // --- 2. Duration Parsing ---
+    // Handles "1h 30m", "90m", "1:30" -> Minutes (Int)
     parseDuration(str) {
         if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
         if (typeof str === 'number') return Math.round(str);
@@ -19,34 +19,47 @@ export const Formatters = {
         let mins = 0;
         const clean = str.toString().toLowerCase().trim();
         
-        // Format: "1h 30m" or "1.5h"
         if (clean.includes('h')) {
             const parts = clean.split('h');
             mins += parseFloat(parts[0]) * 60;
             if (parts[1] && parts[1].includes('m')) {
                 mins += parseInt(parts[1].replace('m',''));
             }
-        } 
-        // Format: "1:30" (1 hr 30 mins)
-        else if (clean.includes(':')) {
+        } else if (clean.includes(':')) {
             const parts = clean.split(':');
             mins += parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
-        } 
-        // Format: "90" or "90m"
-        else {
+        } else {
             mins += parseFloat(clean.replace(/[^\d.]/g, ''));
         }
         
         return Math.round(mins);
     },
 
-    // --- 3. Standard Icons ---
+    // --- 3. Date Helper ---
+    // Fixes "Yesterday" bug by handling timezone offsets for YYYY-MM-DD
+    toLocalYMD(dateObj) {
+        if (!dateObj) return '';
+        const d = new Date(dateObj);
+        const offset = d.getTimezoneOffset() * 60000;
+        const local = new Date(d.getTime() - offset);
+        return local.toISOString().split('T')[0];
+    },
+
+    // --- 4. Icon & Style Helpers ---
     getIconForSport(type) {
         const t = (type || '').toLowerCase();
         if (t.includes('bike') || t.includes('cycl')) return '<i class="fa-solid fa-bicycle icon-bike"></i>';
         if (t.includes('run')) return '<i class="fa-solid fa-person-running icon-run"></i>';
         if (t.includes('swim')) return '<i class="fa-solid fa-person-swimming icon-swim"></i>';
-        if (t.includes('gym') || t.includes('strength')) return '<i class="fa-solid fa-dumbbell text-slate-400"></i>';
+        if (t.includes('gym') || t.includes('strength')) return '<i class="fa-solid fa-dumbbell"></i>';
         return '<i class="fa-solid fa-chart-line icon-all"></i>';
+    },
+
+    getSportColorVar(type) {
+        const t = (type || '').toLowerCase();
+        if (t.includes('bike')) return this.COLORS.Bike;
+        if (t.includes('run')) return this.COLORS.Run;
+        if (t.includes('swim')) return this.COLORS.Swim;
+        return this.COLORS.All;
     }
 };

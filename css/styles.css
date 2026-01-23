@@ -224,3 +224,11 @@ body {
     background-color: #1e293b !important; /* Keep Menu Dark */
     color: #f8fafc !important;
 }
+
+/* Add to css/styles.css */
+#app-tooltip {
+    /* Ensure it sits above everything, including nav bars and modals */
+    z-index: 9999; 
+    /* Prevent text selection inside tooltip */
+    user-select: none;
+}

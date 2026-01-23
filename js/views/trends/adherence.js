@@ -1,5 +1,35 @@
-
 import { COLOR_MAP } from './utils.js';
+
+// --- 1. Global Click Handler for Adherence Tooltip ---
+window.handleAdherenceClick = (evt, date, metric, val, color, label) => {
+    evt.stopPropagation();
+    const el = evt.currentTarget;
+    
+    // Clean up label text (sometimes comes with units)
+    const labelClean = label ? label.replace(/"/g, "'") : '';
+
+    const html = `
+        <div class="min-w-[140px]">
+            <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${date}</div>
+            
+            <div class="flex items-center gap-2 mb-1">
+                <span class="w-2 h-2 rounded-full" style="background:${color}"></span>
+                <span class="text-xs text-slate-300 font-bold capitalize">${metric}</span>
+            </div>
+            
+            <div class="text-xl font-bold text-white mb-1 tracking-tight">
+                ${val}
+            </div>
+            
+            ${labelClean ? `
+            <div class="text-[10px] text-slate-500 border-t border-slate-700 pt-1 mt-1 font-mono italic">
+                ${labelClean}
+            </div>` : ''}
+        </div>
+    `;
+
+    if (window.TooltipManager) window.TooltipManager.show(el, html, evt);
+};
 
 // --- LOCAL STATE ---
 const chartState = {
@@ -170,7 +200,8 @@ const buildTrendChart = (title, isCount, rawData) => {
                 if (i === 0) dPath = `M ${x} ${y}`;
                 else dPath += ` L ${x} ${y}`;
 
-                circlesHtml += `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" stroke="none" opacity="${opacity}" class="cursor-pointer hover:r-4 transition-all" onclick="window.showTrendTooltip(event, '${pt.display_date}', '${sport} ${metric}', '${val}%', '${color}', '${label}')"></circle>`;
+                // New Click Handler here
+                circlesHtml += `<circle cx="${x}" cy="${y}" r="3" fill="${color}" stroke="none" opacity="${opacity}" class="cursor-pointer hover:r-5 transition-all" onclick="window.handleAdherenceClick(event, '${pt.display_date}', '${sport} ${metric}', '${val}%', '${color}', '${label.replace(/'/g, "")}')"></circle>`;
             });
 
             pathsHtml += `<path d="${dPath}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" stroke-dasharray="${dashArray}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}" />`;
@@ -282,9 +313,7 @@ export const renderDynamicCharts = (containerId, rollingData) => {
             <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dotted border-slate-400"></div> 30d</span>
             <span class="flex items-center gap-1"><div class="w-6 h-0.5 border-t-2 border-dashed border-slate-400"></div> 90d</span>
         </div>
-
-        <div id="trend-tooltip-popup" class="z-50 bg-slate-900 border border-slate-600 p-3 rounded-lg shadow-xl text-xs pointer-events-none opacity-0 transition-opacity"></div>
-    `;
+        `;
 
     const chart1 = buildTrendChart("Adherence % (Duration)", false, rollingData);
     const chart2 = buildTrendChart("Adherence % (Count)", true, rollingData);

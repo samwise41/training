@@ -47,7 +47,15 @@ export function renderTopCards() {
             
             // --- Calculate Readiness ---
             if (readinessData && readinessData.upcomingEvents) {
-                const targetEvent = readinessData.upcomingEvents.find(e => e.name === data.next_event) 
+                // FIX: Use raw name if available, otherwise try to clean the display name
+                let targetName = data.next_event_name;
+                if (!targetName && data.next_event) {
+                    // Fallback: Strip " (A Race)" suffix if new python script hasn't run yet
+                    targetName = data.next_event.replace(/\s\([ABC] Race\)$/, '');
+                }
+
+                // Find specific event or default to first if strictly no match found
+                const targetEvent = readinessData.upcomingEvents.find(e => e.name === targetName) 
                                     || readinessData.upcomingEvents[0]; 
 
                 if (targetEvent) {

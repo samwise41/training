@@ -6,16 +6,16 @@ export const TooltipManager = {
     _isInit: false,
 
     show(triggerElement, contentHtml, evt) {
-        // 1. Toggle: If clicking the active element, close it.
+        // 1. Toggle Logic: If clicking the active element, close it.
         if (this.activeElement === triggerElement) {
             this.close();
             return;
         }
 
-        // 2. Close any existing tooltip
+        // 2. Force Close previous
         this.close();
 
-        // 3. Set Active
+        // 3. Set new active state
         this.activeElement = triggerElement;
         
         const tooltip = document.getElementById(this.containerId);
@@ -34,7 +34,7 @@ export const TooltipManager = {
         const tooltip = document.getElementById(this.containerId);
         if (tooltip) {
             tooltip.classList.add('opacity-0', 'pointer-events-none');
-            // Allow pointer events to pass through immediately
+            // Remove interactive pointer events immediately
             tooltip.classList.remove('pointer-events-auto');
         }
         this.activeElement = null;
@@ -49,11 +49,10 @@ export const TooltipManager = {
         const rect = trigger.getBoundingClientRect();
         const ttRect = tooltip.getBoundingClientRect();
         
-        const margin = 12; 
-        const edgePadding = 40; // 40px Buffer from screen edge
+        const margin = 12;      
+        const edgePadding = 40; // High buffer to prevent edge crowding
 
         // --- Vertical ---
-        // Center vertically by default
         let top = rect.top + (rect.height / 2) - (ttRect.height / 2);
 
         // Check Bottom
@@ -66,7 +65,6 @@ export const TooltipManager = {
         }
 
         // --- Horizontal ---
-        // Right by default
         let left = rect.right + margin;
 
         // Flip to Left if overflowing Right
@@ -74,14 +72,14 @@ export const TooltipManager = {
             left = rect.left - ttRect.width - margin;
         }
 
-        // Mobile Fallback: If overflowing Left now
+        // Mobile/Edge Fallback: If overflowing Left now
         if (left < edgePadding) {
             left = edgePadding;
-            // Move Below
             top = rect.bottom + margin;
-            // Check Bottom again
+            
+            // Re-check bottom for the new position
             if (top + ttRect.height > window.innerHeight - edgePadding) {
-                top = rect.top - ttRect.height - margin; // Move Above
+                top = rect.top - ttRect.height - margin; 
             }
         }
 
@@ -93,31 +91,34 @@ export const TooltipManager = {
         if (this._isInit) return;
         this._isInit = true;
 
-        // A. Dismiss on Click (Mousedown is more reliable for UI dismissal)
-        document.addEventListener('mousedown', (e) => {
+        // A. CAPTURE PHASE LISTENER (The Fix)
+        // Passing 'true' as the 3rd argument ensures we catch the click 
+        // BEFORE any chart element can stopPropagation()
+        window.addEventListener('click', (e) => {
+            // If nothing is open, ignore
             if (!this.activeElement) return;
 
-            // 1. Allow clicking inside the tooltip (text selection, links)
+            // Allow interaction inside the tooltip itself
             if (e.target.closest(`#${this.containerId}`)) return;
 
-            // 2. Allow clicking the trigger itself (handled by show() toggle)
+            // Allow interaction with the trigger (handled by toggle logic in show)
             if (this.activeElement.contains(e.target)) return;
 
-            // 3. Otherwise, close it
+            // Otherwise, CLOSE IT.
             this.close();
-        });
+        }, true); // <--- Capture: True
 
         // B. Dismiss on Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.close();
         });
 
-        // C. Dismiss on Window Resize
+        // C. Dismiss on Resize
         window.addEventListener('resize', () => {
             if (this.activeElement) this.close();
         });
 
-        // D. Dismiss on Navigation (Fixes page-to-page persistence)
+        // D. Dismiss on Navigation
         window.addEventListener('hashchange', () => {
             this.close();
         });

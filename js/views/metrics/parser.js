@@ -57,187 +57,71 @@ export const normalizeMetricsData = (rawData) => {
 export const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
-        const tss = d._tss || 0;
+        const tss = getVal(d, KEYS.tss);
         if (tss <= 0) return;
-        
-        // Calculate week ending date (Sunday)
         const date = new Date(d.date);
         const day = date.getDay(); 
         const diff = date.getDate() - day + (day === 0 ? 0 : 7); 
-        const weekEnd = new Date(date);
-        weekEnd.setDate(diff);
+        const weekEnd = new Date(date.setDate(diff));
         weekEnd.setHours(0,0,0,0);
-        
         const key = weekEnd.toISOString().split('T')[0];
         if (!weeks[key]) weeks[key] = 0;
         weeks[key] += tss;
     });
-
     return Object.keys(weeks).sort().map(k => ({
-        date: new Date(k), 
-        dateStr: k, // Keep it simple YYYY-MM-DD
-        name: "Weekly Load", 
-        val: Math.round(weeks[k]), 
-        breakdown: `Total TSS: ${Math.round(weeks[k])}`
+        date: new Date(k), dateStr: `Week Ending ${k}`, name: "Weekly Load", val: weeks[k], breakdown: `Total TSS: ${Math.round(weeks[k])}`
     }));
+};
+
+export const extractMetricData = (data, key) => {
+    switch(key) {
+        case 'endurance': 
+            return data.filter(x => checkSport(x, 'BIKE')).map(x => {
+                if (x._pwr > 0 && x._hr > 0) return { val: x._pwr / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pwr:${Math.round(x._pwr)} / HR:${Math.round(x._hr)}` };
+            }).filter(Boolean);
+        case 'strength': 
+            return data.filter(x => checkSport(x, 'BIKE')).map(x => {
+                if (x._pwr > 0 && x._cad > 0) return { val: x._pwr / x._cad, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pwr:${Math.round(x._pwr)} / RPM:${Math.round(x._cad)}` };
+            }).filter(Boolean);
+        case 'run': 
+            return data.filter(x => checkSport(x, 'RUN')).map(x => {
+                if (x._spd > 0 && x._hr > 0) return { val: (x._spd * 60) / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pace:${Math.round(x._spd*60)}m/m / HR:${Math.round(x._hr)}` };
+            }).filter(Boolean);
+        case 'mechanical': 
+            return data.filter(x => checkSport(x, 'RUN')).map(x => {
+                if (x._spd > 0 && x._pwr > 0) return { val: (x._spd * 100) / x._pwr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Spd:${x._spd.toFixed(1)} / Pwr:${Math.round(x._pwr)}` };
+            }).filter(Boolean);
+        case 'gct': 
+            return data.filter(x => checkSport(x, 'RUN') && x._gct > 0).map(x => ({ val: x._gct, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `${Math.round(x._gct)} ms` }));
+        case 'vert': 
+            return data.filter(x => checkSport(x, 'RUN') && x._vert > 0).map(x => ({ val: x._vert, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `${x._vert.toFixed(1)} cm` }));
+        case 'swim': 
+            return data.filter(x => checkSport(x, 'SWIM')).map(x => {
+                if (x._spd > 0 && x._hr > 0) return { val: (x._spd * 60) / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Spd:${(x._spd*60).toFixed(1)}m/m / HR:${Math.round(x._hr)}` };
+            }).filter(Boolean);
+        case 'vo2max': 
+            return data.map(x => { if (x._vo2 > 0) return { val: x._vo2, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: "VO2 Est", breakdown: `Score: ${x._vo2}` }; }).filter(Boolean);
+        case 'anaerobic': 
+            return data.map(x => { if (x._ana > 0.5) return { val: x._ana, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Anaerobic: ${x._ana}` }; }).filter(Boolean);
+        case 'tss': return aggregateWeeklyTSS(data);
+        default: return [];
+    }
 };
 
 export const calculateSubjectiveEfficiency = (allData, sportMode) => {
     return allData.map(d => {
         const rpe = d._rpe;
         if (!rpe || rpe <= 0) return null;
-        
         let val = 0, breakdown = "", match = false;
-        
-        if (sportMode === 'bike' && checkSport(d, 'BIKE') && d._pwr > 0) { 
-            val = d._pwr / rpe; 
-            breakdown = `${Math.round(d._pwr)}W / ${rpe} RPE`; 
-            match = true; 
-        }
-        else if (sportMode === 'run' && checkSport(d, 'RUN') && d._spd > 0) { 
-            val = d._spd / rpe; 
-            breakdown = `${d._spd.toFixed(2)} m/s / ${rpe} RPE`; 
-            match = true; 
-        }
-        else if (sportMode === 'swim' && checkSport(d, 'SWIM') && d._spd > 0) { 
-            val = d._spd / rpe; 
-            breakdown = `${d._spd.toFixed(2)} m/s / ${rpe} RPE`; 
-            match = true; 
-        }
-        
-        if (match && val > 0) {
-            return { 
-                date: d.date, 
-                dateStr: d.date.toISOString().split('T')[0], 
-                val: parseFloat(val.toFixed(2)), 
-                name: d.actualName, 
-                breakdown: breakdown 
-            };
-        }
+        if (sportMode === 'bike' && checkSport(d, 'BIKE') && d._pwr > 0) { val = d._pwr / rpe; breakdown = `${Math.round(d._pwr)}W / ${rpe} RPE`; match = true; }
+        else if (sportMode === 'run' && checkSport(d, 'RUN') && d._spd > 0) { val = d._spd / rpe; breakdown = `${d._spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
+        else if (sportMode === 'swim' && checkSport(d, 'SWIM') && d._spd > 0) { val = d._spd / rpe; breakdown = `${d._spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
+        if (match && val > 0) return { date: d.date, dateStr: d.date.toISOString().split('T')[0], val: val, name: d.actualName, breakdown: breakdown };
         return null;
     }).filter(Boolean).sort((a, b) => a.date - b.date);
 };
 
-// --- THIS IS THE KEY FUNCTION THAT WAS MISSING LOGIC ---
-export const extractMetricData = (data, key) => {
-    if (key.startsWith('subjective_')) {
-        return calculateSubjectiveEfficiency(data, key.split('_')[1]);
-    }
-
-    switch(key) {
-        case 'endurance': // Aerobic Decoupling (Power / HR)
-            return data.filter(x => checkSport(x, 'BIKE')).map(x => {
-                if (x._pwr > 0 && x._hr > 0) {
-                    return { 
-                        val: parseFloat((x._pwr / x._hr).toFixed(2)), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: x.actualName, 
-                        breakdown: `Pwr:${Math.round(x._pwr)} / HR:${Math.round(x._hr)}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'strength': // Torque proxy (Power / Cadence)
-            return data.filter(x => checkSport(x, 'BIKE')).map(x => {
-                if (x._pwr > 0 && x._cad > 0) {
-                    return { 
-                        val: parseFloat((x._pwr / x._cad).toFixed(2)), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: x.actualName, 
-                        breakdown: `Pwr:${Math.round(x._pwr)} / RPM:${Math.round(x._cad)}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'run': // Running Economy (Speed / HR) * 1000 for readability
-            return data.filter(x => checkSport(x, 'RUN')).map(x => {
-                if (x._spd > 0 && x._hr > 0) {
-                    return { 
-                        val: parseFloat(((x._spd * 60) / x._hr).toFixed(2)), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: x.actualName, 
-                        breakdown: `Pace:${(x._spd*60).toFixed(1)}m/min / HR:${Math.round(x._hr)}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'mechanical': // Form (Speed / Power) * 100
-            return data.filter(x => checkSport(x, 'RUN')).map(x => {
-                if (x._spd > 0 && x._pwr > 0) {
-                    return { 
-                        val: parseFloat(((x._spd * 100) / x._pwr).toFixed(2)), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: x.actualName, 
-                        breakdown: `Spd:${x._spd.toFixed(1)} / Pwr:${Math.round(x._pwr)}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'gct': 
-            return data.filter(x => checkSport(x, 'RUN') && x._gct > 0).map(x => ({ 
-                val: Math.round(x._gct), 
-                date: x.date, 
-                dateStr: x.date.toISOString().split('T')[0], 
-                name: x.actualName, 
-                breakdown: `${Math.round(x._gct)} ms` 
-            }));
-
-        case 'vert': 
-            return data.filter(x => checkSport(x, 'RUN') && x._vert > 0).map(x => ({ 
-                val: parseFloat(x._vert.toFixed(1)), 
-                date: x.date, 
-                dateStr: x.date.toISOString().split('T')[0], 
-                name: x.actualName, 
-                breakdown: `${x._vert.toFixed(1)} cm` 
-            }));
-
-        case 'swim': 
-            return data.filter(x => checkSport(x, 'SWIM')).map(x => {
-                if (x._spd > 0 && x._hr > 0) {
-                    return { 
-                        val: parseFloat(((x._spd * 60) / x._hr).toFixed(2)), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: x.actualName, 
-                        breakdown: `Spd:${(x._spd*60).toFixed(1)} / HR:${Math.round(x._hr)}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'vo2max': 
-            return data.map(x => { 
-                if (x._vo2 > 0) {
-                    return { 
-                        val: Math.round(x._vo2), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: "VO2 Est", 
-                        breakdown: `Score: ${x._vo2}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'anaerobic': 
-            return data.map(x => { 
-                if (x._ana > 0.1) {
-                    return { 
-                        val: parseFloat(x._ana.toFixed(1)), 
-                        date: x.date, 
-                        dateStr: x.date.toISOString().split('T')[0], 
-                        name: x.actualName, 
-                        breakdown: `Anaerobic: ${x._ana}` 
-                    };
-                }
-            }).filter(Boolean);
-
-        case 'tss': 
-            return aggregateWeeklyTSS(data);
-
-        default: 
-            return [];
-    }
+export const extractSubjectiveTableData = (data, key) => {
+    if (key.startsWith('subjective_')) return calculateSubjectiveEfficiency(data, key.split('_')[1]);
+    return [];
 };

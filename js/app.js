@@ -37,7 +37,8 @@
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
         safeImport('./views/logbook/analyzer.js', 'Analyzer'),
-        safeImport('./utils/tooltipManager.js', 'TooltipManager') 
+        safeImport('./utils/tooltipManager.js', 'TooltipManager') ,
+        safeImport('./utils/ui.js', 'UI')
     ]);
 
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
@@ -56,7 +57,11 @@
         TooltipManager.initGlobalListener();
         window.TooltipManager = TooltipManager; 
     }
-
+    
+    // --- UI INITIALIZATION ---
+    const UI = uiMod?.UI;
+    if (UI && UI.init) UI.init();
+    
     // --- 2. APP STATE ---
     const App = {
         planMd: "",

@@ -24,7 +24,20 @@ window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => 
         </div>`;
     if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
 };
+export const checkSport = (item, sport) => {
+    if (!item) return false;
+    const s = (item.actualSport || item.activityType || '').toLowerCase();
+    const target = sport.toLowerCase();
+    return s.includes(target);
+};
 
+export const calculateTrend = (data, days) => {
+    if (!data || data.length === 0) return { val: 0, pct: 0 };
+    // Simple average of last N entries
+    const subset = data.slice(-days);
+    const sum = subset.reduce((acc, curr) => acc + (curr.val || 0), 0);
+    return { val: (sum / subset.length).toFixed(1) };
+};
 window.handleMetricInfoClick = (e, key) => {
     e.stopPropagation();
     const def = METRIC_DEFINITIONS[key];

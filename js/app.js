@@ -3,8 +3,16 @@
 (async function initApp() {
     console.log("🚀 Booting App (JSON Mode)...");
     const cacheBuster = Date.now();
+
+    const CONFIG = {
+        WEATHER_MAP: {
+            0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
+            45: ["Foggy", "🌫️"], 48: ["Foggy", "🌫️"], 51: ["Drizzle", "🌦️"], 
+            61: ["Rain", "🌧️"], 63: ["Rain", "🌧️"],
+            71: ["Snow", "❄️"], 95: ["Storm", "⛈️"]
+        }
+    };
     
-    // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
         try {
             return await import(`${path}?t=${cacheBuster}`);
@@ -14,11 +22,11 @@
         }
     };
 
-    // Load Modules & Utilities
+    // --- LOAD ALL MODULES ---
+    // Added dataMod to the list
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, 
-        metricsMod, readinessMod, analyzerMod, 
-        tooltipMod, uiMod, dataMod, formatMod 
+        metricsMod, readinessMod, analyzerMod, tooltipMod, uiMod, dataMod
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
@@ -28,14 +36,11 @@
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
         safeImport('./views/logbook/analyzer.js', 'Analyzer'),
-        // Utilities
         safeImport('./utils/tooltipManager.js', 'TooltipManager'),
         safeImport('./utils/ui.js', 'UI'),
-        safeImport('./utils/data.js', 'DataManager'),
-        safeImport('./utils/formatting.js', 'Formatters')
+        safeImport('./utils/data.js', 'DataManager')
     ]);
 
-    // Render Functions
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
@@ -46,18 +51,19 @@
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
     
-    // Initialize Utilities
+    // --- INITIALIZE UTILS ---
     if (tooltipMod?.TooltipManager?.initGlobalListener) {
         tooltipMod.TooltipManager.initGlobalListener();
         window.TooltipManager = tooltipMod.TooltipManager; 
     }
 
-    if (uiMod?.UI?.init) uiMod.UI.init();
+    if (uiMod?.UI?.init) {
+        uiMod.UI.init();
+    }
 
     const DataManager = dataMod?.DataManager;
-    const Formatters = formatMod?.Formatters;
 
-    // --- 2. APP STATE ---
+    // --- APP STATE ---
     const App = {
         planMd: "",
         rawLogData: [],   
@@ -75,7 +81,6 @@
             this.setupNavigation();
             this.fetchWeather(); 
 
-            // Routing
             const hashView = window.location.hash.replace('#', '');
             const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
 
@@ -89,9 +94,12 @@
         async loadData() {
             if (DataManager) {
                 try {
-                    // One-liner to load all core data
+                    // Use DataManager to load everything at once
                     const coreData = await DataManager.loadCoreData();
+                    
+                    // Merge into App state
                     Object.assign(this, coreData);
+                    
                     console.log("✅ Data Load Complete");
                 } catch (err) {
                     console.error("❌ Data Load Error:", err);
@@ -108,11 +116,9 @@
                 if (locData.latitude) {
                     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
                     const weatherData = await weatherRes.json();
-                    
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     this.weather.code = weatherData.current_weather.weathercode;
-                    
                     this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
@@ -130,12 +136,10 @@
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
             }
 
-            if (this.weather.current !== null && Formatters) {
-                // Use Formatters for weather mapping
-                const condition = Formatters.getWeatherInfo(this.weather.code);
+            if (this.weather.current !== null) {
+                const condition = CONFIG.WEATHER_MAP[this.weather.code] || ["Cloudy", "☁️"];
                 const wInfo = document.getElementById('weather-info');
                 const wIcon = document.getElementById('weather-icon-top');
-                
                 if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
                 if (wIcon) wIcon.innerText = condition[1];
             }
@@ -165,7 +169,7 @@
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const view = e.currentTarget.dataset.view;
-                    window.location.hash = view; 
+                    window.location.hash = view;
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }
@@ -202,7 +206,7 @@
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
-                            content.innerHTML = renderTrends(null, this.trendsData).html;
+                            content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
                             break;
                         case 'metrics':
                             content.innerHTML = renderMetrics(this.rawLogData); 
@@ -218,8 +222,7 @@
                             this.updateGearResult();
                             break;
                         case 'zones':
-                            // Now passing profileData to zones
-                            content.innerHTML = renderZonesTab(this.profileData);
+                            content.innerHTML = await renderZonesTab();
                             break;
                         case 'plan':
                             content.innerHTML = renderAnalyzer(this.rawLogData);

@@ -23,50 +23,45 @@
         }
     };
 
-    // LOAD ALL MODULES (Including the new Analyzer & TooltipManager)
+    // REMOVED: Parser (No longer needed)
+    // REMOVED: Roadmap (Deleted)
     const [
-        parserMod, dashMod, trendsMod, gearMod, zonesMod, ftpMod, roadmapMod, 
+        dashMod, trendsMod, gearMod, zonesMod, ftpMod, 
         metricsMod, readinessMod, analyzerMod, tooltipMod 
     ] = await Promise.all([
-        safeImport('./parser.js', 'Parser'),
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
         safeImport('./views/gear/index.js', 'Gear'),
         safeImport('./views/zones/index.js', 'Zones'),
         safeImport('./views/ftp/index.js', 'FTP'),
-        safeImport('./views/roadmap/index.js', 'Roadmap'),
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
         safeImport('./views/logbook/analyzer.js', 'Analyzer'),
         safeImport('./utils/tooltipManager.js', 'TooltipManager') 
     ]);
 
-    const Parser = parserMod?.Parser || { parseTrainingLog: (d) => d, getSection: () => "" };
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
     const updateGearResult = gearMod?.updateGearResult || (() => {});
     const renderZonesTab = zonesMod?.renderZonesTab || (() => "Zones missing");
     const renderFTP = ftpMod?.renderFTP || (() => "FTP missing");
-    const renderRoadmap = roadmapMod?.renderRoadmap || (() => "Roadmap missing");
     const renderMetrics = metricsMod?.renderMetrics || (() => "Metrics missing");
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
     
     // --- TOOLTIP INITIALIZATION ---
     const TooltipManager = tooltipMod?.TooltipManager;
-    
-    // Initialize Global Listener
     if (TooltipManager && TooltipManager.initGlobalListener) {
         TooltipManager.initGlobalListener();
-        window.TooltipManager = TooltipManager; // Expose globally for views
+        window.TooltipManager = TooltipManager; 
     }
 
     // --- 2. APP STATE ---
     const App = {
         planMd: "",
         rawLogData: [],   
-        parsedLogData: [], 
+        // parsedLogData: [], // REMOVED (Unused)
         plannedData: [],
         gearData: null,
         garminData: [],
@@ -81,16 +76,12 @@
             this.setupNavigation();
             this.fetchWeather(); 
 
-            // --- HASH ROUTING INITIALIZATION ---
-            // 1. Check URL Hash first, then LocalStorage, then Default
             const hashView = window.location.hash.replace('#', '');
             const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
 
-            // 2. Ensure URL matches the decided view (handles empty hash case)
             if (window.location.hash !== `#${initialView}`) {
                 window.location.hash = initialView; 
             } else {
-                // If hash was already present, render it directly
                 this.renderCurrentView(initialView);
             }
         },
@@ -126,10 +117,7 @@
                     return acc;
                 }, {});
 
-                // -- Text Files --
                 if (dataMap.planMd?.ok) this.planMd = await dataMap.planMd.res.text();
-
-                // -- JSON Files --
                 if (dataMap.log?.ok) this.rawLogData = await dataMap.log.res.json();
                 
                 if (dataMap.gear?.ok) this.gearData = await dataMap.gear.res.json();
@@ -147,8 +135,7 @@
                 if (dataMap.trends?.ok) this.trendsData = await dataMap.trends.res.json();
                 else this.trendsData = null;
 
-                // 4. Parse Log
-                this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
+                // REMOVED: Parser.parseTrainingLog (No longer needed)
                 console.log("✅ Data Load Complete");
 
             } catch (err) {
@@ -175,9 +162,15 @@
 
         updateHeaderUI(viewName) {
             const titles = { 
-                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', 
-                roadmap: 'Season Roadmap', gear: 'Gear Choice', zones: 'Training Zones', 
-                ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics'
+                dashboard: 'Weekly Schedule', 
+                trends: 'Trends & KPIs', 
+                plan: 'Logbook Analysis', 
+                gear: 'Gear Choice', 
+                zones: 'Training Zones', 
+                ftp: 'Performance Profile', 
+                readiness: 'Race Readiness', 
+                metrics: 'Performance Metrics'
+                // REMOVED: Roadmap
             };
             
             if (viewName) {
@@ -201,7 +194,6 @@
             }
         },
 
-        // --- HASH-BASED NAVIGATION ---
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
@@ -214,26 +206,22 @@
                 overlay.classList.toggle('hidden');
             };
 
-            // 1. Global Hash Change Listener (The Source of Truth)
             window.addEventListener('hashchange', () => {
                 const view = window.location.hash.replace('#', '');
                 this.renderCurrentView(view || 'dashboard');
             });
 
-            // 2. Click Handlers just update the Hash
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const view = e.currentTarget.dataset.view;
                     window.location.hash = view; // Triggers 'hashchange'
 
-                    // Close mobile menu if open
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }
                 });
             });
 
-            // 3. Mobile Menu Handlers
             if (menuBtn) {
                 menuBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -245,11 +233,9 @@
         },
 
         renderCurrentView(view) {
-            // 1. Persistence & Header
             localStorage.setItem('currentView', view);
             this.updateHeaderUI(view);
 
-            // 2. Update Navigation Active States
             document.querySelectorAll('.nav-item').forEach(b => {
                 if (b.dataset.view === view) {
                     b.classList.remove('text-slate-400', 'border-transparent');
@@ -260,7 +246,6 @@
                 }
             });
 
-            // 3. Render Content
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             
@@ -272,7 +257,7 @@
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
-                            content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
+                            content.innerHTML = renderTrends(null, this.trendsData).html; // mergedLogData is now null
                             break;
                         case 'metrics':
                             content.innerHTML = renderMetrics(this.rawLogData); 
@@ -290,12 +275,10 @@
                         case 'zones':
                             content.innerHTML = await renderZonesTab();
                             break;
-                        case 'roadmap':
-                            content.innerHTML = renderRoadmap(this.garminData, this.planMd);
-                            break;
                         case 'plan':
                             content.innerHTML = renderAnalyzer(this.rawLogData);
                             break;
+                        // REMOVED: case 'roadmap'
                         default:
                             content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }

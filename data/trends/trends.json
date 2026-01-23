@@ -1,7 +1,7 @@
 {
     "config": {
         "trailing_weeks": 12,
-        "last_updated": "2026-01-22T17:54:23.338659"
+        "last_updated": "2026-01-23T13:39:08.780910"
     },
     "data": [
         {
@@ -339,10 +339,10 @@
             "week_end": "2026-01-24",
             "categories": {
                 "total": {
-                    "planned": 235.0,
-                    "actual": 252.3,
-                    "planned_growth": -0.3,
-                    "actual_growth": -0.2484
+                    "planned": 305.0,
+                    "actual": 274.2,
+                    "planned_growth": -0.0915,
+                    "actual_growth": -0.1832
                 },
                 "cycling": {
                     "planned": 150.0,
@@ -357,10 +357,10 @@
                     "actual_growth": 1.1429
                 },
                 "swimming": {
-                    "planned": 40.0,
-                    "actual": 46.6,
-                    "planned_growth": -0.5444,
-                    "actual_growth": -0.4692
+                    "planned": 60.0,
+                    "actual": 68.5,
+                    "planned_growth": -0.3166,
+                    "actual_growth": -0.2198
                 }
             }
         }

@@ -3853,6 +3853,29 @@
         ]
     },
     {
+        "date": "2026-01-23",
+        "complianceStatus": "Partial",
+        "plannedDuration": 70.0,
+        "actualDuration": 21.9,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim - Drills",
+                "sport": "Swim",
+                "actual": 21.9
+            },
+            {
+                "name": "[RUN] Aerobic Maintenance",
+                "sport": "Other",
+                "actual": 0.0
+            }
+        ]
+    },
+    {
         "date": "2026-05-05",
         "complianceStatus": "Event",
         "plannedDuration": 0,

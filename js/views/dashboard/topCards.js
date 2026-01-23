@@ -1,10 +1,9 @@
 // js/views/dashboard/topCards.js
 import { Formatters } from '../../utils/formatting.js'; 
+import { DataManager } from '../../utils/data.js'; // <--- NEW IMPORT
 
 export function renderTopCards() {
     const containerId = 'top-cards-container';
-
-    // REMOVED: Local parseDur (Now using Formatters.parseDuration)
 
     const parseElev = (str) => {
         if (!str) return 0;
@@ -13,30 +12,24 @@ export function renderTopCards() {
         return match ? parseFloat(match[0]) : 0;
     };
 
-    // --- Main Render Logic ---
     setTimeout(async () => {
         const container = document.getElementById(containerId);
         if (!container) return;
 
         try {
-            const [cardsRes, readinessRes] = await Promise.all([
-                fetch('data/dashboard/top_cards.json'),
-                fetch('data/readiness/readiness.json')
+            // USE DATA MANAGER
+            const [data, readinessData] = await Promise.all([
+                DataManager.fetchJSON('topCards'),
+                DataManager.fetchJSON('readiness')
             ]);
 
-            if (!cardsRes.ok) throw new Error("Top cards data not found");
+            if (!data) throw new Error("Top cards data not found");
             
-            const data = await cardsRes.json();
-            const readinessData = readinessRes.ok ? await readinessRes.json() : null;
-
             let readinessHtml = '';
             
-            // --- Calculate Readiness ---
             if (readinessData && readinessData.upcomingEvents) {
-                // FIX: Use raw name if available, otherwise try to clean the display name
                 let targetName = data.next_event_name;
                 if (!targetName && data.next_event) {
-                    // Fallback: Strip " (A Race)" suffix if new python script hasn't run yet
                     targetName = data.next_event.replace(/\s\([ABC] Race\)$/, '');
                 }
 
@@ -46,7 +39,6 @@ export function renderTopCards() {
                 if (targetEvent) {
                     const stats = readinessData.trainingStats || {};
                     
-                    // USE SHARED FORMATTER
                     const metrics = [
                         { name: 'Swim',       current: stats.maxSwim || 0,     target: Formatters.parseDuration(targetEvent.swimGoal), icon: 'fa-person-swimming', cssClass: 'icon-swim' },
                         { name: 'Bike',       current: stats.maxBike || 0,     target: Formatters.parseDuration(targetEvent.bikeGoal), icon: 'fa-person-biking',   cssClass: 'icon-bike' },
@@ -79,7 +71,6 @@ export function renderTopCards() {
                             label = "Developing";
                         }
 
-                        // Right-aligned readiness block with increased margin (mr-8)
                         readinessHtml = `
                             <div class="flex flex-col items-end text-right mr-8">
                                 <div class="text-3xl font-black ${colorClass} tracking-tighter leading-none">${lowestPct}%</div>
@@ -97,7 +88,6 @@ export function renderTopCards() {
                 }
             }
 
-            // --- Render HTML ---
             container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-sm">

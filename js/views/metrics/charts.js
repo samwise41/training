@@ -27,8 +27,6 @@ const buildMetricChart = (displayData, fullData, key) => {
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
     // --- Build Target Lines ---
-    // Rule: Higher is Good -> Top Green, Bottom Red
-    //       Lower is Good  -> Top Red, Bottom Green
     const isInverted = def.invertRanges;
     const colorGood = '#34d399'; // Emerald-400
     const colorBad = '#f87171';  // Red-400
@@ -48,16 +46,44 @@ const buildMetricChart = (displayData, fullData, key) => {
 
     let pathD = `M ${getX(displayData[0], 0)} ${getY(displayData[0].val)}`;
     let pointsHtml = '';
+    
     displayData.forEach((d, i) => {
         const x = getX(d, i), y = getY(d.val);
         pathD += ` L ${x} ${y}`;
-        pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" class="cursor-pointer hover:stroke-white transition-all" onclick="window.showMetricTooltip(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '', '${d.breakdown||""}', '${color}')"></circle>`;
+        
+        // FIX: Updated click handler
+        pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" class="cursor-pointer hover:stroke-white transition-all" onclick="window.handleMetricChartClick(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '', '${d.breakdown||""}', '${color}')"></circle>`;
     });
 
     const trend = calculateTrend(displayData);
     let trendHtml = trend ? `<line x1="${getX(null, 0)}" y1="${getY(trend.startVal)}" x2="${getX(null, displayData.length - 1)}" y2="${getY(trend.endVal)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.5" />` : '';
 
-    return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors"><div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2"><div class="flex items-center gap-2"><h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid ${def.icon}" style="color: ${color}"></i> ${def.title} <span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span></h3></div><div class="flex items-center gap-2"><span class="text-[9px] text-slate-500 font-mono">${displayData.length} Activities</span><i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.showAnalysisTooltip(event, '${key}')"></i></div></div><div class="flex-1 w-full h-[120px]"><svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible"><line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" /><text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text><text x="${pad.l-5}" y="${getY(dMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMin.toFixed(1)}</text>${targetsHtml}${trendHtml}<path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />${pointsHtml}</svg></div></div>`;
+    return `
+    <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors">
+        <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+            <div class="flex items-center gap-2">
+                <h3 class="text-xs font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid ${def.icon}" style="color: ${color}"></i> ${def.title} 
+                    <span class="text-[10px] font-normal opacity-50 ml-1 font-mono">${formula}</span>
+                </h3>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-[9px] text-slate-500 font-mono">${displayData.length} Activities</span>
+                <i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.handleMetricInfoClick(event, '${key}')"></i>
+            </div>
+        </div>
+        <div class="flex-1 w-full h-[120px]">
+            <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
+                <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" />
+                <text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text>
+                <text x="${pad.l-5}" y="${getY(dMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMin.toFixed(1)}</text>
+                ${targetsHtml}
+                ${trendHtml}
+                <path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />
+                ${pointsHtml}
+            </svg>
+        </div>
+    </div>`;
 };
 
 export const updateCharts = (allData, timeRange) => {

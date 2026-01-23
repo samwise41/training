@@ -1,5 +1,6 @@
 // js/views/metrics/parser.js
 import { checkSport } from './utils.js';
+import { Formatters } from '../../utils/formatting.js'; 
 
 export const METRIC_FORMULAS = {
     'subjective_bike': '(Avg Power / RPE)',
@@ -28,6 +29,11 @@ const KEYS = {
 };
 
 const getVal = (item, key) => {
+    // If it's a time-based key, use the robust parser
+    if (key === 'duration' || key === 'time' || key === 'moving_time') {
+        return Formatters.parseDuration(item[key]);
+    }
+
     const v = parseFloat(item[key]);
     return (!isNaN(v) && v !== 0) ? v : 0;
 };

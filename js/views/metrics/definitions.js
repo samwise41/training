@@ -1,183 +1,111 @@
 // js/views/metrics/definitions.js
+import { Formatters } from '../../utils/formatting.js'; 
 
-const getColor = (varName) => {
-    // Check if we are in a browser environment
-    if (typeof window !== "undefined" && window.getComputedStyle) {
-        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-    }
-    // Fallback colors if CSS isn't loaded yet
-    const defaults = {
-        '--color-swim': '#22d3ee',     // Cyan-400
-        '--color-bike': '#c084fc',     // Purple-400
-        '--color-run': '#f472b6',      // Pink-400
-        '--color-strength': '#94a3b8', // Slate-400
-        '--color-all': '#34d399'       // Emerald-400 (New for General metrics)
-    };
-    return defaults[varName] || '#888888';
-};
+const C = Formatters.COLORS;
 
 export const METRIC_DEFINITIONS = {
-    // --- CYCLING (Purple) ---
-    subjective_bike: {
-        title: "Bike RPE Efficiency", 
-        sport: "Bike", 
-        icon: "fa-person-biking", 
-        colorVar: getColor('--color-bike'),
-        refMin: 25, 
-        refMax: 50, 
-        invertRanges: false, 
-        rangeInfo: "25 – 50 W/RPE",
-        description: "Power produced per unit of perceived effort.",
-        improvement: "• Aerobic Base<br>• Muscular Endurance"
+    'vo2max': {
+        title: 'VO2 Max Estimate',
+        icon: 'fa-heart-pulse',
+        colorVar: '#10b981', // Emerald
+        description: 'Estimated maximum oxygen uptake. A key indicator of aerobic endurance potential.',
+        rangeInfo: 'Target: >50 (Good) | >60 (Elite)',
+        improvement: 'Increase via long slow distance (Zone 2) and VO2 Max intervals (Zone 5).'
     },
-    endurance: {
-        title: "Aerobic Efficiency", 
-        sport: "Bike", 
-        icon: "fa-heart-pulse", 
-        colorVar: getColor('--color-bike'),
-        refMin: 1.30, 
-        refMax: 1.70, 
-        invertRanges: false, 
-        rangeInfo: "1.30 – 1.70 EF",
-        description: "Watts produced per heartbeat (Efficiency Factor).",
-        improvement: "• Long Z2 Rides<br>• Consistent Volume"
+    'tss': {
+        title: 'Training Stress',
+        icon: 'fa-layer-group',
+        colorVar: '#f59e0b', // Amber
+        description: 'Accumulated training load. Higher numbers indicate higher volume or intensity.',
+        rangeInfo: 'Target: 400-600 / week',
+        improvement: 'Consistent daily training. Monitor fatigue if >700/week.'
     },
-    strength: {
-        title: "Torque Efficiency", 
-        sport: "Bike", 
-        icon: "fa-bolt", 
-        colorVar: getColor('--color-bike'),
-        refMin: 2.5, 
-        refMax: 3.5, 
-        invertRanges: false, 
-        rangeInfo: "2.5 – 3.5 W/RPM",
-        description: "Watts produced per revolution.",
-        improvement: "• Low Cadence Intervals (50-60 RPM)<br>• Seated Climbing"
+    'anaerobic': {
+        title: 'Anaerobic Effect',
+        icon: 'fa-fire',
+        colorVar: '#ef4444', // Red
+        description: 'Training effect on anaerobic capacity (sprints/power).',
+        rangeInfo: 'Target: >2.0 on hard days',
+        improvement: 'Add intervals above threshold and sprint repeats.'
     },
-
-    // --- RUNNING (Pink) ---
-    subjective_run: {
-        title: "Run RPE Efficiency", 
-        sport: "Run", 
-        icon: "fa-person-running", 
-        colorVar: getColor('--color-run'),
-        refMin: 0.6, 
-        refMax: 1.0, 
-        invertRanges: false, 
-        rangeInfo: "0.6 – 1.0 Spd/RPE",
-        description: "Speed (m/s) produced per unit of perceived effort.",
-        improvement: "• Run Economy<br>• Durability"
+    'subjective_bike': {
+        title: 'Cycling Efficiency',
+        icon: 'fa-bicycle',
+        colorVar: C.Bike,
+        description: 'Ratio of Power to RPE. Higher means generating more power with less perceived effort.',
+        rangeInfo: 'Target: >30 (Watts per RPE point)',
+        improvement: 'Improve aerobic base (Zone 2) and bike fit.'
     },
-    run: {
-        title: "Running Economy", 
-        sport: "Run", 
-        icon: "fa-gauge-high", 
-        colorVar: getColor('--color-run'),
-        refMin: 1.0, 
-        refMax: 1.6, 
-        invertRanges: false, 
-        rangeInfo: "1.0 – 1.6 m/beat",
-        description: "Distance (meters) traveled per heartbeat.",
-        improvement: "• Strides & Hill Sprints<br>• Plyometrics"
+    'endurance': {
+        title: 'Aerobic Decoupling',
+        icon: 'fa-lungs',
+        colorVar: '#a855f7', // Purple
+        description: 'Ratio of Power to Heart Rate. Tracks cardiac drift.',
+        rangeInfo: 'Target: < 5% drift',
+        improvement: 'Long steady rides. Stay hydrated and cool.'
     },
-    mechanical: {
-        title: "Mechanical Stiffness", 
-        sport: "Run", 
-        icon: "fa-ruler-horizontal", 
-        colorVar: getColor('--color-run'),
-        refMin: 0.75, 
-        refMax: 0.95, 
-        invertRanges: false, 
-        rangeInfo: "0.75 – 0.95 Ratio",
-        description: "Ratio of Speed vs. Power output.",
-        improvement: "• High Cadence (170+)<br>• Form Drills (A-Skips)"
+    'strength': {
+        title: 'Torque / Force',
+        icon: 'fa-dumbbell',
+        colorVar: '#6366f1', // Indigo
+        description: 'Power produced per pedal revolution (Torque).',
+        rangeInfo: 'Target: Varies by cadence',
+        improvement: 'Low cadence / high resistance intervals (Big Gear work).'
     },
-    gct: {
-        title: "Ground Contact Time", 
-        sport: "Run", 
-        icon: "fa-stopwatch", 
-        colorVar: getColor('--color-run'),
-        refMin: 220, 
-        refMax: 260, 
-        invertRanges: true, 
-        rangeInfo: "< 260 ms",
-        description: "Time spent on the ground per step.",
-        improvement: "• Increase Cadence<br>• 'Hot Coals' Imagery"
+    'subjective_run': {
+        title: 'Run Efficiency',
+        icon: 'fa-person-running',
+        colorVar: C.Run,
+        description: 'Ratio of Pace (m/s) to RPE.',
+        rangeInfo: 'Target: >0.4',
+        improvement: 'Improve running form and economy.'
     },
-    vert: {
-        title: "Vertical Oscillation", 
-        sport: "Run", 
-        icon: "fa-arrows-up-down", 
-        colorVar: getColor('--color-run'),
-        refMin: 6.0, 
-        refMax: 9.0, 
-        invertRanges: true, 
-        rangeInfo: "6.0 – 9.0 cm",
-        description: "Vertical bounce height.",
-        improvement: "• Core Stability<br>• Hill Repeats"
+    'run': {
+        title: 'Running Economy',
+        icon: 'fa-stopwatch',
+        colorVar: '#ec4899', // Pink
+        description: 'Pace achieved per heartbeat.',
+        rangeInfo: 'Target: Higher is better',
+        improvement: 'Run hill repeats and strides.'
     },
-
-    // --- SWIMMING (Blue) ---
-    subjective_swim: {
-        title: "Swim RPE Efficiency", 
-        sport: "Swim", 
-        icon: "fa-person-swimming", 
-        colorVar: getColor('--color-swim'), // FIXED: Was set to bike
-        refMin: 0.15, 
-        refMax: 0.3, 
-        invertRanges: false, 
-        rangeInfo: "0.15 – 0.3 Spd/RPE",
-        description: "Water speed (m/s) relative to effort.",
-        improvement: "• Technique<br>• Drag Reduction"
+    'mechanical': {
+        title: 'Form Efficiency',
+        icon: 'fa-ruler-combined',
+        colorVar: '#14b8a6', // Teal
+        description: 'Ratio of forward speed to vertical movement.',
+        rangeInfo: 'Target: High',
+        improvement: 'Increase cadence, reduce bounding.'
     },
-    swim: {
-        title: "Swim Efficiency", 
-        sport: "Swim", 
-        icon: "fa-person-swimming", 
-        colorVar: getColor('--color-swim'), // FIXED: Was set to bike
-        refMin: 0.3, 
-        refMax: 0.6, 
-        invertRanges: false, 
-        rangeInfo: "0.3 – 0.6 m/beat",
-        description: "Distance traveled per heartbeat in water.",
-        improvement: "• Drills (Catch/Pull)<br>• Long Steady Swims"
+    'gct': {
+        title: 'Ground Contact',
+        icon: 'fa-shoe-prints',
+        colorVar: '#f43f5e', // Rose
+        description: 'Time spent on the ground per step (ms).',
+        rangeInfo: 'Target: < 250ms',
+        improvement: 'Quick feet drills, plyometrics, higher cadence.'
     },
-
-    // --- GENERAL (Emerald/Green) ---
-    vo2max: {
-        title: "VO₂ Max Trend", 
-        sport: "All", 
-        icon: "fa-lungs", 
-        colorVar: getColor('--color-all'),
-        refMin: 45, 
-        refMax: 60, 
-        invertRanges: false, 
-        rangeInfo: "45 – 60+",
-        description: "Estimated aerobic ceiling.",
-        improvement: "• VO2 Max Intervals<br>• Consistency"
+    'vert': {
+        title: 'Vertical Oscillation',
+        icon: 'fa-arrows-up-down',
+        colorVar: '#8b5cf6', // Violet
+        description: 'Up/down movement while running (cm).',
+        rangeInfo: 'Target: 6-10 cm',
+        improvement: 'Focus on driving forward, not up.'
     },
-    tss: {
-        title: "Weekly TSS Load", 
-        sport: "All", 
-        icon: "fa-layer-group", 
-        colorVar: getColor('--color-all'), // FIXED: Added missing comma
-        refMin: 300, 
-        refMax: 600, 
-        invertRanges: false, 
-        rangeInfo: "300 – 600 TSS",
-        description: "Total training stress per week.",
-        improvement: "• Increase Volume<br>• Increase Intensity"
+    'subjective_swim': {
+        title: 'Swim Efficiency',
+        icon: 'fa-person-swimming',
+        colorVar: C.Swim,
+        description: 'Speed per RPE point.',
+        rangeInfo: 'Target: Varies',
+        improvement: 'Focus on technique drills and body position.'
     },
-    anaerobic: {
-        title: "Anaerobic Impact", 
-        sport: "All", 
-        icon: "fa-fire", 
-        colorVar: getColor('--color-all'),
-        refMin: 2.0, 
-        refMax: 4.0, 
-        invertRanges: false, 
-        rangeInfo: "2.0 – 4.0",
-        description: "Intensity stimulus on hard days.",
-        improvement: "• All-out Sprints<br>• Full Recovery"
+    'swim': {
+        title: 'Swim Economy',
+        icon: 'fa-water',
+        colorVar: '#0ea5e9', // Sky
+        description: 'Speed vs Heart Rate.',
+        rangeInfo: 'Target: Higher is better',
+        improvement: 'Interval sets with short rest.'
     }
 };

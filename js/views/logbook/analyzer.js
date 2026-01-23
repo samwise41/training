@@ -1,6 +1,6 @@
 // js/views/logbook/analyzer.js
 import { GRID_CONFIG } from './config.js';
-import { Formatters } from '../../utils/formatting.js'; // Optional if you want to use shared formatters later
+import { Formatters } from '../../utils/formatting.js'; 
 
 export const renderAnalyzer = (rawLogData) => {
     const containerId = 'ag-grid-container';
@@ -33,8 +33,23 @@ const initAGGrid = (gridId, statsId, rawData) => {
     // 2. Parse Data
     const rowData = rawData.map(d => {
         const dateObj = new Date(d.date);
-        // Use logic similar to Formatters, but keep as numbers for sorting
-        const durMins = Formatters.parseDuration(d.duration || d.actualDuration);
+        
+        // --- DURATION LOGIC ---
+        // 1. If 'duration' is a raw number (Garmin), it is Seconds. Divide by 60 -> Minutes.
+        // 2. Otherwise (strings like "1:30" or 'actualDuration' in minutes), use Formatters.
+        let durMins = 0;
+        
+        if (typeof d.duration === 'number') {
+            durMins = d.duration / 60; 
+        } else {
+            // parseDuration returns Minutes
+            durMins = Formatters.parseDuration(d.actualDuration || d.duration);
+        }
+        
+        const durHrs = durMins / 60;
+        
+        // --- DISTANCE/ELEV LOGIC ---
+        // Assume raw data is Meters (Standard), convert to Miles/Feet
         const distMiles = (d.distance || 0) / 1609.34;
         const elevFeet = (d.elevationGain || 0) * 3.28084;
 
@@ -74,6 +89,7 @@ const updateStats = (api, statsId) => {
     let count = 0, dur = 0, dist = 0, elev = 0, tss = 0;
 
     api.forEachNodeAfterFilter(node => {
+        // Only sum LEAF nodes (actual activities) to avoid double counting groups
         if (!node.group && node.data) {
             count++;
             dur += node.data.duration || 0;

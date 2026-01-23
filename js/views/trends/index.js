@@ -1,5 +1,6 @@
 // js/views/trends/index.js
 import { UI } from '../../utils/ui.js';
+import { DataManager } from '../../utils/data.js'; // <--- NEW IMPORT
 import { renderVolumeChart } from './volume.js';
 import { renderDynamicCharts } from './adherence.js';
 import { renderComplianceSection } from './compliance.js';
@@ -7,18 +8,6 @@ import { renderComplianceSection } from './compliance.js';
 let trendsData = null;
 let adherenceData = null; 
 
-async function fetchAdherence() {
-    try {
-        const res = await fetch('./data/trends/adherence.json');
-        if (!res.ok) throw new Error("404");
-        return await res.json();
-    } catch(e) {
-        console.warn("Adherence data missing, using empty default.");
-        return null;
-    }
-}
-
-// NOTE: mergedLogData argument is unused but kept for compatibility with app.js call
 export function renderTrends(_mergedLogData, _trendsData) {
     trendsData = _trendsData || { data: [] };
 
@@ -43,14 +32,13 @@ export function renderTrends(_mergedLogData, _trendsData) {
     // 3. Post-Render: Fetch & Initialize
     setTimeout(async () => {
         if (!adherenceData) {
-            adherenceData = await fetchAdherence();
+            // USE DATA MANAGER
+            adherenceData = await DataManager.fetchJSON('adherence');
         }
         
         if (adherenceData) {
-            // Render Rolling Trends
             renderDynamicCharts('trend-charts-container', adherenceData.rolling_trends);
             
-            // Render Compliance Donuts
             const complianceDiv = document.getElementById('compliance-container');
             if (complianceDiv) {
                 complianceDiv.innerHTML = renderComplianceSection(adherenceData.compliance);

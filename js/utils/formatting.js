@@ -1,7 +1,5 @@
-// js/utils/formatting.js
-
 export const Formatters = {
-    // --- 1. Constants ---
+    // --- 1. Colors ---
     COLORS: { 
         All: 'var(--color-all)', 
         Bike: 'var(--color-bike)',
@@ -10,8 +8,19 @@ export const Formatters = {
         Gym: '#94a3b8' 
     },
 
-    // --- 2. Duration Parsing ---
-    // Handles "1h 30m", "90m", "1:30" -> Minutes (Int)
+    // --- 2. Weather Map ---
+    WEATHER: {
+        0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
+        45: ["Foggy", "🌫️"], 48: ["Foggy", "🌫️"], 51: ["Drizzle", "🌦️"], 
+        61: ["Rain", "🌧️"], 63: ["Rain", "🌧️"],
+        71: ["Snow", "❄️"], 95: ["Storm", "⛈️"]
+    },
+
+    getWeatherInfo(code) {
+        return this.WEATHER[code] || ["Unknown", "qm"];
+    },
+
+    // --- 3. Duration Parsing (Minutes) ---
     parseDuration(str) {
         if (!str || str === '-' || str.toLowerCase() === 'n/a') return 0;
         if (typeof str === 'number') return Math.round(str);
@@ -31,12 +40,10 @@ export const Formatters = {
         } else {
             mins += parseFloat(clean.replace(/[^\d.]/g, ''));
         }
-        
         return Math.round(mins);
     },
 
-    // --- 3. Date Helper ---
-    // Fixes "Yesterday" bug by handling timezone offsets for YYYY-MM-DD
+    // --- 4. Date Helper ---
     toLocalYMD(dateObj) {
         if (!dateObj) return '';
         const d = new Date(dateObj);
@@ -45,21 +52,13 @@ export const Formatters = {
         return local.toISOString().split('T')[0];
     },
 
-    // --- 4. Icon & Style Helpers ---
+    // --- 5. Icon & Style Helpers ---
     getIconForSport(type) {
         const t = (type || '').toLowerCase();
         if (t.includes('bike') || t.includes('cycl')) return '<i class="fa-solid fa-bicycle icon-bike"></i>';
         if (t.includes('run')) return '<i class="fa-solid fa-person-running icon-run"></i>';
         if (t.includes('swim')) return '<i class="fa-solid fa-person-swimming icon-swim"></i>';
-        if (t.includes('gym') || t.includes('strength')) return '<i class="fa-solid fa-dumbbell"></i>';
+        if (t.includes('gym') || t.includes('strength')) return '<i class="fa-solid fa-dumbbell text-slate-400"></i>';
         return '<i class="fa-solid fa-chart-line icon-all"></i>';
-    },
-
-    getSportColorVar(type) {
-        const t = (type || '').toLowerCase();
-        if (t.includes('bike')) return this.COLORS.Bike;
-        if (t.includes('run')) return this.COLORS.Run;
-        if (t.includes('swim')) return this.COLORS.Swim;
-        return this.COLORS.All;
     }
 };

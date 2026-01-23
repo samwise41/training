@@ -13,7 +13,6 @@ export const METRIC_FORMULAS = {
     'mechanical': '(Vert Osc / GCT)'
 };
 
-// --- STRICT FIELD MAPPING ---
 const KEYS = {
     hr: 'averageHR',
     spd: 'averageSpeed',
@@ -29,16 +28,13 @@ const KEYS = {
 };
 
 const getVal = (item, key) => {
-    // If it's a time-based key, use the robust parser
     if (key === 'duration' || key === 'time' || key === 'moving_time') {
         return Formatters.parseDuration(item[key]);
     }
-
     const v = parseFloat(item[key]);
     return (!isNaN(v) && v !== 0) ? v : 0;
 };
 
-// --- DATA NORMALIZATION ---
 export const normalizeMetricsData = (rawData) => {
     if (!rawData || !Array.isArray(rawData)) return [];
     return rawData.map(d => ({
@@ -58,7 +54,6 @@ export const normalizeMetricsData = (rawData) => {
     }));
 };
 
-// --- AGGREGATION ---
 export const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
@@ -78,7 +73,6 @@ export const aggregateWeeklyTSS = (data) => {
     }));
 };
 
-// --- MAIN EXTRACTOR ---
 export const extractMetricData = (data, key) => {
     switch(key) {
         case 'endurance': 

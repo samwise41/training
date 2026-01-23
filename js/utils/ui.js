@@ -1,5 +1,3 @@
-// js/utils/ui.js
-
 export const UI = {
     // 1. Standard HTML Builder
     buildCollapsibleSection(id, title, contentHtml, isOpen = true) {
@@ -8,7 +6,6 @@ export const UI = {
             : "max-h-0 opacity-0 py-0 mb-0";
         const iconClasses = isOpen ? "rotate-0" : "-rotate-90";
 
-        // Global handler call: window.UI.toggleSection
         return `
             <div class="w-full">
                 <div class="flex items-center gap-2 cursor-pointer py-3 border-b-2 border-slate-700 hover:border-slate-500 transition-colors group select-none" 

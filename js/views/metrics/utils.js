@@ -1,7 +1,5 @@
 // js/views/metrics/utils.js
-
-import { METRIC_DEFINITIONS } from './definitions.js';
-
+// Removed unused import
 
 export const checkSport = (activity, sportKey) => {
     // STRICT RULE: ONLY USE 'actualSport' FIELD
@@ -38,10 +36,4 @@ export const getTrendIcon = (slope, invert) => {
     const isUp = slope > 0;
     const isGood = invert ? !isUp : isUp;
     return { icon: isUp ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down', color: isGood ? 'text-emerald-400' : 'text-red-400' };
-};
-
-export const buildCollapsibleSection = (id, title, contentHtml, isOpen = true) => {
-    const contentClasses = isOpen ? "max-h-[5000px] opacity-100 py-4 mb-8" : "max-h-0 opacity-0 py-0 mb-0";
-    const iconClasses = isOpen ? "rotate-0" : "-rotate-90";
-    return `<div class="w-full"><div class="flex items-center gap-2 cursor-pointer py-3 border-b-2 border-slate-700 hover:border-slate-500 transition-colors group select-none" onclick="window.toggleSection('${id}')"><i class="fa-solid fa-caret-down text-slate-400 text-base transition-transform duration-300 group-hover:text-white ${iconClasses}"></i><h2 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">${title}</h2></div><div id="${id}" class="collapsible-content overflow-hidden transition-all duration-500 ease-in-out ${contentClasses}">${contentHtml}</div></div>`;
 };

@@ -1,19 +1,10 @@
 // js/views/metrics/definitions.js
 
-const getColor = (varName) => {
-    // Check if we are in a browser environment
-    if (typeof window !== "undefined" && window.getComputedStyle) {
-        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-    }
-    // Fallback colors if CSS isn't loaded yet
-    const defaults = {
-        '--color-swim': '#22d3ee',     // Cyan-400
-        '--color-bike': '#c084fc',     // Purple-400
-        '--color-run': '#f472b6',      // Pink-400
-        '--color-strength': '#94a3b8', // Slate-400
-        '--color-all': '#34d399'       // Emerald-400 (New for General metrics)
-    };
-    return defaults[varName] || '#888888';
+const COLORS = {
+    swim: '#22d3ee',     // Cyan-400
+    bike: '#c084fc',     // Purple-400
+    run: '#f472b6',      // Pink-400
+    all: '#34d399'       // Emerald-400
 };
 
 export const METRIC_DEFINITIONS = {
@@ -22,7 +13,7 @@ export const METRIC_DEFINITIONS = {
         title: "Bike RPE Efficiency", 
         sport: "Bike", 
         icon: "fa-person-biking", 
-        colorVar: getColor('--color-bike'),
+        colorVar: COLORS.bike,
         refMin: 25, 
         refMax: 50, 
         invertRanges: false, 
@@ -34,7 +25,7 @@ export const METRIC_DEFINITIONS = {
         title: "Aerobic Efficiency", 
         sport: "Bike", 
         icon: "fa-heart-pulse", 
-        colorVar: getColor('--color-bike'),
+        colorVar: COLORS.bike,
         refMin: 1.30, 
         refMax: 1.70, 
         invertRanges: false, 
@@ -46,7 +37,7 @@ export const METRIC_DEFINITIONS = {
         title: "Torque Efficiency", 
         sport: "Bike", 
         icon: "fa-bolt", 
-        colorVar: getColor('--color-bike'),
+        colorVar: COLORS.bike,
         refMin: 2.5, 
         refMax: 3.5, 
         invertRanges: false, 
@@ -60,7 +51,7 @@ export const METRIC_DEFINITIONS = {
         title: "Run RPE Efficiency", 
         sport: "Run", 
         icon: "fa-person-running", 
-        colorVar: getColor('--color-run'),
+        colorVar: COLORS.run,
         refMin: 0.6, 
         refMax: 1.0, 
         invertRanges: false, 
@@ -72,7 +63,7 @@ export const METRIC_DEFINITIONS = {
         title: "Running Economy", 
         sport: "Run", 
         icon: "fa-gauge-high", 
-        colorVar: getColor('--color-run'),
+        colorVar: COLORS.run,
         refMin: 1.0, 
         refMax: 1.6, 
         invertRanges: false, 
@@ -84,7 +75,7 @@ export const METRIC_DEFINITIONS = {
         title: "Mechanical Stiffness", 
         sport: "Run", 
         icon: "fa-ruler-horizontal", 
-        colorVar: getColor('--color-run'),
+        colorVar: COLORS.run,
         refMin: 0.75, 
         refMax: 0.95, 
         invertRanges: false, 
@@ -96,7 +87,7 @@ export const METRIC_DEFINITIONS = {
         title: "Ground Contact Time", 
         sport: "Run", 
         icon: "fa-stopwatch", 
-        colorVar: getColor('--color-run'),
+        colorVar: COLORS.run,
         refMin: 220, 
         refMax: 260, 
         invertRanges: true, 
@@ -108,7 +99,7 @@ export const METRIC_DEFINITIONS = {
         title: "Vertical Oscillation", 
         sport: "Run", 
         icon: "fa-arrows-up-down", 
-        colorVar: getColor('--color-run'),
+        colorVar: COLORS.run,
         refMin: 6.0, 
         refMax: 9.0, 
         invertRanges: true, 
@@ -122,7 +113,7 @@ export const METRIC_DEFINITIONS = {
         title: "Swim RPE Efficiency", 
         sport: "Swim", 
         icon: "fa-person-swimming", 
-        colorVar: getColor('--color-swim'), // FIXED: Was set to bike
+        colorVar: COLORS.swim,
         refMin: 0.15, 
         refMax: 0.3, 
         invertRanges: false, 
@@ -134,7 +125,7 @@ export const METRIC_DEFINITIONS = {
         title: "Swim Efficiency", 
         sport: "Swim", 
         icon: "fa-person-swimming", 
-        colorVar: getColor('--color-swim'), // FIXED: Was set to bike
+        colorVar: COLORS.swim,
         refMin: 0.3, 
         refMax: 0.6, 
         invertRanges: false, 
@@ -148,7 +139,7 @@ export const METRIC_DEFINITIONS = {
         title: "VO₂ Max Trend", 
         sport: "All", 
         icon: "fa-lungs", 
-        colorVar: getColor('--color-all'),
+        colorVar: COLORS.all,
         refMin: 45, 
         refMax: 60, 
         invertRanges: false, 
@@ -160,7 +151,7 @@ export const METRIC_DEFINITIONS = {
         title: "Weekly TSS Load", 
         sport: "All", 
         icon: "fa-layer-group", 
-        colorVar: getColor('--color-all'), // FIXED: Added missing comma
+        colorVar: COLORS.all,
         refMin: 300, 
         refMax: 600, 
         invertRanges: false, 
@@ -172,7 +163,7 @@ export const METRIC_DEFINITIONS = {
         title: "Anaerobic Impact", 
         sport: "All", 
         icon: "fa-fire", 
-        colorVar: getColor('--color-all'),
+        colorVar: COLORS.all,
         refMin: 2.0, 
         refMax: 4.0, 
         invertRanges: false, 

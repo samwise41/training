@@ -114,7 +114,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    const CELL_PX = 12; 
+    const CELL_PX = 14; 
     const GAP_PX = 2;   
     const STRIDE_PX = CELL_PX + GAP_PX;
 

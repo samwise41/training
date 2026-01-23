@@ -1,27 +1,22 @@
-// js/views/dashboard/heatmaps.js
 import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
-import { DataManager } from '../../utils/data.js'; // <--- NEW IMPORT
+import { DataManager } from '../../utils/data.js';
 
 export function renderHeatmaps() {
     setTimeout(initHeatmaps, 0);
-    
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
             <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps...</span>
         </div>
     </div>`;
-    
     return UI.buildCollapsibleSection('heatmaps-section', 'Training Heatmaps', loadingHtml, true);
 }
 
 async function initHeatmaps() {
     const container = document.getElementById('heatmaps-container');
     if (!container) return;
-
     try {
-        // USE DATA MANAGER
         const rawData = await DataManager.fetchJSON('heatmaps');
         if (!rawData) throw new Error("Heatmap file empty or missing");
 
@@ -56,7 +51,6 @@ async function initHeatmaps() {
         `;
 
         setupDelegation(container);
-
         setTimeout(() => {
             ['hm-consistency', 'hm-activity'].forEach(id => {
                 const el = document.getElementById(id);
@@ -78,9 +72,7 @@ function setupDelegation(container) {
 
         const d = cell.dataset;
         const dateObj = new Date(d.date + 'T12:00:00'); 
-        const dateStr = dateObj.toLocaleDateString('en-US', { 
-            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' 
-        });
+        const dateStr = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 
         let detailsHtml = '';
         if (d.details) {
@@ -105,8 +97,7 @@ function setupDelegation(container) {
                     </span>
                 </div>
                 ${detailsHtml}
-            </div>
-        `;
+            </div>`;
 
         if (window.TooltipManager) {
             window.TooltipManager.show(cell, tooltipHtml, e);
@@ -118,15 +109,10 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let gridCells = '';
     let curr = new Date(start);
     const today = new Date();
-    
-    const CELL_PX = 12; 
-    const GAP_PX = 2;   
-    const STRIDE_PX = CELL_PX + GAP_PX;
+    const CELL_PX = 12, GAP_PX = 2, STRIDE_PX = CELL_PX + GAP_PX;
 
-    let monthLabels = '';
-    let dayCount = 0;
+    let monthLabels = '', dayCount = 0;
     const addedMonths = new Set();
-
     const currentWeekStart = new Date(today);
     currentWeekStart.setDate(today.getDate() - today.getDay());
     currentWeekStart.setHours(0,0,0,0);
@@ -150,45 +136,21 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
         }
 
-        let bgColor = 'bg-slate-800/50'; 
-        let opacity = '1'; 
-        let styleOverride = '';
-        let extraClasses = '';
-        let visibility = ''; 
-        
+        let bgColor = 'bg-slate-800/50', opacity = '1', styleOverride = '', extraClasses = '', visibility = ''; 
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
-        if (targetYear && curr.getFullYear() < targetYear) {
-            visibility = 'opacity: 0; pointer-events: none;';
-        }
-
-        if (isSunday) {
-            if (!entry || !entry.actualDuration || entry.actualDuration <= 0) {
-                visibility = 'opacity: 0; pointer-events: none;';
-            }
-        }
+        if (targetYear && curr.getFullYear() < targetYear) visibility = 'opacity: 0; pointer-events: none;';
+        if (isSunday && (!entry || !entry.actualDuration || entry.actualDuration <= 0)) visibility = 'opacity: 0; pointer-events: none;';
 
         if (isConsistencyMode) {
             if (isFuture) {
-                if (isCurrentWeek) {
-                    bgColor = 'bg-slate-700'; 
-                    opacity = '0.5';
-                } else {
-                    bgColor = 'bg-slate-800/30';
-                    opacity = '0.3';
-                }
-            } else {
-                bgColor = 'bg-emerald-500';
-                opacity = '0.2'; 
-            }
+                if (isCurrentWeek) { bgColor = 'bg-slate-700'; opacity = '0.5'; } 
+                else { bgColor = 'bg-slate-800/30'; opacity = '0.3'; }
+            } else { bgColor = 'bg-emerald-500'; opacity = '0.2'; }
         }
 
-        let label = isFuture ? 'Future' : 'Rest';
-        let plan = 0;
-        let act = 0;
-        let detailsJson = '';
-        let tooltipColor = '#64748b'; 
+        let label = isFuture ? 'Future' : 'Rest', plan = 0, act = 0, detailsJson = '', tooltipColor = '#64748b'; 
 
         if (entry) {
             plan = entry.plannedDuration || 0;
@@ -198,30 +160,18 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             if (entry.activities && entry.activities.length > 0) {
                 const lines = entry.activities.map(a => {
                     const icon = Formatters.getIconForSport(a.sport); 
-                    
-                    let colorStyle = '';
-                    if (['Run','Bike','Swim'].includes(a.sport)) {
-                        colorStyle = `style="color: ${Formatters.COLORS[a.sport] || '#94a3b8'}"`;
-                    } else {
-                        colorStyle = `class="text-slate-400"`;
-                    }
+                    const colorStyle = ['Run','Bike','Swim'].includes(a.sport) ? `style="color: ${Formatters.COLORS[a.sport]}"` : `class="text-slate-400"`;
                     return `<div class='flex justify-between items-center gap-2 text-xs'><span ${colorStyle}>${icon}</span> <span>${a.name}</span><span class='font-mono text-emerald-400'>${Math.round(a.actual)}m</span></div>`;
                 }).join('');
                 detailsJson = encodeURIComponent(lines);
             }
 
             if (isConsistencyMode) {
-                if (status === 'Event') {
-                    bgColor = 'bg-purple-600'; tooltipColor = '#9333ea'; opacity = '1'; label = `Event: ${entry.eventName}`;
-                } else if (status === 'Completed') {
-                    bgColor = 'bg-emerald-500'; tooltipColor = '#10b981'; opacity = '1'; label = "Completed";
-                } else if (status === 'Partial') {
-                    bgColor = 'bg-yellow-500'; tooltipColor = '#eab308'; opacity = '1'; label = "Partial";
-                } else if (status === 'Missed') {
-                    bgColor = 'bg-red-600'; tooltipColor = '#dc2626'; opacity = '1'; label = "Missed";
-                } else if (status === 'Unplanned') {
-                    bgColor = 'bg-emerald-600'; extraClasses = 'bg-striped'; tooltipColor = '#059669'; opacity = '1'; label = "Unplanned";
-                }
+                if (status === 'Event') { bgColor = 'bg-purple-600'; tooltipColor = '#9333ea'; label = `Event: ${entry.eventName}`; }
+                else if (status === 'Completed') { bgColor = 'bg-emerald-500'; tooltipColor = '#10b981'; label = "Completed"; }
+                else if (status === 'Partial') { bgColor = 'bg-yellow-500'; tooltipColor = '#eab308'; label = "Partial"; }
+                else if (status === 'Missed') { bgColor = 'bg-red-600'; tooltipColor = '#dc2626'; label = "Missed"; }
+                else if (status === 'Unplanned') { bgColor = 'bg-emerald-600'; extraClasses = 'bg-striped'; tooltipColor = '#059669'; label = "Unplanned"; }
             } else {
                 if (act > 0) {
                     const sports = entry.sports || [];
@@ -229,45 +179,31 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
                             let c = ['Run','Bike','Swim'].includes(s) ? Formatters.COLORS[s] : Formatters.COLORS.All;
-                            const startPct = (i / count) * 100;
-                            const endPct = ((i + 1) / count) * 100;
-                            return `${c} ${startPct}%, ${c} ${endPct}%`;
+                            return `${c} ${(i / count) * 100}%, ${c} ${((i + 1) / count) * 100}%`;
                         });
                         styleOverride = `background: linear-gradient(135deg, ${stops.join(', ')});`;
-                        label = "Multi-Sport";
-                        tooltipColor = '#ffffff';
+                        label = "Multi-Sport"; tooltipColor = '#ffffff';
                     } else if (sports.length === 1) {
                         const s = sports[0];
-                        let colorVar = Formatters.COLORS[s];
-                        if (!['Run','Bike','Swim'].includes(s)) colorVar = Formatters.COLORS.All; 
+                        let colorVar = ['Run','Bike','Swim'].includes(s) ? Formatters.COLORS[s] : Formatters.COLORS.All;
                         styleOverride = `background-color: ${colorVar};`;
-                        label = s;
-                        tooltipColor = colorVar; 
+                        label = s; tooltipColor = colorVar; 
                     }
-                    opacity = '1';
                 }
             }
         }
 
-        gridCells += `
-            <div class="heatmap-cell rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
+        gridCells += `<div class="heatmap-cell rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
                  style="width: ${CELL_PX}px !important; height: ${CELL_PX}px !important; opacity: ${opacity}; ${styleOverride} ${visibility}"
-                 data-date="${dateStr}"
-                 data-plan="${Math.round(plan)}"
-                 data-act="${Math.round(act)}"
-                 data-label="${label.replace(/"/g, '&quot;')}" 
-                 data-color="${tooltipColor}"
-                 data-details="${detailsJson}">
-            </div>
-        `;
+                 data-date="${dateStr}" data-plan="${Math.round(plan)}" data-act="${Math.round(act)}"
+                 data-label="${label.replace(/"/g, '&quot;')}" data-color="${tooltipColor}" data-details="${detailsJson}"></div>`;
 
         curr.setDate(curr.getDate() + 1);
         dayCount++;
     }
 
     const idAttr = containerId ? `id="${containerId}"` : '';
-    return `
-    <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-5 flex flex-col backdrop-blur-sm">
+    return `<div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-5 flex flex-col backdrop-blur-sm">
         <h3 class="text-xs font-bold text-slate-300 uppercase mb-4 flex items-center gap-2">
             <i class="fa-solid ${isConsistencyMode ? 'fa-calendar-check text-emerald-400' : 'fa-chart-simple text-blue-400'}"></i> ${title}
         </h3>
@@ -283,21 +219,19 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 
 function renderLegend(isConsistencyMode) {
     if (isConsistencyMode) {
-        return `
-            <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-500"></div> Done</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-yellow-500"></div> Partial</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-red-600"></div> Missed</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-purple-600"></div> Event</div>
-            </div>`;
+        return `<div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-500"></div> Done</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-yellow-500"></div> Partial</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-red-600"></div> Missed</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-purple-600"></div> Event</div>
+        </div>`;
     } else {
-        return `
-            <div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-run)"></div> Run</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
-                <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-all)"></div> Other</div>
-            </div>`;
+        return `<div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-run)"></div> Run</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-all)"></div> Other</div>
+        </div>`;
     }
 }

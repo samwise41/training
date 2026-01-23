@@ -1,180 +1,56 @@
 // js/views/gear/index.js
+import { UI } from '../../utils/ui.js';
 
-// --- 1. UTILS ---
-const WEATHER_MAP = {
-    0: ["Clear", "☀️"], 1: ["Partly Cloudy", "🌤️"], 2: ["Partly Cloudy", "🌤️"], 3: ["Cloudy", "☁️"],
-    45: ["Foggy", "🌫️"], 48: ["Foggy", "🌫️"], 51: ["Drizzle", "🌦️"], 61: ["Rain", "🌧️"], 63: ["Rain", "🌧️"],
-    71: ["Snow", "❄️"], 95: ["Storm", "⛈️"]
-};
-
-// --- 2. COMPONENTS ---
-const buildHourlyForecast = (hourlyWeather) => {
-    // If no weather data, show a placeholder or empty string
-    if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
-        return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
+export function renderGear(gearData, currentTemp, hourlyWeather) {
+    // 1. Loading State
+    if (!gearData) {
+        return `
+            <div class="p-10 flex flex-col items-center justify-center text-slate-500 animate-pulse">
+                <i class="fa-solid fa-bicycle text-4xl mb-4 text-slate-600"></i>
+                <div class="text-sm font-mono">Loading Gear Locker...</div>
+            </div>`;
     }
 
-    const times = hourlyWeather.time.slice(0, 24); 
-    const temps = hourlyWeather.temperature_2m;
-    const codes = hourlyWeather.weathercode;
-    
-    let itemsHtml = '';
-    
-    times.forEach((t, index) => {
-        const date = new Date(t);
-        if (index < 24 && temps[index] !== undefined) { 
-            const h = date.getHours();
-            const ampm = h >= 12 ? 'PM' : 'AM';
-            const hourLabel = h % 12 === 0 ? 12 : h % 12;
-            const icon = (WEATHER_MAP[codes[index]] || ["", "☁️"])[1];
-            itemsHtml += `
-                <div class="hourly-item">
-                    <span class="text-[10px] text-slate-400 font-bold">${hourLabel} ${ampm}</span>
-                    <span class="text-lg">${icon}</span>
-                    <span class="text-xs font-bold text-slate-200">${Math.round(temps[index])}°</span>
-                </div>
-            `;
-        }
-    });
+    // 2. Data Destructuring
+    const bikeGear = gearData.bike || [];
+    const runGear = gearData.run || [];
 
-    return `<div class="mb-6">
-        <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p>
-        <div class="hourly-scroll">${itemsHtml}</div>
-    </div>`;
-};
-
-const buildTempOptions = (defaultVal) => {
-    let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
-    for (let i = 30; i <= 70; i++) {
-        tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
-    }
-    tempOptions += `<option value="75" ${defaultVal === 75 ? 'selected' : ''}>70°F+</option>`;
-    return tempOptions;
-};
-
-// --- FIX: Forced Tailwind classes to ensure Matrix Layout on tablet+ ---
-const generateRow = (idPrefix, iconClass, label, colorClass) => `
-    <div class="gear-row-container flex flex-col md:flex-row gap-4 items-stretch mb-4">
-        <div class="activity-header min-w-[140px] flex items-center gap-3 p-4 bg-slate-800/40 rounded-lg border border-slate-700">
-            <i class="${iconClass} ${colorClass} text-lg"></i>
-            <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
-        </div>
+    // 3. Helper to build gear rows
+    const buildRow = (item, type) => {
+        const isRetired = item.status === 'Retired';
+        const opacity = isRetired ? 'opacity-50 grayscale' : '';
+        const icon = type === 'bike' ? 'fa-bicycle' : 'fa-shoe-prints';
         
-        <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span>
-                <p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span>
-                <p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full">
-                <span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span>
-                <p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p>
-            </div>
-        </div>
-    </div>
-`;
-
-const renderLayout = (hourlyHtml, tempOptions) => {
-    return `
-        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
-            ${hourlyHtml}
-            
-            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto">
-                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Temperature</label>
-                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">
-                    ${tempOptions}
-                </select>
-            </div>
-
-            <div class="mb-10">
-                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions
-                </h3>
-                <div class="flex flex-col gap-4">
-                    ${generateRow('bike-standard', 'fa-solid fa-bicycle', 'Cycling', 'icon-bike')}
-                    ${generateRow('run-standard', 'fa-solid fa-person-running', 'Running', 'icon-run')}
+        return `
+            <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700/50 ${opacity}">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
+                        <i class="fa-solid ${icon} text-xs"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-white">${item.name}</div>
+                        <div class="text-[10px] text-slate-500 uppercase tracking-wider">${item.brand || ''}</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm font-mono font-bold text-emerald-400">${Math.round(item.distance || 0)} <span class="text-[10px] text-slate-500">mi</span></div>
+                    <div class="text-[10px] ${isRetired ? 'text-red-500' : 'text-blue-400'} font-bold uppercase">${item.status || 'Active'}</div>
                 </div>
             </div>
-
-            <div>
-                <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)
-                </h3>
-                <div class="flex flex-col gap-4">
-                    ${generateRow('bike-weather', 'fa-solid fa-bicycle', 'Cycling', 'icon-bike')}
-                    ${generateRow('run-weather', 'fa-solid fa-person-running', 'Running', 'icon-run')}
-                </div>
-            </div>
-        </div>
-        
-        <div class="text-center text-xs text-slate-500 mt-4">
-            <a href="https://github.com/samwise41/training-plan/blob/main/js/views/gear/Gear.md" target="_blank" class="hover:text-blue-400 underline">
-                View Source Documentation (Gear.md)
-            </a>
-        </div>
-    `;
-};
-
-// --- 3. LOGIC ---
-function updateGearUI(gearData) {
-    if (!gearData) return;
-    
-    const tempSelect = document.getElementById('gear-temp');
-    if (!tempSelect) return;
-    const temp = parseInt(tempSelect.value);
-    
-    const processActivity = (activity, prefixBase) => {
-        const list = gearData[activity] || [];
-        
-        const findMatch = (t) => {
-            const match = list.find(r => {
-                if (r.min === -999) return t < r.max;
-                if (r.max === 999) return t >= r.min;
-                return t >= r.min && t <= r.max;
-            });
-            return match || { upper: "—", lower: "—", extremities: "—" };
-        };
-
-        const standard = findMatch(temp);
-        const weather = findMatch(temp - 10);
-
-        const updateUI = (prefix, data) => {
-            const u = document.getElementById(`${prefix}-upper`);
-            const l = document.getElementById(`${prefix}-lower`);
-            const e = document.getElementById(`${prefix}-extremities`);
-            if (u) u.innerHTML = data.upper;
-            if (l) l.innerHTML = data.lower;
-            if (e) e.innerHTML = data.extremities;
-        };
-
-        updateUI(`${prefixBase}-standard`, standard);
-        updateUI(`${prefixBase}-weather`, weather);
+        `;
     };
 
-    processActivity('bike', 'bike');
-    processActivity('run', 'run');
+    // 4. Build Sections using UI
+    const bikeHtml = `<div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">${bikeGear.map(g => buildRow(g, 'bike')).join('')}</div>`;
+    const runHtml = `<div class="space-y-2 grid grid-cols-1 md:grid-cols-2 gap-2">${runGear.map(g => buildRow(g, 'run')).join('')}</div>`;
+
+    return `
+        <div class="max-w-5xl mx-auto space-y-6">
+            ${UI.buildCollapsibleSection('gear-bike', 'Bike Garage', bikeHtml, true)}
+            ${UI.buildCollapsibleSection('gear-run', 'Shoe Rotation', runHtml, true)}
+        </div>
+    `;
 }
 
-// --- 4. EXPORTS ---
-export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // Default Temp Logic
-    let defaultVal = 50;
-    if (currentTemp !== null && currentTemp !== undefined) {
-        if (currentTemp < 30) defaultVal = 25;
-        else if (currentTemp > 70) defaultVal = 75;
-        else defaultVal = currentTemp;
-    }
-
-    const tempOptions = buildTempOptions(defaultVal);
-    const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    const html = renderLayout(hourlyHtml, tempOptions);
-
-    return html;
-}
-
-export function updateGearResult(gearData) {
-    updateGearUI(gearData);
-}
+// Keep this placeholder if app.js calls it
+export function updateGearResult() {}

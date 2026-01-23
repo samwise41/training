@@ -3,24 +3,30 @@
 export const TooltipManager = {
     activeElement: null,
     containerId: 'app-tooltip',
+    _isInit: false,
 
     show(triggerElement, contentHtml, evt) {
-        // Toggle Logic: If clicking the same element, close it.
+        // 1. Toggle: If clicking the active element, close it.
         if (this.activeElement === triggerElement) {
             this.close();
             return;
         }
 
+        // 2. Close any existing tooltip
         this.close();
+
+        // 3. Set Active
         this.activeElement = triggerElement;
         
         const tooltip = document.getElementById(this.containerId);
         if (!tooltip) return;
 
+        // 4. Content & Visibility
         tooltip.innerHTML = contentHtml;
         tooltip.classList.remove('opacity-0', 'pointer-events-none', 'hidden');
         tooltip.classList.add('opacity-100', 'pointer-events-auto');
 
+        // 5. Position
         this.updatePosition(triggerElement, tooltip);
     },
 
@@ -28,62 +34,55 @@ export const TooltipManager = {
         const tooltip = document.getElementById(this.containerId);
         if (tooltip) {
             tooltip.classList.add('opacity-0', 'pointer-events-none');
+            // Allow pointer events to pass through immediately
+            tooltip.classList.remove('pointer-events-auto');
         }
         this.activeElement = null;
     },
 
     updatePosition(trigger, tooltip) {
+        if (!trigger || !trigger.isConnected) {
+            this.close();
+            return;
+        }
+
         const rect = trigger.getBoundingClientRect();
         const ttRect = tooltip.getBoundingClientRect();
         
-        // --- SETTINGS ---
-        const margin = 12;      // Distance from the target element
-        const edgePadding = 20; // Safe zone from screen edges (Buffer)
+        const margin = 12; 
+        const edgePadding = 40; // 40px Buffer from screen edge
 
-        // --- 1. Vertical Positioning ---
-        // Default: Center vertically relative to target
+        // --- Vertical ---
+        // Center vertically by default
         let top = rect.top + (rect.height / 2) - (ttRect.height / 2);
 
-        // Check Bottom Edge
+        // Check Bottom
         if (top + ttRect.height > window.innerHeight - edgePadding) {
             top = window.innerHeight - ttRect.height - edgePadding;
         }
-        // Check Top Edge
+        // Check Top
         if (top < edgePadding) {
             top = edgePadding;
         }
 
-        // --- 2. Horizontal Positioning ---
-        // Default: Place to the Right
+        // --- Horizontal ---
+        // Right by default
         let left = rect.right + margin;
 
-        // Check Right Edge Collision -> Flip to Left
+        // Flip to Left if overflowing Right
         if (left + ttRect.width > window.innerWidth - edgePadding) {
             left = rect.left - ttRect.width - margin;
         }
 
-        // --- 3. Mobile / Narrow Screen Fallback ---
-        // If placing left causes Left Edge Collision...
+        // Mobile Fallback: If overflowing Left now
         if (left < edgePadding) {
-            // Force "Floating Mode":
-            // 1. Pin to left edge (with buffer)
             left = edgePadding;
-            
-            // 2. Move BELOW the element to avoid covering it
+            // Move Below
             top = rect.bottom + margin;
-
-            // 3. Re-check Bottom Edge for this new position
+            // Check Bottom again
             if (top + ttRect.height > window.innerHeight - edgePadding) {
-                // If no room below, move ABOVE
-                top = rect.top - ttRect.height - margin;
+                top = rect.top - ttRect.height - margin; // Move Above
             }
-        }
-
-        // --- 4. Final Safety Clamp (The Buffer Guarantee) ---
-        // Ensure the Right edge of the tooltip never exceeds the window width - padding
-        const maxLeft = window.innerWidth - ttRect.width - edgePadding;
-        if (left > maxLeft) {
-            left = maxLeft;
         }
 
         tooltip.style.top = `${top}px`;
@@ -91,13 +90,36 @@ export const TooltipManager = {
     },
 
     initGlobalListener() {
-        document.addEventListener('click', (e) => {
+        if (this._isInit) return;
+        this._isInit = true;
+
+        // A. Dismiss on Click (Mousedown is more reliable for UI dismissal)
+        document.addEventListener('mousedown', (e) => {
+            if (!this.activeElement) return;
+
+            // 1. Allow clicking inside the tooltip (text selection, links)
             if (e.target.closest(`#${this.containerId}`)) return;
-            if (this.activeElement && this.activeElement.contains(e.target)) return;
-            if (this.activeElement) this.close();
+
+            // 2. Allow clicking the trigger itself (handled by show() toggle)
+            if (this.activeElement.contains(e.target)) return;
+
+            // 3. Otherwise, close it
+            this.close();
         });
+
+        // B. Dismiss on Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.close();
+        });
+
+        // C. Dismiss on Window Resize
+        window.addEventListener('resize', () => {
+            if (this.activeElement) this.close();
+        });
+
+        // D. Dismiss on Navigation (Fixes page-to-page persistence)
+        window.addEventListener('hashchange', () => {
+            this.close();
         });
     }
 };

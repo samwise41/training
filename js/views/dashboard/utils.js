@@ -102,39 +102,3 @@ export const buildCollapsibleSection = (id, title, content, isOpen = true) => {
     const contentClass = isOpen ? 'max-h-[5000px] opacity-100 py-4 mb-8' : 'max-h-0 opacity-0 py-0 mb-0';
     return `<div class="w-full"><div class="flex items-center gap-2 cursor-pointer py-3 border-b-2 border-slate-700 hover:border-slate-500 transition-colors group select-none" onclick="window.toggleSection('${id}')"><i id="icon-${id}" class="fa-solid fa-caret-down text-slate-400 text-base transition-transform duration-300 group-hover:text-white ${arrowClass}"></i><h2 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">${title}</h2></div><div id="${id}" class="collapsible-content overflow-hidden transition-all duration-500 ease-in-out ${contentClass}">${content}</div></div>`;
 };
-
-// --- TOOLTIP LOGIC ---
-window.showTooltip = function(evt, date, minutes, type, color) {
-    let tooltip = document.getElementById('global-tooltip');
-    if (!tooltip) {
-        tooltip = document.createElement('div');
-        tooltip.id = 'global-tooltip';
-        tooltip.className = 'fixed z-50 bg-slate-900 border border-slate-600 rounded px-3 py-2 shadow-xl pointer-events-none text-xs';
-        document.body.appendChild(tooltip);
-    }
-
-    // Default to a safety color if not provided
-    const safeColor = color && color !== 'undefined' ? color : '#64748b';
-
-    if (minutes == 0 || minutes === '0') {
-        tooltip.innerHTML = `<span class="text-slate-400">${date}</span><br><span class="font-bold text-slate-500">${type === 'Future' ? 'Future' : 'Rest'}</span>`;
-    } else {
-        tooltip.innerHTML = `
-            <span class="text-slate-300 border-b border-slate-700 pb-0.5 mb-1 block">${date}</span>
-            <div class="font-bold text-white flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full" style="background:${safeColor}"></span> ${type}
-            </div>
-            <span class="text-slate-400">${minutes} mins</span>
-        `;
-    }
-
-    tooltip.style.display = 'block';
-    // Small offset to prevent cursor overlap
-    tooltip.style.left = (evt.clientX + 10) + 'px';
-    tooltip.style.top = (evt.clientY + 10) + 'px';
-};
-
-window.hideTooltip = function() {
-    const tooltip = document.getElementById('global-tooltip');
-    if (tooltip) tooltip.style.display = 'none';
-};

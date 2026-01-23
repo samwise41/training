@@ -1,10 +1,7 @@
-// js/app.js
-
 (async function initApp() {
     console.log("🚀 Booting App (JSON Mode)...");
     const cacheBuster = Date.now();
     
-    // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
         try {
             return await import(`${path}?t=${cacheBuster}`);
@@ -14,7 +11,7 @@
         }
     };
 
-    // Load Modules & Utilities
+    // LOAD ALL MODULES
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, 
         metricsMod, readinessMod, analyzerMod, 
@@ -35,7 +32,7 @@
         safeImport('./utils/formatting.js', 'Formatters')
     ]);
 
-    // Render Functions
+    // RENDER FUNCTIONS
     const renderDashboard = dashMod?.renderDashboard || (() => "Dashboard loading...");
     const renderTrends = trendsMod?.renderTrends || (() => ({ html: "Trends missing" }));
     const renderGear = gearMod?.renderGear || (() => "Gear missing");
@@ -46,18 +43,17 @@
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
     
-    // Initialize Utilities
+    // INITIALIZE UTILS
     if (tooltipMod?.TooltipManager?.initGlobalListener) {
         tooltipMod.TooltipManager.initGlobalListener();
         window.TooltipManager = tooltipMod.TooltipManager; 
     }
-
     if (uiMod?.UI?.init) uiMod.UI.init();
 
     const DataManager = dataMod?.DataManager;
     const Formatters = formatMod?.Formatters;
 
-    // --- 2. APP STATE ---
+    // APP STATE
     const App = {
         planMd: "",
         rawLogData: [],   
@@ -75,7 +71,6 @@
             this.setupNavigation();
             this.fetchWeather(); 
 
-            // Routing
             const hashView = window.location.hash.replace('#', '');
             const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
 
@@ -89,7 +84,6 @@
         async loadData() {
             if (DataManager) {
                 try {
-                    // One-liner to load all core data
                     const coreData = await DataManager.loadCoreData();
                     Object.assign(this, coreData);
                     console.log("✅ Data Load Complete");
@@ -130,11 +124,8 @@
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
             }
 
-            // --- UPDATED WEATHER LOGIC ---
             if (this.weather.current !== null && Formatters) {
-                // Use Formatters for weather mapping
                 const condition = Formatters.getWeatherInfo(this.weather.code);
-                
                 const wInfo = document.getElementById('weather-info');
                 const wIcon = document.getElementById('weather-icon-top');
                 
@@ -220,7 +211,6 @@
                             this.updateGearResult();
                             break;
                         case 'zones':
-                            // Passed profileData just in case, but kept simple
                             content.innerHTML = renderZonesTab(this.profileData);
                             break;
                         case 'plan':

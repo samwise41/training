@@ -1,6 +1,7 @@
 // js/views/dashboard/plannedWorkouts.js
 import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
+import { DataManager } from '../../utils/data.js'; // <--- NEW IMPORT
 
 export function renderPlannedWorkouts() {
     setTimeout(async () => {
@@ -8,12 +9,12 @@ export function renderPlannedWorkouts() {
         if (!container) return;
         
         try {
-            const response = await fetch('data/dashboard/plannedWorkouts.json');
-            if (!response.ok) throw new Error("Schedule file not found");
+            // USE DATA MANAGER
+            let data = await DataManager.fetchJSON('schedule');
             
-            let data = await response.json();
+            if (!data) throw new Error("Schedule file missing");
+            
             data.sort((a, b) => new Date(a.date) - new Date(b.date));
-
             container.innerHTML = generateCardsHTML(data);
             
             setTimeout(() => {
@@ -53,7 +54,6 @@ function generateCardsHTML(data) {
         const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No specific notes.";
         
         const sportType = w.actualSport || 'Other'; 
-        // USE SHARED FORMATTERS
         const titleStyle = `style="color: ${Formatters.COLORS[sportType] || Formatters.COLORS.All}"`;
         const iconHtml = Formatters.getIconForSport(sportType);
 

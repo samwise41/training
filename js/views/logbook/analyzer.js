@@ -1,37 +1,39 @@
 // js/views/logbook/analyzer.js
 import { GRID_CONFIG } from './config.js';
+import { Formatters } from '../../utils/formatting.js'; // Optional if you want to use shared formatters later
 
 export const renderAnalyzer = (rawLogData) => {
     const containerId = 'ag-grid-container';
     const statsId = 'ag-stats-bar';
 
-    // Wait for DOM
+    // Wait for DOM to be ready
     setTimeout(() => initAGGrid(containerId, statsId, rawLogData), 50);
 
     return `
         <div class="flex flex-col gap-4 h-[calc(100vh-140px)]">
-            <div id="${statsId}" class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-900/50 p-4 rounded-xl border border-slate-700 shrink-0">
-                <div class="text-slate-500 text-sm">Loading Data...</div>
+            <div id="${statsId}" class="grid grid-cols-2 md:grid-cols-5 gap-4 bg-slate-800/50 p-4 rounded-xl border border-slate-700 shrink-0">
+                <div class="text-slate-500 text-sm animate-pulse">Loading Data...</div>
             </div>
 
-            <div id="${containerId}" class="${GRID_CONFIG.themeClass} flex-1 w-full rounded-xl overflow-hidden border border-slate-700"></div>
+            <div id="${containerId}" class="${GRID_CONFIG.themeClass} flex-1 w-full rounded-xl overflow-hidden border border-slate-700 shadow-sm"></div>
         </div>
     `;
 };
 
 const initAGGrid = (gridId, statsId, rawData) => {
-    // 1. Set License
+    // 1. Set License (if you have one)
     const licenseKey = '__AG_GRID_LICENSE_KEY__';
-    if (licenseKey && !licenseKey.startsWith('__')) {
-        agGrid.LicenseManager.setLicenseKey(licenseKey);
+    if (licenseKey && !licenseKey.startsWith('__') && window.agGrid) {
+        window.agGrid.LicenseManager.setLicenseKey(licenseKey);
     }
 
     const gridDiv = document.getElementById(gridId);
-    if (!gridDiv) return;
+    if (!gridDiv || !window.agGrid) return;
 
-    // 2. Parse Your Data
+    // 2. Parse Data
     const rowData = rawData.map(d => {
         const dateObj = new Date(d.date);
+        // Use logic similar to Formatters, but keep as numbers for sorting
         const durHrs = (d.duration || d.actualDuration * 60 || 0) / 3600;
         const distMiles = (d.distance || 0) / 1609.34;
         const elevFeet = (d.elevationGain || 0) * 3.28084;
@@ -56,25 +58,22 @@ const initAGGrid = (gridId, statsId, rawData) => {
         };
     });
 
-    // 3. Initialize Grid with Config
+    // 3. Grid Options
     const gridOptions = {
         ...GRID_CONFIG,
         rowData: rowData,
-        
-        // Listeners for Top Bar Stats
         onGridReady: (params) => updateStats(params.api, statsId),
         onModelUpdated: (params) => updateStats(params.api, statsId)
     };
 
-    agGrid.createGrid(gridDiv, gridOptions);
+    window.agGrid.createGrid(gridDiv, gridOptions);
 };
 
-// --- Custom Stats Bar Logic ---
+// --- Custom Stats Bar ---
 const updateStats = (api, statsId) => {
     let count = 0, dur = 0, dist = 0, elev = 0, tss = 0;
 
     api.forEachNodeAfterFilter(node => {
-        // Only sum LEAF nodes (actual activities) to avoid double counting groups
         if (!node.group && node.data) {
             count++;
             dur += node.data.duration || 0;

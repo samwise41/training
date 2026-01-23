@@ -133,7 +133,7 @@ export function renderMetrics(rawData) {
     } catch (e) {
         tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
     }
-    const tableSection = buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
+    const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
     const buildSectionHeader = (title, icon, color) => `
         <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
@@ -165,7 +165,7 @@ export function renderMetrics(rawData) {
             <div id="metric-chart-swim"></div> 
         </div>`;
     
-    const chartsSection = buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
+    const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
     return `
         <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">

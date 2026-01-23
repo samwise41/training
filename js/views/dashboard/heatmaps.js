@@ -1,14 +1,18 @@
-import { Formatters } from '../../utils/formatting.js'; and import { UI } from '../../utils/ui.js';
+// js/views/dashboard/heatmaps.js
+import { Formatters } from '../../utils/formatting.js';
+import { UI } from '../../utils/ui.js';
 
 export function renderHeatmaps() {
     setTimeout(initHeatmaps, 0);
+    
     const loadingHtml = `
     <div id="heatmaps-container" class="flex flex-col gap-6">
         <div class="bg-slate-800/30 border border-slate-700/50 rounded-xl p-6 flex items-center justify-center min-h-[100px]">
             <span class="text-slate-500 text-xs animate-pulse">Loading Heatmaps...</span>
         </div>
     </div>`;
-    return buildCollapsibleSection('heatmaps-section', 'Training Heatmaps', loadingHtml, true);
+    
+    return UI.buildCollapsibleSection('heatmaps-section', 'Training Heatmaps', loadingHtml, true);
 }
 
 async function initHeatmaps() {
@@ -114,7 +118,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     let curr = new Date(start);
     const today = new Date();
     
-    const CELL_PX = 14; 
+    const CELL_PX = 12; 
     const GAP_PX = 2;   
     const STRIDE_PX = CELL_PX + GAP_PX;
 
@@ -130,7 +134,9 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     currentWeekEnd.setHours(23,59,59,999);
 
     while (curr <= end) {
+        // USE SHARED FORMATTER
         const dateStr = Formatters.toLocalYMD(curr);
+        
         const entry = dataMap[dateStr];
         const isSunday = curr.getDay() === 0;
         
@@ -192,11 +198,11 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             
             if (entry.activities && entry.activities.length > 0) {
                 const lines = entry.activities.map(a => {
-                    const icon = getIconForSport(a.sport); 
-                    // FIX: Apply color variable to icon
+                    const icon = Formatters.getIconForSport(a.sport); 
+                    
                     let colorStyle = '';
                     if (['Run','Bike','Swim'].includes(a.sport)) {
-                        colorStyle = `style="color: ${getSportColorVar(a.sport)}"`;
+                        colorStyle = `style="color: ${Formatters.COLORS[a.sport] || '#94a3b8'}"`;
                     } else {
                         colorStyle = `class="text-slate-400"`;
                     }
@@ -223,7 +229,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                     if (sports.length > 1) {
                         const count = sports.length;
                         const stops = sports.map((s, i) => {
-                            let c = ['Run','Bike','Swim'].includes(s) ? getSportColorVar(s) : 'var(--color-all)';
+                            let c = ['Run','Bike','Swim'].includes(s) ? Formatters.COLORS[s] : Formatters.COLORS.All;
                             const startPct = (i / count) * 100;
                             const endPct = ((i + 1) / count) * 100;
                             return `${c} ${startPct}%, ${c} ${endPct}%`;
@@ -233,8 +239,8 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                         tooltipColor = '#ffffff';
                     } else if (sports.length === 1) {
                         const s = sports[0];
-                        let colorVar = getSportColorVar(s);
-                        if (!['Run','Bike','Swim'].includes(s)) colorVar = 'var(--color-all)'; 
+                        let colorVar = Formatters.COLORS[s];
+                        if (!['Run','Bike','Swim'].includes(s)) colorVar = Formatters.COLORS.All; 
                         styleOverride = `background-color: ${colorVar};`;
                         label = s;
                         tooltipColor = colorVar; 
@@ -274,14 +280,6 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
         </div>
         ${renderLegend(isConsistencyMode)}
     </div>`;
-}
-
-function getIconForSport(sport) {
-    const s = (sport || '').toLowerCase();
-    if(s.includes('run')) return '<i class="fa-solid fa-person-running"></i>';
-    if(s.includes('bike')) return '<i class="fa-solid fa-bicycle"></i>';
-    if(s.includes('swim')) return '<i class="fa-solid fa-person-swimming"></i>';
-    return '<i class="fa-solid fa-dumbbell"></i>';
 }
 
 function renderLegend(isConsistencyMode) {

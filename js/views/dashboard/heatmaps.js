@@ -1,6 +1,7 @@
 // js/views/dashboard/heatmaps.js
 import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
+import { DataManager } from '../../utils/data.js'; // <--- NEW IMPORT
 
 export function renderHeatmaps() {
     setTimeout(initHeatmaps, 0);
@@ -20,9 +21,9 @@ async function initHeatmaps() {
     if (!container) return;
 
     try {
-        const response = await fetch(`data/dashboard/heatmaps.json?t=${Date.now()}`);
-        if (!response.ok) throw new Error("Heatmap file not found");
-        const rawData = await response.json();
+        // USE DATA MANAGER
+        const rawData = await DataManager.fetchJSON('heatmaps');
+        if (!rawData) throw new Error("Heatmap file empty or missing");
 
         const dateMap = {};
         if (Array.isArray(rawData)) {
@@ -134,9 +135,7 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
     currentWeekEnd.setHours(23,59,59,999);
 
     while (curr <= end) {
-        // USE SHARED FORMATTER
         const dateStr = Formatters.toLocalYMD(curr);
-        
         const entry = dataMap[dateStr];
         const isSunday = curr.getDay() === 0;
         

@@ -13,7 +13,6 @@
         }
     };
     
-    // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
         try {
             return await import(`${path}?t=${cacheBuster}`);
@@ -23,11 +22,10 @@
         }
     };
 
-    // REMOVED: Parser (No longer needed)
-    // REMOVED: Roadmap (Deleted)
+    // --- LOAD ALL MODULES ---
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, 
-        metricsMod, readinessMod, analyzerMod, tooltipMod 
+        metricsMod, readinessMod, analyzerMod, tooltipMod, uiMod
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
@@ -37,7 +35,7 @@
         safeImport('./views/metrics/index.js', 'Metrics'),
         safeImport('./views/readiness/index.js', 'Readiness'),
         safeImport('./views/logbook/analyzer.js', 'Analyzer'),
-        safeImport('./utils/tooltipManager.js', 'TooltipManager') ,
+        safeImport('./utils/tooltipManager.js', 'TooltipManager'),
         safeImport('./utils/ui.js', 'UI')
     ]);
 
@@ -51,22 +49,20 @@
     const renderReadiness = readinessMod?.renderReadiness || (() => "Readiness missing");
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
     
-    // --- TOOLTIP INITIALIZATION ---
-    const TooltipManager = tooltipMod?.TooltipManager;
-    if (TooltipManager && TooltipManager.initGlobalListener) {
-        TooltipManager.initGlobalListener();
-        window.TooltipManager = TooltipManager; 
+    // --- INITIALIZE UTILS ---
+    if (tooltipMod?.TooltipManager?.initGlobalListener) {
+        tooltipMod.TooltipManager.initGlobalListener();
+        window.TooltipManager = tooltipMod.TooltipManager; 
     }
-    
-    // --- UI INITIALIZATION ---
-    const UI = uiMod?.UI;
-    if (UI && UI.init) UI.init();
-    
-    // --- 2. APP STATE ---
+
+    if (uiMod?.UI?.init) {
+        uiMod.UI.init();
+    }
+
+    // --- APP STATE ---
     const App = {
         planMd: "",
         rawLogData: [],   
-        // parsedLogData: [], // REMOVED (Unused)
         plannedData: [],
         gearData: null,
         garminData: [],
@@ -93,8 +89,7 @@
 
         async loadData() {
             try {
-                console.log("📡 Fetching Data (Isolated Mode)...");
-
+                console.log("📡 Fetching Data...");
                 const sources = {
                     planMd: './endurance_plan.md',
                     log: './data/training_log.json',
@@ -110,17 +105,12 @@
                         const res = await fetch(url);
                         return { key, res, ok: res.ok };
                     } catch (e) {
-                        console.warn(`⚠️ Failed to fetch ${key}:`, e);
                         return { key, res: null, ok: false };
                     }
                 });
 
                 const results = await Promise.all(requests);
-                
-                const dataMap = results.reduce((acc, item) => {
-                    acc[item.key] = item;
-                    return acc;
-                }, {});
+                const dataMap = results.reduce((acc, item) => { acc[item.key] = item; return acc; }, {});
 
                 if (dataMap.planMd?.ok) this.planMd = await dataMap.planMd.res.text();
                 if (dataMap.log?.ok) this.rawLogData = await dataMap.log.res.json();
@@ -140,11 +130,9 @@
                 if (dataMap.trends?.ok) this.trendsData = await dataMap.trends.res.json();
                 else this.trendsData = null;
 
-                // REMOVED: Parser.parseTrainingLog (No longer needed)
                 console.log("✅ Data Load Complete");
-
             } catch (err) {
-                console.error("❌ Critical Data Load Error:", err);
+                console.error("❌ Data Load Error:", err);
             }
         },
 
@@ -155,11 +143,9 @@
                 if (locData.latitude) {
                     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
                     const weatherData = await weatherRes.json();
-                    
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     this.weather.code = weatherData.current_weather.weathercode;
-                    
                     this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
@@ -167,15 +153,9 @@
 
         updateHeaderUI(viewName) {
             const titles = { 
-                dashboard: 'Weekly Schedule', 
-                trends: 'Trends & KPIs', 
-                plan: 'Logbook Analysis', 
-                gear: 'Gear Choice', 
-                zones: 'Training Zones', 
-                ftp: 'Performance Profile', 
-                readiness: 'Race Readiness', 
-                metrics: 'Performance Metrics'
-                // REMOVED: Roadmap
+                dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', 
+                gear: 'Gear Choice', zones: 'Training Zones', ftp: 'Performance Profile', 
+                readiness: 'Race Readiness', metrics: 'Performance Metrics'
             };
             
             if (viewName) {
@@ -187,16 +167,13 @@
                 const condition = CONFIG.WEATHER_MAP[this.weather.code] || ["Cloudy", "☁️"];
                 const wInfo = document.getElementById('weather-info');
                 const wIcon = document.getElementById('weather-icon-top');
-                
                 if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
                 if (wIcon) wIcon.innerText = condition[1];
             }
         },
 
         updateGearResult() {
-            if (this.gearData) {
-                updateGearResult(this.gearData);
-            }
+            if (this.gearData) updateGearResult(this.gearData);
         },
 
         setupNavigation() {
@@ -219,20 +196,14 @@
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const view = e.currentTarget.dataset.view;
-                    window.location.hash = view; // Triggers 'hashchange'
-
+                    window.location.hash = view;
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }
                 });
             });
 
-            if (menuBtn) {
-                menuBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleSidebar();
-                });
-            }
+            if (menuBtn) menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
         },
@@ -262,7 +233,7 @@
                             content.innerHTML = renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData);
                             break;
                         case 'trends':
-                            content.innerHTML = renderTrends(null, this.trendsData).html; // mergedLogData is now null
+                            content.innerHTML = renderTrends(this.parsedLogData, this.trendsData).html;
                             break;
                         case 'metrics':
                             content.innerHTML = renderMetrics(this.rawLogData); 
@@ -283,7 +254,6 @@
                         case 'plan':
                             content.innerHTML = renderAnalyzer(this.rawLogData);
                             break;
-                        // REMOVED: case 'roadmap'
                         default:
                             content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }

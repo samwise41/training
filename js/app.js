@@ -13,6 +13,7 @@
         }
     };
     
+    // --- 1. DYNAMIC IMPORTS ---
     const safeImport = async (path, name) => {
         try {
             return await import(`${path}?t=${cacheBuster}`);
@@ -22,6 +23,7 @@
         }
     };
 
+    // LOAD ALL MODULES (Including the new Analyzer & TooltipManager)
     const [
         parserMod, dashMod, trendsMod, gearMod, zonesMod, ftpMod, roadmapMod, 
         metricsMod, readinessMod, analyzerMod, tooltipMod 
@@ -52,11 +54,12 @@
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
     
     // --- TOOLTIP INITIALIZATION ---
-    // Initialize global listeners immediately
     const TooltipManager = tooltipMod?.TooltipManager;
+    
+    // Initialize Global Listener
     if (TooltipManager && TooltipManager.initGlobalListener) {
         TooltipManager.initGlobalListener();
-        window.TooltipManager = TooltipManager; // Expose globally
+        window.TooltipManager = TooltipManager; // Expose globally for views
     }
 
     // --- 2. APP STATE ---
@@ -78,12 +81,16 @@
             this.setupNavigation();
             this.fetchWeather(); 
 
+            // --- HASH ROUTING INITIALIZATION ---
+            // 1. Check URL Hash first, then LocalStorage, then Default
             const hashView = window.location.hash.replace('#', '');
             const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
 
+            // 2. Ensure URL matches the decided view (handles empty hash case)
             if (window.location.hash !== `#${initialView}`) {
                 window.location.hash = initialView; 
             } else {
+                // If hash was already present, render it directly
                 this.renderCurrentView(initialView);
             }
         },
@@ -119,19 +126,28 @@
                     return acc;
                 }, {});
 
+                // -- Text Files --
                 if (dataMap.planMd?.ok) this.planMd = await dataMap.planMd.res.text();
+
+                // -- JSON Files --
                 if (dataMap.log?.ok) this.rawLogData = await dataMap.log.res.json();
+                
                 if (dataMap.gear?.ok) this.gearData = await dataMap.gear.res.json();
                 else this.gearData = { bike: [], run: [] };
+
                 if (dataMap.garmin?.ok) this.garminData = await dataMap.garmin.res.json();
                 else this.garminData = [];
+
                 if (dataMap.profile?.ok) this.profileData = await dataMap.profile.res.json();
                 else this.profileData = {}; 
+
                 if (dataMap.readiness?.ok) this.readinessData = await dataMap.readiness.res.json();
                 else this.readinessData = null;
+
                 if (dataMap.trends?.ok) this.trendsData = await dataMap.trends.res.json();
                 else this.trendsData = null;
 
+                // 4. Parse Log
                 this.parsedLogData = Parser.parseTrainingLog(this.rawLogData);
                 console.log("✅ Data Load Complete");
 
@@ -147,9 +163,11 @@
                 if (locData.latitude) {
                     const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
                     const weatherData = await weatherRes.json();
+                    
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     this.weather.code = weatherData.current_weather.weathercode;
+                    
                     this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
@@ -161,23 +179,29 @@
                 roadmap: 'Season Roadmap', gear: 'Gear Choice', zones: 'Training Zones', 
                 ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics'
             };
+            
             if (viewName) {
                 const titleEl = document.getElementById('header-title-dynamic');
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
             }
+
             if (this.weather.current !== null) {
                 const condition = CONFIG.WEATHER_MAP[this.weather.code] || ["Cloudy", "☁️"];
                 const wInfo = document.getElementById('weather-info');
                 const wIcon = document.getElementById('weather-icon-top');
+                
                 if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
                 if (wIcon) wIcon.innerText = condition[1];
             }
         },
 
         updateGearResult() {
-            if (this.gearData) updateGearResult(this.gearData);
+            if (this.gearData) {
+                updateGearResult(this.gearData);
+            }
         },
 
+        // --- HASH-BASED NAVIGATION ---
         setupNavigation() {
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
@@ -190,30 +214,42 @@
                 overlay.classList.toggle('hidden');
             };
 
+            // 1. Global Hash Change Listener (The Source of Truth)
             window.addEventListener('hashchange', () => {
                 const view = window.location.hash.replace('#', '');
                 this.renderCurrentView(view || 'dashboard');
             });
 
+            // 2. Click Handlers just update the Hash
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const view = e.currentTarget.dataset.view;
-                    window.location.hash = view; 
+                    window.location.hash = view; // Triggers 'hashchange'
+
+                    // Close mobile menu if open
                     if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) {
                         toggleSidebar();
                     }
                 });
             });
 
-            if (menuBtn) menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
+            // 3. Mobile Menu Handlers
+            if (menuBtn) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+            }
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
         },
 
         renderCurrentView(view) {
+            // 1. Persistence & Header
             localStorage.setItem('currentView', view);
             this.updateHeaderUI(view);
 
+            // 2. Update Navigation Active States
             document.querySelectorAll('.nav-item').forEach(b => {
                 if (b.dataset.view === view) {
                     b.classList.remove('text-slate-400', 'border-transparent');
@@ -224,6 +260,7 @@
                 }
             });
 
+            // 3. Render Content
             const content = document.getElementById('main-content');
             content.classList.add('opacity-0');
             

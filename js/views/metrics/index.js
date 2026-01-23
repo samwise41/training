@@ -1,5 +1,5 @@
 // js/views/metrics/index.js
-import { buildCollapsibleSection } from './utils.js';
+import { buildCollapsibleSection } from ../../utils/ui.js;
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
 import { normalizeMetricsData } from './parser.js';

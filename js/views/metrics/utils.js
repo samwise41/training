@@ -23,6 +23,20 @@ export const checkSport = (activity, sportKey) => {
     return false;
 };
 
+export const checkSport = (item, sport) => {
+    if (!item) return false;
+    const s = (item.actualSport || item.activityType || '').toLowerCase();
+    const target = sport.toLowerCase();
+    return s.includes(target);
+};
+
+export const calculateTrend = (data, days) => {
+    if (!data || data.length === 0) return { val: 0, pct: 0 };
+    const subset = data.slice(-days);
+    const sum = subset.reduce((acc, curr) => acc + (curr.val || 0), 0);
+    return { val: (sum / subset.length).toFixed(1) };
+};
+
 export const calculateTrend = (dataPoints) => {
     const n = dataPoints.length;
     if (n < 3) return null;

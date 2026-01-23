@@ -8,8 +8,7 @@ import { METRIC_DEFINITIONS } from './definitions.js';
 let metricsState = { timeRange: '6m' };
 let cleanData = [];
 
-// --- 1. Global Handlers for TooltipManager ---
-
+// --- Global Handlers ---
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     e.stopPropagation();
     const breakdownHtml = breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : '';
@@ -144,6 +143,7 @@ export function renderMetrics(rawData) {
     
     const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
+    // Explicitly return the HTML string
     return `
         <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">
             ${headerHtml}

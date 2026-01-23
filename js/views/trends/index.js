@@ -33,7 +33,7 @@ export function renderTrends(mergedLogData, _trendsData) {
             ${renderVolumeChart(trendsData, 'Run', 'Running Volume')}
             ${renderVolumeChart(trendsData, 'Swim', 'Swimming Volume')}
         </div>`;
-    const volumeSection = buildCollapsibleSection('volume-section', 'Weekly Volume Analysis', volumeChartsHtml, true);
+    const volumeSection = UI.buildCollapsibleSection('volume-section', 'Weekly Volume Analysis', volumeChartsHtml, true);
 
     // --- TRENDS SECTION (Container Only) ---
     const trendContainerHtml = `<div id="trend-charts-container"><div class="p-4 text-slate-500 italic">Loading adherence data...</div></div>`;

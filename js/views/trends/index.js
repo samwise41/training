@@ -1,6 +1,6 @@
 // js/views/trends/index.js
 
-import { buildCollapsibleSection } from './utils.js';
+import { UI } from '../../utils/ui.js';
 import { renderVolumeChart } from './volume.js';
 import { renderDynamicCharts } from './adherence.js';
 import { renderComplianceSection } from './compliance.js';

@@ -52,11 +52,12 @@
     const renderAnalyzer = analyzerMod?.renderAnalyzer || (() => "Analyzer missing");
     
     // --- TOOLTIP INITIALIZATION ---
-    const TooltipManager = tooltipMod?.TooltipManager || { initGlobalListener: () => {}, close: () => {} };
-    if (TooltipManager.initGlobalListener) {
+    // Initialize global listeners immediately
+    const TooltipManager = tooltipMod?.TooltipManager;
+    if (TooltipManager && TooltipManager.initGlobalListener) {
         TooltipManager.initGlobalListener();
+        window.TooltipManager = TooltipManager; // Expose globally
     }
-    window.TooltipManager = TooltipManager;
 
     // --- 2. APP STATE ---
     const App = {
@@ -212,11 +213,6 @@
         renderCurrentView(view) {
             localStorage.setItem('currentView', view);
             this.updateHeaderUI(view);
-
-            // --- FORCE CLOSE TOOLTIPS ON NAVIGATION ---
-            if (window.TooltipManager) {
-                window.TooltipManager.close();
-            }
 
             document.querySelectorAll('.nav-item').forEach(b => {
                 if (b.dataset.view === view) {

@@ -45,7 +45,7 @@ const buildMetricChart = (displayData, fullData, key) => {
     }
 
     // --- 3. Setup SVG Dimensions ---
-    const width = 800, height = 150;
+    const width = 800, height = 240;
     const pad = { t: 20, b: 30, l: 40, r: 20 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
     

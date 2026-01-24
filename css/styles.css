@@ -40,8 +40,8 @@
 
 .text-metric-tss       { color: var(--color-all); }
 .text-metric-anaerobic { color: var(--color-all); }
-.text-metric-endurance { color: var(--color-endurance); }
-.text-metric-strength  { color: var(--color-strength); }
+.text-metric-endurance { color: var(--color-endurance); } //Not used?
+.text-metric-strength  { color: var(--color-strength); } //Not used?
 .text-metric-economy   { color: var(--color-run); }
 .text-metric-mech      { color: var(--color-run); }
 .text-metric-gct       { color: var(--color-run); }

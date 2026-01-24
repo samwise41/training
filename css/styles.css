@@ -8,11 +8,18 @@
 
 /* --- 1. GLOBAL VARIABLES (Single Source of Truth) --- */
 :root {
-    --color-run:  #ec4899; /* Pink-400 */
-    --color-bike: #8b5cf6; /* Purple-400 */
-    --color-swim: #0ea5e9; /* Cyan-400 */
+
+    //--color-run:  #ec4899; /* Pink-400 */
+    //--color-bike: #8b5cf6; /* Purple-400 */
+    //--color-swim: #0ea5e9; /* Cyan-400 */
+    //--color-gym:  #94a3b8; /* Slate-400 */
+    //--color-all:  #14b8a6; /* Emerald-400 */
+    
+    --color-run:  #FFFF00; /* Pink-400 */
+    --color-bike: #FF5F1F; /* Purple-400 */
+    --color-swim: #B5651D; /* Cyan-400 */
     --color-gym:  #94a3b8; /* Slate-400 */
-    --color-all:  #14b8a6; /* Emerald-400 */
+    --color-all:  #D3D3D3; /* Emerald-400 */
     
     /* Consistency Colors */
     --color-done:    #34d399; /* Emerald-400 */

@@ -11,7 +11,7 @@ export const TooltipManager = {
             const el = document.createElement('div');
             el.id = 'global-tooltip';
             // pointer-events-none ensures the tooltip doesn't block mouse clicks while fading out
-            el.className = 'fixed z-50 pointer-events-none opacity-0 transition-opacity duration-150 bg-slate-900 text-slate-200 text-xs rounded-lg shadow-xl border border-slate-700 p-3 max-w-xs';
+            el.className = 'fixed z-50 pointer-events-none opacity-0 transition-opacity duration-50 bg-slate-900 text-slate-200 text-xs rounded-lg shadow-xl border border-slate-700 p-3 max-w-xs';
             document.body.appendChild(el);
             this.tooltipEl = el;
         } else {

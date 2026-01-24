@@ -14,7 +14,7 @@ window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => 
     e.stopPropagation();
     const breakdownHtml = breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : '';
     const html = `
-        <div class="min-w-[150px]">
+        <div class="min-w-[240px]">
             <div class="font-bold text-slate-200 mb-1 border-b border-slate-700 pb-1">${name}</div>
             <div class="flex justify-between items-end mb-1 gap-4">
                 <span class="text-[10px] text-slate-400">${date}</span>

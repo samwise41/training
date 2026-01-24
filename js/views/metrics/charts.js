@@ -2,17 +2,49 @@
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend } from './utils.js';
 import { METRIC_FORMULAS, extractMetricData, calculateSubjectiveEfficiency } from './parser.js';
+import { Formatters } from '../../utils/formatting.js'; 
 
 const buildMetricChart = (displayData, fullData, key) => {
     const def = METRIC_DEFINITIONS[key];
     if (!def) return '';
-    const color = def.colorVar;
+
+    // --- 1. NEW: Resolve Colors via Formatters (Single Source of Truth) ---
+    // We map keys to the Sport colors defined in Formatters.COLORS
+    const C = Formatters.COLORS;
+    const colorMap = {
+        // General
+        'vo2max': C.All, 'tss': C.All, 'anaerobic': C.All,
+        
+        // Bike
+        'subjective_bike': C.Bike, 'endurance': C.Bike, 'strength': C.Bike,
+        
+        // Run
+        'subjective_run': C.Run, 'run': C.Run, 'mechanical': C.Run, 'gct': C.Run, 'vert': C.Run,
+        
+        // Swim
+        'subjective_swim': C.Swim, 'swim': C.Swim
+    };
+
+    const color = colorMap[key] || C.All; // Fallback to Emerald
     const formula = METRIC_FORMULAS[key] || '';
 
+    // --- 2. Handle "Not Enough Data" ---
     if (!displayData || displayData.length < 2) {
-        return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between opacity-60"><div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2"><h3 class="text-xs font-bold text-slate-400 flex items-center gap-2"><i class="fa-solid ${def.icon}"></i> ${def.title}</h3></div><div class="flex-1 flex flex-col items-center justify-center text-slate-500"><i class="fa-solid fa-chart-simple text-2xl opacity-20"></i><p class="text-[10px] italic">Not enough data</p></div></div>`;
+        return `
+        <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between opacity-60">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                <h3 class="text-xs font-bold text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid ${def.icon}"></i> ${def.title}
+                </h3>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center text-slate-500">
+                <i class="fa-solid fa-chart-simple text-2xl opacity-20"></i>
+                <p class="text-[10px] italic">Not enough data</p>
+            </div>
+        </div>`;
     }
 
+    // --- 3. Setup SVG Dimensions ---
     const width = 800, height = 150;
     const pad = { t: 20, b: 30, l: 40, r: 20 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
@@ -26,10 +58,10 @@ const buildMetricChart = (displayData, fullData, key) => {
     const dMax = maxV + range * 0.1;
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
-    // --- Build Target Lines ---
+    // --- 4. Build Target Lines ---
     const isInverted = def.invertRanges;
-    const colorGood = '#34d399'; // Emerald-400
-    const colorBad = '#f87171';  // Red-400
+    const colorGood = C.All;     // Emerald (from CSS)
+    const colorBad = '#ef4444';  // Red-500 (Hardcoded to match --color-missed since it's not in C)
     
     const maxLineColor = isInverted ? colorBad : colorGood;
     const minLineColor = isInverted ? colorGood : colorBad;
@@ -44,6 +76,7 @@ const buildMetricChart = (displayData, fullData, key) => {
         targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${maxLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
 
+    // --- 5. Build Data Path & Points ---
     let pathD = `M ${getX(displayData[0], 0)} ${getY(displayData[0].val)}`;
     let pointsHtml = '';
     
@@ -51,7 +84,6 @@ const buildMetricChart = (displayData, fullData, key) => {
         const x = getX(d, i), y = getY(d.val);
         pathD += ` L ${x} ${y}`;
         
-        // FIX: Updated click handler
         pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" class="cursor-pointer hover:stroke-white transition-all" onclick="window.handleMetricChartClick(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '', '${d.breakdown||""}', '${color}')"></circle>`;
     });
 
@@ -86,6 +118,7 @@ const buildMetricChart = (displayData, fullData, key) => {
     </div>`;
 };
 
+// --- 6. Main Render Loop ---
 export const updateCharts = (allData, timeRange) => {
     if (!allData || !allData.length) return;
     const cutoff = new Date();
@@ -102,6 +135,12 @@ export const updateCharts = (allData, timeRange) => {
         const display = full ? full.filter(d => d.date >= cutoff) : [];
         el.innerHTML = buildMetricChart(display, full||[], key);
     };
+
     ['vo2max','tss','anaerobic','subjective_bike','endurance','strength','subjective_run','run','mechanical','gct','vert','subjective_swim','swim'].forEach(k => render(`metric-chart-${k}`, k));
-    ['30d','90d','6m','1y'].forEach(r => { const b = document.getElementById(`btn-metric-${r}`); if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; });
+    
+    // Update active button state
+    ['30d','90d','6m','1y'].forEach(r => { 
+        const b = document.getElementById(`btn-metric-${r}`); 
+        if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; 
+    });
 };

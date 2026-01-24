@@ -1,3 +1,4 @@
+// js/views/dashboard/heatmaps.js
 import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
 import { DataManager } from '../../utils/data.js';
@@ -136,18 +137,21 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
         }
 
-        let bgColor = 'bg-slate-800/50', opacity = '1', styleOverride = '', extraClasses = '', visibility = ''; 
+        // --- NEW: CSS Class Logic ---
+        let bgClass = 'hm-empty', styleOverride = '', visibility = ''; 
         const isFuture = curr > today;
         const isCurrentWeek = curr >= currentWeekStart && curr <= currentWeekEnd;
 
         if (targetYear && curr.getFullYear() < targetYear) visibility = 'opacity: 0; pointer-events: none;';
         if (isSunday && (!entry || !entry.actualDuration || entry.actualDuration <= 0)) visibility = 'opacity: 0; pointer-events: none;';
 
+        // Base Context Colors
         if (isConsistencyMode) {
             if (isFuture) {
-                if (isCurrentWeek) { bgColor = 'bg-slate-700'; opacity = '0.5'; } 
-                else { bgColor = 'bg-slate-800/30'; opacity = '0.3'; }
-            } else { bgColor = 'bg-emerald-500'; opacity = '0.2'; }
+                bgClass = isCurrentWeek ? 'hm-future-current' : 'hm-future';
+            } else { 
+                bgClass = 'hm-rest'; 
+            }
         }
 
         let label = isFuture ? 'Future' : 'Rest', plan = 0, act = 0, detailsJson = '', tooltipColor = '#64748b'; 
@@ -167,11 +171,12 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
             }
 
             if (isConsistencyMode) {
-                if (status === 'Event') { bgColor = 'bg-purple-600'; tooltipColor = '#9333ea'; label = `Event: ${entry.eventName}`; }
-                else if (status === 'Completed') { bgColor = 'bg-emerald-500'; tooltipColor = '#10b981'; label = "Completed"; }
-                else if (status === 'Partial') { bgColor = 'bg-yellow-500'; tooltipColor = '#eab308'; label = "Partial"; }
-                else if (status === 'Missed') { bgColor = 'bg-red-600'; tooltipColor = '#dc2626'; label = "Missed"; }
-                else if (status === 'Unplanned') { bgColor = 'bg-emerald-600'; extraClasses = 'bg-striped'; tooltipColor = '#059669'; label = "Unplanned"; }
+                // Use new CSS classes
+                if (status === 'Event') { bgClass = 'hm-event'; tooltipColor = '#a855f7'; label = `Event: ${entry.eventName}`; }
+                else if (status === 'Completed') { bgClass = 'hm-done'; tooltipColor = '#34d399'; label = "Completed"; }
+                else if (status === 'Partial') { bgClass = 'hm-partial'; tooltipColor = '#facc15'; label = "Partial"; }
+                else if (status === 'Missed') { bgClass = 'hm-missed'; tooltipColor = '#ef4444'; label = "Missed"; }
+                else if (status === 'Unplanned') { bgClass = 'hm-unplanned'; tooltipColor = '#10b981'; label = "Unplanned"; }
             } else {
                 if (act > 0) {
                     const sports = entry.sports || [];
@@ -185,16 +190,19 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
                         label = "Multi-Sport"; tooltipColor = '#ffffff';
                     } else if (sports.length === 1) {
                         const s = sports[0];
-                        let colorVar = ['Run','Bike','Swim'].includes(s) ? Formatters.COLORS[s] : Formatters.COLORS.All;
-                        styleOverride = `background-color: ${colorVar};`;
-                        label = s; tooltipColor = colorVar; 
+                        // Map sport string to CSS class if possible, or fallback to style
+                        if(s === 'Run') { bgClass = 'hm-run'; tooltipColor = '#f472b6'; }
+                        else if(s === 'Bike') { bgClass = 'hm-bike'; tooltipColor = '#c084fc'; }
+                        else if(s === 'Swim') { bgClass = 'hm-swim'; tooltipColor = '#22d3ee'; }
+                        else { bgClass = 'hm-other'; tooltipColor = '#34d399'; }
+                        label = s; 
                     }
                 }
             }
         }
 
-        gridCells += `<div class="heatmap-cell rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgColor} ${extraClasses}"
-                 style="width: ${CELL_PX}px !important; height: ${CELL_PX}px !important; opacity: ${opacity}; ${styleOverride} ${visibility}"
+        gridCells += `<div class="heatmap-cell rounded-[2px] transition-all hover:scale-125 hover:z-10 relative cursor-pointer ${bgClass}"
+                 style="width: ${CELL_PX}px !important; height: ${CELL_PX}px !important; ${styleOverride} ${visibility}"
                  data-date="${dateStr}" data-plan="${Math.round(plan)}" data-act="${Math.round(act)}"
                  data-label="${label.replace(/"/g, '&quot;')}" data-color="${tooltipColor}" data-details="${detailsJson}"></div>`;
 
@@ -220,18 +228,18 @@ function buildGrid(dataMap, start, end, title, containerId, isConsistencyMode, t
 function renderLegend(isConsistencyMode) {
     if (isConsistencyMode) {
         return `<div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-500"></div> Done</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-yellow-500"></div> Partial</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-red-600"></div> Missed</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-emerald-600 bg-striped"></div> Unplanned</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] bg-purple-600"></div> Event</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] hm-done"></div> Done</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] hm-partial"></div> Partial</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] hm-missed"></div> Missed</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] hm-unplanned"></div> Unplanned</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-[2px] hm-event"></div> Event</div>
         </div>`;
     } else {
         return `<div class="flex flex-wrap justify-center gap-4 mt-3 pt-3 text-[10px] text-slate-400 font-mono border-t border-slate-700/30">
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-run)"></div> Run</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-bike)"></div> Bike</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-swim)"></div> Swim</div>
-            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full" style="background:var(--color-all)"></div> Other</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full hm-run"></div> Run</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full hm-bike"></div> Bike</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full hm-swim"></div> Swim</div>
+            <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full hm-other"></div> Other</div>
         </div>`;
     }
 }

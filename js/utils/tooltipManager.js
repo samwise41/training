@@ -1,135 +1,127 @@
 // js/utils/tooltipManager.js
 
 export const TooltipManager = {
-    activeElement: null,
-    containerId: 'app-tooltip',
-    _isInit: false,
+    tooltipEl: null,
+    activeTarget: null,
 
-    /**
-     * Shows the tooltip for a specific element.
-     * RELIES ON: The trigger event (evt) must have called evt.stopPropagation() 
-     * prevents the global window listener from immediately closing it.
-     */
-    show(triggerElement, contentHtml) {
-        // 1. Toggle: If clicking the same active element, close it.
-        if (this.activeElement === triggerElement) {
-            this.close();
-            return;
+    init() {
+        // 1. Create the tooltip element if it doesn't exist
+        // We use 'global-tooltip' to avoid conflicts with any manual 'app-tooltip'
+        if (!document.getElementById('global-tooltip')) {
+            const el = document.createElement('div');
+            el.id = 'global-tooltip';
+            // pointer-events-none ensures the tooltip doesn't block mouse clicks while fading out
+            el.className = 'fixed z-50 pointer-events-none opacity-0 transition-opacity duration-150 bg-slate-900 text-slate-200 text-xs rounded-lg shadow-xl border border-slate-700 p-3 max-w-xs';
+            document.body.appendChild(el);
+            this.tooltipEl = el;
+        } else {
+            this.tooltipEl = document.getElementById('global-tooltip');
         }
 
-        // 2. Close any currently open tooltip
-        this.close();
-
-        // 3. Set Active
-        this.activeElement = triggerElement;
+        // 2. Global Event Listeners to HIDE tooltip
+        // 'true' (useCapture) is critical: it detects scroll on ANY element (charts, grids, etc)
+        window.addEventListener('scroll', () => this.hide(), true);
+        window.addEventListener('resize', () => this.hide());
         
-        const tooltip = document.getElementById(this.containerId);
-        if (!tooltip) return;
-
-        // 4. Render & Visible
-        tooltip.innerHTML = contentHtml;
-        tooltip.classList.remove('opacity-0', 'pointer-events-none', 'hidden');
-        tooltip.classList.add('opacity-100', 'pointer-events-auto');
-
-        // 5. Smart Position
-        this.updatePosition(triggerElement, tooltip);
-    },
-
-    close() {
-        const tooltip = document.getElementById(this.containerId);
-        if (tooltip) {
-            tooltip.classList.remove('opacity-100', 'pointer-events-auto');
-            tooltip.classList.add('opacity-0', 'pointer-events-none');
-        }
-        this.activeElement = null;
-    },
-
-    updatePosition(trigger, tooltip) {
-        // Safety check if element disappeared (e.g. re-render)
-        if (!trigger || !trigger.isConnected) {
-            this.close();
-            return;
-        }
-
-        const rect = trigger.getBoundingClientRect();
-        const ttRect = tooltip.getBoundingClientRect();
-        
-        const margin = 12;      
-        const edgePadding = 20; // Safe distance from screen edge
-
-        // --- Vertical Strategy ---
-        // Default: Center vertically relative to target
-        let top = rect.top + (rect.height / 2) - (ttRect.height / 2);
-
-        // Floor Check (Bottom Edge)
-        if (top + ttRect.height > window.innerHeight - edgePadding) {
-            top = window.innerHeight - ttRect.height - edgePadding;
-        }
-        // Ceiling Check (Top Edge)
-        if (top < edgePadding) {
-            top = edgePadding;
-        }
-
-        // --- Horizontal Strategy ---
-        // Default: Place to the Right
-        let left = rect.right + margin;
-
-        // Right Wall Check -> Flip Left
-        if (left + ttRect.width > window.innerWidth - edgePadding) {
-            left = rect.left - ttRect.width - margin;
-        }
-
-        // Left Wall Check (Mobile Fallback) -> Move Below
-        if (left < edgePadding) {
-            // Pin to left edge safe zone
-            left = edgePadding;
-            
-            // Move it UNDER the element so we don't cover it
-            top = rect.bottom + margin;
-
-            // Re-verify Bottom Edge with new Y position
-            if (top + ttRect.height > window.innerHeight - edgePadding) {
-                // If it doesn't fit below, put it ABOVE
-                top = rect.top - ttRect.height - margin; 
+        // Hide if clicking anywhere else
+        document.addEventListener('click', (e) => {
+            if (this.activeTarget && !this.activeTarget.contains(e.target)) {
+                this.hide();
             }
-        }
-
-        tooltip.style.top = `${top}px`;
-        tooltip.style.left = `${left}px`;
+        });
+        
+        // Hide on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.hide();
+        });
     },
 
-    initGlobalListener() {
-        if (this._isInit) return;
-        this._isInit = true;
+    show(targetEl, htmlContent, event) {
+        if (!this.tooltipEl) this.init();
 
-        // --- THE CLEAN LOGIC ---
-        // Since charts call stopPropagation(), this listener ONLY fires
-        // when clicking background, headers, empty space, or other UI.
-        window.addEventListener('click', (e) => {
-            // 1. If nothing is open, do nothing.
-            if (!this.activeElement) return;
+        // --- Feature Preserved from your old code: Toggle ---
+        // If clicking the same element that is already open, close it.
+        if (this.activeTarget === targetEl) {
+            this.hide();
+            return;
+        }
 
-            // 2. Allow interaction INSIDE the tooltip (e.g. selecting text)
-            const tooltip = document.getElementById(this.containerId);
-            if (tooltip && tooltip.contains(e.target)) return;
+        this.activeTarget = targetEl;
+        this.tooltipEl.innerHTML = htmlContent;
+        this.tooltipEl.style.opacity = '1';
 
-            // 3. Otherwise, Close.
-            this.close();
-        });
+        // --- Smart Positioning (Top/Bottom preferred for Charts) ---
+        const rect = targetEl.getBoundingClientRect();
+        const tipRect = this.tooltipEl.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
 
-        // Handle Page Navigation (Hash Change)
-        window.addEventListener('hashchange', () => {
-            this.close();
-        });
+        // Default: Center Top
+        let top = rect.top - tipRect.height - 10;
+        let left = rect.left + (rect.width / 2) - (tipRect.width / 2);
 
-        // Handle Window Resize (Prevents floating ghosts)
-        window.addEventListener('resize', () => {
-            if (this.activeElement) this.close();
-        });
+        // 1. Ceiling Check: If it hits top of screen, flip to Bottom
+        if (top < 10) {
+            top = rect.bottom + 10;
+        }
 
-        // Handle Escape Key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.close();
-        });
+        // 2. Floor Check: If flipping to bottom hits bottom of screen, force it inside
+        if (top + tipRect.height > viewportHeight - 10) {
+            top = viewportHeight - tipRect.height - 10;
+        }
+
+        // 3. Right Wall Check: If it goes off right edge, shift left
+        if (left + tipRect.width > viewportWidth - 10) {
+            left = viewportWidth - tipRect.width - 10;
+        }
+
+        // 4. Left Wall Check: If it goes off left edge, shift right
+        if (left < 10) {
+            left = 10;
+        }
+
+        this.tooltipEl.style.top = `${top}px`;
+        this.tooltipEl.style.left = `${left}px`;
+    },
+
+    // --- Feature Added: Required by Metrics Tab ---
+    showModal(htmlContent) {
+        const modalId = 'global-info-modal';
+        let modal = document.getElementById(modalId);
+        
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = modalId;
+            modal.className = 'fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4';
+            // Click background to close
+            modal.onclick = (e) => { if(e.target === modal) modal.remove(); };
+            document.body.appendChild(modal);
+        }
+
+        modal.innerHTML = `
+            <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md w-full shadow-2xl relative animate-in fade-in zoom-in duration-200">
+                <button onclick="document.getElementById('${modalId}').remove()" class="absolute top-3 right-3 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <div class="mt-2 text-sm text-slate-300 leading-relaxed">${htmlContent}</div>
+            </div>
+        `;
+    },
+
+    hide() {
+        if (this.tooltipEl) {
+            this.tooltipEl.style.opacity = '0';
+            this.activeTarget = null;
+            
+            // Move off-screen after transition to ensure it doesn't block clicks
+            setTimeout(() => {
+                if (this.tooltipEl.style.opacity === '0') {
+                    this.tooltipEl.style.top = '-9999px';
+                }
+            }, 150);
+        }
     }
 };
+
+// --- CRITICAL: Expose globally so inline HTML (onclick="...") can find it ---
+window.TooltipManager = TooltipManager;

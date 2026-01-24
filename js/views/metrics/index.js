@@ -122,24 +122,24 @@ export function renderMetrics(rawData) {
 
         const chartsGrid = `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'text-emerald-400')}
+                ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'icon-all')}
                 <div id="metric-chart-vo2max"></div>
                 <div id="metric-chart-tss"></div>
                 <div id="metric-chart-anaerobic"></div>
 
-                ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'text-purple-400')}
+                ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
                 <div id="metric-chart-subjective_bike"></div>
                 <div id="metric-chart-endurance"></div>
                 <div id="metric-chart-strength"></div>
 
-                ${buildSectionHeader('Running Metrics', 'fa-person-running', 'text-pink-400')}
+                ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
                 <div id="metric-chart-subjective_run"></div>
                 <div id="metric-chart-run"></div>
                 <div id="metric-chart-mechanical"></div>
                 <div id="metric-chart-gct"></div>
                 <div id="metric-chart-vert"></div>
 
-                ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'text-blue-400')}
+                ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
                 <div id="metric-chart-subjective_swim"></div>
                 <div id="metric-chart-swim"></div> 
             </div>`;

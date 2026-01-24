@@ -1,20 +1,20 @@
 // js/views/zones/index.js
 import { UI } from '../../utils/ui.js';
+import { DataManager } from '../../utils/data.js';
 
 export async function renderZonesTab() {
     const containerId = 'zones-tab-content';
     
+    // Use setTimeout to allow the UI to render the container first (Lazy Load pattern)
     setTimeout(async () => {
         const container = document.getElementById(containerId);
         if (!container) return;
 
         try {
-            const cacheBuster = new Date().getTime();
-            // Assuming data/zones/zones.json is the file you want to use
-            const response = await fetch(`data/zones/zones.json?t=${cacheBuster}`);
+            // 1. Fetch via DataManager (Uses cache if available)
+            const data = await DataManager.fetchJSON('zones');
             
-            if (!response.ok) throw new Error("Zones JSON not found");
-            const data = await response.json();
+            if (!data) throw new Error("Zones data missing");
 
             container.innerHTML = `
                 <div class="zones-layout grid grid-cols-1 lg:grid-cols-2 gap-6 p-4">
@@ -24,11 +24,12 @@ export async function renderZonesTab() {
             `;
         } catch (err) {
             console.error("Zones Load Error:", err);
-            container.innerHTML = `<div class="p-12 text-center text-slate-500 italic">Unable to load zones. Check console.</div>`;
+            container.innerHTML = `<div class="p-12 text-center text-slate-500 italic">Unable to load zones.</div>`;
         }
     }, 50);
 
-    return UI.buildCollapsibleSection('zones-section', 'Training Zones', `<div id="${containerId}" class="min-h-[400px]"></div>`, true);
+    // Initial placeholder
+    return UI.buildCollapsibleSection('zones-section', 'Training Zones', `<div id="${containerId}" class="min-h-[400px] flex items-center justify-center text-slate-500"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Loading Zones...</div>`, true);
 }
 
 function renderZoneCard(title, sportData) {

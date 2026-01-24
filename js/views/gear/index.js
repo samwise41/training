@@ -41,13 +41,17 @@ const buildTempOptions = (defaultVal) => {
 };
 
 const generateRow = (idPrefix, sportType, label) => {
+    // --- UPDATED: Use Shared Icon Formatter ---
+    // This ensures "Bike" gets the purple icon, "Run" gets pink, etc.
     const iconHtml = Formatters.getIconForSport(sportType);
-    const colorClass = sportType === 'bike' ? 'text-blue-400' : 'text-emerald-400';
 
+    // Note: We remove the manual colorClass logic because the icon itself
+    // now carries the correct color (e.g. class="icon-bike")
+    
     return `
     <div class="gear-row-container flex flex-col md:flex-row gap-4 items-stretch mb-4">
         <div class="activity-header min-w-[140px] flex items-center gap-3 p-4 bg-slate-800/40 rounded-lg border border-slate-700">
-            <span class="${colorClass} text-lg">${iconHtml}</span>
+            <span class="text-lg">${iconHtml}</span>
             <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
         </div>
         <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
@@ -80,8 +84,7 @@ const renderLayout = (hourlyHtml, tempOptions) => {
 // --- LOGIC ---
 function updateGearUI(gearData) {
     if (!gearData) return;
-    console.log("⚙️ Updating Gear UI with Data:", gearData); // DEBUG
-
+    
     const tempSelect = document.getElementById('gear-temp');
     if (!tempSelect) return;
     const temp = parseInt(tempSelect.value);
@@ -119,16 +122,14 @@ function updateGearUI(gearData) {
 
 // --- EXPORTS ---
 export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // 1. Loading State (Fix for missing data)
     if (!gearData) {
         return `
             <div class="p-12 flex flex-col items-center justify-center text-slate-500 animate-pulse">
-                <i class="fa-solid fa-spinner fa-spin text-3xl mb-4"></i>
-                <div class="text-sm font-mono">Loading Gear Data...</div>
+                <i class="fa-solid fa-bicycle text-4xl mb-4 text-slate-600"></i>
+                <div class="text-sm font-mono">Loading Gear Locker...</div>
             </div>`;
     }
 
-    // Default Temp Logic
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
         if (currentTemp < 30) defaultVal = 25;

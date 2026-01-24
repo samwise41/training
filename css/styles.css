@@ -6,13 +6,22 @@
     --text-dim: #94a3b8;
 }
 
-/* Activity Icon Theme Colors */
+/* --- 1. GLOBAL VARIABLES (Single Source of Truth) --- */
 :root {
+
+    --color-run:  #ec4899; /* Pink-400 */
+    --color-bike: #8b5cf6; /* Purple-400 */
+    --color-swim: #0ea5e9; /* Cyan-400 */
+    --color-gym:  #94a3b8; /* Slate-400 */
+    --color-all:  #14b8a6; /* Emerald-400 */
     
-    --color-all:  #14b8a6; 
-    --color-bike: #8b5cf6; 
-    --color-run:  #ec4899; 
-    --color-swim: #0ea5e9;  
+    
+    /* Consistency Colors */
+    --color-done:    #34d399; /* Emerald-400 */
+    --color-partial: #facc15; /* Yellow-400 */
+    --color-missed:  #ef4444; /* Red-500 */
+    --color-event:   #a855f7; /* Purple-500 */
+
 }
 
 /* You can still use your classes for icons */
@@ -28,17 +37,61 @@
 .bg-icon-run  { background-color: var(--color-run) !important; }
 .bg-icon-swim { background-color: var(--color-swim) !important; }
 
-/* --- STRIPED PATTERN FOR UNPLANNED --- */
-/* High Contrast Diagonal Stripes */
-.bg-striped {
-    background-image: repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, 0.5) 0px,   /* Start bright white */
-        rgba(0, 0, 0, 0.5) 3px,   /* Hard stop white at 2px */
-        transparent 3px,                  /* Start transparent immediately */
-        transparent 6px                   /* End transparent at 4px (2px gap) */
-    ) !important;
+/* --- METRIC TEXT COLORS (Exact Match to JS Keys) --- */
+/* 1. General (TSS, Anaerobic) */
+.text-metric-tss       { color: var(--color-all); }  
+.text-metric-anaerobic { color: var(--color-all); } 
+.text-metric-vo2max    { color: var(--color-all); }       
+
+/* 2. Bike Metrics (Purple) */
+.text-metric-subjective_bike { color: var(--color-bike); }
+.text-metric-endurance       { color: var(--color-bike); } /* Aerobic */
+.text-metric-strength        { color: var(--color-bike); } /* Torque */
+
+/* 3. Run Metrics (Pink) */
+.text-metric-subjective_run { color: var(--color-run); }
+.text-metric-run            { color: var(--color-run); } /* Economy */
+.text-metric-mechanical     { color: var(--color-run); } /* Stiffness */
+.text-metric-gct            { color: var(--color-run); }
+.text-metric-vert           { color: var(--color-run); }
+
+/* 4. Swim Metrics (Cyan) */
+.text-metric-subjective_swim { color: var(--color-swim); }
+.text-metric-swim            { color: var(--color-swim); }
+
+/* --- Heatmap Status Colors (Consistency Mode) --- */
+.hm-done    { background-color: var(--color-done); }
+.hm-partial { background-color: var(--color-partial); }
+.hm-missed  { background-color: var(--color-missed); }
+.hm-event   { background-color: var(--color-event); }
+
+/* Unplanned: Emerald-500 + Striped Pattern */
+.hm-unplanned {
+    background-color: #10b981;
+    background-image: linear-gradient(
+        45deg, 
+        rgba(0, 0, 0, 0.2) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(0, 0, 0, 0.5) 50%, 
+        rgba(0, 0, 0, 0.5) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 8px 8px;
 }
+
+/* --- Heatmap Sport Colors (Activity Mode) --- */
+.hm-run   { background-color: var(--color-run); }
+.hm-bike  { background-color: var(--color-bike); }
+.hm-swim  { background-color: var(--color-swim); }
+.hm-other { background-color: var(--color-all); }
+
+/* --- Context States --- */
+.hm-future-current { background-color: #334155; opacity: 0.5; } /* Slate-700 */
+.hm-future { background-color: rgba(30, 41, 59, 0.3); opacity: 0.3; }
+.hm-rest { background-color: rgba(51, 65, 85, 0.5); opacity: 0.4; }
+.hm-empty { background-color: rgba(30, 41, 59, 0.5); }
 
 
 

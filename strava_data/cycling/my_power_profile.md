@@ -13,7 +13,7 @@
 | 20min | **261w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 261w | [2025-12-23](https://www.strava.com/activities/16820057363) |
 | 30min | **253w** | [2025-09-19](https://www.strava.com/activities/15864321973) | 252w | [2025-12-23](https://www.strava.com/activities/16820057363) |
 | 1hr | **241w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 241w | [2025-12-23](https://www.strava.com/activities/16820057363) |
-| 2hr | **171w** | [2025-08-16](https://www.strava.com/activities/15482056744) | 153w | [2026-01-03](https://www.strava.com/activities/16923876221) |
+| 2hr | **171w** | [2025-08-16](https://www.strava.com/activities/15482056744) | 168w | [2026-01-24](https://www.strava.com/activities/17161980630) |
 | 3hr | **162w** | [2025-08-05](https://www.strava.com/activities/15353424386) | -- | -- |
 | 4hr | **148w** | [2025-08-16](https://www.strava.com/activities/15482056744) | -- | -- |
 | 5hr | **137w** | [2025-08-16](https://www.strava.com/activities/15482056744) | -- | -- |

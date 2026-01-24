@@ -23,7 +23,7 @@ export const METRIC_DEFINITIONS = {
         improvement: "• Long Z2 Rides<br>• Consistent Volume"
     },
     strength: {
-        title: "Torque Efficiency", sport: "Bike", icon: "fa-bolt", 
+        title: "Pedal Force (Torque)", sport: "Bike", icon: "fa-bolt", 
         colorVar: "var(--color-bike)",
         refMin: 2.5, refMax: 3.5, invertRanges: false, 
         rangeInfo: "2.5 – 3.5 W/RPM",

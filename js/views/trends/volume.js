@@ -26,7 +26,6 @@ window.handleVolumeClick = (evt, date, plan, planLabel, planClass, act, actLabel
             </div>
         </div>
     `;
-
     if (window.TooltipManager) window.TooltipManager.show(el, html, evt);
 };
 
@@ -39,18 +38,20 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
         const categoryMap = { 'All': 'total', 'Bike': 'cycling', 'Run': 'running', 'Swim': 'swimming' };
         const jsonKey = categoryMap[sportType] || 'total';
 
-        // 2. Color Logic
+        // --- NEW: Uses CSS Variables instead of Hex ---
         const getStatusColor = (pctChange, key) => {
             const val = pctChange;
-            if (val < -0.05) return ['bg-slate-600', '#475569', 'text-slate-500']; // Recovery
+            // Recovery Week
+            if (val < -0.05) return ['bg-slate-600', 'var(--color-gym)', 'text-slate-500']; 
 
-            // Thresholds
+            // Determine Limits
             const limitRed = key === 'running' ? 0.15 : (key === 'total' ? 0.25 : 0.30);
             const limitYellow = key === 'running' ? 0.10 : (key === 'total' ? 0.15 : 0.20);
 
-            if (val > limitRed) return ['bg-red-500', '#ef4444', 'text-red-400'];
-            if (val > limitYellow) return ['bg-yellow-500', '#eab308', 'text-yellow-400'];
-            return ['bg-emerald-500', '#10b981', 'text-emerald-400'];
+            // Return [Tailwind BG Class, CSS Color Var (for border/gradient), Tailwind Text Class]
+            if (val > limitRed) return ['bg-red-500', 'var(--color-missed)', 'text-red-400'];
+            if (val > limitYellow) return ['bg-yellow-500', 'var(--color-partial)', 'text-yellow-400'];
+            return ['bg-emerald-500', 'var(--color-done)', 'text-emerald-400'];
         };
 
         const getRedLimitLabel = (key) => {
@@ -59,7 +60,7 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
             return "15%";
         };
 
-        // 3. Scale
+        // Scale Logic
         let maxVol = 0;
         trendsJson.data.forEach(week => {
             const cat = week.categories[jsonKey];
@@ -67,7 +68,7 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
         });
         maxVol = maxVol || 1; 
 
-        // 4. Generate Bars
+        // Generate Bars
         let barsHtml = ''; 
         trendsJson.data.forEach((week, idx) => {
             const cat = week.categories[jsonKey];
@@ -79,11 +80,13 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
             const hActual = Math.round((actualMins / maxVol) * 100); 
             const hPlan = Math.round((plannedMins / maxVol) * 100); 
 
-            const [actualClass, _, actualTextClass] = getStatusColor(cat.actual_growth || 0, jsonKey);
-            const [__, planHex, planTextClass] = getStatusColor(cat.planned_growth || 0, jsonKey);
+            const [actualClass, actVar, actualTextClass] = getStatusColor(cat.actual_growth || 0, jsonKey);
+            const [__, planVar, planTextClass] = getStatusColor(cat.planned_growth || 0, jsonKey);
 
             const formatLabel = (val) => `${val > 0 ? '▲' : (val < 0 ? '▼' : '')} ${Math.round(Math.abs(val) * 100)}%`;
-            const planBarStyle = `background: repeating-linear-gradient(45deg, ${planHex} 0, ${planHex} 4px, transparent 4px, transparent 8px); border: 1px solid ${planHex}; opacity: 0.3;`;
+            
+            // Uses the CSS variable in the gradient and border
+            const planBarStyle = `background: repeating-linear-gradient(45deg, ${planVar} 0, ${planVar} 4px, transparent 4px, transparent 8px); border: 1px solid ${planVar}; opacity: 0.3;`;
             const actualOpacity = isCurrentWeek ? 'opacity-90' : 'opacity-80'; 
 
             const clickAttr = `onclick="window.handleVolumeClick(event, '${week.week_label}', ${Math.round(plannedMins)}, '${formatLabel(cat.planned_growth||0)}', '${planTextClass}', ${Math.round(actualMins)}, '${formatLabel(cat.actual_growth||0)}', '${actualTextClass}', '${getRedLimitLabel(jsonKey)}')"`;
@@ -101,7 +104,6 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
                 </div>`;
         });
         
-        // Use Shared Icons
         const iconHtml = Formatters.getIconForSport(sportType);
 
         return `
@@ -113,6 +115,5 @@ export const renderVolumeChart = (trendsJson, sportType = 'All', title = 'Weekly
                     ${barsHtml}
                 </div>
             </div>`;
-            
     } catch (e) { return `<div class="p-4 text-red-400">Chart Error: ${e.message}</div>`; }
 };

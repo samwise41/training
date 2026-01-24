@@ -16,7 +16,7 @@ export const METRIC_DEFINITIONS = {
     },
     endurance: {
         title: "Aerobic Efficiency", sport: "Bike", icon: "fa-heart-pulse", 
-        colorVar: "var(--color-endurance)", // <--- Specific Metric Color
+        colorVar: "var(--color-bike)", // <--- Specific Metric Color
         refMin: 1.30, refMax: 1.70, invertRanges: false, 
         rangeInfo: "1.30 – 1.70 EF",
         description: "Watts produced per heartbeat (Efficiency Factor).",
@@ -24,7 +24,7 @@ export const METRIC_DEFINITIONS = {
     },
     strength: {
         title: "Torque Efficiency", sport: "Bike", icon: "fa-bolt", 
-        colorVar: "var(--color-strength)",
+        colorVar: "var(--color-bike)",
         refMin: 2.5, refMax: 3.5, invertRanges: false, 
         rangeInfo: "2.5 – 3.5 W/RPM",
         description: "Watts produced per revolution.",
@@ -42,7 +42,7 @@ export const METRIC_DEFINITIONS = {
     },
     run: {
         title: "Running Economy", sport: "Run", icon: "fa-gauge-high", 
-        colorVar: "var(--color-economy)",
+        colorVar: "var(--color-run)",
         refMin: 1.0, refMax: 1.6, invertRanges: false, 
         rangeInfo: "1.0 – 1.6 m/beat",
         description: "Distance (meters) traveled per heartbeat.",
@@ -50,7 +50,7 @@ export const METRIC_DEFINITIONS = {
     },
     mechanical: {
         title: "Mechanical Stiffness", sport: "Run", icon: "fa-ruler-horizontal", 
-        colorVar: "var(--color-mech)",
+        colorVar: "var(--color-run)",
         refMin: 0.75, refMax: 0.95, invertRanges: false, 
         rangeInfo: "0.75 – 0.95 Ratio",
         description: "Ratio of Speed vs. Power output.",
@@ -58,7 +58,7 @@ export const METRIC_DEFINITIONS = {
     },
     gct: {
         title: "Ground Contact Time", sport: "Run", icon: "fa-stopwatch", 
-        colorVar: "var(--color-gct)",
+        colorVar: "var(--color-run)",
         refMin: 220, refMax: 260, invertRanges: true, 
         rangeInfo: "< 260 ms",
         description: "Time spent on the ground per step.",
@@ -66,7 +66,7 @@ export const METRIC_DEFINITIONS = {
     },
     vert: {
         title: "Vertical Oscillation", sport: "Run", icon: "fa-arrows-up-down", 
-        colorVar: "var(--color-vert)",
+        colorVar: "var(--color-run)",
         refMin: 6.0, refMax: 9.0, invertRanges: true, 
         rangeInfo: "6.0 – 9.0 cm",
         description: "Vertical bounce height.",
@@ -102,7 +102,7 @@ export const METRIC_DEFINITIONS = {
     },
     tss: {
         title: "Weekly TSS Load", sport: "All", icon: "fa-layer-group", 
-        colorVar: "var(--color-tss)",
+        colorVar: "var(--color-all)",
         refMin: 300, refMax: 600, invertRanges: false, 
         rangeInfo: "300 – 600 TSS",
         description: "Total training stress per week.",
@@ -110,7 +110,7 @@ export const METRIC_DEFINITIONS = {
     },
     anaerobic: {
         title: "Anaerobic Impact", sport: "All", icon: "fa-fire", 
-        colorVar: "var(--color-anaerobic)",
+        colorVar: "var(--color-all)",
         refMin: 2.0, refMax: 4.0, invertRanges: false, 
         rangeInfo: "2.0 – 4.0",
         description: "Intensity stimulus on hard days.",

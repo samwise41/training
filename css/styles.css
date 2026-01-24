@@ -19,6 +19,10 @@
     --color-partial: #facc15; /* Yellow-400 */
     --color-missed:  #ef4444; /* Red-500 */
     --color-event:   #a855f7; /* Purple-500 */
+
+    --color-endurance: #FFFF00; /* Purple-500 */
+    --color-strength:  #FF5F1F; /* Indigo-500 */
+
 }
 
 /* You can still use your classes for icons */
@@ -33,6 +37,15 @@
 .bg-icon-bike { background-color: var(--color-bike) !important; }
 .bg-icon-run  { background-color: var(--color-run) !important; }
 .bg-icon-swim { background-color: var(--color-swim) !important; }
+
+.text-metric-tss       { color: var(--color-all); }
+.text-metric-anaerobic { color: var(--color-all); }
+.text-metric-endurance { color: var(--color-endurance); }
+.text-metric-strength  { color: var(--color-strength); }
+.text-metric-economy   { color: var(--color-run); }
+.text-metric-mech      { color: var(--color-run); }
+.text-metric-gct       { color: var(--color-run); }
+.text-metric-vert      { color: var(--color-run); }
 
 /* --- Heatmap Status Colors (Consistency Mode) --- */
 .hm-done    { background-color: var(--color-done); }

@@ -20,9 +20,6 @@
     --color-missed:  #ef4444; /* Red-500 */
     --color-event:   #a855f7; /* Purple-500 */
 
-    --color-endurance: #FFFF00; /* Purple-500 */
-    --color-strength:  #FF5F1F; /* Indigo-500 */
-
 }
 
 /* You can still use your classes for icons */
@@ -38,14 +35,26 @@
 .bg-icon-run  { background-color: var(--color-run) !important; }
 .bg-icon-swim { background-color: var(--color-swim) !important; }
 
+/* Metric Text Colors (Mapped to Sports) */
+/* General -> All (Emerald) */
 .text-metric-tss       { color: var(--color-all); }
 .text-metric-anaerobic { color: var(--color-all); }
-.text-metric-endurance { color: var(--color-endurance); } //Not used?
-.text-metric-strength  { color: var(--color-strength); } //Not used?
-.text-metric-economy   { color: var(--color-run); }
-.text-metric-mech      { color: var(--color-run); }
-.text-metric-gct       { color: var(--color-run); }
-.text-metric-vert      { color: var(--color-run); }
+
+/* Bike Metrics -> Bike Color */
+.text-metric-subjective_bike { color: var(--color-bike); }
+.text-metric-endurance       { color: var(--color-bike); }
+.text-metric-strength        { color: var(--color-bike); }
+
+/* Run Metrics -> Run Color */
+.text-metric-subjective_run { color: var(--color-run); }
+.text-metric-economy        { color: var(--color-run); }
+.text-metric-mech           { color: var(--color-run); }
+.text-metric-gct            { color: var(--color-run); }
+.text-metric-vert           { color: var(--color-run); }
+
+/* Swim Metrics -> Swim Color */
+.text-metric-subjective_swim { color: var(--color-swim); }
+.text-metric-swim            { color: var(--color-swim); }
 
 /* --- Heatmap Status Colors (Consistency Mode) --- */
 .hm-done    { background-color: var(--color-done); }

@@ -12,8 +12,8 @@ export const METRIC_FORMULAS = {
     'swim': '(Avg Speed / Stroke Rate)',
     'mechanical': '(Vert Osc / GCT)',
     'calories': '(Weekly Sum)',
-    'training_balance': '(Weekly Zone Distribution)', // NEW
-    'feeling_load': '(TSS vs Feeling)' // NEW
+    'training_balance': '(Weekly Zone Distribution)',
+    'feeling_load': '(TSS vs Feeling)'
 };
 
 const KEYS = {
@@ -29,8 +29,8 @@ const KEYS = {
     ana: 'anaerobicTrainingEffect',
     tss: 'trainingStressScore',
     cals: 'calories',
-    effect: 'trainingEffectLabel', // Need this for balance
-    feeling: 'Feeling'             // Need this for subjective tracking
+    effect: 'trainingEffectLabel',
+    feeling: 'Feeling'
 };
 
 const getVal = (item, key) => {
@@ -102,7 +102,7 @@ export const aggregateWeeklyCalories = (data) => {
     }));
 };
 
-// --- NEW: Training Balance (Stacked 100%) ---
+// --- Stacked Bar (Training Balance) ---
 export const aggregateWeeklyBalance = (data) => {
     const weeks = {};
     
@@ -110,7 +110,6 @@ export const aggregateWeeklyBalance = (data) => {
         const key = getWeekKey(d.date);
         if (!weeks[key]) weeks[key] = { RECOVERY: 0, AEROBIC_BASE: 0, TEMPO: 0, LACTATE_THRESHOLD: 0, VO2MAX: 0, ANAEROBIC_CAPACITY: 0, total: 0 };
         
-        // Count activities (Frequency based)
         const label = d._effect || 'UNKNOWN';
         if (weeks[key].hasOwnProperty(label)) {
             weeks[key][label]++;
@@ -120,7 +119,6 @@ export const aggregateWeeklyBalance = (data) => {
 
     return Object.keys(weeks).sort().map(k => {
         const w = weeks[k];
-        // Calculate percentages
         const dist = {
             Recovery: w.total ? (w.RECOVERY / w.total) * 100 : 0,
             Aerobic: w.total ? (w.AEROBIC_BASE / w.total) * 100 : 0,
@@ -138,18 +136,16 @@ export const aggregateWeeklyBalance = (data) => {
     });
 };
 
-// --- NEW: Feeling vs Load (Dual Axis) ---
+// --- Feeling vs Load (Dual Axis) ---
 export const aggregateFeelingVsLoad = (data) => {
     const weeks = {};
     data.forEach(d => {
         const key = getWeekKey(d.date);
         if (!weeks[key]) weeks[key] = { tss: 0, feelingSum: 0, feelingCount: 0 };
         
-        // Load (TSS or estimate from duration if missing)
         const load = d._tss > 0 ? d._tss : (d.duration ? d.duration / 60 : 0); 
         weeks[key].tss += load;
 
-        // Feeling
         if (d._feeling > 0) {
             weeks[key].feelingSum += d._feeling;
             weeks[key].feelingCount++;
@@ -157,13 +153,14 @@ export const aggregateFeelingVsLoad = (data) => {
     });
 
     return Object.keys(weeks).sort().map(k => {
-        const w = weeks[key];
+        // FIX WAS HERE: Changed 'weeks[key]' to 'weeks[k]'
+        const w = weeks[k]; 
         const avgFeeling = w.feelingCount > 0 ? (w.feelingSum / w.feelingCount) : null;
         return {
             date: new Date(k),
             dateStr: `Week of ${k}`,
             load: Math.round(w.tss),
-            feeling: avgFeeling, // Can be null
+            feeling: avgFeeling,
             name: "Load vs Feeling"
         };
     });
@@ -171,7 +168,6 @@ export const aggregateFeelingVsLoad = (data) => {
 
 export const extractMetricData = (data, key) => {
     switch(key) {
-        // ... existing cases ...
         case 'endurance': 
             return data.filter(x => checkSport(x, 'BIKE')).map(x => {
                 if (x._pwr > 0 && x._hr > 0) return { val: x._pwr / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pwr:${Math.round(x._pwr)} / HR:${Math.round(x._hr)}` };
@@ -203,7 +199,6 @@ export const extractMetricData = (data, key) => {
         case 'tss': return aggregateWeeklyTSS(data);
         case 'calories': return aggregateWeeklyCalories(data);
         
-        // --- NEW CASES ---
         case 'training_balance': return aggregateWeeklyBalance(data);
         case 'feeling_load': return aggregateFeelingVsLoad(data);
         

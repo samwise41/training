@@ -116,4 +116,13 @@ export const METRIC_DEFINITIONS = {
         description: "Intensity stimulus on hard days.",
         improvement: "• All-out Sprints<br>• Full Recovery"
     }
+    // <--- NEW METRIC ---
+    calories: {
+        title: "Weekly Energy Burn", sport: "All", icon: "fa-fire-flame-curved",
+        colorVar: "var(--color-all)",
+        refMin: 3500, refMax: 6000, invertRanges: false, 
+        rangeInfo: "3.5k – 6k kcal",
+        description: "Total active energy expenditure per week.",
+        improvement: "• Increase Duration<br>• Add Frequency"
+    }
 };

@@ -1,14 +1,10 @@
 // js/views/metrics/definitions.js
 
-// We now use CSS Variables for consistency.
-// Note: Chart.js needs Hex for transparency, so we use Formatters.COLORS in charts.js
-// But for these UI definitions, we use CSS variables.
-
 export const METRIC_DEFINITIONS = {
     // --- CYCLING ---
     subjective_bike: {
         title: "Bike RPE Efficiency", sport: "Bike", icon: "fa-person-biking", 
-        colorVar: "var(--color-bike)", // <--- CSS Variable
+        colorVar: "var(--color-bike)", 
         refMin: 25, refMax: 50, invertRanges: false, 
         rangeInfo: "25 – 50 W/RPE",
         description: "Power produced per unit of perceived effort.",
@@ -16,7 +12,7 @@ export const METRIC_DEFINITIONS = {
     },
     endurance: {
         title: "Aerobic Efficiency", sport: "Bike", icon: "fa-heart-pulse", 
-        colorVar: "var(--color-bike)", // <--- Specific Metric Color
+        colorVar: "var(--color-bike)",
         refMin: 1.30, refMax: 1.70, invertRanges: false, 
         rangeInfo: "1.30 – 1.70 EF",
         description: "Watts produced per heartbeat (Efficiency Factor).",
@@ -27,8 +23,8 @@ export const METRIC_DEFINITIONS = {
         colorVar: "var(--color-bike)",
         refMin: 1.5, refMax: 3.0, invertRanges: false, 
         rangeInfo: "1.5 – 3.0 W/RPM",
-        description: "Watts produced per revolution.",
-        improvement: "• Low Cadence Intervals (50-60 RPM)<br>• Seated Climbing"
+        description: "Force applied to pedals per revolution (Power ÷ Cadence).",
+        improvement: "• Low Score: Efficient Spinning (Good for Z2)<br>• High Score: Muscular Grinding (Good for Strength)"
     },
 
     // --- RUNNING ---
@@ -115,8 +111,7 @@ export const METRIC_DEFINITIONS = {
         rangeInfo: "2.0 – 4.0",
         description: "Intensity stimulus on hard days.",
         improvement: "• All-out Sprints<br>• Full Recovery"
-    }
-    // <--- NEW METRIC ---
+    },
     calories: {
         title: "Weekly Energy Burn", sport: "All", icon: "fa-fire-flame-curved",
         colorVar: "var(--color-all)",

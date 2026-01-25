@@ -8,21 +8,30 @@ const buildMetricChart = (displayData, fullData, key) => {
     const def = METRIC_DEFINITIONS[key];
     if (!def) return '';
 
-    // --- 1. NEW: Resolve Colors via Formatters (Single Source of Truth) ---
-    // We map keys to the Sport colors defined in Formatters.COLORS
+    // --- 1. Resolve Colors via Formatters (Single Source of Truth) ---
     const C = Formatters.COLORS;
     const colorMap = {
-        // General
-        'vo2max': C.All, 'tss': C.All, 'anaerobic': C.All,
+        // General (Emerald)
+        'vo2max': C.All, 
+        'tss': C.All, 
+        'anaerobic': C.All, 
+        'calories': C.All, // <--- Added Calories here
         
-        // Bike
-        'subjective_bike': C.Bike, 'endurance': C.Bike, 'strength': C.Bike,
+        // Bike (Purple)
+        'subjective_bike': C.Bike, 
+        'endurance': C.Bike, 
+        'strength': C.Bike,
         
-        // Run
-        'subjective_run': C.Run, 'run': C.Run, 'mechanical': C.Run, 'gct': C.Run, 'vert': C.Run,
+        // Run (Pink)
+        'subjective_run': C.Run, 
+        'run': C.Run, 
+        'mechanical': C.Run, 
+        'gct': C.Run, 
+        'vert': C.Run,
         
-        // Swim
-        'subjective_swim': C.Swim, 'swim': C.Swim
+        // Swim (Cyan)
+        'subjective_swim': C.Swim, 
+        'swim': C.Swim
     };
 
     const color = colorMap[key] || C.All; // Fallback to Emerald
@@ -45,7 +54,8 @@ const buildMetricChart = (displayData, fullData, key) => {
     }
 
     // --- 3. Setup SVG Dimensions ---
-    const width = 800, height = 240;
+    const width = 800;
+    const height = 240; // Tall height for better visibility
     const pad = { t: 20, b: 30, l: 40, r: 20 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
     
@@ -60,8 +70,8 @@ const buildMetricChart = (displayData, fullData, key) => {
 
     // --- 4. Build Target Lines ---
     const isInverted = def.invertRanges;
-    const colorGood = C.All;     // Emerald (from CSS)
-    const colorBad = '#ef4444';  // Red-500 (Hardcoded to match --color-missed since it's not in C)
+    const colorGood = C.All;     // Match Global Theme
+    const colorBad = '#ef4444';  // Standard Red for "out of range"
     
     const maxLineColor = isInverted ? colorBad : colorGood;
     const minLineColor = isInverted ? colorGood : colorBad;
@@ -104,7 +114,7 @@ const buildMetricChart = (displayData, fullData, key) => {
                 <i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.handleMetricInfoClick(event, '${key}')"></i>
             </div>
         </div>
-        <div class="flex-1 w-full h-[120px]">
+        <div class="flex-1 w-full h-[240px]">
             <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
                 <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" />
                 <text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text>
@@ -136,7 +146,15 @@ export const updateCharts = (allData, timeRange) => {
         el.innerHTML = buildMetricChart(display, full||[], key);
     };
 
-    ['vo2max','tss','anaerobic','subjective_bike','endurance','strength','subjective_run','run','mechanical','gct','vert','subjective_swim','swim'].forEach(k => render(`metric-chart-${k}`, k));
+    // Render List (Includes new 'calories' chart)
+    const metricsToRender = [
+        'vo2max', 'tss', 'anaerobic', 'calories',
+        'subjective_bike', 'endurance', 'strength',
+        'subjective_run', 'run', 'mechanical', 'gct', 'vert',
+        'subjective_swim', 'swim'
+    ];
+
+    metricsToRender.forEach(k => render(`metric-chart-${k}`, k));
     
     // Update active button state
     ['30d','90d','6m','1y'].forEach(r => { 

@@ -56,7 +56,7 @@ const buildMetricChart = (displayData, fullData, key) => {
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
     const isInverted = def.invertRanges;
-    const colorGood = color;     
+    const colorGood = 'var(--color-done)';     
     const colorBad = '#ef4444'; 
     
     const maxLineColor = isInverted ? colorBad : colorGood;

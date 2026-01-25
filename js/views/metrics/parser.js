@@ -11,7 +11,9 @@ export const METRIC_FORMULAS = {
     'run': '(Avg Power / Avg Speed)',
     'swim': '(Avg Speed / Stroke Rate)',
     'mechanical': '(Vert Osc / GCT)',
-    'calories': '(Weekly Sum)' 
+    'calories': '(Weekly Sum)',
+    'training_balance': '(Weekly Zone Distribution)', // NEW
+    'feeling_load': '(TSS vs Feeling)' // NEW
 };
 
 const KEYS = {
@@ -26,7 +28,9 @@ const KEYS = {
     vo2: 'vO2MaxValue',
     ana: 'anaerobicTrainingEffect',
     tss: 'trainingStressScore',
-    cals: 'calories'
+    cals: 'calories',
+    effect: 'trainingEffectLabel', // Need this for balance
+    feeling: 'Feeling'             // Need this for subjective tracking
 };
 
 const getVal = (item, key) => {
@@ -53,23 +57,29 @@ export const normalizeMetricsData = (rawData) => {
         _ana: getVal(d, KEYS.ana),
         _tss: getVal(d, KEYS.tss),
         _cals: getVal(d, KEYS.cals),
-        _cad: getVal(d, KEYS.cad_bike) || getVal(d, KEYS.cad_run)
+        _cad: getVal(d, KEYS.cad_bike) || getVal(d, KEYS.cad_run),
+        _effect: d[KEYS.effect] || 'UNKNOWN',
+        _feeling: getVal(d, KEYS.feeling)
     }));
 };
 
 // --- Aggregators ---
+
+const getWeekKey = (dateObj) => {
+    const d = new Date(dateObj);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? 0 : 7); // Adjust to Sunday
+    const weekEnd = new Date(d.setDate(diff));
+    weekEnd.setHours(0,0,0,0);
+    return weekEnd.toISOString().split('T')[0];
+};
 
 export const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
         const val = d._tss;
         if (val <= 0) return;
-        const date = new Date(d.date);
-        const day = date.getDay(); 
-        const diff = date.getDate() - day + (day === 0 ? 0 : 7); 
-        const weekEnd = new Date(date.setDate(diff));
-        weekEnd.setHours(0,0,0,0);
-        const key = weekEnd.toISOString().split('T')[0];
+        const key = getWeekKey(d.date);
         if (!weeks[key]) weeks[key] = 0;
         weeks[key] += val;
     });
@@ -83,12 +93,7 @@ export const aggregateWeeklyCalories = (data) => {
     data.forEach(d => {
         const val = d._cals;
         if (val <= 0) return;
-        const date = new Date(d.date);
-        const day = date.getDay(); 
-        const diff = date.getDate() - day + (day === 0 ? 0 : 7); 
-        const weekEnd = new Date(date.setDate(diff));
-        weekEnd.setHours(0,0,0,0);
-        const key = weekEnd.toISOString().split('T')[0];
+        const key = getWeekKey(d.date);
         if (!weeks[key]) weeks[key] = 0;
         weeks[key] += val;
     });
@@ -97,8 +102,76 @@ export const aggregateWeeklyCalories = (data) => {
     }));
 };
 
+// --- NEW: Training Balance (Stacked 100%) ---
+export const aggregateWeeklyBalance = (data) => {
+    const weeks = {};
+    
+    data.forEach(d => {
+        const key = getWeekKey(d.date);
+        if (!weeks[key]) weeks[key] = { RECOVERY: 0, AEROBIC_BASE: 0, TEMPO: 0, LACTATE_THRESHOLD: 0, VO2MAX: 0, ANAEROBIC_CAPACITY: 0, total: 0 };
+        
+        // Count activities (Frequency based)
+        const label = d._effect || 'UNKNOWN';
+        if (weeks[key].hasOwnProperty(label)) {
+            weeks[key][label]++;
+            weeks[key].total++;
+        }
+    });
+
+    return Object.keys(weeks).sort().map(k => {
+        const w = weeks[k];
+        // Calculate percentages
+        const dist = {
+            Recovery: w.total ? (w.RECOVERY / w.total) * 100 : 0,
+            Aerobic: w.total ? (w.AEROBIC_BASE / w.total) * 100 : 0,
+            Tempo: w.total ? (w.TEMPO / w.total) * 100 : 0,
+            Threshold: w.total ? (w.LACTATE_THRESHOLD / w.total) * 100 : 0,
+            VO2: w.total ? ((w.VO2MAX + w.ANAEROBIC_CAPACITY) / w.total) * 100 : 0
+        };
+        return {
+            date: new Date(k),
+            dateStr: k,
+            distribution: dist,
+            totalActivities: w.total,
+            name: "Training Distribution"
+        };
+    });
+};
+
+// --- NEW: Feeling vs Load (Dual Axis) ---
+export const aggregateFeelingVsLoad = (data) => {
+    const weeks = {};
+    data.forEach(d => {
+        const key = getWeekKey(d.date);
+        if (!weeks[key]) weeks[key] = { tss: 0, feelingSum: 0, feelingCount: 0 };
+        
+        // Load (TSS or estimate from duration if missing)
+        const load = d._tss > 0 ? d._tss : (d.duration ? d.duration / 60 : 0); 
+        weeks[key].tss += load;
+
+        // Feeling
+        if (d._feeling > 0) {
+            weeks[key].feelingSum += d._feeling;
+            weeks[key].feelingCount++;
+        }
+    });
+
+    return Object.keys(weeks).sort().map(k => {
+        const w = weeks[key];
+        const avgFeeling = w.feelingCount > 0 ? (w.feelingSum / w.feelingCount) : null;
+        return {
+            date: new Date(k),
+            dateStr: `Week of ${k}`,
+            load: Math.round(w.tss),
+            feeling: avgFeeling, // Can be null
+            name: "Load vs Feeling"
+        };
+    });
+};
+
 export const extractMetricData = (data, key) => {
     switch(key) {
+        // ... existing cases ...
         case 'endurance': 
             return data.filter(x => checkSport(x, 'BIKE')).map(x => {
                 if (x._pwr > 0 && x._hr > 0) return { val: x._pwr / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pwr:${Math.round(x._pwr)} / HR:${Math.round(x._hr)}` };
@@ -127,9 +200,13 @@ export const extractMetricData = (data, key) => {
             return data.map(x => { if (x._vo2 > 0) return { val: x._vo2, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: "VO2 Est", breakdown: `Score: ${x._vo2}` }; }).filter(Boolean);
         case 'anaerobic': 
             return data.map(x => { if (x._ana > 0.5) return { val: x._ana, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Anaerobic: ${x._ana}` }; }).filter(Boolean);
-        
         case 'tss': return aggregateWeeklyTSS(data);
         case 'calories': return aggregateWeeklyCalories(data);
+        
+        // --- NEW CASES ---
+        case 'training_balance': return aggregateWeeklyBalance(data);
+        case 'feeling_load': return aggregateFeelingVsLoad(data);
+        
         default: return [];
     }
 };

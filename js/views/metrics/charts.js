@@ -8,33 +8,16 @@ const buildMetricChart = (displayData, fullData, key) => {
     const def = METRIC_DEFINITIONS[key];
     if (!def) return '';
 
-    // --- 1. Resolve Colors via Formatters (Single Source of Truth) ---
+    // --- 1. Resolve Colors via Formatters ---
     const C = Formatters.COLORS;
     const colorMap = {
-        // General (Emerald)
-        'vo2max': C.All, 
-        'tss': C.All, 
-        'anaerobic': C.All, 
-        'calories': C.All, // <--- Added Calories here
-        
-        // Bike (Purple)
-        'subjective_bike': C.Bike, 
-        'endurance': C.Bike, 
-        'strength': C.Bike,
-        
-        // Run (Pink)
-        'subjective_run': C.Run, 
-        'run': C.Run, 
-        'mechanical': C.Run, 
-        'gct': C.Run, 
-        'vert': C.Run,
-        
-        // Swim (Cyan)
-        'subjective_swim': C.Swim, 
-        'swim': C.Swim
+        'vo2max': C.All, 'tss': C.All, 'anaerobic': C.All, 'calories': C.All,
+        'subjective_bike': C.Bike, 'endurance': C.Bike, 'strength': C.Bike,
+        'subjective_run': C.Run, 'run': C.Run, 'mechanical': C.Run, 'gct': C.Run, 'vert': C.Run,
+        'subjective_swim': C.Swim, 'swim': C.Swim
     };
 
-    const color = colorMap[key] || C.All; // Fallback to Emerald
+    const color = colorMap[key] || C.All;
     const formula = METRIC_FORMULAS[key] || '';
 
     // --- 2. Handle "Not Enough Data" ---
@@ -55,7 +38,7 @@ const buildMetricChart = (displayData, fullData, key) => {
 
     // --- 3. Setup SVG Dimensions ---
     const width = 800;
-    const height = 240; // Tall height for better visibility
+    const height = 240; // UPDATED HEIGHT
     const pad = { t: 20, b: 30, l: 40, r: 20 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
     
@@ -70,8 +53,8 @@ const buildMetricChart = (displayData, fullData, key) => {
 
     // --- 4. Build Target Lines ---
     const isInverted = def.invertRanges;
-    const colorGood = C.All;     // Match Global Theme
-    const colorBad = '#ef4444';  // Standard Red for "out of range"
+    const colorGood = C.All;     
+    const colorBad = '#ef4444';  
     
     const maxLineColor = isInverted ? colorBad : colorGood;
     const minLineColor = isInverted ? colorGood : colorBad;
@@ -93,7 +76,6 @@ const buildMetricChart = (displayData, fullData, key) => {
     displayData.forEach((d, i) => {
         const x = getX(d, i), y = getY(d.val);
         pathD += ` L ${x} ${y}`;
-        
         pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" class="cursor-pointer hover:stroke-white transition-all" onclick="window.handleMetricChartClick(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '', '${d.breakdown||""}', '${color}')"></circle>`;
     });
 
@@ -128,7 +110,6 @@ const buildMetricChart = (displayData, fullData, key) => {
     </div>`;
 };
 
-// --- 6. Main Render Loop ---
 export const updateCharts = (allData, timeRange) => {
     if (!allData || !allData.length) return;
     const cutoff = new Date();
@@ -146,17 +127,8 @@ export const updateCharts = (allData, timeRange) => {
         el.innerHTML = buildMetricChart(display, full||[], key);
     };
 
-    // Render List (Includes new 'calories' chart)
-    const metricsToRender = [
-        'vo2max', 'tss', 'anaerobic', 'calories',
-        'subjective_bike', 'endurance', 'strength',
-        'subjective_run', 'run', 'mechanical', 'gct', 'vert',
-        'subjective_swim', 'swim'
-    ];
-
-    metricsToRender.forEach(k => render(`metric-chart-${k}`, k));
+    ['vo2max','tss','anaerobic','calories','subjective_bike','endurance','strength','subjective_run','run','mechanical','gct','vert','subjective_swim','swim'].forEach(k => render(`metric-chart-${k}`, k));
     
-    // Update active button state
     ['30d','90d','6m','1y'].forEach(r => { 
         const b = document.getElementById(`btn-metric-${r}`); 
         if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; 

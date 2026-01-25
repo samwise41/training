@@ -125,7 +125,15 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-vo2max"></div>
                 <div id="metric-chart-tss"></div>
                 <div id="metric-chart-anaerobic"></div>
-                <div id="metric-chart-calories"></div> ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
+                <div id="metric-chart-calories"></div> 
+
+                <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="metric-chart-training_balance"></div>
+                    <div id="metric-chart-feeling_load"></div>
+                </div>
+
+
+${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
                 <div id="metric-chart-subjective_bike"></div>
                 <div id="metric-chart-endurance"></div>
                 <div id="metric-chart-strength"></div>

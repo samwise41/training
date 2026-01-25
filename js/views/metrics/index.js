@@ -131,9 +131,9 @@ export function renderMetrics(rawData) {
                     <div id="metric-chart-training_balance"></div>
                     <div id="metric-chart-feeling_load"></div>
                 </div>
+                
 
-
-${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
+                ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
                 <div id="metric-chart-subjective_bike"></div>
                 <div id="metric-chart-endurance"></div>
                 <div id="metric-chart-strength"></div>

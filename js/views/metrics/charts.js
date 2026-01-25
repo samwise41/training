@@ -17,8 +17,8 @@ const buildMetricChart = (displayData, fullData, key) => {
     const C = Formatters.COLORS;
     const colorMap = {
         'vo2max': 'var(--color-all)', 
-        'tss': 'var(--color-tss)', 
-        'anaerobic': 'var(--color-anaerobic)', 
+        'tss': 'var(--color-all)', 
+        'anaerobic': 'var(--color-all)', 
         'calories': 'var(--color-all)',
         
         'subjective_bike': 'var(--color-bike)', 

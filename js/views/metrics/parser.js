@@ -7,10 +7,11 @@ export const METRIC_FORMULAS = {
     'subjective_run': '(Avg Speed / RPE)',
     'subjective_swim': '(Avg Speed / RPE)',
     'endurance': '(Norm Power / Avg HR)',
-    'strength': '(Torque / Output)',
+    'strength': '(Avg Power / Avg Cadence)',
     'run': '(Avg Power / Avg Speed)',
     'swim': '(Avg Speed / Stroke Rate)',
-    'mechanical': '(Vert Osc / GCT)'
+    'mechanical': '(Vert Osc / GCT)',
+    'calories': '(Weekly Sum)' // <--- Added
 };
 
 const KEYS = {
@@ -24,7 +25,8 @@ const KEYS = {
     vert: 'avgVerticalOscillation',
     vo2: 'vO2MaxValue',
     ana: 'anaerobicTrainingEffect',
-    tss: 'trainingStressScore'
+    tss: 'trainingStressScore',
+    cals: 'calories' // <--- Added
 };
 
 const getVal = (item, key) => {
@@ -50,15 +52,18 @@ export const normalizeMetricsData = (rawData) => {
         _vo2: getVal(d, KEYS.vo2),
         _ana: getVal(d, KEYS.ana),
         _tss: getVal(d, KEYS.tss),
+        _cals: getVal(d, KEYS.cals), // <--- Added
         _cad: getVal(d, KEYS.cad_bike) || getVal(d, KEYS.cad_run)
     }));
 };
 
+// --- Aggregators ---
+
 export const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
-        const tss = getVal(d, KEYS.tss);
-        if (tss <= 0) return;
+        const val = d._tss;
+        if (val <= 0) return;
         const date = new Date(d.date);
         const day = date.getDay(); 
         const diff = date.getDate() - day + (day === 0 ? 0 : 7); 
@@ -66,10 +71,30 @@ export const aggregateWeeklyTSS = (data) => {
         weekEnd.setHours(0,0,0,0);
         const key = weekEnd.toISOString().split('T')[0];
         if (!weeks[key]) weeks[key] = 0;
-        weeks[key] += tss;
+        weeks[key] += val;
     });
     return Object.keys(weeks).sort().map(k => ({
         date: new Date(k), dateStr: `Week Ending ${k}`, name: "Weekly Load", val: weeks[k], breakdown: `Total TSS: ${Math.round(weeks[k])}`
+    }));
+};
+
+// <--- NEW AGGREGATOR --->
+export const aggregateWeeklyCalories = (data) => {
+    const weeks = {};
+    data.forEach(d => {
+        const val = d._cals;
+        if (val <= 0) return;
+        const date = new Date(d.date);
+        const day = date.getDay(); 
+        const diff = date.getDate() - day + (day === 0 ? 0 : 7); 
+        const weekEnd = new Date(date.setDate(diff));
+        weekEnd.setHours(0,0,0,0);
+        const key = weekEnd.toISOString().split('T')[0];
+        if (!weeks[key]) weeks[key] = 0;
+        weeks[key] += val;
+    });
+    return Object.keys(weeks).sort().map(k => ({
+        date: new Date(k), dateStr: `Week Ending ${k}`, name: "Weekly Energy", val: weeks[k], breakdown: `Total: ${Math.round(weeks[k])} kcal`
     }));
 };
 
@@ -103,7 +128,9 @@ export const extractMetricData = (data, key) => {
             return data.map(x => { if (x._vo2 > 0) return { val: x._vo2, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: "VO2 Est", breakdown: `Score: ${x._vo2}` }; }).filter(Boolean);
         case 'anaerobic': 
             return data.map(x => { if (x._ana > 0.5) return { val: x._ana, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Anaerobic: ${x._ana}` }; }).filter(Boolean);
+        
         case 'tss': return aggregateWeeklyTSS(data);
+        case 'calories': return aggregateWeeklyCalories(data); // <--- Added
         default: return [];
     }
 };

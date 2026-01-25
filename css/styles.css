@@ -22,6 +22,14 @@
     --color-missed:  #ef4444; /* Red-500 */
     --color-event:   #a855f7; /* Purple-500 */
 
+   /* --- ZONE COLORS (Extracted from your classes) --- */
+    --color-z1: #94a3b8; /* Grey (Recovery) */
+    --color-z2: #3b82f6; /* Blue (Endurance) */
+    --color-z3: #22c55e; /* Green (Tempo) */
+    --color-zss: #eab308; /* Yellow (Sweet Spot) */
+    --color-z4: #f97316; /* Orange (Threshold) */
+    --color-z5: #ef4444; /* Red (VO2 Max) */
+
 }
 
 /* You can still use your classes for icons */
@@ -163,12 +171,16 @@ body {
     margin-bottom: 0.75rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px;
     display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #64748b;
 }
-.z-1 { border-left-color: #94a3b8; } /* Grey (Recovery) */
-.z-2 { border-left-color: #3b82f6; } /* Blue (Endurance) */
-.z-3 { border-left-color: #22c55e; } /* Green (Tempo) */
-.z-ss { border-left-color: #eab308; } /* Yellow (Sweet Spot) */
-.z-4 { border-left-color: #f97316; } /* Orange (Threshold) */
-.z-5 { border-left-color: #ef4444; } /* Red (VO2 Max) */
+
+
+/* --- UPDATED: Zone Classes use Variables now --- */
+.z-1 { border-left-color: var(--color-z1); }
+.z-2 { border-left-color: var(--color-z2); }
+.z-3 { border-left-color: var(--color-z3); }
+.z-ss { border-left-color: var(--color-zss); }
+.z-4 { border-left-color: var(--color-z4); }
+.z-5 { border-left-color: var(--color-z5); }
+
 
 .gear-select {
     background-color: #1e293b;

@@ -11,7 +11,7 @@ export const METRIC_FORMULAS = {
     'run': '(Avg Power / Avg Speed)',
     'swim': '(Avg Speed / Stroke Rate)',
     'mechanical': '(Vert Osc / GCT)',
-    'calories': '(Weekly Sum)' // <--- Added
+    'calories': '(Weekly Sum)' 
 };
 
 const KEYS = {
@@ -26,7 +26,7 @@ const KEYS = {
     vo2: 'vO2MaxValue',
     ana: 'anaerobicTrainingEffect',
     tss: 'trainingStressScore',
-    cals: 'calories' // <--- Added
+    cals: 'calories'
 };
 
 const getVal = (item, key) => {
@@ -52,7 +52,7 @@ export const normalizeMetricsData = (rawData) => {
         _vo2: getVal(d, KEYS.vo2),
         _ana: getVal(d, KEYS.ana),
         _tss: getVal(d, KEYS.tss),
-        _cals: getVal(d, KEYS.cals), // <--- Added
+        _cals: getVal(d, KEYS.cals),
         _cad: getVal(d, KEYS.cad_bike) || getVal(d, KEYS.cad_run)
     }));
 };
@@ -78,7 +78,6 @@ export const aggregateWeeklyTSS = (data) => {
     }));
 };
 
-// <--- NEW AGGREGATOR --->
 export const aggregateWeeklyCalories = (data) => {
     const weeks = {};
     data.forEach(d => {
@@ -130,7 +129,7 @@ export const extractMetricData = (data, key) => {
             return data.map(x => { if (x._ana > 0.5) return { val: x._ana, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Anaerobic: ${x._ana}` }; }).filter(Boolean);
         
         case 'tss': return aggregateWeeklyTSS(data);
-        case 'calories': return aggregateWeeklyCalories(data); // <--- Added
+        case 'calories': return aggregateWeeklyCalories(data);
         default: return [];
     }
 };

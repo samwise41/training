@@ -126,6 +126,7 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-vo2max"></div>
                 <div id="metric-chart-tss"></div>
                 <div id="metric-chart-anaerobic"></div>
+               <div id="metric-chart-calories"></div>
 
                 ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
                 <div id="metric-chart-subjective_bike"></div>

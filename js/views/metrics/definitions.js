@@ -25,8 +25,8 @@ export const METRIC_DEFINITIONS = {
     strength: {
         title: "Pedal Force (Torque)", sport: "Bike", icon: "fa-bolt", 
         colorVar: "var(--color-bike)",
-        refMin: 2.5, refMax: 3.5, invertRanges: false, 
-        rangeInfo: "2.5 – 3.5 W/RPM",
+        refMin: 1.5, refMax: 3.0, invertRanges: false, 
+        rangeInfo: "1.5 – 3.0 W/RPM",
         description: "Watts produced per revolution.",
         improvement: "• Low Cadence Intervals (50-60 RPM)<br>• Seated Climbing"
     },

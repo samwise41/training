@@ -14,7 +14,7 @@ window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => 
     e.stopPropagation();
     const breakdownHtml = breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : '';
     const html = `
-        <div class="min-w-[240px]">
+        <div class="min-w-[150px]">
             <div class="font-bold text-slate-200 mb-1 border-b border-slate-700 pb-1">${name}</div>
             <div class="flex justify-between items-end mb-1 gap-4">
                 <span class="text-[10px] text-slate-400">${date}</span>
@@ -111,7 +111,6 @@ export function renderMetrics(rawData) {
             tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
         }
         
-        // USE UI MODULE
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
         const buildSectionHeader = (title, icon, color) => `
@@ -126,9 +125,7 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-vo2max"></div>
                 <div id="metric-chart-tss"></div>
                 <div id="metric-chart-anaerobic"></div>
-               <div id="metric-chart-calories"></div>
-
-                ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
+                <div id="metric-chart-calories"></div> ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
                 <div id="metric-chart-subjective_bike"></div>
                 <div id="metric-chart-endurance"></div>
                 <div id="metric-chart-strength"></div>
@@ -145,7 +142,6 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-swim"></div> 
             </div>`;
         
-        // USE UI MODULE
         const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
         return `

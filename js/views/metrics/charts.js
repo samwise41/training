@@ -13,15 +13,29 @@ const buildMetricChart = (displayData, fullData, key) => {
     if (!def) return '';
 
     // --- STANDARD CHART LOGIC ---
+    // We map keys to CSS Variables for consistency
     const C = Formatters.COLORS;
     const colorMap = {
-        'vo2max': C.All, 'tss': C.All, 'anaerobic': C.All, 'calories': C.All,
-        'subjective_bike': C.Bike, 'endurance': C.Bike, 'strength': C.Bike,
-        'subjective_run': C.Run, 'run': C.Run, 'mechanical': C.Run, 'gct': C.Run, 'vert': C.Run,
-        'subjective_swim': C.Swim, 'swim': C.Swim
+        'vo2max': 'var(--color-all)', 
+        'tss': 'var(--color-tss)', 
+        'anaerobic': 'var(--color-anaerobic)', 
+        'calories': 'var(--color-all)',
+        
+        'subjective_bike': 'var(--color-bike)', 
+        'endurance': 'var(--color-bike)', 
+        'strength': 'var(--color-bike)',
+        
+        'subjective_run': 'var(--color-run)', 
+        'run': 'var(--color-run)', 
+        'mechanical': 'var(--color-run)', 
+        'gct': 'var(--color-run)', 
+        'vert': 'var(--color-run)',
+        
+        'subjective_swim': 'var(--color-swim)', 
+        'swim': 'var(--color-swim)'
     };
 
-    const color = colorMap[key] || C.All;
+    const color = colorMap[key] || 'var(--color-all)';
     const formula = METRIC_FORMULAS[key] || '';
 
     if (!displayData || displayData.length < 2) {
@@ -43,7 +57,7 @@ const buildMetricChart = (displayData, fullData, key) => {
 
     const isInverted = def.invertRanges;
     const colorGood = color;     
-    const colorBad = '#ef4444';  
+    const colorBad = '#ef4444'; 
     
     const maxLineColor = isInverted ? colorBad : colorGood;
     const minLineColor = isInverted ? colorGood : colorBad;
@@ -108,12 +122,12 @@ const buildStackedBarChart = (data, key) => {
     const width = 800, height = 240;
     const pad = { t: 20, b: 30, l: 40, r: 20 };
     
-    // Stack Colors
-    const cRec = '#94a3b8'; // Slate
-    const cAer = '#34d399'; // Emerald
-    const cTem = '#facc15'; // Yellow
-    const cThr = '#f97316'; // Orange
-    const cVO2 = '#ef4444'; // Red
+    // --- UPDATED: Use CSS Variables ---
+    const cRec = 'var(--color-z1)';
+    const cAer = 'var(--color-z2)';
+    const cTem = 'var(--color-z3)';
+    const cThr = 'var(--color-z4)';
+    const cVO2 = 'var(--color-z5)';
 
     const barWidth = (width - pad.l - pad.r) / data.length * 0.6;
     let barsHtml = '';
@@ -175,6 +189,10 @@ const buildDualAxisChart = (data, key) => {
     const width = 800, height = 240;
     const pad = { t: 20, b: 30, l: 40, r: 40 };
 
+    // --- UPDATED: Use Existing Variables ---
+    const cLoad = 'var(--color-partial)'; // Yellow
+    const cFeel = 'var(--color-done)';    // Green
+
     const maxLoad = Math.max(...data.map(d => d.load || 0)) * 1.1 || 100;
     const maxFeel = 5;
 
@@ -195,7 +213,7 @@ const buildDualAxisChart = (data, key) => {
         // Bar (Load)
         if (d.load > 0) {
             const hBar = (d.load / maxLoad) * (height - pad.t - pad.b);
-            barsHtml += `<rect x="${x - barWidth/2}" y="${height - pad.b - hBar}" width="${barWidth}" height="${hBar}" fill="#3b82f6" opacity="0.4" rx="2" />`;
+            barsHtml += `<rect x="${x - barWidth/2}" y="${height - pad.b - hBar}" width="${barWidth}" height="${hBar}" fill="${cLoad}" opacity="0.4" rx="2" />`;
         }
 
         // Line (Feeling)
@@ -207,7 +225,7 @@ const buildDualAxisChart = (data, key) => {
             } else {
                 linePath += ` L ${x} ${yF}`;
             }
-            pointsHtml += `<circle cx="${x}" cy="${yF}" r="4" fill="#10b981" stroke="#fff" stroke-width="1" class="cursor-pointer" onclick="window.handleMetricChartClick(event, '${d.dateStr}', 'Feeling Score', '${d.feeling.toFixed(1)}', '/ 5', 'Load: ${d.load} TSS', '#10b981')" />`;
+            pointsHtml += `<circle cx="${x}" cy="${yF}" r="4" fill="${cFeel}" stroke="#fff" stroke-width="1" class="cursor-pointer" onclick="window.handleMetricChartClick(event, '${d.dateStr}', 'Feeling Score', '${d.feeling.toFixed(1)}', '/ 5', 'Load: ${d.load} TSS', '${cFeel}')" />`;
         }
     });
 
@@ -219,22 +237,22 @@ const buildDualAxisChart = (data, key) => {
             </h3>
             <div class="flex items-center gap-3">
                 <div class="flex gap-2 text-[9px] font-mono">
-                    <span class="text-blue-400">■ Load</span>
-                    <span class="text-emerald-400">● Feeling</span>
+                    <span style="color: ${cLoad}">■ Load</span>
+                    <span style="color: ${cFeel}">● Feeling</span>
                 </div>
                 <i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.handleMetricInfoClick(event, '${key}')"></i>
             </div>
         </div>
         <div class="flex-1 w-full h-[240px]">
             <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
-                <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#3b82f6" stroke-width="1" opacity="0.3" />
-                <line x1="${width - pad.r}" y1="${pad.t}" x2="${width - pad.r}" y2="${height - pad.b}" stroke="#10b981" stroke-width="1" opacity="0.3" />
+                <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="${cLoad}" stroke-width="1" opacity="0.3" />
+                <line x1="${width - pad.r}" y1="${pad.t}" x2="${width - pad.r}" y2="${height - pad.b}" stroke="${cFeel}" stroke-width="1" opacity="0.3" />
                 
-                <text x="${pad.l-5}" y="${pad.t}" text-anchor="end" font-size="9" fill="#3b82f6">${Math.round(maxLoad)}</text>
-                <text x="${width-pad.r+5}" y="${pad.t}" text-anchor="start" font-size="9" fill="#10b981">5.0</text>
+                <text x="${pad.l-5}" y="${pad.t}" text-anchor="end" font-size="9" fill="${cLoad}">${Math.round(maxLoad)}</text>
+                <text x="${width-pad.r+5}" y="${pad.t}" text-anchor="start" font-size="9" fill="${cFeel}">5.0</text>
 
                 ${barsHtml}
-                <path d="${linePath}" fill="none" stroke="#10b981" stroke-width="2" />
+                <path d="${linePath}" fill="none" stroke="${cFeel}" stroke-width="2" />
                 ${pointsHtml}
             </svg>
         </div>

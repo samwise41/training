@@ -1,82 +1,72 @@
 [
     {
-        "id": "PLAN-2026-01-19-Bike",
-        "date": "2026-01-19",
+        "id": "PLAN-2026-01-26-Run",
+        "date": "2026-01-26",
         "day": "Monday",
-        "plannedWorkout": "[BIKE] Strength / Hill Focus",
-        "plannedDuration": 60.0,
-        "activityType": "Bike",
-        "notes": "**File:** `Sweet_Spot___2_x_15.zwo`. **Focus:** Perform intervals at **Low Cadence (60-70 RPM)** to fix Torque Efficiency (1.97). Grind it out.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-01-20-Swim",
-        "date": "2026-01-20",
-        "day": "Tuesday",
-        "plannedWorkout": "[SWIM] Technique Focus",
-        "plannedDuration": 40.0,
-        "activityType": "Swim",
-        "notes": "**Focus:** Smooth rotation. Swim Efficiency is improving (0.50) but needs maintenance. Use Pull Buoy if legs are tired.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-01-21-Run",
-        "date": "2026-01-21",
-        "day": "Wednesday",
         "plannedWorkout": "[RUN] Tempo / Threshold",
         "plannedDuration": 45.0,
         "activityType": "Run",
-        "notes": "**Focus:** Run Durability. Include 4-6 x 20sec \"Strides\" at the end. **Target:** High Cadence (175+ spm) to lower Ground Contact Time.",
+        "notes": "**Loc:** Hotel Treadmill. **Focus:** Anaerobic Impact. 10m Warmup; 20m @ Tempo (RPE 6-7); 4 x 20s Strides (Fast!); Cooldown.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-01-22-Bike",
-        "date": "2026-01-22",
+        "id": "PLAN-2026-01-27-Bike",
+        "date": "2026-01-27",
+        "day": "Tuesday",
+        "plannedWorkout": "[BIKE] Strength / Hill Focus",
+        "plannedDuration": 60.0,
+        "activityType": "Bike",
+        "notes": "**Loc:** Peloton. **Focus:** Torque Efficiency (1.97). Set heavy resistance. 3 x 10min \"Climbs\" at **60-65 RPM** (Power Zone 3/High Sweet Spot). Do not spin fast.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-01-28-Run",
+        "date": "2026-01-28",
+        "day": "Wednesday",
+        "plannedWorkout": "[RUN] Aerobic Maintenance",
+        "plannedDuration": 45.0,
+        "activityType": "Run",
+        "notes": "**Loc:** Treadmill. **Focus:** Ground Contact Time. Easy Z2 effort. Every 5 mins, do 1 min of \"High Cadence\" (180+ spm) running.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-01-29-Bike",
+        "date": "2026-01-29",
         "day": "Thursday",
         "plannedWorkout": "[BIKE] Mid-Week Aerobic Volume",
         "plannedDuration": 90.0,
         "activityType": "Bike",
-        "notes": "**File:** `Zone_2___71___90_min_.zwo`. **Winter Strategy:** Volume re-allocated here. Strict Zone 2 (134-180W).",
+        "notes": "**Loc:** Peloton. **Focus:** Aerobic Efficiency (1.15). \"Power Zone Endurance\" ride. Stay strictly in Zone 2 (134-180W equivalent).",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-01-23-Swim",
-        "date": "2026-01-23",
+        "id": "PLAN-2026-01-30-Other",
+        "date": "2026-01-30",
         "day": "Friday",
-        "plannedWorkout": "[SWIM] Touch Swim",
-        "plannedDuration": 20.0,
-        "activityType": "Swim",
-        "notes": "Very easy. Drills only. Maintain \"feel for water.\"",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0,
+        "activityType": "Other",
+        "notes": "**Loc:** Travel Day. No workout planned. Hydrate well.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-01-23-Run",
-        "date": "2026-01-23",
-        "day": "Friday",
-        "plannedWorkout": "[RUN] Aerobic Maintenance",
-        "plannedDuration": 50.0,
-        "activityType": "Run",
-        "notes": "**Focus:** Pure Zone 2. Keep HR < 152 bpm. Focus on quick feet / low vertical oscillation.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-01-24-Bike",
-        "date": "2026-01-24",
+        "id": "PLAN-2026-01-31-Bike",
+        "date": "2026-01-31",
         "day": "Saturday",
         "plannedWorkout": "[BIKE] Long Steady Distance",
         "plannedDuration": 120.0,
         "activityType": "Bike",
-        "notes": "**File:** `Zone_2___71___2_hrs_.zwo`. **Winter Cap Applied.** 2.0 Hours max. Fueling practice (60-90g carb/hr).",
+        "notes": "**Loc:** Home (Zwift). **File:** `Zone_2___71___2_hrs_.zwo`. **Focus:** Re-establish Aerobic Efficiency. Keep HR stable.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-01-25-Other",
-        "date": "2026-01-25",
+        "id": "PLAN-2026-02-01-Other",
+        "date": "2026-02-01",
         "day": "Sunday",
         "plannedWorkout": "Rest",
         "plannedDuration": 0,
         "activityType": "Other",
-        "notes": "Strict recovery. No activity.",
+        "notes": "Strict recovery.",
         "status": "PLANNED"
     }
 ]

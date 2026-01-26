@@ -3121,8 +3121,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3858,8 +3858,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3891,6 +3891,24 @@
                 "name": "Innsbruck Virtual Cycling",
                 "sport": "Bike",
                 "actual": 132.7
+            }
+        ]
+    },
+    {
+        "date": "2026-01-26",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 45.8,
+        "sports": [
+            "Run"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Threshold",
+                "sport": "Run",
+                "actual": 45.8
             }
         ]
     },

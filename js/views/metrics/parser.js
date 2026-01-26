@@ -43,7 +43,12 @@ const getVal = (item, key) => {
 
 export const normalizeMetricsData = (rawData) => {
     if (!rawData || !Array.isArray(rawData)) return [];
-    return rawData.map(d => ({
+
+    // --- FILTER: Exclude Junk Miles ---
+    // This ensures activities marked "exclude": true in JSON are ignored
+    const validData = rawData.filter(d => d.exclude !== true);
+
+    return validData.map(d => ({
         ...d,
         date: new Date(d.date),
         actualName: d.actualWorkout || d.activityType || "Activity",
@@ -153,8 +158,7 @@ export const aggregateFeelingVsLoad = (data) => {
     });
 
     return Object.keys(weeks).sort().map(k => {
-        // FIX WAS HERE: Changed 'weeks[key]' to 'weeks[k]'
-        const w = weeks[k]; 
+        const w = weeks[k];
         const avgFeeling = w.feelingCount > 0 ? (w.feelingSum / w.feelingCount) : null;
         return {
             date: new Date(k),

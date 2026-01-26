@@ -2,7 +2,7 @@
 # Master Training Plan 2026
 
 **Last Updated:** January 17, 2026
-**Status:** Phase 1 (Base/Prep) - Block 2 Week 1 (Loading)
+**Status:** Phase 1 (Base/Prep) - Block 2 Week 2 (Loading)
 
 ## 1. Event Schedule
 

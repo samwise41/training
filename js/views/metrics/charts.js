@@ -43,7 +43,7 @@ const buildMetricChart = (displayData, fullData, key) => {
     }
 
     const width = 800, height = 240;
-    const pad = { t: 20, b: 30, l: 40, r: 20 };
+    const pad = { t: 20, b: 30, l: 40, r: 40 };
     const getX = (d, i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
     
     const vals = displayData.map(d => d.val);

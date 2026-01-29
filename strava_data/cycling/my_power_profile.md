@@ -2,9 +2,9 @@
 
 | Duration | All Time Best | Date | 6 Week Best | Date |
 |---|---|---|---|---|
-| 1s | **921w** | [2025-05-21](https://www.strava.com/activities/14554194008) | 890w | [2025-12-18](https://www.strava.com/activities/16776448314) |
-| 5s | **864w** | [2025-12-18](https://www.strava.com/activities/16776448314) | 864w | [2025-12-18](https://www.strava.com/activities/16776448314) |
-| 15s | **749w** | [2025-12-18](https://www.strava.com/activities/16776448314) | 749w | [2025-12-18](https://www.strava.com/activities/16776448314) |
+| 1s | **921w** | [2025-05-21](https://www.strava.com/activities/14554194008) | 878w | [2026-01-24](https://www.strava.com/activities/17161980630) |
+| 5s | **864w** | [2025-12-18](https://www.strava.com/activities/16776448314) | 825w | [2026-01-17](https://www.strava.com/activities/17081769410) |
+| 15s | **749w** | [2025-12-18](https://www.strava.com/activities/16776448314) | 677w | [2026-01-17](https://www.strava.com/activities/17081769410) |
 | 30s | **625w** | [2025-09-02](https://www.strava.com/activities/15671097940) | 462w | [2026-01-14](https://www.strava.com/activities/17046568553) |
 | 1min | **440w** | [2025-09-05](https://www.strava.com/activities/15704986795) | 416w | [2026-01-14](https://www.strava.com/activities/17046568553) |
 | 2min | **356w** | [2025-09-19](https://www.strava.com/activities/15864321973) | 355w | [2026-01-14](https://www.strava.com/activities/17046568553) |

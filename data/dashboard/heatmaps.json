@@ -3947,6 +3947,24 @@
         ]
     },
     {
+        "date": "2026-01-29",
+        "complianceStatus": "Completed",
+        "plannedDuration": 90.0,
+        "actualDuration": 90.1,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Indoor Cycling",
+                "sport": "Bike",
+                "actual": 90.1
+            }
+        ]
+    },
+    {
         "date": "2026-05-05",
         "complianceStatus": "Event",
         "plannedDuration": 0,

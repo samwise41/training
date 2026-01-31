@@ -2,9 +2,7 @@ name: Update Codebase for NotebookLM
 
 on:
   schedule:
-    # Runs at 00:00 UTC every day
     - cron: '0 0 * * *'
-  # Allows you to run this manually from the Actions tab for testing
   workflow_dispatch:
 
 permissions:
@@ -17,6 +15,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        # Standard checkout is sufficient; it grabs the default branch automatically.
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,7 +23,6 @@ jobs:
           python-version: '3.x'
 
       - name: Run Combine Script
-        # We execute the script located in the notebook_lm folder
         run: python notebook_lm/combine_codebase.py
 
       - name: Commit and Push changes
@@ -32,4 +30,5 @@ jobs:
         with:
           commit_message: "Auto-update NotebookLM codebase context [skip ci]"
           file_pattern: "notebook_lm/full_codebase.txt"
-          branch: main
+          # REMOVED "branch: main"
+          # The action will now auto-detect the correct branch.

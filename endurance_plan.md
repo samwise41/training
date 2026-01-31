@@ -315,3 +315,5 @@ Please generate a raw markdown text of next week's schedule. Please provide evid
 GitHub Training Plan Files:
 - Plan: https://github.com/samwise41/training-plan/blob/main/endurance_plan.md
 - History: https://github.com/samwise41/training-plan/blob/main/MASTER_TRAINING_DATABASE.md
+
+

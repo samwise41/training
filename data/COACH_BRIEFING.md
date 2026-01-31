@@ -1,6 +1,6 @@
 # Coach Briefing 
 
-**Generated:** 2026-01-31 13:39
+**Generated:** 2026-01-31 15:07
 
 ## Run Trends
 | Metric | 30-Day Trend | 90-Day Trend | Status |
@@ -10,7 +10,7 @@
 ## Bike Trends
 | Metric | 30-Day Trend | 90-Day Trend | Status |
 | :--- | :--- | :--- | :--- |
-| Aerobic Efficiency | 0.0058 | -0.0001 | ↗️ Improving |
-| Torque Efficiency | 0.0051 | 0.0068 | ↗️ Improving |
+| Aerobic Efficiency | 0.0070 | 0.0003 | ↗️ Improving |
+| Torque Efficiency | -0.0013 | 0.0058 | ↘️ Declining |
 | VO2 Max | 0.0000 | 0.4000 | ➡️ Stable |
 

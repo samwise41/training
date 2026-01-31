@@ -190,14 +190,13 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Monday | [BIKE] Zwift Race | 45 | | | **Fun Factor Rule.** Focus: Anaerobic Impact (1.51). Replaces Strength Intervals. Go hard! | 2026-02-02 |
-| PLANNED | Tuesday | [SWIM] Technique Focus | 40 | | | **Focus:** Swim Efficiency. Re-establish feel after cruise. Drills: Catch-up & Fist Drill. | 2026-02-03 |
-| PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 | | | **Focus:** Ground Contact Time (273ms). Insert 5x1min @ **High Cadence (175+ spm)**. | 2026-02-04 |
-| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Volume | 90 | | | **Winter Strategy.** File: `Zone_2___71___90_min_.zwo`. Focus: Aerobic Efficiency (1.15). | 2026-02-05 |
-| PLANNED | Friday | [SWIM] Touch Swim | 20 | | | **Focus:** Frequency. Very easy, drills only. | 2026-02-06 |
-| PLANNED | Friday | [RUN] Aerobic Maintenance | 50 | | | **Focus:** Vertical Oscillation (9.29cm). Cue: "Run Tall." Keep strictly Zone 2. | 2026-02-06 |
-| PLANNED | Saturday | [BIKE] Long Steady Distance | 120 | | | **Winter Cap (2h).** File: `Zone_2___71___2_hrs_.zwo`. Focus: Cardiac Drift <5%. | 2026-02-07 |
-| PLANNED | Sunday | Rest | 0 | | | Strict Recovery. | 2026-02-08 |
+| PLANNED | Monday | [RUN] Tempo / Threshold | 45 mins | | | **Loc:** Hotel Treadmill. **Focus:** Anaerobic Impact. 10m Warmup; 20m @ Tempo (RPE 6-7); 4 x 20s Strides (Fast!); Cooldown. | 2026-01-26 |
+| PLANNED | Tuesday | [BIKE] Strength / Hill Focus | 60 mins | | | **Loc:** Peloton. **Focus:** Torque Efficiency (1.97). Set heavy resistance. 3 x 10min "Climbs" at **60-65 RPM** (Power Zone 3/High Sweet Spot). Do not spin fast. | 2026-01-27 |
+| PLANNED | Wednesday | Rest | - | | | If time allows do a 45 minute run. | 2026-01-28 |
+| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Volume | 90 mins | | | **Loc:** Peloton. **Focus:** Aerobic Efficiency (1.15). "Power Zone Endurance" ride. Stay strictly in Zone 2 (134-180W equivalent). | 2026-01-29 |
+| PLANNED | Friday | Rest | - | | | **Loc:** Travel Day. No workout planned. Hydrate well. | 2026-01-30 |
+| PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Loc:** Home (Zwift). **File:** `Zone_2___71___2_hrs_.zwo`. **Focus:** Re-establish Aerobic Efficiency. Keep HR stable. | 2026-01-31 |
+| PLANNED | Sunday | Rest | - | | | Strict recovery. | 2026-02-01 |
 
 
 ## 6. Fueling Strategy & Equipment

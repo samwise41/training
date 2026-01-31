@@ -3,7 +3,7 @@ name: 01.1 Training Data Sync
 on:
   schedule:
     # Run at 6:00, 7:00, 8:00, 9:00, 10:00, 11:00 MST
-    #- cron: '0 13 * * *'
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 permissions:

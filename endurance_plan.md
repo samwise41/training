@@ -190,13 +190,15 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Monday | [RUN] Tempo / Threshold | 45 mins | | | **Loc:** Hotel Treadmill. **Focus:** Anaerobic Impact. 10m Warmup; 20m @ Tempo (RPE 6-7); 4 x 20s Strides (Fast!); Cooldown. | 2026-01-26 |
-| PLANNED | Tuesday | [BIKE] Strength / Hill Focus | 60 mins | | | **Loc:** Peloton. **Focus:** Torque Efficiency (1.97). Set heavy resistance. 3 x 10min "Climbs" at **60-65 RPM** (Power Zone 3/High Sweet Spot). Do not spin fast. | 2026-01-27 |
-| PLANNED | Wednesday | Rest | - | | | If time allows do a 45 minute run. | 2026-01-28 |
-| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Volume | 90 mins | | | **Loc:** Peloton. **Focus:** Aerobic Efficiency (1.15). "Power Zone Endurance" ride. Stay strictly in Zone 2 (134-180W equivalent). | 2026-01-29 |
-| PLANNED | Friday | Rest | - | | | **Loc:** Travel Day. No workout planned. Hydrate well. | 2026-01-30 |
-| PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Loc:** Home (Zwift). **File:** `Zone_2___71___2_hrs_.zwo`. **Focus:** Re-establish Aerobic Efficiency. Keep HR stable. | 2026-01-31 |
-| PLANNED | Sunday | Rest | - | | | Strict recovery. | 2026-02-01 |
+| PLANNED | Monday | [RUN] Tempo / Threshold | 45 mins | | | **Loc:** Treadmill/Outdoor. **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **6 x 20s Strides** (High Cadence); Cooldown. | 2026-02-02 |
+| PLANNED | Tuesday | [BIKE] Strength / Low Cadence | 60 mins | | | **Loc:** Peloton/Zwift. **Focus:** Torque Efficiency. Warmup, then 4 x 8min @ Sweet Spot at **55-60 RPM**. Grind it out to build force. | 2026-02-03 |
+| PLANNED | Wednesday | [SWIM] Technique Focus | 40 mins | | | **Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work. | 2026-02-04 |
+| PLANNED | Thursday | [BIKE] Zwift Race | 45 mins | | | **Loc:** Zwift. **Focus:** "Fun Factor" Rule Application. High Cadence, Anaerobic Capacity. Go full gas. | 2026-02-05 |
+| PLANNED | Friday | [RUN] Aerobic Maintenance | 40 mins | | | **Loc:** Easy Terrain. **Focus:** Active Recovery. Strict Zone 2 (HR < 152). Flush the legs. | 2026-02-06 |
+| PLANNED | Friday | [SWIM] Touch Swim | 20 mins | | | **Loc:** Pool. **Focus:** Frequency Rule. 500m-800m total. Drills ONLY. Catch & Pull focus. No intensity. | 2026-02-06 |
+| PLANNED | Saturday | [BIKE] Long Steady Distance | 135 mins | | | **Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m. | 2026-02-07 |
+| PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Sleep and mobility. | 2026-02-08 |
+
 
 
 ## 6. Fueling Strategy & Equipment

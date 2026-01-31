@@ -190,7 +190,7 @@ const buildDualAxisChart = (data, key) => {
     const pad = { t: 20, b: 30, l: 40, r: 40 };
 
     // --- UPDATED: Use Existing Variables ---
-    const cLoad = 'var(--color-partial)'; // Yellow
+    const cLoad = 'var(--color-z2)'; 
     const cFeel = 'var(--color-done)';    // Green
 
     const maxLoad = Math.max(...data.map(d => d.load || 0)) * 1.1 || 100;

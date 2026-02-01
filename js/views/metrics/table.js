@@ -1,66 +1,146 @@
-// js/views/metrics/table.js
-import { METRIC_DEFINITIONS } from './definitions.js';
-import { calculateTrend, getTrendIcon } from './utils.js';
-import { METRIC_FORMULAS, extractMetricData, extractSubjectiveTableData } from './parser.js';
+import { DataManager } from '../../utils/data.js';
 
-export const renderSummaryTable = (allData) => {
-    let rows = '';
-    const now = new Date();
-    const groups = [
-        { name: 'General Fitness', keys: ['vo2max', 'tss', 'anaerobic'] },
-        { name: 'Cycling Metrics', keys: ['subjective_bike', 'endurance', 'strength'] },
-        { name: 'Running Metrics', keys: ['subjective_run', 'run', 'mechanical', 'gct', 'vert'] },
-        { name: 'Swimming Metrics', keys: ['subjective_swim', 'swim'] }
-    ];
+// --- HELPERS FOR DARK THEME ---
 
-    groups.forEach(group => {
-        rows += `<tr class="bg-slate-900/80"><td colspan="5" class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-700">${group.name}</td></tr>`;
-        group.keys.forEach(key => {
-            const def = METRIC_DEFINITIONS[key];
-            if (!def) return;
-            let fullData = key.startsWith('subjective_') ? extractSubjectiveTableData(allData, key) : extractMetricData(allData, key);
-            if (!fullData || fullData.length === 0) return;
-            fullData.sort((a,b) => a.date - b.date);
+const getTrendIcon = (trend, higherIsBetter) => {
+    // 1. Handle Flat or Missing
+    if (!trend || trend === 'Flat') {
+        return '<i class="fa-solid fa-minus text-slate-600" title="Stable"></i>';
+    }
+    
+    const isRising = trend === 'Rising';
+    
+    // 2. Determine "Good" direction
+    // If Higher is Better: Rising = Good (Green)
+    // If Lower is Better (e.g. GCT): Falling = Good (Green)
+    let isGood = false;
+    if (higherIsBetter) {
+        isGood = isRising;
+    } else {
+        isGood = !isRising; 
+    }
+    
+    // Dark Theme Colors: Green-400 / Red-400 (brighter for dark mode)
+    const colorClass = isGood ? 'text-emerald-400' : 'text-rose-400';
+    const iconClass = isRising ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down';
+    
+    return `<i class="fa-solid ${iconClass} ${colorClass}"></i>`;
+};
 
-            const getT = (days) => {
-                const cutoff = new Date(); cutoff.setDate(now.getDate() - days);
-                const subset = fullData.filter(d => d.date >= cutoff);
-                const trend = calculateTrend(subset);
-                return trend ? getTrendIcon(trend.slope, def.invertRanges) : { icon: 'fa-minus', color: 'text-slate-600' };
-            };
-            const t30 = getT(30); const t90 = getT(90); const t6m = getT(180);
+const getStatusBadge = (status) => {
+    // Dark Theme Badges
+    const map = {
+        'On Target':  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+        'Off Target': 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+        'Neutral':    'bg-slate-700/50 text-slate-400 border-slate-600',
+        'No Data':    'bg-slate-800 text-slate-600 border-slate-700'
+    };
+    
+    const cls = map[status] || map['Neutral'];
+    
+    return `
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${cls}">
+            ${status}
+        </span>
+    `;
+};
 
-            const recent = fullData.filter(d => d.date >= new Date(now.getTime() - 30*24*60*60*1000));
-            let statusHtml = '<span class="text-slate-500">--</span>';
-            if (recent.length > 0) {
-                const avg = recent.reduce((sum, d) => sum + d.val, 0) / recent.length;
-                const isGood = def.invertRanges ? (avg <= def.refMax) : (avg >= def.refMin);
-                
-                // Added Click Handler to Status
-                const clickAttr = `onclick="window.handleMetricStatusClick(event, '${key}', '${avg.toFixed(2)}', ${isGood})"`;
-                
-                statusHtml = isGood 
-                    ? `<span class="text-emerald-400 font-bold text-[10px] bg-emerald-900/30 px-1.5 py-0.5 rounded cursor-pointer hover:bg-emerald-800/50" ${clickAttr}>✅ On Target</span>` 
-                    : `<span class="text-red-400 font-bold text-[10px] bg-red-900/30 px-1.5 py-0.5 rounded cursor-pointer hover:bg-red-800/50" ${clickAttr}>⚠️ Off Target</span>`;
-            }
+const formatValue = (val) => {
+    if (val === null || val === undefined) return '<span class="text-slate-600">--</span>';
+    return val; 
+};
 
-            rows += `
-            <tr class="border-b border-slate-700/50 hover:bg-slate-800/30 transition-colors">
-                <td class="px-4 py-3 flex items-center gap-3">
-                    <div onclick="window.scrollToMetric('${key}')" class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700 hover:border-slate-500 group shadow-sm">
-                        <i class="fa-solid ${def.icon} text-xs group-hover:text-white" style="color: ${def.colorVar}"></i>
-                    </div>
-                    <div>
-                        <div class="font-bold text-slate-200">${def.title}</div>
-                        <div class="text-[9px] text-slate-500 font-mono">${def.rangeInfo}</div>
-                    </div>
+// --- MAIN RENDERER ---
+
+export const renderSummaryTable = async () => {
+    // 1. Fetch the Pre-Calculated Data directly
+    const data = await DataManager.fetchJSON('COACHING_VIEW');
+
+    // 2. Handle Empty/Loading State
+    if (!data || !data.metrics_summary) {
+        return `
+            <div class="p-6 text-center bg-slate-800/50 rounded-xl border border-slate-700">
+                <p class="text-slate-400 font-mono text-xs">Waiting for Coaching Data...</p>
+                <p class="text-[10px] text-slate-600 mt-2">Run 'python python/metrics/generate_coach_view.py' to generate.</p>
+            </div>
+        `;
+    }
+
+    // 3. Build HTML Table
+    let html = `
+        <div class="overflow-x-auto bg-slate-800/30 border border-slate-700 rounded-xl mb-4 shadow-sm">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-slate-900/50 text-slate-400 uppercase font-bold text-[10px] tracking-wider">
+                    <tr>
+                        <th class="px-4 py-3 border-b border-slate-700">Metric</th>
+                        <th class="px-4 py-3 text-center border-b border-slate-700">Current (30d)</th>
+                        <th class="px-4 py-3 text-center border-b border-slate-700">30d Trend</th>
+                        <th class="px-4 py-3 text-center border-b border-slate-700">90d Trend</th>
+                        <th class="px-4 py-3 text-right border-b border-slate-700">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700/50">
+    `;
+
+    data.metrics_summary.forEach(group => {
+        // Group Header
+        html += `
+            <tr class="bg-slate-900/80">
+                <td colspan="5" class="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-700">
+                    ${group.group}
                 </td>
-                <td class="px-4 py-3 text-center"><i class="fa-solid ${t30.icon} ${t30.color}"></i></td>
-                <td class="px-4 py-3 text-center"><i class="fa-solid ${t90.icon} ${t90.color}"></i></td>
-                <td class="px-4 py-3 text-center"><i class="fa-solid ${t6m.icon} ${t6m.color}"></i></td>
-                <td class="px-4 py-3 text-right">${statusHtml}</td>
-            </tr>`;
+            </tr>
+        `;
+
+        // Metric Rows
+        group.metrics.forEach(m => {
+            const higherIsBetter = m.higher_is_better !== false;
+            
+            html += `
+                <tr class="hover:bg-slate-700/30 transition-colors group">
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-1.5 h-1.5 rounded-full ${m.status === 'On Target' ? 'bg-emerald-500' : 'bg-slate-600'}"></div>
+                            <div>
+                                <div class="font-bold text-slate-200 group-hover:text-white transition-colors">
+                                    ${m.title}
+                                </div>
+                                <div class="text-[9px] text-slate-500 font-mono">
+                                    ${m.good_min ?? 0} – ${m.good_max ?? '∞'} ${m.unit}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="px-4 py-3 text-center font-mono text-slate-300">
+                        ${formatValue(m.current_value)}
+                        <span class="text-[9px] text-slate-600 ml-0.5">${m.unit || ''}</span>
+                    </td>
+
+                    <td class="px-4 py-3 text-center">
+                        ${getTrendIcon(m.trends['30d'], higherIsBetter)}
+                    </td>
+
+                    <td class="px-4 py-3 text-center">
+                        ${getTrendIcon(m.trends['90d'], higherIsBetter)}
+                    </td>
+
+                    <td class="px-4 py-3 text-right">
+                        ${getStatusBadge(m.status)}
+                    </td>
+                </tr>
+            `;
         });
     });
-    return `<div class="overflow-x-auto bg-slate-800/30 border border-slate-700 rounded-xl mb-4 shadow-sm"><table class="w-full text-left text-xs"><thead class="bg-slate-900/50 text-slate-400 uppercase font-bold text-[10px] tracking-wider"><tr><th class="px-4 py-3">Metric</th><th class="px-4 py-3 text-center">30d</th><th class="px-4 py-3 text-center">90d</th><th class="px-4 py-3 text-center">6m</th><th class="px-4 py-3 text-right">Status</th></tr></thead><tbody class="divide-y divide-slate-700/50 text-slate-300">${rows}</tbody></table></div>`;
+
+    html += `</tbody></table></div>`;
+    
+    // Footer
+    html += `
+        <div class="text-right text-[10px] text-slate-600 font-mono mb-4">
+            AI Context Generated: ${data.generated_at || 'Unknown'}
+        </div>
+    `;
+
+    return html;
 };

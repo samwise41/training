@@ -1,6 +1,6 @@
 import { DataManager } from '../../utils/data.js';
 
-// --- HELPER: Week Aggregator ---
+// --- HELPER: Week Aggregator (For TSS/Calories) ---
 const aggregateWeekly = (data, valueKey) => {
     const weeks = {};
     data.forEach(d => {
@@ -25,7 +25,7 @@ const aggregateWeekly = (data, valueKey) => {
     })).sort((a,b) => a.date - b.date);
 };
 
-// --- MAIN NORMALIZER ---
+// --- MAIN NORMALIZER (Calculates Everything Once) ---
 export const normalizeMetricsData = (data) => {
     if (!data || !Array.isArray(data)) return [];
 
@@ -39,36 +39,57 @@ export const normalizeMetricsData = (data) => {
         if (sourceSport === 'Running') cleanSport = 'Run';
         if (sourceSport === 'Swimming') cleanSport = 'Swim';
 
-        // 2. Metrics
+        // 2. Raw Values
+        const p   = d.avgPower || 0;
+        const hr  = d.averageHR || 0;
+        const s   = d.averageSpeed || 0;
+        const rpe = d.RPE || 0;
+        const cad = d.averageBikingCadenceInRevPerMinute || 0;
+        const vert= d.avgVerticalOscillation || 0;
+        const gct = d.avgGroundContactTime || 0;
+        const dur = (d.durationInSeconds || d.duration || 0) / 60;
+
+        // 3. Construct Normalized Object
         return {
             date: new Date(d.date),
             dateStr: d.date,
             name: d.title || 'Workout',
             sport: cleanSport,
-            duration: (d.durationInSeconds || d.duration || 0) / 60,
+            duration: dur,
             
-            // Raw
-            avgPower: d.avgPower,
-            averageHR: d.averageHR,
-            averageSpeed: d.averageSpeed,
-            RPE: d.RPE,
-            cadence: d.averageBikingCadenceInRevPerMinute,
-            vert: d.avgVerticalOscillation,
-            gct: d.avgGroundContactTime,
-            
-            // Aggregatable
+            // Raw Metrics
+            vo2max: d.vO2MaxValue || 0,
             tss: d.trainingStressScore || 0,
+            anaerobic: d.anaerobicTrainingEffect || 0,
             calories: d.calories || 0,
             
-            // Special
-            zones: d.zones || null,
-            feeling: d.Feeling || null,
-            load: d.trainingStressScore || 0
+            // Derived Cycling
+            subjective_bike: (p && rpe) ? p/rpe : 0,
+            endurance: (p && hr) ? p/hr : 0,
+            strength: (p && cad) ? p/cad : 0,
+            
+            // Derived Running
+            subjective_run: (s && rpe) ? s/rpe : 0,
+            run: (s && hr) ? (s * 60)/hr : 0,
+            mechanical: (vert && gct) ? (vert/gct)*100 : 0,
+            gct: gct,
+            vert: vert,
+
+            // Derived Swimming
+            subjective_swim: (s && rpe) ? s/rpe : 0,
+            swim: (s && hr) ? (s * 60)/hr : 0,
+
+            // Special Objects
+            feeling_load: {
+                load: d.trainingStressScore || 0,
+                feeling: d.Feeling || null
+            },
+            training_balance: d.zones || null
         };
     }).filter(d => d !== null).sort((a,b) => a.date - b.date);
 };
 
-// --- CHART DATA EXTRACTOR ---
+// --- CHART DATA EXTRACTOR (Reads Pre-Calculated Values) ---
 export const extractMetricData = (data, key) => {
     if (!data) return [];
 
@@ -78,73 +99,48 @@ export const extractMetricData = (data, key) => {
 
     // --- CASE 2: Special Charts ---
     if (key === 'training_balance') {
-        return data.filter(d => d.zones).map(d => ({
+        return data.filter(d => d.training_balance).map(d => ({
             date: d.date, dateStr: d.dateStr, name: d.name,
-            distribution: d.zones, // <--- Correct property for charts.js
-            val: 0 // Placeholder
+            distribution: d.training_balance,
+            val: 0
         }));
     }
     if (key === 'feeling_load') {
-        return data.filter(d => d.load > 0 || d.feeling != null).map(d => ({
+        return data.filter(d => d.feeling_load.load > 0 || d.feeling_load.feeling != null).map(d => ({
             date: d.date, dateStr: d.dateStr, name: d.name,
-            load: d.load,       // <--- Correct property
-            feeling: d.feeling, // <--- Correct property
-            val: d.load // Placeholder
+            load: d.feeling_load.load,
+            feeling: d.feeling_load.feeling,
+            val: d.feeling_load.load
         }));
     }
 
-    // --- CASE 3: Standard Metrics ---
-    // Define Sport Filter
+    // --- CASE 3: Standard Metrics (The Fix) ---
+    // We strictly filter based on sport to prevent "Run" data appearing in "Bike" charts
     let reqSport = null;
     if (['subjective_bike','endurance','strength'].includes(key)) reqSport = 'Bike';
     if (['subjective_run','run','mechanical','gct','vert'].includes(key)) reqSport = 'Run';
     if (['subjective_swim','swim'].includes(key)) reqSport = 'Swim';
 
-    return data.filter(d => {
-        if (reqSport && d.sport !== reqSport) return false;
-        
-        // Dynamic Calculation based on key
-        let val = 0;
-        if (key === 'vo2max') val = d.vo2max; // Note: Ensure source has this if needed, or map in normalizer
-        else if (key === 'anaerobic') val = d.anaerobic; // Same note
-        
-        else if (key === 'subjective_bike') val = (d.avgPower && d.RPE) ? d.avgPower/d.RPE : 0;
-        else if (key === 'endurance') val = (d.avgPower && d.averageHR) ? d.avgPower/d.averageHR : 0;
-        else if (key === 'strength') val = (d.avgPower && d.cadence) ? d.avgPower/d.cadence : 0;
-        
-        else if (key === 'subjective_run') val = (d.averageSpeed && d.RPE) ? d.averageSpeed/d.RPE : 0;
-        else if (key === 'run') val = (d.averageSpeed && d.averageHR) ? (d.averageSpeed*60)/d.averageHR : 0;
-        else if (key === 'mechanical') val = (d.vert && d.gct) ? (d.vert/d.gct)*100 : 0;
-        else if (key === 'gct') val = d.gct;
-        else if (key === 'vert') val = d.vert;
-        
-        else if (key === 'subjective_swim') val = (d.averageSpeed && d.RPE) ? d.averageSpeed/d.RPE : 0;
-        else if (key === 'swim') val = (d.averageSpeed && d.averageHR) ? (d.averageSpeed*60)/d.averageHR : 0;
-
-        // Check Validity
-        return val !== 0 && isFinite(val);
-    }).map(d => {
-        // Recalculate val for the map return
-        let val = 0;
-        if (key === 'subjective_bike') val = d.avgPower/d.RPE;
-        else if (key === 'endurance') val = d.avgPower/d.averageHR;
-        else if (key === 'strength') val = d.avgPower/d.cadence;
-        else if (key === 'subjective_run') val = d.averageSpeed/d.RPE;
-        else if (key === 'run') val = (d.averageSpeed*60)/d.averageHR;
-        else if (key === 'mechanical') val = (d.vert/d.gct)*100;
-        else if (key === 'gct') val = d.gct;
-        else if (key === 'vert') val = d.vert;
-        else if (key === 'subjective_swim') val = d.averageSpeed/d.RPE;
-        else if (key === 'swim') val = (d.averageSpeed*60)/d.averageHR;
-
-        return {
+    return data
+        .filter(d => {
+            // 1. Sport Filter
+            if (reqSport && d.sport !== reqSport) return false;
+            
+            // 2. Value Filter (Must exist and be valid)
+            // Note: We access d[key] directly because normalizeMetricsData already calculated it!
+            const val = d[key];
+            if (val === null || val === undefined || val === 0) return false;
+            if (!isFinite(val)) return false;
+            
+            return true;
+        })
+        .map(d => ({
             date: d.date,
             dateStr: d.dateStr,
             name: d.name,
-            val: val,
+            val: d[key], // Simply read the value
             breakdown: ''
-        };
-    });
+        }));
 };
 
 export const calculateSubjectiveEfficiency = (data, type) => {

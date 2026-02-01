@@ -1,45 +1,40 @@
-// js/views/metrics/charts.js
 import { METRIC_DEFINITIONS } from './definitions.js';
 import { calculateTrend } from './utils.js';
 import { METRIC_FORMULAS, extractMetricData, calculateSubjectiveEfficiency } from './parser.js';
 import { Formatters } from '../../utils/formatting.js'; 
+import { DataManager } from '../../utils/data.js'; // Import DataManager
 
-const buildMetricChart = (displayData, fullData, key) => {
+const buildMetricChart = (displayData, fullData, key, configRules) => {
     // --- SPECIAL RENDERERS ---
     if (key === 'training_balance') return buildStackedBarChart(displayData, key);
     if (key === 'feeling_load') return buildDualAxisChart(displayData, key);
 
-    const def = METRIC_DEFINITIONS[key];
-    if (!def) return '';
+    const def = METRIC_DEFINITIONS[key] || {};
+    
+    // --- OVERRIDE WITH CONFIG (Source of Truth) ---
+    // If config exists, use those values for the reference lines
+    if (configRules) {
+        if (configRules.good_min !== undefined && configRules.good_min !== null) def.refMin = configRules.good_min;
+        if (configRules.good_max !== undefined && configRules.good_max !== null) def.refMax = configRules.good_max;
+        if (configRules.higher_is_better !== undefined) def.invertRanges = !configRules.higher_is_better;
+    }
+
+    if (!def.title && !configRules) return '';
 
     // --- STANDARD CHART LOGIC ---
-    // We map keys to CSS Variables for consistency
     const C = Formatters.COLORS;
     const colorMap = {
-        'vo2max': 'var(--color-all)', 
-        'tss': 'var(--color-all)', 
-        'anaerobic': 'var(--color-all)', 
-        'calories': 'var(--color-all)',
-        
-        'subjective_bike': 'var(--color-bike)', 
-        'endurance': 'var(--color-bike)', 
-        'strength': 'var(--color-bike)',
-        
-        'subjective_run': 'var(--color-run)', 
-        'run': 'var(--color-run)', 
-        'mechanical': 'var(--color-run)', 
-        'gct': 'var(--color-run)', 
-        'vert': 'var(--color-run)',
-        
-        'subjective_swim': 'var(--color-swim)', 
-        'swim': 'var(--color-swim)'
+        'vo2max': 'var(--color-all)', 'tss': 'var(--color-all)', 'anaerobic': 'var(--color-all)', 'calories': 'var(--color-all)',
+        'subjective_bike': 'var(--color-bike)', 'endurance': 'var(--color-bike)', 'strength': 'var(--color-bike)',
+        'subjective_run': 'var(--color-run)', 'run': 'var(--color-run)', 'mechanical': 'var(--color-run)', 'gct': 'var(--color-run)', 'vert': 'var(--color-run)',
+        'subjective_swim': 'var(--color-swim)', 'swim': 'var(--color-swim)'
     };
 
     const color = colorMap[key] || 'var(--color-all)';
     const formula = METRIC_FORMULAS[key] || '';
 
     if (!displayData || displayData.length < 2) {
-        return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between opacity-60"><div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2"><h3 class="text-xs font-bold text-slate-400 flex items-center gap-2"><i class="fa-solid ${def.icon}"></i> ${def.title}</h3></div><div class="flex-1 flex flex-col items-center justify-center text-slate-500"><i class="fa-solid fa-chart-simple text-2xl opacity-20"></i><p class="text-[10px] italic">Not enough data</p></div></div>`;
+        return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-between opacity-60"><div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2"><h3 class="text-xs font-bold text-slate-400 flex items-center gap-2"><i class="fa-solid ${def.icon||'fa-chart-line'}"></i> ${def.title||key}</h3></div><div class="flex-1 flex flex-col items-center justify-center text-slate-500"><i class="fa-solid fa-chart-simple text-2xl opacity-20"></i><p class="text-[10px] italic">Not enough data</p></div></div>`;
     }
 
     const width = 800, height = 240;
@@ -48,8 +43,11 @@ const buildMetricChart = (displayData, fullData, key) => {
     
     const vals = displayData.map(d => d.val);
     let minV = Math.min(...vals), maxV = Math.max(...vals);
-    if (def.refMin) minV = Math.min(minV, def.refMin);
-    if (def.refMax) maxV = Math.max(maxV, def.refMax);
+    
+    // Scale y-axis to include targets if they exist
+    if (def.refMin !== undefined) minV = Math.min(minV, def.refMin);
+    if (def.refMax !== undefined) maxV = Math.max(maxV, def.refMax);
+    
     const range = maxV - minV || 1;
     const dMin = Math.max(0, minV - range * 0.1);
     const dMax = maxV + range * 0.1;
@@ -63,11 +61,11 @@ const buildMetricChart = (displayData, fullData, key) => {
     const minLineColor = isInverted ? colorGood : colorBad;
 
     let targetsHtml = '';
-    if (def.refMin !== undefined) {
+    if (def.refMin !== undefined && def.refMin !== null) {
         const yVal = getY(def.refMin);
         targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${minLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
-    if (def.refMax !== undefined) {
+    if (def.refMax !== undefined && def.refMax !== null) {
         const yVal = getY(def.refMax);
         targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${maxLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
@@ -112,7 +110,8 @@ const buildMetricChart = (displayData, fullData, key) => {
     </div>`;
 };
 
-// --- NEW RENDERER: Stacked Bar (Training Balance) ---
+// ... (StackBarChart and DualAxisChart functions remain unchanged) ...
+// Copy buildStackedBarChart and buildDualAxisChart from your existing file here
 const buildStackedBarChart = (data, key) => {
     const def = METRIC_DEFINITIONS[key];
     if (!data || data.length === 0) {
@@ -179,7 +178,6 @@ const buildStackedBarChart = (data, key) => {
     </div>`;
 };
 
-// --- NEW RENDERER: Dual Axis (Feeling vs Load) ---
 const buildDualAxisChart = (data, key) => {
     const def = METRIC_DEFINITIONS[key];
     if (!data || data.length === 0) {
@@ -260,8 +258,20 @@ const buildDualAxisChart = (data, key) => {
 };
 
 // --- Main Update Loop ---
-export const updateCharts = (allData, timeRange) => {
+export const updateCharts = async (allData, timeRange) => {
     if (!allData || !allData.length) return;
+
+    // --- 1. Fetch Config to Ensure Consistency ---
+    let config = null;
+    try {
+        const configData = await DataManager.fetchJSON('METRICS_CONFIG');
+        if (configData && configData.metrics) {
+            config = configData.metrics;
+        }
+    } catch (e) {
+        console.warn("Charts: Failed to fetch metric config, using defaults.");
+    }
+
     const cutoff = new Date();
     if (timeRange === '30d') cutoff.setDate(cutoff.getDate() - 30);
     else if (timeRange === '90d') cutoff.setDate(cutoff.getDate() - 90);
@@ -284,7 +294,11 @@ export const updateCharts = (allData, timeRange) => {
         
         if (key === 'training_balance') el.innerHTML = buildStackedBarChart(display, key);
         else if (key === 'feeling_load') el.innerHTML = buildDualAxisChart(display, key);
-        else el.innerHTML = buildMetricChart(display, full||[], key);
+        else {
+            // Pass the specific config rule for this metric
+            const rule = config ? config[key] : null;
+            el.innerHTML = buildMetricChart(display, full||[], key, rule);
+        }
     };
 
     const metrics = [

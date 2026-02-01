@@ -1,0 +1,2491 @@
+[
+  {
+    "date": "2026-01-31",
+    "name": "Tower Hamlets Virtual Cycling",
+    "type": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "endurance": {
+        "value": 1.27,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-29",
+    "name": "Indoor Cycling",
+    "type": {
+      "typeId": 25,
+      "typeKey": "indoor_cycling",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "subjective_bike": {
+        "value": 37.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.38,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-27",
+    "name": "Indoor Cycling",
+    "type": {
+      "typeId": 25,
+      "typeKey": "indoor_cycling",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "subjective_bike": {
+        "value": 28.12,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.57,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-26",
+    "name": "Threshold",
+    "type": {
+      "typeId": 18,
+      "typeKey": "treadmill_running",
+      "parentTypeId": 1,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "subjective_run": {
+        "value": 0.52,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.78,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2026-01-24",
+    "name": "Innsbruck Virtual Cycling",
+    "type": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "endurance": {
+        "value": 1.23,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-23",
+    "name": "Roy - Zone 2 - 45 Minutes",
+    "type": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "trimmable": true,
+      "restricted": false
+    },
+    "metrics": {
+      "subjective_run": {
+        "value": 0.7,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.08,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2026-01-22",
+    "name": "Innsbruck Virtual Cycling",
+    "type": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "endurance": {
+        "value": 1.14,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-21",
+    "name": "Roy - Zone 2 with Strides",
+    "type": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "subjective_run": {
+        "value": 0.77,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.34,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2026-01-19",
+    "name": "Zwift - Sweet Spot - 2 x 15 on Jurassic Coast in Watopia",
+    "type": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "subjective_bike": {
+        "value": 29.17,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.32,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-17",
+    "name": "Thio Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "subjective_bike": {
+        "value": 47.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.08,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-16",
+    "name": "Roy - 25 Min at high cadence",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.66,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.56,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2026-01-15",
+    "name": "North Ayrshire Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "subjective_bike": {
+        "value": 55.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.28,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-14",
+    "name": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (D) on Avon Flyer in New York (+2)",
+    "type": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "subjective_bike": {
+        "value": 20.11,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.25,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-12",
+    "name": "North Ayrshire Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "subjective_bike": {
+        "value": 25.14,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.23,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-10",
+    "name": "Richmond Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.11,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-09",
+    "name": "Roy - Zone 2 - 45 Minutes",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.96,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.36,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2026-01-08",
+    "name": "Harrogate Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.11,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-07",
+    "name": "Roy - Zone 3 - Tempo - 45 minutes",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.6,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.55,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2026-01-05",
+    "name": "Zwift - Sweet Spot - 2 x 15 on Richmond Rollercoaster in Richmond",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.2,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-03",
+    "name": "Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.11,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2026-01-02",
+    "name": "Roy - Zone 2 - 45 Minutes",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.97,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.35,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-31",
+    "name": "Innsbruck Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.24,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-30",
+    "name": "Roy - Zone 2 - 45 Minutes",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.97,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.38,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-27",
+    "name": "Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.23,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-26",
+    "name": "Roy - Lactate Threshold Heart Rate Tes",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.42,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.32,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-25",
+    "name": "Innsbruck Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.19,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-24",
+    "name": "Zwift - Mend (1) on Cobbled Climbs in Richmond",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.0,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-23",
+    "name": "Cool down",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 0.92,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-20",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 38.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.03,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-19",
+    "name": "Roy - 9 mile Endurance Run - Zone 2",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.69,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.24,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-18",
+    "name": "Richmond Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.24,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-16",
+    "name": "Zwift - Gentil 8 in France",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.28,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-13",
+    "name": "Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.1,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-12",
+    "name": "Roy - Endurance Run - Zone 2 - 8 miles",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.71,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.29,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-11",
+    "name": "Richmond Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-10",
+    "name": "Roy - 30 minute Base Run",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.91,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.31,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-09",
+    "name": "Zwift - Sweet Spot - 2 x 15 on The Muckle Yin in Scotland",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.24,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-06",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.45,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.61,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-04",
+    "name": "City of Westminster Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-12-03",
+    "name": "Roy - Tempo Intervals - 6 x 3 minutes",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.51,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.48,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-12-02",
+    "name": "Zwift - Sweet Spot - 2 x 20 on Chain Chomper in Makuri Islands",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-28",
+    "name": "Rich County Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.56,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.27,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-11-27",
+    "name": "Rich County Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.42,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.45,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-11-25",
+    "name": "Innsbruck Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.18,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-22",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 28.67,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-21",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.77,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.48,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-11-20",
+    "name": "Zwift - FTP Test [Standard] on Queen s Highway in Yorkshire",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.31,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-18",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.36,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.62,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-11-15",
+    "name": "Zwift - Sugar Cookie in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-14",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.76,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.46,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-11-07",
+    "name": "Grand County Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 24.17,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.95,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-06",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.74,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.4,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-11-05",
+    "name": "Zwift - Pacer Group Ride: Flat Route in Watopia with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.08,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-11-01",
+    "name": "Zwift - Pacer Group Ride: Castle to Castle in Makuri Islands with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.02,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-31",
+    "name": "Zwift - Race: Foudre Friday Apero League Race (C) on Tempus Fugit in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.18,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-28",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.49,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.74,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-10-27",
+    "name": "Zwift - Race: SAZ speed race on Ocean Lava Cliffside Loop in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.31,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-25",
+    "name": "Harrogate Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-24",
+    "name": "Harrogate Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.13,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-23",
+    "name": "Zwift - Sweet Spot - 3 x 10 on Tour Of Tewit Well in Yorkshire",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.19,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-18",
+    "name": "St George Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 25.67,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.11,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-16",
+    "name": "St George Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.7,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.26,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-10-15",
+    "name": "Zwift - Sweet Spot - 1 x 15 on 2018 Worlds Short Lap in Innsbruck",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.18,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-14",
+    "name": "Innsbruck Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.07,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-13",
+    "name": "Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.07,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-10",
+    "name": "Davis County Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.33,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.65,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-10-08",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 1.1,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.68,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-10-07",
+    "name": "Zwift - New Workout on Innsbruckring in Innsbruck",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.05,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-10-06",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.81,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.58,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-10-04",
+    "name": "Roy - Base",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.97,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.31,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-10-01",
+    "name": "Roy - Base",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.53,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.53,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-09-30",
+    "name": "Zwift - Sweet Spot - 2 x 25 on Mountain Mash in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.22,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-27",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.42,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.32,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-09-26",
+    "name": "Thio Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-25",
+    "name": "Zwift - Sweet Spot - 2 x 25 on Knickerbocker in New York",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.21,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-24",
+    "name": "Roy Running",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.74,
+        "grade": "Good",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.3,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-09-22",
+    "name": "Zwift - Cadence Pyramid on Tempus Fugit in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.23,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-20",
+    "name": "Roy - Base",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.58,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.26,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-09-19",
+    "name": "Zwift - Race: Zwift Crit Racing Club - Downtown Dolphin (D) on Downtown Dolphin in Crit City",
+    "type": "virtual_ride",
+    "metrics": {
+      "subjective_bike": {
+        "value": 29.62,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.39,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-17",
+    "name": "Roy - Base",
+    "type": "running",
+    "metrics": {
+      "subjective_run": {
+        "value": 0.42,
+        "grade": "Miss",
+        "label": "Run Efficiency"
+      },
+      "mechanical": {
+        "value": 3.26,
+        "grade": "Good",
+        "label": "Vertical Ratio"
+      }
+    }
+  },
+  {
+    "date": "2025-09-16",
+    "name": "Zwift - Sweet Spot - 3 x 10 on The Highline in New York",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.16,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-15",
+    "name": "Zwift - Active Recovery on Figure 8 in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.39,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-12",
+    "name": "Zwift - Road to Sky in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.31,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-09",
+    "name": "Zwift - Sweet Spot - 3 x 10 on Whole Lotta Lava in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.16,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-08",
+    "name": "Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.19,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-06",
+    "name": "Zwift - Zone 2 Long Endurance w/ Tempo on Makuri Pretzel in Makuri Islands",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.2,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-05",
+    "name": "Zwift - Two Bridges Loop in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.21,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-03",
+    "name": "Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.16,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-02",
+    "name": "Zwift - 3x30 Sprints with Zone 2 on Suki s Playground in Makuri Islands",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.08,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-09-01",
+    "name": "Zwift - Mend (1) on London 8 in London",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 0.92,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-30",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 29.4,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.1,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-29",
+    "name": "Zwift - 3x30 Sprints with Zone 2 on Mighty Metropolitan in New York",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 0.99,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-27",
+    "name": "Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.09,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-26",
+    "name": "Zwift - Garmin UNBOUND Gravel Training Plan",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.13,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-25",
+    "name": "Zwift - Active Recovery on Flat Route in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 0.97,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-23",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 28.6,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.05,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-22",
+    "name": "Zwift - FTP Test [Standard] on Queen s Highway After Party in Yorkshire",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.22,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-20",
+    "name": "Zwift - Pacer Group Ride: Classique in London with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-19",
+    "name": "Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Bernie",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.24,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-18",
+    "name": "Zwift - 6x2 VO2 Max on Ocean Lava Cliffside Loop in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.21,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-16",
+    "name": "Richfield Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 23.83,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.06,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-14",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 34.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.06,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-13",
+    "name": "Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.2,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-12",
+    "name": "Zwift - Pacer Group Ride: Triple Flat Loops in Watopia with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.07,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-08-05",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 32.8,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-31",
+    "name": "Zwift - Pacer Group Ride: Tick Tock in Watopia with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.11,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-30",
+    "name": "Zwift - Volcano Circuit CCW in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.21,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-29",
+    "name": "Zwift - FTP Ramp Test on Volcano Circuit in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.43,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-28",
+    "name": "Zwift - Pacer Group Ride: Watopia s Waistband in Watopia with Bernie",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.13,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-23",
+    "name": "Thio Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-22",
+    "name": "Thio Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.19,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-21",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 46.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.05,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-19",
+    "name": "Salt Lake City Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 40.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.1,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-17",
+    "name": "Zwift - Pacer Group Ride: Sugar Cookie in Watopia with Bernie",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.02,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-16",
+    "name": "Zwift - Pacer Group Ride: Sugar Cookie in Watopia with Bernie",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.04,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-15",
+    "name": "Zwift - Microbursts on Going Coastal in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.29,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-14",
+    "name": "Zwift - Recovery Spin on Beach Island Loop in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.09,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-12",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 31.8,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.11,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-10",
+    "name": "Zwift - Climb Portal - Mont Saint-Michel in France",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.34,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-09",
+    "name": "Zwift - Pacer Group Ride: Volcano Flat in Watopia with Maria",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.91,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-08",
+    "name": "Thio Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-07",
+    "name": "Thio Virtual Cycling",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.28,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-04",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 39.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.35,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-03",
+    "name": "Zwift - Lionel Sanders  Yellow Day Workout on Classique in London",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.17,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-02",
+    "name": "Zwift - Climb Portal - Mont Saint-Michel in France",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.43,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-07-01",
+    "name": "Zwift - Group Ride: Hong Kong Cycling Group Ride (C) on Tick Tock in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.29,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-30",
+    "name": "Zwift - Endurance #2 on Champs-lyses in Paris",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.16,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-28",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 39.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.38,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-27",
+    "name": "Zwift - Pacer Group Ride: Casse-Pattes in France with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.13,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-25",
+    "name": "Zwift - Amalgam on Achterbahn in Innsbruck",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.15,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-24",
+    "name": "Zwift - Workout 3 on Ven-10 in France",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.21,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-23",
+    "name": "Zwift - Loch Loop in Scotland",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.38,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-21",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 38.75,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-20",
+    "name": "Zwift - Road to Sky in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.19,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-19",
+    "name": "Zwift - Pacer Group Ride: The Big Ring in Watopia with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-18",
+    "name": "Zwift - Pacer Group Ride: Lutece Express in Paris with Miguel",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.78,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-17",
+    "name": "Zwift - Race: Stage 3: Cityscapes: Richmond Worlds (E) on 2015 Worlds Course in Richmond",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.29,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-16",
+    "name": "Zwift - FTP Ramp Test on Rising Empire in New York",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.21,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-14",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 40.25,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.1,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-13",
+    "name": "Zwift - EF Pro Cycling s Red Day Workout on Mayan 8 in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.05,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-12",
+    "name": "Zwift - Zone 2 #1 on Scotland Smash in Scotland",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.09,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-11",
+    "name": "Zwift - Race: Stage 2: Cityscapes: Park Perimeter Loop (D) on Park Perimeter Loop in New York",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.27,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-10",
+    "name": "Zwift - Group Workout:  Mountain Standard Dreams - Power2Tri Endurance Coaching (E) on Big Flat 8 in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.02,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-09",
+    "name": "Zwift - Extensive Anaerobic x 6 on Downtown Eruption in Watopia",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-07",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 39.5,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.04,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-06",
+    "name": "Zwift - 2x20 FTP Intervals on 2019 Worlds Harrogate Circuit in Yorkshire",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-05",
+    "name": "Zwift - FTP Test [Standard] on Mighty Metropolitan in New York",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.12,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-06-04",
+    "name": "Zwift - Group Ride: BMTR Short Adventure (D) on Makuri Madness in Makuri Islands",
+    "type": "virtual_ride",
+    "metrics": {
+      "endurance": {
+        "value": 1.16,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-05-31",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 16.71,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.76,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-05-29",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 57.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.55,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-05-26",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 38.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      }
+    }
+  },
+  {
+    "date": "2025-05-24",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 28.6,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.92,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-05-21",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 40.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.02,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-05-10",
+    "name": "Salt Lake County Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 20.43,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.89,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-28",
+    "name": "Roy - Base",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 30.6,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.01,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-26",
+    "name": "Manual Ride",
+    "type": {
+      "typeId": 10,
+      "typeKey": "road_biking",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "metrics": {
+      "endurance": {
+        "value": 0.91,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-21",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 29.5,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.09,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-12",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 50.67,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.97,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-09",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 25.17,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.0,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-05",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 27.83,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.04,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-04-02",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 27.17,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      }
+    }
+  },
+  {
+    "date": "2025-03-25",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 39.75,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.98,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-03-22",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 27.8,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.89,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-03-01",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 26.6,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.86,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2025-02-24",
+    "name": "Clinton Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 26.6,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.87,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2024-10-19",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 18.12,
+        "grade": "Miss",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 0.93,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2024-10-12",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "subjective_bike": {
+        "value": 54.0,
+        "grade": "Good",
+        "label": "Bike Efficiency"
+      },
+      "endurance": {
+        "value": 1.05,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2024-10-05",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "endurance": {
+        "value": 0.33,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2024-10-03",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "endurance": {
+        "value": 1.03,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2024-10-01",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "endurance": {
+        "value": 1.1,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  },
+  {
+    "date": "2024-09-28",
+    "name": "Roy Road Cycling",
+    "type": "road_biking",
+    "metrics": {
+      "endurance": {
+        "value": 0.98,
+        "grade": "Good",
+        "label": "Aerobic Decoupling"
+      }
+    }
+  }
+]

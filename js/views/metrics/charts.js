@@ -2,10 +2,8 @@ import { DataManager } from '../../utils/data.js';
 import { extractMetricData, calculateSubjectiveEfficiency } from './parser.js';
 
 // --- VISUAL TREND CALCULATION ---
-// Calculates the exact line drawn on the chart to ensure visual match
 const calculateVisualTrend = (data) => {
     if (!data || data.length < 2) return null;
-    
     const n = data.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
     
@@ -19,23 +17,17 @@ const calculateVisualTrend = (data) => {
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     const intercept = (sumY - slope * sumX) / n;
     
-    return {
-        start: intercept,
-        end: intercept + slope * (n - 1)
-    };
+    return { start: intercept, end: intercept + slope * (n - 1) };
 };
 
-// --- CHART BUILDERS ---
-
+// --- CHART BUILDER ---
 const buildMetricChart = (displayData, key, config, timeRange) => {
-    // 1. Config Defaults
+    // 1. Config Safeguard (Uses Config from JSON, falls back to Key)
     const def = config || { title: key, icon: 'fa-chart-line', unit: '' };
-    
-    // 2. Route Special Charts
+
     if (key === 'training_balance') return buildStackedBarChart(displayData, def);
     if (key === 'feeling_load') return buildDualAxisChart(displayData, def);
 
-    // 3. Setup Colors
     const colorMap = { 'Bike': 'var(--color-bike)', 'Run': 'var(--color-run)', 'Swim': 'var(--color-swim)', 'All': 'var(--color-all)' };
     const color = colorMap[def.sport] || 'var(--color-all)';
 
@@ -43,7 +35,7 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
         return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-center items-center opacity-60"><i class="fa-solid ${def.icon} text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-500 italic">Not enough data</p></div>`;
     }
 
-    // 4. Dimensions
+    // 2. Dimensions & Scales
     const width = 800, height = 240;
     const pad = { t: 20, b: 30, l: 40, r: 40 };
     const getX = (i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
@@ -51,7 +43,6 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
     const vals = displayData.map(d => d.val);
     let minV = Math.min(...vals), maxV = Math.max(...vals);
     
-    // Limits from Config
     if (def.good_min != null) minV = Math.min(minV, def.good_min);
     if (def.good_max != null) maxV = Math.max(maxV, def.good_max);
     
@@ -60,7 +51,7 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
     const dMax = maxV + range * 0.1;
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
-    // 5. Reference Lines
+    // 3. Target Lines
     const isInverted = def.higher_is_better === false;
     const colorGood = 'var(--color-done)';     
     const colorBad = '#ef4444'; 
@@ -77,7 +68,7 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
         targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${maxLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
 
-    // 6. Data Line & Points
+    // 4. Data Line & Points
     let pathD = `M ${getX(0)} ${getY(displayData[0].val)}`;
     let pointsHtml = '';
     displayData.forEach((d, i) => {
@@ -86,7 +77,7 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
         pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" class="cursor-pointer hover:stroke-white transition-all" onclick="window.handleMetricChartClick(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '', '${d.breakdown||""}', '${color}')"></circle>`;
     });
 
-    // 7. Visual Trend Line (Client Calculated)
+    // 5. Visual Trend Line
     const trend = calculateVisualTrend(displayData);
     let trendHtml = '';
     if (trend) {
@@ -123,7 +114,7 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
     </div>`;
 };
 
-// --- Helper: Stacked Bar ---
+// --- HELPERS (Bar/Dual) ---
 const buildStackedBarChart = (data, def) => {
     if (!data || data.length === 0) return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex items-center justify-center opacity-60"><p class="text-xs text-slate-500">No Balance Data</p></div>`;
 
@@ -161,7 +152,6 @@ const buildStackedBarChart = (data, def) => {
     </div>`;
 };
 
-// --- Helper: Dual Axis ---
 const buildDualAxisChart = (data, def) => {
     if (!data || data.length === 0) return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex items-center justify-center opacity-60"><p class="text-xs text-slate-500">No Feeling Data</p></div>`;
 
@@ -169,7 +159,6 @@ const buildDualAxisChart = (data, def) => {
     const pad = { t: 20, b: 30, l: 40, r: 40 };
     const cLoad = 'var(--color-z2)', cFeel = 'var(--color-done)';
     const maxLoad = Math.max(...data.map(d => d.load || 0)) * 1.1 || 100;
-
     const getX = (i) => pad.l + (i / (data.length - 1)) * (width - pad.l - pad.r);
     const getYLoad = (v) => height - pad.b - (v / maxLoad) * (height - pad.t - pad.b);
     const getYFeel = (v) => height - pad.b - (v / 5) * (height - pad.t - pad.b);
@@ -195,7 +184,6 @@ const buildDualAxisChart = (data, def) => {
     <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors">
         <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
             <h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid ${def.icon}" style="color: ${def.colorVar}"></i> ${def.title}</h3>
-            <div class="flex gap-2 text-[9px] font-mono"><span style="color: ${cLoad}">■ Load</span><span style="color: ${cFeel}">● Feeling</span></div>
         </div>
         <div class="flex-1 w-full h-[240px]">
             <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
@@ -209,7 +197,6 @@ const buildDualAxisChart = (data, def) => {
 export const updateCharts = async (allData, timeRange) => {
     if (!allData || !allData.length) return;
 
-    // Fetch Config (Coaching View)
     let metricsSummary = [];
     try {
         const coachingData = await DataManager.fetchJSON('COACHING_VIEW');
@@ -218,9 +205,8 @@ export const updateCharts = async (allData, timeRange) => {
         }
     } catch (e) { console.warn("Charts: Failed to fetch coaching view."); }
 
-    // --- DATE FIX: Set to Midnight to match Python logic ---
     const cutoff = new Date();
-    cutoff.setHours(0, 0, 0, 0); // <--- CRITICAL FIX
+    cutoff.setHours(0, 0, 0, 0); // Date Sync Fix
 
     if (timeRange === '30d') cutoff.setDate(cutoff.getDate() - 30);
     else if (timeRange === '90d') cutoff.setDate(cutoff.getDate() - 90);
@@ -240,11 +226,8 @@ export const updateCharts = async (allData, timeRange) => {
         else full = extractMetricData(allData, key);
 
         if(full && full.length > 0) full.sort((a,b)=>a.date-b.date);
-        
-        // Filter by Date
         const display = full ? full.filter(d => d.date >= cutoff) : [];
         
-        // Render Chart
         el.innerHTML = buildMetricChart(display, key, config, timeRange);
     };
 

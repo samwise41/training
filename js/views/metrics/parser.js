@@ -1,21 +1,6 @@
-// js/views/metrics/parser.js
-import { checkSport } from './utils.js';
 import { Formatters } from '../../utils/formatting.js'; 
 
-export const METRIC_FORMULAS = {
-    'subjective_bike': '(Avg Power / RPE)',
-    'subjective_run': '(Avg Speed / RPE)',
-    'subjective_swim': '(Avg Speed / RPE)',
-    'endurance': '(Norm Power / Avg HR)',
-    'strength': '(Avg Power / Avg Cadence)',
-    'run': '(Avg Power / Avg Speed)',
-    'swim': '(Avg Speed / Stroke Rate)',
-    'mechanical': '(Vert Osc / GCT)',
-    'calories': '(Weekly Sum)',
-    'training_balance': '(Weekly Zone Distribution)',
-    'feeling_load': '(TSS vs Feeling)'
-};
-
+// --- 1. MAPPINGS & HELPERS (Kept from working file) ---
 const KEYS = {
     hr: 'averageHR',
     spd: 'averageSpeed',
@@ -33,197 +18,167 @@ const KEYS = {
     feeling: 'Feeling'
 };
 
+// Robust Sport Check (The fix for data loss)
+const checkSport = (d, type) => {
+    const s = (d.actualSport || d.sport || '').toLowerCase();
+    const t = type.toLowerCase();
+    if (t === 'bike') return s.includes('bike') || s.includes('cycl') || s.includes('ride') || s.includes('spin');
+    if (t === 'run') return s.includes('run') || s.includes('jog') || s.includes('treadmill');
+    if (t === 'swim') return s.includes('swim') || s.includes('pool');
+    return false;
+};
+
+// Safe Value Extractor (The fix for Math crashes)
 const getVal = (item, key) => {
     if (key === 'duration' || key === 'time' || key === 'moving_time') {
         return Formatters.parseDuration(item[key]);
     }
-    const v = parseFloat(item[key]);
-    return (!isNaN(v) && v !== 0) ? v : 0;
+    const val = item[key];
+    if (val === null || val === undefined || val === '') return 0;
+    return parseFloat(val); // Ensures "150" becomes 150
 };
 
+// --- 2. NORMALIZER (Restored) ---
 export const normalizeMetricsData = (rawData) => {
-    if (!rawData || !Array.isArray(rawData)) return [];
-
-    // --- FILTER: Exclude Junk Miles ---
-    // This ensures activities marked "exclude": true in JSON are ignored
-    const validData = rawData.filter(d => d.exclude !== true);
-
-    return validData.map(d => ({
-        ...d,
-        date: new Date(d.date),
-        actualName: d.actualWorkout || d.activityType || "Activity",
-        _pwr: getVal(d, KEYS.pwr),
-        _hr:  getVal(d, KEYS.hr),
-        _spd: getVal(d, KEYS.spd),
-        _rpe: getVal(d, KEYS.rpe),
-        _gct: getVal(d, KEYS.gct),
-        _vert: getVal(d, KEYS.vert),
-        _vo2: getVal(d, KEYS.vo2),
-        _ana: getVal(d, KEYS.ana),
-        _tss: getVal(d, KEYS.tss),
-        _cals: getVal(d, KEYS.cals),
-        _cad: getVal(d, KEYS.cad_bike) || getVal(d, KEYS.cad_run),
-        _effect: d[KEYS.effect] || 'UNKNOWN',
-        _feeling: getVal(d, KEYS.feeling)
-    }));
-};
-
-// --- Aggregators ---
-
-const getWeekKey = (dateObj) => {
-    const d = new Date(dateObj);
-    const day = d.getDay();
-    const diff = d.getDate() - day + (day === 0 ? 0 : 7); // Adjust to Sunday
-    const weekEnd = new Date(d.setDate(diff));
-    weekEnd.setHours(0,0,0,0);
-    return weekEnd.toISOString().split('T')[0];
-};
-
-export const aggregateWeeklyTSS = (data) => {
-    const weeks = {};
-    data.forEach(d => {
-        const val = d._tss;
-        if (val <= 0) return;
-        const key = getWeekKey(d.date);
-        if (!weeks[key]) weeks[key] = 0;
-        weeks[key] += val;
-    });
-    return Object.keys(weeks).sort().map(k => ({
-        date: new Date(k), dateStr: `Week Ending ${k}`, name: "Weekly Load", val: weeks[k], breakdown: `Total TSS: ${Math.round(weeks[k])}`
-    }));
-};
-
-export const aggregateWeeklyCalories = (data) => {
-    const weeks = {};
-    data.forEach(d => {
-        const val = d._cals;
-        if (val <= 0) return;
-        const key = getWeekKey(d.date);
-        if (!weeks[key]) weeks[key] = 0;
-        weeks[key] += val;
-    });
-    return Object.keys(weeks).sort().map(k => ({
-        date: new Date(k), dateStr: `Week Ending ${k}`, name: "Weekly Energy", val: weeks[k], breakdown: `Total: ${Math.round(weeks[k])} kcal`
-    }));
-};
-
-// --- Stacked Bar (Training Balance) ---
-export const aggregateWeeklyBalance = (data) => {
-    const weeks = {};
-    
-    data.forEach(d => {
-        const key = getWeekKey(d.date);
-        if (!weeks[key]) weeks[key] = { RECOVERY: 0, AEROBIC_BASE: 0, TEMPO: 0, LACTATE_THRESHOLD: 0, VO2MAX: 0, ANAEROBIC_CAPACITY: 0, total: 0 };
+    if (!rawData) return [];
+    return rawData.map(item => {
+        const out = { 
+            ...item, 
+            dateObj: new Date(item.date),
+            _dur: getVal(item, 'durationInSeconds') / 60 
+        };
         
-        const label = d._effect || 'UNKNOWN';
-        if (weeks[key].hasOwnProperty(label)) {
-            weeks[key][label]++;
-            weeks[key].total++;
-        }
-    });
-
-    return Object.keys(weeks).sort().map(k => {
-        const w = weeks[k];
-        const dist = {
-            Recovery: w.total ? (w.RECOVERY / w.total) * 100 : 0,
-            Aerobic: w.total ? (w.AEROBIC_BASE / w.total) * 100 : 0,
-            Tempo: w.total ? (w.TEMPO / w.total) * 100 : 0,
-            Threshold: w.total ? (w.LACTATE_THRESHOLD / w.total) * 100 : 0,
-            VO2: w.total ? ((w.VO2MAX + w.ANAEROBIC_CAPACITY) / w.total) * 100 : 0
-        };
-        return {
-            date: new Date(k),
-            dateStr: k,
-            distribution: dist,
-            totalActivities: w.total,
-            name: "Training Distribution"
-        };
-    });
+        // Map keys to underscore version using getVal for safety
+        Object.entries(KEYS).forEach(([short, raw]) => {
+            out[`_${short}`] = getVal(item, raw);
+        });
+        
+        // Complex objects
+        out._zones = item.zones || null;
+        out._feeling = item.Feeling || null;
+        
+        return out;
+    }).sort((a, b) => a.dateObj - b.dateObj);
 };
 
-// --- Feeling vs Load (Dual Axis) ---
-export const aggregateFeelingVsLoad = (data) => {
+// --- 3. AGGREGATORS (Restored) ---
+const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
-        const key = getWeekKey(d.date);
-        if (!weeks[key]) weeks[key] = { tss: 0, feelingSum: 0, feelingCount: 0 };
+        if (!d.date) return;
+        const date = new Date(d.date);
+        const day = date.getDay();
+        const diff = 6 - day; 
+        const weekEnd = new Date(date);
+        weekEnd.setDate(date.getDate() + diff);
+        const k = weekEnd.toISOString().split('T')[0];
         
-        const load = d._tss > 0 ? d._tss : (d.duration ? d.duration / 60 : 0); 
-        weeks[key].tss += load;
-
-        if (d._feeling > 0) {
-            weeks[key].feelingSum += d._feeling;
-            weeks[key].feelingCount++;
-        }
+        if (!weeks[k]) weeks[k] = 0;
+        weeks[k] += d._tss; // uses safe parsed value
     });
-
-    return Object.keys(weeks).sort().map(k => {
-        const w = weeks[k];
-        const avgFeeling = w.feelingCount > 0 ? (w.feelingSum / w.feelingCount) : null;
-        return {
-            date: new Date(k),
-            dateStr: `Week of ${k}`,
-            load: Math.round(w.tss),
-            feeling: avgFeeling,
-            name: "Load vs Feeling"
-        };
-    });
+    return Object.keys(weeks).map(k => ({ date: new Date(k), dateStr: k, val: weeks[k], name: 'Week Ending ' + k }));
 };
 
+const aggregateWeeklyCalories = (data) => {
+    const weeks = {};
+    data.forEach(d => {
+        if (!d.date) return;
+        const date = new Date(d.date);
+        const day = date.getDay();
+        const diff = 6 - day; 
+        const weekEnd = new Date(date);
+        weekEnd.setDate(date.getDate() + diff);
+        const k = weekEnd.toISOString().split('T')[0];
+        
+        if (!weeks[k]) weeks[k] = 0;
+        weeks[k] += d._cals;
+    });
+    return Object.keys(weeks).map(k => ({ date: new Date(k), dateStr: k, val: weeks[k], name: 'Week Ending ' + k }));
+};
+
+const aggregateWeeklyBalance = (data) => {
+    return data.filter(d => d._zones).map(d => ({
+        date: d.dateObj, dateStr: d.date, name: d.title, distribution: d._zones, val: 0
+    }));
+};
+
+const aggregateFeelingVsLoad = (data) => {
+    return data.filter(d => d._tss > 0 || d._feeling).map(d => ({
+        date: d.dateObj, dateStr: d.date, name: d.title, 
+        load: d._tss, feeling: d._feeling, val: d._tss
+    }));
+};
+
+// --- 4. EXTRACTOR (Restored Logic) ---
 export const extractMetricData = (data, key) => {
-    switch(key) {
+    switch (key) {
+        case 'subjective_bike': 
+            return data.map(d => {
+                if (!checkSport(d, 'BIKE') || !d._pwr || !d._rpe) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: d._pwr / d._rpe, breakdown: `${Math.round(d._pwr)}W / ${d._rpe}` };
+            }).filter(Boolean);
+            
         case 'endurance': 
-            return data.filter(x => checkSport(x, 'BIKE')).map(x => {
-                if (x._pwr > 0 && x._hr > 0) return { val: x._pwr / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pwr:${Math.round(x._pwr)} / HR:${Math.round(x._hr)}` };
+            return data.map(d => {
+                if (!checkSport(d, 'BIKE') || !d._pwr || !d._hr) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: d._pwr / d._hr, breakdown: `${Math.round(d._pwr)}W / ${d._hr}bpm` };
             }).filter(Boolean);
+
         case 'strength': 
-            return data.filter(x => checkSport(x, 'BIKE')).map(x => {
-                if (x._pwr > 0 && x._cad > 0) return { val: x._pwr / x._cad, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pwr:${Math.round(x._pwr)} / RPM:${Math.round(x._cad)}` };
+            return data.map(d => {
+                if (!checkSport(d, 'BIKE') || !d._pwr || !d._cad_bike) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: d._pwr / d._cad_bike, breakdown: `${Math.round(d._pwr)}W / ${d._cad_bike}rpm` };
             }).filter(Boolean);
+
+        case 'subjective_run': 
+            return data.map(d => {
+                if (!checkSport(d, 'RUN') || !d._spd || !d._rpe) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: d._spd / d._rpe, breakdown: `${d._spd.toFixed(1)} / ${d._rpe}` };
+            }).filter(Boolean);
+
         case 'run': 
-            return data.filter(x => checkSport(x, 'RUN')).map(x => {
-                if (x._spd > 0 && x._hr > 0) return { val: (x._spd * 60) / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Pace:${Math.round(x._spd*60)}m/m / HR:${Math.round(x._hr)}` };
+            return data.map(d => {
+                if (!checkSport(d, 'RUN') || !d._spd || !d._hr) return null;
+                // (spd * 60) / HR
+                const val = (d._spd * 60) / d._hr;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);
+
         case 'mechanical': 
-            return data.filter(x => checkSport(x, 'RUN')).map(x => {
-                if (x._spd > 0 && x._pwr > 0) return { val: (x._spd * 100) / x._pwr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Spd:${x._spd.toFixed(1)} / Pwr:${Math.round(x._pwr)}` };
+            return data.map(d => {
+                if (!checkSport(d, 'RUN') || !d._vert || !d._gct) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: (d._vert / d._gct) * 100, breakdown: `${d._vert.toFixed(1)}cm / ${d._gct}ms` };
             }).filter(Boolean);
-        case 'gct': 
-            return data.filter(x => checkSport(x, 'RUN') && x._gct > 0).map(x => ({ val: x._gct, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `${Math.round(x._gct)} ms` }));
-        case 'vert': 
-            return data.filter(x => checkSport(x, 'RUN') && x._vert > 0).map(x => ({ val: x._vert, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `${x._vert.toFixed(1)} cm` }));
+
+        case 'gct': return data.filter(d => checkSport(d, 'RUN') && d._gct).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title, val: d._gct }));
+        case 'vert': return data.filter(d => checkSport(d, 'RUN') && d._vert).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title, val: d._vert }));
+
+        case 'subjective_swim': 
+            return data.map(d => {
+                if (!checkSport(d, 'SWIM') || !d._spd || !d._rpe) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: d._spd / d._rpe, breakdown: '' };
+            }).filter(Boolean);
+
         case 'swim': 
-            return data.filter(x => checkSport(x, 'SWIM')).map(x => {
-                if (x._spd > 0 && x._hr > 0) return { val: (x._spd * 60) / x._hr, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Spd:${(x._spd*60).toFixed(1)}m/m / HR:${Math.round(x._hr)}` };
+            return data.map(d => {
+                if (!checkSport(d, 'SWIM') || !d._spd || !d._hr) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title, val: (d._spd * 60) / d._hr, breakdown: '' };
             }).filter(Boolean);
-        case 'vo2max': 
-            return data.map(x => { if (x._vo2 > 0) return { val: x._vo2, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: "VO2 Est", breakdown: `Score: ${x._vo2}` }; }).filter(Boolean);
-        case 'anaerobic': 
-            return data.map(x => { if (x._ana > 0.5) return { val: x._ana, date: x.date, dateStr: x.date.toISOString().split('T')[0], name: x.actualName, breakdown: `Anaerobic: ${x._ana}` }; }).filter(Boolean);
+
+        case 'vo2max': return data.filter(d => d._vo2).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title, val: d._vo2 }));
+        case 'anaerobic': return data.filter(d => d._ana).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title, val: d._ana }));
+        
         case 'tss': return aggregateWeeklyTSS(data);
         case 'calories': return aggregateWeeklyCalories(data);
-        
         case 'training_balance': return aggregateWeeklyBalance(data);
         case 'feeling_load': return aggregateFeelingVsLoad(data);
-        
+
         default: return [];
     }
 };
 
 export const calculateSubjectiveEfficiency = (allData, sportMode) => {
-    return allData.map(d => {
-        const rpe = d._rpe;
-        if (!rpe || rpe <= 0) return null;
-        let val = 0, breakdown = "", match = false;
-        if (sportMode === 'bike' && checkSport(d, 'BIKE') && d._pwr > 0) { val = d._pwr / rpe; breakdown = `${Math.round(d._pwr)}W / ${rpe} RPE`; match = true; }
-        else if (sportMode === 'run' && checkSport(d, 'RUN') && d._spd > 0) { val = d._spd / rpe; breakdown = `${d._spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
-        else if (sportMode === 'swim' && checkSport(d, 'SWIM') && d._spd > 0) { val = d._spd / rpe; breakdown = `${d._spd.toFixed(2)} m/s / ${rpe} RPE`; match = true; }
-        if (match && val > 0) return { date: d.date, dateStr: d.date.toISOString().split('T')[0], val: val, name: d.actualName, breakdown: breakdown };
-        return null;
-    }).filter(Boolean).sort((a, b) => a.date - b.date);
-};
-
-export const extractSubjectiveTableData = (data, key) => {
-    if (key.startsWith('subjective_')) return calculateSubjectiveEfficiency(data, key.split('_')[1]);
-    return [];
+    // Re-use logic above if possible, or simple filter
+    // Since we kept extractMetricData logic intact, we can just call it
+    return extractMetricData(allData, `subjective_${sportMode}`);
 };

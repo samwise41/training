@@ -1,8 +1,11 @@
 {
   "metrics": {
     "vo2max": {
+      "id": "vo2max",
       "title": "VO2 Max",
       "sport": "All",
+      "icon": "fa-heart-pulse",
+      "colorVar": "var(--color-all)",
       "unit": "ml/kg/min",
       "good_min": 45,
       "good_max": 65,
@@ -12,8 +15,11 @@
       "formula": "Garmin/Apple Estimate"
     },
     "tss": {
+      "id": "tss",
       "title": "Weekly Load",
       "sport": "All",
+      "icon": "fa-layer-group",
+      "colorVar": "var(--color-all)",
       "unit": "TSS",
       "good_min": 300,
       "good_max": 600,
@@ -23,8 +29,11 @@
       "formula": "Sum of Workout TSS"
     },
     "anaerobic": {
+      "id": "anaerobic",
       "title": "Anaerobic Impact",
       "sport": "All",
+      "icon": "fa-fire",
+      "colorVar": "var(--color-all)",
       "unit": "Score",
       "good_min": 2.0,
       "good_max": 4.0,
@@ -34,8 +43,11 @@
       "formula": "Training Effect > 2.0"
     },
     "calories": {
+      "id": "calories",
       "title": "Weekly Energy Burn",
       "sport": "All",
+      "icon": "fa-fire-flame-curved",
+      "colorVar": "var(--color-all)",
       "unit": "kcal",
       "good_min": 3500,
       "good_max": 6000,
@@ -45,8 +57,11 @@
       "formula": "Active Calories"
     },
     "subjective_bike": {
+      "id": "subjective_bike",
       "title": "Bike Efficiency",
       "sport": "Bike",
+      "icon": "fa-person-biking",
+      "colorVar": "var(--color-bike)",
       "unit": "W/RPE",
       "good_min": 25,
       "good_max": 50,
@@ -56,8 +71,11 @@
       "formula": "Avg Power / RPE"
     },
     "endurance": {
+      "id": "endurance",
       "title": "Aerobic Efficiency",
       "sport": "Bike",
+      "icon": "fa-heart-pulse",
+      "colorVar": "var(--color-bike)",
       "unit": "EF",
       "good_min": 1.30,
       "good_max": 1.70,
@@ -67,8 +85,11 @@
       "formula": "Avg Power / Avg HR"
     },
     "strength": {
+      "id": "strength",
       "title": "Pedal Force",
       "sport": "Bike",
+      "icon": "fa-bolt",
+      "colorVar": "var(--color-bike)",
       "unit": "W/RPM",
       "good_min": 1.5,
       "good_max": 3.0,
@@ -78,8 +99,11 @@
       "formula": "Avg Power / Cadence"
     },
     "subjective_run": {
+      "id": "subjective_run",
       "title": "Run Efficiency",
       "sport": "Run",
+      "icon": "fa-person-running",
+      "colorVar": "var(--color-run)",
       "unit": "Spd/RPE",
       "good_min": 0.6,
       "good_max": 1.0,
@@ -89,8 +113,11 @@
       "formula": "Avg Speed / RPE"
     },
     "run": {
+      "id": "run",
       "title": "Running Economy",
       "sport": "Run",
+      "icon": "fa-stopwatch",
+      "colorVar": "var(--color-run)",
       "unit": "m/beat",
       "good_min": 1.0,
       "good_max": 1.6,
@@ -100,8 +127,11 @@
       "formula": "(Speed * 60) / HR"
     },
     "mechanical": {
+      "id": "mechanical",
       "title": "Mechanical Stiffness",
       "sport": "Run",
+      "icon": "fa-ruler-combined",
+      "colorVar": "var(--color-run)",
       "unit": "Ratio",
       "good_min": 0.75,
       "good_max": 0.95,
@@ -111,8 +141,11 @@
       "formula": "(Vert / GCT) * 100"
     },
     "gct": {
+      "id": "gct",
       "title": "Ground Contact Time",
       "sport": "Run",
+      "icon": "fa-shoe-prints",
+      "colorVar": "var(--color-run)",
       "unit": "ms",
       "good_min": 220,
       "good_max": 260,
@@ -122,8 +155,11 @@
       "formula": "Avg GCT"
     },
     "vert": {
+      "id": "vert",
       "title": "Vertical Oscillation",
       "sport": "Run",
+      "icon": "fa-arrows-up-down",
+      "colorVar": "var(--color-run)",
       "unit": "cm",
       "good_min": 6.0,
       "good_max": 9.0,
@@ -133,8 +169,11 @@
       "formula": "Avg Vert Oscillation"
     },
     "subjective_swim": {
+      "id": "subjective_swim",
       "title": "Swim RPE Efficiency",
       "sport": "Swim",
+      "icon": "fa-person-swimming",
+      "colorVar": "var(--color-swim)",
       "unit": "Spd/RPE",
       "good_min": 0.15,
       "good_max": 0.3,
@@ -144,8 +183,11 @@
       "formula": "Speed / RPE"
     },
     "swim": {
+      "id": "swim",
       "title": "Swim Efficiency",
       "sport": "Swim",
+      "icon": "fa-water",
+      "colorVar": "var(--color-swim)",
       "unit": "m/beat",
       "good_min": 0.3,
       "good_max": 0.6,
@@ -155,8 +197,11 @@
       "formula": "(Speed * 60) / HR"
     },
     "training_balance": {
+      "id": "training_balance",
       "title": "Training Balance",
       "sport": "All",
+      "icon": "fa-chart-pie",
+      "colorVar": "var(--color-all)",
       "unit": "%",
       "good_min": 0,
       "good_max": 0,
@@ -166,8 +211,11 @@
       "formula": "Zone Distribution"
     },
     "feeling_load": {
+      "id": "feeling_load",
       "title": "Feeling vs Load",
       "sport": "All",
+      "icon": "fa-face-smile-beam",
+      "colorVar": "var(--color-all)",
       "unit": "Ratio",
       "good_min": 0,
       "good_max": 0,

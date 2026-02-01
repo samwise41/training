@@ -1,60 +1,139 @@
 {
   "metrics": {
     "vo2max": {
-      "title": "VO2 Max",
+      "title": "VO₂ Max Trend",
+      "sport": "All",
       "unit": "ml/kg/min",
-      "good_min": 50,
-      "good_max": 65,
+      "good_min": 45,
+      "good_max": 60,
       "higher_is_better": true,
-      "description": "Aerobic ceiling."
+      "description": "Estimated aerobic ceiling."
     },
     "tss": {
-      "title": "Weekly Load",
+      "title": "Weekly TSS Load",
+      "sport": "All",
       "unit": "TSS",
       "good_min": 300,
-      "good_max": 500,
+      "good_max": 600,
       "higher_is_better": true,
-      "description": "Total training stress."
+      "description": "Total training stress per week."
     },
-    "endurance": {
-      "title": "Aerobic Decoupling",
-      "unit": "%",
-      "good_min": -5.0,
-      "good_max": 5.0,
-      "higher_is_better": false,
-      "description": "Power vs HR drift. Lower is better."
+    "calories": {
+      "title": "Weekly Energy Burn",
+      "sport": "All",
+      "unit": "kcal",
+      "good_min": 3500,
+      "good_max": 6000,
+      "higher_is_better": true,
+      "description": "Total active energy expenditure per week."
+    },
+    "anaerobic": {
+      "title": "Anaerobic Impact",
+      "sport": "All",
+      "unit": "Score",
+      "good_min": 2.0,
+      "good_max": 4.0,
+      "higher_is_better": true,
+      "description": "Intensity stimulus on hard days."
+    },
+    "feeling_load": {
+      "title": "Feeling vs. Load",
+      "sport": "All",
+      "unit": "Ratio",
+      "good_min": 0,
+      "good_max": 0,
+      "higher_is_better": true,
+      "description": "Correlation between how much you do (TSS) and how you feel."
     },
     "subjective_bike": {
-      "title": "Bike Efficiency",
+      "title": "Bike RPE Efficiency",
+      "sport": "Bike",
       "unit": "W/RPE",
-      "good_min": 30,
-      "good_max": null,
+      "good_min": 25,
+      "good_max": 50,
       "higher_is_better": true,
       "description": "Power produced per unit of perceived effort."
     },
-    "subjective_run": {
-      "title": "Run Efficiency",
-      "unit": "Speed/RPE",
-      "good_min": 0.65,
-      "good_max": null,
+    "endurance": {
+      "title": "Aerobic Efficiency",
+      "sport": "Bike",
+      "unit": "EF",
+      "good_min": 1.30,
+      "good_max": 1.70,
       "higher_is_better": true,
-      "description": "Speed per unit of perceived effort."
+      "description": "Watts produced per heartbeat (Efficiency Factor)."
+    },
+    "strength": {
+      "title": "Pedal Force (Torque)",
+      "sport": "Bike",
+      "unit": "W/RPM",
+      "good_min": 1.5,
+      "good_max": 3.0,
+      "higher_is_better": true,
+      "description": "Force applied to pedals per revolution."
+    },
+    "subjective_run": {
+      "title": "Run RPE Efficiency",
+      "sport": "Run",
+      "unit": "Spd/RPE",
+      "good_min": 0.6,
+      "good_max": 1.0,
+      "higher_is_better": true,
+      "description": "Speed (m/s) produced per unit of perceived effort."
+    },
+    "run": {
+      "title": "Running Economy",
+      "sport": "Run",
+      "unit": "m/beat",
+      "good_min": 1.0,
+      "good_max": 1.6,
+      "higher_is_better": true,
+      "description": "Distance (meters) traveled per heartbeat."
     },
     "mechanical": {
-      "title": "Vertical Ratio",
-      "unit": "%",
-      "good_min": null,
-      "good_max": 8.0,
-      "higher_is_better": false,
-      "description": "Vertical oscillation divided by stride length."
-    },
-    "feeling_load": {
-      "title": "Feeling vs Load",
+      "title": "Mechanical Stiffness",
+      "sport": "Run",
       "unit": "Ratio",
-      "good_min": 0.8,
-      "good_max": 1.2,
+      "good_min": 0.75,
+      "good_max": 0.95,
       "higher_is_better": true,
-      "description": "Balance between subjective feeling and objective load."
+      "description": "Ratio of Speed vs. Power output."
+    },
+    "gct": {
+      "title": "Ground Contact Time",
+      "sport": "Run",
+      "unit": "ms",
+      "good_min": 220,
+      "good_max": 260,
+      "higher_is_better": false,
+      "description": "Time spent on the ground per step."
+    },
+    "vert": {
+      "title": "Vertical Oscillation",
+      "sport": "Run",
+      "unit": "cm",
+      "good_min": 6.0,
+      "good_max": 9.0,
+      "higher_is_better": false,
+      "description": "Vertical bounce height."
+    },
+    "subjective_swim": {
+      "title": "Swim RPE Efficiency",
+      "sport": "Swim",
+      "unit": "Spd/RPE",
+      "good_min": 0.15,
+      "good_max": 0.3,
+      "higher_is_better": true,
+      "description": "Water speed (m/s) relative to effort."
+    },
+    "swim": {
+      "title": "Swim Efficiency",
+      "sport": "Swim",
+      "unit": "m/beat",
+      "good_min": 0.3,
+      "good_max": 0.6,
+      "higher_is_better": true,
+      "description": "Distance traveled per heartbeat in water."
     }
   }
 }

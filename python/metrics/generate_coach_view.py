@@ -11,13 +11,16 @@ INPUT_LOG = os.path.join(PROJECT_ROOT, 'data', 'training_log.json')
 INPUT_CONFIG = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'metrics_config.json')
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'coaching_view.json')
 
-# --- DEFINITIONS (Must match the rows in your Metrics Tab) ---
-METRIC_GROUPS = [
-    {'name': 'General Fitness', 'keys': ['vo2max', 'tss', 'feeling_load']},
-    {'name': 'Cycling Metrics', 'keys': ['subjective_bike', 'endurance']},
-    {'name': 'Running Metrics', 'keys': ['subjective_run', 'mechanical']},
-    # Add 'swim' here if you have metrics for it
-]
+# Map "Sport" keys in JSON to Display Titles
+SPORT_DISPLAY_MAP = {
+    "All": "General Fitness",
+    "Bike": "Cycling Metrics",
+    "Run": "Running Metrics",
+    "Swim": "Swimming Metrics"
+}
+
+# Define Sort Order for Groups
+GROUP_ORDER = ["All", "Bike", "Run", "Swim"]
 
 def load_json(filepath):
     try:
@@ -43,7 +46,6 @@ def get_days_ago(date_str):
         return 9999
 
 def calculate_slope(values):
-    """Calculates linear regression slope."""
     n = len(values)
     if n < 2: return 0
     x = list(range(n))
@@ -51,73 +53,76 @@ def calculate_slope(values):
     mean_x = mean(x)
     mean_y = mean(y)
     numerator = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, y))
-    denominator = sum((xi - mean_x) ** 2 for x in x)
+    denominator = sum((xi - mean_x) ** 2 for xi in x)
     if denominator == 0: return 0
     return numerator / denominator
 
-def get_trend_label(slope, higher_is_better=True):
-    """Returns 'Rising', 'Falling', or 'Flat'."""
+def get_trend_label(slope):
     threshold = 0.0001
     if abs(slope) < threshold: return "Flat"
-    
-    # If slope is positive (+)
-    if slope > 0:
-        return "Rising" # e.g. Rising Power (Good) or Rising HR (Bad?)
-        # We generally describe the direction of the number, let the LLM decide if that's good.
-    else:
-        return "Falling"
+    return "Rising" if slope > 0 else "Falling"
 
 def extract_metric_series(log, metric_key):
-    """Extracts values for a specific metric key over time."""
+    """
+    Extracts or calculates values for a specific metric key.
+    """
     series = []
     
     for entry in log:
         if entry.get('exclude') is True: continue
         
-        val = None
+        # Short vars for math readability
+        p   = safe_float(entry.get('avgPower'))
+        hr  = safe_float(entry.get('averageHR'))
+        s   = safe_float(entry.get('averageSpeed'))
+        rpe = safe_float(entry.get('RPE'))
+        cad = safe_float(entry.get('averageBikingCadenceInRevPerMinute'))
+        vert= safe_float(entry.get('avgVerticalOscillation'))
+        gct = safe_float(entry.get('avgGroundContactTime'))
         
-        # 1. Direct value lookup
-        if metric_key in entry and entry[metric_key] is not None:
-            val = safe_float(entry[metric_key])
-            
-        # 2. Calculated values (Derived)
-        elif metric_key == 'subjective_bike':
-            p = safe_float(entry.get('avgPower'))
-            r = safe_float(entry.get('RPE'))
-            if p and r and r > 0: val = p / r
-            
+        val = None
+
+        # --- MATH LOGIC ---
+        if metric_key == 'subjective_bike':
+            if p and rpe and rpe > 0: val = p / rpe
+        elif metric_key == 'endurance':
+            if p and hr and hr > 0: val = p / hr
+        elif metric_key == 'strength':
+            if p and cad and cad > 0: val = p / cad
         elif metric_key == 'subjective_run':
-            s = safe_float(entry.get('averageSpeed'))
-            r = safe_float(entry.get('RPE'))
-            if s and r and r > 0: val = s / r
+            if s and rpe and rpe > 0: val = s / rpe
+        elif metric_key == 'run': 
+            if s and hr and hr > 0: val = (s * 60) / hr
+        elif metric_key == 'mechanical':
+            if vert and gct and gct > 0: val = (vert / gct) * 100
+        elif metric_key == 'vert': val = vert
+        elif metric_key == 'gct': val = gct
+        elif metric_key == 'subjective_swim':
+            if s and rpe and rpe > 0: val = s / rpe
+        elif metric_key == 'swim':
+            if s and hr and hr > 0: val = (s * 60) / hr
+        elif metric_key == 'vo2max': val = safe_float(entry.get('vO2MaxValue'))
+        elif metric_key == 'tss': val = safe_float(entry.get('trainingStressScore'))
+        elif metric_key == 'calories': val = safe_float(entry.get('calories'))
+        elif metric_key == 'anaerobic': val = safe_float(entry.get('anaerobicTrainingEffect'))
+        elif metric_key == 'feeling_load': val = safe_float(entry.get('Feeling'))
+        
+        # Fallback to direct key
+        elif metric_key in entry:
+            val = safe_float(entry[metric_key])
 
-        elif metric_key == 'endurance': # Efficiency Factor
-            p = safe_float(entry.get('avgPower'))
-            h = safe_float(entry.get('averageHR'))
-            if p and h and h > 0: val = p / h
-
-        elif metric_key == 'mechanical': # Vert Ratio approx
-            v = safe_float(entry.get('avgVerticalOscillation'))
-            g = safe_float(entry.get('avgGroundContactTime'))
-            if v and g and g > 0: val = (v / g) * 100
-
-        elif metric_key == 'feeling_load':
-            f = safe_float(entry.get('Feeling'))
-            if f is not None: val = f # Just track feeling for now
-
-        if val is not None:
+        if val is not None and val > 0:
              series.append({
                  'date': entry['date'], 
                  'days_ago': get_days_ago(entry['date']),
                  'value': val
              })
              
-    # Sort by date OLD -> NEW
     series.sort(key=lambda x: x['date'])
     return series
 
 def process_data():
-    print("--- Generating Aggregated Coaching View ---")
+    print("--- Generating Full Context Coaching View ---")
     log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     
@@ -125,69 +130,86 @@ def process_data():
         print("Error: Missing input files.")
         return
 
-    # Structure the output for the Dashboard
+    # 1. Bucket Metrics by Sport
+    grouped_metrics = {k: [] for k in GROUP_ORDER}
+    
+    # Iterate through the Config File to find what to process
+    metrics_config = config.get('metrics', {})
+    
+    for key, rule in metrics_config.items():
+        sport = rule.get('sport', 'All')
+        
+        # Safety: If sport isn't in our list, put it in 'All'
+        if sport not in grouped_metrics:
+            sport = 'All'
+            
+        # Extract Data
+        series = extract_metric_series(log, key)
+        
+        # Calculate Stats (even if series is empty, we return the object with nulls)
+        recent = [x['value'] for x in series if x['days_ago'] <= 30] if series else []
+        current_avg = mean(recent) if recent else 0
+        
+        good_min = rule.get('good_min')
+        good_max = rule.get('good_max')
+        higher_is_better = rule.get('higher_is_better', True)
+        
+        # Determine Status
+        status = "No Data"
+        if recent:
+            status = "Neutral"
+            if higher_is_better:
+                if good_min is not None and current_avg >= good_min: status = "On Target"
+                elif good_min is not None: status = "Off Target"
+            else: # Lower is better
+                if good_max is not None and current_avg <= good_max: status = "On Target"
+                elif good_max is not None: status = "Off Target"
+
+        # Calculate Trends
+        trends = {}
+        for period in [30, 60, 90]:
+            if series:
+                subset = [x['value'] for x in series if x['days_ago'] <= period]
+                slope = calculate_slope(subset)
+                trends[f"{period}d"] = get_trend_label(slope)
+            else:
+                trends[f"{period}d"] = "Flat"
+
+        # --- BUILD MEGA OBJECT ---
+        # 1. Start with a COPY of the config rule (Description, Min, Max, Units, etc.)
+        metric_obj = rule.copy()
+        
+        # 2. Append Calculated Data
+        metric_obj.update({
+            "id": key,
+            "current_value": round(current_avg, 2) if recent else None,
+            "status": status,
+            "trends": trends,
+            "has_data": bool(recent)
+        })
+        
+        grouped_metrics[sport].append(metric_obj)
+
+    # 2. Construct Final Output List
     output_data = {
         "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "metrics_summary": []
     }
 
-    for group in METRIC_GROUPS:
-        group_output = {
-            "group": group['name'],
-            "metrics": []
-        }
-        
-        for key in group['keys']:
-            # Get rules from config
-            rule = config.get('metrics', {}).get(key, {})
-            good_min = rule.get('good_min')
-            good_max = rule.get('good_max')
-            higher_is_better = rule.get('higher_is_better', True)
-            
-            # Get Data
-            series = extract_metric_series(log, key)
-            if not series: 
-                continue
-
-            # 1. Status (Last 30 Days Average)
-            recent = [x['value'] for x in series if x['days_ago'] <= 30]
-            current_avg = mean(recent) if recent else 0
-            
-            status = "Neutral"
-            if recent:
-                if higher_is_better:
-                    if good_min is not None and current_avg >= good_min: status = "On Target"
-                    elif good_min is not None: status = "Off Target"
-                else:
-                    if good_max is not None and current_avg <= good_max: status = "On Target"
-                    elif good_max is not None: status = "Off Target"
-
-            # 2. Trends (30, 60, 90 Days)
-            trends = {}
-            for period in [30, 60, 90]:
-                subset = [x['value'] for x in series if x['days_ago'] <= period]
-                slope = calculate_slope(subset)
-                trends[f"{period}d"] = get_trend_label(slope, higher_is_better)
-
-            # Add to list
-            group_output['metrics'].append({
-                "id": key,
-                "label": rule.get('title', key),
-                "current_value": round(current_avg, 2),
-                "unit": rule.get('unit', ''),
-                "status": status,
-                "trends": trends,
-                "target": f"{good_min} - {good_max}" if (good_min or good_max) else "N/A"
+    # Respect the GROUP_ORDER (All -> Bike -> Run -> Swim)
+    for sport_key in GROUP_ORDER:
+        metrics_list = grouped_metrics.get(sport_key, [])
+        if metrics_list:
+            output_data['metrics_summary'].append({
+                "group": SPORT_DISPLAY_MAP.get(sport_key, sport_key),
+                "metrics": metrics_list
             })
-            
-        if group_output['metrics']:
-            output_data['metrics_summary'].append(group_output)
 
     # Save
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=2)
         
-    print(f"Success! Aggregated view saved to: {OUTPUT_FILE}")
+    print(f"Success! Saved full context view to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     process_data()

@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+import subprocess
 import pandas as pd
 from datetime import datetime
 from zoneinfo import ZoneInfo # Standard in Python 3.9+
@@ -109,6 +111,38 @@ def bundle_activities(activities):
     combined['maxSpeed'] = max((safe_get(a, 'maxSpeed', 0) or 0) for a in activities)
 
     return combined
+
+def trigger_coaching_update():
+    """
+    Triggers the standalone script to regenerate coaching views and metrics.
+    Located at: python/metrics/generate_coach_view.py
+    """
+    print("\n" + "="*50)
+    print("🔄 SYNC COMPLETE. STARTING METRICS RECALCULATION...")
+    print("="*50)
+
+    # 1. Navigate paths
+    # Current file: .../python/sync_modules/sync_database.py
+    # Target file:  .../python/metrics/generate_coach_view.py
+    
+    current_dir = os.path.dirname(os.path.abspath(__file__)) # python/sync_modules
+    python_root = os.path.dirname(current_dir)               # python/
+    script_path = os.path.join(python_root, "metrics", "generate_coach_view.py")
+
+    # 2. Verify existence
+    if not os.path.exists(script_path):
+        print(f"❌ ERROR: Could not find coaching script at: {script_path}")
+        return
+
+    # 3. Run subprocess
+    try:
+        # Use sys.executable to ensure we use the active Python environment (venv)
+        subprocess.run([sys.executable, script_path], check=True)
+        print("✅ SUCCESS: Coaching View updated.")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ ERROR: Coaching script failed with exit code {e.returncode}")
+    except Exception as e:
+        print(f"❌ ERROR: Unexpected error running coaching script: {e}")
 
 def main():
     # 1. Refresh Plan
@@ -223,7 +257,7 @@ def main():
         telemetry = {
             "actualWorkout": composite.get('activityName'),
             "actualDuration": round(act_dur_min, 1),
-            "actualSport": detect_garmin_sport(composite),  # <-- ADDED THIS FIELD
+            "actualSport": detect_garmin_sport(composite),
             "id": composite.get('activityId'),
             "activityType": composite.get('activityType'), # Raw Garmin Type
             "sportTypeId": composite.get('sportTypeId'),
@@ -328,6 +362,9 @@ def main():
     
     save_json(config.MASTER_DB_JSON, final_list)
     print(f"   -> Synced Database. Total records: {len(final_list)}")
+
+    # --- NEW: TRIGGER COACHING UPDATE ---
+    trigger_coaching_update()
 
 if __name__ == "__main__":
     main()

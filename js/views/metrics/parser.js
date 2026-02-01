@@ -30,8 +30,7 @@ const checkSport = (d, type) => {
 
 // Safe Value Extractor
 const getVal = (item, key) => {
-    // Only use formatter if the value is a string that looks like a duration (e.g., "01:30:00")
-    // If it's a number, we want to treat it as a number immediately.
+    // Duration fix: handle string durations
     if ((key === 'duration' || key === 'time' || key === 'moving_time') && typeof item[key] === 'string') {
         return Formatters.parseDuration(item[key]);
     }
@@ -39,7 +38,21 @@ const getVal = (item, key) => {
     if (val === null || val === undefined || val === '') return 0;
     
     const num = parseFloat(val);
-    return isNaN(num) ? 0 : num; // Never return NaN
+    return isNaN(num) ? 0 : num;
+};
+
+// --- SYNTHETIC ZONES (Fallback if real zones missing) ---
+const estimateZonesFromEffect = (effect) => {
+    switch (effect) {
+        case 'RECOVERY': return { Recovery: 100, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0 };
+        case 'AEROBIC_BASE': return { Recovery: 20, Aerobic: 80, Tempo: 0, Threshold: 0, VO2: 0 };
+        case 'TEMPO': return { Recovery: 10, Aerobic: 30, Tempo: 60, Threshold: 0, VO2: 0 };
+        case 'LACTATE_THRESHOLD': return { Recovery: 10, Aerobic: 20, Tempo: 30, Threshold: 40, VO2: 0 };
+        case 'VO2MAX': return { Recovery: 20, Aerobic: 30, Tempo: 10, Threshold: 10, VO2: 30 };
+        case 'ANAEROBIC_CAPACITY': 
+        case 'SPEED': return { Recovery: 40, Aerobic: 20, Tempo: 0, Threshold: 0, VO2: 40 };
+        default: return { Recovery: 50, Aerobic: 50, Tempo: 0, Threshold: 0, VO2: 0 }; // Default Fallback
+    }
 };
 
 // --- 2. NORMALIZER ---
@@ -47,33 +60,43 @@ export const normalizeMetricsData = (rawData) => {
     if (!rawData) return [];
     
     return rawData.map(item => {
-        // --- DURATION FIX ---
-        // 1. Try 'durationInSeconds' (Standard)
-        // 2. Try 'duration' (Garmin/Strava Raw Seconds)
-        // 3. Try 'actualDuration' (Often minutes in planning logs, so * 60)
+        // 1. Duration Standardization
         let durSecs = 0;
-        if (item.durationInSeconds != null) {
-            durSecs = parseFloat(item.durationInSeconds);
-        } else if (item.duration != null) {
-            durSecs = parseFloat(item.duration);
-        } else if (item.actualDuration != null) {
-            durSecs = parseFloat(item.actualDuration) * 60;
-        }
+        if (item.durationInSeconds != null) durSecs = parseFloat(item.durationInSeconds);
+        else if (item.duration != null) durSecs = parseFloat(item.duration);
+        else if (item.actualDuration != null) durSecs = parseFloat(item.actualDuration) * 60;
 
+        // 2. Base Object
         const out = { 
             ...item, 
-            // Create a reliable Date Object once
             dateObj: new Date(item.date),
-            // Store standardized duration in minutes
             _dur: durSecs / 60 
         };
         
-        // Map keys
+        // 3. Map Keys
         Object.entries(KEYS).forEach(([short, raw]) => {
             out[`_${short}`] = getVal(item, raw);
         });
         
-        out._zones = item.zones || null;
+        // 4. Calculate Estimated Load (Fallback for missing TSS)
+        // Formula: Foster's Load = RPE * Minutes
+        // We scale it down (/6) to roughly approximate TSS scale (100tss ~= 1hr @ RPE 9-10)
+        if (out._rpe > 0 && out._dur > 0) {
+            out._load_est = (out._rpe * out._dur) / 6; 
+        } else {
+            out._load_est = 0;
+        }
+
+        // 5. Handle Zones
+        // If real zones exist, use them. If not, estimate from Training Effect label.
+        if (item.zones) {
+            out._zones = item.zones;
+        } else if (out._effect) {
+            out._zones = estimateZonesFromEffect(out._effect);
+        } else {
+            out._zones = null;
+        }
+
         out._feeling = item.Feeling || null;
         return out;
     }).sort((a, b) => a.dateObj - b.dateObj);
@@ -96,7 +119,10 @@ const aggregateWeeklyTSS = (data) => {
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
-        if (d._tss > 0) weeks[k] += d._tss; 
+        
+        // Use Real TSS if available, otherwise Estimated Load
+        const val = d._tss > 0 ? d._tss : d._load_est;
+        weeks[k] += val; 
     });
 
     return Object.keys(weeks).map(k => ({ 
@@ -125,16 +151,26 @@ const aggregateWeeklyCalories = (data) => {
 };
 
 const aggregateWeeklyBalance = (data) => {
+    // Only aggregate items that have zone data (real or estimated)
     return data.filter(d => d._zones).map(d => ({
         date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', distribution: d._zones, val: 0
     }));
 };
 
 const aggregateFeelingVsLoad = (data) => {
-    return data.filter(d => d._tss > 0 || d._feeling).map(d => ({
-        date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', 
-        load: d._tss, feeling: d._feeling, val: d._tss
-    }));
+    // Filter: Must have either TSS/Load OR Feeling
+    return data.filter(d => (d._tss > 0 || d._load_est > 0) || d._feeling).map(d => {
+        // Prefer Real TSS, fallback to Estimated
+        const loadVal = d._tss > 0 ? d._tss : d._load_est;
+        return {
+            date: d.dateObj, 
+            dateStr: d.date, 
+            name: d.title || 'Workout', 
+            load: loadVal, 
+            feeling: d._feeling, 
+            val: loadVal // Primary value for trend calculation
+        };
+    });
 };
 
 // --- 4. EXTRACTOR ---
@@ -167,7 +203,6 @@ export const extractMetricData = (data, key) => {
         case 'run': 
             return data.map(d => {
                 if (!checkSport(d, 'RUN') || !d._spd || !d._hr) return null;
-                // Running Economy: (Speed * 60) / HR -> Meters per beat (approx)
                 const val = (d._spd * 60) / d._hr;
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);

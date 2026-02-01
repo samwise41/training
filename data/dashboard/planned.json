@@ -1,5 +1,15 @@
 [
     {
+        "id": "PLAN-2026-02-01-Other",
+        "date": "2026-02-01",
+        "day": "Sunday",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0.0,
+        "activityType": "Other",
+        "notes": "**Focus:** Sleep and mobility.",
+        "status": "PLANNED"
+    },
+    {
         "id": "PLAN-2026-02-02-Run",
         "date": "2026-02-02",
         "day": "Monday",
@@ -67,16 +77,6 @@
         "plannedDuration": 135.0,
         "activityType": "Bike",
         "notes": "**Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-08-Other",
-        "date": "2026-02-08",
-        "day": "Sunday",
-        "plannedWorkout": "Rest",
-        "plannedDuration": 0.0,
-        "activityType": "Other",
-        "notes": "**Focus:** Sleep and mobility.",
         "status": "PLANNED"
     }
 ]

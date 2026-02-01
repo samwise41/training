@@ -1,5 +1,5 @@
 import { UI } from '../../utils/ui.js';
-import { DataManager } from '../../utils/data.js'; // Added DataManager
+import { DataManager } from '../../utils/data.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
 import { normalizeMetricsData } from './parser.js';
@@ -8,7 +8,7 @@ import { METRIC_DEFINITIONS } from './definitions.js';
 let metricsState = { timeRange: '6m' };
 let cleanData = [];
 
-// --- Global Handlers ---
+// --- Global Handlers (Tooltips & Interaction) ---
 
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     e.stopPropagation();
@@ -85,24 +85,25 @@ export async function renderMetrics(rawData) {
     try {
         console.log("🚀 Rendering Metrics View...");
 
-        // 1. ENSURE DATA FOR CHARTS
-        // If rawData is missing (not passed by app.js), fetch it manually
+        // 1. DATA SAFETY CHECK
+        // If app.js didn't pass data, we fetch it manually to ensure charts work
         if (!rawData || rawData.length === 0) {
-            console.log("⚠️ No rawData passed. Fetching log manually...");
+            console.log("⚠️ No data passed to Metrics. Fetching log manually...");
             rawData = await DataManager.fetchJSON('log');
         }
 
         if (rawData && rawData.length > 0) {
             cleanData = normalizeMetricsData(rawData);
             
-            // Schedule Chart Render
+            // Schedule Charts to render slightly after DOM insertion
             setTimeout(() => {
-                console.log(`📈 Rendering Charts with ${cleanData.length} activities...`);
+                console.log(`📈 Rendering Charts with ${cleanData.length} records...`);
                 updateCharts(cleanData, metricsState.timeRange);
+                // Force button state update
                 window.toggleMetricsTime(metricsState.timeRange);
-            }, 100);
+            }, 150);
         } else {
-            console.error("❌ No log data available for charts.");
+            console.error("❌ Failed to load any log data for charts.");
         }
 
         // 2. Build Header
@@ -116,12 +117,12 @@ export async function renderMetrics(rawData) {
                 <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
             </div>`;
 
-        // 3. Build Table (ASYNC)
+        // 3. Build Table (Async Fetch)
         let tableHtml = "";
         try {
-            tableHtml = await renderSummaryTable(); 
+            tableHtml = await renderSummaryTable();
         } catch (e) {
-            tableHtml = `<div class="p-4 text-rose-400 text-xs border border-rose-900/30 rounded">Error loading table: ${e.message}</div>`;
+            tableHtml = `<div class="p-4 text-rose-400 text-xs">Error loading table</div>`;
         }
         
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);

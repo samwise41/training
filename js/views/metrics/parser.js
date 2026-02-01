@@ -28,61 +28,89 @@ const checkSport = (d, type) => {
     return false;
 };
 
-// Safe Value Extractor
+// Safe Value Extractor (Upgraded for TSS Debugging)
 const getVal = (item, key) => {
     if (key === 'duration' || key === 'time' || key === 'moving_time') {
         return Formatters.parseDuration(item[key]);
     }
     const val = item[key];
     if (val === null || val === undefined || val === '') return 0;
-    return parseFloat(val); 
+    
+    const num = parseFloat(val);
+    return isNaN(num) ? 0 : num; // Never return NaN
 };
 
 // --- 2. NORMALIZER ---
 export const normalizeMetricsData = (rawData) => {
     if (!rawData) return [];
+    
+    // Debug Log: Check the raw data for the last entry to see if TSS exists
+    if (rawData.length > 0) {
+        const last = rawData[rawData.length - 1];
+        console.log("DEBUG: Last Raw Entry:", last.date, "TSS:", last.trainingStressScore);
+    }
+
     return rawData.map(item => {
         const out = { 
             ...item, 
+            // Create a reliable Date Object once
             dateObj: new Date(item.date),
             _dur: getVal(item, 'durationInSeconds') / 60 
         };
+        
         // Map keys
         Object.entries(KEYS).forEach(([short, raw]) => {
             out[`_${short}`] = getVal(item, raw);
         });
+        
         out._zones = item.zones || null;
         out._feeling = item.Feeling || null;
         return out;
     }).sort((a, b) => a.dateObj - b.dateObj);
 };
 
-// --- 3. AGGREGATORS ---
+// --- 3. AGGREGATORS (Fixed TSS Logic) ---
 const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
-        if (!d.date) return;
-        const date = new Date(d.date);
-        const day = date.getDay();
+        // Use the safe dateObj we created in normalize
+        if (!d.dateObj || isNaN(d.dateObj)) return;
+        
+        const date = d.dateObj; 
+        const day = date.getDay(); // 0=Sun, 6=Sat
         const diff = 6 - day; 
-        const weekEnd = new Date(date);
+        
+        // Clone date to avoid mutating the original record
+        const weekEnd = new Date(date.valueOf());
         weekEnd.setDate(date.getDate() + diff);
+        weekEnd.setHours(0,0,0,0);
+        
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
-        weeks[k] += d._tss; 
+        
+        // Strict addition
+        if (d._tss > 0) {
+            weeks[k] += d._tss; 
+        }
     });
-    return Object.keys(weeks).map(k => ({ date: new Date(k), dateStr: k, val: weeks[k], name: 'Week Ending ' + k }));
+
+    return Object.keys(weeks).map(k => ({ 
+        date: new Date(k), 
+        dateStr: k, 
+        val: weeks[k], 
+        name: 'Week Ending ' + k 
+    })).sort((a, b) => a.date - b.date);
 };
 
 const aggregateWeeklyCalories = (data) => {
     const weeks = {};
     data.forEach(d => {
-        if (!d.date) return;
-        const date = new Date(d.date);
+        if (!d.dateObj) return;
+        const date = d.dateObj;
         const day = date.getDay();
         const diff = 6 - day; 
-        const weekEnd = new Date(date);
+        const weekEnd = new Date(date.valueOf());
         weekEnd.setDate(date.getDate() + diff);
         const k = weekEnd.toISOString().split('T')[0];
         

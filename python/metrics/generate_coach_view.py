@@ -11,7 +11,6 @@ INPUT_LOG = os.path.join(PROJECT_ROOT, 'data', 'training_log.json')
 INPUT_CONFIG = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'metrics_config.json')
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'coaching_view.json')
 
-# Map "Sport" keys in JSON to Display Titles
 SPORT_DISPLAY_MAP = {
     "All": "General Fitness",
     "Bike": "Cycling Metrics",
@@ -30,7 +29,9 @@ def load_json(filepath):
 def safe_float(val):
     try:
         if val is None: return None
-        return float(val)
+        v = float(val)
+        if v == 0: return None # Treat 0 as None for trend accuracy
+        return v
     except (ValueError, TypeError):
         return None
 
@@ -43,7 +44,11 @@ def get_days_ago(date_str):
     except ValueError:
         return 9999
 
-def calculate_slope(values):
+def calculate_linear_regression(values):
+    """
+    Calculates simple linear regression (y = mx + b).
+    Returns: slope (m), start_y, end_y
+    """
     n = len(values)
     if n < 2: return 0, 0, 0
     
@@ -60,16 +65,19 @@ def calculate_slope(values):
     slope = numerator / denominator
     intercept = mean_y - (slope * mean_x)
     
-    # Calculate start and end points of the regression line
-    start_val = intercept + (slope * 0)
-    end_val = intercept + (slope * (n - 1))
+    start_val = intercept # at x=0
+    end_val = intercept + (slope * (n - 1)) # at x=n-1
     
     return slope, start_val, end_val
 
-def get_trend_label(slope):
-    threshold = 0.0001
+def get_trend_label(slope, start_val, end_val):
+    # A flat slope is rare, so we use a threshold
+    threshold = 0.00001
     if abs(slope) < threshold: return "Flat"
-    return "Rising" if slope > 0 else "Falling"
+    
+    # If slope is positive, the line is going UP on the chart
+    if slope > 0: return "Rising"
+    return "Falling"
 
 def extract_metric_series(log, metric_key):
     series = []
@@ -77,6 +85,7 @@ def extract_metric_series(log, metric_key):
     for entry in log:
         if entry.get('exclude') is True: continue
         
+        # Raw Data Extraction (Matches JS Parser)
         p   = safe_float(entry.get('avgPower'))
         hr  = safe_float(entry.get('averageHR'))
         s   = safe_float(entry.get('averageSpeed'))
@@ -88,23 +97,23 @@ def extract_metric_series(log, metric_key):
         val = None
 
         if metric_key == 'subjective_bike':
-            if p and rpe and rpe > 0: val = p / rpe
+            if p and rpe: val = p / rpe
         elif metric_key == 'endurance':
-            if p and hr and hr > 0: val = p / hr
+            if p and hr: val = p / hr
         elif metric_key == 'strength':
-            if p and cad and cad > 0: val = p / cad
+            if p and cad: val = p / cad
         elif metric_key == 'subjective_run':
-            if s and rpe and rpe > 0: val = s / rpe
+            if s and rpe: val = s / rpe
         elif metric_key == 'run': 
-            if s and hr and hr > 0: val = (s * 60) / hr
+            if s and hr: val = (s * 60) / hr
         elif metric_key == 'mechanical':
-            if vert and gct and gct > 0: val = (vert / gct) * 100
+            if vert and gct: val = (vert / gct) * 100
         elif metric_key == 'vert': val = vert
         elif metric_key == 'gct': val = gct
         elif metric_key == 'subjective_swim':
-            if s and rpe and rpe > 0: val = s / rpe
+            if s and rpe: val = s / rpe
         elif metric_key == 'swim':
-            if s and hr and hr > 0: val = (s * 60) / hr
+            if s and hr: val = (s * 60) / hr
         elif metric_key == 'vo2max': val = safe_float(entry.get('vO2MaxValue'))
         elif metric_key == 'tss': val = safe_float(entry.get('trainingStressScore'))
         elif metric_key == 'calories': val = safe_float(entry.get('calories'))
@@ -113,18 +122,19 @@ def extract_metric_series(log, metric_key):
         elif metric_key in entry:
             val = safe_float(entry[metric_key])
 
-        if val is not None and val > 0:
+        if val is not None:
              series.append({
                  'date': entry['date'], 
                  'days_ago': get_days_ago(entry['date']),
                  'value': val
              })
              
+    # Strict Sort: Oldest -> Newest
     series.sort(key=lambda x: x['date'])
     return series
 
 def process_data():
-    print("--- Generating Full Context Coaching View ---")
+    print("--- Generating Aligned Coaching View ---")
     log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     
@@ -132,59 +142,70 @@ def process_data():
         print("Error: Missing input files.")
         return
 
-    grouped_metrics = {k: [] for k in GROUP_ORDER}
     metrics_config = config.get('metrics', {})
+    grouped_metrics = {k: [] for k in GROUP_ORDER}
     
     for key, rule in metrics_config.items():
         sport = rule.get('sport', 'All')
         if sport not in grouped_metrics: sport = 'All'
             
         series = extract_metric_series(log, key)
-        recent = [x['value'] for x in series if x['days_ago'] <= 30] if series else []
-        current_avg = mean(recent) if recent else 0
+        
+        # 1. Current Status (Weighted Average of last 30 days)
+        recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
+        current_avg = mean(recent_30) if recent_30 else 0
         
         good_min = rule.get('good_min')
         good_max = rule.get('good_max')
         higher_is_better = rule.get('higher_is_better', True)
         
         status = "No Data"
-        if recent:
+        if recent_30:
             status = "Neutral"
             if higher_is_better:
                 if good_min is not None and current_avg >= good_min: status = "On Target"
                 elif good_min is not None: status = "Off Target"
-            else:
+            else: # Lower is better
                 if good_max is not None and current_avg <= good_max: status = "On Target"
                 elif good_max is not None: status = "Off Target"
 
-        # Calculate Trends & Regression Lines
+        # 2. Trend Calculations for Chart Alignment
+        # We calculate the regression for 30d, 90d, and 180d (6 months)
         trends = {}
-        for period in [30, 60, 90]:
+        for period, label in [(30, "30d"), (90, "90d"), (180, "6m")]: # Renamed 90 -> 6m to match user
             if series:
+                # Slice the data exactly as the chart would
                 subset = [x['value'] for x in series if x['days_ago'] <= period]
-                slope, start_val, end_val = calculate_slope(subset)
                 
+                if len(subset) >= 2:
+                    slope, start_val, end_val = calculate_linear_regression(subset)
+                    direction = get_trend_label(slope, start_val, end_val)
+                else:
+                    direction = "Flat"
+                    slope = 0
+                
+                # Store the raw "Visual Direction" (Rising/Falling)
+                # The Frontend Table will decide if Rising is "Good" or "Bad"
                 trends[f"{period}d"] = {
-                    "direction": get_trend_label(slope),
-                    "slope": slope,
-                    "start_val": start_val,
-                    "end_val": end_val
+                    "direction": direction, 
+                    "slope": slope
                 }
             else:
-                trends[f"{period}d"] = {"direction": "Flat", "slope": 0, "start_val": 0, "end_val": 0}
+                trends[f"{period}d"] = {"direction": "Flat", "slope": 0}
 
-        # Build Mega Object (Merging Config + Data)
+        # 3. Construct Output Object (Merging Config + Data)
         metric_obj = rule.copy()
         metric_obj.update({
             "id": key,
-            "current_value": round(current_avg, 2) if recent else None,
+            "current_value": round(current_avg, 2) if recent_30 else None,
             "status": status,
-            "trends": trends,
-            "has_data": bool(recent)
+            "trends": trends, 
+            "has_data": bool(recent_30)
         })
         
         grouped_metrics[sport].append(metric_obj)
 
+    # 4. Final Output Structure
     output_data = {
         "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "metrics_summary": []
@@ -201,7 +222,7 @@ def process_data():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=2)
         
-    print(f"Success! Saved full context view to: {OUTPUT_FILE}")
+    print(f"Success! Saved aligned view to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     process_data()

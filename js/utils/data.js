@@ -17,8 +17,8 @@ const DATA_SOURCES = {
     schedule:   './data/dashboard/plannedWorkouts.json',
     topCards:   './data/dashboard/top_cards.json',
     adherence:  './data/trends/adherence.json',
-    METRICS_CONFIG: 'data/metrics_config.json',  // <--- NEW: The Rules
-    COACHING_VIEW: 'data/coaching_view.json',    // <--- NEW: The Graded Output
+    METRICS_CONFIG: 'data/metrics/metrics_config.json',  // <--- NEW: The Rules
+    COACHING_VIEW: 'data/metrics/coaching_view.json',    // <--- NEW: The Graded Output
     
 };
 

@@ -4,96 +4,77 @@ import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
 import { normalizeMetricsData } from './parser.js';
 
-// Global state for tooltips and charts
+// Global state
 let metricsState = { timeRange: '6m', configMap: {} };
 let cleanData = [];
 
-// --- Global Handlers (Tooltips) ---
+// --- Global Handlers ---
 
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
-    e.stopPropagation();
-    const breakdownHtml = breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : '';
-    const html = `
-        <div class="min-w-[150px]">
-            <div class="font-bold text-slate-200 mb-1 border-b border-slate-700 pb-1">${name}</div>
-            <div class="flex justify-between items-end mb-1 gap-4">
-                <span class="text-[10px] text-slate-400">${date}</span>
-                <span class="text-lg font-bold" style="color: ${color}">${val} <span class="text-[10px] text-slate-500">${unit}</span></span>
-            </div>
-            ${breakdownHtml}
-        </div>`;
-    if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
+    if(window.TooltipManager) {
+        e.stopPropagation();
+        const breakdownHtml = breakdown ? `<div class="mt-2 pt-2 border-t border-slate-700 text-[10px] text-slate-400 italic">${breakdown}</div>` : '';
+        const html = `
+            <div class="min-w-[150px]">
+                <div class="font-bold text-slate-200 mb-1 border-b border-slate-700 pb-1">${name}</div>
+                <div class="flex justify-between items-end mb-1 gap-4">
+                    <span class="text-[10px] text-slate-400">${date}</span>
+                    <span class="text-lg font-bold" style="color: ${color}">${val} <span class="text-[10px] text-slate-500">${unit}</span></span>
+                </div>
+                ${breakdownHtml}
+            </div>`;
+        window.TooltipManager.show(e.currentTarget, html, e);
+    }
 };
 
 window.handleMetricInfoClick = (e, key) => {
-    e.stopPropagation();
-    // Look up config from the loaded state (No definition.js needed)
-    const def = metricsState.configMap[key];
-    
-    if (!def) return;
-    
-    // Icon/Color fallbacks
-    const icon = def.icon || 'fa-circle-info';
-    const color = def.colorVar || 'var(--text-main)';
-    const range = (def.good_min !== null || def.good_max !== null) ? `${def.good_min ?? 0} – ${def.good_max ?? '∞'}` : 'N/A';
+    if(window.TooltipManager) {
+        e.stopPropagation();
+        const def = metricsState.configMap[key] || { title: key, description: 'Loading...' };
+        const icon = def.icon || 'fa-circle-info';
+        const color = def.colorVar || 'var(--text-main)';
+        const range = (def.good_min !== undefined) ? `${def.good_min} – ${def.good_max}` : 'N/A';
 
-    const html = `
-        <div class="max-w-[280px]">
-            <div class="flex items-center gap-2 mb-2 pb-2 border-b border-blue-500/30">
-                <i class="fa-solid ${icon}" style="color: ${color}"></i>
-                <h3 class="font-bold text-white uppercase tracking-wider">${def.title}</h3>
-            </div>
-            <div class="space-y-3 text-slate-300">
-                <p>${def.description || 'No description.'}</p>
-                <div class="bg-slate-800/80 p-2 rounded border border-slate-700">
-                    <div class="text-[10px] text-slate-500 uppercase font-bold">Target Range</div>
-                    <div class="font-mono text-emerald-400">${range} ${def.unit || ''}</div>
+        const html = `
+            <div class="max-w-[280px]">
+                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-blue-500/30">
+                    <i class="fa-solid ${icon}" style="color: ${color}"></i>
+                    <h3 class="font-bold text-white uppercase tracking-wider">${def.title}</h3>
                 </div>
-                ${def.improvement ? `
-                <div>
-                    <div class="text-[10px] text-slate-500 uppercase font-bold mb-1">How to Improve</div>
-                    <div class="text-xs text-slate-400 pl-2 border-l-2 border-slate-600">${def.improvement}</div>
-                </div>` : ''}
-            </div>
-        </div>`;
-    if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
+                <div class="space-y-3 text-slate-300">
+                    <p>${def.description || ''}</p>
+                    <div class="bg-slate-800/80 p-2 rounded border border-slate-700">
+                        <div class="text-[10px] text-slate-500 uppercase font-bold">Target Range</div>
+                        <div class="font-mono text-emerald-400">${range} ${def.unit || ''}</div>
+                    </div>
+                    ${def.improvement ? `<div class="text-xs text-slate-400 pl-2 border-l-2 border-slate-600">${def.improvement}</div>` : ''}
+                </div>
+            </div>`;
+        window.TooltipManager.show(e.currentTarget, html, e);
+    }
 };
 
 window.scrollToMetric = (key) => {
     const el = document.getElementById(`metric-chart-${key}`);
-    if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        const container = el.closest('.bg-slate-800\\/30');
-        if (container) {
-            container.classList.add('ring-2', 'ring-blue-500');
-            setTimeout(() => container.classList.remove('ring-2', 'ring-blue-500'), 1500);
-        }
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;
-    if (cleanData.length > 0) {
-        updateCharts(cleanData, metricsState.timeRange);
-    }
+    if (cleanData.length > 0) updateCharts(cleanData, metricsState.timeRange);
     
     document.querySelectorAll('[id^="btn-metric-"]').forEach(btn => {
-        if(btn.id === `btn-metric-${range}`) {
-            btn.classList.add('text-white', 'bg-slate-700');
-            btn.classList.remove('text-slate-400', 'bg-slate-800');
-        } else {
-            btn.classList.remove('text-white', 'bg-slate-700');
-            btn.classList.add('text-slate-400', 'bg-slate-800');
-        }
+        const isActive = btn.id === `btn-metric-${range}`;
+        btn.className = isActive 
+            ? "bg-slate-700 text-white px-3 py-1 rounded text-[10px] transition-all" 
+            : "bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white";
     });
 };
 
-// --- ASYNC POPULATOR ---
+// --- ASYNC LOGIC ---
 async function populateView(rawData) {
     try {
-        console.log("🚀 Hydrating Metrics View...");
-
-        // 1. Fetch Config for Tooltips (Store in State)
+        // 1. Fetch Config
         const coachingData = await DataManager.fetchJSON('COACHING_VIEW');
         if (coachingData && coachingData.metrics_summary) {
             metricsState.configMap = {};
@@ -102,95 +83,99 @@ async function populateView(rawData) {
             });
         }
 
-        // 2. Render Table (Inject HTML)
+        // 2. Render Table
         const tableContainer = document.getElementById('metrics-table-container');
         if (tableContainer) {
             tableContainer.innerHTML = await renderSummaryTable();
         }
 
-        // 3. Prepare Charts
-        if (!rawData || rawData.length === 0) {
-            rawData = await DataManager.fetchJSON('log');
-        }
+        // 3. Render Charts
+        if (!rawData || rawData.length === 0) rawData = await DataManager.fetchJSON('log');
 
         if (rawData && rawData.length > 0) {
             cleanData = normalizeMetricsData(rawData);
-            
-            // Give DOM a moment to settle
             setTimeout(() => {
                 updateCharts(cleanData, metricsState.timeRange);
                 window.toggleMetricsTime(metricsState.timeRange);
             }, 50);
         }
-
     } catch (e) {
-        console.error("Metrics Hydration Error:", e);
+        console.error("Hydration Error:", e);
     }
 }
 
-// --- MAIN RENDERER (Synchronous Return) ---
-
+// --- MAIN RENDERER (Must return string synchronously) ---
 export function renderMetrics(rawData) {
-    // 1. Return Skeleton HTML Immediately
-    const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
-    
-    const headerHtml = `
-        <div class="flex justify-between items-center bg-slate-900/40 p-3 rounded-xl border border-slate-800 backdrop-blur-sm sticky top-0 z-10 mb-6">
-            <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-bullseye text-emerald-500"></i> Performance Lab
-            </h2>
-            <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
-        </div>`;
+    try {
+        // Ensure UI exists before using it
+        if (!UI || typeof UI.buildCollapsibleSection !== 'function') {
+            throw new Error("UI Utility is missing or invalid imports.");
+        }
 
-    // Empty containers that populateView will fill
-    const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', '<div id="metrics-table-container" class="min-h-[200px] flex items-center justify-center text-slate-500 text-xs">Loading Analysis...</div>', true);
+        const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
+        
+        const headerHtml = `
+            <div class="flex justify-between items-center bg-slate-900/40 p-3 rounded-xl border border-slate-800 backdrop-blur-sm sticky top-0 z-10 mb-6">
+                <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-bullseye text-emerald-500"></i> Performance Lab
+                </h2>
+                <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
+            </div>`;
 
-    const buildSectionHeader = (title, icon, color) => `
-        <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
-            <i class="fa-solid ${icon} ${color}"></i>
-            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">${title}</h3>
-        </div>`;
+        const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', '<div id="metrics-table-container" class="min-h-[100px] flex items-center justify-center text-slate-500 text-xs">Loading Analysis...</div>', true);
 
-    const chartsGrid = `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'icon-all')}
-            <div id="metric-chart-vo2max"></div>
-            <div id="metric-chart-tss"></div>
-            <div id="metric-chart-anaerobic"></div>
-            <div id="metric-chart-calories"></div> 
-            <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-                <div id="metric-chart-training_balance"></div>
-                <div id="metric-chart-feeling_load"></div>
+        const buildSectionHeader = (title, icon, color) => `
+            <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
+                <i class="fa-solid ${icon} ${color}"></i>
+                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">${title}</h3>
+            </div>`;
+
+        const chartsGrid = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'icon-all')}
+                <div id="metric-chart-vo2max"></div>
+                <div id="metric-chart-tss"></div>
+                <div id="metric-chart-anaerobic"></div>
+                <div id="metric-chart-calories"></div> 
+                <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                    <div id="metric-chart-training_balance"></div>
+                    <div id="metric-chart-feeling_load"></div>
+                </div>
+
+                ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
+                <div id="metric-chart-subjective_bike"></div>
+                <div id="metric-chart-endurance"></div>
+                <div id="metric-chart-strength"></div>
+
+                ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
+                <div id="metric-chart-subjective_run"></div>
+                <div id="metric-chart-run"></div>
+                <div id="metric-chart-mechanical"></div>
+                <div id="metric-chart-gct"></div>
+                <div id="metric-chart-vert"></div>
+
+                ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
+                <div id="metric-chart-subjective_swim"></div>
+                <div id="metric-chart-swim"></div> 
+            </div>`;
+        
+        const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
+
+        // Trigger Async Load
+        setTimeout(() => populateView(rawData), 0);
+
+        return `
+            <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">
+                ${headerHtml}
+                ${tableSection}
+                ${chartsSection}
             </div>
-
-            ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
-            <div id="metric-chart-subjective_bike"></div>
-            <div id="metric-chart-endurance"></div>
-            <div id="metric-chart-strength"></div>
-
-            ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
-            <div id="metric-chart-subjective_run"></div>
-            <div id="metric-chart-run"></div>
-            <div id="metric-chart-mechanical"></div>
-            <div id="metric-chart-gct"></div>
-            <div id="metric-chart-vert"></div>
-
-            ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
-            <div id="metric-chart-subjective_swim"></div>
-            <div id="metric-chart-swim"></div> 
+        `;
+    } catch (e) {
+        console.error(e);
+        return `<div class="p-8 text-center text-rose-400 border border-rose-900 bg-rose-900/10 rounded">
+            <h3 class="font-bold">View Error</h3>
+            <p class="text-sm font-mono mt-2">${e.message}</p>
         </div>`;
-    
-    const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
-
-    // 2. Trigger Async Population in background
-    setTimeout(() => populateView(rawData), 0);
-
-    // 3. Return Skeleton
-    return `
-        <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">
-            ${headerHtml}
-            ${tableSection}
-            ${chartsSection}
-        </div>
-    `;
+    }
 }

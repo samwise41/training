@@ -8,7 +8,7 @@ import { METRIC_DEFINITIONS } from './definitions.js';
 let metricsState = { timeRange: '6m' };
 let cleanData = [];
 
-// --- Global Handlers ---
+// --- Global Handlers (Chart Tooltips) ---
 
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     e.stopPropagation();
@@ -52,6 +52,8 @@ window.handleMetricInfoClick = (e, key) => {
 
 window.handleMetricStatusClick = (e, key, avg, isGood) => {
     e.stopPropagation();
+    // This handler might be less relevant for the new table, 
+    // but we keep it for backward compatibility if charts use it.
     const def = METRIC_DEFINITIONS[key];
     if (!def) return;
     const html = `
@@ -60,10 +62,6 @@ window.handleMetricStatusClick = (e, key, avg, isGood) => {
             <div class="flex justify-between items-center mb-2">
                 <span class="text-slate-400">Average:</span>
                 <span class="font-mono font-bold ${isGood ? 'text-emerald-400' : 'text-yellow-400'}">${avg}</span>
-            </div>
-            <div class="text-[10px] bg-slate-800 p-1.5 rounded text-center">
-                <span class="text-slate-500 block mb-0.5 uppercase tracking-wider">Goal</span>
-                <span class="font-mono text-white">${def.rangeInfo}</span>
             </div>
         </div>`;
     if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
@@ -84,16 +82,34 @@ window.scrollToMetric = (key) => {
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;
     updateCharts(cleanData, metricsState.timeRange);
+    
+    // Update active button state
+    document.querySelectorAll('[id^="btn-metric-"]').forEach(btn => {
+        if(btn.id === `btn-metric-${range}`) {
+            btn.classList.add('text-white', 'bg-slate-700');
+            btn.classList.remove('text-slate-400', 'bg-slate-800');
+        } else {
+            btn.classList.remove('text-white', 'bg-slate-700');
+            btn.classList.add('text-slate-400', 'bg-slate-800');
+        }
+    });
 };
 
-export function renderMetrics(rawData) {
+// --- Main Renderer ---
+
+export async function renderMetrics(rawData) {
     try {
+        // 1. Prepare Data for Charts (Historical)
         cleanData = normalizeMetricsData(rawData || []);
         
+        // 2. Schedule Charts to render after DOM insertion
         setTimeout(() => {
             updateCharts(cleanData, metricsState.timeRange);
+            // Set initial button state
+            window.toggleMetricsTime(metricsState.timeRange);
         }, 50);
 
+        // 3. Build Header
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
         
         const headerHtml = `
@@ -104,15 +120,22 @@ export function renderMetrics(rawData) {
                 <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
             </div>`;
 
+        // 4. Build Table (ASYNC - fetches coaching_view.json)
         let tableHtml = "";
         try {
-            tableHtml = renderSummaryTable(cleanData);
+            // Updated: No arguments passed. It fetches its own data.
+            tableHtml = await renderSummaryTable();
         } catch (e) {
-            tableHtml = `<div class="p-4 text-red-400 text-xs">Error loading table: ${e.message}</div>`;
+            console.error("Table Render Error:", e);
+            tableHtml = `<div class="p-4 text-rose-400 text-xs bg-rose-900/10 border border-rose-900/20 rounded">
+                <p><strong>Error loading Coaching Table:</strong> ${e.message}</p>
+                <p class="mt-1 opacity-70">Ensure <code>coaching_view.json</code> exists.</p>
+            </div>`;
         }
         
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
+        // 5. Build Charts Grid
         const buildSectionHeader = (title, icon, color) => `
             <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
                 <i class="fa-solid ${icon} ${color}"></i>
@@ -126,7 +149,8 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-vo2max"></div>
                 <div id="metric-chart-tss"></div>
                 <div id="metric-chart-anaerobic"></div>
-                <div id="metric-chart-calories"></div> <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div id="metric-chart-calories"></div> 
+                <div class="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
                     <div id="metric-chart-training_balance"></div>
                     <div id="metric-chart-feeling_load"></div>
                 </div>
@@ -150,6 +174,7 @@ export function renderMetrics(rawData) {
         
         const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
+        // 6. Return Final HTML
         return `
             <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">
                 ${headerHtml}

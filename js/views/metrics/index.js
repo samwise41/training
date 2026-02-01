@@ -1,4 +1,3 @@
-// js/views/metrics/index.js
 import { UI } from '../../utils/ui.js';
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
@@ -9,6 +8,7 @@ let metricsState = { timeRange: '6m' };
 let cleanData = [];
 
 // --- Global Handlers (Chart Tooltips) ---
+// (These handlers allow the charts to be interactive)
 
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     e.stopPropagation();
@@ -50,23 +50,6 @@ window.handleMetricInfoClick = (e, key) => {
     if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
 };
 
-window.handleMetricStatusClick = (e, key, avg, isGood) => {
-    e.stopPropagation();
-    // This handler might be less relevant for the new table, 
-    // but we keep it for backward compatibility if charts use it.
-    const def = METRIC_DEFINITIONS[key];
-    if (!def) return;
-    const html = `
-        <div class="min-w-[160px]">
-            <div class="font-bold text-slate-200 mb-2 border-b border-slate-700 pb-1">30-Day Status</div>
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-slate-400">Average:</span>
-                <span class="font-mono font-bold ${isGood ? 'text-emerald-400' : 'text-yellow-400'}">${avg}</span>
-            </div>
-        </div>`;
-    if (window.TooltipManager) window.TooltipManager.show(e.currentTarget, html, e);
-};
-
 window.scrollToMetric = (key) => {
     const el = document.getElementById(`metric-chart-${key}`);
     if (el) {
@@ -95,19 +78,23 @@ window.toggleMetricsTime = (range) => {
     });
 };
 
-// --- Main Renderer ---
+// --- MAIN RENDERER ---
 
 export async function renderMetrics(rawData) {
     try {
+        console.log("🚀 Rendering Metrics View...");
+
         // 1. Prepare Data for Charts (Historical)
+        // We parse raw logs for charts, even though Table uses JSON
         cleanData = normalizeMetricsData(rawData || []);
         
         // 2. Schedule Charts to render after DOM insertion
         setTimeout(() => {
+            console.log("📈 Updating Charts with data points:", cleanData.length);
             updateCharts(cleanData, metricsState.timeRange);
             // Set initial button state
             window.toggleMetricsTime(metricsState.timeRange);
-        }, 50);
+        }, 100);
 
         // 3. Build Header
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
@@ -121,16 +108,13 @@ export async function renderMetrics(rawData) {
             </div>`;
 
         // 4. Build Table (ASYNC - fetches coaching_view.json)
+        // We await this so the Promise resolves to actual HTML string
         let tableHtml = "";
         try {
-            // Updated: No arguments passed. It fetches its own data.
-            tableHtml = await renderSummaryTable();
+            tableHtml = await renderSummaryTable(); 
         } catch (e) {
             console.error("Table Render Error:", e);
-            tableHtml = `<div class="p-4 text-rose-400 text-xs bg-rose-900/10 border border-rose-900/20 rounded">
-                <p><strong>Error loading Coaching Table:</strong> ${e.message}</p>
-                <p class="mt-1 opacity-70">Ensure <code>coaching_view.json</code> exists.</p>
-            </div>`;
+            tableHtml = `<div class="p-4 text-rose-400 text-xs bg-rose-900/10 border border-rose-900/20 rounded">Error loading table</div>`;
         }
         
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);

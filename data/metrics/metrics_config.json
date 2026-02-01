@@ -7,7 +7,9 @@
       "good_min": 45,
       "good_max": 65,
       "higher_is_better": true,
-      "description": "Aerobic ceiling."
+      "description": "Aerobic ceiling.",
+      "improvement": "• Increase VO2 Intervals (Zone 5)<br>• Maintain Consistency",
+      "formula": "Garmin/Apple Estimate"
     },
     "tss": {
       "title": "Weekly Load",
@@ -16,7 +18,9 @@
       "good_min": 300,
       "good_max": 600,
       "higher_is_better": true,
-      "description": "Total training stress."
+      "description": "Total training stress.",
+      "improvement": "• Increase Duration<br>• Increase Intensity",
+      "formula": "Sum of Workout TSS"
     },
     "anaerobic": {
       "title": "Anaerobic Impact",
@@ -25,7 +29,9 @@
       "good_min": 2.0,
       "good_max": 4.0,
       "higher_is_better": true,
-      "description": "Intensity stimulus on hard days."
+      "description": "Intensity stimulus on hard days.",
+      "improvement": "• All-out Sprints<br>• Full Recovery Between Reps",
+      "formula": "Training Effect > 2.0"
     },
     "calories": {
       "title": "Weekly Energy Burn",
@@ -34,7 +40,9 @@
       "good_min": 3500,
       "good_max": 6000,
       "higher_is_better": true,
-      "description": "Total active energy expenditure."
+      "description": "Total active energy expenditure.",
+      "improvement": "• Add Frequency<br>• Longer Sessions",
+      "formula": "Active Calories"
     },
     "subjective_bike": {
       "title": "Bike Efficiency",
@@ -43,7 +51,9 @@
       "good_min": 25,
       "good_max": 50,
       "higher_is_better": true,
-      "description": "Power produced per unit of perceived effort."
+      "description": "Power produced per unit of perceived effort.",
+      "improvement": "• Aerobic Base Work<br>• Muscular Endurance",
+      "formula": "Avg Power / RPE"
     },
     "endurance": {
       "title": "Aerobic Efficiency",
@@ -52,7 +62,9 @@
       "good_min": 1.30,
       "good_max": 1.70,
       "higher_is_better": true,
-      "description": "Watts produced per heartbeat (Efficiency Factor)."
+      "description": "Watts produced per heartbeat (Efficiency Factor).",
+      "improvement": "• Long Zone 2 Rides<br>• Consistent Volume",
+      "formula": "Avg Power / Avg HR"
     },
     "strength": {
       "title": "Pedal Force",
@@ -61,7 +73,9 @@
       "good_min": 1.5,
       "good_max": 3.0,
       "higher_is_better": true,
-      "description": "Force applied to pedals per revolution."
+      "description": "Force applied to pedals per revolution.",
+      "improvement": "• Low Score: Spin Faster<br>• High Score: Grind Harder",
+      "formula": "Avg Power / Cadence"
     },
     "subjective_run": {
       "title": "Run Efficiency",
@@ -70,7 +84,9 @@
       "good_min": 0.6,
       "good_max": 1.0,
       "higher_is_better": true,
-      "description": "Speed per unit of perceived effort."
+      "description": "Speed per unit of perceived effort.",
+      "improvement": "• Improve Form<br>• Hill Repeats",
+      "formula": "Avg Speed / RPE"
     },
     "run": {
       "title": "Running Economy",
@@ -79,7 +95,9 @@
       "good_min": 1.0,
       "good_max": 1.6,
       "higher_is_better": true,
-      "description": "Distance traveled per heartbeat."
+      "description": "Distance traveled per heartbeat.",
+      "improvement": "• Strides<br>• Plyometrics",
+      "formula": "(Speed * 60) / HR"
     },
     "mechanical": {
       "title": "Mechanical Stiffness",
@@ -88,7 +106,9 @@
       "good_min": 0.75,
       "good_max": 0.95,
       "higher_is_better": true,
-      "description": "Ratio of Speed vs. Power output."
+      "description": "Ratio of Vertical Oscillation vs Contact Time.",
+      "improvement": "• Increase Cadence<br>• Focus on 'Pop'",
+      "formula": "(Vert / GCT) * 100"
     },
     "gct": {
       "title": "Ground Contact Time",
@@ -97,7 +117,9 @@
       "good_min": 220,
       "good_max": 260,
       "higher_is_better": false,
-      "description": "Time spent on the ground per step."
+      "description": "Time spent on the ground per step.",
+      "improvement": "• Quick Feet Drills<br>• Jump Rope",
+      "formula": "Avg GCT"
     },
     "vert": {
       "title": "Vertical Oscillation",
@@ -106,7 +128,9 @@
       "good_min": 6.0,
       "good_max": 9.0,
       "higher_is_better": false,
-      "description": "Vertical bounce height."
+      "description": "Vertical bounce height.",
+      "improvement": "• Lean Forward Slightly<br>• Stop Bouncing",
+      "formula": "Avg Vert Oscillation"
     },
     "subjective_swim": {
       "title": "Swim RPE Efficiency",
@@ -115,7 +139,9 @@
       "good_min": 0.15,
       "good_max": 0.3,
       "higher_is_better": true,
-      "description": "Water speed relative to effort."
+      "description": "Water speed relative to effort.",
+      "improvement": "• Drill Sets<br>• Body Position",
+      "formula": "Speed / RPE"
     },
     "swim": {
       "title": "Swim Efficiency",
@@ -124,7 +150,9 @@
       "good_min": 0.3,
       "good_max": 0.6,
       "higher_is_better": true,
-      "description": "Distance traveled per heartbeat."
+      "description": "Distance traveled per heartbeat.",
+      "improvement": "• Long Glides<br>• Catch Mechanics",
+      "formula": "(Speed * 60) / HR"
     },
     "training_balance": {
       "title": "Training Balance",
@@ -133,7 +161,9 @@
       "good_min": 0,
       "good_max": 0,
       "higher_is_better": true,
-      "description": "Zone distribution."
+      "description": "Zone distribution.",
+      "improvement": "• 80% Easy / 20% Hard",
+      "formula": "Zone Distribution"
     },
     "feeling_load": {
       "title": "Feeling vs Load",
@@ -142,7 +172,9 @@
       "good_min": 0,
       "good_max": 0,
       "higher_is_better": true,
-      "description": "Subjective vs Objective load."
+      "description": "Subjective vs Objective load.",
+      "improvement": "• Align RPE with TSS",
+      "formula": "RPE vs TSS"
     }
   }
 }

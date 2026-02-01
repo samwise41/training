@@ -14,11 +14,11 @@
           "description": "Estimated aerobic ceiling.",
           "id": "vo2max",
           "current_value": 100.0,
-          "status": "Off Target",
+          "status": "On Target",
           "trends": {
-            "30d": "Falling",
-            "60d": "Falling",
-            "90d": "Falling"
+            "30d": "Rising",
+            "60d": "Rising",
+            "90d": "Rising"
           },
           "has_data": true
         },

@@ -16,7 +16,10 @@ const DATA_SOURCES = {
     heatmaps:   './data/dashboard/heatmaps.json',
     schedule:   './data/dashboard/plannedWorkouts.json',
     topCards:   './data/dashboard/top_cards.json',
-    adherence:  './data/trends/adherence.json'
+    adherence:  './data/trends/adherence.json',
+    METRICS_CONFIG: 'data/metrics_config.json',  // <--- NEW: The Rules
+    COACHING_VIEW: 'data/coaching_view.json',    // <--- NEW: The Graded Output
+    
 };
 
 export const DataManager = {

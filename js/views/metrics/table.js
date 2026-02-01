@@ -12,6 +12,7 @@ const getTrendIcon = (trend, higherIsBetter) => {
     // Determine "Good" direction
     let isGood = higherIsBetter ? isRising : !isRising;
     
+    // Bright colors for dark mode
     const colorClass = isGood ? 'text-emerald-400' : 'text-rose-400';
     const iconClass = isRising ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down';
     
@@ -43,28 +44,26 @@ export const renderSummaryTable = async () => {
         console.log("📊 Table: Fetching COACHING_VIEW...");
         const data = await DataManager.fetchJSON('COACHING_VIEW');
         
-        // DEBUGGING: Check what we actually got
-        if (!data) {
-            console.error("❌ Table: Data is NULL. Check js/utils/data.js paths.");
-            throw new Error("Data fetch failed");
-        }
-        if (!data.metrics_summary) {
-            console.error("❌ Table: 'metrics_summary' key missing in JSON.", data);
-            throw new Error("Invalid JSON structure");
+        if (!data || !data.metrics_summary) {
+            return `
+                <div class="p-6 text-center bg-slate-800/50 rounded-xl border border-slate-700">
+                    <p class="text-slate-400 font-mono text-xs">Waiting for Coaching Data...</p>
+                    <p class="text-[10px] text-slate-600 mt-2">Run 'python python/metrics/generate_coach_view.py'</p>
+                </div>
+            `;
         }
 
-        console.log(`✅ Table: Loaded ${data.metrics_summary.length} groups.`);
-
+        // Updated Layout: Name gets 'w-auto' (flexible), others get fixed width
         let html = `
             <div class="overflow-x-auto bg-slate-800/30 border border-slate-700 rounded-xl mb-4 shadow-sm">
-                <table class="w-full text-left text-xs">
+                <table class="w-full text-left text-xs min-w-[600px]">
                     <thead class="bg-slate-900/50 text-slate-400 uppercase font-bold text-[10px] tracking-wider">
                         <tr>
-                            <th class="px-4 py-3 border-b border-slate-700">Metric</th>
-                            <th class="px-4 py-3 text-center border-b border-slate-700 w-16">30d</th>
-                            <th class="px-4 py-3 text-center border-b border-slate-700 w-16">60d</th>
-                            <th class="px-4 py-3 text-center border-b border-slate-700 w-16">90d</th>
-                            <th class="px-4 py-3 text-right border-b border-slate-700 w-24">Status</th>
+                            <th class="px-4 py-3 border-b border-slate-700 w-auto">Metric</th>
+                            <th class="px-4 py-3 text-center border-b border-slate-700 w-20">30d</th>
+                            <th class="px-4 py-3 text-center border-b border-slate-700 w-20">60d</th>
+                            <th class="px-4 py-3 text-center border-b border-slate-700 w-20">90d</th>
+                            <th class="px-4 py-3 text-right border-b border-slate-700 w-32">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-700/50">
@@ -80,7 +79,6 @@ export const renderSummaryTable = async () => {
             `;
 
             group.metrics.forEach(m => {
-                // Merge static definitions (Icons/Colors) with dynamic data
                 const def = METRIC_DEFINITIONS[m.id] || {};
                 const icon = def.icon || 'fa-chart-line';
                 const colorVar = def.colorVar || 'var(--text-main)';
@@ -91,14 +89,14 @@ export const renderSummaryTable = async () => {
                     <tr class="hover:bg-slate-700/30 transition-colors group">
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 border border-slate-700 group-hover:border-slate-500 transition-colors shadow-sm">
+                                <div class="w-6 h-6 rounded flex items-center justify-center bg-slate-800 border border-slate-700 group-hover:border-slate-500 transition-colors shadow-sm shrink-0">
                                     <i class="fa-solid ${icon} text-xs" style="color: ${colorVar}"></i>
                                 </div>
-                                <div>
-                                    <div class="font-bold text-slate-200 group-hover:text-white transition-colors">
+                                <div class="min-w-0">
+                                    <div class="font-bold text-slate-200 group-hover:text-white transition-colors truncate">
                                         ${m.title}
                                     </div>
-                                    <div class="text-[9px] text-slate-500 font-mono">
+                                    <div class="text-[9px] text-slate-500 font-mono truncate">
                                         ${rangeInfo}
                                     </div>
                                 </div>
@@ -134,12 +132,6 @@ export const renderSummaryTable = async () => {
 
     } catch (e) {
         console.error("Table Render Error:", e);
-        return `
-            <div class="p-6 text-center bg-slate-800/50 rounded-xl border border-rose-500/30">
-                <p class="text-rose-400 font-bold text-xs mb-1">Error Loading Table</p>
-                <p class="text-slate-500 text-[10px] font-mono">${e.message}</p>
-                <p class="text-slate-600 text-[10px] mt-2">Check Console (F12) for details.</p>
-            </div>
-        `;
+        return `<div class="p-4 text-rose-400 text-xs">Error loading table: ${e.message}</div>`;
     }
 };

@@ -1,11 +1,11 @@
 # Coach Briefing 
 
-**Generated:** 2026-01-31 23:38
+**Generated:** 2026-02-01 13:43
 
 ## Run Trends
 | Metric | 30-Day Trend | 90-Day Trend | Status |
 | :--- | :--- | :--- | :--- |
-| VO2 Max | 0.2857 | 0.2333 | ↗️ Improving |
+| VO2 Max | 0.2000 | 0.2333 | ↗️ Improving |
 
 ## Bike Trends
 | Metric | 30-Day Trend | 90-Day Trend | Status |

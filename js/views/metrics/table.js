@@ -1,14 +1,23 @@
 import { DataManager } from '../../utils/data.js';
-import { METRIC_DEFINITIONS } from './definitions.js';
 
 // --- HELPERS ---
 
-const getTrendIcon = (trend, higherIsBetter) => {
-    if (!trend || trend === 'Flat') return '<i class="fa-solid fa-minus text-slate-600/50" title="Stable"></i>';
-    const isRising = trend === 'Rising';
+const getTrendIcon = (trendObj, higherIsBetter) => {
+    // 1. Handle Missing/Flat Data
+    if (!trendObj || trendObj.direction === 'Flat') {
+        return '<i class="fa-solid fa-minus text-slate-600/50" title="Stable/Flat"></i>';
+    }
+    
+    const isRising = trendObj.direction === 'Rising';
+    
+    // 2. Determine "Good" direction based on config
+    // If higher_is_better is TRUE:  Rising = Good, Falling = Bad
+    // If higher_is_better is FALSE: Rising = Bad,  Falling = Good
     let isGood = higherIsBetter ? isRising : !isRising;
+    
     const colorClass = isGood ? 'text-emerald-400' : 'text-rose-400';
     const iconClass = isRising ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down';
+    
     return `<i class="fa-solid ${iconClass} ${colorClass}"></i>`;
 };
 
@@ -19,23 +28,35 @@ const getStatusBadge = (status) => {
         'Neutral':    'bg-slate-700/50 text-slate-400 border-slate-600',
         'No Data':    'bg-slate-800 text-slate-600 border-slate-700'
     };
+    
     const cls = map[status] || map['Neutral'];
     let icon = status === 'On Target' ? '✅ ' : (status === 'Off Target' ? '⚠️ ' : '');
-    // whitespace-nowrap ensures the badge doesn't break into two lines
-    return `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${cls} whitespace-nowrap">${icon}${status}</span>`;
+
+    return `
+        <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${cls} whitespace-nowrap">
+            ${icon}${status}
+        </span>
+    `;
 };
 
 // --- MAIN RENDERER ---
 
 export const renderSummaryTable = async () => {
     try {
+        // 1. Fetch Data (Config + Trends combined by Python)
         const data = await DataManager.fetchJSON('COACHING_VIEW');
         
         if (!data || !data.metrics_summary) {
-            return `<div class="p-6 text-center bg-slate-800/50 rounded-xl border border-slate-700"><p class="text-[10px] text-slate-500">No Data Found</p></div>`;
+            return `
+                <div class="p-6 text-center bg-slate-800/50 rounded-xl border border-slate-700">
+                    <p class="text-slate-400 font-mono text-xs">Waiting for Coaching Data...</p>
+                    <p class="text-[10px] text-slate-600 mt-2">Run 'python python/metrics/generate_coach_view.py'</p>
+                </div>
+            `;
         }
 
-        // KEY CHANGE: table-fixed ensures strict column widths
+        // 2. Build Table
+        // Layout: Fixed Layout to prevent squishing
         let html = `
             <div class="overflow-hidden bg-slate-800/30 border border-slate-700 rounded-xl mb-4 shadow-sm">
                 <table class="w-full text-left text-xs table-fixed">
@@ -44,8 +65,8 @@ export const renderSummaryTable = async () => {
                             <th class="px-4 py-3 border-b border-slate-700 w-[40%]">Metric</th>
                             
                             <th class="px-2 py-3 text-center border-b border-slate-700 w-[12%]">30d</th>
-                            <th class="px-2 py-3 text-center border-b border-slate-700 w-[12%]">60d</th>
                             <th class="px-2 py-3 text-center border-b border-slate-700 w-[12%]">90d</th>
+                            <th class="px-2 py-3 text-center border-b border-slate-700 w-[12%]">6m</th>
                             
                             <th class="px-4 py-3 text-right border-b border-slate-700 w-[24%]">Status</th>
                         </tr>
@@ -54,6 +75,7 @@ export const renderSummaryTable = async () => {
         `;
 
         data.metrics_summary.forEach(group => {
+            // Group Header
             html += `
                 <tr class="bg-slate-900/80">
                     <td colspan="5" class="px-4 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-700">
@@ -63,10 +85,17 @@ export const renderSummaryTable = async () => {
             `;
 
             group.metrics.forEach(m => {
-                const def = METRIC_DEFINITIONS[m.id] || {};
-                const icon = def.icon || 'fa-chart-line';
-                const colorVar = def.colorVar || 'var(--text-main)';
-                const rangeInfo = def.rangeInfo || `${m.good_min} - ${m.good_max}`;
+                // Config is now inside 'm' (merged by Python)
+                const icon = m.icon || 'fa-chart-line';
+                const colorVar = m.colorVar || 'var(--text-main)';
+                // Formatting specific ranges based on presence
+                let rangeInfo = "N/A";
+                if(m.good_min !== null || m.good_max !== null) {
+                    const min = m.good_min !== null ? m.good_min : 0;
+                    const max = m.good_max !== null ? m.good_max : '∞';
+                    rangeInfo = `${min} – ${max}`;
+                }
+
                 const higherIsBetter = m.higher_is_better !== false;
 
                 html += `
@@ -81,20 +110,24 @@ export const renderSummaryTable = async () => {
                                         ${m.title}
                                     </div>
                                     <div class="text-[9px] text-slate-500 font-mono truncate">
-                                        ${rangeInfo}
+                                        ${rangeInfo} <span class="opacity-50">${m.unit || ''}</span>
                                     </div>
                                 </div>
                             </div>
                         </td>
+
                         <td class="px-2 py-3 text-center">
                             ${getTrendIcon(m.trends['30d'], higherIsBetter)}
                         </td>
-                        <td class="px-2 py-3 text-center">
-                            ${getTrendIcon(m.trends['60d'], higherIsBetter)}
-                        </td>
+
                         <td class="px-2 py-3 text-center">
                             ${getTrendIcon(m.trends['90d'], higherIsBetter)}
                         </td>
+
+                        <td class="px-2 py-3 text-center">
+                            ${getTrendIcon(m.trends['180d'], higherIsBetter)}
+                        </td>
+
                         <td class="px-4 py-3 text-right">
                             ${getStatusBadge(m.status)}
                         </td>
@@ -108,14 +141,14 @@ export const renderSummaryTable = async () => {
         // Footer
         html += `
             <div class="text-right text-[10px] text-slate-600 font-mono mb-4">
-                AI Analysis: ${data.generated_at || 'Unknown'}
+                AI Coach Analysis: ${data.generated_at || 'Unknown'}
             </div>
         `;
 
         return html;
 
     } catch (e) {
-        console.error("Table Error:", e);
-        return `<div class="p-4 text-rose-400 text-xs">Table Error: ${e.message}</div>`;
+        console.error("Table Render Error:", e);
+        return `<div class="p-4 text-rose-400 text-xs">Error loading table: ${e.message}</div>`;
     }
 };

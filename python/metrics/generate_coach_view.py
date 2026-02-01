@@ -11,61 +11,53 @@ INPUT_LOG = os.path.join(PROJECT_ROOT, 'data', 'training_log.json')
 INPUT_CONFIG = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'metrics_config.json')
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'coaching_view.json')
 
-SPORT_DISPLAY_MAP = {
-    "All": "General Fitness",
-    "Bike": "Cycling Metrics",
-    "Run": "Running Metrics",
-    "Swim": "Swimming Metrics"
-}
+SPORT_DISPLAY_MAP = { "All": "General Fitness", "Bike": "Cycling Metrics", "Run": "Running Metrics", "Swim": "Swimming Metrics" }
 GROUP_ORDER = ["All", "Bike", "Run", "Swim"]
 
 def load_json(filepath):
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
+        with open(filepath, 'r', encoding='utf-8') as f: return json.load(f)
+    except: return {}
 
 def safe_float(val):
     try:
         if val is None: return None
-        v = float(val)
-        if v == 0: return None 
-        return v
-    except (ValueError, TypeError):
-        return None
+        return float(val)
+    except: return None
 
 def get_days_ago(date_str):
     if not date_str: return 9999
     try:
         d = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
-        delta = datetime.date.today() - d
-        return delta.days
-    except ValueError:
-        return 9999
+        return (datetime.date.today() - d).days
+    except: return 9999
 
 def calculate_slope(values):
     n = len(values)
     if n < 2: return 0
-    x = list(range(n))
-    y = values
-    mean_x = mean(x)
-    mean_y = mean(y)
-    numerator = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, y))
-    denominator = sum((xi - mean_x) ** 2 for xi in x)
-    if denominator == 0: return 0
-    return numerator / denominator
+    x, y = list(range(n)), values
+    mean_x, mean_y = mean(x), mean(y)
+    num = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, y))
+    den = sum((xi - mean_x) ** 2 for xi in x)
+    return num / den if den != 0 else 0
 
 def get_trend_label(slope):
     if abs(slope) < 0.00001: return "Flat"
     return "Rising" if slope > 0 else "Falling"
 
-def extract_metric_series(log, metric_key):
+def extract_metric_series(log, metric_key, rules):
     series = []
+    filters = rules.get('filters', {})
+    
     for entry in log:
         if entry.get('exclude') is True: continue
         
-        # Extract Raw Values
+        # --- 1. FILTER: Duration ---
+        duration_min = safe_float(entry.get('durationInSeconds', 0)) / 60.0
+        if filters.get('min_duration_minutes') and duration_min < filters['min_duration_minutes']:
+            continue
+
+        # --- 2. Extract Values ---
         p   = safe_float(entry.get('avgPower'))
         hr  = safe_float(entry.get('averageHR'))
         s   = safe_float(entry.get('averageSpeed'))
@@ -75,7 +67,12 @@ def extract_metric_series(log, metric_key):
         gct = safe_float(entry.get('avgGroundContactTime'))
         
         val = None
+        
+        # --- 3. FILTER: Required Fields ---
+        if filters.get('require_hr') and (not hr or hr <= 0): continue
+        if filters.get('require_power') and (not p or p <= 0): continue
 
+        # --- 4. Logic ---
         if metric_key == 'subjective_bike': val = p / rpe if (p and rpe) else None
         elif metric_key == 'endurance': val = p / hr if (p and hr) else None
         elif metric_key == 'strength': val = p / cad if (p and cad) else None
@@ -93,34 +90,31 @@ def extract_metric_series(log, metric_key):
         elif metric_key == 'feeling_load': val = safe_float(entry.get('Feeling'))
         elif metric_key in entry: val = safe_float(entry[metric_key])
 
-        if val is not None:
-             series.append({'date': entry['date'], 'days_ago': get_days_ago(entry['date']), 'value': val})
+        # --- 5. FILTER: Zeros/Nulls ---
+        if val is None: continue
+        if filters.get('ignore_zero') and val == 0: continue
+
+        series.append({'date': entry['date'], 'days_ago': get_days_ago(entry['date']), 'value': val})
              
     series.sort(key=lambda x: x['date'])
     return series
 
 def process_data():
-    print("--- Generating Coherent Coaching View ---")
-    log = load_json(INPUT_LOG)
-    config = load_json(INPUT_CONFIG)
-    
-    if not log or not config:
-        print("Error: Missing input files.")
-        return
+    print("--- Generating Unified Coaching View ---")
+    log, config = load_json(INPUT_LOG), load_json(INPUT_CONFIG)
+    if not log or not config: return
 
-    metrics_config = config.get('metrics', {})
     grouped_metrics = {k: [] for k in GROUP_ORDER}
     
-    for key, rule in metrics_config.items():
+    for key, rule in config.get('metrics', {}).items():
         sport = rule.get('sport', 'All')
         if sport not in grouped_metrics: sport = 'All'
             
-        series = extract_metric_series(log, key)
+        series = extract_metric_series(log, key, rule)
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
         current_avg = mean(recent_30) if recent_30 else 0
         
-        good_min = rule.get('good_min')
-        good_max = rule.get('good_max')
+        good_min, good_max = rule.get('good_min'), rule.get('good_max')
         higher_is_better = rule.get('higher_is_better', True)
         
         status = "No Data"
@@ -133,52 +127,27 @@ def process_data():
                 if good_max is not None and current_avg <= good_max: status = "On Target"
                 elif good_max is not None: status = "Off Target"
 
-        # Trends
         trends = {}
-        # Keys here MUST match table.js expectations: "30d", "90d", "6m", "1y"
-        periods = [(30, "30d"), (90, "90d"), (180, "6m"), (365, "1y")]
-        
-        for days, label in periods:
-            if series:
-                subset = [x['value'] for x in series if x['days_ago'] <= days]
-                if len(subset) >= 2:
-                    slope = calculate_slope(subset)
-                    direction = get_trend_label(slope)
-                else:
-                    slope = 0
-                    direction = "Flat"
-                
-                trends[label] = { "direction": direction, "slope": slope }
-            else:
-                trends[label] = { "direction": "Flat", "slope": 0 }
+        for period, label in [(30, "30d"), (90, "90d"), (180, "6m"), (365, "1y")]:
+            subset = [x['value'] for x in series if x['days_ago'] <= period] if series else []
+            trends[label] = { 
+                "direction": get_trend_label(calculate_slope(subset)) if len(subset) >= 2 else "Flat",
+                "slope": calculate_slope(subset) if len(subset) >= 2 else 0
+            }
 
         metric_obj = rule.copy()
         metric_obj.update({
-            "id": key,
-            "current_value": round(current_avg, 2) if recent_30 else None,
-            "status": status,
-            "trends": trends, 
-            "has_data": bool(recent_30)
+            "id": key, "current_value": round(current_avg, 2) if recent_30 else None,
+            "status": status, "trends": trends, "has_data": bool(recent_30)
         })
         grouped_metrics[sport].append(metric_obj)
 
-    output_data = {
-        "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "metrics_summary": []
-    }
+    output = { "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "metrics_summary": [] }
+    for k in GROUP_ORDER:
+        if grouped_metrics[k]: output['metrics_summary'].append({ "group": SPORT_DISPLAY_MAP.get(k, k), "metrics": grouped_metrics[k] })
 
-    for sport_key in GROUP_ORDER:
-        metrics_list = grouped_metrics.get(sport_key, [])
-        if metrics_list:
-            output_data['metrics_summary'].append({
-                "group": SPORT_DISPLAY_MAP.get(sport_key, sport_key),
-                "metrics": metrics_list
-            })
-
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        json.dump(output_data, f, indent=2)
-        
-    print(f"Success! Saved view to: {OUTPUT_FILE}")
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f: json.dump(output, f, indent=2)
+    print(f"Success! View saved to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     process_data()

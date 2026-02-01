@@ -219,8 +219,8 @@ export const updateCharts = async (allData, timeRange) => {
 
     let config = null;
     try {
-        // Fetch the definitions directly from the Config JSON
-        const rawConfig = await DataManager.fetchJSON('data/metrics/metrics_config.json');
+        // FIXED: Use the key defined in DATA_SOURCES, not the raw path
+        const rawConfig = await DataManager.fetchJSON('METRICS_CONFIG');
         if (rawConfig && rawConfig.metrics) {
             config = rawConfig;
         }

@@ -1,6 +1,6 @@
 import { Formatters } from '../../utils/formatting.js'; 
 
-// --- 1. MAPPINGS & HELPERS (Kept from working file) ---
+// --- 1. MAPPINGS & HELPERS ---
 const KEYS = {
     hr: 'averageHR',
     spd: 'averageSpeed',
@@ -18,27 +18,30 @@ const KEYS = {
     feeling: 'Feeling'
 };
 
-// Robust Sport Check (The fix for data loss)
+// Robust Sport Check (Replaces import)
 const checkSport = (d, type) => {
+    // Check actualSport (Training Log) first, then sport (Legacy)
     const s = (d.actualSport || d.sport || '').toLowerCase();
     const t = type.toLowerCase();
+    
     if (t === 'bike') return s.includes('bike') || s.includes('cycl') || s.includes('ride') || s.includes('spin');
     if (t === 'run') return s.includes('run') || s.includes('jog') || s.includes('treadmill');
     if (t === 'swim') return s.includes('swim') || s.includes('pool');
     return false;
 };
 
-// Safe Value Extractor (The fix for Math crashes)
+// Safe Value Extractor (CRITICAL: Prevents math crashes)
 const getVal = (item, key) => {
     if (key === 'duration' || key === 'time' || key === 'moving_time') {
         return Formatters.parseDuration(item[key]);
     }
     const val = item[key];
     if (val === null || val === undefined || val === '') return 0;
-    return parseFloat(val); // Ensures "150" becomes 150
+    // ensure numbers are numbers (fixes "50"+"50"="5050" bug)
+    return parseFloat(val); 
 };
 
-// --- 2. NORMALIZER (Restored) ---
+// --- 2. NORMALIZER ---
 export const normalizeMetricsData = (rawData) => {
     if (!rawData) return [];
     return rawData.map(item => {
@@ -61,7 +64,7 @@ export const normalizeMetricsData = (rawData) => {
     }).sort((a, b) => a.dateObj - b.dateObj);
 };
 
-// --- 3. AGGREGATORS (Restored) ---
+// --- 3. AGGREGATORS ---
 const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
@@ -74,7 +77,7 @@ const aggregateWeeklyTSS = (data) => {
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
-        weeks[k] += d._tss; // uses safe parsed value
+        weeks[k] += d._tss; 
     });
     return Object.keys(weeks).map(k => ({ date: new Date(k), dateStr: k, val: weeks[k], name: 'Week Ending ' + k }));
 };
@@ -109,7 +112,7 @@ const aggregateFeelingVsLoad = (data) => {
     }));
 };
 
-// --- 4. EXTRACTOR (Restored Logic) ---
+// --- 4. EXTRACTOR ---
 export const extractMetricData = (data, key) => {
     switch (key) {
         case 'subjective_bike': 
@@ -139,7 +142,6 @@ export const extractMetricData = (data, key) => {
         case 'run': 
             return data.map(d => {
                 if (!checkSport(d, 'RUN') || !d._spd || !d._hr) return null;
-                // (spd * 60) / HR
                 const val = (d._spd * 60) / d._hr;
                 return { date: d.dateObj, dateStr: d.date, name: d.title, val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);
@@ -178,7 +180,5 @@ export const extractMetricData = (data, key) => {
 };
 
 export const calculateSubjectiveEfficiency = (allData, sportMode) => {
-    // Re-use logic above if possible, or simple filter
-    // Since we kept extractMetricData logic intact, we can just call it
     return extractMetricData(allData, `subjective_${sportMode}`);
 };

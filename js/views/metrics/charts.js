@@ -22,7 +22,7 @@ const calculateVisualTrend = (data) => {
 
 // --- CHART BUILDER ---
 const buildMetricChart = (displayData, key, config, timeRange) => {
-    // 1. Config Safeguard (Uses Config from JSON, falls back to Key)
+    // 1. Config Safeguard (Uses Config from JSON)
     const def = config || { title: key, icon: 'fa-chart-line', unit: '' };
 
     if (key === 'training_balance') return buildStackedBarChart(displayData, def);
@@ -35,7 +35,6 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
         return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-center items-center opacity-60"><i class="fa-solid ${def.icon} text-2xl text-slate-500 mb-2"></i><p class="text-[10px] text-slate-500 italic">Not enough data</p></div>`;
     }
 
-    // 2. Dimensions & Scales
     const width = 800, height = 240;
     const pad = { t: 20, b: 30, l: 40, r: 40 };
     const getX = (i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
@@ -51,7 +50,6 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
     const dMax = maxV + range * 0.1;
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
-    // 3. Target Lines
     const isInverted = def.higher_is_better === false;
     const colorGood = 'var(--color-done)';     
     const colorBad = '#ef4444'; 
@@ -68,7 +66,6 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
         targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${maxLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
 
-    // 4. Data Line & Points
     let pathD = `M ${getX(0)} ${getY(displayData[0].val)}`;
     let pointsHtml = '';
     displayData.forEach((d, i) => {
@@ -77,7 +74,6 @@ const buildMetricChart = (displayData, key, config, timeRange) => {
         pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" class="cursor-pointer hover:stroke-white transition-all" onclick="window.handleMetricChartClick(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '', '${d.breakdown||""}', '${color}')"></circle>`;
     });
 
-    // 5. Visual Trend Line
     const trend = calculateVisualTrend(displayData);
     let trendHtml = '';
     if (trend) {
@@ -184,6 +180,7 @@ const buildDualAxisChart = (data, def) => {
     <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors">
         <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
             <h3 class="text-xs font-bold text-white flex items-center gap-2"><i class="fa-solid ${def.icon}" style="color: ${def.colorVar}"></i> ${def.title}</h3>
+            <div class="flex gap-2 text-[9px] font-mono"><span style="color: ${cLoad}">■ Load</span><span style="color: ${cFeel}">● Feeling</span></div>
         </div>
         <div class="flex-1 w-full h-[240px]">
             <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
@@ -206,7 +203,7 @@ export const updateCharts = async (allData, timeRange) => {
     } catch (e) { console.warn("Charts: Failed to fetch coaching view."); }
 
     const cutoff = new Date();
-    cutoff.setHours(0, 0, 0, 0); // Date Sync Fix
+    cutoff.setHours(0, 0, 0, 0); 
 
     if (timeRange === '30d') cutoff.setDate(cutoff.getDate() - 30);
     else if (timeRange === '90d') cutoff.setDate(cutoff.getDate() - 90);

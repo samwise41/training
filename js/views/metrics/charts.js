@@ -218,17 +218,26 @@ export const updateCharts = async (allData, timeRange) => {
     if (!allData || !allData.length) return;
 
     let config = null;
+
+    // --- ROBUST CONFIG LOADING ---
     try {
-        // FIXED: Use the key defined in DATA_SOURCES, not the raw path
-        const rawConfig = await DataManager.fetchJSON('METRICS_CONFIG');
-        if (rawConfig && rawConfig.metrics) {
-            config = rawConfig;
+        // 1. Try DataManager Key (Primary)
+        config = await DataManager.fetchJSON('METRICS_CONFIG');
+        
+        // 2. Fallback: Direct Fetch (if DataManager key isn't working/cached yet)
+        if (!config) {
+            console.warn("Charts: METRICS_CONFIG key not resolved. Attempting direct fallback fetch...");
+            const res = await fetch('data/metrics/metrics_config.json');
+            if (res.ok) {
+                config = await res.json();
+                console.log("Charts: Direct fetch successful.");
+            }
         }
     } catch (e) { 
         console.warn("Charts: Failed to fetch metrics config.", e); 
     }
 
-    // SAFEGUARD: If config is missing or invalid, we stop here to avoid the crash
+    // SAFEGUARD: If config is still missing, we cannot proceed.
     if (!config || !config.metrics) {
         console.warn("Charts: Config missing or invalid. Charts cannot render.");
         return;

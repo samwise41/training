@@ -1,4 +1,5 @@
 import { UI } from '../../utils/ui.js';
+import { DataManager } from '../../utils/data.js'; // Added DataManager
 import { renderSummaryTable } from './table.js';
 import { updateCharts } from './charts.js';
 import { normalizeMetricsData } from './parser.js';
@@ -7,8 +8,7 @@ import { METRIC_DEFINITIONS } from './definitions.js';
 let metricsState = { timeRange: '6m' };
 let cleanData = [];
 
-// --- Global Handlers (Chart Tooltips) ---
-// (These handlers allow the charts to be interactive)
+// --- Global Handlers ---
 
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     e.stopPropagation();
@@ -64,9 +64,10 @@ window.scrollToMetric = (key) => {
 
 window.toggleMetricsTime = (range) => {
     metricsState.timeRange = range;
-    updateCharts(cleanData, metricsState.timeRange);
+    if (cleanData.length > 0) {
+        updateCharts(cleanData, metricsState.timeRange);
+    }
     
-    // Update active button state
     document.querySelectorAll('[id^="btn-metric-"]').forEach(btn => {
         if(btn.id === `btn-metric-${range}`) {
             btn.classList.add('text-white', 'bg-slate-700');
@@ -84,19 +85,27 @@ export async function renderMetrics(rawData) {
     try {
         console.log("🚀 Rendering Metrics View...");
 
-        // 1. Prepare Data for Charts (Historical)
-        // We parse raw logs for charts, even though Table uses JSON
-        cleanData = normalizeMetricsData(rawData || []);
-        
-        // 2. Schedule Charts to render after DOM insertion
-        setTimeout(() => {
-            console.log("📈 Updating Charts with data points:", cleanData.length);
-            updateCharts(cleanData, metricsState.timeRange);
-            // Set initial button state
-            window.toggleMetricsTime(metricsState.timeRange);
-        }, 100);
+        // 1. ENSURE DATA FOR CHARTS
+        // If rawData is missing (not passed by app.js), fetch it manually
+        if (!rawData || rawData.length === 0) {
+            console.log("⚠️ No rawData passed. Fetching log manually...");
+            rawData = await DataManager.fetchJSON('log');
+        }
 
-        // 3. Build Header
+        if (rawData && rawData.length > 0) {
+            cleanData = normalizeMetricsData(rawData);
+            
+            // Schedule Chart Render
+            setTimeout(() => {
+                console.log(`📈 Rendering Charts with ${cleanData.length} activities...`);
+                updateCharts(cleanData, metricsState.timeRange);
+                window.toggleMetricsTime(metricsState.timeRange);
+            }, 100);
+        } else {
+            console.error("❌ No log data available for charts.");
+        }
+
+        // 2. Build Header
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
         
         const headerHtml = `
@@ -107,19 +116,17 @@ export async function renderMetrics(rawData) {
                 <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
             </div>`;
 
-        // 4. Build Table (ASYNC - fetches coaching_view.json)
-        // We await this so the Promise resolves to actual HTML string
+        // 3. Build Table (ASYNC)
         let tableHtml = "";
         try {
             tableHtml = await renderSummaryTable(); 
         } catch (e) {
-            console.error("Table Render Error:", e);
-            tableHtml = `<div class="p-4 text-rose-400 text-xs bg-rose-900/10 border border-rose-900/20 rounded">Error loading table</div>`;
+            tableHtml = `<div class="p-4 text-rose-400 text-xs border border-rose-900/30 rounded">Error loading table: ${e.message}</div>`;
         }
         
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', tableHtml, true);
 
-        // 5. Build Charts Grid
+        // 4. Build Charts Grid
         const buildSectionHeader = (title, icon, color) => `
             <div class="col-span-full mt-6 mb-2 flex items-center gap-2 border-b border-slate-700/50 pb-2">
                 <i class="fa-solid ${icon} ${color}"></i>
@@ -128,7 +135,6 @@ export async function renderMetrics(rawData) {
 
         const chartsGrid = `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
                 ${buildSectionHeader('General Fitness', 'fa-heart-pulse', 'icon-all')}
                 <div id="metric-chart-vo2max"></div>
                 <div id="metric-chart-tss"></div>
@@ -158,7 +164,6 @@ export async function renderMetrics(rawData) {
         
         const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
-        // 6. Return Final HTML
         return `
             <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">
                 ${headerHtml}
@@ -168,6 +173,6 @@ export async function renderMetrics(rawData) {
         `;
     } catch (e) {
         console.error(e);
-        return `<div class="p-4 text-red-400">Metrics Render Failed: ${e.message}</div>`;
+        return `<div class="p-4 text-red-400">Render Failed: ${e.message}</div>`;
     }
 }

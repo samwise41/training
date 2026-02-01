@@ -28,9 +28,11 @@ const checkSport = (d, type) => {
     return false;
 };
 
-// Safe Value Extractor (Upgraded for TSS Debugging)
+// Safe Value Extractor
 const getVal = (item, key) => {
-    if (key === 'duration' || key === 'time' || key === 'moving_time') {
+    // Only use formatter if the value is a string that looks like a duration (e.g., "01:30:00")
+    // If it's a number, we want to treat it as a number immediately.
+    if ((key === 'duration' || key === 'time' || key === 'moving_time') && typeof item[key] === 'string') {
         return Formatters.parseDuration(item[key]);
     }
     const val = item[key];
@@ -44,18 +46,26 @@ const getVal = (item, key) => {
 export const normalizeMetricsData = (rawData) => {
     if (!rawData) return [];
     
-    // Debug Log: Check the raw data for the last entry to see if TSS exists
-    if (rawData.length > 0) {
-        const last = rawData[rawData.length - 1];
-        console.log("DEBUG: Last Raw Entry:", last.date, "TSS:", last.trainingStressScore);
-    }
-
     return rawData.map(item => {
+        // --- DURATION FIX ---
+        // 1. Try 'durationInSeconds' (Standard)
+        // 2. Try 'duration' (Garmin/Strava Raw Seconds)
+        // 3. Try 'actualDuration' (Often minutes in planning logs, so * 60)
+        let durSecs = 0;
+        if (item.durationInSeconds != null) {
+            durSecs = parseFloat(item.durationInSeconds);
+        } else if (item.duration != null) {
+            durSecs = parseFloat(item.duration);
+        } else if (item.actualDuration != null) {
+            durSecs = parseFloat(item.actualDuration) * 60;
+        }
+
         const out = { 
             ...item, 
             // Create a reliable Date Object once
             dateObj: new Date(item.date),
-            _dur: getVal(item, 'durationInSeconds') / 60 
+            // Store standardized duration in minutes
+            _dur: durSecs / 60 
         };
         
         // Map keys
@@ -69,18 +79,16 @@ export const normalizeMetricsData = (rawData) => {
     }).sort((a, b) => a.dateObj - b.dateObj);
 };
 
-// --- 3. AGGREGATORS (Fixed TSS Logic) ---
+// --- 3. AGGREGATORS ---
 const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
-        // Use the safe dateObj we created in normalize
         if (!d.dateObj || isNaN(d.dateObj)) return;
         
         const date = d.dateObj; 
         const day = date.getDay(); // 0=Sun, 6=Sat
         const diff = 6 - day; 
         
-        // Clone date to avoid mutating the original record
         const weekEnd = new Date(date.valueOf());
         weekEnd.setDate(date.getDate() + diff);
         weekEnd.setHours(0,0,0,0);
@@ -88,11 +96,7 @@ const aggregateWeeklyTSS = (data) => {
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
-        
-        // Strict addition
-        if (d._tss > 0) {
-            weeks[k] += d._tss; 
-        }
+        if (d._tss > 0) weeks[k] += d._tss; 
     });
 
     return Object.keys(weeks).map(k => ({ 
@@ -163,6 +167,7 @@ export const extractMetricData = (data, key) => {
         case 'run': 
             return data.map(d => {
                 if (!checkSport(d, 'RUN') || !d._spd || !d._hr) return null;
+                // Running Economy: (Speed * 60) / HR -> Meters per beat (approx)
                 const val = (d._spd * 60) / d._hr;
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);

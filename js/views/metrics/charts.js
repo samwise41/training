@@ -2,7 +2,6 @@ import { DataManager } from '../../utils/data.js';
 import { extractMetricData, calculateSubjectiveEfficiency } from './parser.js';
 
 // --- VISUAL TREND CALCULATION ---
-// Calculates a simple linear regression to show the trend line
 const calculateVisualTrend = (data) => {
     if (!data || data.length < 2) return null;
     const n = data.length;
@@ -27,7 +26,7 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     if (key === 'training_balance') return buildStackedBarChart(displayData, def);
     if (key === 'feeling_load') return buildDualAxisChart(displayData, def);
 
-    // 1. Setup Configuration from JSON Definition
+    // 1. Setup Configuration from JSON Definition (Safe Defaults)
     const color = def.colorVar || 'var(--color-all)';
     const title = def.title || key;
     const icon = def.icon || 'fa-chart-line';
@@ -60,7 +59,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
     // 4. Target Lines (Dashed lines for Good Min/Max)
-    // "higher_is_better" determines if the top line is Green (Good) or Red (Bad)
     const isInverted = def.higher_is_better === false;
     const colorGood = 'var(--color-done)';     
     const colorBad = '#ef4444'; 
@@ -219,13 +217,21 @@ const buildDualAxisChart = (data, def) => {
 export const updateCharts = async (allData, timeRange) => {
     if (!allData || !allData.length) return;
 
-    let config = { metrics: {} };
+    let config = null;
     try {
         // Fetch the definitions directly from the Config JSON
-        config = await DataManager.fetchJSON('data/metrics/metrics_config.json');
+        const rawConfig = await DataManager.fetchJSON('data/metrics/metrics_config.json');
+        if (rawConfig && rawConfig.metrics) {
+            config = rawConfig;
+        }
     } catch (e) { 
         console.warn("Charts: Failed to fetch metrics config.", e); 
-        return; 
+    }
+
+    // SAFEGUARD: If config is missing or invalid, we stop here to avoid the crash
+    if (!config || !config.metrics) {
+        console.warn("Charts: Config missing or invalid. Charts cannot render.");
+        return;
     }
 
     // Time cutoff calculation

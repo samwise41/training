@@ -1,31 +1,22 @@
 {
   "metrics": {
     "vo2max": {
-      "title": "VO₂ Max Trend",
+      "title": "VO2 Max",
       "sport": "All",
       "unit": "ml/kg/min",
       "good_min": 45,
-      "good_max": 60,
+      "good_max": 65,
       "higher_is_better": true,
-      "description": "Estimated aerobic ceiling."
+      "description": "Aerobic ceiling."
     },
     "tss": {
-      "title": "Weekly TSS Load",
+      "title": "Weekly Load",
       "sport": "All",
       "unit": "TSS",
       "good_min": 300,
       "good_max": 600,
       "higher_is_better": true,
-      "description": "Total training stress per week."
-    },
-    "calories": {
-      "title": "Weekly Energy Burn",
-      "sport": "All",
-      "unit": "kcal",
-      "good_min": 3500,
-      "good_max": 6000,
-      "higher_is_better": true,
-      "description": "Total active energy expenditure per week."
+      "description": "Total training stress."
     },
     "anaerobic": {
       "title": "Anaerobic Impact",
@@ -36,17 +27,17 @@
       "higher_is_better": true,
       "description": "Intensity stimulus on hard days."
     },
-    "feeling_load": {
-      "title": "Feeling vs. Load",
+    "calories": {
+      "title": "Weekly Energy Burn",
       "sport": "All",
-      "unit": "Ratio",
-      "good_min": 0,
-      "good_max": 0,
+      "unit": "kcal",
+      "good_min": 3500,
+      "good_max": 6000,
       "higher_is_better": true,
-      "description": "Correlation between how much you do (TSS) and how you feel."
+      "description": "Total active energy expenditure."
     },
     "subjective_bike": {
-      "title": "Bike RPE Efficiency",
+      "title": "Bike Efficiency",
       "sport": "Bike",
       "unit": "W/RPE",
       "good_min": 25,
@@ -64,7 +55,7 @@
       "description": "Watts produced per heartbeat (Efficiency Factor)."
     },
     "strength": {
-      "title": "Pedal Force (Torque)",
+      "title": "Pedal Force",
       "sport": "Bike",
       "unit": "W/RPM",
       "good_min": 1.5,
@@ -73,13 +64,13 @@
       "description": "Force applied to pedals per revolution."
     },
     "subjective_run": {
-      "title": "Run RPE Efficiency",
+      "title": "Run Efficiency",
       "sport": "Run",
       "unit": "Spd/RPE",
       "good_min": 0.6,
       "good_max": 1.0,
       "higher_is_better": true,
-      "description": "Speed (m/s) produced per unit of perceived effort."
+      "description": "Speed per unit of perceived effort."
     },
     "run": {
       "title": "Running Economy",
@@ -88,7 +79,7 @@
       "good_min": 1.0,
       "good_max": 1.6,
       "higher_is_better": true,
-      "description": "Distance (meters) traveled per heartbeat."
+      "description": "Distance traveled per heartbeat."
     },
     "mechanical": {
       "title": "Mechanical Stiffness",
@@ -124,7 +115,7 @@
       "good_min": 0.15,
       "good_max": 0.3,
       "higher_is_better": true,
-      "description": "Water speed (m/s) relative to effort."
+      "description": "Water speed relative to effort."
     },
     "swim": {
       "title": "Swim Efficiency",
@@ -133,7 +124,25 @@
       "good_min": 0.3,
       "good_max": 0.6,
       "higher_is_better": true,
-      "description": "Distance traveled per heartbeat in water."
+      "description": "Distance traveled per heartbeat."
+    },
+    "training_balance": {
+      "title": "Training Balance",
+      "sport": "All",
+      "unit": "%",
+      "good_min": 0,
+      "good_max": 0,
+      "higher_is_better": true,
+      "description": "Zone distribution."
+    },
+    "feeling_load": {
+      "title": "Feeling vs Load",
+      "sport": "All",
+      "unit": "Ratio",
+      "good_min": 0,
+      "good_max": 0,
+      "higher_is_better": true,
+      "description": "Subjective vs Objective load."
     }
   }
 }

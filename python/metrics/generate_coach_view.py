@@ -1,5 +1,8 @@
 import json
 import os
+import datetime
+from statistics import mean
+import math
 
 # --- PATH CONFIGURATION ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -9,132 +12,229 @@ INPUT_LOG = os.path.join(PROJECT_ROOT, 'data', 'training_log.json')
 INPUT_CONFIG = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'metrics_config.json')
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'coaching_view.json')
 
+# --- DEFINITIONS (Mapping to your table.js groups) ---
+METRIC_GROUPS = [
+    {'name': 'General Fitness', 'keys': ['vo2max', 'tss', 'anaerobic']},
+    {'name': 'Cycling Metrics', 'keys': ['subjective_bike', 'endurance', 'strength']},
+    {'name': 'Running Metrics', 'keys': ['subjective_run', 'run', 'mechanical', 'gct', 'vert']},
+    {'name': 'Swimming Metrics', 'keys': ['subjective_swim', 'swim']}
+]
+
 def load_json(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             return json.load(f)
-    except FileNotFoundError:
-        print(f"Error: Could not find {filepath}")
-        return {}
-    except json.JSONDecodeError:
-        print(f"Error: {filepath} is not valid JSON")
+    except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
-def safe_div(num, den):
-    if not den or den == 0: return 0
-    return num / den
-
-def sanitize(val):
-    """Converts None to 0.0 to prevent TypeErrors in comparisons."""
-    if val is None:
-        return 0.0
+def safe_float(val):
     try:
+        if val is None: return None
         return float(val)
     except (ValueError, TypeError):
-        return 0.0
+        return None
 
-def calculate_metrics(activity):
-    metrics = {}
+def get_days_ago(date_str):
+    """Returns number of days between date_str and today."""
+    if not date_str: return 9999
+    try:
+        d = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+        delta = datetime.date.today() - d
+        return delta.days
+    except ValueError:
+        return 9999
+
+def calculate_slope(values):
+    """
+    Calculates the slope of the linear regression line.
+    values: list of float
+    Returns: slope (float) or 0
+    """
+    n = len(values)
+    if n < 2: return 0
     
-    # Extract and SANITIZE fields (Critical Fix)
-    # .get() returns None if key exists but is null. 'or 0' fixes that.
-    pwr = sanitize(activity.get('avgPower'))
-    hr = sanitize(activity.get('averageHR'))
-    speed = sanitize(activity.get('averageSpeed'))
-    rpe = sanitize(activity.get('RPE'))
-    vert = sanitize(activity.get('avgVerticalOscillation'))
-    gct = sanitize(activity.get('avgGroundContactTime'))
+    x = list(range(n)) # [0, 1, 2, ... n-1]
+    y = values
     
-    sport = str(activity.get('activityType', '')).lower()
-    actual_sport = str(activity.get('actualSport', '')).lower()
+    mean_x = mean(x)
+    mean_y = mean(y)
     
-    # Combine sport checks for robustness
-    is_bike = 'cycling' in sport or 'bike' in actual_sport or 'virtual_ride' in sport
-    is_run = 'running' in sport or 'run' in actual_sport
+    numerator = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, y))
+    denominator = sum((xi - mean_x) ** 2 for x in x)
     
-    # --- 1. Subjective Efficiency (Bike) ---
-    if is_bike and pwr > 0 and rpe > 0:
-        metrics['subjective_bike'] = round(safe_div(pwr, rpe), 2)
+    if denominator == 0: return 0
+    return numerator / denominator
 
-    # --- 2. Subjective Efficiency (Run) ---
-    if is_run and speed > 0 and rpe > 0:
-        metrics['subjective_run'] = round(safe_div(speed, rpe), 2)
-
-    # --- 3. Endurance (Efficiency Factor: Power / HR) ---
-    if is_bike and pwr > 0 and hr > 0:
-        metrics['endurance'] = round(safe_div(pwr, hr), 2)
-
-    # --- 4. Mechanical (Run: Vert / GCT) ---
-    if is_run and vert > 0 and gct > 0:
-        metrics['mechanical'] = round(safe_div(vert, gct) * 100, 2)
-
-    return metrics
-
-def grade_metric(metric_key, value, config):
-    if 'metrics' not in config or metric_key not in config['metrics']:
-        return 'Neutral'
-
-    rules = config['metrics'][metric_key]
-    min_v = rules.get('good_min')
-    max_v = rules.get('good_max')
-    higher_is_better = rules.get('higher_is_better', True)
-
-    if higher_is_better:
-        if min_v is not None and value < min_v: return 'Miss'
-        return 'Good'
+def get_trend_icon(slope, invert=False):
+    """
+    Returns a simple string identifier for the icon/direction.
+    Matches js/views/metrics/utils.js logic roughly.
+    """
+    # Threshold for "flat"
+    threshold = 0.001 
+    
+    if abs(slope) < threshold: return "Flat"
+    
+    is_up = slope > 0
+    
+    # If "invert" is True (e.g., Lower GCT is better), 
+    # then an UP slope is "Worsening" (Red) and DOWN is "Improving" (Green).
+    if invert:
+        return "Rising" if is_up else "Falling"
     else:
-        if max_v is not None and value > max_v: return 'Miss'
-        return 'Good'
+        return "Rising" if is_up else "Falling"
+
+def extract_metric_series(log, metric_key):
+    """
+    Extracts a list of valid values for a specific metric key, sorted by date.
+    Returns: [{'date': 'YYYY-MM-DD', 'value': 123.4}, ...]
+    """
+    series = []
+    
+    # 1. Identify Sport Type Filter based on metric name
+    # (Simple heuristic to avoid grabbing Bike power for Run metrics if keys overlap)
+    target_sport = None
+    if 'bike' in metric_key or 'cycling' in metric_key: target_sport = 'bike'
+    elif 'run' in metric_key: target_sport = 'run'
+    elif 'swim' in metric_key: target_sport = 'swim'
+    
+    for entry in log:
+        if entry.get('exclude') is True: continue
+        
+        # Determine value (Handle derived metrics)
+        val = None
+        
+        # Raw Data Check
+        if metric_key in entry and entry[metric_key] is not None:
+            val = safe_float(entry[metric_key])
+            
+        # Derived: Subjective Bike (Power / RPE)
+        elif metric_key == 'subjective_bike':
+            p = safe_float(entry.get('avgPower'))
+            r = safe_float(entry.get('RPE'))
+            if p and r and r > 0: val = p / r
+
+        # Derived: Subjective Run (Speed / RPE)
+        elif metric_key == 'subjective_run':
+            s = safe_float(entry.get('averageSpeed'))
+            r = safe_float(entry.get('RPE'))
+            if s and r and r > 0: val = s / r
+
+        # Derived: Endurance (Power / HR)
+        elif metric_key == 'endurance':
+            p = safe_float(entry.get('avgPower'))
+            h = safe_float(entry.get('averageHR'))
+            if p and h and h > 0: val = p / h
+
+        # Derived: Mechanical (Vert / GCT * 100)
+        elif metric_key == 'mechanical':
+            v = safe_float(entry.get('avgVerticalOscillation'))
+            g = safe_float(entry.get('avgGroundContactTime'))
+            if v and g and g > 0: val = (v / g) * 100
+
+        # Derived: Vert & GCT Mapping
+        elif metric_key == 'vert': val = safe_float(entry.get('avgVerticalOscillation'))
+        elif metric_key == 'gct': val = safe_float(entry.get('avgGroundContactTime'))
+        elif metric_key == 'run': 
+             # Run Efficiency (m/beat) = (Speed * 60) / HR
+             s = safe_float(entry.get('averageSpeed'))
+             h = safe_float(entry.get('averageHR'))
+             if s and h and h > 0: val = (s * 60) / h
+             
+        elif metric_key == 'tss': val = safe_float(entry.get('trainingStressScore'))
+        elif metric_key == 'vo2max': val = safe_float(entry.get('vO2MaxValue'))
+        
+        if val is not None:
+             series.append({
+                 'date': entry['date'], 
+                 'days_ago': get_days_ago(entry['date']),
+                 'value': val
+             })
+             
+    # Sort by date (oldest first) for trend calculation
+    series.sort(key=lambda x: x['date'])
+    return series
 
 def process_data():
-    print(f"--- Starting Coaching View Generation ---")
-    print(f"Reading from: {INPUT_LOG}")
-    
-    raw_data = load_json(INPUT_LOG)
+    print("--- Generating Aggregated Coaching View ---")
+    log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     
-    if not raw_data:
-        print("ABORTING: No training data found.")
+    if not log or not config:
+        print("Error: Missing input files.")
         return
 
-    processed_log = []
+    output_data = {
+        "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "groups": []
+    }
 
-    for entry in raw_data:
-        if entry.get('exclude') is True:
-            continue
-            
-        processed_entry = {
-            'date': entry.get('date'),
-            'name': entry.get('activityName') or entry.get('actualWorkout') or 'Activity',
-            'type': entry.get('activityType'),
-            'metrics': {}
+    # Iterate Groups
+    for group in METRIC_GROUPS:
+        group_data = {
+            "name": group['name'],
+            "metrics": []
         }
+        
+        for key in group['keys']:
+            # Get Config Rule
+            rule = config.get('metrics', {}).get(key, {})
+            good_min = rule.get('good_min')
+            good_max = rule.get('good_max')
+            higher_is_better = rule.get('higher_is_better', True)
+            
+            # Extract Data
+            series = extract_metric_series(log, key)
+            if not series: continue
 
-        calculated = calculate_metrics(entry)
+            # --- 1. Calculate Trends (30, 60, 90 days) ---
+            trends = {}
+            for days in [30, 60, 90]:
+                # Get subset
+                subset = [d['value'] for d in series if d['days_ago'] <= days]
+                if len(subset) >= 2:
+                    slope = calculate_slope(subset)
+                    direction = get_trend_icon(slope, not higher_is_better)
+                else:
+                    direction = "Insufficient Data"
+                trends[f"trend_{days}d"] = direction
 
-        for key, val in calculated.items():
-            grade = grade_metric(key, val, config)
-            label = "Metric"
-            if 'metrics' in config and key in config['metrics']:
-                label = config['metrics'][key].get('title', key)
+            # --- 2. Calculate Current Status (Last 30 days Avg) ---
+            recent_subset = [d['value'] for d in series if d['days_ago'] <= 30]
+            
+            status = "Unknown"
+            avg_val = 0
+            
+            if recent_subset:
+                avg_val = mean(recent_subset)
+                
+                # Check Logic
+                if higher_is_better:
+                    if good_min is not None and avg_val >= good_min: status = "On Target"
+                    else: status = "Off Target"
+                else: # Lower is better
+                    if good_max is not None and avg_val <= good_max: status = "On Target"
+                    else: status = "Off Target"
+            else:
+                status = "No Recent Data"
 
-            processed_entry['metrics'][key] = {
-                'value': val,
-                'grade': grade,
-                'label': label
-            }
+            # Append to Result
+            group_data['metrics'].append({
+                "key": key,
+                "title": rule.get('title', key),
+                "current_average": round(avg_val, 2),
+                "status": status,
+                "trends": trends,
+                "target_info": f"{good_min} - {good_max}" if good_min or good_max else "N/A"
+            })
+            
+        output_data['groups'].append(group_data)
 
-        if processed_entry['metrics']:
-            processed_log.append(processed_entry)
-
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-
+    # Save
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        json.dump(processed_log, f, indent=2)
-    
-    print(f"Success! Generated metrics for {len(processed_log)} activities.")
-    print(f"Saved to: {OUTPUT_FILE}")
+        json.dump(output_data, f, indent=2)
+        
+    print(f"Success! Saved aggregated view to: {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     process_data()

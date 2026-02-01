@@ -45,19 +45,38 @@ def get_trend_label(slope):
     if abs(slope) < 0.00001: return "Flat"
     return "Rising" if slope > 0 else "Falling"
 
+# --- HELPER: Normalize Sport ---
+def normalize_sport(entry):
+    # Check 'actualSport' first, then 'sport'
+    raw = entry.get('actualSport') or entry.get('sport') or 'Other'
+    s = raw.lower()
+    if 'cycl' in s or 'ride' in s or 'bike' in s: return 'Bike'
+    if 'run' in s or 'jog' in s: return 'Run'
+    if 'swim' in s or 'pool' in s: return 'Swim'
+    return 'Other'
+
 def extract_metric_series(log, metric_key, rules):
     series = []
     filters = rules.get('filters', {})
+    target_sport = rules.get('sport', 'All') # 'Bike', 'Run', or 'All'
     
     for entry in log:
         if entry.get('exclude') is True: continue
         
-        # --- 1. FILTER: Duration ---
-        duration_min = safe_float(entry.get('durationInSeconds', 0)) / 60.0
+        # 1. Sport Match (Python Side)
+        entry_sport = normalize_sport(entry)
+        if target_sport != 'All' and entry_sport != target_sport:
+            continue
+        
+        # 2. Duration Check
+        dur_sec = safe_float(entry.get('durationInSeconds'))
+        if dur_sec is None: dur_sec = safe_float(entry.get('duration')) or 0
+        duration_min = dur_sec / 60.0
+        
         if filters.get('min_duration_minutes') and duration_min < filters['min_duration_minutes']:
             continue
 
-        # --- 2. Extract Values ---
+        # 3. Extract Values
         p   = safe_float(entry.get('avgPower'))
         hr  = safe_float(entry.get('averageHR'))
         s   = safe_float(entry.get('averageSpeed'))
@@ -68,11 +87,11 @@ def extract_metric_series(log, metric_key, rules):
         
         val = None
         
-        # --- 3. FILTER: Required Fields ---
+        # 4. Filter Required Fields
         if filters.get('require_hr') and (not hr or hr <= 0): continue
         if filters.get('require_power') and (not p or p <= 0): continue
 
-        # --- 4. Logic ---
+        # 5. Calculate Metric
         if metric_key == 'subjective_bike': val = p / rpe if (p and rpe) else None
         elif metric_key == 'endurance': val = p / hr if (p and hr) else None
         elif metric_key == 'strength': val = p / cad if (p and cad) else None
@@ -90,7 +109,7 @@ def extract_metric_series(log, metric_key, rules):
         elif metric_key == 'feeling_load': val = safe_float(entry.get('Feeling'))
         elif metric_key in entry: val = safe_float(entry[metric_key])
 
-        # --- 5. FILTER: Zeros/Nulls ---
+        # 6. Filter Zeros
         if val is None: continue
         if filters.get('ignore_zero') and val == 0: continue
 
@@ -100,15 +119,16 @@ def extract_metric_series(log, metric_key, rules):
     return series
 
 def process_data():
-    print("--- Generating Unified Coaching View ---")
+    print("--- Generating Coach View (Sport-Aware) ---")
     log, config = load_json(INPUT_LOG), load_json(INPUT_CONFIG)
     if not log or not config: return
 
     grouped_metrics = {k: [] for k in GROUP_ORDER}
     
     for key, rule in config.get('metrics', {}).items():
-        sport = rule.get('sport', 'All')
-        if sport not in grouped_metrics: sport = 'All'
+        # Determine Group based on sport config
+        sport_group = rule.get('sport', 'All')
+        if sport_group not in grouped_metrics: sport_group = 'All'
             
         series = extract_metric_series(log, key, rule)
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
@@ -140,7 +160,7 @@ def process_data():
             "id": key, "current_value": round(current_avg, 2) if recent_30 else None,
             "status": status, "trends": trends, "has_data": bool(recent_30)
         })
-        grouped_metrics[sport].append(metric_obj)
+        grouped_metrics[sport_group].append(metric_obj)
 
     output = { "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "metrics_summary": [] }
     for k in GROUP_ORDER:

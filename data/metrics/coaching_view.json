@@ -1,60 +1,76 @@
 {
-  "generated_at": "2026-02-01 12:54:20",
+  "generated_at": "2026-02-01 06:17:41",
   "metrics_summary": [
     {
       "group": "General Fitness",
       "metrics": [
         {
-          "title": "VO\u2082 Max Trend",
+          "title": "VO2 Max",
           "sport": "All",
           "unit": "ml/kg/min",
           "good_min": 45,
-          "good_max": 60,
+          "good_max": 65,
           "higher_is_better": true,
-          "description": "Estimated aerobic ceiling.",
+          "description": "Aerobic ceiling.",
+          "improvement": "\u2022 Increase VO2 Intervals (Zone 5)<br>\u2022 Maintain Consistency",
+          "formula": "Garmin/Apple Estimate",
           "id": "vo2max",
           "current_value": 53.0,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.2857142857142857,
+              "start_val": 52.285714285714285,
+              "end_val": 53.714285714285715
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.2703296703296703,
+              "start_val": 50.17142857142857,
+              "end_val": 53.68571428571428
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.19593450028232637,
+              "start_val": 49.1699604743083,
+              "end_val": 53.28458498023715
+            }
           },
           "has_data": true
         },
         {
-          "title": "Weekly TSS Load",
+          "title": "Weekly Load",
           "sport": "All",
           "unit": "TSS",
           "good_min": 300,
           "good_max": 600,
           "higher_is_better": true,
-          "description": "Total training stress per week.",
+          "description": "Total training stress.",
+          "improvement": "\u2022 Increase Duration<br>\u2022 Increase Intensity",
+          "formula": "Sum of Workout TSS",
           "id": "tss",
           "current_value": 96.44,
           "status": "Off Target",
           "trends": {
-            "30d": "Falling",
-            "60d": "Falling",
-            "90d": "Falling"
-          },
-          "has_data": true
-        },
-        {
-          "title": "Weekly Energy Burn",
-          "sport": "All",
-          "unit": "kcal",
-          "good_min": 3500,
-          "good_max": 6000,
-          "higher_is_better": true,
-          "description": "Total active energy expenditure per week.",
-          "id": "calories",
-          "current_value": 632.96,
-          "status": "Off Target",
-          "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Falling",
+              "slope": -5.611818181818182,
+              "start_val": 124.49545454545455,
+              "end_val": 68.37727272727273
+            },
+            "60d": {
+              "direction": "Falling",
+              "slope": -0.735038934529477,
+              "start_val": 106.33139793501076,
+              "end_val": 85.01526883365592
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -0.7673210488568408,
+              "start_val": 117.33932343924947,
+              "end_val": 85.11183938726215
+            }
           },
           "has_data": true
         },
@@ -66,31 +82,135 @@
           "good_max": 4.0,
           "higher_is_better": true,
           "description": "Intensity stimulus on hard days.",
+          "improvement": "\u2022 All-out Sprints<br>\u2022 Full Recovery Between Reps",
+          "formula": "Training Effect > 2.0",
           "id": "anaerobic",
           "current_value": 1.27,
           "status": "Off Target",
           "trends": {
-            "30d": "Falling",
-            "60d": "Falling",
-            "90d": "Falling"
+            "30d": {
+              "direction": "Falling",
+              "slope": -0.09757575729362271,
+              "start_val": 1.7090909201351396,
+              "end_val": 0.8309091044925353
+            },
+            "60d": {
+              "direction": "Falling",
+              "slope": -0.02807017303263366,
+              "start_val": 1.542105243143091,
+              "end_val": 1.0368421285556852
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -0.028464075126173667,
+              "start_val": 1.900568165053766,
+              "end_val": 1.0181818361423822
+            }
           },
           "has_data": true
         },
         {
-          "title": "Feeling vs. Load",
+          "title": "Weekly Energy Burn",
+          "sport": "All",
+          "unit": "kcal",
+          "good_min": 3500,
+          "good_max": 6000,
+          "higher_is_better": true,
+          "description": "Total active energy expenditure.",
+          "improvement": "\u2022 Add Frequency<br>\u2022 Longer Sessions",
+          "formula": "Active Calories",
+          "id": "calories",
+          "current_value": 632.96,
+          "status": "Off Target",
+          "trends": {
+            "30d": {
+              "direction": "Rising",
+              "slope": 7.2011494252873565,
+              "start_val": 535.7487684729064,
+              "end_val": 730.179802955665
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 1.7994962861777513,
+              "start_val": 571.7089985486211,
+              "end_val": 663.4833091436865
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.5891953597433051,
+              "start_val": 596.5697889670492,
+              "end_val": 638.9918548685672
+            }
+          },
+          "has_data": true
+        },
+        {
+          "title": "Training Balance",
+          "sport": "All",
+          "unit": "%",
+          "good_min": 0,
+          "good_max": 0,
+          "higher_is_better": true,
+          "description": "Zone distribution.",
+          "improvement": "\u2022 80% Easy / 20% Hard",
+          "formula": "Zone Distribution",
+          "id": "training_balance",
+          "current_value": null,
+          "status": "No Data",
+          "trends": {
+            "30d": {
+              "direction": "Flat",
+              "slope": 0,
+              "start_val": 0,
+              "end_val": 0
+            },
+            "60d": {
+              "direction": "Flat",
+              "slope": 0,
+              "start_val": 0,
+              "end_val": 0
+            },
+            "90d": {
+              "direction": "Flat",
+              "slope": 0,
+              "start_val": 0,
+              "end_val": 0
+            }
+          },
+          "has_data": false
+        },
+        {
+          "title": "Feeling vs Load",
           "sport": "All",
           "unit": "Ratio",
           "good_min": 0,
           "good_max": 0,
           "higher_is_better": true,
-          "description": "Correlation between how much you do (TSS) and how you feel.",
+          "description": "Subjective vs Objective load.",
+          "improvement": "\u2022 Align RPE with TSS",
+          "formula": "RPE vs TSS",
           "id": "feeling_load",
           "current_value": 3.84,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.0912280701754386,
+              "start_val": 3.0210526315789474,
+              "end_val": 4.663157894736843
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.041788856304985335,
+              "start_val": 2.9772727272727275,
+              "end_val": 4.272727272727273
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.02116804168475901,
+              "start_val": 3.0442176870748296,
+              "end_val": 4.039115646258503
+            }
           },
           "has_data": true
         }
@@ -100,20 +220,37 @@
       "group": "Cycling Metrics",
       "metrics": [
         {
-          "title": "Bike RPE Efficiency",
+          "title": "Bike Efficiency",
           "sport": "Bike",
           "unit": "W/RPE",
           "good_min": 25,
           "good_max": 50,
           "higher_is_better": true,
           "description": "Power produced per unit of perceived effort.",
+          "improvement": "\u2022 Aerobic Base Work<br>\u2022 Muscular Endurance",
+          "formula": "Avg Power / RPE",
           "id": "subjective_bike",
           "current_value": 60.53,
           "status": "On Target",
           "trends": {
-            "30d": "Falling",
-            "60d": "Falling",
-            "90d": "Falling"
+            "30d": {
+              "direction": "Falling",
+              "slope": -2.862614578322433,
+              "start_val": 79.13276502839571,
+              "end_val": 41.918775510204085
+            },
+            "60d": {
+              "direction": "Falling",
+              "slope": -1.4111322799192678,
+              "start_val": 79.72452196766783,
+              "end_val": 50.0907440893632
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -0.4075531078526491,
+              "start_val": 69.58278957578008,
+              "end_val": 57.76374944805326
+            }
           },
           "has_data": true
         },
@@ -125,31 +262,65 @@
           "good_max": 1.7,
           "higher_is_better": true,
           "description": "Watts produced per heartbeat (Efficiency Factor).",
+          "improvement": "\u2022 Long Zone 2 Rides<br>\u2022 Consistent Volume",
+          "formula": "Avg Power / Avg HR",
           "id": "endurance",
           "current_value": 1.63,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Falling"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.003975851463302751,
+              "start_val": 1.5939654745078837,
+              "end_val": 1.6734825037739387
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.0018107654027543893,
+              "start_val": 1.560305341001892,
+              "end_val": 1.6309251917093133
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -0.00017924496156628263,
+              "start_val": 1.612948676025391,
+              "end_val": 1.6036279380239444
+            }
           },
           "has_data": true
         },
         {
-          "title": "Pedal Force (Torque)",
+          "title": "Pedal Force",
           "sport": "Bike",
           "unit": "W/RPM",
           "good_min": 1.5,
           "good_max": 3.0,
           "higher_is_better": true,
           "description": "Force applied to pedals per revolution.",
+          "improvement": "\u2022 Low Score: Spin Faster<br>\u2022 High Score: Grind Harder",
+          "formula": "Avg Power / Cadence",
           "id": "strength",
           "current_value": 2.21,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.031854260924756884,
+              "start_val": 2.0009602034229608,
+              "end_val": 2.4150655954448004
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.02312209141163432,
+              "start_val": 1.76066458614499,
+              "end_val": 2.338716871435848
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.014425160161877752,
+              "start_val": 1.8002445305268182,
+              "end_val": 2.2618496557069063
+            }
           },
           "has_data": true
         }
@@ -159,20 +330,37 @@
       "group": "Running Metrics",
       "metrics": [
         {
-          "title": "Run RPE Efficiency",
+          "title": "Run Efficiency",
           "sport": "Run",
           "unit": "Spd/RPE",
           "good_min": 0.6,
           "good_max": 1.0,
           "higher_is_better": true,
-          "description": "Speed (m/s) produced per unit of perceived effort.",
+          "description": "Speed per unit of perceived effort.",
+          "improvement": "\u2022 Improve Form<br>\u2022 Hill Repeats",
+          "formula": "Avg Speed / RPE",
           "id": "subjective_run",
           "current_value": 0.91,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.015665906842652014,
+              "start_val": 0.7615664215898753,
+              "end_val": 1.0592186516002635
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.019944697204717438,
+              "start_val": 0.4616169727620541,
+              "end_val": 1.0998472833130122
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.01406196458733458,
+              "start_val": 0.3424649061878643,
+              "end_val": 1.0174392063799242
+            }
           },
           "has_data": true
         },
@@ -183,14 +371,31 @@
           "good_min": 1.0,
           "good_max": 1.6,
           "higher_is_better": true,
-          "description": "Distance (meters) traveled per heartbeat.",
+          "description": "Distance traveled per heartbeat.",
+          "improvement": "\u2022 Strides<br>\u2022 Plyometrics",
+          "formula": "(Speed * 60) / HR",
           "id": "run",
           "current_value": 2.14,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.012107134790308036,
+              "start_val": 1.9787912524311542,
+              "end_val": 2.293576756979163
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.006187426877779268,
+              "start_val": 1.9336382039837248,
+              "end_val": 2.2430095478726884
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.011471669825006664,
+              "start_val": 1.5181712387377937,
+              "end_val": 2.332659796313267
+            }
           },
           "has_data": true
         },
@@ -201,14 +406,31 @@
           "good_min": 0.75,
           "good_max": 0.95,
           "higher_is_better": true,
-          "description": "Ratio of Speed vs. Power output.",
+          "description": "Ratio of Vertical Oscillation vs Contact Time.",
+          "improvement": "\u2022 Increase Cadence<br>\u2022 Focus on 'Pop'",
+          "formula": "(Vert / GCT) * 100",
           "id": "mechanical",
           "current_value": 3.43,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Falling"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.011811467506418705,
+              "start_val": 3.395766754940065,
+              "end_val": 3.4666355599785774
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.002970757990391888,
+              "start_val": 3.3853866691200722,
+              "end_val": 3.4240065229951666
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -0.0022941520812535545,
+              "start_val": 3.4393587513375303,
+              "end_val": 3.395769861793713
+            }
           },
           "has_data": true
         },
@@ -220,13 +442,30 @@
           "good_max": 260,
           "higher_is_better": false,
           "description": "Time spent on the ground per step.",
+          "improvement": "\u2022 Quick Feet Drills<br>\u2022 Jump Rope",
+          "formula": "Avg GCT",
           "id": "gct",
           "current_value": 262.63,
           "status": "Off Target",
           "trends": {
-            "30d": "Falling",
-            "60d": "Falling",
-            "90d": "Falling"
+            "30d": {
+              "direction": "Falling",
+              "slope": -6.5785718647879445,
+              "start_val": 282.36428615050227,
+              "end_val": 242.89285496177462
+            },
+            "60d": {
+              "direction": "Falling",
+              "slope": -2.4661539937963592,
+              "start_val": 286.4514290948884,
+              "end_val": 254.39142717553574
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -1.0842856272327304,
+              "start_val": 281.8357125433594,
+              "end_val": 261.23428562593756
+            }
           },
           "has_data": true
         },
@@ -238,13 +477,30 @@
           "good_max": 9.0,
           "higher_is_better": false,
           "description": "Vertical bounce height.",
+          "improvement": "\u2022 Lean Forward Slightly<br>\u2022 Stop Bouncing",
+          "formula": "Avg Vert Oscillation",
           "id": "vert",
           "current_value": 8.99,
           "status": "On Target",
           "trends": {
-            "30d": "Falling",
-            "60d": "Falling",
-            "90d": "Falling"
+            "30d": {
+              "direction": "Falling",
+              "slope": -0.20285718097900388,
+              "start_val": 9.602857344449568,
+              "end_val": 8.385714258575545
+            },
+            "60d": {
+              "direction": "Falling",
+              "slope": -0.07896703529606369,
+              "start_val": 9.708285805680692,
+              "end_val": 8.681714346831864
+            },
+            "90d": {
+              "direction": "Falling",
+              "slope": -0.04487216117682828,
+              "start_val": 9.697285515909263,
+              "end_val": 8.844714453549525
+            }
           },
           "has_data": true
         }
@@ -260,14 +516,31 @@
           "good_min": 0.15,
           "good_max": 0.3,
           "higher_is_better": true,
-          "description": "Water speed (m/s) relative to effort.",
+          "description": "Water speed relative to effort.",
+          "improvement": "\u2022 Drill Sets<br>\u2022 Body Position",
+          "formula": "Speed / RPE",
           "id": "subjective_swim",
           "current_value": 0.91,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.015665906842652014,
+              "start_val": 0.7615664215898753,
+              "end_val": 1.0592186516002635
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.019944697204717438,
+              "start_val": 0.4616169727620541,
+              "end_val": 1.0998472833130122
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.01406196458733458,
+              "start_val": 0.3424649061878643,
+              "end_val": 1.0174392063799242
+            }
           },
           "has_data": true
         },
@@ -278,14 +551,31 @@
           "good_min": 0.3,
           "good_max": 0.6,
           "higher_is_better": true,
-          "description": "Distance traveled per heartbeat in water.",
+          "description": "Distance traveled per heartbeat.",
+          "improvement": "\u2022 Long Glides<br>\u2022 Catch Mechanics",
+          "formula": "(Speed * 60) / HR",
           "id": "swim",
           "current_value": 2.14,
           "status": "On Target",
           "trends": {
-            "30d": "Rising",
-            "60d": "Rising",
-            "90d": "Rising"
+            "30d": {
+              "direction": "Rising",
+              "slope": 0.012107134790308036,
+              "start_val": 1.9787912524311542,
+              "end_val": 2.293576756979163
+            },
+            "60d": {
+              "direction": "Rising",
+              "slope": 0.006187426877779268,
+              "start_val": 1.9336382039837248,
+              "end_val": 2.2430095478726884
+            },
+            "90d": {
+              "direction": "Rising",
+              "slope": 0.011471669825006664,
+              "start_val": 1.5181712387377937,
+              "end_val": 2.332659796313267
+            }
           },
           "has_data": true
         }

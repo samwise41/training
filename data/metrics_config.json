@@ -1,0 +1,60 @@
+{
+  "metrics": {
+    "vo2max": {
+      "title": "VO2 Max",
+      "unit": "ml/kg/min",
+      "good_min": 50,
+      "good_max": 65,
+      "higher_is_better": true,
+      "description": "Aerobic ceiling."
+    },
+    "tss": {
+      "title": "Weekly Load",
+      "unit": "TSS",
+      "good_min": 300,
+      "good_max": 500,
+      "higher_is_better": true,
+      "description": "Total training stress."
+    },
+    "endurance": {
+      "title": "Aerobic Decoupling",
+      "unit": "%",
+      "good_min": -5.0,
+      "good_max": 5.0,
+      "higher_is_better": false,
+      "description": "Power vs HR drift. Lower is better."
+    },
+    "subjective_bike": {
+      "title": "Bike Efficiency",
+      "unit": "W/RPE",
+      "good_min": 30,
+      "good_max": null,
+      "higher_is_better": true,
+      "description": "Power produced per unit of perceived effort."
+    },
+    "subjective_run": {
+      "title": "Run Efficiency",
+      "unit": "Speed/RPE",
+      "good_min": 0.65,
+      "good_max": null,
+      "higher_is_better": true,
+      "description": "Speed per unit of perceived effort."
+    },
+    "mechanical": {
+      "title": "Vertical Ratio",
+      "unit": "%",
+      "good_min": null,
+      "good_max": 8.0,
+      "higher_is_better": false,
+      "description": "Vertical oscillation divided by stride length."
+    },
+    "feeling_load": {
+      "title": "Feeling vs Load",
+      "unit": "Ratio",
+      "good_min": 0.8,
+      "good_max": 1.2,
+      "higher_is_better": true,
+      "description": "Balance between subjective feeling and objective load."
+    }
+  }
+}

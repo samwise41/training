@@ -30,7 +30,7 @@ def safe_float(val):
     try:
         if val is None: return None
         v = float(val)
-        if v == 0: return None # Treat 0 as None for trend accuracy
+        if v == 0: return None 
         return v
     except (ValueError, TypeError):
         return None
@@ -45,10 +45,6 @@ def get_days_ago(date_str):
         return 9999
 
 def calculate_linear_regression(values):
-    """
-    Calculates simple linear regression (y = mx + b).
-    Returns: slope (m), start_y, end_y
-    """
     n = len(values)
     if n < 2: return 0, 0, 0
     
@@ -70,12 +66,9 @@ def calculate_linear_regression(values):
     
     return slope, start_val, end_val
 
-def get_trend_label(slope, start_val, end_val):
-    # A flat slope is rare, so we use a threshold
+def get_trend_label(slope):
     threshold = 0.00001
     if abs(slope) < threshold: return "Flat"
-    
-    # If slope is positive, the line is going UP on the chart
     if slope > 0: return "Rising"
     return "Falling"
 
@@ -85,7 +78,6 @@ def extract_metric_series(log, metric_key):
     for entry in log:
         if entry.get('exclude') is True: continue
         
-        # Raw Data Extraction (Matches JS Parser)
         p   = safe_float(entry.get('avgPower'))
         hr  = safe_float(entry.get('averageHR'))
         s   = safe_float(entry.get('averageSpeed'))
@@ -129,7 +121,6 @@ def extract_metric_series(log, metric_key):
                  'value': val
              })
              
-    # Strict Sort: Oldest -> Newest
     series.sort(key=lambda x: x['date'])
     return series
 
@@ -150,8 +141,6 @@ def process_data():
         if sport not in grouped_metrics: sport = 'All'
             
         series = extract_metric_series(log, key)
-        
-        # 1. Current Status (Weighted Average of last 30 days)
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
         current_avg = mean(recent_30) if recent_30 else 0
         
@@ -165,35 +154,34 @@ def process_data():
             if higher_is_better:
                 if good_min is not None and current_avg >= good_min: status = "On Target"
                 elif good_min is not None: status = "Off Target"
-            else: # Lower is better
+            else:
                 if good_max is not None and current_avg <= good_max: status = "On Target"
                 elif good_max is not None: status = "Off Target"
 
-        # 2. Trend Calculations for Chart Alignment
-        # We calculate the regression for 30d, 90d, and 180d (6 months)
+        # Calculate Trends (Added 1y)
         trends = {}
-        for period, label in [(30, "30d"), (90, "90d"), (180, "6m")]: # Renamed 90 -> 6m to match user
+        # Added (365, "1y") to this list so the chart works on Year view
+        for period, label in [(30, "30d"), (90, "90d"), (180, "6m"), (365, "1y")]:
             if series:
-                # Slice the data exactly as the chart would
                 subset = [x['value'] for x in series if x['days_ago'] <= period]
-                
                 if len(subset) >= 2:
                     slope, start_val, end_val = calculate_linear_regression(subset)
-                    direction = get_trend_label(slope, start_val, end_val)
+                    direction = get_trend_label(slope)
                 else:
                     direction = "Flat"
                     slope = 0
+                    start_val = 0
+                    end_val = 0
                 
-                # Store the raw "Visual Direction" (Rising/Falling)
-                # The Frontend Table will decide if Rising is "Good" or "Bad"
-                trends[f"{period}d"] = {
+                trends[label] = {
                     "direction": direction, 
-                    "slope": slope
+                    "slope": slope,
+                    "start_val": start_val,
+                    "end_val": end_val
                 }
             else:
-                trends[f"{period}d"] = {"direction": "Flat", "slope": 0}
+                trends[label] = {"direction": "Flat", "slope": 0}
 
-        # 3. Construct Output Object (Merging Config + Data)
         metric_obj = rule.copy()
         metric_obj.update({
             "id": key,
@@ -202,10 +190,8 @@ def process_data():
             "trends": trends, 
             "has_data": bool(recent_30)
         })
-        
         grouped_metrics[sport].append(metric_obj)
 
-    # 4. Final Output Structure
     output_data = {
         "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "metrics_summary": []

@@ -1,15 +1,16 @@
-// js/views/metrics/parser.js
+console.log("--- PARSER V5 (RESTORED) LOADED ---");
+import { DataManager } from '../../utils/data.js';
 
-// --- HELPER: Safely determine sport ---
+// --- HELPER: Safely determine sport (Checks actualSport first) ---
 const getSport = (d) => {
-    // 1. Look for 'actualSport' (Training Log Standard)
+    // 1. Look for 'actualSport' (This is what your JSON uses)
     if (d.actualSport) {
         const s = d.actualSport.toLowerCase();
         if (s === 'cycling' || s === 'ride' || s === 'bike') return 'Bike';
         if (s === 'running' || s === 'run') return 'Run';
         if (s === 'swimming' || s === 'swim') return 'Swim';
     }
-    // 2. Fallback to 'sport' (Legacy)
+    // 2. Fallback to 'sport' (Legacy support)
     if (d.sport) {
         const s = d.sport.toLowerCase();
         if (s.includes('bike') || s.includes('cycl')) return 'Bike';
@@ -19,7 +20,7 @@ const getSport = (d) => {
     return 'Other';
 };
 
-// --- HELPER: Weekly Aggregation (TSS/Calories) ---
+// --- HELPER: Weekly Aggregator (Sums Raw Values) ---
 const aggregateWeekly = (data, valueKey) => {
     const weeks = {};
     data.forEach(d => {
@@ -49,7 +50,7 @@ const aggregateWeekly = (data, valueKey) => {
 };
 
 // --- EXPORT 1: Normalizer (Pass-through) ---
-// We restore this to a simple pass-through so index.js doesn't crash.
+// We restore this to a simple pass-through to ensure compatibility
 export const normalizeMetricsData = (data) => {
     if (!data) return [];
     // Just sort by date, don't change structure
@@ -92,12 +93,12 @@ export const extractMetricData = (data, key) => {
         .filter(d => {
             const sport = getSport(d);
 
-            // 1. Sport Filtering
+            // 1. Sport Filtering (Strict)
             if (['subjective_bike','endurance','strength'].includes(key) && sport !== 'Bike') return false;
             if (['subjective_run','run','mechanical','gct','vert'].includes(key) && sport !== 'Run') return false;
             if (['subjective_swim','swim'].includes(key) && sport !== 'Swim') return false;
 
-            // 2. Value Calculation (Raw Math)
+            // 2. Value Calculation (Raw Math on the fly)
             let val = null;
 
             // General

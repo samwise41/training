@@ -73,9 +73,9 @@
       "filters": { "min_duration_minutes": 15, "ignore_zero": true, "require_hr": true }
     },
     "mechanical": {
-      "id": "mechanical", "title": "Stiffness", "sport": "Run",
+      "id": "mechanical", "title": "Vertical Ratio", "sport": "Run",
       "icon": "fa-ruler-combined", "colorVar": "var(--color-run)", "unit": "Ratio",
-      "good_min": 0.75, "good_max": 0.95, "higher_is_better": true,
+      "good_min": 6.0, "good_max": 8.0, "higher_is_better": true,
       "description": "Vert Osc / Contact Time.", "improvement": "• Increase Cadence",
       "formula": "(Vert / GCT) * 100",
       "filters": { "ignore_zero": true }

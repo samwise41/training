@@ -152,62 +152,82 @@ const aggregateWeeklyCalories = (data) => {
 
 const aggregateWeeklyBalance = (data) => {
     const weeks = {};
-    const zoneKeys = ['Recovery', 'Aerobic', 'Tempo', 'Threshold', 'VO2'];
+    // Chart expects these exact capitalized keys
+    const targetKeys = ['Recovery', 'Aerobic', 'Tempo', 'Threshold', 'VO2'];
+    
+    // Helper to map input keys (e.g., "Zone 1") to target keys (e.g., "Recovery")
+    const normalizeZoneKey = (k) => {
+        const lower = String(k).toLowerCase();
+        if (lower.includes('recovery') || lower.includes('zone 1') || lower === 'z1' || lower === '1') return 'Recovery';
+        if (lower.includes('aerobic') || lower.includes('zone 2') || lower === 'z2' || lower === '2') return 'Aerobic';
+        if (lower.includes('tempo') || lower.includes('zone 3') || lower === 'z3' || lower === '3') return 'Tempo';
+        if (lower.includes('threshold') || lower.includes('zone 4') || lower === 'z4' || lower === '4') return 'Threshold';
+        if (lower.includes('vo2') || lower.includes('zone 5') || lower === 'z5' || lower === '5') return 'VO2';
+        return null; // Skip unknown keys
+    };
 
     data.forEach(d => {
-        // Skip entries without valid zone data
         if (!d.dateObj || !d._zones) return;
 
-        // 1. Calculate Week Ending Saturday (Sunday -> Saturday grouping)
+        // 1. Calculate Week Ending Saturday
+        // Groups Sunday through Saturday (e.g., Sun Jan 1 -> Sat Jan 7)
         const date = d.dateObj;
         const day = date.getDay(); // 0=Sun ... 6=Sat
-        const diff = 6 - day; // Days to add to reach Saturday
+        const diff = 6 - day; 
         
         const weekEnd = new Date(date);
         weekEnd.setDate(date.getDate() + diff);
         weekEnd.setHours(0, 0, 0, 0);
 
-        // 2. Create Safe Key (YYYY-MM-DD) to prevent timezone bugs
+        // Safe Date Key (YYYY-MM-DD)
         const y = weekEnd.getFullYear();
         const m = String(weekEnd.getMonth() + 1).padStart(2, '0');
         const dayStr = String(weekEnd.getDate()).padStart(2, '0');
         const k = `${y}-${m}-${dayStr}`;
 
-        // 3. Initialize Week Bucket
         if (!weeks[k]) {
             weeks[k] = { Recovery: 0, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0, Total: 0 };
         }
 
-        // 4. Normalize to Minutes (Weighted Average)
-        // Some sources are %, some are minutes. We detect % by summing.
+        // 2. Normalize and Sum Data
         const zData = d._zones;
-        let sum = 0;
-        zoneKeys.forEach(z => sum += (parseFloat(zData[z]) || 0));
+        let localSum = 0;
+        const tempMap = {};
 
-        // If sum is roughly 100, we treat it as Percentage and convert to Minutes
-        const isPercent = sum > 90 && sum < 110; 
-        const duration = d._dur || 0; 
-
-        zoneKeys.forEach(z => {
-            let val = parseFloat(zData[z]) || 0;
-            
-            // Convert % to minutes so long rides weigh more than short runs
-            if (isPercent && duration > 0) {
-                val = (val / 100) * duration;
+        // Pre-calculate sum to detect if values are Percentages or Minutes
+        Object.keys(zData).forEach(rawKey => {
+            const val = parseFloat(zData[rawKey]) || 0;
+            const normKey = normalizeZoneKey(rawKey);
+            if (normKey && val > 0) {
+                tempMap[normKey] = (tempMap[normKey] || 0) + val;
+                localSum += val;
             }
-            
-            weeks[k][z] += val;
-            weeks[k].Total += val;
+        });
+
+        // 3. Convert to "Minutes" for Weighted Aggregation
+        // If sum is ~100, assume % and convert to mins using duration. Otherwise assume mins.
+        const isPercent = localSum > 90 && localSum < 110;
+        const duration = d._dur || 0; 
+        // If duration is missing but we have %, default to 1 min just to show distribution
+        const weight = (isPercent && duration === 0) ? 1 : duration; 
+
+        Object.entries(tempMap).forEach(([key, val]) => {
+            let timeVal = val;
+            if (isPercent && weight > 0) {
+                timeVal = (val / 100) * weight;
+            }
+            weeks[k][key] += timeVal;
+            weeks[k].Total += timeVal;
         });
     });
 
-    // 5. Convert Weekly Totals back to Percentages (0-100) for the Chart
+    // 4. Output as Percentages for Chart
     return Object.keys(weeks).sort().map(k => {
         const w = weeks[k];
         const dist = {};
-        const totalTime = w.Total || 1; // Prevent divide by zero
+        const totalTime = w.Total || 1; // Avoid divide by zero
 
-        zoneKeys.forEach(z => {
+        targetKeys.forEach(z => {
             dist[z] = (w[z] / totalTime) * 100;
         });
 
@@ -216,7 +236,7 @@ const aggregateWeeklyBalance = (data) => {
             dateStr: k, 
             name: 'Week Ending ' + k, 
             distribution: dist, 
-            val: 100 // Dummy value required for chart "has data" check
+            val: 100 // Required to pass "has data" check in chart builder
         };
     });
 };

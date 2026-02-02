@@ -1,5 +1,17 @@
 [
     {
+        "date": "2026-02-02",
+        "day": "Monday",
+        "activityType": "Run",
+        "plannedWorkout": "[RUN] Tempo / Threshold",
+        "plannedDuration": 45.0,
+        "notes": "**Loc:** Treadmill/Outdoor. **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **6 x 20s Strides** (High Cadence); Cooldown.",
+        "actualDuration": 0,
+        "id": "PLAN-2026-02-02-Run",
+        "matchStatus": "Planned",
+        "status": "PLANNED"
+    },
+    {
         "date": "2026-02-01",
         "day": "Sunday",
         "activityType": "Other",
@@ -8,7 +20,7 @@
         "notes": "**Focus:** Sleep and mobility.",
         "actualDuration": 0,
         "id": "PLAN-2026-02-01-Other",
-        "status": "PLANNED"
+        "status": "UNKNOWN"
     },
     {
         "date": "2026-01-31",

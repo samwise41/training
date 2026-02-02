@@ -151,10 +151,70 @@ const aggregateWeeklyCalories = (data) => {
 };
 
 const aggregateWeeklyBalance = (data) => {
-    // Only aggregate items that have zone data (real or estimated)
-    return data.filter(d => d._zones).map(d => ({
-        date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', distribution: d._zones, val: 0
-    }));
+    const weeks = {};
+    const zoneKeys = ['Recovery', 'Aerobic', 'Tempo', 'Threshold', 'VO2'];
+
+    data.forEach(d => {
+        // Skip entries without zone data
+        if (!d.dateObj || !d._zones) return;
+        
+        // 1. Determine Week Ending Date
+        const date = d.dateObj;
+        const day = date.getDay(); 
+        const diff = 6 - day; 
+        const weekEnd = new Date(date.valueOf());
+        weekEnd.setDate(date.getDate() + diff);
+        weekEnd.setHours(0,0,0,0);
+        
+        const k = weekEnd.toISOString().split('T')[0];
+        
+        // 2. Initialize Week Bucket
+        if (!weeks[k]) {
+            weeks[k] = { Recovery: 0, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0 };
+        }
+        
+        // 3. Normalize Input to "Time Units"
+        // Some sources might be %, others Minutes. We try to detect % by summing.
+        const values = Object.values(d._zones);
+        const sum = values.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+        if (sum === 0) return;
+
+        // If sum is ~100, assume it's Percentage-based and convert to Time using Duration
+        const isPercent = sum > 95 && sum < 105; 
+        const duration = d._dur || 0; // Duration in minutes
+
+        zoneKeys.forEach(z => {
+            const rawVal = parseFloat(d._zones[z]) || 0;
+            let timeVal = rawVal;
+
+            if (isPercent) {
+                // Convert % to Minutes
+                timeVal = (rawVal / 100) * duration;
+            }
+            
+            // Add to weekly bucket
+            weeks[k][z] += timeVal;
+        });
+    });
+
+    // 4. Convert Weekly Totals back to Percentages (0-100)
+    return Object.keys(weeks).map(k => {
+        const w = weeks[k];
+        const totalTime = zoneKeys.reduce((acc, z) => acc + w[z], 0);
+        const dist = {};
+
+        zoneKeys.forEach(z => {
+            dist[z] = totalTime > 0 ? (w[z] / totalTime) * 100 : 0;
+        });
+
+        return { 
+            date: new Date(k), 
+            dateStr: k, 
+            name: 'Week Ending ' + k, 
+            distribution: dist, 
+            val: 100 // Dummy value for scaling
+        };
+    }).sort((a, b) => a.date - b.date);
 };
 
 const aggregateFeelingVsLoad = (data) => {

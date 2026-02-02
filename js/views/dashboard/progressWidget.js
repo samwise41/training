@@ -12,7 +12,7 @@ export function renderProgressWidget() {
         if (!container) return;
         
         try {
-            // FIX: Fetch both Planned Workouts and Streaks JSON
+            // Fetch Planned Workouts (Source of Truth for the week) and Streaks
             const [workoutsResponse, streaksResponse] = await Promise.all([
                 fetch('data/dashboard/plannedWorkouts.json'),
                 fetch('data/dashboard/streaks.json')
@@ -21,14 +21,13 @@ export function renderProgressWidget() {
             if (!workoutsResponse.ok) throw new Error("Data not found");
             
             const data = await workoutsResponse.json();
-            // Handle streaks gracefully if file missing, though user confirms it exists
             const streaksData = streaksResponse.ok ? await streaksResponse.json() : null;
 
             container.innerHTML = generateWidgetHTML(data, streaksData);
             
         } catch (error) {
             console.error("Widget Error:", error);
-            container.innerHTML = ''; 
+            container.innerHTML = `<div class="p-4 text-xs text-red-400">Error loading progress: ${error.message}</div>`; 
         }
     }, 50);
 
@@ -37,30 +36,19 @@ export function renderProgressWidget() {
 
 // --- LOGIC ADAPTER ---
 function generateWidgetHTML(data, streaksData) {
-    if (!data || data.length === 0) return '';
+    if (!data || data.length === 0) return '<div class="p-4 text-xs text-slate-500">No planned workouts found.</div>';
 
-    // 1. Date Setup
+    // 1. Setup Time Pointers
     const now = new Date();
-    const today = new Date(); 
-    today.setHours(0,0,0,0);
-    
-    // Calculate This Week's Window (Monday to Sunday)
-    const day = today.getDay(); 
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1); 
-    const monday = new Date(today);
-    monday.setDate(diff);
-    monday.setHours(0,0,0,0);
-    
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    sunday.setHours(23,59,59,999);
+    // We treat the file as the absolute truth for the week's content. 
+    // We only use dates to calculate "Expected So Far" (Pacing).
 
     // 2. Initialize Stats Buckets
-    const currentWeekStats = {
+    const weekStats = {
         totalPlanned: 0,
         totalActual: 0,
         expectedSoFar: 0,
-        dailyMarkers: {}, // { '2023-10-25': 60 }
+        dailyMarkers: {}, 
         bySport: {
             Bike: { planned: 0, actual: 0, dailyMarkers: {} },
             Run: { planned: 0, actual: 0, dailyMarkers: {} },
@@ -69,68 +57,75 @@ function generateWidgetHTML(data, streaksData) {
         }
     };
 
-    // 3. Process Data Loop
+    // 3. Process Data Loop (No Date Filtering - Aggregate Everything)
     data.forEach(w => {
-        const wDate = new Date(w.date.replace(/-/g, '/')); // Fix for some browser parsing
         const dateKey = w.date;
+        // Fix for browser date parsing (safest format yyyy/mm/dd)
+        const workoutDate = new Date(w.date.replace(/-/g, '/')); 
         
+        // Parse Durations
         const planDur = w.plannedDuration || 0;
         const actDur = w.actualDuration || 0;
 
-        // --- B. Process Current Week Stats ---
-        if (wDate >= monday && wDate <= sunday) {
-            currentWeekStats.totalPlanned += planDur;
-            currentWeekStats.totalActual += actDur;
+        // --- Aggregations ---
+        weekStats.totalPlanned += planDur;
+        weekStats.totalActual += actDur;
 
-            // Pacing: Only add to "Expected" if the workout was in the past (or today)
-            if (wDate <= now) {
-                currentWeekStats.expectedSoFar += planDur;
-            }
-
-            // Daily Markers for the main bar
-            if (!currentWeekStats.dailyMarkers[dateKey]) currentWeekStats.dailyMarkers[dateKey] = 0;
-            currentWeekStats.dailyMarkers[dateKey] += planDur;
-
-            // Sport Breakdown
-            // Use 'actualSport' which is normalized in the JSON (Run, Bike, Swim, Strength -> Other)
-            let sport = w.actualSport || 'Other';
-            if (['Strength', 'Gym', 'Rest'].includes(sport)) sport = 'Other';
-            if (!currentWeekStats.bySport[sport]) sport = 'Other';
-
-            currentWeekStats.bySport[sport].planned += planDur;
-            currentWeekStats.bySport[sport].actual += actDur;
-            
-            if (!currentWeekStats.bySport[sport].dailyMarkers[dateKey]) currentWeekStats.bySport[sport].dailyMarkers[dateKey] = 0;
-            currentWeekStats.bySport[sport].dailyMarkers[dateKey] += planDur;
+        // Pacing Logic: If the workout is Today or Earlier, we "Expect" it to be done.
+        // We compare the END of the workout day to 'now' effectively by just checking dates.
+        // Set workoutDate to end of day to be safe, or just check if now > workout start.
+        // Simple logic: If today is the same day or after the workout date, count it.
+        const isPastOrToday = new Date().setHours(0,0,0,0) >= workoutDate.setHours(0,0,0,0);
+        
+        if (isPastOrToday) {
+            weekStats.expectedSoFar += planDur;
         }
+
+        // Daily Markers
+        if (!weekStats.dailyMarkers[dateKey]) weekStats.dailyMarkers[dateKey] = 0;
+        weekStats.dailyMarkers[dateKey] += planDur;
+
+        // Sport Breakdown
+        let sport = w.actualSport || 'Other';
+        // Normalize common non-tri sports
+        if (['Strength', 'Gym', 'Rest', 'Yoga'].includes(sport)) sport = 'Other';
+        // Normalize "Virtual Ride" -> "Bike", etc is usually handled upstream, but simple check:
+        if (sport === 'VirtualRide') sport = 'Bike'; 
+        
+        // Safety Bucket
+        if (!weekStats.bySport[sport]) sport = 'Other';
+
+        weekStats.bySport[sport].planned += planDur;
+        weekStats.bySport[sport].actual += actDur;
+        
+        if (!weekStats.bySport[sport].dailyMarkers[dateKey]) weekStats.bySport[sport].dailyMarkers[dateKey] = 0;
+        weekStats.bySport[sport].dailyMarkers[dateKey] += planDur;
     });
 
-    // 4. Streaks (Loaded directly from JSON now)
+    // 4. Streaks
     const dailyStreak = streaksData ? streaksData.daily_streak : 0;
     const volumeStreak = streaksData ? streaksData.volume_streak : 0;
 
-    // 5. Render HTML Helper
+    // 5. Render Helper
     const generateBarHtml = (label, iconClass, actual, planned, dailyMap, isMain = false, sportType = 'Other') => {
-        // Calculations
         const rawPct = planned > 0 ? Math.round((actual / planned) * 100) : 0; 
         const barWidth = Math.min(rawPct, 100); 
         const actualHrs = (actual / 60).toFixed(1); 
         const plannedHrs = (planned / 60).toFixed(1);
         
-        // Markers (Tick marks for each day's contribution)
         let markersHtml = ''; 
         let runningTotal = 0; 
+        // Sort keys to ensure markers appear in chronological order (Sun -> Mon -> Tue)
         const sortedDays = Object.keys(dailyMap).sort();
         
         if (planned > 0) { 
             for (let i = 0; i < sortedDays.length - 1; i++) { 
                 runningTotal += dailyMap[sortedDays[i]]; 
                 const pct = (runningTotal / planned) * 100; 
-                markersHtml += `<div class="absolute top-0 bottom-0 w-0.5 bg-slate-900 z-10" style="left: ${pct}%"></div>`; 
+                markersHtml += `<div class="absolute top-0 bottom-0 w-0.5 bg-slate-900 z-10 opacity-50" style="left: ${pct}%"></div>`; 
             } 
         }
         
-        // Styles
         const colorVar = getSportColorVar(sportType);
         const labelHtml = isMain ? `<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">${label}</span>` : ''; 
         const iconHtml = iconClass ? `<i class="fa-solid ${iconClass} mr-2 w-4 text-center" style="color: ${colorVar}"></i>` : ''; 
@@ -139,7 +134,6 @@ function generateWidgetHTML(data, streaksData) {
         const pctColor = rawPct >= 100 ? 'text-emerald-400' : (rawPct >= 80 ? 'text-blue-400' : 'text-slate-400');
         const barBgStyle = `style="width: ${barWidth}%; background-color: ${colorVar}"`;
 
-        // Hide empty rows (except main)
         if (!isMain && planned === 0 && actual === 0) return '';
 
         return `
@@ -165,11 +159,11 @@ function generateWidgetHTML(data, streaksData) {
     };
 
     // 6. Pacing Logic
-    const pacingDiff = currentWeekStats.totalActual - currentWeekStats.expectedSoFar; 
     let pacingLabel = "On Track"; 
     let pacingColor = "text-slate-400"; 
     let pacingIcon = "fa-check";
     
+    const pacingDiff = weekStats.totalActual - weekStats.expectedSoFar; 
     if (pacingDiff >= 15) { 
         pacingLabel = `${Math.round(pacingDiff)}m Ahead`; 
         pacingColor = "text-emerald-400"; 
@@ -182,14 +176,13 @@ function generateWidgetHTML(data, streaksData) {
 
     const getStreakColor = (val) => val >= 3 ? "text-orange-400" : "text-slate-500";
 
-    // 7. Final HTML
     return `
     <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-5 mb-8 flex flex-col md:flex-row items-start gap-6 shadow-sm">
         <div class="flex-1 w-full">
-            ${generateBarHtml('Weekly Goal', null, currentWeekStats.totalActual, currentWeekStats.totalPlanned, currentWeekStats.dailyMarkers, true, 'All')}
-            ${generateBarHtml('Bike', 'fa-bicycle', currentWeekStats.bySport.Bike.actual, currentWeekStats.bySport.Bike.planned, currentWeekStats.bySport.Bike.dailyMarkers, false, 'Bike')}
-            ${generateBarHtml('Run', 'fa-person-running', currentWeekStats.bySport.Run.actual, currentWeekStats.bySport.Run.planned, currentWeekStats.bySport.Run.dailyMarkers, false, 'Run')}
-            ${generateBarHtml('Swim', 'fa-person-swimming', currentWeekStats.bySport.Swim.actual, currentWeekStats.bySport.Swim.planned, currentWeekStats.bySport.Swim.dailyMarkers, false, 'Swim')}
+            ${generateBarHtml('Weekly Goal', null, weekStats.totalActual, weekStats.totalPlanned, weekStats.dailyMarkers, true, 'All')}
+            ${generateBarHtml('Bike', 'fa-bicycle', weekStats.bySport.Bike.actual, weekStats.bySport.Bike.planned, weekStats.bySport.Bike.dailyMarkers, false, 'Bike')}
+            ${generateBarHtml('Run', 'fa-person-running', weekStats.bySport.Run.actual, weekStats.bySport.Run.planned, weekStats.bySport.Run.dailyMarkers, false, 'Run')}
+            ${generateBarHtml('Swim', 'fa-person-swimming', weekStats.bySport.Swim.actual, weekStats.bySport.Swim.planned, weekStats.bySport.Swim.dailyMarkers, false, 'Swim')}
         </div>
 
         <div class="w-full md:w-auto md:border-l md:border-slate-700 md:pl-6 flex flex-row md:flex-col justify-between md:justify-center items-center md:items-start gap-6 md:gap-4 self-center">
@@ -201,8 +194,8 @@ function generateWidgetHTML(data, streaksData) {
                     <span class="text-lg font-bold ${pacingColor}">${pacingLabel}</span>
                 </div>
                 <div class="text-right md:text-left flex flex-col items-end md:items-start mt-1">
-                    <span class="text-[10px] text-slate-300 font-mono">Act: ${Math.round(currentWeekStats.totalActual)}m</span>
-                    <span class="text-[10px] text-slate-300 font-mono">Tgt: ${Math.round(currentWeekStats.expectedSoFar)}m</span>
+                    <span class="text-[10px] text-slate-300 font-mono">Act: ${Math.round(weekStats.totalActual)}m</span>
+                    <span class="text-[10px] text-slate-300 font-mono">Tgt: ${Math.round(weekStats.expectedSoFar)}m</span>
                 </div>
             </div>
 

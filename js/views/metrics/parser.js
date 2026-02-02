@@ -44,7 +44,10 @@ const getVal = (item, key) => {
 // --- SYNTHETIC ZONES (Fallback if real zones missing) ---
 const estimateZonesFromEffect = (effect) => {
     if (!effect) return null;
-    const e = effect.toUpperCase();
+    
+    // Ensure we are working with a clean string
+    const e = String(effect).toUpperCase();
+    
     switch (e) {
         case 'RECOVERY': return { Recovery: 100, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0 };
         case 'AEROBIC_BASE': return { Recovery: 20, Aerobic: 80, Tempo: 0, Threshold: 0, VO2: 0 };
@@ -72,13 +75,18 @@ export const normalizeMetricsData = (rawData) => {
         // 2. Base Object
         const out = { 
             ...item, 
-            dateObj: new Date(item.date), // UTC Date usually
+            dateObj: new Date(item.date),
             _dur: durSecs / 60 
         };
         
         // 3. Map Keys
         Object.entries(KEYS).forEach(([short, raw]) => {
-            out[`_${short}`] = getVal(item, raw);
+            // FIX: Special handling for 'effect' to preserve the string value
+            if (short === 'effect') {
+                out[`_${short}`] = item[raw] || null;
+            } else {
+                out[`_${short}`] = getVal(item, raw);
+            }
         });
         
         // 4. Calculate Estimated Load (Fallback for missing TSS)
@@ -88,7 +96,7 @@ export const normalizeMetricsData = (rawData) => {
             out._load_est = 0;
         }
 
-        // 5. Handle Zones (Priority: Real > Estimated)
+        // 5. Handle Zones
         if (item.zones) {
             out._zones = item.zones;
         } else if (out._effect) {
@@ -109,7 +117,7 @@ const aggregateWeeklyTSS = (data) => {
         if (!d.dateObj || isNaN(d.dateObj)) return;
         
         const date = d.dateObj; 
-        const day = date.getDay(); 
+        const day = date.getDay(); // 0=Sun
         const diff = 6 - day; 
         
         const weekEnd = new Date(date.valueOf());
@@ -119,6 +127,7 @@ const aggregateWeeklyTSS = (data) => {
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
+        
         const val = d._tss > 0 ? d._tss : d._load_est;
         weeks[k] += val; 
     });
@@ -152,7 +161,7 @@ const aggregateWeeklyBalance = (data) => {
     const weeks = {};
     const chartKeys = ['Recovery', 'Aerobic', 'Tempo', 'Threshold', 'VO2'];
 
-    // Helper to map loose keys (e.g. "Zone 1") to strict keys ("Recovery")
+    // Helper to map keys like "Zone 1" to "Recovery"
     const mapZoneKey = (k) => {
         const s = String(k).toLowerCase();
         if (s.includes('recovery') || s.includes('zone 1') || s === 'z1' || s === '1') return 'Recovery';
@@ -164,20 +173,19 @@ const aggregateWeeklyBalance = (data) => {
     };
 
     data.forEach(d => {
-        // Must have zones data
+        // Skip if date or zones are missing
         if (!d.dateObj || !d._zones) return;
 
         // 1. Calculate Week Ending Saturday
-        // (Sun=0 ... Sat=6). Diff to Sat = 6 - day.
         const date = d.dateObj;
-        const day = date.getDay();
+        const day = date.getDay(); // 0=Sun ... 6=Sat
         const diff = 6 - day; 
         
         const weekEnd = new Date(date);
         weekEnd.setDate(date.getDate() + diff);
         weekEnd.setHours(0, 0, 0, 0);
 
-        // Safe Key (YYYY-MM-DD)
+        // Safe Key YYYY-MM-DD
         const y = weekEnd.getFullYear();
         const m = String(weekEnd.getMonth() + 1).padStart(2, '0');
         const dayStr = String(weekEnd.getDate()).padStart(2, '0');
@@ -187,25 +195,24 @@ const aggregateWeeklyBalance = (data) => {
             weeks[k] = { Recovery: 0, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0, Total: 0 };
         }
 
-        // 2. Sum up time in each zone (Weighted by Duration)
+        // 2. Normalize and Weighted Sum
         const zData = d._zones;
         let sumVals = 0;
         
-        // First pass: sum values to check if they are Minutes or Percentages
+        // Detect if values are % or minutes
         Object.keys(zData).forEach(k => sumVals += (parseFloat(zData[k]) || 0));
-
-        // If sum is approx 100, assume it is PERCENTAGE distribution
-        const isPercent = sumVals > 95 && sumVals < 105;
+        const isPercent = sumVals > 90 && sumVals < 110;
         const duration = d._dur || 0;
-        const weight = (isPercent && duration > 0) ? duration : 1; 
+        // If it's a percentage, use duration to weight it. If missing duration, assume 1 unit.
+        const weight = (isPercent && duration > 0) ? duration : (isPercent ? 1 : 1); 
 
         Object.keys(zData).forEach(rawKey => {
             const strictKey = mapZoneKey(rawKey);
             if (strictKey) {
                 let val = parseFloat(zData[rawKey]) || 0;
                 
-                // If it was %, convert to minutes so longer workouts weigh more
-                if (isPercent) {
+                // Convert % to "minutes/units"
+                if (isPercent && val > 0) {
                     val = (val / 100) * weight;
                 }
                 
@@ -215,11 +222,11 @@ const aggregateWeeklyBalance = (data) => {
         });
     });
 
-    // 3. Convert back to Percentages for the Chart
+    // 3. Convert back to Percentages for Chart
     return Object.keys(weeks).sort().map(k => {
         const w = weeks[k];
         const dist = {};
-        const total = w.Total || 1; // Prevent div/0
+        const total = w.Total || 1; // Avoid div/0
 
         chartKeys.forEach(key => {
             dist[key] = (w[key] / total) * 100;
@@ -230,7 +237,7 @@ const aggregateWeeklyBalance = (data) => {
             dateStr: k,
             name: 'Week Ending ' + k,
             distribution: dist,
-            val: 100 // Dummy value required for "has data" check in chart builder
+            val: 100 // Dummy value for chart "has data" check
         };
     });
 };

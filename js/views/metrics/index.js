@@ -199,7 +199,7 @@ export function renderMetrics(rawData) {
                 ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
                 <div id="metric-chart-subjective_run"></div>
                 <div id="metric-chart-run"></div>
-                <div id="metric-chart-mechanical"></div>
+                <div id="metric-chart-vertical_ratio"></div>
                 <div id="metric-chart-gct"></div>
                 <div id="metric-chart-vert"></div>
                 <div id="metric-chart-drift_run"></div>  <div id="metric-chart-mechanical"></div>

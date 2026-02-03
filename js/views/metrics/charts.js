@@ -61,7 +61,7 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     // 4. Target Lines (Dashed lines for Good Min/Max)
     const isInverted = def.higher_is_better === false;
     const colorGood = 'var(--color-done)';     
-    const colorBad = '#ef4444'; 
+    const colorBad = 'var(--color-bad'; 
     const maxLineColor = isInverted ? colorBad : colorGood;
     const minLineColor = isInverted ? colorGood : colorBad;
 

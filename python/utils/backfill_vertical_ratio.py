@@ -1,78 +1,60 @@
 import json
 import os
-import sys
 
-# --- CONFIGURATION ---
-# Adjust these paths based on your file structure
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) # python/
-ROOT_DIR = os.path.dirname(BASE_DIR)                                     # Project Root
-
-LOG_FILE = os.path.join(ROOT_DIR, 'data', 'training_log.json')
-GARMIN_FILE = os.path.join(ROOT_DIR, 'data', 'garmin_activities.json')
-
-def load_json(path):
-    if not os.path.exists(path): return []
-    with open(path, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-def save_json(path, data):
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4)
+# --- HARDCODED PATHS ---
+# Assumes you run this from the repo root (e.g., python python/utils/backfill_vertical_ratio.py)
+LOG_FILE = r'C:\Users\samwi\Documents\training\data\training_log.json'
+GARMIN_FILE = r'C:\Users\samwi\Documents\training\data\my_garmin_data_ALL.json'
 
 def main():
-    print("💧 Starting Data Hydration: Vertical Ratio...")
+    print(f"Loading {LOG_FILE} and {GARMIN_FILE}...")
 
     # 1. Load Data
-    log_data = load_json(LOG_FILE)
-    garmin_data = load_json(GARMIN_FILE)
-
-    if not log_data or not garmin_data:
-        print("❌ Error: Could not load data files.")
+    try:
+        with open(LOG_FILE, 'r', encoding='utf-8') as f:
+            log_data = json.load(f)
+        with open(GARMIN_FILE, 'r', encoding='utf-8') as f:
+            garmin_data = json.load(f)
+    except FileNotFoundError as e:
+        print(f"❌ Error: Could not find file. Make sure you are running from the repo root.\nDetailed error: {e}")
         return
 
-    # 2. Create a Map for Fast Lookup (Garmin Activity ID -> Activity Object)
+    # 2. Map Garmin Data (ID -> Vertical Ratio)
+    # We create a simple dictionary for instant lookup
     garmin_map = {}
     for g in garmin_data:
-        gid = str(g.get('activityId'))
-        if gid:
-            garmin_map[gid] = g
+        if 'activityId' in g:
+            garmin_map[str(g['activityId'])] = g.get('avgVerticalRatio')
 
-    # 3. Iterate and Update
+    # 3. Update Log
     updated_count = 0
-    
+    print(f"Scanning {len(log_data)} logs against {len(garmin_map)} garmin records...")
+
     for entry in log_data:
-        # Get the ID(s) from the log entry
+        # Get ID from log (handle strings/ints)
         log_id = str(entry.get('id', ''))
         
-        # Handle comma-separated IDs (bundled activities)
+        # Handle comma-separated IDs if you have bundled activities
         ids = [x.strip() for x in log_id.split(',')] if ',' in log_id else [log_id]
         
-        found_val = None
-        
-        # Look for the data in the source Garmin file
-        for single_id in ids:
-            if single_id in garmin_map:
-                g_activity = garmin_map[single_id]
-                # Grab the target field
-                v_ratio = g_activity.get('avgVerticalRatio')
+        for check_id in ids:
+            if check_id in garmin_map:
+                val = garmin_map[check_id]
                 
-                if v_ratio is not None:
-                    found_val = v_ratio
-                    break # Stop if we found it
-        
-        # Update the log entry if we found new data
-        if found_val is not None:
-            # Only update if it's missing or different (optional check)
-            if 'avgVerticalRatio' not in entry or entry['avgVerticalRatio'] != found_val:
-                entry['avgVerticalRatio'] = found_val
-                updated_count += 1
+                # Update if value exists and is different/missing
+                if val is not None:
+                    if 'avgVerticalRatio' not in entry or entry['avgVerticalRatio'] != val:
+                        entry['avgVerticalRatio'] = val
+                        updated_count += 1
+                    break # Found a match, stop checking other IDs in this bundle
 
     # 4. Save
     if updated_count > 0:
-        save_json(LOG_FILE, log_data)
-        print(f"✅ Hydration Complete! Updated {updated_count} records with avgVerticalRatio.")
+        with open(LOG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(log_data, f, indent=4)
+        print(f"✅ Success! Updated {updated_count} records.")
     else:
-        print("✅ Analysis Complete. No records needed updating (field might already exist).")
+        print("✅ No updates needed.")
 
 if __name__ == "__main__":
     main()

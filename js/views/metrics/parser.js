@@ -290,11 +290,23 @@ export const extractMetricData = (data, key) => {
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);
 
-        case 'mechanical': 
-            return data.map(d => {
-                if (!checkSport(d, 'RUN') || !d._vert || !d._gct) return null;
-                return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: (d._vert / d._gct) * 100, breakdown: `${d._vert.toFixed(1)}cm / ${d._gct}ms` };
-            }).filter(Boolean);
+        case 'vertical_ratio':
+                return data.map(d => {
+                    // 1. Grab the raw field we just added to the DB
+                    const val = d.avgVerticalRatio; 
+            
+                    // 2. Filter out bad data (null or 0)
+                    if (val == null || val === 0) return null;
+
+                    // 3. Return the standard format for the chart
+                    return { 
+                        date: d.dateObj, 
+                        dateStr: d.date, 
+                        name: d.title || 'Run', 
+                        val: val, 
+                        breakdown: `${val.toFixed(1)}%` 
+                    };
+                }).filter(Boolean);
 
         case 'gct': return data.filter(d => checkSport(d, 'RUN') && d._gct).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._gct }));
         case 'vert': return data.filter(d => checkSport(d, 'RUN') && d._vert).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._vert }));

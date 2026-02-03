@@ -126,5 +126,35 @@
       "description": "Subjective vs Objective.", "improvement": "• Align RPE with TSS",
       "formula": "RPE vs TSS"
     }
+    "drift_bike": {
+      "id": "drift_bike",
+      "title": "Bike HR Drift",
+      "sport": "Bike",
+      "icon": "fa-arrow-trend-up",
+      "colorVar": "var(--color-bad)",
+      "unit": "%",
+      "good_min": -2,
+      "good_max": 5,
+      "higher_is_better": false,
+      "description": "Aerobic decoupling on the bike. <5% is good.",
+      "improvement": "• Extend Zone 2 Duration",
+      "formula": "Pw:Hr (First vs Second Half)",
+      "filters": { "min_duration_minutes": 45, "ignore_zero": false }
+    },
+    "drift_run": {
+      "id": "drift_run",
+      "title": "Run HR Drift",
+      "sport": "Run",
+      "icon": "fa-heart-crack",
+      "colorVar": "var(--color-bad)",
+      "unit": "%",
+      "good_min": -2,
+      "good_max": 5,
+      "higher_is_better": false,
+      "description": "Aerobic decoupling (Pa:Hr).",
+      "improvement": "• Improve Durability",
+      "formula": "Pa:Hr (First vs Second Half)",
+      "filters": { "min_duration_minutes": 30, "ignore_zero": false }
+    },
   }
 }

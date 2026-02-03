@@ -2,8 +2,9 @@ import os
 import json
 
 # --- CONFIGURATION ---
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # This is .../strava_data
+ROOT_DIR = os.path.dirname(BASE_DIR)                  # This is .../ (Repo Root)
+
 OUTPUT_FILE = os.path.join(ROOT_DIR, 'data', 'metrics', 'drift_history.json')
 
 # Define source folders

@@ -54,6 +54,53 @@ def format_duration(seconds):
     if s > 0 or not parts: parts.append(f"{s}s")
     return " ".join(parts)
 
+def calculate_decoupling(streams):
+    """
+    Calculates Aerobic Decoupling (Pw:Hr).
+    Returns a percentage (e.g., 5.2 for 5.2% drift).
+    Returns None if data is insufficient.
+    """
+    # 1. Validation
+    if 'watts' not in streams or 'heartrate' not in streams:
+        return None
+    
+    watts_data = streams['watts']['data']
+    hr_data = streams['heartrate']['data']
+    
+    # Ensure equal length (Strava streams can sometimes differ by 1-2 seconds)
+    length = min(len(watts_data), len(hr_data))
+    
+    # Create DataFrame
+    df = pd.DataFrame({
+        'watts': watts_data[:length],
+        'hr': hr_data[:length]
+    })
+    
+    # 2. Clean Data (Remove zeros/coasting)
+    # We only care about active pedaling for this metric
+    # Thresholds: >10 watts and >50 bpm
+    df_active = df[(df['watts'] > 10) & (df['hr'] > 50)]
+    
+    # Require at least 20 minutes of active data (1200 seconds) to be statistically significant
+    if len(df_active) < 1200:
+        return None
+
+    # 3. Split into First and Second Half
+    mid = len(df_active) // 2
+    first_half = df_active.iloc[:mid]
+    second_half = df_active.iloc[mid:]
+
+    # 4. Calculate Efficiency Factors (Power / HR)
+    ef1 = first_half['watts'].mean() / first_half['hr'].mean()
+    ef2 = second_half['watts'].mean() / second_half['hr'].mean()
+    
+    # 5. Calculate Drift %
+    # Formula: ((EF1 - EF2) / EF1) * 100
+    # Positive value = Cardiac Drift (HR went up for same power, or Power went down for same HR)
+    drift = (1 - (ef2 / ef1)) * 100
+    
+    return round(drift, 2)
+
 def update_cache(token):
     if not os.path.exists(CACHE_DIR): os.makedirs(CACHE_DIR)
     
@@ -107,8 +154,9 @@ def update_cache(token):
             print(f"   🚴 Processing NEW ride: {act['name']} ({act['start_date_local'][:10]})")
 
             try:
+                # UPDATED: Now requesting 'heartrate' as well
                 url = f"https://www.strava.com/api/v3/activities/{aid}/streams"
-                r_stream = requests.get(url, headers=headers, params={'keys': 'watts', 'key_by_type': 'true'})
+                r_stream = requests.get(url, headers=headers, params={'keys': 'watts,heartrate', 'key_by_type': 'true'})
                 
                 if r_stream.status_code == 429: 
                     print("⚠️ Rate Limit Hit. Stopping.")
@@ -122,9 +170,11 @@ def update_cache(token):
                     processed_count += 1
                     continue
 
+                # Fetch full details for metadata
                 r_det = requests.get(f"https://www.strava.com/api/v3/activities/{aid}", headers=headers)
                 details = r_det.json()
 
+                # Calculate Power Curve (Existing Logic)
                 power_series = pd.Series(streams['watts']['data'])
                 limit = min(len(power_series), MAX_DURATION_SECONDS)
                 curve = []
@@ -132,15 +182,23 @@ def update_cache(token):
                     peak = int(power_series.rolling(window=seconds).mean().max())
                     curve.append(peak)
 
+                # NEW: Calculate Aerobic Decoupling
+                drift_score = calculate_decoupling(streams)
+
                 data = {
                     'id': aid,
                     'name': details['name'],
                     'date': details['start_date_local'][:10],
-                    'power_curve': curve
+                    'power_curve': curve,
+                    'aerobic_decoupling': drift_score
                 }
+                
                 with open(os.path.join(CACHE_DIR, f"{aid}.json"), "w") as f:
                     json.dump(data, f)
                 
+                msg_drift = f" (Drift: {drift_score}%)" if drift_score is not None else ""
+                print(f"      ✅ Saved.{msg_drift}")
+
                 processed_count += 1
                 if processed_count >= MAX_NEW_TO_PROCESS:
                     print(f"🛑 Reached limit of {MAX_NEW_TO_PROCESS} new files. Stopping.")

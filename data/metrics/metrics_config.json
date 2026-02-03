@@ -139,7 +139,7 @@
       "description": "Aerobic decoupling on the bike. <5% is good.",
       "improvement": "• Extend Zone 2 Duration",
       "formula": "Pw:Hr (First vs Second Half)",
-      "filters": { "min_duration_minutes": 45, "ignore_zero": false }
+      "filters": { "min_duration_minutes": 70, "ignore_zero": false }
     },
     "drift_run": {
       "id": "drift_run",
@@ -154,7 +154,7 @@
       "description": "Aerobic decoupling (Pa:Hr).",
       "improvement": "• Improve Durability",
       "formula": "Pa:Hr (First vs Second Half)",
-      "filters": { "min_duration_minutes": 30, "ignore_zero": false }
+      "filters": { "min_duration_minutes": 40, "ignore_zero": false }
     }
   }
 }

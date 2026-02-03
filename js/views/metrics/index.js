@@ -83,17 +83,58 @@ async function populateView(rawData) {
             });
         }
 
-        // 2. Render Table
+        // 2. Fetch Drift History (NEW)
+        let driftData = [];
+        try {
+            const res = await fetch('data/metrics/drift_history.json');
+            if (res.ok) driftData = await res.json();
+        } catch (e) { 
+            console.warn("Could not load drift history", e); 
+        }
+
+        // 3. Render Table
         const tableContainer = document.getElementById('metrics-table-container');
         if (tableContainer) {
             tableContainer.innerHTML = await renderSummaryTable();
         }
 
-        // 3. Render Charts
+        // 4. Render Charts
         if (!rawData || rawData.length === 0) rawData = await DataManager.fetchJSON('log');
 
         if (rawData && rawData.length > 0) {
             cleanData = normalizeMetricsData(rawData);
+
+            // --- MERGE DRIFT DATA (Sport-Aware) ---
+            if (driftData.length > 0) {
+                // Create a map: Date -> { Bike: 1.5, Run: 2.0 }
+                const driftMap = {};
+                driftData.forEach(d => {
+                    // Safety check for valid date
+                    if (!d.date) return;
+                    if (!driftMap[d.date]) driftMap[d.date] = {};
+                    
+                    // Assign value to sport bucket
+                    driftMap[d.date][d.sport] = d.val;
+                });
+
+                // Inject into main data stream
+                cleanData.forEach(day => {
+                    // Match date format (YYYY-MM-DD)
+                    const dateKey = day.dateStr || (day.date ? day.date.split('T')[0] : null);
+                    
+                    if (dateKey && driftMap[dateKey]) {
+                        // Assign strictly to specific properties based on sport
+                        if (driftMap[dateKey].Bike !== undefined) {
+                            day._drift_bike = driftMap[dateKey].Bike;
+                        }
+                        if (driftMap[dateKey].Run !== undefined) {
+                            day._drift_run = driftMap[dateKey].Run;
+                        }
+                    }
+                });
+            }
+            // --------------------------------------
+
             setTimeout(() => {
                 updateCharts(cleanData, metricsState.timeRange);
                 window.toggleMetricsTime(metricsState.timeRange);

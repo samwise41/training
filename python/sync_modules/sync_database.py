@@ -125,7 +125,7 @@ def trigger_drift_compilation():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     
     # 2. Go up one level to the Project Root
-    project_root = os.path.dirname(current_dir)
+    project_root = os.path.dirname(os.path.dirname(BASE_DIR))
     
     # 3. Build path to strava_data/compile_drift.py
     script_path = os.path.join(project_root, "strava_data", "compile_drift.py")

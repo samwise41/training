@@ -1,0 +1,51 @@
+name: Process Cycling Data
+
+on:
+  schedule:
+    # Run every 6 hours (adjust as needed)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows manual triggering from the "Actions" tab
+
+permissions:
+  contents: write # Needed to commit the new data back to the repo
+
+jobs:
+  update-cycling-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install requirements if the file exists
+          if [ -f strava_data/requirements.txt ]; then pip install -r strava_data/requirements.txt; fi
+          # Explicitly install packages known to be needed
+          pip install pandas requests python-dotenv
+
+      - name: Run Processing Script
+        env:
+          # Map GitHub Secrets to Environment Variables
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: python strava_data/cycling/process_cycling.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          # Add the generated files
+          git add strava_data/power_cache/*.json
+          git add strava_data/cycling/my_power_profile.md
+          git add strava_data/cycling/power_curve_graph.json
+          
+          # Commit only if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update cycling stats & drift" && git push)

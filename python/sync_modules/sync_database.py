@@ -121,13 +121,13 @@ def trigger_drift_compilation():
     print("🔄 COMPILING HEART RATE DRIFT HISTORY...")
     print("="*50)
 
-    # 1. Get the directory of this script (.../python)
+    # 1. Get the directory of this script (e.g., .../training/python)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # 2. Go up one level to the Project Root
-    project_root = os.path.dirname(os.path.dirname(BASE_DIR))
+    # 2. Go UP one level to the project root (e.g., .../training)
+    project_root = os.path.dirname(current_dir)
     
-    # 3. Build path to strava_data/compile_drift.py
+    # 3. Build the path to the file in the sibling directory
     script_path = os.path.join(project_root, "strava_data", "compile_drift.py")
 
     if not os.path.exists(script_path):

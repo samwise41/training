@@ -71,6 +71,12 @@ window.toggleMetricsTime = (range) => {
     });
 };
 
+function resolveCssVar(colorString) {
+    if (!colorString || !colorString.startsWith('var(')) return colorString;
+    const varName = colorString.replace(/^var\((--[^)]+)\)$/, '$1');
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+}
+
 // --- ASYNC LOGIC ---
 async function populateView(rawData) {
     try {
@@ -79,7 +85,16 @@ async function populateView(rawData) {
         if (coachingData && coachingData.metrics_summary) {
             metricsState.configMap = {};
             coachingData.metrics_summary.forEach(group => {
-                group.metrics.forEach(m => metricsState.configMap[m.id] = m);
+                group.metrics.forEach(m => {
+                    // --- THE FIX: RESOLVE COLORS HERE ---
+                    // If the config says "var(--color-bad)", we resolve it to "#ef4444"
+                    // so the charting library can actually use it.
+                    if (m.colorVar && m.colorVar.startsWith('var(--')) {
+                        m.colorVar = resolveCssVar(m.colorVar);
+                    }
+                    // ------------------------------------
+                    metricsState.configMap[m.id] = m;
+                });
             });
         }
 
@@ -106,24 +121,16 @@ async function populateView(rawData) {
 
             // --- MERGE DRIFT DATA (Sport-Aware) ---
             if (driftData.length > 0) {
-                // Create a map: Date -> { Bike: 1.5, Run: 2.0 }
                 const driftMap = {};
                 driftData.forEach(d => {
-                    // Safety check for valid date
                     if (!d.date) return;
                     if (!driftMap[d.date]) driftMap[d.date] = {};
-                    
-                    // Assign value to sport bucket
                     driftMap[d.date][d.sport] = d.val;
                 });
 
-                // Inject into main data stream
                 cleanData.forEach(day => {
-                    // Match date format (YYYY-MM-DD)
                     const dateKey = day.dateStr || (day.date ? day.date.split('T')[0] : null);
-                    
                     if (dateKey && driftMap[dateKey]) {
-                        // Assign strictly to specific properties based on sport
                         if (driftMap[dateKey].Bike !== undefined) {
                             day._drift_bike = driftMap[dateKey].Bike;
                         }

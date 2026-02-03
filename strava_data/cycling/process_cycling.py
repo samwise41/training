@@ -57,8 +57,8 @@ def format_duration(seconds):
 def calculate_decoupling(streams):
     """
     Calculates Aerobic Decoupling (Pw:Hr).
+    Trims the first 10 mins and last 5 mins to exclude warmup/cooldown.
     Returns a percentage (e.g., 5.2 for 5.2% drift).
-    Returns None if data is insufficient.
     """
     # 1. Validation
     if 'watts' not in streams or 'heartrate' not in streams:
@@ -67,7 +67,6 @@ def calculate_decoupling(streams):
     watts_data = streams['watts']['data']
     hr_data = streams['heartrate']['data']
     
-    # Ensure equal length (Strava streams can sometimes differ by 1-2 seconds)
     length = min(len(watts_data), len(hr_data))
     
     # Create DataFrame
@@ -76,27 +75,38 @@ def calculate_decoupling(streams):
         'hr': hr_data[:length]
     })
     
-    # 2. Clean Data (Remove zeros/coasting)
-    # We only care about active pedaling for this metric
-    # Thresholds: >10 watts and >50 bpm
+    # 2. Smart Filtering
+    # Remove coasting/zeros
     df_active = df[(df['watts'] > 10) & (df['hr'] > 50)]
     
-    # Require at least 20 minutes of active data (1200 seconds) to be statistically significant
-    if len(df_active) < 1200:
+    # 3. Apply "Trim" Logic (Exclude Warmup/Cooldown)
+    # We remove the first 600 seconds (10 mins) and last 300 seconds (5 mins)
+    # of the ACTIVE data to find the steady state portion.
+    start_trim = 600
+    end_trim = 300
+    
+    # Only trim if the ride is long enough to support it (e.g. > 30 mins)
+    if len(df_active) > (start_trim + end_trim + 600):
+        # Slice the dataframe
+        df_steady = df_active.iloc[start_trim:-end_trim]
+    else:
+        # If ride is short (20-30 mins), just use the whole active part
+        df_steady = df_active
+
+    # Require at least 20 minutes of data AFTER trimming
+    if len(df_steady) < 1200:
         return None
 
-    # 3. Split into First and Second Half
-    mid = len(df_active) // 2
-    first_half = df_active.iloc[:mid]
-    second_half = df_active.iloc[mid:]
+    # 4. Split into First and Second Half
+    mid = len(df_steady) // 2
+    first_half = df_steady.iloc[:mid]
+    second_half = df_steady.iloc[mid:]
 
-    # 4. Calculate Efficiency Factors (Power / HR)
+    # 5. Calculate Efficiency Factors (Power / HR)
     ef1 = first_half['watts'].mean() / first_half['hr'].mean()
     ef2 = second_half['watts'].mean() / second_half['hr'].mean()
     
-    # 5. Calculate Drift %
-    # Formula: ((EF1 - EF2) / EF1) * 100
-    # Positive value = Cardiac Drift (HR went up for same power, or Power went down for same HR)
+    # 6. Calculate Drift %
     drift = (1 - (ef2 / ef1)) * 100
     
     return round(drift, 2)

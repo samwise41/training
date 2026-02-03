@@ -112,6 +112,32 @@ def bundle_activities(activities):
 
     return combined
 
+def trigger_drift_compilation():
+    """
+    Triggers the script to compile aerobic decoupling (drift) history.
+    Located at: python/metrics/compile_drift.py
+    """
+    print("\n" + "="*50)
+    print("🔄 COMPILING HEART RATE DRIFT HISTORY...")
+    print("="*50)
+
+    # Navigate paths
+    current_dir = os.path.dirname(os.path.abspath(__file__)) 
+    python_root = os.path.dirname(current_dir)               
+    script_path = os.path.join(python_root, "metrics", "compile_drift.py")
+
+    if not os.path.exists(script_path):
+        print(f"❌ ERROR: Could not find drift script at: {script_path}")
+        return
+
+    try:
+        subprocess.run([sys.executable, script_path], check=True)
+        print("✅ SUCCESS: Drift history compiled.")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ ERROR: Drift script failed with exit code {e.returncode}")
+    except Exception as e:
+        print(f"❌ ERROR: Unexpected error running drift script: {e}")
+
 def trigger_coaching_update():
     """
     Triggers the standalone script to regenerate coaching views and metrics.
@@ -122,9 +148,6 @@ def trigger_coaching_update():
     print("="*50)
 
     # 1. Navigate paths
-    # Current file: .../python/sync_modules/sync_database.py
-    # Target file:  .../python/metrics/generate_coach_view.py
-    
     current_dir = os.path.dirname(os.path.abspath(__file__)) # python/sync_modules
     python_root = os.path.dirname(current_dir)               # python/
     script_path = os.path.join(python_root, "metrics", "generate_coach_view.py")
@@ -153,7 +176,6 @@ def main():
     master_log = load_json(config.MASTER_DB_JSON)
     
     # FIX: Use configured timezone name to automatically calculate local date
-    # This handles DST and offsets automatically
     try:
         user_tz = ZoneInfo(config.USER_TIMEZONE)
     except Exception as e:
@@ -259,7 +281,7 @@ def main():
             "actualDuration": round(act_dur_min, 1),
             "actualSport": detect_garmin_sport(composite),
             "id": composite.get('activityId'),
-            "activityType": composite.get('activityType'), # Raw Garmin Type
+            "activityType": composite.get('activityType'),
             "sportTypeId": composite.get('sportTypeId'),
             "duration": composite.get('duration'),
             "distance": composite.get('distance'),
@@ -362,6 +384,9 @@ def main():
     
     save_json(config.MASTER_DB_JSON, final_list)
     print(f"   -> Synced Database. Total records: {len(final_list)}")
+
+    # --- NEW: TRIGGER DRIFT COMPILATION ---
+    trigger_drift_compilation()
 
     # --- NEW: TRIGGER COACHING UPDATE ---
     trigger_coaching_update()

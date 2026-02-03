@@ -10,10 +10,15 @@ export function renderPlannedWorkouts() {
             let data = await DataManager.fetchJSON('schedule');
             if (!data) throw new Error("Schedule file missing");
             
-            data.sort((a, b) => new Date(a.date) - new Date(b.date));
-            container.innerHTML = generateCardsHTML(data);
+            // 1. Group data by date
+            const groupedData = groupWorkoutsByDate(data);
+            
+            // 2. Render groups
+            container.innerHTML = generateGroupedCardsHTML(groupedData);
+            
+            // 3. Scroll to today
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500'); 
+                const todayCard = container.querySelector('.ring-blue-500, .ring-emerald-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
         } catch (error) {
@@ -29,44 +34,149 @@ export function renderPlannedWorkouts() {
     return UI.buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', loadingHtml, true);
 }
 
-function generateCardsHTML(data) {
-    if (!data || data.length === 0) return '<p class="text-slate-500 italic p-4">No workouts found.</p>';
-    let cardsHtml = '';
+/**
+ * Helper: Groups flat workout list by Date 'YYYY-MM-DD'
+ */
+function groupWorkoutsByDate(workouts) {
+    const groups = {};
+
+    workouts.forEach(w => {
+        // Ensure we have a valid date string
+        const dateKey = w.date; 
+        if (!dateKey) return;
+
+        if (!groups[dateKey]) {
+            groups[dateKey] = {
+                dateStr: dateKey,
+                dateObj: new Date(dateKey), 
+                workouts: [],
+                totalDuration: 0,
+                isRestDay: true // Assume rest until we find a real workout
+            };
+        }
+        
+        groups[dateKey].workouts.push(w);
+        
+        // Accumulate Stats
+        const duration = parseFloat(w.plannedDuration) || 0;
+        groups[dateKey].totalDuration += duration;
+        
+        // If any workout is NOT a rest day, the whole day is active
+        if (w.status !== 'REST' && w.actualSport !== 'Rest') {
+            groups[dateKey].isRestDay = false;
+        }
+    });
+
+    // Sort by Date
+    return Object.values(groups).sort((a, b) => a.dateObj - b.dateObj);
+}
+
+/**
+ * Generates the Stacked Card HTML
+ */
+function generateGroupedCardsHTML(groupedData) {
+    if (!groupedData || groupedData.length === 0) return '<p class="text-slate-500 italic p-4">No workouts found.</p>';
+    
+    let html = '';
     const d = new Date();
     const todayStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
 
-    data.forEach(w => {
-        const dayName = w.day || w.date; 
-        const planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
-        const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No specific notes.";
-        const sportType = w.actualSport || 'Other'; 
-        const titleStyle = `style="color: ${Formatters.COLORS[sportType] || Formatters.COLORS.All}"`;
-        const iconHtml = Formatters.getIconForSport(sportType);
+    groupedData.forEach(day => {
+        // --- Header Logic ---
+        const isToday = day.dateStr === todayStr;
+        const dayNameFull = day.dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+        
+        // Format Total Duration
+        const hours = Math.floor(day.totalDuration / 60);
+        const mins = Math.round(day.totalDuration % 60);
+        const totalTimeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
-        let statusText = w.status;
-        let statusColorClass = "text-slate-400";
-        let cardBorderClass = "border border-slate-700 hover:border-slate-600";
-        let displayDuration = Math.round(w.plannedDuration);
-        let displayUnit = "min";
+        // Check Completion Status of the DAY
+        // A day is "Complete" if ALL non-rest workouts are COMPLETED/UNPLANNED
+        const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
+        const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
+        const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        if (w.date === todayStr && statusText !== 'COMPLETED') cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900";
-        if (statusText === 'COMPLETED' || statusText === 'UNPLANNED') {
-            statusText = "COMPLETED"; statusColorClass = "text-emerald-400"; cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900";
-            if (w.plannedDuration === 0) { displayDuration = Math.round(w.actualDuration); statusText = "UNPLANNED"; }
-        } else if (statusText === 'MISSED') { statusColorClass = "text-red-500"; cardBorderClass = "border border-red-900/50 opacity-75"; }
-        else if (statusText === 'REST' || sportType === 'Rest') { statusText = "REST DAY"; displayDuration = "--"; displayUnit = ""; cardBorderClass = "border border-slate-800 opacity-50"; }
+        // --- Card Border Logic ---
+        let cardBorderClass = "";
+        
+        if (isDayComplete) {
+            // GREEN Border if fully complete
+            cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
+        } else if (isToday) {
+            // BLUE Border if Today (and incomplete)
+            cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
+        } else {
+            // DEFAULT Grey Border
+            cardBorderClass = "border border-slate-700 hover:border-slate-600 bg-slate-800/60";
+        }
 
-        cardsHtml += `
-            <div class="bg-slate-800 rounded-xl p-6 shadow-lg relative overflow-hidden transition-all ${cardBorderClass}">
-                <div class="flex justify-between items-start mb-2"><span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">${dayName}</span>${iconHtml}</div>
-                <div class="flex justify-between items-center mb-6 mt-1">
-                    <div class="flex flex-col"><div class="flex items-baseline gap-1"><span class="text-5xl font-bold text-white tracking-tight leading-none">${displayDuration}</span><span class="text-lg font-medium text-slate-400 font-mono">${displayUnit}</span></div><div class="text-sm font-bold ${statusColorClass} uppercase tracking-widest mt-1">${statusText}</div></div>
-                    <div class="text-right pl-4 max-w-[55%]"><h3 class="text-lg font-bold leading-tight" ${titleStyle}>${planName}</h3></div>
+        // --- Rows Logic ---
+        const rowsHtml = day.workouts.map(w => {
+            const planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
+            const sportType = w.actualSport || 'Other';
+            const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "";
+            
+            // Row Status Logic
+            let statusIcon = ''; 
+            let rowOpacity = 'opacity-100';
+            let titleColor = 'text-slate-200'; // Default Title Color
+
+            if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
+                statusIcon = `<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>`;
+                titleColor = 'text-emerald-100'; // Light Green text, NO strikethrough
+                rowOpacity = 'opacity-80';
+            } else if (w.status === 'MISSED') {
+                statusIcon = `<i class="fa-solid fa-circle-xmark text-red-500/50 text-lg"></i>`;
+                titleColor = 'text-red-200/50';
+            } else if (w.status === 'REST') {
+                titleColor = 'text-slate-500 italic';
+                rowOpacity = 'opacity-50';
+            }
+
+            // Sport Icon Class (matches styles.css variables)
+            const iconClass = `icon-${sportType.toLowerCase()}`;
+            
+            return `
+                <div class="group flex items-start gap-3 p-3 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/30 transition-colors ${rowOpacity}">
+                    <div class="mt-1 ${iconClass} text-lg w-6 flex justify-center">
+                        ${Formatters.getIconForSport(sportType)}
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-bold ${titleColor} truncate pr-2">${planName}</h4>
+                            ${statusIcon}
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
+                            ${w.plannedDuration > 0 ? `<span class="font-mono bg-slate-700/30 px-1 rounded">${Math.round(w.plannedDuration)} min</span>` : ''}
+                            ${(w.tss > 0) ? `<span class="px-1.5 py-0.5 rounded bg-slate-700/50 text-[10px] text-slate-300">${w.tss} TSS</span>` : ''}
+                        </div>
+                        
+                        ${notes ? `<p class="text-[11px] text-slate-500 mt-1 line-clamp-1 group-hover:line-clamp-none transition-all cursor-default" title="${notes}">${notes}</p>` : ''}
+                        
+                        ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
+                            `<div class="mt-1 text-[10px] font-mono text-emerald-500/70">Actual: ${Math.round(w.actualDuration)}m</div>` : ''}
+                    </div>
                 </div>
-                <div class="h-px bg-slate-700 w-full mb-4"></div>
-                <div><p class="text-sm text-slate-300 leading-relaxed font-sans line-clamp-3" title="${notes}">${notes}</p></div>
-                ${(w.actualDuration > 0 && w.plannedDuration > 0) ? `<div class="mt-4 pt-3 border-t border-slate-700/50 flex justify-between items-center"><span class="text-[10px] font-bold text-slate-500 uppercase">Actual Duration</span><span class="text-sm font-mono font-bold text-emerald-400">${Math.round(w.actualDuration)} min</span></div>` : ''}
-            </div>`;
+            `;
+        }).join('');
+
+        // --- Assemble Card ---
+        html += `
+            <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full">
+                <div class="px-4 py-2 bg-black/20 border-b border-slate-700/50 flex justify-between items-center backdrop-blur-sm">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${dayNameFull}</span>
+                    ${(!day.isRestDay && day.totalDuration > 0) ? `<span class="text-xs font-mono text-slate-500"><i class="fa-regular fa-clock mr-1"></i>${totalTimeStr}</span>` : ''}
+                </div>
+                
+                <div class="flex flex-col flex-1">
+                    ${rowsHtml}
+                </div>
+            </div>
+        `;
     });
-    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-0 p-2">${cardsHtml}</div>`;
+
+    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-0 p-2">${html}</div>`;
 }

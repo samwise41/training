@@ -115,7 +115,7 @@ def bundle_activities(activities):
 def trigger_drift_compilation():
     """
     Triggers the script to compile aerobic decoupling (drift) history.
-    Located at: python/metrics/compile_drift.py
+    Located at: python/strava/compile_drift.py
     """
     print("\n" + "="*50)
     print("🔄 COMPILING HEART RATE DRIFT HISTORY...")

@@ -100,6 +100,7 @@ def extract_metric_series(log, metric_key, rules):
         elif metric_key == 'subjective_run': val = s / rpe if (s and rpe) else None
         elif metric_key == 'run': val = (s * 60) / hr if (s and hr) else None
         elif metric_key == 'mechanical': val = (vert / gct) * 100 if (vert and gct) else None
+        elif metric_key == 'vertical_ratio': val = safe_float(entry.get('avgVerticalRatio'))
         elif metric_key == 'vert': val = vert
         elif metric_key == 'gct': val = gct
         elif metric_key == 'subjective_swim': val = s / rpe if (s and rpe) else None

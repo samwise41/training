@@ -124,7 +124,7 @@ def trigger_drift_compilation():
     # Navigate paths
     current_dir = os.path.dirname(os.path.abspath(__file__)) 
     python_root = os.path.dirname(current_dir)               
-    script_path = os.path.join(python_root, "metrics", "compile_drift.py")
+    script_path = os.path.join(python_root, "strava_data", "compile_drift.py")
 
     if not os.path.exists(script_path):
         print(f"❌ ERROR: Could not find drift script at: {script_path}")

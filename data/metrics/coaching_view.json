@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-03 17:22:18",
+  "generated_at": "2026-02-03 18:22:57",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -363,7 +363,7 @@
           "improvement": "\u2022 Extend Zone 2 Duration",
           "formula": "Pw:Hr (First vs Second Half)",
           "filters": {
-            "min_duration_minutes": 45,
+            "min_duration_minutes": 70,
             "ignore_zero": false
           },
           "current_value": 4.28,
@@ -473,42 +473,42 @@
           "has_data": true
         },
         {
-          "id": "mechanical",
+          "id": "vertical_ratio",
           "title": "Vertical Ratio",
           "sport": "Run",
-          "icon": "fa-ruler-combined",
+          "icon": "fa-ruler-vertical",
           "colorVar": "var(--color-run)",
-          "unit": "Ratio",
-          "good_min": 6.0,
+          "unit": "%",
+          "good_min": 0,
           "good_max": 8.0,
           "higher_is_better": false,
-          "description": "Vert Osc / Contact Time.",
-          "improvement": "\u2022 Increase Cadence",
-          "formula": "(Vert / GCT) * 100",
+          "description": "Vertical oscillation divided by stride length. Lower is more efficient.",
+          "improvement": "\u2022 Increase Cadence\n\u2022 Improve Form",
           "filters": {
+            "min_duration_minutes": 10,
             "ignore_zero": true
           },
-          "current_value": 3.45,
-          "status": "On Target",
+          "current_value": null,
+          "status": "No Data",
           "trends": {
             "30d": {
-              "direction": "Rising",
-              "slope": 0.0015637242011212749
+              "direction": "Flat",
+              "slope": 0
             },
             "90d": {
-              "direction": "Falling",
-              "slope": -0.0015769943055509597
+              "direction": "Flat",
+              "slope": 0
             },
             "6m": {
-              "direction": "Rising",
-              "slope": 3.137997364696535e-05
+              "direction": "Flat",
+              "slope": 0
             },
             "1y": {
-              "direction": "Rising",
-              "slope": 3.137997364696535e-05
+              "direction": "Flat",
+              "slope": 0
             }
           },
-          "has_data": true
+          "has_data": false
         },
         {
           "id": "gct",
@@ -600,7 +600,7 @@
           "improvement": "\u2022 Improve Durability",
           "formula": "Pa:Hr (First vs Second Half)",
           "filters": {
-            "min_duration_minutes": 30,
+            "min_duration_minutes": 40,
             "ignore_zero": false
           },
           "current_value": 3.78,

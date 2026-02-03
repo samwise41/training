@@ -321,23 +321,31 @@ export const extractMetricData = (data, key) => {
 
         case 'drift_bike':
         return data.map(d => {
-            // Strict Sport Check: BIKE only
-            if (!checkSport(d, 'BIKE') || d._drift == null) return null;
+            // Check specifically for the Bike Drift property
+            if (d._drift_bike == null) return null;
+            
             return { 
-                date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', 
-                val: d._drift, breakdown: `${d._drift.toFixed(2)}%` 
+                date: d.dateObj, 
+                dateStr: d.date, 
+                name: d.title || 'Bike Ride', 
+                val: d._drift_bike, 
+                breakdown: `${d._drift_bike.toFixed(2)}%` 
             };
         }).filter(Boolean);
 
-        case 'drift_run':
-            return data.map(d => {
-                // Strict Sport Check: RUN only
-                if (!checkSport(d, 'RUN') || d._drift == null) return null;
-                return { 
-                    date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', 
-                    val: d._drift, breakdown: `${d._drift.toFixed(2)}%` 
-                };
-            }).filter(Boolean);
+    case 'drift_run':
+        return data.map(d => {
+            // Check specifically for the Run Drift property
+            if (d._drift_run == null) return null;
+            
+            return { 
+                date: d.dateObj, 
+                dateStr: d.date, 
+                name: d.title || 'Run', 
+                val: d._drift_run, 
+                breakdown: `${d._drift_run.toFixed(2)}%` 
+            };
+        }).filter(Boolean);
             
         default: return [];
     }

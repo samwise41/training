@@ -1,16 +1,13 @@
-name: Process Cycling Data
+name: Manual Backfill Drift
 
 on:
-  schedule:
-    # Run every 6 hours (adjust as needed)
-    - cron: '0 */6 * * *'
-  workflow_dispatch: # Allows manual triggering from the "Actions" tab
+  workflow_dispatch: # This allows you to click a "Run" button manually
 
 permissions:
-  contents: write # Needed to commit the new data back to the repo
+  contents: write # Needed to commit the updated JSON files
 
 jobs:
-  update-cycling-stats:
+  backfill-data:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,28 +21,22 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # Install requirements if the file exists
-          if [ -f strava_data/requirements.txt ]; then pip install -r strava_data/requirements.txt; fi
-          # Explicitly install packages known to be needed
           pip install pandas requests python-dotenv
 
-      - name: Run Processing Script
+      - name: Run Backfill Script
         env:
-          # Map GitHub Secrets to Environment Variables
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
           STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-        run: python strava_data/cycling/process_cycling.py
+        run: python strava_data/cycling/backfill_drift.py
 
-      - name: Commit and Push changes
+      - name: Commit and Push Changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
-          # Add the generated files
+          # Stage the updated JSON files
           git add strava_data/power_cache/*.json
-          git add strava_data/cycling/my_power_profile.md
-          git add strava_data/cycling/power_curve_graph.json
           
-          # Commit only if there are changes
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update cycling stats & drift" && git push)
+          # Commit if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Backfill Aerobic Decoupling" && git push)

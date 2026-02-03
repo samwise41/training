@@ -162,5 +162,20 @@
       "formula": "Pa:Hr (First vs Second Half)",
       "filters": { "min_duration_minutes": 40, "ignore_zero": false }
     }
+    "swims_weekly": {
+      "id": "swims_weekly",
+      "title": "Swims / Week",
+      "sport": "Swim",
+      "icon": "fa-person-swimming",
+      "colorVar": "var(--color-swim)",
+      "unit": "x",
+      "good_min": 2,
+      "good_max": 4,
+      "higher_is_better": true,
+      "description": "Frequency of swim sessions.",
+      "improvement": "• Consistency is Key",
+      "formula": "Count per Week",
+      "filters": { "ignore_zero": false }
+    },
   }
 }

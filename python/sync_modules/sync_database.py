@@ -115,16 +115,20 @@ def bundle_activities(activities):
 def trigger_drift_compilation():
     """
     Triggers the script to compile aerobic decoupling (drift) history.
-    Located at: python/strava/compile_drift.py
+    Located at: strava_data/compile_drift.py
     """
     print("\n" + "="*50)
     print("🔄 COMPILING HEART RATE DRIFT HISTORY...")
     print("="*50)
 
-    # Navigate paths
-    current_dir = os.path.dirname(os.path.abspath(__file__)) 
-    python_root = os.path.dirname(current_dir)               
-    script_path = os.path.join(python_root, "strava_data", "compile_drift.py")
+    # 1. Get the directory of this script (.../python)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Go up one level to the Project Root
+    project_root = os.path.dirname(current_dir)
+    
+    # 3. Build path to strava_data/compile_drift.py
+    script_path = os.path.join(project_root, "strava_data", "compile_drift.py")
 
     if not os.path.exists(script_path):
         print(f"❌ ERROR: Could not find drift script at: {script_path}")

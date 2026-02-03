@@ -23,11 +23,11 @@ export function renderPlannedWorkouts() {
             }, 500);
         } catch (error) {
             console.error("Failed to load schedule:", error);
-            container.innerHTML = `<p class="text-slate-500 italic p-4">Unable to load schedule.</p>`;
+            container.innerHTML = `<p class="text-slate-400 italic p-4">Unable to load schedule.</p>`;
         }
     }, 50);
 
-    const loadingHtml = `<div id="planned-workouts-content" class="min-h-[100px] flex items-center justify-center text-slate-500">
+    const loadingHtml = `<div id="planned-workouts-content" class="min-h-[100px] flex items-center justify-center text-slate-400">
         <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Loading Schedule...
     </div>`;
 
@@ -68,10 +68,10 @@ function groupWorkoutsByDate(workouts) {
 }
 
 /**
- * Generates the HTML with the Split Layout (Time Left / Content Right)
+ * Generates the HTML with High Contrast
  */
 function generateGroupedCardsHTML(groupedData) {
-    if (!groupedData || groupedData.length === 0) return '<p class="text-slate-500 italic p-4">No workouts found.</p>';
+    if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
     
     let html = '';
     const d = new Date();
@@ -82,13 +82,20 @@ function generateGroupedCardsHTML(groupedData) {
         const isToday = day.dateStr === todayStr;
         const dayNameFull = day.dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         
+        // Format Total Duration
+        const hours = Math.floor(day.totalDuration / 60);
+        const mins = Math.round(day.totalDuration % 60);
+        const totalTimeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+
         // Completion Logic
         const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
         // --- Card Border Logic ---
-        let cardBorderClass = "border border-slate-700 hover:border-slate-600 bg-slate-800/60"; // Default
+        // Changed bg-slate-800/60 to bg-slate-800 (SOLID) for better visibility
+        let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
+        
         if (isDayComplete) {
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
@@ -101,9 +108,9 @@ function generateGroupedCardsHTML(groupedData) {
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // 1. Status Colors (for the status text under time)
+            // 1. Status Colors
             let statusText = w.status;
-            let statusColorClass = "text-slate-500"; 
+            let statusColorClass = "text-slate-400"; // Brighter than 500
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
                 statusText = "Done";
@@ -114,18 +121,18 @@ function generateGroupedCardsHTML(groupedData) {
                 statusText = "Rest";
             }
 
-            // 2. Sport Color Class (Matches style.css: icon-bike, icon-run, etc.)
+            // 2. Sport Color Class
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
             return `
-                <div class="flex items-start gap-4 p-4 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/30 transition-colors">
+                <div class="flex items-start gap-4 p-4 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/50 transition-colors">
                     
-                    <div class="flex flex-col items-start min-w-[70px] border-r border-slate-700/30 pr-3">
+                    <div class="flex flex-col items-start min-w-[70px] border-r border-slate-700/50 pr-3">
                         <div class="flex items-baseline">
                             <span class="text-2xl font-bold text-white leading-none tracking-tight">
                                 ${w.plannedDuration > 0 ? Math.round(w.plannedDuration) : '--'}
                             </span>
-                            <span class="text-[10px] font-medium text-slate-500 ml-0.5">m</span>
+                            <span class="text-[10px] font-medium text-slate-400 ml-0.5">m</span>
                         </div>
                         
                         <div class="text-[10px] font-bold uppercase tracking-wider mt-1 ${statusColorClass}">
@@ -133,7 +140,7 @@ function generateGroupedCardsHTML(groupedData) {
                         </div>
 
                         ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
-                            `<div class="text-[10px] font-mono text-slate-400 mt-1">Act: ${Math.round(w.actualDuration)}m</div>` : ''}
+                            `<div class="text-[10px] font-mono text-slate-300 mt-1">Act: ${Math.round(w.actualDuration)}m</div>` : ''}
                     </div>
 
                     <div class="flex-1 min-w-0 pt-0.5">
@@ -141,10 +148,10 @@ function generateGroupedCardsHTML(groupedData) {
                             <div class="text-sm w-4 text-center">
                                 ${Formatters.getIconForSport(sportType)}
                             </div>
-                            <h4 class="text-sm font-bold truncate leading-none uppercase tracking-wide">${planName}</h4>
+                            <h4 class="text-sm font-bold truncate leading-none uppercase tracking-wide text-slate-100">${planName}</h4>
                         </div>
 
-                        <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-2" title="${notes}">
+                        <div class="text-xs text-slate-300 leading-relaxed font-sans line-clamp-2" title="${notes}">
                             ${notes}
                         </div>
                     </div>
@@ -155,8 +162,8 @@ function generateGroupedCardsHTML(groupedData) {
         // --- Assemble Card ---
         html += `
             <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full">
-                <div class="px-4 py-1.5 bg-black/30 border-b border-slate-700/50 flex justify-between items-center backdrop-blur-sm">
-                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">${dayNameFull}</span>
+                <div class="px-4 py-1.5 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
                 </div>
                 
                 <div class="flex flex-col flex-1">

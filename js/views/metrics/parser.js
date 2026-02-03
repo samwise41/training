@@ -15,7 +15,7 @@ const KEYS = {
     tss: 'trainingStressScore',
     cals: 'calories',
     effect: 'trainingEffectLabel',
-    avr: 'avgVerticalRatio', // Short key for Vertical Ratio
+    avr: 'avgVerticalRatio', 
     feeling: 'Feeling'
 };
 
@@ -202,9 +202,7 @@ const aggregateFeelingVsLoad = (data) => {
 const aggregateWeeklyCount = (data, sportType) => {
     const weeks = {};
     data.forEach(d => {
-        // Filter by sport
         if (!checkSport(d, sportType) || !d.dateObj) return;
-
         const date = d.dateObj;
         const day = date.getDay();
         const diff = 6 - day; 
@@ -213,7 +211,7 @@ const aggregateWeeklyCount = (data, sportType) => {
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
-        weeks[k] += 1; // Increment count
+        weeks[k] += 1; 
     });
     
     return Object.keys(weeks).map(k => ({ 
@@ -257,27 +255,13 @@ export const extractMetricData = (data, key) => {
                 const val = (d._spd * 60) / d._hr;
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);
-            
-        case 'swims_weekly': 
-            return aggregateWeeklyCount(data, 'SWIM');
-            
-        // --- NEW: VERTICAL RATIO PARSER ---
+
         case 'vertical_ratio':
             return data.map(d => {
-                // We use _avr because we mapped 'avr' in the KEYS object above
                 const val = d._avr; 
-                
                 if (val == null || val === 0) return null;
-
-                return { 
-                    date: d.dateObj, 
-                    dateStr: d.date, 
-                    name: d.title || 'Run', 
-                    val: val, 
-                    breakdown: `${val.toFixed(1)}%` 
-                };
+                return { date: d.dateObj, dateStr: d.date, name: d.title || 'Run', val: val, breakdown: `${val.toFixed(1)}%` };
             }).filter(Boolean);
-        // ----------------------------------
 
         case 'gct': return data.filter(d => checkSport(d, 'RUN') && d._gct).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._gct }));
         case 'vert': return data.filter(d => checkSport(d, 'RUN') && d._vert).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._vert }));
@@ -293,6 +277,9 @@ export const extractMetricData = (data, key) => {
                 if (!checkSport(d, 'SWIM') || !d._spd || !d._hr) return null;
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: (d._spd * 60) / d._hr, breakdown: '' };
             }).filter(Boolean);
+        
+        case 'swims_weekly': 
+            return aggregateWeeklyCount(data, 'SWIM');
 
         case 'vo2max': return data.filter(d => d._vo2).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._vo2 }));
         case 'anaerobic': return data.filter(d => d._ana).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._ana }));

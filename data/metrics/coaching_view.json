@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-03 15:15:44",
+  "generated_at": "2026-02-03 16:23:57",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -348,6 +348,45 @@
             }
           },
           "has_data": true
+        },
+        {
+          "id": "drift_bike",
+          "title": "Bike HR Drift",
+          "sport": "Bike",
+          "icon": "fa-arrow-trend-up",
+          "colorVar": "var(--color-bad)",
+          "unit": "%",
+          "good_min": -2,
+          "good_max": 5,
+          "higher_is_better": false,
+          "description": "Aerobic decoupling on the bike. <5% is good.",
+          "improvement": "\u2022 Extend Zone 2 Duration",
+          "formula": "Pw:Hr (First vs Second Half)",
+          "filters": {
+            "min_duration_minutes": 45,
+            "ignore_zero": false
+          },
+          "current_value": null,
+          "status": "No Data",
+          "trends": {
+            "30d": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "90d": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "6m": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "1y": {
+              "direction": "Flat",
+              "slope": 0
+            }
+          },
+          "has_data": false
         }
       ]
     },
@@ -546,6 +585,45 @@
             }
           },
           "has_data": true
+        },
+        {
+          "id": "drift_run",
+          "title": "Run HR Drift",
+          "sport": "Run",
+          "icon": "fa-heart-crack",
+          "colorVar": "var(--color-bad)",
+          "unit": "%",
+          "good_min": -2,
+          "good_max": 5,
+          "higher_is_better": false,
+          "description": "Aerobic decoupling (Pa:Hr).",
+          "improvement": "\u2022 Improve Durability",
+          "formula": "Pa:Hr (First vs Second Half)",
+          "filters": {
+            "min_duration_minutes": 30,
+            "ignore_zero": false
+          },
+          "current_value": null,
+          "status": "No Data",
+          "trends": {
+            "30d": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "90d": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "6m": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "1y": {
+              "direction": "Flat",
+              "slope": 0
+            }
+          },
+          "has_data": false
         }
       ]
     },

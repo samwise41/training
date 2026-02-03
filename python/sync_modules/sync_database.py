@@ -298,6 +298,7 @@ def main():
             "averageRunningCadenceInStepsPerMinute": composite.get('averageRunningCadenceInStepsPerMinute'),
             "avgStrideLength": composite.get('avgStrideLength'),
             "avgVerticalOscillation": composite.get('avgVerticalOscillation'),
+            "avgVerticalRatio": composite.get('avgVerticalRatio'),
             "avgGroundContactTime": composite.get('avgGroundContactTime'),
             "vO2MaxValue": composite.get('vO2MaxValue'),
             "calories": composite.get('calories'),

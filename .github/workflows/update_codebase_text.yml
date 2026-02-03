@@ -1,39 +1,40 @@
-name: Update Codebase for NotebookLM
+name: Update NotebookLM Data
 
 on:
   schedule:
     # Runs at 00:00 UTC every day
     - cron: '0 0 * * *'
-  # Allows you to run this manually from the Actions tab
-  workflow_dispatch:
-
-permissions:
-  contents: write
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
-  build:
+  update-notebook-files:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Crucial: allows the action to push changes
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Install Dependencies & Run Script
-        # We need to install fpdf2 before running the script
-        run: |
-          pip install fpdf2
-          python notebook_lm/generate_notebook_files.py
+      - name: Run Generation Script
+        # This runs the script we just created
+        run: python python/utils/generate_notebook_files.py
 
-- name: Commit and Push Changes
+      - name: Commit and Push Changes
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
+          
+          # Stage the specific folder
           git add notebook_lm/*.md
-          # The '|| exit 0' prevents the workflow from failing if there are no changes to commit
-          git commit -m "🤖 Update NotebookLM context files" || exit 0
+          
+          # Commit if there are changes, otherwise exit gracefully
+          git commit -m "🤖 Update NotebookLM context files" || echo "No changes to commit"
+          
+          # Push changes back to the repo
           git push

@@ -1,0 +1,80 @@
+# Daily Readiness Scores
+**Generated:** 2026-02-03 19:48:38
+**Source:** https://raw.githubusercontent.com/samwise41/training/main/data/readiness/readiness.json
+
+---
+
+## Data Content
+```json
+{
+  "generatedAt": "2026-02-03T18:37:37.406361",
+  "trainingStats": {
+    "maxSwim": 46.6,
+    "maxBike": 132.7,
+    "maxRun": 51.8,
+    "maxBikeElev": 3392
+  },
+  "upcomingEvents": [
+    {
+      "dateStr": "May 5, 2026",
+      "name": "East Canyon and Back",
+      "goal": "Finish ~ 2:30:00",
+      "priority": "C-Race",
+      "courseProfile": "5000+ ft of climb",
+      "trainingImplication": "Needs low-cadence/high-torque bike intervals (Strength Endurance).",
+      "swimDist": "",
+      "swimGoal": "",
+      "bikeDist": "41 Miles",
+      "bikeGoal": "2:30:00",
+      "bikeElevGoal": "4905 ft",
+      "runDist": "",
+      "runGoal": ""
+    },
+    {
+      "dateStr": "June 20, 2026",
+      "name": "Jordanelle Olympic Triathlon",
+      "goal": "Finish ~ 2:30:00",
+      "priority": "A-Race",
+      "courseProfile": "Hilly Bike / Flat Run",
+      "trainingImplication": "Needs low-cadence/high-torque bike intervals (Strength Endurance).",
+      "swimDist": "1.5 k",
+      "swimGoal": "00:30:00",
+      "bikeDist": "25 Miles",
+      "bikeGoal": "1:14:00",
+      "bikeElevGoal": "1202 ft",
+      "runDist": "10 k",
+      "runGoal": "00:50:33"
+    },
+    {
+      "dateStr": "Aug 15, 2026",
+      "name": "CF Ride for Life Century Ride",
+      "goal": "Finish ~ 5:30:00",
+      "priority": "A-Race",
+      "courseProfile": "4000+ ft of climb over two mountains",
+      "trainingImplication": "Needs sustained Z2 endurance (4-5h saddle time).",
+      "swimDist": "",
+      "swimGoal": "",
+      "bikeDist": "100 Miles",
+      "bikeGoal": "5:30:00",
+      "bikeElevGoal": "4938 ft",
+      "runDist": "",
+      "runGoal": ""
+    },
+    {
+      "dateStr": "Sept 11, 2026",
+      "name": "Brineman 70.3 Triathlon",
+      "goal": "sub 6:00:00",
+      "priority": "B-Race",
+      "courseProfile": "1000 ft of climb total with no single climb over 200 ft.",
+      "trainingImplication": "Need to pace effort.",
+      "swimDist": "1.2 Miles",
+      "swimGoal": "01:00:00",
+      "bikeDist": "52 Miles",
+      "bikeGoal": "02:45:00",
+      "bikeElevGoal": "1332 ft",
+      "runDist": "13.1 Miles",
+      "runGoal": "02:15:00"
+    }
+  ]
+}
+```

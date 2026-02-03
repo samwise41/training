@@ -1,0 +1,377 @@
+# Long Term Trends
+**Generated:** 2026-02-03 19:48:37
+**Source:** https://raw.githubusercontent.com/samwise41/training/main/data/trends/trends.json
+
+---
+
+## Data Content
+```json
+{
+  "config": {
+    "trailing_weeks": 12,
+    "last_updated": "2026-02-03T18:37:37.411443"
+  },
+  "data": [
+    {
+      "week_label": "11/08",
+      "week_end": "2025-11-08",
+      "categories": {
+        "total": {
+          "planned": 265,
+          "actual": 315.3,
+          "planned_growth": -0.0721,
+          "actual_growth": 0.104
+        },
+        "cycling": {
+          "planned": 210,
+          "actual": 222.1,
+          "planned_growth": 0.3011,
+          "actual_growth": 0.3761
+        },
+        "running": {
+          "planned": 25,
+          "actual": 46.2,
+          "planned_growth": 0.0246,
+          "actual_growth": 0.8934
+        },
+        "swimming": {
+          "planned": 30,
+          "actual": 47,
+          "planned_growth": -0.6994,
+          "actual_growth": -0.5291
+        }
+      }
+    },
+    {
+      "week_label": "11/15",
+      "week_end": "2025-11-15",
+      "categories": {
+        "total": {
+          "planned": 370,
+          "actual": 173.2,
+          "planned_growth": 0.1735,
+          "actual_growth": -0.4507
+        },
+        "cycling": {
+          "planned": 180,
+          "actual": 60.1,
+          "planned_growth": -0.1896,
+          "actual_growth": -0.7294
+        },
+        "running": {
+          "planned": 55,
+          "actual": 44.3,
+          "planned_growth": 0.1905,
+          "actual_growth": -0.0411
+        },
+        "swimming": {
+          "planned": 135,
+          "actual": 68.8,
+          "planned_growth": 1.8723,
+          "actual_growth": 0.4638
+        }
+      }
+    },
+    {
+      "week_label": "11/22",
+      "week_end": "2025-11-22",
+      "categories": {
+        "total": {
+          "planned": 294.2,
+          "actual": 285.5,
+          "planned_growth": 0.6985,
+          "actual_growth": 0.6484
+        },
+        "cycling": {
+          "planned": 111.4,
+          "actual": 110.4,
+          "planned_growth": 0.8541,
+          "actual_growth": 0.8369
+        },
+        "running": {
+          "planned": 108.0,
+          "actual": 108.0,
+          "planned_growth": 1.4383,
+          "actual_growth": 1.4379
+        },
+        "swimming": {
+          "planned": 74.7,
+          "actual": 67.1,
+          "planned_growth": 0.0862,
+          "actual_growth": -0.0247
+        }
+      }
+    },
+    {
+      "week_label": "11/29",
+      "week_end": "2025-11-29",
+      "categories": {
+        "total": {
+          "planned": 264.6,
+          "actual": 263.9,
+          "planned_growth": -0.0733,
+          "actual_growth": -0.0757
+        },
+        "cycling": {
+          "planned": 91.0,
+          "actual": 90.7,
+          "planned_growth": -0.176,
+          "actual_growth": -0.1784
+        },
+        "running": {
+          "planned": 107.9,
+          "actual": 107.9,
+          "planned_growth": -0.0006,
+          "actual_growth": -0.0009
+        },
+        "swimming": {
+          "planned": 65.7,
+          "actual": 65.3,
+          "planned_growth": -0.0211,
+          "actual_growth": -0.0268
+        }
+      }
+    },
+    {
+      "week_label": "12/06",
+      "week_end": "2025-12-06",
+      "categories": {
+        "total": {
+          "planned": 449.8,
+          "actual": 363.6,
+          "planned_growth": 0.7042,
+          "actual_growth": 0.3778
+        },
+        "cycling": {
+          "planned": 160,
+          "actual": 140.7,
+          "planned_growth": 0.7641,
+          "actual_growth": 0.5513
+        },
+        "running": {
+          "planned": 109.8,
+          "actual": 105.7,
+          "planned_growth": 0.0171,
+          "actual_growth": -0.0204
+        },
+        "swimming": {
+          "planned": 180,
+          "actual": 117.2,
+          "planned_growth": 1.7565,
+          "actual_growth": 0.7948
+        }
+      }
+    },
+    {
+      "week_label": "12/13",
+      "week_end": "2025-12-13",
+      "categories": {
+        "total": {
+          "planned": 424.8,
+          "actual": 349.7,
+          "planned_growth": 0.1682,
+          "actual_growth": -0.0382
+        },
+        "cycling": {
+          "planned": 285,
+          "actual": 203.4,
+          "planned_growth": 1.0256,
+          "actual_growth": 0.4456
+        },
+        "running": {
+          "planned": 94.8,
+          "actual": 111.4,
+          "planned_growth": -0.1036,
+          "actual_growth": 0.0539
+        },
+        "swimming": {
+          "planned": 45,
+          "actual": 34.9,
+          "planned_growth": -0.616,
+          "actual_growth": -0.7022
+        }
+      }
+    },
+    {
+      "week_label": "12/20",
+      "week_end": "2025-12-20",
+      "categories": {
+        "total": {
+          "planned": 431,
+          "actual": 369.6,
+          "planned_growth": 0.2325,
+          "actual_growth": 0.0569
+        },
+        "cycling": {
+          "planned": 280,
+          "actual": 250.4,
+          "planned_growth": 0.3766,
+          "actual_growth": 0.2311
+        },
+        "running": {
+          "planned": 76,
+          "actual": 88,
+          "planned_growth": -0.3178,
+          "actual_growth": -0.2101
+        },
+        "swimming": {
+          "planned": 75,
+          "actual": 31.2,
+          "planned_growth": 1.149,
+          "actual_growth": -0.106
+        }
+      }
+    },
+    {
+      "week_label": "12/27",
+      "week_end": "2025-12-27",
+      "categories": {
+        "total": {
+          "planned": 310,
+          "actual": 265.3,
+          "planned_growth": -0.1613,
+          "actual_growth": -0.2822
+        },
+        "cycling": {
+          "planned": 280,
+          "actual": 174.7,
+          "planned_growth": 0.1182,
+          "actual_growth": -0.3023
+        },
+        "running": {
+          "planned": 30,
+          "actual": 60.3,
+          "planned_growth": -0.6591,
+          "actual_growth": -0.3148
+        },
+        "swimming": {
+          "planned": 0,
+          "actual": 30.3,
+          "planned_growth": -1.0,
+          "actual_growth": -0.0288
+        }
+      }
+    },
+    {
+      "week_label": "01/03",
+      "week_end": "2026-01-03",
+      "categories": {
+        "total": {
+          "planned": 295,
+          "actual": 285.2,
+          "planned_growth": 0.1119,
+          "actual_growth": 0.075
+        },
+        "cycling": {
+          "planned": 180,
+          "actual": 184.0,
+          "planned_growth": 0.0303,
+          "actual_growth": 0.0532
+        },
+        "running": {
+          "planned": 85,
+          "actual": 101.2,
+          "planned_growth": 0.4096,
+          "actual_growth": 0.6783
+        },
+        "swimming": {
+          "planned": 30,
+          "actual": 0,
+          "planned_growth": -0.0099,
+          "actual_growth": -1.0
+        }
+      }
+    },
+    {
+      "week_label": "01/10",
+      "week_end": "2026-01-10",
+      "categories": {
+        "total": {
+          "planned": 390,
+          "actual": 424.5,
+          "planned_growth": 0.3675,
+          "actual_growth": 0.4884
+        },
+        "cycling": {
+          "planned": 270,
+          "actual": 266.6,
+          "planned_growth": 0.4674,
+          "actual_growth": 0.4489
+        },
+        "running": {
+          "planned": 90,
+          "actual": 98.4,
+          "planned_growth": -0.1107,
+          "actual_growth": -0.0277
+        },
+        "swimming": {
+          "planned": 30,
+          "actual": 59.5,
+          "planned_growth": 0,
+          "actual_growth": 0
+        }
+      }
+    },
+    {
+      "week_label": "01/17",
+      "week_end": "2026-01-17",
+      "categories": {
+        "total": {
+          "planned": 260,
+          "actual": 335.7,
+          "planned_growth": -0.3875,
+          "actual_growth": -0.2092
+        },
+        "cycling": {
+          "planned": 205,
+          "actual": 220.6,
+          "planned_growth": -0.2311,
+          "actual_growth": -0.1725
+        },
+        "running": {
+          "planned": 25,
+          "actual": 27.3,
+          "planned_growth": -0.7459,
+          "actual_growth": -0.7226
+        },
+        "swimming": {
+          "planned": 30,
+          "actual": 87.8,
+          "planned_growth": -0.4958,
+          "actual_growth": 0.4756
+        }
+      }
+    },
+    {
+      "week_label": "01/24",
+      "week_end": "2026-01-24",
+      "categories": {
+        "total": {
+          "planned": 425.0,
+          "actual": 455.3,
+          "planned_growth": 0.266,
+          "actual_growth": 0.3563
+        },
+        "cycling": {
+          "planned": 270.0,
+          "actual": 279.9,
+          "planned_growth": 0.2239,
+          "actual_growth": 0.2688
+        },
+        "running": {
+          "planned": 95.0,
+          "actual": 106.9,
+          "planned_growth": 2.4799,
+          "actual_growth": 2.9158
+        },
+        "swimming": {
+          "planned": 60.0,
+          "actual": 68.5,
+          "planned_growth": -0.3166,
+          "actual_growth": -0.2198
+        }
+      }
+    }
+  ]
+}
+```

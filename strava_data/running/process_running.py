@@ -75,6 +75,60 @@ def format_time(seconds):
     if h > 0: return f"{h}:{m:02d}:{s:02d}"
     return f"{m}:{s:02d}"
 
+# --- NEW: Calculate Running Drift (Pa:Hr) ---
+def calculate_decoupling(streams):
+    """
+    Calculates Aerobic Decoupling for Running (Pace vs Heart Rate).
+    Trims first/last 3 minutes (180s) to exclude warmup/cooldown.
+    """
+    # 1. Validation
+    if 'velocity_smooth' not in streams or 'heartrate' not in streams:
+        return None
+    
+    velocity_data = streams['velocity_smooth']['data']
+    hr_data = streams['heartrate']['data']
+    
+    length = min(len(velocity_data), len(hr_data))
+    
+    # Create DataFrame
+    df = pd.DataFrame({
+        'speed': velocity_data[:length],
+        'hr': hr_data[:length]
+    })
+    
+    # 2. Clean Data
+    # Remove stops (speed < 1 m/s ~ 26 min/mile) and bad HR
+    df_active = df[(df['speed'] > 1.0) & (df['hr'] > 50)]
+    
+    # 3. Trim Logic (3 minutes from start AND end)
+    trim_seconds = 180 
+    
+    # Require enough data to trim (at least 20 mins total duration recommended)
+    # 3m + 3m + 10m (core) = 16 mins absolute minimum
+    if len(df_active) > (trim_seconds * 2 + 600):
+        df_steady = df_active.iloc[trim_seconds : -trim_seconds]
+    else:
+        # Fallback for short runs: skip calc
+        return None
+
+    # 4. Split into First and Second Half
+    mid = len(df_steady) // 2
+    first_half = df_steady.iloc[:mid]
+    second_half = df_steady.iloc[mid:]
+
+    # 5. Calculate Efficiency Factors (Avg Speed / Avg HR)
+    # EF = Speed (m/s) / Heart Rate
+    ef1 = first_half['speed'].mean() / first_half['hr'].mean()
+    ef2 = second_half['speed'].mean() / second_half['hr'].mean()
+    
+    if ef1 == 0: return None
+
+    # 6. Calculate Drift %
+    # Positive = Fatigue (HR rose for same speed, or Speed dropped for same HR)
+    drift = (1 - (ef2 / ef1)) * 100
+    
+    return round(drift, 2)
+
 def update_cache(token):
     if not os.path.exists(CACHE_DIR): os.makedirs(CACHE_DIR)
     
@@ -131,9 +185,9 @@ def update_cache(token):
             print(f"   🏃 Processing NEW run: {act['name']} ({act['start_date_local'][:10]})")
 
             try:
-                # 1. Get Streams (for Graph)
+                # 1. Get Streams (Updated to fetch heartrate)
                 url = f"https://www.strava.com/api/v3/activities/{aid}/streams"
-                r_stream = requests.get(url, headers=headers, params={'keys': 'velocity_smooth', 'key_by_type': 'true'})
+                r_stream = requests.get(url, headers=headers, params={'keys': 'velocity_smooth,heartrate', 'key_by_type': 'true'})
                 
                 if r_stream.status_code == 429:
                     print(f"⚠️ Rate Limit Exceeded. Stopping.")
@@ -164,16 +218,24 @@ def update_cache(token):
                             'elapsed_time': e['elapsed_time']
                         })
 
-                # 5. Save EVERYTHING
+                # 5. Calculate Drift (Pa:Hr)
+                drift_score = calculate_decoupling(streams)
+
+                # 6. Save EVERYTHING
                 data = {
                     'id': aid,
                     'name': details['name'],
                     'date': details['start_date_local'][:10],
                     'velocity_curve': curve, # For JSON Graph (Time)
-                    'best_efforts': efforts  # For MD Table (Distance)
+                    'best_efforts': efforts,  # For MD Table (Distance)
+                    'aerobic_decoupling': drift_score # New Metric
                 }
+                
                 with open(os.path.join(CACHE_DIR, f"{aid}.json"), "w") as f:
                     json.dump(data, f)
+                
+                drift_msg = f" (Drift: {drift_score}%)" if drift_score is not None else ""
+                print(f"      ✅ Saved{drift_msg}")
                 
                 processed_count += 1
                 if processed_count >= MAX_NEW_TO_PROCESS:

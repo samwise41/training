@@ -28,7 +28,7 @@ jobs:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
           STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-        run: python strava_data/cycling/backfill_drift.py
+        run: python strava_data/running/backfill_running_drift.py
 
       - name: Commit and Push Changes
         run: |
@@ -36,7 +36,7 @@ jobs:
           git config --global user.email "action@github.com"
           
           # Stage the updated JSON files
-          git add strava_data/power_cache/*.json
+          git add strava_data/running_cache/*.json
           
           # Commit if there are changes
           git diff --quiet && git diff --staged --quiet || (git commit -m "Backfill Aerobic Decoupling" && git push)

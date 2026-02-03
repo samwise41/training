@@ -23,7 +23,7 @@ jobs:
 
       - name: Run Generation Script
         # This runs the script we just created
-        run: python python/utils/generate_notebook_files.py
+        run: python notebook_lm/generate_notebook_files.py
 
       - name: Commit and Push Changes
         run: |

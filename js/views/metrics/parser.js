@@ -319,6 +319,26 @@ export const extractMetricData = (data, key) => {
         case 'training_balance': return aggregateWeeklyBalance(data);
         case 'feeling_load': return aggregateFeelingVsLoad(data);
 
+        case 'drift_bike':
+        return data.map(d => {
+            // Strict Sport Check: BIKE only
+            if (!checkSport(d, 'BIKE') || d._drift == null) return null;
+            return { 
+                date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', 
+                val: d._drift, breakdown: `${d._drift.toFixed(2)}%` 
+            };
+        }).filter(Boolean);
+
+        case 'drift_run':
+            return data.map(d => {
+                // Strict Sport Check: RUN only
+                if (!checkSport(d, 'RUN') || d._drift == null) return null;
+                return { 
+                    date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', 
+                    val: d._drift, breakdown: `${d._drift.toFixed(2)}%` 
+                };
+            }).filter(Boolean);
+            
         default: return [];
     }
 };

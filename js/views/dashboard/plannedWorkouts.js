@@ -10,13 +10,13 @@ export function renderPlannedWorkouts() {
             let data = await DataManager.fetchJSON('schedule');
             if (!data) throw new Error("Schedule file missing");
             
-            // 1. Group data by date
+            // 1. Group data by date (Stacked Card Logic)
             const groupedData = groupWorkoutsByDate(data);
             
-            // 2. Render groups
+            // 2. Render grouped cards
             container.innerHTML = generateGroupedCardsHTML(groupedData);
             
-            // 3. Scroll to today
+            // 3. Scroll to today (Blue or Green ring)
             setTimeout(() => {
                 const todayCard = container.querySelector('.ring-blue-500, .ring-emerald-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -35,13 +35,12 @@ export function renderPlannedWorkouts() {
 }
 
 /**
- * Helper: Groups flat workout list by Date 'YYYY-MM-DD'
+ * Groups flat workout list by Date 'YYYY-MM-DD'
  */
 function groupWorkoutsByDate(workouts) {
     const groups = {};
 
     workouts.forEach(w => {
-        // Ensure we have a valid date string
         const dateKey = w.date; 
         if (!dateKey) return;
 
@@ -51,17 +50,17 @@ function groupWorkoutsByDate(workouts) {
                 dateObj: new Date(dateKey), 
                 workouts: [],
                 totalDuration: 0,
-                isRestDay: true // Assume rest until we find a real workout
+                isRestDay: true 
             };
         }
         
         groups[dateKey].workouts.push(w);
         
-        // Accumulate Stats
+        // Sum planned duration
         const duration = parseFloat(w.plannedDuration) || 0;
         groups[dateKey].totalDuration += duration;
         
-        // If any workout is NOT a rest day, the whole day is active
+        // If any workout is NOT a rest day, the whole day is considered active
         if (w.status !== 'REST' && w.actualSport !== 'Rest') {
             groups[dateKey].isRestDay = false;
         }
@@ -72,7 +71,7 @@ function groupWorkoutsByDate(workouts) {
 }
 
 /**
- * Generates the Stacked Card HTML
+ * Generates the HTML for Stacked Cards
  */
 function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-500 italic p-4">No workouts found.</p>';
@@ -92,22 +91,22 @@ function generateGroupedCardsHTML(groupedData) {
         const totalTimeStr = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
         // Check Completion Status of the DAY
-        // A day is "Complete" if ALL non-rest workouts are COMPLETED/UNPLANNED
+        // Day is complete if ALL active workouts are Completed or Unplanned
         const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        // --- Card Border Logic ---
+        // --- Card Border Logic (Your Specific Requirements) ---
         let cardBorderClass = "";
         
         if (isDayComplete) {
-            // GREEN Border if fully complete
+            // "if the workout is complete the border should be green"
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
-            // BLUE Border if Today (and incomplete)
+            // "border to be blue if it is the current day and the workout is not complete"
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else {
-            // DEFAULT Grey Border
+            // Standard grey border for other days
             cardBorderClass = "border border-slate-700 hover:border-slate-600 bg-slate-800/60";
         }
 
@@ -117,40 +116,43 @@ function generateGroupedCardsHTML(groupedData) {
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "";
             
-            // Row Status Logic
+            // Row Styling Logic
             let statusIcon = ''; 
-            let rowOpacity = 'opacity-100';
             let titleColor = 'text-slate-200'; // Default Title Color
+            let rowOpacity = 'opacity-100';
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
                 statusIcon = `<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>`;
-                titleColor = 'text-emerald-100'; // Light Green text, NO strikethrough
-                rowOpacity = 'opacity-80';
+                // "I don't want the workout name crossed out" -> Removed line-through
+                titleColor = 'text-emerald-400 font-bold'; 
+                rowOpacity = 'opacity-100';
             } else if (w.status === 'MISSED') {
-                statusIcon = `<i class="fa-solid fa-circle-xmark text-red-500/50 text-lg"></i>`;
-                titleColor = 'text-red-200/50';
+                statusIcon = `<i class="fa-solid fa-circle-xmark text-red-500 text-lg"></i>`;
+                titleColor = 'text-red-400';
             } else if (w.status === 'REST') {
                 titleColor = 'text-slate-500 italic';
-                rowOpacity = 'opacity-50';
+                rowOpacity = 'opacity-60';
             }
 
-            // Sport Icon Class (matches styles.css variables)
-            const iconClass = `icon-${sportType.toLowerCase()}`;
+            // Sport Icon Class (uses your styles.css variables via existing classes)
+            // Ensure we use the helper to get the SVG/Icon
+            const iconHtml = Formatters.getIconForSport(sportType);
+            const iconColorClass = `icon-${sportType.toLowerCase()}`;
             
             return `
                 <div class="group flex items-start gap-3 p-3 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/30 transition-colors ${rowOpacity}">
-                    <div class="mt-1 ${iconClass} text-lg w-6 flex justify-center">
-                        ${Formatters.getIconForSport(sportType)}
+                    <div class="mt-1 ${iconColorClass} text-lg w-6 flex justify-center">
+                        ${iconHtml}
                     </div>
 
                     <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-start">
-                            <h4 class="text-sm font-bold ${titleColor} truncate pr-2">${planName}</h4>
+                            <h4 class="text-sm ${titleColor} truncate pr-2">${planName}</h4>
                             ${statusIcon}
                         </div>
                         
                         <div class="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-                            ${w.plannedDuration > 0 ? `<span class="font-mono bg-slate-700/30 px-1 rounded">${Math.round(w.plannedDuration)} min</span>` : ''}
+                            ${w.plannedDuration > 0 ? `<span class="font-mono bg-slate-700/30 px-1.5 rounded">${Math.round(w.plannedDuration)}m</span>` : ''}
                             ${(w.tss > 0) ? `<span class="px-1.5 py-0.5 rounded bg-slate-700/50 text-[10px] text-slate-300">${w.tss} TSS</span>` : ''}
                         </div>
                         

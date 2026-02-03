@@ -9,6 +9,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 
 INPUT_LOG = os.path.join(PROJECT_ROOT, 'data', 'training_log.json')
 INPUT_CONFIG = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'metrics_config.json')
+INPUT_DRIFT = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'drift_history.json') # NEW
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'coaching_view.json')
 
 SPORT_DISPLAY_MAP = { "All": "General Fitness", "Bike": "Cycling Metrics", "Run": "Running Metrics", "Swim": "Swimming Metrics" }
@@ -16,6 +17,7 @@ GROUP_ORDER = ["All", "Bike", "Run", "Swim"]
 
 def load_json(filepath):
     try:
+        if not os.path.exists(filepath): return {} if 'config' in filepath else []
         with open(filepath, 'r', encoding='utf-8') as f: return json.load(f)
     except: return {}
 
@@ -38,7 +40,7 @@ def calculate_slope(values):
     x, y = list(range(n)), values
     mean_x, mean_y = mean(x), mean(y)
     num = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, y))
-    den = sum((xi - mean_x) ** 2 for xi in x)
+    den = sum((xi - mean_x) ** 2 for xi, yi in zip(x, y))
     return num / den if den != 0 else 0
 
 def get_trend_label(slope):
@@ -118,10 +120,37 @@ def extract_metric_series(log, metric_key, rules):
     series.sort(key=lambda x: x['date'])
     return series
 
+# --- NEW: Helper for Drift Data ---
+def extract_drift_series(drift_data, sport_filter):
+    """
+    Extracts series from drift_history.json based on sport ('Bike' or 'Run').
+    """
+    series = []
+    for entry in drift_data:
+        if entry.get('sport') != sport_filter: continue
+        
+        val = safe_float(entry.get('val'))
+        date = entry.get('date')
+        
+        if val is not None and date:
+            series.append({
+                'date': date,
+                'days_ago': get_days_ago(date),
+                'value': val
+            })
+    
+    series.sort(key=lambda x: x['date'])
+    return series
+
 def process_data():
-    print("--- Generating Coach View (Sport-Aware) ---")
-    log, config = load_json(INPUT_LOG), load_json(INPUT_CONFIG)
-    if not log or not config: return
+    print("--- Generating Coach View (Sport-Aware + Drift) ---")
+    log = load_json(INPUT_LOG)
+    config = load_json(INPUT_CONFIG)
+    drift_history = load_json(INPUT_DRIFT) # Load drift data
+
+    if not config: 
+        print("❌ Config not found.")
+        return
 
     grouped_metrics = {k: [] for k in GROUP_ORDER}
     
@@ -130,7 +159,15 @@ def process_data():
         sport_group = rule.get('sport', 'All')
         if sport_group not in grouped_metrics: sport_group = 'All'
             
-        series = extract_metric_series(log, key, rule)
+        # --- SWITCH: Drift vs Standard ---
+        if key == 'drift_bike':
+            series = extract_drift_series(drift_history, 'Bike')
+        elif key == 'drift_run':
+            series = extract_drift_series(drift_history, 'Run')
+        else:
+            series = extract_metric_series(log, key, rule)
+        # ---------------------------------
+
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
         current_avg = mean(recent_30) if recent_30 else 0
         
@@ -141,11 +178,12 @@ def process_data():
         if recent_30:
             status = "Neutral"
             if higher_is_better:
-                if good_min is not None and current_avg >= good_min: status = "On Target"
-                elif good_min is not None: status = "Off Target"
+                if good_min is not None and current_avg >= good_min: status = "On Target" # changed Good to On Target to match your CSS
+                elif good_min is not None: status = "Watch"
             else:
+                # Lower is better (like drift)
                 if good_max is not None and current_avg <= good_max: status = "On Target"
-                elif good_max is not None: status = "Off Target"
+                elif good_max is not None: status = "Watch"
 
         trends = {}
         for period, label in [(30, "30d"), (90, "90d"), (180, "6m"), (365, "1y")]:

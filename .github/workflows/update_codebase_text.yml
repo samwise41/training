@@ -27,7 +27,7 @@ jobs:
         # We need to install fpdf2 before running the script
         run: |
           pip install fpdf2
-          python notebook_lm/combine_codebase.py
+          python notebook_lm/generate_notebook_files.py
 
       - name: Commit and Push changes
         uses: stefanzweifel/git-auto-commit-action@v5

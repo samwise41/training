@@ -15,7 +15,7 @@ const KEYS = {
     tss: 'trainingStressScore',
     cals: 'calories',
     effect: 'trainingEffectLabel',
-    avgVerticalRatio: 'avgVerticalRatio',
+    avr: 'avgVerticalRatio',
     feeling: 'Feeling'
 };
 
@@ -294,7 +294,7 @@ export const extractMetricData = (data, key) => {
         case 'vertical_ratio':
                 return data.map(d => {
                     // 1. Grab the raw field we just added to the DB
-                    const val = d.avgVerticalRatio; 
+                    const val = d._avr,; 
             
                     // 2. Filter out bad data (null or 0)
                     if (val == null || val === 0) return null;

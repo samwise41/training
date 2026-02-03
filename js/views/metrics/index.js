@@ -146,6 +146,7 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-subjective_bike"></div>
                 <div id="metric-chart-endurance"></div>
                 <div id="metric-chart-strength"></div>
+                <div id="metric-chart-drift_bike"></div> <div id="metric-chart-strength"></div>
 
                 ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
                 <div id="metric-chart-subjective_run"></div>
@@ -153,6 +154,7 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-mechanical"></div>
                 <div id="metric-chart-gct"></div>
                 <div id="metric-chart-vert"></div>
+                <div id="metric-chart-drift_run"></div>  <div id="metric-chart-mechanical"></div>
 
                 ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
                 <div id="metric-chart-subjective_swim"></div>

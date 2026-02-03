@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-03 18:22:57",
+  "generated_at": "2026-02-03 18:37:37",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -488,27 +488,27 @@
             "min_duration_minutes": 10,
             "ignore_zero": true
           },
-          "current_value": null,
-          "status": "No Data",
+          "current_value": 7.85,
+          "status": "On Target",
           "trends": {
             "30d": {
-              "direction": "Flat",
-              "slope": 0
+              "direction": "Falling",
+              "slope": -0.15892863273620605
             },
             "90d": {
-              "direction": "Flat",
-              "slope": 0
+              "direction": "Falling",
+              "slope": -0.03025974731940728
             },
             "6m": {
-              "direction": "Flat",
-              "slope": 0
+              "direction": "Falling",
+              "slope": -0.012729844739360193
             },
             "1y": {
-              "direction": "Flat",
-              "slope": 0
+              "direction": "Falling",
+              "slope": -0.012729844739360193
             }
           },
-          "has_data": false
+          "has_data": true
         },
         {
           "id": "gct",

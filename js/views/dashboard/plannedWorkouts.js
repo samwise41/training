@@ -141,7 +141,7 @@ function generateGroupedCardsHTML(groupedData) {
                             <div class="text-sm w-4 text-center">
                                 ${Formatters.getIconForSport(sportType)}
                             </div>
-                            <h4 class="text-sm font-bold truncate leading-none uppercase tracking-wide opacity-90">${planName}</h4>
+                            <h4 class="text-sm font-bold truncate leading-none uppercase tracking-wide">${planName}</h4>
                         </div>
 
                         <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-2" title="${notes}">

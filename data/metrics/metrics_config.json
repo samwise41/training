@@ -125,7 +125,7 @@
       "good_min": 0, "good_max": 0, "higher_is_better": true,
       "description": "Subjective vs Objective.", "improvement": "• Align RPE with TSS",
       "formula": "RPE vs TSS"
-    }
+    },
     "drift_bike": {
       "id": "drift_bike",
       "title": "Bike HR Drift",
@@ -155,6 +155,6 @@
       "improvement": "• Improve Durability",
       "formula": "Pa:Hr (First vs Second Half)",
       "filters": { "min_duration_minutes": 30, "ignore_zero": false }
-    },
+    }
   }
 }

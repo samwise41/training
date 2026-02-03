@@ -9,10 +9,10 @@
 | 1min | **440w** | [2025-09-05](https://www.strava.com/activities/15704986795) | 416w | [2026-01-14](https://www.strava.com/activities/17046568553) |
 | 2min | **356w** | [2025-09-19](https://www.strava.com/activities/15864321973) | 355w | [2026-01-14](https://www.strava.com/activities/17046568553) |
 | 5min | **295w** | [2025-09-19](https://www.strava.com/activities/15864321973) | 292w | [2026-01-14](https://www.strava.com/activities/17046568553) |
-| 10min | **272w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 272w | [2025-12-23](https://www.strava.com/activities/16820057363) |
-| 20min | **261w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 261w | [2025-12-23](https://www.strava.com/activities/16820057363) |
-| 30min | **253w** | [2025-09-19](https://www.strava.com/activities/15864321973) | 252w | [2025-12-23](https://www.strava.com/activities/16820057363) |
-| 1hr | **241w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 241w | [2025-12-23](https://www.strava.com/activities/16820057363) |
+| 10min | **272w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 267w | [2026-01-14](https://www.strava.com/activities/17046568553) |
+| 20min | **261w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 251w | [2026-01-14](https://www.strava.com/activities/17046568553) |
+| 30min | **253w** | [2025-09-19](https://www.strava.com/activities/15864321973) | 243w | [2026-01-14](https://www.strava.com/activities/17046568553) |
+| 1hr | **241w** | [2025-12-23](https://www.strava.com/activities/16820057363) | 182w | [2026-01-24](https://www.strava.com/activities/17161980630) |
 | 2hr | **171w** | [2025-08-16](https://www.strava.com/activities/15482056744) | 168w | [2026-01-24](https://www.strava.com/activities/17161980630) |
 | 3hr | **162w** | [2025-08-05](https://www.strava.com/activities/15353424386) | -- | -- |
 | 4hr | **148w** | [2025-08-16](https://www.strava.com/activities/15482056744) | -- | -- |

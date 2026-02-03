@@ -2589,8 +2589,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2809,8 +2809,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4000,17 +4000,19 @@
     },
     {
         "date": "2026-02-02",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Partial",
         "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 35.5,
+        "sports": [
+            "Run"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[RUN] Tempo / Threshold",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy - Threshold",
+                "sport": "Run",
+                "actual": 35.5
             }
         ]
     },

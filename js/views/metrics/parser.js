@@ -15,6 +15,7 @@ const KEYS = {
     tss: 'trainingStressScore',
     cals: 'calories',
     effect: 'trainingEffectLabel',
+    avgVerticalRatio: 'avgVerticalRatio',
     feeling: 'Feeling'
 };
 

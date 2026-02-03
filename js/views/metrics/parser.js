@@ -199,6 +199,31 @@ const aggregateFeelingVsLoad = (data) => {
     });
 };
 
+const aggregateWeeklyCount = (data, sportType) => {
+    const weeks = {};
+    data.forEach(d => {
+        // Filter by sport
+        if (!checkSport(d, sportType) || !d.dateObj) return;
+
+        const date = d.dateObj;
+        const day = date.getDay();
+        const diff = 6 - day; 
+        const weekEnd = new Date(date.valueOf());
+        weekEnd.setDate(date.getDate() + diff);
+        const k = weekEnd.toISOString().split('T')[0];
+        
+        if (!weeks[k]) weeks[k] = 0;
+        weeks[k] += 1; // Increment count
+    });
+    
+    return Object.keys(weeks).map(k => ({ 
+        date: new Date(k), 
+        dateStr: k, 
+        val: weeks[k], 
+        name: 'Week Ending ' + k 
+    })).sort((a, b) => a.date - b.date);
+};
+
 // --- 4. EXTRACTOR ---
 export const extractMetricData = (data, key) => {
     switch (key) {
@@ -232,7 +257,10 @@ export const extractMetricData = (data, key) => {
                 const val = (d._spd * 60) / d._hr;
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);
-
+            
+        case 'swims_weekly': 
+            return aggregateWeeklyCount(data, 'SWIM');
+            
         // --- NEW: VERTICAL RATIO PARSER ---
         case 'vertical_ratio':
             return data.map(d => {

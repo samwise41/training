@@ -205,6 +205,7 @@ export function renderMetrics(rawData) {
                 <div id="metric-chart-drift_run"></div>  <div id="metric-chart-mechanical"></div>
 
                 ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
+                <div id="metric-chart-swims_weekly"></div>
                 <div id="metric-chart-subjective_swim"></div>
                 <div id="metric-chart-swim"></div> 
             </div>`;

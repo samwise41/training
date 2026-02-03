@@ -15,7 +15,7 @@ const KEYS = {
     tss: 'trainingStressScore',
     cals: 'calories',
     effect: 'trainingEffectLabel',
-    avr: 'avgVerticalRatio',
+    avr: 'avgVerticalRatio', // Short key for Vertical Ratio
     feeling: 'Feeling'
 };
 
@@ -31,7 +31,6 @@ const checkSport = (d, type) => {
 
 // Safe Value Extractor
 const getVal = (item, key) => {
-    // Duration fix: handle string durations
     if ((key === 'duration' || key === 'time' || key === 'moving_time') && typeof item[key] === 'string') {
         return Formatters.parseDuration(item[key]);
     }
@@ -42,13 +41,10 @@ const getVal = (item, key) => {
     return isNaN(num) ? 0 : num;
 };
 
-// --- SYNTHETIC ZONES (Fallback if real zones missing) ---
+// --- SYNTHETIC ZONES ---
 const estimateZonesFromEffect = (effect) => {
     if (!effect) return null;
-    
-    // Ensure we are working with a clean string
     const e = String(effect).toUpperCase();
-    
     switch (e) {
         case 'RECOVERY': return { Recovery: 100, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0 };
         case 'AEROBIC_BASE': return { Recovery: 20, Aerobic: 80, Tempo: 0, Threshold: 0, VO2: 0 };
@@ -58,7 +54,7 @@ const estimateZonesFromEffect = (effect) => {
         case 'VO2MAX': return { Recovery: 20, Aerobic: 30, Tempo: 10, Threshold: 10, VO2: 30 };
         case 'ANAEROBIC_CAPACITY': 
         case 'SPEED': return { Recovery: 40, Aerobic: 20, Tempo: 0, Threshold: 0, VO2: 40 };
-        default: return { Recovery: 50, Aerobic: 50, Tempo: 0, Threshold: 0, VO2: 0 }; // Default Fallback
+        default: return { Recovery: 50, Aerobic: 50, Tempo: 0, Threshold: 0, VO2: 0 }; 
     }
 };
 
@@ -67,22 +63,18 @@ export const normalizeMetricsData = (rawData) => {
     if (!rawData) return [];
     
     return rawData.map(item => {
-        // 1. Duration Standardization
         let durSecs = 0;
         if (item.durationInSeconds != null) durSecs = parseFloat(item.durationInSeconds);
         else if (item.duration != null) durSecs = parseFloat(item.duration);
         else if (item.actualDuration != null) durSecs = parseFloat(item.actualDuration) * 60;
 
-        // 2. Base Object
         const out = { 
             ...item, 
             dateObj: new Date(item.date),
             _dur: durSecs / 60 
         };
         
-        // 3. Map Keys
         Object.entries(KEYS).forEach(([short, raw]) => {
-            // FIX: Special handling for 'effect' to preserve the string value
             if (short === 'effect') {
                 out[`_${short}`] = item[raw] || null;
             } else {
@@ -90,14 +82,12 @@ export const normalizeMetricsData = (rawData) => {
             }
         });
         
-        // 4. Calculate Estimated Load (Fallback for missing TSS)
         if (out._rpe > 0 && out._dur > 0) {
             out._load_est = (out._rpe * out._dur) / 6; 
         } else {
             out._load_est = 0;
         }
 
-        // 5. Handle Zones
         if (item.zones) {
             out._zones = item.zones;
         } else if (out._effect) {
@@ -116,29 +106,19 @@ const aggregateWeeklyTSS = (data) => {
     const weeks = {};
     data.forEach(d => {
         if (!d.dateObj || isNaN(d.dateObj)) return;
-        
         const date = d.dateObj; 
-        const day = date.getDay(); // 0=Sun
+        const day = date.getDay(); 
         const diff = 6 - day; 
-        
         const weekEnd = new Date(date.valueOf());
         weekEnd.setDate(date.getDate() + diff);
         weekEnd.setHours(0,0,0,0);
-        
         const k = weekEnd.toISOString().split('T')[0];
         
         if (!weeks[k]) weeks[k] = 0;
-        
         const val = d._tss > 0 ? d._tss : d._load_est;
         weeks[k] += val; 
     });
-
-    return Object.keys(weeks).map(k => ({ 
-        date: new Date(k), 
-        dateStr: k, 
-        val: weeks[k], 
-        name: 'Week Ending ' + k 
-    })).sort((a, b) => a.date - b.date);
+    return Object.keys(weeks).map(k => ({ date: new Date(k), dateStr: k, val: weeks[k], name: 'Week Ending ' + k })).sort((a, b) => a.date - b.date);
 };
 
 const aggregateWeeklyCalories = (data) => {
@@ -151,7 +131,6 @@ const aggregateWeeklyCalories = (data) => {
         const weekEnd = new Date(date.valueOf());
         weekEnd.setDate(date.getDate() + diff);
         const k = weekEnd.toISOString().split('T')[0];
-        
         if (!weeks[k]) weeks[k] = 0;
         weeks[k] += d._cals;
     });
@@ -161,8 +140,6 @@ const aggregateWeeklyCalories = (data) => {
 const aggregateWeeklyBalance = (data) => {
     const weeks = {};
     const chartKeys = ['Recovery', 'Aerobic', 'Tempo', 'Threshold', 'VO2'];
-
-    // Helper to map keys like "Zone 1" to "Recovery"
     const mapZoneKey = (k) => {
         const s = String(k).toLowerCase();
         if (s.includes('recovery') || s.includes('zone 1') || s === 'z1' || s === '1') return 'Recovery';
@@ -174,86 +151,51 @@ const aggregateWeeklyBalance = (data) => {
     };
 
     data.forEach(d => {
-        // Skip if date or zones are missing
         if (!d.dateObj || !d._zones) return;
-
-        // 1. Calculate Week Ending Saturday
         const date = d.dateObj;
-        const day = date.getDay(); // 0=Sun ... 6=Sat
+        const day = date.getDay();
         const diff = 6 - day; 
-        
         const weekEnd = new Date(date);
         weekEnd.setDate(date.getDate() + diff);
         weekEnd.setHours(0, 0, 0, 0);
-
-        // Safe Key YYYY-MM-DD
         const y = weekEnd.getFullYear();
         const m = String(weekEnd.getMonth() + 1).padStart(2, '0');
         const dayStr = String(weekEnd.getDate()).padStart(2, '0');
         const k = `${y}-${m}-${dayStr}`;
 
-        if (!weeks[k]) {
-            weeks[k] = { Recovery: 0, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0, Total: 0 };
-        }
+        if (!weeks[k]) weeks[k] = { Recovery: 0, Aerobic: 0, Tempo: 0, Threshold: 0, VO2: 0, Total: 0 };
 
-        // 2. Normalize and Weighted Sum
         const zData = d._zones;
         let sumVals = 0;
-        
-        // Detect if values are % or minutes
         Object.keys(zData).forEach(k => sumVals += (parseFloat(zData[k]) || 0));
         const isPercent = sumVals > 90 && sumVals < 110;
         const duration = d._dur || 0;
-        // If it's a percentage, use duration to weight it. If missing duration, assume 1 unit.
         const weight = (isPercent && duration > 0) ? duration : (isPercent ? 1 : 1); 
 
         Object.keys(zData).forEach(rawKey => {
             const strictKey = mapZoneKey(rawKey);
             if (strictKey) {
                 let val = parseFloat(zData[rawKey]) || 0;
-                
-                // Convert % to "minutes/units"
-                if (isPercent && val > 0) {
-                    val = (val / 100) * weight;
-                }
-                
+                if (isPercent && val > 0) val = (val / 100) * weight;
                 weeks[k][strictKey] += val;
                 weeks[k].Total += val;
             }
         });
     });
 
-    // 3. Convert back to Percentages for Chart
     return Object.keys(weeks).sort().map(k => {
         const w = weeks[k];
         const dist = {};
-        const total = w.Total || 1; // Avoid div/0
-
-        chartKeys.forEach(key => {
-            dist[key] = (w[key] / total) * 100;
-        });
-
-        return {
-            date: new Date(k),
-            dateStr: k,
-            name: 'Week Ending ' + k,
-            distribution: dist,
-            val: 100 // Dummy value for chart "has data" check
-        };
+        const total = w.Total || 1; 
+        chartKeys.forEach(key => { dist[key] = (w[key] / total) * 100; });
+        return { date: new Date(k), dateStr: k, name: 'Week Ending ' + k, distribution: dist, val: 100 };
     });
 };
 
 const aggregateFeelingVsLoad = (data) => {
     return data.filter(d => (d._tss > 0 || d._load_est > 0) || d._feeling).map(d => {
         const loadVal = d._tss > 0 ? d._tss : d._load_est;
-        return {
-            date: d.dateObj, 
-            dateStr: d.date, 
-            name: d.title || 'Workout', 
-            load: loadVal, 
-            feeling: d._feeling, 
-            val: loadVal 
-        };
+        return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', load: loadVal, feeling: d._feeling, val: loadVal };
     });
 };
 
@@ -291,23 +233,23 @@ export const extractMetricData = (data, key) => {
                 return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: val, breakdown: `${d._spd.toFixed(1)} m/s / ${d._hr}bpm` };
             }).filter(Boolean);
 
+        // --- NEW: VERTICAL RATIO PARSER ---
         case 'vertical_ratio':
-                return data.map(d => {
-                    // 1. Grab the raw field we just added to the DB
-                    const val = d._avr,; 
-            
-                    // 2. Filter out bad data (null or 0)
-                    if (val == null || val === 0) return null;
+            return data.map(d => {
+                // We use _avr because we mapped 'avr' in the KEYS object above
+                const val = d._avr; 
+                
+                if (val == null || val === 0) return null;
 
-                    // 3. Return the standard format for the chart
-                    return { 
-                        date: d.dateObj, 
-                        dateStr: d.date, 
-                        name: d.title || 'Run', 
-                        val: val, 
-                        breakdown: `${val.toFixed(1)}%` 
-                    };
-                }).filter(Boolean);
+                return { 
+                    date: d.dateObj, 
+                    dateStr: d.date, 
+                    name: d.title || 'Run', 
+                    val: val, 
+                    breakdown: `${val.toFixed(1)}%` 
+                };
+            }).filter(Boolean);
+        // ----------------------------------
 
         case 'gct': return data.filter(d => checkSport(d, 'RUN') && d._gct).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._gct }));
         case 'vert': return data.filter(d => checkSport(d, 'RUN') && d._vert).map(d => ({ date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._vert }));
@@ -333,32 +275,16 @@ export const extractMetricData = (data, key) => {
         case 'feeling_load': return aggregateFeelingVsLoad(data);
 
         case 'drift_bike':
-        return data.map(d => {
-            // Check specifically for the Bike Drift property
-            if (d._drift_bike == null) return null;
-            
-            return { 
-                date: d.dateObj, 
-                dateStr: d.date, 
-                name: d.title || 'Bike Ride', 
-                val: d._drift_bike, 
-                breakdown: `${d._drift_bike.toFixed(2)}%` 
-            };
-        }).filter(Boolean);
+            return data.map(d => {
+                if (d._drift_bike == null) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title || 'Bike Ride', val: d._drift_bike, breakdown: `${d._drift_bike.toFixed(2)}%` };
+            }).filter(Boolean);
 
-    case 'drift_run':
-        return data.map(d => {
-            // Check specifically for the Run Drift property
-            if (d._drift_run == null) return null;
-            
-            return { 
-                date: d.dateObj, 
-                dateStr: d.date, 
-                name: d.title || 'Run', 
-                val: d._drift_run, 
-                breakdown: `${d._drift_run.toFixed(2)}%` 
-            };
-        }).filter(Boolean);
+        case 'drift_run':
+            return data.map(d => {
+                if (d._drift_run == null) return null;
+                return { date: d.dateObj, dateStr: d.date, name: d.title || 'Run', val: d._drift_run, breakdown: `${d._drift_run.toFixed(2)}%` };
+            }).filter(Boolean);
             
         default: return [];
     }

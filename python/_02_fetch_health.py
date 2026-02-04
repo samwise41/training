@@ -34,8 +34,6 @@ def init_garmin():
 def debug_log(title, data):
     if DEBUG and data:
         print(f"\n--- DEBUG: {title} ---")
-        # Print first 3 keys just to show it's working, or full dump if needed
-        # We'll dump the whole thing so you can see fields.
         print(json.dumps(data, indent=2, default=str))
         print("------------------------\n")
 
@@ -45,7 +43,7 @@ def extract_health_metrics(summary):
     if not summary: return row
     
     # DEBUG: See what is in the daily summary
-    debug_log("Daily Summary (First Record)", summary)
+    debug_log("Daily Summary", summary)
     
     if 'calendarDate' in summary:
         row['Date'] = summary['calendarDate']
@@ -83,7 +81,6 @@ def fetch_activity_metrics(client, date_str):
         activities = client.get_activities_by_date(date_str, date_str, "")
         if not activities: return metrics
 
-        # Containers for averaging
         run_dist = 0
         run_time = 0
         run_cadence_sum = 0
@@ -120,26 +117,26 @@ def fetch_activity_metrics(client, date_str):
         pass 
     return metrics
 
-# --- HELPER: FETCH PHYSIOLOGICAL METRICS (Training Status) ---
-def fetch_training_status(client, date_str):
+# --- HELPER: FETCH PHYSIOLOGICAL METRICS (Max Metrics) ---
+def fetch_max_metrics(client, date_str):
     metrics = {}
     try:
-        status_list = client.get_training_status(date_str)
+        # Use get_max_metrics specifically for VO2/Fitness Age
+        max_metrics = client.get_max_metrics(date_str)
         
-        if status_list:
-            latest = status_list[-1]
+        if max_metrics:
+            # DEBUG: See what get_max_metrics returns
+            debug_log("Max Metrics", max_metrics)
             
-            # DEBUG: See what Training Status returns
-            debug_log("Training Status", latest)
-            
-            if 'vo2Max' in latest:
-                metrics['VO2 Max'] = latest['vo2Max']
-            
-            if 'lactateThresholdValue' in latest:
-                metrics['Lactate Threshold'] = latest['lactateThresholdValue']
+            # Extract VO2 Max (Running)
+            for item in max_metrics:
+                if 'generic' in item and 'vo2MaxValue' in item['generic']:
+                    metrics['VO2 Max'] = item['generic']['vo2MaxValue']
                 
-            if 'functionalThresholdPower' in latest:
-                metrics['FTP'] = latest['functionalThresholdPower']
+                # Check for Lactate Threshold if available in this endpoint
+                # (Field names vary, check your logs!)
+                if 'running' in item and 'lactateThresholdHeartRate' in item['running']:
+                     metrics['Lactate Threshold HR'] = item['running']['lactateThresholdHeartRate']
                 
     except Exception:
         pass
@@ -162,10 +159,9 @@ def fetch_daily_stats(client, start_date, end_date):
     
     all_data = []
     
-    # GLOBAL FLAG to only print debug info ONCE (to avoid spamming logs)
+    # GLOBAL FLAG to only print debug info ONCE
     global DEBUG
-    first_run_done = False
-
+    
     for i in range(days):
         current_date = start_date + timedelta(days=i)
         date_str = current_date.isoformat()
@@ -180,15 +176,15 @@ def fetch_daily_stats(client, start_date, end_date):
             # 2. Performance (Activities)
             row.update(fetch_activity_metrics(client, date_str))
 
-            # 3. Physiology (Training Status)
-            row.update(fetch_training_status(client, date_str))
+            # 3. Physiology (New Endpoint)
+            row.update(fetch_max_metrics(client, date_str))
 
             # 4. Weight
             weight = fetch_weight(client, date_str)
             if weight:
                 row['Weight (lbs)'] = weight
 
-            # Turn off debug after the first successful day to save log space
+            # Turn off debug after the first successful day
             if DEBUG and len(row) > 1:
                 DEBUG = False 
 
@@ -223,9 +219,6 @@ def load_existing_data():
     return []
 
 def get_start_date(existing_data):
-    # FORCE LOOKBACK for debugging purposes if needed, otherwise use history
-    # return date.today() - timedelta(days=5) 
-    
     if not existing_data:
         print("🆕 No existing history found. Fetching last 365 days.")
         return date.today() - timedelta(days=365)
@@ -274,19 +267,12 @@ def main():
     existing_data = load_existing_data()
     
     today = date.today()
-    
-    # --- MANUAL OVERRIDE FOR DEBUGGING ---
-    # Uncomment the line below to force it to re-run the last 3 days 
-    # so you can see the logs even if "up to date"
-    # start_date = date.today() - timedelta(days=3)
-    
-    # Default Logic:
     start_date = get_start_date(existing_data)
     
     if start_date > today:
         print("✅ Data is already up to date.")
-        # OPTIONAL: Force run anyway to test
-        # start_date = date.today() - timedelta(days=1)
+        # OPTIONAL: FORCE RUN FOR DEBUGGING
+        # start_date = date.today() - timedelta(days=2) 
         return
 
     new_data = fetch_daily_stats(client, start_date, today)

@@ -34,7 +34,6 @@ def init_garmin():
 def debug_dump(title, data):
     if DEBUG and data:
         print(f"\n🔍 RAW {title}:")
-        # safely dump without crashing on non-serializable
         try:
             print(json.dumps(data, indent=2, default=str))
         except:
@@ -87,22 +86,17 @@ def extract_health_summary(client, date_str):
 def fetch_advanced_metrics(client, date_str):
     metrics = {}
     
-    # A. Readiness (Morning Report)
+    # A. Readiness
     try:
         readiness = client.get_morning_training_readiness(date_str)
-        if DEBUG: debug_dump("Readiness", readiness) # See what we get
-        
         if readiness and isinstance(readiness, dict):
             if 'trainingReadinessScore' in readiness:
                 metrics['Readiness Score'] = readiness['trainingReadinessScore']
     except Exception: pass
 
-    # B. Training Status (Heat/Load)
+    # B. Training Status
     try:
         status = client.get_training_status(date_str)
-        if DEBUG: debug_dump("Training Status", status) 
-
-        # Handle List vs Dict
         latest = None
         if isinstance(status, list) and status: latest = status[-1]
         elif isinstance(status, dict): latest = status
@@ -131,19 +125,15 @@ def fetch_advanced_metrics(client, date_str):
     # E. HRV
     try:
         hrv = client.get_hrv_data(date_str)
-        if DEBUG: debug_dump("HRV Data", hrv)
-
         if hrv and isinstance(hrv, dict) and 'hrvSummary' in hrv:
             summary = hrv['hrvSummary']
             if 'weeklyAverage' in summary: metrics['HRV Night Avg'] = summary['weeklyAverage']
             if 'lastNightAverage' in summary: metrics['HRV Last Night'] = summary['lastNightAverage']
     except Exception: pass
 
-    # F. Floors (Detailed)
+    # F. Floors
     try:
         floors = client.get_floors(date_str)
-        if DEBUG: debug_dump("Floors Data", floors)
-
         if floors and isinstance(floors, dict):
             if 'floorGoal' in floors: metrics['Floors Goal'] = floors['floorGoal']
             if 'floorsDescended' in floors: metrics['Floors Descended'] = floors['floorsDescended']
@@ -168,27 +158,27 @@ def fetch_advanced_metrics(client, date_str):
     if 'Fitness Age' not in metrics:
         try:
             fit_age = client.get_fitnessage_data(date_str)
-            if DEBUG: debug_dump("Fitness Age", fit_age)
-            
-            # Handle List vs Dict for Fitness Age
             fa_data = None
             if isinstance(fit_age, list) and fit_age: fa_data = fit_age[-1]
             elif isinstance(fit_age, dict): fa_data = fit_age
-            
             if fa_data and 'fitnessAge' in fa_data:
                 metrics['Fitness Age'] = fa_data['fitnessAge']
         except Exception: pass
 
-    # H. Intensity Minutes
+    # [cite_start]H. Intensity Minutes (UPDATED: Corrected keys based on your raw data) [cite: 1]
     try:
         minutes = client.get_intensity_minutes_data(date_str)
         if DEBUG: debug_dump("Intensity Min", minutes)
 
         if minutes and isinstance(minutes, dict):
-            metrics['Intensity Min Mod'] = minutes.get('dailyModerateIntensityMinutes', 0)
-            metrics['Intensity Min Vig'] = minutes.get('dailyVigorousIntensityMinutes', 0)
-            # Calculate Total (Vigorous is often 2x)
-            # metrics['Intensity Min Total'] = ... (Garmin usually pre-calculates this in weekly, but not always daily)
+            # Garmin uses 'moderateMinutes' and 'vigorousMinutes' in this endpoint
+            mod = minutes.get('moderateMinutes', 0)
+            vig = minutes.get('vigorousMinutes', 0)
+            
+            metrics['Intensity Min Mod'] = mod
+            metrics['Intensity Min Vig'] = vig
+            # Calculate total (Vigorous counts x2 usually, but here just raw sum or official weeklyTotal)
+            metrics['Intensity Min Total'] = mod + (vig * 2)
     except Exception: pass
 
     # I. Blood Pressure
@@ -293,7 +283,8 @@ def fetch_daily_stats(client, start_date, end_date):
                 if DEBUG:
                     # Print success list to verify
                     print(f"   ✅ {date_str} Captured Keys: {list(row.keys())}")
-                    DEBUG = False # Turn off raw dumps after first success to save log space
+                    # Only turn off debug if we actually found what we wanted
+                    if 'Intensity Min Vig' in row: DEBUG = False 
                 else:
                     print(f"   ✅ {date_str}: {len(row)} metrics.")
                 all_data.append(row)
@@ -317,7 +308,7 @@ def load_existing_data():
     return []
 
 def get_start_date(existing_data):
-    # FORCE RESCAN last 7 days to ensure we get the new metrics
+    # Rescan last week to catch new metrics
     return date.today() - timedelta(days=7)
 
 def save_json_data(new_data, existing_data):

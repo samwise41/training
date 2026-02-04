@@ -112,6 +112,33 @@ def bundle_activities(activities):
 
     return combined
 
+def update_local_profile():
+    """
+    Executes the utility script that parses endurance_plan.md 
+    and updates data/zones/profile.json.
+    """
+    print("\n" + "="*50)
+    print("👤 UPDATING PROFILE (FTP/ZONES)...")
+    print("="*50)
+    
+    # Calculate path: python/sync_modules/sync_database.py -> python/ -> root -> js/views/ftp/update_profile.py
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    python_root = os.path.dirname(current_dir)
+    root_dir = os.path.dirname(python_root) 
+    script_path = os.path.join(root_dir, 'js', 'views', 'ftp', 'update_profile.py')
+    
+    if not os.path.exists(script_path):
+        print(f"⚠️ Warning: Profile update script not found at {script_path}")
+        return
+
+    try:
+        subprocess.run([sys.executable, script_path], check=True)
+        print("✅ Profile JSON updated successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error updating profile: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected error updating profile: {e}")
+
 def trigger_drift_compilation():
     """
     Triggers the script to compile aerobic decoupling (drift) history.
@@ -121,6 +148,7 @@ def trigger_drift_compilation():
     print("🔄 COMPILING HEART RATE DRIFT HISTORY...")
     print("="*50)
 
+    # Relative path from root execution context
     script_path = "strava_data/compile_drift.py"
 
     if not os.path.exists(script_path):
@@ -165,6 +193,9 @@ def trigger_coaching_update():
         print(f"❌ ERROR: Unexpected error running coaching script: {e}")
 
 def main():
+    # 0. UPDATE PROFILE (New Step)
+    update_local_profile()
+
     # 1. Refresh Plan
     build_plan.main()
     

@@ -57,14 +57,14 @@ def extract_health_summary(client, date_str):
             'averageStressLevel': 'Stress Avg',
             'maxStressLevel': 'Stress Max',
             'totalSteps': 'Steps',
+            'dailyStepGoal': 'Steps Goal',
             'totalDistanceMeters': 'Daily Distance (m)',
-            'floorsClimbed': 'Floors',
+            'floorsClimbed': 'Floors Climbed',
             'activeCalories': 'Active Cals',
             'bodyBatteryHighestValue': 'Body Batt Max',
             'bodyBatteryLowestValue': 'Body Batt Min',
             'sleepScore': 'Sleep Score',
             'hrvStatusBalanced': 'HRV Status',
-            # Fallbacks just in case
             'vo2MaxValue': 'VO2 Max', 
             'weight': 'Weight (grams)'
         }
@@ -76,7 +76,7 @@ def extract_health_summary(client, date_str):
         if 'sleepingSeconds' in summary and summary['sleepingSeconds']:
             row['Sleep Hours'] = round(summary['sleepingSeconds'] / 3600, 1)
 
-        # Process Fallback Weight if found here
+        # Fallback Weight Processing
         if 'Weight (grams)' in row:
             row['Weight (lbs)'] = round(row['Weight (grams)'] * 0.00220462, 1)
             del row['Weight (grams)'] 
@@ -88,14 +88,14 @@ def extract_health_summary(client, date_str):
 def fetch_advanced_metrics(client, date_str):
     metrics = {}
     
-    # A. Training Readiness
+    # A. Readiness (Morning Report)
     try:
         readiness = client.get_morning_training_readiness(date_str)
         if readiness and 'trainingReadinessScore' in readiness:
             metrics['Readiness Score'] = readiness['trainingReadinessScore']
     except Exception: pass
 
-    # B. Training Status (Heat/Load/VO2 Backup)
+    # B. Training Status (Heat/Load)
     try:
         status = client.get_training_status(date_str)
         if status:
@@ -103,7 +103,6 @@ def fetch_advanced_metrics(client, date_str):
             if 'heatAdaptation' in latest: metrics['Heat Adaptation'] = latest['heatAdaptation']
             if 'altitudeAdaptation' in latest: metrics['Altitude Adaptation'] = latest['altitudeAdaptation']
             if 'load' in latest: metrics['Acute Load'] = latest['load']
-            # CHECK FOR VO2 HERE
             if 'vo2Max' in latest: metrics['VO2 Max'] = latest['vo2Max']
     except Exception: pass
 
@@ -129,30 +128,30 @@ def fetch_advanced_metrics(client, date_str):
             metrics['HRV Last Night'] = hrv['hrvSummary'].get('lastNightAverage')
     except Exception: pass
 
-    # F. Fitness Age & VO2 (Max Metrics - Deep Search)
+    # F. Floors (Detailed)
+    try:
+        floors = client.get_floors(date_str)
+        if floors:
+            if 'floorGoal' in floors: metrics['Floors Goal'] = floors['floorGoal']
+            if 'floorsDescended' in floors: metrics['Floors Descended'] = floors['floorsDescended']
+            # Note: floorsClimbed is already in Summary, but we can overwrite if this is better
+    except Exception: pass
+
+    # G. Fitness Age & VO2 (Max Metrics)
     try:
         max_m = client.get_max_metrics(date_str)
         if max_m:
-            if DEBUG: debug_dump(f"Max Metrics {date_str}", max_m) # Debug this specific object
-            
             for item in max_m:
-                # 1. Generic Check
                 if 'generic' in item:
                     if 'vo2MaxValue' in item['generic']: metrics['VO2 Max'] = item['generic']['vo2MaxValue']
                     if 'fitnessAge' in item['generic']: metrics['Fitness Age'] = item['generic']['fitnessAge']
-                
-                # 2. Running Specific Check
-                if 'running' in item:
-                    if 'vo2MaxPreciseValue' in item['running']: metrics['VO2 Max'] = int(item['running']['vo2MaxPreciseValue'])
-                
-                # 3. Cycling Specific Check
-                if 'cycling' in item:
-                    if 'vo2MaxPreciseValue' in item['cycling'] and 'VO2 Max' not in metrics: 
-                        metrics['VO2 Max'] = int(item['cycling']['vo2MaxPreciseValue'])
-
+                if 'running' in item and 'vo2MaxPreciseValue' in item['running']:
+                     metrics['VO2 Max'] = int(item['running']['vo2MaxPreciseValue'])
+                if 'cycling' in item and 'vo2MaxPreciseValue' in item['cycling'] and 'VO2 Max' not in metrics:
+                     metrics['VO2 Max'] = int(item['cycling']['vo2MaxPreciseValue'])
     except Exception: pass
     
-    # F2. Explicit Fitness Age Call (Backup)
+    # G2. Explicit Fitness Age
     if 'Fitness Age' not in metrics:
         try:
             fit_age = client.get_fitnessage_data(date_str)
@@ -160,22 +159,22 @@ def fetch_advanced_metrics(client, date_str):
                 metrics['Fitness Age'] = fit_age['fitnessAge']
         except Exception: pass
 
-    # G. Intensity Minutes
+    # H. Intensity Minutes
     try:
         minutes = client.get_intensity_minutes_data(date_str)
         if minutes:
             metrics['Intensity Min Mod'] = minutes.get('dailyModerateIntensityMinutes', 0)
             metrics['Intensity Min Vig'] = minutes.get('dailyVigorousIntensityMinutes', 0)
+            metrics['Intensity Min Total'] = minutes.get('dailyModerateIntensityMinutes', 0) + (minutes.get('dailyVigorousIntensityMinutes', 0) * 2)
     except Exception: pass
 
-    # H. Blood Pressure
+    # I. Blood Pressure
     try:
         bp_data = client.get_blood_pressure(date_str, date_str)
         if bp_data and 'measurementSummaries' in bp_data:
             readings = []
             for summary in bp_data['measurementSummaries']:
                 if 'measurements' in summary: readings.extend(summary['measurements'])
-            
             if readings:
                 sys_sum = sum(r['systolic'] for r in readings if 'systolic' in r)
                 dia_sum = sum(r['diastolic'] for r in readings if 'diastolic' in r)
@@ -211,11 +210,11 @@ def fetch_activity_metrics(client, date_str):
     except Exception: pass
     return metrics
 
-# --- 4. BODY COMPOSITION (Priority Logic) ---
+# --- 4. BODY COMPOSITION ---
 def fetch_body_comp(client, date_str):
     metrics = {}
     try:
-        # Source 1: Daily Weigh-Ins
+        # Priority: Daily Weigh-Ins
         weigh_ins = client.get_daily_weigh_ins(date_str)
         if weigh_ins and 'dateWeightList' in weigh_ins:
             valid = [w for w in weigh_ins['dateWeightList'] if w['weight'] > 0]
@@ -226,7 +225,7 @@ def fetch_body_comp(client, date_str):
                 if 'bodyFat' in latest: metrics['Body Fat %'] = latest['bodyFat']
                 return metrics
 
-        # Source 2: Body Composition
+        # Fallback: Index Scale
         comp = client.get_body_composition(date_str)
         if comp and 'totalAverage' in comp and comp['totalAverage']:
             avg = comp['totalAverage']
@@ -269,9 +268,9 @@ def fetch_daily_stats(client, start_date, end_date):
 
             if len(row) > 1:
                 if DEBUG:
-                    print(f"   ✅ {date_str} Captured: {list(row.keys())}")
-                    # Only turn off debug if we actually found what we wanted
-                    if 'VO2 Max' in row: DEBUG = False 
+                    print(f"   ✅ {date_str} Found: {list(row.keys())}")
+                    # Turn off debug only if we found some critical metrics (to avoid spam)
+                    if 'Weight (lbs)' in row: DEBUG = False 
                 else:
                     print(f"   ✅ {date_str}: {len(row)} metrics.")
                 all_data.append(row)
@@ -295,7 +294,7 @@ def load_existing_data():
     return []
 
 def get_start_date(existing_data):
-    # FORCE LOOKBACK to check for VO2
+    # Rescan last week to catch new metrics for recent days
     return date.today() - timedelta(days=7)
 
 def save_json_data(new_data, existing_data):

@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-04 04:38:05
+**Generated:** 2026-02-04 04:48:45
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -6011,6 +6011,47 @@
     "RPE": 8,
     "Feeling": 4,
     "status": "COMPLETED"
+  },
+  {
+    "actualSport": "Bike",
+    "Status": "COMPLETED",
+    "Day": "Saturday",
+    "plannedWorkout": null,
+    "plannedDuration": null,
+    "actualWorkout": "Richfield Road Cycling",
+    "actualDuration": 3.3,
+    "notes": null,
+    "date": "2025-08-16",
+    "matchStatus": "Linked (modified)",
+    "id": 20076482628,
+    "activityName": "Richfield Road Cycling",
+    "activityType": "road_biking",
+    "sportTypeId": 2,
+    "duration": 195.4629974,
+    "distance": 1391.199951,
+    "averageHR": 135,
+    "maxHR": 147,
+    "aerobicTrainingEffect": 0.600000024,
+    "anaerobicTrainingEffect": 0,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": 143,
+    "maxPower": 364,
+    "normPower": 174,
+    "trainingStressScore": 2.5,
+    "intensityFactor": 0.740999997,
+    "averageSpeed": 7.117000103,
+    "maxSpeed": 10.76799965,
+    "averageBikingCadenceInRevPerMinute": 75,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 33,
+    "elevationGain": 5,
+    "RPE": 6,
+    "Feeling": 1,
+    "status": "UNPLANNED"
   },
   {
     "actualSport": "Run",

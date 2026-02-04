@@ -165,13 +165,12 @@ def fetch_advanced_metrics(client, date_str):
                 metrics['Fitness Age'] = fa_data['fitnessAge']
         except Exception: pass
 
-    # H. Intensity Minutes (Fixed Keys)
+    # H. Intensity Minutes
     try:
         minutes = client.get_intensity_minutes_data(date_str)
         if minutes and isinstance(minutes, dict):
             mod = minutes.get('moderateMinutes', 0)
             vig = minutes.get('vigorousMinutes', 0)
-            
             metrics['Intensity Min Mod'] = mod
             metrics['Intensity Min Vig'] = vig
             metrics['Intensity Min Total'] = mod + (vig * 2)
@@ -191,6 +190,20 @@ def fetch_advanced_metrics(client, date_str):
                 if count > 0:
                     metrics['BP Systolic'] = round(sys_sum / count)
                     metrics['BP Diastolic'] = round(dia_sum / count)
+    except Exception: pass
+
+    # J. Lactate Threshold (Restored!)
+    try:
+        # Fetch specifically for this date
+        lt_data = client.get_lactate_threshold(start_date=date_str, end_date=date_str)
+        if DEBUG: debug_dump("Lactate Threshold", lt_data)
+        
+        if lt_data and isinstance(lt_data, list):
+            for item in lt_data:
+                if 'lactateThresholdHeartRate' in item: 
+                    metrics['Lactate Threshold HR'] = item['lactateThresholdHeartRate']
+                if 'lactateThresholdPower' in item:
+                    metrics['Lactate Threshold Power'] = item['lactateThresholdPower']
     except Exception: pass
 
     return metrics
@@ -278,7 +291,9 @@ def fetch_daily_stats(client, start_date, end_date):
             if len(row) > 1:
                 if DEBUG:
                     print(f"   ✅ {date_str} Found: {list(row.keys())}")
-                    if 'Intensity Min Vig' in row: DEBUG = False 
+                    # Turn off debug ONLY if we found Intensity or Threshold to avoid spam
+                    if 'Intensity Min Vig' in row or 'Lactate Threshold HR' in row: 
+                        DEBUG = False 
                 else:
                     print(f"   ✅ {date_str}: {len(row)} metrics.")
                 all_data.append(row)
@@ -302,12 +317,10 @@ def load_existing_data():
     return []
 
 def get_start_date(existing_data):
-    # 1. If no history, fetch last year
     if not existing_data:
         print("🆕 No existing history found. Fetching last 365 days.")
         return date.today() - timedelta(days=365)
     
-    # 2. Find the last date in the file
     try:
         dates = [d.get('Date') for d in existing_data if d.get('Date')]
         if not dates: 
@@ -317,8 +330,6 @@ def get_start_date(existing_data):
         last_date = date.fromisoformat(last_date_str)
         
         print(f"🔄 Resuming from last recorded date: {last_date}")
-        # Note: We start from the last date (inclusive) to catch any late-day updates 
-        # that might have happened after the script ran yesterday.
         return last_date
     except Exception as e:
         print(f"⚠️ Error parsing dates: {e}. Defaulting to 1 year ago.")

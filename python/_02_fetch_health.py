@@ -165,19 +165,15 @@ def fetch_advanced_metrics(client, date_str):
                 metrics['Fitness Age'] = fa_data['fitnessAge']
         except Exception: pass
 
-    # [cite_start]H. Intensity Minutes (UPDATED: Corrected keys based on your raw data) [cite: 1]
+    # H. Intensity Minutes (Fixed Keys)
     try:
         minutes = client.get_intensity_minutes_data(date_str)
-        if DEBUG: debug_dump("Intensity Min", minutes)
-
         if minutes and isinstance(minutes, dict):
-            # Garmin uses 'moderateMinutes' and 'vigorousMinutes' in this endpoint
             mod = minutes.get('moderateMinutes', 0)
             vig = minutes.get('vigorousMinutes', 0)
             
             metrics['Intensity Min Mod'] = mod
             metrics['Intensity Min Vig'] = vig
-            # Calculate total (Vigorous counts x2 usually, but here just raw sum or official weeklyTotal)
             metrics['Intensity Min Total'] = mod + (vig * 2)
     except Exception: pass
 
@@ -281,9 +277,7 @@ def fetch_daily_stats(client, start_date, end_date):
 
             if len(row) > 1:
                 if DEBUG:
-                    # Print success list to verify
-                    print(f"   ✅ {date_str} Captured Keys: {list(row.keys())}")
-                    # Only turn off debug if we actually found what we wanted
+                    print(f"   ✅ {date_str} Found: {list(row.keys())}")
                     if 'Intensity Min Vig' in row: DEBUG = False 
                 else:
                     print(f"   ✅ {date_str}: {len(row)} metrics.")
@@ -308,8 +302,27 @@ def load_existing_data():
     return []
 
 def get_start_date(existing_data):
-    # Rescan last week to catch new metrics
-    return date.today() - timedelta(days=7)
+    # 1. If no history, fetch last year
+    if not existing_data:
+        print("🆕 No existing history found. Fetching last 365 days.")
+        return date.today() - timedelta(days=365)
+    
+    # 2. Find the last date in the file
+    try:
+        dates = [d.get('Date') for d in existing_data if d.get('Date')]
+        if not dates: 
+            return date.today() - timedelta(days=365)
+            
+        last_date_str = max(dates)
+        last_date = date.fromisoformat(last_date_str)
+        
+        print(f"🔄 Resuming from last recorded date: {last_date}")
+        # Note: We start from the last date (inclusive) to catch any late-day updates 
+        # that might have happened after the script ran yesterday.
+        return last_date
+    except Exception as e:
+        print(f"⚠️ Error parsing dates: {e}. Defaulting to 1 year ago.")
+        return date.today() - timedelta(days=365)
 
 def save_json_data(new_data, existing_data):
     if not new_data: return

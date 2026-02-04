@@ -68,7 +68,7 @@ function groupWorkoutsByDate(workouts) {
 }
 
 /**
- * Generates the HTML with Taller Cards & High Contrast
+ * Generates the HTML with Taller Cards, Wrapping Text, & Raw Status
  */
 function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
@@ -88,7 +88,6 @@ function generateGroupedCardsHTML(groupedData) {
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
         // --- Card Border Logic ---
-        // FIX: Used solid bg-slate-800 instead of transparent /60 to fix "greyed out" look
         let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
         
         if (isDayComplete) {
@@ -103,50 +102,48 @@ function generateGroupedCardsHTML(groupedData) {
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // 1. Status Colors
-            let statusText = w.status;
-            let statusColorClass = "text-slate-400"; // Brighter text
+            // 1. Status Colors & Text
+            // FIX: Use w.status directly as requested.
+            let statusText = w.status; 
+            let statusColorClass = "text-slate-400"; 
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
-                statusText = "Done";
                 statusColorClass = "text-emerald-400";
             } else if (w.status === 'MISSED') {
                 statusColorClass = "text-red-400";
-            } else if (w.status === 'REST') {
-                statusText = "Rest";
             }
-
+            
             // 2. Sport Color Class
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
             return `
                 <div class="flex items-start gap-4 p-4 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/50 transition-colors">
                     
-                    <div class="flex flex-col items-start min-w-[70px] border-r border-slate-700/50 pr-3">
+                    <div class="flex flex-col items-start min-w-[85px] border-r border-slate-700/50 pr-3">
                         <div class="flex items-baseline">
-                            <span class="text-2xl font-bold text-white leading-none tracking-tight">
+                            <span class="text-4xl font-bold text-white leading-none tracking-tight">
                                 ${w.plannedDuration > 0 ? Math.round(w.plannedDuration) : '--'}
                             </span>
-                            <span class="text-[10px] font-medium text-slate-400 ml-0.5">m</span>
+                            <span class="text-xs font-medium text-slate-400 ml-0.5">min</span>
                         </div>
                         
-                        <div class="text-[10px] font-bold uppercase tracking-wider mt-1 ${statusColorClass}">
+                        <div class="text-[10px] font-bold uppercase tracking-wider mt-1 ${statusColorClass} break-words w-full">
                             ${statusText}
                         </div>
 
                         ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
-                            `<div class="text-[10px] font-mono text-slate-300 mt-1">Act: ${Math.round(w.actualDuration)}m</div>` : ''}
+                            `<div class="text-[10px] font-mono text-slate-300 mt-2 pt-2 border-t border-slate-700/50 w-full">Act: ${Math.round(w.actualDuration)}m</div>` : ''}
                     </div>
 
                     <div class="flex-1 min-w-0 pt-0.5">
-                        <div class="flex items-center gap-2 mb-1.5 ${sportColorClass}">
-                            <div class="text-sm w-4 text-center">
+                        <div class="flex items-start gap-2 mb-2 ${sportColorClass}">
+                            <div class="text-sm w-5 text-center mt-0.5 shrink-0">
                                 ${Formatters.getIconForSport(sportType)}
                             </div>
-                            <h4 class="text-sm font-bold truncate leading-none uppercase tracking-wide text-slate-100">${planName}</h4>
+                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-slate-100">${planName}</h4>
                         </div>
 
-                        <div class="text-xs text-slate-300 leading-relaxed font-sans line-clamp-2" title="${notes}">
+                        <div class="text-xs text-slate-300 leading-relaxed font-sans line-clamp-4" title="${notes}">
                             ${notes}
                         </div>
                     </div>
@@ -155,7 +152,7 @@ function generateGroupedCardsHTML(groupedData) {
         }).join('');
 
         // --- Assemble Card ---
-        // ADDED: min-h-[180px] to force taller cards
+        // min-h-[180px] keeps them tall
         html += `
             <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full min-h-[180px]">
                 <div class="px-4 py-1.5 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">

@@ -10,7 +10,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 OUTPUT_FILE = os.path.join(ROOT_DIR, 'garmin_data', 'garmin_health.json') 
 
-# Set to True to see raw API responses in your GitHub Action logs
+# Debug: Set to True to see raw API JSON responses in logs
 DEBUG = True 
 
 # --- CREDENTIALS ---
@@ -34,8 +34,7 @@ def init_garmin():
 def debug_log(title, data):
     if DEBUG and data:
         print(f"\n--- DEBUG: {title} ---")
-        # Truncate long lists to avoid massive logs
-        if isinstance(data, list) and len(data) > 3:
+        if isinstance(data, list) and len(data) > 2:
             print(json.dumps(data[:2], indent=2, default=str))
             print(f"... ({len(data)-2} more items) ...")
         else:
@@ -44,9 +43,6 @@ def debug_log(title, data):
 
 # --- 1. BASE HEALTH SUMMARY ---
 def extract_health_summary(client, date_str):
-    """
-    Fetches the main User Summary which contains Steps, Floors, Stress, etc.
-    """
     row = {}
     try:
         summary = client.get_user_summary(date_str)
@@ -54,7 +50,7 @@ def extract_health_summary(client, date_str):
         
         row['Date'] = date_str
         
-        # Mapping API keys to Readable Names
+        # Standard Fields
         field_map = {
             'restingHeartRate': 'Resting HR',
             'minHeartRate': 'Min HR',
@@ -75,40 +71,31 @@ def extract_health_summary(client, date_str):
             if api_key in summary and summary[api_key] is not None:
                 row[nice_name] = summary[api_key]
 
-        # Calculate Sleep Hours
         if 'sleepingSeconds' in summary and summary['sleepingSeconds']:
             row['Sleep Hours'] = round(summary['sleepingSeconds'] / 3600, 1)
             
-    except Exception as e:
-        if DEBUG: print(f"   ⚠️ Summary Error: {e}")
-        
+    except Exception: pass
     return row
 
 # --- 2. ADVANCED METRICS FETCHER ---
 def fetch_advanced_metrics(client, date_str):
-    """
-    Fetches specific advanced metrics requested by the user.
-    """
     metrics = {}
     
-    # A. Training Readiness (Morning)
+    # A. Readiness
     try:
         readiness = client.get_morning_training_readiness(date_str)
         if readiness and 'trainingReadinessScore' in readiness:
             metrics['Readiness Score'] = readiness['trainingReadinessScore']
     except Exception: pass
 
-    # B. Training Status (Load / Heat)
+    # B. Training Status
     try:
         status = client.get_training_status(date_str)
         if status:
-            latest = status[-1] # Get most recent for the day
-            if 'heatAdaptation' in latest:
-                metrics['Heat Adaptation'] = latest['heatAdaptation']
-            if 'altitudeAdaptation' in latest:
-                metrics['Altitude Adaptation'] = latest['altitudeAdaptation']
-            if 'load' in latest:
-                metrics['Acute Load'] = latest['load']
+            latest = status[-1]
+            if 'heatAdaptation' in latest: metrics['Heat Adaptation'] = latest['heatAdaptation']
+            if 'altitudeAdaptation' in latest: metrics['Altitude Adaptation'] = latest['altitudeAdaptation']
+            if 'load' in latest: metrics['Acute Load'] = latest['load']
     except Exception: pass
 
     # C. Respiration
@@ -118,16 +105,14 @@ def fetch_advanced_metrics(client, date_str):
             metrics['Respiration Avg'] = resp['avgWakingRespirationValue']
     except Exception: pass
 
-    # D. SpO2 (Pulse Ox)
+    # D. SpO2
     try:
         spo2 = client.get_spo2_data(date_str)
         if spo2 and 'averageSpO2' in spo2:
             metrics['SpO2 Avg'] = spo2['averageSpO2']
-        elif spo2 and 'userProfilePk' in spo2: # Sometimes structure varies
-             pass # Add parsing if needed for specific SpO2 graph
     except Exception: pass
 
-    # E. HRV Data
+    # E. HRV
     try:
         hrv = client.get_hrv_data(date_str)
         if hrv and 'hrvSummary' in hrv:
@@ -135,44 +120,58 @@ def fetch_advanced_metrics(client, date_str):
             metrics['HRV Last Night'] = hrv['hrvSummary'].get('lastNightAverage')
     except Exception: pass
 
-    # F. Fitness Age & VO2 (Max Metrics)
+    # F. Fitness Age (Specific Endpoint)
+    try:
+        fit_age = client.get_fitnessage_data(date_str)
+        # Check explicit keys or list structure
+        if fit_age and isinstance(fit_age, dict):
+            if 'fitnessAge' in fit_age:
+                metrics['Fitness Age'] = fit_age['fitnessAge']
+        elif fit_age and isinstance(fit_age, list) and len(fit_age) > 0:
+             if 'fitnessAge' in fit_age[-1]:
+                 metrics['Fitness Age'] = fit_age[-1]['fitnessAge']
+    except Exception: pass
+
+    # G. VO2 Max (Max Metrics)
     try:
         max_m = client.get_max_metrics(date_str)
         if max_m:
             for item in max_m:
-                if 'generic' in item:
-                    if 'vo2MaxValue' in item['generic']:
-                        metrics['VO2 Max'] = item['generic']['vo2MaxValue']
-                    if 'fitnessAge' in item['generic']:
-                        metrics['Fitness Age'] = item['generic']['fitnessAge']
+                if 'generic' in item and 'vo2MaxValue' in item['generic']:
+                    metrics['VO2 Max'] = item['generic']['vo2MaxValue']
     except Exception: pass
 
-    # G. Intensity Minutes
+    # H. Intensity Minutes
     try:
         minutes = client.get_intensity_minutes_data(date_str)
-        if minutes and 'dailyModerateIntensityMinutes' in minutes:
-            metrics['Intensity Min Mod'] = minutes['dailyModerateIntensityMinutes']
-            metrics['Intensity Min Vig'] = minutes['dailyVigorousIntensityMinutes']
+        if minutes:
+            metrics['Intensity Min Mod'] = minutes.get('dailyModerateIntensityMinutes', 0)
+            metrics['Intensity Min Vig'] = minutes.get('dailyVigorousIntensityMinutes', 0)
     except Exception: pass
 
-    # H. Blood Pressure (Average of day's readings)
+    # I. Blood Pressure (Robust Parsing)
     try:
+        # Use start/end date range for robustness
         bp_data = client.get_blood_pressure(date_str, date_str)
         if bp_data and 'measurementSummaries' in bp_data:
-            measurements = []
+            readings = []
             for summary in bp_data['measurementSummaries']:
-                measurements.extend(summary.get('measurements', []))
+                if 'measurements' in summary:
+                    readings.extend(summary['measurements'])
             
-            if measurements:
-                avg_sys = sum(m['systolic'] for m in measurements) / len(measurements)
-                avg_dia = sum(m['diastolic'] for m in measurements) / len(measurements)
-                metrics['BP Systolic'] = round(avg_sys)
-                metrics['BP Diastolic'] = round(avg_dia)
+            if readings:
+                # Average all readings for the day
+                sys_sum = sum(r['systolic'] for r in readings if 'systolic' in r)
+                dia_sum = sum(r['diastolic'] for r in readings if 'diastolic' in r)
+                count = len(readings)
+                if count > 0:
+                    metrics['BP Systolic'] = round(sys_sum / count)
+                    metrics['BP Diastolic'] = round(dia_sum / count)
     except Exception: pass
 
     return metrics
 
-# --- 3. ACTIVITY & PERFORMANCE (Run/Bike) ---
+# --- 3. ACTIVITY & PERFORMANCE ---
 def fetch_activity_performance(client, date_str):
     metrics = {}
     try:
@@ -187,8 +186,6 @@ def fetch_activity_performance(client, date_str):
             if sport == 'running':
                 run_dist += act.get('distance', 0)
                 run_time += act.get('duration', 0)
-                
-                # Grab latest Run Cadence
                 cad = act.get('averageRunningCadenceInStepsPerMinute')
                 if cad: metrics['Run Avg Cadence'] = cad
 
@@ -198,25 +195,34 @@ def fetch_activity_performance(client, date_str):
     except Exception: pass
     return metrics
 
-# --- 4. BODY COMPOSITION ---
+# --- 4. BODY COMPOSITION (Aggressive) ---
 def fetch_body_comp(client, date_str):
     metrics = {}
     try:
-        # Priority 1: Daily Weigh-ins (Specific Endpoint)
+        # Method A: Daily Weigh-Ins (Manual)
         weigh_ins = client.get_daily_weigh_ins(date_str)
-        if weigh_ins and 'dateWeightList' in weigh_ins and weigh_ins['dateWeightList']:
-            latest = weigh_ins['dateWeightList'][-1] # Last weigh-in of day
-            if 'weight' in latest:
-                # API returns grams, convert to lbs
+        if weigh_ins and 'dateWeightList' in weigh_ins:
+            valid_entries = [w for w in weigh_ins['dateWeightList'] if w['weight'] > 0]
+            if valid_entries:
+                latest = valid_entries[-1]
+                # Grams to Lbs
                 metrics['Weight (lbs)'] = round(latest['weight'] * 0.00220462, 1)
                 
-        # Priority 2: Body Comp (Index Scale)
+                # Check for fat/muscle if available
+                if 'muscleMass' in latest: metrics['Muscle Mass'] = round(latest['muscleMass'] * 0.00220462, 1)
+                if 'bodyFat' in latest: metrics['Body Fat %'] = latest['bodyFat']
+
+        # Method B: Body Composition (Index Scale / Fallback)
         if 'Weight (lbs)' not in metrics:
             comp = client.get_body_composition(date_str)
             if comp and 'totalAverage' in comp and comp['totalAverage']:
-                w_g = comp['totalAverage'].get('weight')
-                if w_g:
-                    metrics['Weight (lbs)'] = round(w_g * 0.00220462, 1)
+                avg = comp['totalAverage']
+                if avg.get('weight'):
+                    metrics['Weight (lbs)'] = round(avg['weight'] * 0.00220462, 1)
+                if avg.get('muscleMass'):
+                    metrics['Muscle Mass'] = round(avg['muscleMass'] * 0.00220462, 1)
+                if avg.get('bodyFat'):
+                    metrics['Body Fat %'] = avg['bodyFat']
     except Exception: pass
     return metrics
 
@@ -231,7 +237,7 @@ def fetch_current_ftp(client):
     except Exception: pass
     return None
 
-# --- MAIN FETCH LOOP ---
+# --- MAIN LOOP ---
 def fetch_daily_stats(client, start_date, end_date):
     days = (end_date - start_date).days + 1
     print(f"📡 Fetching {days} days of data ({start_date} to {end_date})...")
@@ -249,35 +255,26 @@ def fetch_daily_stats(client, start_date, end_date):
         row = {}
         
         try:
-            # 1. Base Health (Steps, Sleep, Stress, Body Batt Min/Max)
+            # Gather all metrics
             row.update(extract_health_summary(client, date_str))
-            
-            # 2. Advanced Metrics (Readiness, HRV, SpO2, BP, etc.)
             row.update(fetch_advanced_metrics(client, date_str))
-            
-            # 3. Activity Perf (Run Speed, Cadence)
             row.update(fetch_activity_performance(client, date_str))
-            
-            # 4. Weight
             row.update(fetch_body_comp(client, date_str))
 
-            # 5. Inject Current FTP (Only for today/recent to avoid bad history)
             if is_today and current_ftp:
                 row['FTP'] = current_ftp
 
-            # Debug Log (Only first day)
+            # DEBUG: Dump first day to see raw response structures
             if DEBUG and len(row) > 1:
-                debug_log(f"Final Data for {date_str}", row)
-                DEBUG = False # Silence after first success
+                debug_log(f"Combined Data for {date_str}", row)
+                DEBUG = False 
 
-            # Console Progress
-            rhr = row.get('Resting HR', '-')
-            readiness = row.get('Readiness Score', '-')
-            hrv = row.get('HRV Night Avg', '-')
-            
-            print(f"   ✅ {date_str}: RHR {rhr} | Readiness {readiness} | HRV {hrv}")
-            
+            # VISUAL CONFIRMATION: Print ALL captured keys for this day
             if len(row) > 1:
+                print(f"   ✅ {date_str}: {len(row)} metrics found.")
+                # Print a clean summary of what we actually got
+                keys_found = [k for k in row.keys() if k != 'Date']
+                print(f"      Running keys: {keys_found}")
                 all_data.append(row)
             else:
                 print(f"   ⚠️ {date_str}: No data.")
@@ -289,7 +286,7 @@ def fetch_daily_stats(client, start_date, end_date):
 
     return all_data
 
-# --- JSON MANAGEMENT ---
+# --- JSON SAVE ---
 def load_existing_data():
     if os.path.exists(OUTPUT_FILE):
         try:
@@ -300,37 +297,18 @@ def load_existing_data():
     return []
 
 def get_start_date(existing_data):
-    # OPTIONAL: Set FORCE_RESCAN = True to re-download the last 7 days 
-    # and fill in the NEW metrics (Readiness, HRV, etc)
-    FORCE_RESCAN = True 
-    
-    if FORCE_RESCAN:
-        print("🔄 Rescanning last 7 days to capture new metrics...")
-        return date.today() - timedelta(days=7)
-
-    if not existing_data:
-        print("🆕 No existing history found. Fetching last 365 days.")
-        return date.today() - timedelta(days=365)
-    
-    try:
-        dates = [d.get('Date') for d in existing_data if d.get('Date')]
-        if not dates: return date.today() - timedelta(days=365)
-        last_date = date.fromisoformat(max(dates))
-        print(f"🔄 Resuming from: {last_date}")
-        return last_date
-    except Exception:
-        return date.today() - timedelta(days=365)
+    # FORCE RESCAN of last 7 days to capture new fields
+    return date.today() - timedelta(days=7)
 
 def save_json_data(new_data, existing_data):
     if not new_data: return
 
-    # Merge Logic: Dictionary keyed by Date
     data_map = {item['Date']: item for item in existing_data if 'Date' in item}
     
     for item in new_data:
         if 'Date' in item:
             if item['Date'] in data_map:
-                data_map[item['Date']].update(item) # Merge new fields
+                data_map[item['Date']].update(item)
             else:
                 data_map[item['Date']] = item
 

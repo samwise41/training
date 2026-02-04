@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-02-03 19:48:37
+**Generated:** 2026-02-04 04:38:06
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-02-03 18:37:37",
+  "generated_at": "2026-02-04 04:02:47",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -75,7 +75,7 @@
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.7673210488568408
+              "slope": -1.0611862873211249
             },
             "6m": {
               "direction": "Rising",
@@ -151,7 +151,7 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.46128100703443164
+              "slope": 0.32966185363445644
             },
             "6m": {
               "direction": "Rising",
@@ -305,7 +305,7 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.006125138902946225
+              "slope": 0.006045115979698985
             },
             "6m": {
               "direction": "Rising",
@@ -344,7 +344,7 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.019334698905396488
+              "slope": 0.01941778914822252
             },
             "6m": {
               "direction": "Rising",
@@ -383,7 +383,7 @@
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.04035427807486633
+              "slope": -0.06582661290322582
             },
             "6m": {
               "direction": "Rising",
@@ -714,6 +714,44 @@
             }
           },
           "has_data": true
+        },
+        {
+          "id": "swims_weekly",
+          "title": "Swims / Week",
+          "sport": "Swim",
+          "icon": "fa-person-swimming",
+          "colorVar": "var(--color-swim)",
+          "unit": "x",
+          "good_min": 1.5,
+          "good_max": 3,
+          "higher_is_better": true,
+          "description": "Frequency of swim sessions.",
+          "improvement": "\u2022 Consistency is Key",
+          "formula": "Count per Week",
+          "filters": {
+            "ignore_zero": false
+          },
+          "current_value": null,
+          "status": "No Data",
+          "trends": {
+            "30d": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "90d": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "6m": {
+              "direction": "Flat",
+              "slope": 0
+            },
+            "1y": {
+              "direction": "Flat",
+              "slope": 0
+            }
+          },
+          "has_data": false
         }
       ]
     }

@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-03 19:48:37
+**Generated:** 2026-02-04 04:38:05
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -5971,6 +5971,45 @@
     "elevationGain": 229,
     "RPE": null,
     "Feeling": null,
+    "status": "COMPLETED"
+  },
+  {
+    "date": "2025-08-16",
+    "day": "Saturday",
+    "plannedWorkout": null,
+    "plannedDuration": null,
+    "actualWorkout": "Richfield - Rooster Ride",
+    "actualDuration": 337.1,
+    "notes": "Century Ride. Manual Data Fix.",
+    "matchStatus": "Linked (Manual Fix)",
+    "id": 20076482628,
+    "activityName": "Richfield - Rooster Ride",
+    "activityType": "road_biking",
+    "sportTypeId": 2,
+    "duration": 20223.57,
+    "distance": 163751.2,
+    "averageHR": 148,
+    "maxHR": 177,
+    "aerobicTrainingEffect": 5.0,
+    "anaerobicTrainingEffect": 2.0,
+    "trainingEffectLabel": "VO2MAX",
+    "avgPower": 140,
+    "maxPower": 691,
+    "normPower": 169,
+    "trainingStressScore": 290.3,
+    "intensityFactor": 0.72,
+    "averageSpeed": 8.097,
+    "maxSpeed": 17.495,
+    "averageBikingCadenceInRevPerMinute": 83,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": 48.0,
+    "calories": 3339,
+    "elevationGain": 1222,
+    "RPE": 8,
+    "Feeling": 4,
     "status": "COMPLETED"
   },
   {

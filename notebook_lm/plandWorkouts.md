@@ -1,0 +1,107 @@
+# Current Week Workouts
+**Generated:** 2026-02-04 04:38:06
+**Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
+
+---
+
+## Data Content
+```json
+[
+  {
+    "date": "2026-02-01",
+    "day": "Sunday",
+    "plannedWorkout": "Rest",
+    "plannedDuration": 0.0,
+    "notes": "**Focus:** Sleep and mobility.",
+    "actualSport": "Other",
+    "actualDuration": 0.0,
+    "actualWorkout": "Activity",
+    "status": "COMPLETED",
+    "compliance": 100
+  },
+  {
+    "date": "2026-02-02",
+    "day": "Monday",
+    "plannedWorkout": "[RUN] Tempo / Threshold",
+    "plannedDuration": 45.0,
+    "notes": "**Loc:** Treadmill/Outdoor. **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **6 x 20s Strides** (High Cadence); Cooldown.",
+    "actualSport": "Run",
+    "actualDuration": 35.5,
+    "actualWorkout": "Roy - Threshold",
+    "status": "COMPLETED",
+    "compliance": 79
+  },
+  {
+    "date": "2026-02-03",
+    "day": "Tuesday",
+    "plannedWorkout": "[BIKE] Strength / Low Cadence",
+    "plannedDuration": 60.0,
+    "notes": "**Loc:** Peloton/Zwift. **Focus:** Torque Efficiency. Warmup, then 4 x 8min @ Sweet Spot at **55-60 RPM**. Grind it out to build force.",
+    "actualSport": "Bike",
+    "actualDuration": 60.5,
+    "actualWorkout": "Innsbruck Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 101
+  },
+  {
+    "date": "2026-02-04",
+    "day": "Wednesday",
+    "plannedWorkout": "[SWIM] Technique Focus",
+    "plannedDuration": 40.0,
+    "notes": "**Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work.",
+    "actualSport": "Swim",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
+  },
+  {
+    "date": "2026-02-05",
+    "day": "Thursday",
+    "plannedWorkout": "[BIKE] Zwift Race",
+    "plannedDuration": 45.0,
+    "notes": "**Loc:** Zwift. **Focus:** \"Fun Factor\" Rule Application. High Cadence, Anaerobic Capacity. Go full gas.",
+    "actualSport": "Bike",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
+  },
+  {
+    "date": "2026-02-06",
+    "day": "Friday",
+    "plannedWorkout": "[RUN] Aerobic Maintenance",
+    "plannedDuration": 40.0,
+    "notes": "**Loc:** Easy Terrain. **Focus:** Active Recovery. Strict Zone 2 (HR < 152). Flush the legs.",
+    "actualSport": "Run",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
+  },
+  {
+    "date": "2026-02-06",
+    "day": "Friday",
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 20.0,
+    "notes": "**Loc:** Pool. **Focus:** Frequency Rule. 500m-800m total. Drills ONLY. Catch & Pull focus. No intensity.",
+    "actualSport": "Swim",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
+  },
+  {
+    "date": "2026-02-07",
+    "day": "Saturday",
+    "plannedWorkout": "[BIKE] Long Steady Distance",
+    "plannedDuration": 135.0,
+    "notes": "**Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m.",
+    "actualSport": "Bike",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
+  }
+]
+```

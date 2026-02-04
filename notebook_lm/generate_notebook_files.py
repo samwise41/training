@@ -37,18 +37,17 @@ SOURCES = [
         "url": "https://raw.githubusercontent.com/samwise41/training/main/data/zones/profile.json",
         "filename": "profile.md",
         "title": "Athlete Profile"
-    }
+    },
     {
         "url": "https://raw.githubusercontent.com/samwise41/training/main/data/zones/zones.json",
         "filename": "zones.md",
         "title": "Athlete Zones"
-    }
+    },
     {
         "url": "https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json",
         "filename": "plandWorkouts.md",
         "title": "Current Week Workouts"
     }
-
 ]
 
 def ensure_dir(directory):

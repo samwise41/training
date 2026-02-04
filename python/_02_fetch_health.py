@@ -10,6 +10,9 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 OUTPUT_FILE = os.path.join(ROOT_DIR, 'garmin_data', 'garmin_health.json') 
 
+# SET THIS TO TRUE TO SEE RAW DATA IN LOGS
+DEBUG = True 
+
 # --- CREDENTIALS ---
 EMAIL = os.environ.get('GARMIN_EMAIL')
 PASSWORD = os.environ.get('GARMIN_PASSWORD')
@@ -27,10 +30,22 @@ def init_garmin():
         print(f"❌ Login Failed: {e}")
         sys.exit(1)
 
+# --- DEBUG HELPER ---
+def debug_log(title, data):
+    if DEBUG and data:
+        print(f"\n--- DEBUG: {title} ---")
+        # Print first 3 keys just to show it's working, or full dump if needed
+        # We'll dump the whole thing so you can see fields.
+        print(json.dumps(data, indent=2, default=str))
+        print("------------------------\n")
+
 # --- HELPER: FLATTEN HEALTH SUMMARY ---
 def extract_health_metrics(summary):
     row = {}
     if not summary: return row
+    
+    # DEBUG: See what is in the daily summary
+    debug_log("Daily Summary (First Record)", summary)
     
     if 'calendarDate' in summary:
         row['Date'] = summary['calendarDate']
@@ -63,9 +78,6 @@ def extract_health_metrics(summary):
 
 # --- HELPER: FETCH PERFORMANCE METRICS (Activities) ---
 def fetch_activity_metrics(client, date_str):
-    """
-    Fetches activities for the day to aggregate Run/Bike stats.
-    """
     metrics = {}
     try:
         activities = client.get_activities_by_date(date_str, date_str, "")
@@ -74,22 +86,23 @@ def fetch_activity_metrics(client, date_str):
         # Containers for averaging
         run_dist = 0
         run_time = 0
-        run_steps = 0
         run_cadence_sum = 0
         run_count = 0
 
         for act in activities:
             sport = act.get('activityType', {}).get('typeKey')
             
-            # --- RUNNING METRICS ---
+            # DEBUG: Show ONE Run Activity to see available fields
+            if sport == 'running' and run_count == 0:
+                debug_log("Sample Running Activity", act)
+
             if sport == 'running':
                 dist = act.get('distance', 0) # meters
                 dur = act.get('duration', 0)  # seconds
                 
-                # Average Cadence (Steps per Minute)
                 avg_cadence = act.get('averageRunningCadenceInStepsPerMinute')
                 if avg_cadence:
-                    run_cadence_sum += (avg_cadence * dur) # Weighted by duration
+                    run_cadence_sum += (avg_cadence * dur)
                     run_count += 1
                 
                 run_dist += dist
@@ -97,42 +110,32 @@ def fetch_activity_metrics(client, date_str):
 
         # Calculate Averages
         if run_dist > 0 and run_time > 0:
-            # Speed (m/s) -> Pace (min/km) or Speed (km/h)
-            # Storing Avg Speed in m/s (standard)
             avg_speed_mps = run_dist / run_time
             metrics['Run Avg Speed (m/s)'] = round(avg_speed_mps, 2)
-            
-            # Calculate Pace (min/mile) for readability if needed, 
-            # but keeping raw speed is better for data.
             
         if run_time > 0 and run_cadence_sum > 0:
             metrics['Run Avg Cadence'] = round(run_cadence_sum / run_time)
 
     except Exception:
-        pass # Fail silently for activity fetch
+        pass 
     return metrics
 
 # --- HELPER: FETCH PHYSIOLOGICAL METRICS (Training Status) ---
 def fetch_training_status(client, date_str):
-    """
-    Fetches training status for VO2Max, LTHR, FTP (if available).
-    """
     metrics = {}
     try:
-        # get_training_status returns a list, usually sorted by date
         status_list = client.get_training_status(date_str)
         
-        # Look for the entry matching our date
         if status_list:
-            # Usually the most recent one is relevant, or exact match
-            # For simplicity, we take the last one provided for that day
             latest = status_list[-1]
+            
+            # DEBUG: See what Training Status returns
+            debug_log("Training Status", latest)
             
             if 'vo2Max' in latest:
                 metrics['VO2 Max'] = latest['vo2Max']
             
             if 'lactateThresholdValue' in latest:
-                # Often in meters/second or bpm depending on source
                 metrics['Lactate Threshold'] = latest['lactateThresholdValue']
                 
             if 'functionalThresholdPower' in latest:
@@ -158,6 +161,10 @@ def fetch_daily_stats(client, start_date, end_date):
     print(f"📡 Fetching {days} days of data ({start_date} to {end_date})...")
     
     all_data = []
+    
+    # GLOBAL FLAG to only print debug info ONCE (to avoid spamming logs)
+    global DEBUG
+    first_run_done = False
 
     for i in range(days):
         current_date = start_date + timedelta(days=i)
@@ -181,6 +188,10 @@ def fetch_daily_stats(client, start_date, end_date):
             if weight:
                 row['Weight (lbs)'] = weight
 
+            # Turn off debug after the first successful day to save log space
+            if DEBUG and len(row) > 1:
+                DEBUG = False 
+
             # Console Log
             rhr = row.get('Resting HR', '-')
             vo2 = row.get('VO2 Max', '-')
@@ -188,7 +199,7 @@ def fetch_daily_stats(client, start_date, end_date):
             
             print(f"   ✅ {date_str}: RHR {rhr} | VO2 {vo2} | Run Cad {run_cad}")
             
-            if len(row) > 1: # More than just Date
+            if len(row) > 1:
                 all_data.append(row)
             else:
                 print(f"   ⚠️ {date_str}: No data.")
@@ -196,7 +207,6 @@ def fetch_daily_stats(client, start_date, end_date):
         except Exception as e:
             print(f"   ❌ {date_str}: Error ({str(e)})")
         
-        # Increased sleep to be kind to API with multiple calls per day
         time.sleep(1.0) 
 
     return all_data
@@ -209,11 +219,13 @@ def load_existing_data():
             with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except (json.JSONDecodeError, ValueError):
-            print("⚠️ Existing JSON file was corrupt. Starting fresh.")
             return []
     return []
 
 def get_start_date(existing_data):
+    # FORCE LOOKBACK for debugging purposes if needed, otherwise use history
+    # return date.today() - timedelta(days=5) 
+    
     if not existing_data:
         print("🆕 No existing history found. Fetching last 365 days.")
         return date.today() - timedelta(days=365)
@@ -241,9 +253,6 @@ def save_json_data(new_data, existing_data):
     
     for item in new_data:
         if 'Date' in item:
-            # Smart Update: Don't overwrite existing fields if new fetch fails, 
-            # but usually we want new data to supersede.
-            # Here we just merge/overwrite based on Date key.
             if item['Date'] in data_map:
                 data_map[item['Date']].update(item)
             else:
@@ -265,10 +274,19 @@ def main():
     existing_data = load_existing_data()
     
     today = date.today()
+    
+    # --- MANUAL OVERRIDE FOR DEBUGGING ---
+    # Uncomment the line below to force it to re-run the last 3 days 
+    # so you can see the logs even if "up to date"
+    # start_date = date.today() - timedelta(days=3)
+    
+    # Default Logic:
     start_date = get_start_date(existing_data)
     
     if start_date > today:
         print("✅ Data is already up to date.")
+        # OPTIONAL: Force run anyway to test
+        # start_date = date.today() - timedelta(days=1)
         return
 
     new_data = fetch_daily_stats(client, start_date, today)

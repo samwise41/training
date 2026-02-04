@@ -38,7 +38,7 @@ def parse_plan():
         return
 
     plan_file = os.path.join(PROJECT_ROOT, 'endurance_plan.md')
-    output_file = os.path.join(PROJECT_ROOT, 'data', 'profile.json')
+    output_file = os.path.join(PROJECT_ROOT, 'data', 'zones', 'profile.json')
 
     with open(plan_file, 'r', encoding='utf-8') as f:
         content = f.read()

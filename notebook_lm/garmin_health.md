@@ -1,5 +1,5 @@
 # Health Trends
-**Generated:** 2026-02-04 18:20:31
+**Generated:** 2026-02-04 18:25:49
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json
 
 ---
@@ -1746,7 +1746,8 @@
     "Intensity Min Total": 89,
     "Weight (lbs)": 178.6,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 252
   },
   {
     "Date": "2025-11-19",
@@ -3447,7 +3448,8 @@
     "Run Avg Speed (m/s)": 2.46,
     "Weight (lbs)": 183.0,
     "Muscle Mass": 75.2,
-    "Body Fat %": 22.5
+    "Body Fat %": 22.5,
+    "FTP": 240
   },
   {
     "Date": "2025-09-03",
@@ -4896,7 +4898,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 196.5,
     "Muscle Mass": 78.5,
-    "Body Fat %": 24.4
+    "Body Fat %": 24.4,
+    "FTP": 235
   },
   {
     "Date": "2025-06-11",
@@ -5236,7 +5239,8 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-07",
@@ -5426,7 +5430,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-16",
@@ -5550,7 +5555,8 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-02",

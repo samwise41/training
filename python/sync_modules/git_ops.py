@@ -9,7 +9,8 @@ def run_cmd(args):
         subprocess.run(args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except subprocess.CalledProcessError as e:
         print(f"Git Error: {e.stderr.decode().strip()}")
-        raise e
+        # We don't raise here so the main script doesn't crash if git fails slightly
+        pass
 
 def main():
     # 1. Check Directory
@@ -26,20 +27,23 @@ def main():
         pass 
 
     # 3. Add Files (THE FIX)
-    print("   -> Staging ALL files in data directory...")
+    print("   -> Staging files...")
     
-    # We construct the path to the 'data' folder explicitly
+    # Define paths relative to BASE_DIR
     data_folder = os.path.join(config.BASE_DIR, 'data')
+    garmin_folder = os.path.join(config.BASE_DIR, 'garmin_data') # <--- ADDED
     strava_folder = os.path.join(config.BASE_DIR, 'strava_data')
     plan_file = os.path.join(config.BASE_DIR, 'endurance_plan.md')
 
-    # Force add the entire folders. This picks up NEW and MODIFIED files automatically.
     paths_to_add = [data_folder, plan_file]
     
-    # Add strava folder if it exists
+    # Add optional folders if they exist
+    if os.path.exists(garmin_folder):
+        paths_to_add.append(garmin_folder) # <--- ADDED
+        
     if os.path.exists(strava_folder):
         paths_to_add.append(strava_folder)
-        
+
     # Run the add command
     if paths_to_add:
         # We use standard strings here to avoid path issues
@@ -53,7 +57,7 @@ def main():
         return
 
     # 5. Commit
-    msg = f"Auto-Update: Training Data {datetime.now().strftime('%Y-%m-%d')}"
+    msg = f"Auto-Update: Training & Health Data {datetime.now().strftime('%Y-%m-%d')}"
     print(f"   -> Committing: {msg}")
     run_cmd(["git", "commit", "-m", msg])
 

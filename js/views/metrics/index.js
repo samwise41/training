@@ -191,10 +191,17 @@ export function renderMetrics(rawData) {
                 </div>
 
                 ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
-                <div id="metric-chart-subjective_bike"></div>
+
+
                 <div id="metric-chart-endurance"></div>
+
+                <div id="metric-chart-drift_bike"></div> 
+
                 <div id="metric-chart-strength"></div>
-                <div id="metric-chart-drift_bike"></div> <div id="metric-chart-strength"></div>
+
+                <div id="metric-chart-strength"></div>
+
+                <div id="metric-chart-subjective_bike"></div>
 
                 ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
                 <div id="metric-chart-subjective_run"></div>

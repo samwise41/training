@@ -16,9 +16,10 @@ export function renderPlannedWorkouts() {
             // 2. Render groups
             container.innerHTML = generateGroupedCardsHTML(groupedData);
             
-            // 3. Scroll to today
+            // 3. Scroll to today ONLY IF incomplete (Blue Ring)
+            // Fix: Removed .ring-emerald-500 from selector so it stays at the top if you are done.
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500, .ring-emerald-500'); 
+                const todayCard = container.querySelector('.ring-blue-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
         } catch (error) {
@@ -68,7 +69,7 @@ function groupWorkoutsByDate(workouts) {
 }
 
 /**
- * Generates the HTML with Compliance Added
+ * Generates the HTML
  */
 function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
@@ -93,6 +94,7 @@ function generateGroupedCardsHTML(groupedData) {
         if (isDayComplete) {
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
+            // Only this class triggers the auto-scroll now
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         }
 

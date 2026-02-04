@@ -8,7 +8,8 @@ from garminconnect import Garmin
 # --- CONFIGURATION ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-OUTPUT_FILE = os.path.join(ROOT_DIR, 'garmin_data', 'garmin_health.json') 
+OUTPUT_FILE = os.path.join(ROOT_DIR, 'garmin_data', 'garmin_health.json')
+PROFILE_FILE = os.path.join(ROOT_DIR, 'data', 'zones', 'profile.json')
 
 # DEBUG: Keeps raw logs enabled for the first day to verify data structures
 DEBUG = True 
@@ -39,6 +40,37 @@ def debug_dump(title, data):
         except:
             print(str(data))
         print("------------------------\n")
+
+# --- PROFILE DATA (SOURCE OF TRUTH) ---
+def load_profile_data():
+    """
+    Loads static physiology settings from profile.json.
+    These OVERRIDE any API data for consistency.
+    """
+    metrics = {}
+    if os.path.exists(PROFILE_FILE):
+        try:
+            with open(PROFILE_FILE, 'r', encoding='utf-8') as f:
+                profile = json.load(f)
+                
+                # 1. Lactate Threshold HR
+                if 'lthr' in profile:
+                    metrics['Lactate Threshold HR'] = int(profile['lthr'])
+                
+                # 2. Cycling FTP
+                if 'ftp_watts' in profile:
+                    metrics['FTP'] = int(profile['ftp_watts'])
+
+                # 3. Run FTP Pace
+                if 'run_ftp_pace' in profile:
+                    metrics['Run FTP Pace'] = profile['run_ftp_pace']
+                    
+        except Exception as e:
+            print(f"⚠️ Profile Load Error: {e}")
+    else:
+        print(f"⚠️ Profile file not found at: {PROFILE_FILE}")
+        
+    return metrics
 
 # --- 1. BASE HEALTH SUMMARY ---
 def extract_health_summary(client, date_str):
@@ -82,7 +114,7 @@ def extract_health_summary(client, date_str):
     except Exception: pass
     return row
 
-# --- 2. ADVANCED METRICS FETCHER (Robust) ---
+# --- 2. ADVANCED METRICS FETCHER (No FTP/LTHR) ---
 def fetch_advanced_metrics(client, date_str):
     metrics = {}
     
@@ -94,7 +126,7 @@ def fetch_advanced_metrics(client, date_str):
                 metrics['Readiness Score'] = readiness['trainingReadinessScore']
     except Exception: pass
 
-    # B. Training Status
+    # B. Training Status (Heat/Load/VO2)
     try:
         status = client.get_training_status(date_str)
         latest = None
@@ -140,7 +172,7 @@ def fetch_advanced_metrics(client, date_str):
             if 'floorsClimbed' in floors: metrics['Floors Climbed'] = floors['floorsClimbed']
     except Exception: pass
 
-    # G. Fitness Age & VO2
+    # G. Fitness Age & VO2 (Max Metrics)
     try:
         max_m = client.get_max_metrics(date_str)
         if max_m and isinstance(max_m, list):
@@ -190,41 +222,6 @@ def fetch_advanced_metrics(client, date_str):
                 if count > 0:
                     metrics['BP Systolic'] = round(sys_sum / count)
                     metrics['BP Diastolic'] = round(dia_sum / count)
-    except Exception: pass
-
-    # J. Lactate Threshold (NESTED PARSER)
-    try:
-        lt_data = client.get_lactate_threshold(start_date=date_str, end_date=date_str)
-        if DEBUG: debug_dump("Lactate Threshold", lt_data)
-        
-        # Helper to parse the specific nested structure
-        def parse_lt_item(item):
-            # 1. Heart Rate (LTHR)
-            if 'speed_and_heart_rate' in item:
-                shr = item['speed_and_heart_rate']
-                if shr and 'heartRate' in shr:
-                    metrics['Lactate Threshold HR'] = shr['heartRate']
-            
-            # 2. Power (FTP or Run Power)
-            if 'power' in item:
-                pwr = item['power']
-                if pwr and 'functionalThresholdPower' in pwr:
-                    val = pwr['functionalThresholdPower']
-                    sport = pwr.get('sport', 'GENERIC')
-                    
-                    if sport == 'RUNNING':
-                        metrics['Run Power Threshold'] = val
-                    elif sport == 'CYCLING':
-                        metrics['FTP'] = val # Use this if historical FTP is found
-                    else:
-                        metrics['Lactate Threshold Power'] = val
-
-        # Handle List (Range) vs Dict (Single)
-        if isinstance(lt_data, list):
-            for i in lt_data: parse_lt_item(i)
-        elif isinstance(lt_data, dict):
-            parse_lt_item(lt_data)
-            
     except Exception: pass
 
     return metrics
@@ -283,12 +280,9 @@ def fetch_daily_stats(client, start_date, end_date):
     days = (end_date - start_date).days + 1
     print(f"📡 Fetching {days} days of data ({start_date} to {end_date})...")
     
-    current_ftp = None
-    try:
-        ftp_data = client.get_cycling_ftp()
-        if isinstance(ftp_data, dict): current_ftp = ftp_data.get('functionalThresholdPower')
-        elif isinstance(ftp_data, (int, float)): current_ftp = ftp_data
-    except: pass
+    # 1. Load Profile (Manual settings) - THE SOURCE OF TRUTH
+    profile_data = load_profile_data()
+    print(f"   ℹ️ Injected Profile Data: {profile_data}")
 
     all_data = []
     global DEBUG
@@ -296,24 +290,23 @@ def fetch_daily_stats(client, start_date, end_date):
     for i in range(days):
         current_date = start_date + timedelta(days=i)
         date_str = current_date.isoformat()
-        is_today = (current_date == date.today())
         
         row = {}
         
         try:
+            # Gather metrics from API
             row.update(extract_health_summary(client, date_str))
             row.update(fetch_advanced_metrics(client, date_str))
             row.update(fetch_activity_metrics(client, date_str))
             row.update(fetch_body_comp(client, date_str))
 
-            if is_today and current_ftp:
-                row['FTP'] = current_ftp
+            # --- FORCE OVERWRITE FROM PROFILE.JSON ---
+            row.update(profile_data)
 
             if len(row) > 1:
                 if DEBUG:
-                    print(f"   ✅ {date_str} Found: {list(row.keys())}")
-                    if 'Lactate Threshold HR' in row or 'Run Power Threshold' in row: 
-                        DEBUG = False 
+                    print(f"   ✅ {date_str} Keys: {list(row.keys())}")
+                    if 'Weight (lbs)' in row: DEBUG = False 
                 else:
                     print(f"   ✅ {date_str}: {len(row)} metrics.")
                 all_data.append(row)

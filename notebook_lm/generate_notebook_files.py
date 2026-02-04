@@ -47,6 +47,11 @@ SOURCES = [
         "url": "https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json",
         "filename": "plandWorkouts.md",
         "title": "Current Week Workouts"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.md",
+        "filename": "garmin_health.md",
+        "title": "Health Trends"
     }
 ]
 

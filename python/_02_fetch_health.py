@@ -1,15 +1,15 @@
 import os
 import sys
-import pandas as pd
-from garminconnect import Garmin
-from datetime import date, timedelta
+import json
 import time
+from datetime import date, timedelta
+from garminconnect import Garmin
 
 # --- CONFIGURATION ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-OUTPUT_FILE = os.path.join(ROOT_DIR, 'garmin_data', 'garmin_health.md')
-DAYS_TO_FETCH = 15 
+# Changed to JSON
+OUTPUT_FILE = os.path.join(ROOT_DIR, 'garmin_data', 'garmin_health.json') 
 
 # --- CREDENTIALS ---
 EMAIL = os.environ.get('GARMIN_EMAIL')
@@ -31,8 +31,7 @@ def init_garmin():
 # --- DYNAMIC DATA EXTRACTOR ---
 def flatten_health_data(summary):
     """
-    Automatically extracts all useful scalar metrics from the daily summary
-    so we don't have to hardcode every single field name.
+    Automatically extracts all useful scalar metrics from the daily summary.
     """
     row = {}
     if not summary: return row
@@ -41,12 +40,11 @@ def flatten_health_data(summary):
     if 'calendarDate' in summary:
         row['Date'] = summary['calendarDate']
     
-    # 2. Calculated Conversions (Make these readable)
+    # 2. Calculated Conversions
     if 'sleepingSeconds' in summary and summary['sleepingSeconds']:
         row['Sleep Hours'] = round(summary['sleepingSeconds'] / 3600, 1)
     
-    # 3. Dynamic Extraction (The "Capture Everything" Logic)
-    # We map ugly API keys to nice readable column headers
+    # 3. Dynamic Extraction
     field_map = {
         'restingHeartRate': 'Resting HR',
         'minHeartRate': 'Min HR',
@@ -70,31 +68,49 @@ def flatten_health_data(summary):
         if api_key in summary and summary[api_key] is not None:
             row[nice_name] = summary[api_key]
 
-    # 4. Fallback: specific Fallback for Body Battery if 'HighestValue' key changes
+    # 4. Fallback for Body Battery
     if 'Body Batt Max' not in row and 'maxBodyBattery' in summary:
         row['Body Batt Max'] = summary['maxBodyBattery']
     
     return row
 
+def fetch_weight(client, date_str):
+    """
+    Fetches weight for a specific day.
+    """
+    try:
+        data = client.get_body_composition(date_str)
+        if data and 'totalAverage' in data and data['totalAverage']:
+            weight_g = data['totalAverage'].get('weight')
+            if weight_g:
+                # Convert Grams to Lbs
+                return round(weight_g * 0.00220462, 1)
+    except Exception:
+        return None
+    return None
+
 def fetch_daily_stats(client, start_date, end_date):
-    print(f"📡 Fetching Health Data from {start_date} to {end_date}...")
-    
     days = (end_date - start_date).days + 1
+    print(f"📡 Fetching {days} days of data ({start_date} to {end_date})...")
+    
     all_data = []
 
+    # Fetch chronologically to be safe
     for i in range(days):
-        current_date = end_date - timedelta(days=i)
+        current_date = start_date + timedelta(days=i)
         date_str = current_date.isoformat()
         
         try:
+            # 1. Fetch Summary
             summary = client.get_user_summary(date_str)
-            
-            # --- USE DYNAMIC EXTRACTOR ---
             row = flatten_health_data(summary)
-            # -----------------------------
+
+            # 2. Fetch Weight (Separate API Call)
+            weight = fetch_weight(client, date_str)
+            if weight:
+                row['Weight (lbs)'] = weight
 
             if row:
-                # Log a few key stats to console just to show it's working
                 rhr = row.get('Resting HR', '--')
                 sleep = row.get('Sleep Hours', '--')
                 print(f"   ✅ {date_str}: RHR {rhr} | Sleep {sleep}h")
@@ -105,40 +121,95 @@ def fetch_daily_stats(client, start_date, end_date):
         except Exception as e:
             print(f"   ❌ {date_str}: Error ({str(e)})")
         
+        # Polite delay to avoid rate limiting
         time.sleep(0.5) 
 
     return all_data
 
-def save_to_markdown(data):
-    if not data:
-        print("⚠️ No data to save.")
+# --- JSON MANAGEMENT ---
+
+def load_existing_data():
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, ValueError):
+            print("⚠️ Existing JSON file was corrupt. Starting fresh.")
+            return []
+    return []
+
+def get_start_date(existing_data):
+    """
+    Determines the fetch start date based on existing history.
+    """
+    if not existing_data:
+        # Initial Run: Go back 1 Year
+        print("🆕 No existing history found. Fetching last 365 days.")
+        return date.today() - timedelta(days=365)
+    
+    # Find the latest date in the file
+    try:
+        dates = [d.get('Date') for d in existing_data if d.get('Date')]
+        if not dates:
+            return date.today() - timedelta(days=365)
+            
+        last_date_str = max(dates) # ISO strings sort correctly
+        last_date = date.fromisoformat(last_date_str)
+        
+        # We start from the last date (inclusive) to capture updates/weight changes
+        print(f"🔄 Resuming from last recorded date: {last_date}")
+        return last_date
+    except Exception as e:
+        print(f"⚠️ Error parsing dates: {e}. Defaulting to 1 year ago.")
+        return date.today() - timedelta(days=365)
+
+def save_json_data(new_data, existing_data):
+    if not new_data:
+        print("⚠️ No new data to save.")
         return
 
-    # Create DataFrame
-    df = pd.DataFrame(data)
+    # Create a map keyed by Date to merge/deduplicate
+    # Start with existing data
+    data_map = {item['Date']: item for item in existing_data if 'Date' in item}
     
-    # Smart Column Sorting: Date first, then the rest
-    cols = ['Date'] + [c for c in df.columns if c != 'Date']
-    df = df[cols]
+    # Update with new data (overwriting matching dates)
+    for item in new_data:
+        if 'Date' in item:
+            data_map[item['Date']] = item
+
+    # Convert back to list and sort (Newest First)
+    final_list = sorted(data_map.values(), key=lambda x: x['Date'], reverse=True)
 
     # Ensure directory exists
     os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
     
-    print(f"💾 Saving {len(df)} records to {OUTPUT_FILE}...")
+    print(f"💾 Saving {len(final_list)} records to {OUTPUT_FILE}...")
     
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        f.write("# Garmin Health & Biometrics\n\n")
-        f.write(f"**Last Updated:** {date.today().isoformat()}\n\n")
-        f.write(df.to_markdown(index=False))
+        json.dump(final_list, f, indent=4)
         
     print("✅ Done.")
 
 def main():
     client = init_garmin()
+    
+    # 1. Load History
+    existing_data = load_existing_data()
+    
+    # 2. Determine Range
     today = date.today()
-    start_date = today - timedelta(days=DAYS_TO_FETCH)
-    health_data = fetch_daily_stats(client, start_date, today)
-    save_to_markdown(health_data)
+    start_date = get_start_date(existing_data)
+    
+    # 3. Fetch
+    # Check if we are already up to date
+    if start_date > today:
+        print("✅ Data is already up to date.")
+        return
+
+    new_data = fetch_daily_stats(client, start_date, today)
+    
+    # 4. Save
+    save_json_data(new_data, existing_data)
 
 if __name__ == "__main__":
     main()

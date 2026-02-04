@@ -22,7 +22,7 @@ The primary "A" races and secondary objectives for the 2026 season.
 ### Biometrics & Fitness
 
 * **Weight:** 176 lbs.
-* **Cycling FTP:** 242 Watts (Validated Dec 23, 2025 via 60-min Alpe du Zwift).
+* **Cycling FTP:** 241 Watts (Validated Dec 23, 2025 via 60-min Alpe du Zwift).
 * **Running Fitness:**
   * **Lactate Threshold HR (LTHR):** 171 bpm (Validated Dec 26, 2025).
   * **Functional Threshold Pace (FTP):** 7:45 min/mile (Wind-adjusted estimate).

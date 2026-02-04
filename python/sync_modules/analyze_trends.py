@@ -88,10 +88,12 @@ def main():
         
         md_output += "\n"
 
-    with open(config.COACH_BRIEFING_MD, 'w', encoding='utf-8') as f:
-        f.write(md_output)
+    # --- DISABLED: WRITE TO FILE ---
+    # with open(config.COACH_BRIEFING_MD, 'w', encoding='utf-8') as f:
+    #     f.write(md_output)
     
-    print("   -> Coach Briefing generated.")
+    # print("   -> Coach Briefing generated.")
+    print("   -> Trends analyzed (File output disabled).")
 
 if __name__ == "__main__":
     main()

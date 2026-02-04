@@ -16,9 +16,10 @@ export function renderPlannedWorkouts() {
             // 2. Render groups
             container.innerHTML = generateGroupedCardsHTML(groupedData);
             
-            // 3. Scroll to today
+            // 3. Scroll to today ONLY IF incomplete (Blue Ring)
+            // Removed .ring-emerald-500 so it doesn't scroll if you are already done.
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500, .ring-emerald-500'); 
+                const todayCard = container.querySelector('.ring-blue-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
         } catch (error) {
@@ -68,7 +69,7 @@ function groupWorkoutsByDate(workouts) {
 }
 
 /**
- * Generates the HTML with Correct Colors and Layout
+ * Generates the HTML
  */
 function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
@@ -78,33 +79,27 @@ function generateGroupedCardsHTML(groupedData) {
     const todayStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
 
     groupedData.forEach(day => {
-        // --- Header Logic ---
         const isToday = day.dateStr === todayStr;
         const dayNameFull = day.dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         
-        // Completion Logic
         const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        // --- Card Border Logic ---
-        // Solid background (bg-slate-800) to prevent greying out
         let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
         
         if (isDayComplete) {
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
+            // This class (.ring-blue-500) is what the scroll target looks for
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         }
 
-        // --- Rows Logic ---
         const rowsHtml = day.workouts.map(w => {
             const planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // 1. Status Colors
-            // We use the raw status text
             let statusText = w.status; 
             let statusColorClass = "text-slate-400"; 
 
@@ -114,8 +109,6 @@ function generateGroupedCardsHTML(groupedData) {
                 statusColorClass = "text-red-400";
             }
 
-            // 2. Sport Color Class
-            // FIX: Using 'icon-{sport}' because these classes are already defined in styles.css with !important color
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
             return `
@@ -153,8 +146,6 @@ function generateGroupedCardsHTML(groupedData) {
             `;
         }).join('');
 
-        // --- Assemble Card ---
-        // min-h-[180px] to ensure cards are tall enough
         html += `
             <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full min-h-[180px]">
                 <div class="px-4 py-1.5 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">

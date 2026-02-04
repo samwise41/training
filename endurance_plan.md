@@ -12,7 +12,7 @@ The primary "A" races and secondary objectives for the 2026 season.
 
 | **Date** | **Event Type** | **Goal** | **Priority** |  **Course Profile** | **Training Implication** | **Swim Distance** | **Swim Goal** | **Bike Distance** | **Bike Goal** | **Run Distance** | **Run Goal** | **Elevation Goal** |
 | :--- | :--- | :--- | :--- |  :--- | :--- | :--- | :--- | :--- | :--- |  :--- | :--- | :--- | 
-| June 20, 2026 | Jordanelle Olympic Triathlon | Finish ~ 2:30:00 | **A-Race** |  Hilly Bike / Flat Run | Needs low-cadence/high-torque bike intervals (Strength Endurance). | 1.5 k | 00:30:00 | 25 Miles | 1:14:00  | 10 k |  00:50:33 | 1202 ft |
+| June 20, 2026 | Jordanelle Olympic Triathlon | Finish ~ 2:30:00 | **A-Race** |  Hilly Bike / Flat Run | Needs low-cadence/high-torque bike intervals (Strength Endurance). | 1.3716 k | 00:30:00 | 25 Miles | 1:14:00  | 10 k |  00:50:33 | 1202 ft |
 | Aug 15, 2026 | CF Ride for Life Century Ride | Finish ~ 5:30:00 | **A-Race** |  4000+ ft of climb over two mountains  | Needs sustained Z2 endurance (4-5h saddle time). | | | 100 Miles | 5:30:00 | | | 4938 ft | 
 | Sept 11, 2026 | Brineman 70.3 Triathlon | sub 6:00:00 | **B-Race** |  1000 ft of climb total with no single climb over 200 ft.  | Need to pace effort. | 1.2 Miles | 01:00:00 | 52 Miles | 02:45:00 | 13.1 Miles | 02:15:00 | 1332 ft |
 | May 5, 2026 | East Canyon and Back | Finish ~ 2:30:00 | **C-Race** |  5000+ ft of climb | Needs low-cadence/high-torque bike intervals (Strength Endurance). |  |  | 41 Miles | 2:30:00  |  |  | 4905 ft |

@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-02-04 19:08:40
+**Generated:** 2026-02-04 19:53:05
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-02-04 14:03:54",
+  "generated_at": "2026-02-04 19:51:25",
   "metrics_summary": [
     {
       "group": "General Fitness",

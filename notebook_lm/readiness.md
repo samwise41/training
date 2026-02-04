@@ -1,5 +1,5 @@
 # Daily Readiness Scores
-**Generated:** 2026-02-04 19:08:40
+**Generated:** 2026-02-04 19:53:05
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/readiness/readiness.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generatedAt": "2026-02-04T14:03:55.000322",
+  "generatedAt": "2026-02-04T19:51:25.506767",
   "trainingStats": {
     "maxSwim": 46.6,
     "maxBike": 132.7,
@@ -37,7 +37,7 @@
       "priority": "A-Race",
       "courseProfile": "Hilly Bike / Flat Run",
       "trainingImplication": "Needs low-cadence/high-torque bike intervals (Strength Endurance).",
-      "swimDist": "1.5 k",
+      "swimDist": "1500 yards",
       "swimGoal": "00:30:00",
       "bikeDist": "25 Miles",
       "bikeGoal": "1:14:00",

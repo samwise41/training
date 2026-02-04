@@ -140,7 +140,7 @@ def fetch_advanced_metrics(client, date_str):
             if 'floorsClimbed' in floors: metrics['Floors Climbed'] = floors['floorsClimbed']
     except Exception: pass
 
-    # G. Fitness Age & VO2 (Max Metrics)
+    # G. Fitness Age & VO2
     try:
         max_m = client.get_max_metrics(date_str)
         if max_m and isinstance(max_m, list):
@@ -192,18 +192,39 @@ def fetch_advanced_metrics(client, date_str):
                     metrics['BP Diastolic'] = round(dia_sum / count)
     except Exception: pass
 
-    # J. Lactate Threshold (Restored!)
+    # J. Lactate Threshold (NESTED PARSER)
     try:
-        # Fetch specifically for this date
         lt_data = client.get_lactate_threshold(start_date=date_str, end_date=date_str)
         if DEBUG: debug_dump("Lactate Threshold", lt_data)
         
-        if lt_data and isinstance(lt_data, list):
-            for item in lt_data:
-                if 'lactateThresholdHeartRate' in item: 
-                    metrics['Lactate Threshold HR'] = item['lactateThresholdHeartRate']
-                if 'lactateThresholdPower' in item:
-                    metrics['Lactate Threshold Power'] = item['lactateThresholdPower']
+        # Helper to parse the specific nested structure
+        def parse_lt_item(item):
+            # 1. Heart Rate (LTHR)
+            if 'speed_and_heart_rate' in item:
+                shr = item['speed_and_heart_rate']
+                if shr and 'heartRate' in shr:
+                    metrics['Lactate Threshold HR'] = shr['heartRate']
+            
+            # 2. Power (FTP or Run Power)
+            if 'power' in item:
+                pwr = item['power']
+                if pwr and 'functionalThresholdPower' in pwr:
+                    val = pwr['functionalThresholdPower']
+                    sport = pwr.get('sport', 'GENERIC')
+                    
+                    if sport == 'RUNNING':
+                        metrics['Run Power Threshold'] = val
+                    elif sport == 'CYCLING':
+                        metrics['FTP'] = val # Use this if historical FTP is found
+                    else:
+                        metrics['Lactate Threshold Power'] = val
+
+        # Handle List (Range) vs Dict (Single)
+        if isinstance(lt_data, list):
+            for i in lt_data: parse_lt_item(i)
+        elif isinstance(lt_data, dict):
+            parse_lt_item(lt_data)
+            
     except Exception: pass
 
     return metrics
@@ -291,8 +312,7 @@ def fetch_daily_stats(client, start_date, end_date):
             if len(row) > 1:
                 if DEBUG:
                     print(f"   ✅ {date_str} Found: {list(row.keys())}")
-                    # Turn off debug ONLY if we found Intensity or Threshold to avoid spam
-                    if 'Intensity Min Vig' in row or 'Lactate Threshold HR' in row: 
+                    if 'Lactate Threshold HR' in row or 'Run Power Threshold' in row: 
                         DEBUG = False 
                 else:
                     print(f"   ✅ {date_str}: {len(row)} metrics.")
@@ -323,16 +343,11 @@ def get_start_date(existing_data):
     
     try:
         dates = [d.get('Date') for d in existing_data if d.get('Date')]
-        if not dates: 
-            return date.today() - timedelta(days=365)
-            
-        last_date_str = max(dates)
-        last_date = date.fromisoformat(last_date_str)
-        
+        if not dates: return date.today() - timedelta(days=365)
+        last_date = date.fromisoformat(max(dates))
         print(f"🔄 Resuming from last recorded date: {last_date}")
         return last_date
-    except Exception as e:
-        print(f"⚠️ Error parsing dates: {e}. Defaulting to 1 year ago.")
+    except Exception:
         return date.today() - timedelta(days=365)
 
 def save_json_data(new_data, existing_data):

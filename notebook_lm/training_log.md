@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-04 04:48:45
+**Generated:** 2026-02-04 13:15:12
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-04",
+    "day": "Wednesday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": false
+    },
+    "plannedWorkout": "[SWIM] Technique Focus",
+    "plannedDuration": 40.0,
+    "notes": "**Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work.",
+    "actualDuration": 40.0,
+    "id": 21761590353,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 2401.239013671875,
+    "distance": 1463.0400390625,
+    "averageHR": 148.0,
+    "maxHR": 166.0,
+    "aerobicTrainingEffect": 3.299999952316284,
+    "anaerobicTrainingEffect": 1.899999976158142,
+    "trainingEffectLabel": "TEMPO",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.6990000009536743,
+    "maxSpeed": 1.184000015258789,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 549.0,
+    "elevationGain": null,
+    "RPE": 5.0,
+    "Feeling": 2,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-03",
     "day": "Tuesday",
@@ -6010,7 +6057,7 @@
     "elevationGain": 1222,
     "RPE": 8,
     "Feeling": 4,
-    "status": "COMPLETED"
+    "status": "UNPLANNED"
   },
   {
     "actualSport": "Bike",

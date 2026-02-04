@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-04 04:48:46
+**Generated:** 2026-02-04 13:15:12
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -50,10 +50,10 @@
     "plannedDuration": 40.0,
     "notes": "**Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0
+    "actualDuration": 40.0,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 100
   },
   {
     "date": "2026-02-05",

@@ -1,5 +1,30 @@
 [
-    
+    {
+        "Date": "2026-02-04",
+        "Resting HR": 52,
+        "Min HR": 48,
+        "Max HR": 162,
+        "Stress Avg": 26,
+        "Stress Max": 93,
+        "Steps": 1320,
+        "Steps Goal": 6680,
+        "Daily Distance (m)": 2562,
+        "Body Batt Max": 70,
+        "Body Batt Min": 34,
+        "Sleep Hours": 4.7,
+        "Respiration Avg": 13.0,
+        "SpO2 Avg": 94.0,
+        "Fitness Age": 30.88636666234766,
+        "Intensity Min Mod": 9,
+        "Intensity Min Vig": 35,
+        "Intensity Min Total": 79,
+        "BP Systolic": 122,
+        "BP Diastolic": 78,
+        "Weight (lbs)": 178.0,
+        "Muscle Mass": 74.0,
+        "Body Fat %": 21.3,
+        "FTP": 252
+    },
     {
         "Date": "2026-02-03",
         "Resting HR": 50,
@@ -16,11 +41,12 @@
         "Respiration Avg": 13.0,
         "SpO2 Avg": 95.0,
         "Fitness Age": 30.772071452280134,
-        "Intensity Min Mod": 0,
-        "Intensity Min Vig": 0,
+        "Intensity Min Mod": 10,
+        "Intensity Min Vig": 58,
         "Weight (lbs)": 177.4,
         "Muscle Mass": 0.0,
-        "Body Fat %": 0.0
+        "Body Fat %": 0.0,
+        "Intensity Min Total": 126
     },
     {
         "Date": "2026-02-02",
@@ -39,10 +65,11 @@
         "SpO2 Avg": 95.0,
         "VO2 Max": 52.0,
         "Fitness Age": null,
-        "Intensity Min Mod": 0,
-        "Intensity Min Vig": 0,
+        "Intensity Min Mod": 3,
+        "Intensity Min Vig": 36,
         "Run Avg Cadence": 173.515625,
-        "Run Avg Speed (m/s)": 3.3
+        "Run Avg Speed (m/s)": 3.3,
+        "Intensity Min Total": 75
     },
     {
         "Date": "2026-02-01",
@@ -61,7 +88,8 @@
         "SpO2 Avg": 94.0,
         "Fitness Age": 30.848268622328582,
         "Intensity Min Mod": 0,
-        "Intensity Min Vig": 0
+        "Intensity Min Vig": 0,
+        "Intensity Min Total": 0
     },
     {
         "Date": "2026-01-31",
@@ -78,11 +106,12 @@
         "Respiration Avg": 13.0,
         "SpO2 Avg": 95.0,
         "Fitness Age": 30.848268622328582,
-        "Intensity Min Mod": 0,
-        "Intensity Min Vig": 0,
+        "Intensity Min Mod": 56,
+        "Intensity Min Vig": 77,
         "Weight (lbs)": 184.2,
         "Muscle Mass": 75.5,
-        "Body Fat %": 20.5
+        "Body Fat %": 20.5,
+        "Intensity Min Total": 210
     },
     {
         "Date": "2026-01-30",
@@ -123,10 +152,10 @@
         "HRV Night Avg": null,
         "HRV Last Night": null,
         "Fitness Age": 30.457072241889925,
-        "Intensity Min Mod": 0,
-        "Intensity Min Vig": 0,
+        "Intensity Min Mod": 24,
+        "Intensity Min Vig": 70,
         "Steps Goal": 10680,
-        "Intensity Min Total": 0
+        "Intensity Min Total": 164
     },
     {
         "Date": "2026-01-28",
@@ -146,9 +175,9 @@
         "HRV Last Night": null,
         "Fitness Age": 30.457072241889925,
         "Intensity Min Mod": 0,
-        "Intensity Min Vig": 0,
+        "Intensity Min Vig": 1,
         "Steps Goal": 10750,
-        "Intensity Min Total": 0
+        "Intensity Min Total": 2
     },
     {
         "Date": "2025-12-31",

@@ -1,5 +1,5 @@
 # Health Trends
-**Generated:** 2026-02-04 18:25:49
+**Generated:** 2026-02-04 19:08:41
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json
 
 ---
@@ -12,15 +12,15 @@
     "Resting HR": 52,
     "Min HR": 48,
     "Max HR": 162,
-    "Stress Avg": 25,
+    "Stress Avg": 26,
     "Stress Max": 93,
-    "Steps": 1320,
+    "Steps": 1376,
     "Steps Goal": 6680,
-    "Daily Distance (m)": 2562,
+    "Daily Distance (m)": 2609,
     "Body Batt Max": 70,
     "Body Batt Min": 34,
     "Sleep Hours": 4.7,
-    "Respiration Avg": 13.0,
+    "Respiration Avg": 12.0,
     "SpO2 Avg": 94.0,
     "Fitness Age": 30.88636666234766,
     "Intensity Min Mod": 9,
@@ -31,7 +31,9 @@
     "Weight (lbs)": 178.0,
     "Muscle Mass": 74.0,
     "Body Fat %": 21.3,
-    "FTP": 252
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-02-03",
@@ -54,7 +56,10 @@
     "Intensity Min Total": 126,
     "Weight (lbs)": 177.4,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-02-02",
@@ -77,7 +82,10 @@
     "Intensity Min Vig": 36,
     "Intensity Min Total": 75,
     "Run Avg Cadence": 173.515625,
-    "Run Avg Speed (m/s)": 3.3
+    "Run Avg Speed (m/s)": 3.3,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-02-01",
@@ -97,7 +105,10 @@
     "Fitness Age": 30.848268622328582,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-31",
@@ -119,7 +130,10 @@
     "Intensity Min Total": 210,
     "Weight (lbs)": 184.2,
     "Muscle Mass": 75.5,
-    "Body Fat %": 20.5
+    "Body Fat %": 20.5,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-30",
@@ -139,7 +153,10 @@
     "Fitness Age": 30.457072241889925,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-29",
@@ -159,7 +176,10 @@
     "Fitness Age": 30.457072241889925,
     "Intensity Min Mod": 24,
     "Intensity Min Vig": 70,
-    "Intensity Min Total": 164
+    "Intensity Min Total": 164,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-28",
@@ -179,7 +199,10 @@
     "Fitness Age": 30.457072241889925,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 1,
-    "Intensity Min Total": 2
+    "Intensity Min Total": 2,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-27",
@@ -199,7 +222,10 @@
     "Fitness Age": 30.590417561977276,
     "Intensity Min Mod": 2,
     "Intensity Min Vig": 59,
-    "Intensity Min Total": 120
+    "Intensity Min Total": 120,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-26",
@@ -219,7 +245,10 @@
     "Fitness Age": 30.671375897017807,
     "Intensity Min Mod": 12,
     "Intensity Min Vig": 40,
-    "Intensity Min Total": 92
+    "Intensity Min Total": 92,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-25",
@@ -238,7 +267,10 @@
     "Fitness Age": 30.671375897017807,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-24",
@@ -261,7 +293,10 @@
     "Intensity Min Total": 209,
     "Weight (lbs)": 178.8,
     "Muscle Mass": 74.2,
-    "Body Fat %": 20.1
+    "Body Fat %": 20.1,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-23",
@@ -284,7 +319,10 @@
     "Intensity Min Vig": 69,
     "Intensity Min Total": 145,
     "Run Avg Cadence": 168.640625,
-    "Run Avg Speed (m/s)": 2.8
+    "Run Avg Speed (m/s)": 2.8,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-22",
@@ -307,7 +345,10 @@
     "Intensity Min Total": 136,
     "Weight (lbs)": 176.8,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-21",
@@ -333,7 +374,10 @@
     "Run Avg Speed (m/s)": 3.07,
     "Weight (lbs)": 175.9,
     "Muscle Mass": 73.5,
-    "Body Fat %": 20.8
+    "Body Fat %": 20.8,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-20",
@@ -356,7 +400,10 @@
     "Intensity Min Total": 96,
     "Weight (lbs)": 175.2,
     "Muscle Mass": 73.3,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-19",
@@ -376,7 +423,10 @@
     "Fitness Age": 30.399924091851013,
     "Intensity Min Mod": 12,
     "Intensity Min Vig": 37,
-    "Intensity Min Total": 86
+    "Intensity Min Total": 86,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-18",
@@ -396,7 +446,10 @@
     "Fitness Age": 30.499932536911384,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-17",
@@ -421,7 +474,10 @@
     "BP Diastolic": 76,
     "Weight (lbs)": 175.9,
     "Muscle Mass": 73.5,
-    "Body Fat %": 20.0
+    "Body Fat %": 20.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-16",
@@ -447,7 +503,10 @@
     "Run Avg Speed (m/s)": 3.29,
     "Weight (lbs)": 177.6,
     "Muscle Mass": 73.9,
-    "Body Fat %": 20.0
+    "Body Fat %": 20.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-15",
@@ -466,7 +525,10 @@
     "Fitness Age": 30.8285335821274,
     "Intensity Min Mod": 13,
     "Intensity Min Vig": 29,
-    "Intensity Min Total": 71
+    "Intensity Min Total": 71,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-14",
@@ -486,7 +548,10 @@
     "Fitness Age": 30.8285335821274,
     "Intensity Min Mod": 22,
     "Intensity Min Vig": 32,
-    "Intensity Min Total": 86
+    "Intensity Min Total": 86,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-13",
@@ -506,7 +571,10 @@
     "Fitness Age": 30.8285335821274,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-12",
@@ -531,7 +599,10 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 177.7,
     "Muscle Mass": 73.9,
-    "Body Fat %": 20.7
+    "Body Fat %": 20.7,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-11",
@@ -554,7 +625,10 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 178.8,
     "Muscle Mass": 74.2,
-    "Body Fat %": 21.0
+    "Body Fat %": 21.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-10",
@@ -574,7 +648,10 @@
     "Fitness Age": 30.95235439220998,
     "Intensity Min Mod": 57,
     "Intensity Min Vig": 87,
-    "Intensity Min Total": 231
+    "Intensity Min Total": 231,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-09",
@@ -600,7 +677,10 @@
     "Run Avg Speed (m/s)": 2.89,
     "Weight (lbs)": 178.0,
     "Muscle Mass": 74.0,
-    "Body Fat %": 20.6
+    "Body Fat %": 20.6,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-08",
@@ -622,7 +702,10 @@
     "Intensity Min Vig": 36,
     "Intensity Min Total": 111,
     "BP Systolic": 125,
-    "BP Diastolic": 85
+    "BP Diastolic": 85,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-07",
@@ -645,7 +728,10 @@
     "Intensity Min Vig": 44,
     "Intensity Min Total": 92,
     "Run Avg Cadence": 150.828125,
-    "Run Avg Speed (m/s)": 3.0
+    "Run Avg Speed (m/s)": 3.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-06",
@@ -668,7 +754,10 @@
     "Intensity Min Total": 64,
     "Weight (lbs)": 179.5,
     "Muscle Mass": 74.3,
-    "Body Fat %": 21.7
+    "Body Fat %": 21.7,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-05",
@@ -688,7 +777,10 @@
     "Fitness Age": 30.886368842368256,
     "Intensity Min Mod": 9,
     "Intensity Min Vig": 47,
-    "Intensity Min Total": 103
+    "Intensity Min Total": 103,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-04",
@@ -711,7 +803,10 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 179.6,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-03",
@@ -734,7 +829,10 @@
     "Intensity Min Total": 194,
     "Weight (lbs)": 178.4,
     "Muscle Mass": 74.1,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-02",
@@ -760,7 +858,10 @@
     "Run Avg Speed (m/s)": 2.92,
     "Weight (lbs)": 179.1,
     "Muscle Mass": 74.2,
-    "Body Fat %": 20.7
+    "Body Fat %": 20.7,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2026-01-01",
@@ -780,7 +881,10 @@
     "Fitness Age": 30.919024460957505,
     "Intensity Min Mod": 19,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 19
+    "Intensity Min Total": 19,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-31",
@@ -802,7 +906,10 @@
     "Intensity Min Total": 103,
     "Weight (lbs)": 180.6,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.4
+    "Body Fat %": 21.4,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-30",
@@ -828,7 +935,10 @@
     "Run Avg Speed (m/s)": 2.93,
     "Weight (lbs)": 180.5,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.1
+    "Body Fat %": 21.1,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-29",
@@ -848,7 +958,10 @@
     "Fitness Age": 30.726353150251065,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-28",
@@ -868,7 +981,10 @@
     "Fitness Age": 30.726353150251065,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-27",
@@ -888,7 +1004,10 @@
     "Fitness Age": 30.733973412261065,
     "Intensity Min Mod": 30,
     "Intensity Min Vig": 57,
-    "Intensity Min Total": 144
+    "Intensity Min Total": 144,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-26",
@@ -916,7 +1035,10 @@
     "Run Avg Speed (m/s)": 2.91,
     "Weight (lbs)": 179.6,
     "Muscle Mass": 74.4,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "Lactate Threshold HR": 171,
+    "FTP": 241,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-25",
@@ -939,7 +1061,10 @@
     "Intensity Min Total": 105,
     "Weight (lbs)": 181.0,
     "Muscle Mass": 74.7,
-    "Body Fat %": 21.2
+    "Body Fat %": 21.2,
+    "FTP": 241,
+    "Lactate Threshold HR": 171,
+    "Run FTP Pace": "7:45"
   },
   {
     "Date": "2025-12-24",
@@ -962,7 +1087,8 @@
     "Intensity Min Total": 42,
     "Weight (lbs)": 179.0,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-23",
@@ -987,7 +1113,8 @@
     "BP Diastolic": 68,
     "Weight (lbs)": 181.0,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-22",
@@ -1007,7 +1134,8 @@
     "Fitness Age": 30.60702903637029,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-21",
@@ -1030,7 +1158,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 180.0,
     "Muscle Mass": 74.5,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "FTP": 241
   },
   {
     "Date": "2025-12-20",
@@ -1053,7 +1182,8 @@
     "Intensity Min Total": 221,
     "Weight (lbs)": 178.9,
     "Muscle Mass": 74.2,
-    "Body Fat %": 21.1
+    "Body Fat %": 21.1,
+    "FTP": 241
   },
   {
     "Date": "2025-12-19",
@@ -1078,7 +1208,8 @@
     "BP Systolic": 110,
     "BP Diastolic": 78,
     "Run Avg Cadence": 154.4375,
-    "Run Avg Speed (m/s)": 2.76
+    "Run Avg Speed (m/s)": 2.76,
+    "FTP": 241
   },
   {
     "Date": "2025-12-18",
@@ -1098,7 +1229,8 @@
     "Fitness Age": 30.56633854814418,
     "Intensity Min Mod": 21,
     "Intensity Min Vig": 26,
-    "Intensity Min Total": 73
+    "Intensity Min Total": 73,
+    "FTP": 241
   },
   {
     "Date": "2025-12-17",
@@ -1118,7 +1250,8 @@
     "Fitness Age": 30.535315764984908,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-16",
@@ -1143,7 +1276,8 @@
     "BP Diastolic": 80,
     "Weight (lbs)": 178.3,
     "Muscle Mass": 74.0,
-    "Body Fat %": 20.5
+    "Body Fat %": 20.5,
+    "FTP": 241
   },
   {
     "Date": "2025-12-15",
@@ -1163,7 +1297,8 @@
     "Fitness Age": 30.572054562159398,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-14",
@@ -1186,7 +1321,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 180.7,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.1
+    "Body Fat %": 21.1,
+    "FTP": 241
   },
   {
     "Date": "2025-12-13",
@@ -1209,7 +1345,8 @@
     "Intensity Min Total": 251,
     "Weight (lbs)": 178.2,
     "Muscle Mass": 74.0,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "FTP": 241
   },
   {
     "Date": "2025-12-12",
@@ -1237,7 +1374,8 @@
     "Run Avg Speed (m/s)": 2.82,
     "Weight (lbs)": 180.7,
     "Muscle Mass": 74.6,
-    "Body Fat %": 19.7
+    "Body Fat %": 19.7,
+    "FTP": 241
   },
   {
     "Date": "2025-12-11",
@@ -1260,7 +1398,8 @@
     "Intensity Min Total": 155,
     "Weight (lbs)": 179.6,
     "Muscle Mass": 74.4,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "FTP": 241
   },
   {
     "Date": "2025-12-10",
@@ -1286,7 +1425,8 @@
     "Run Avg Speed (m/s)": 2.73,
     "Weight (lbs)": 178.4,
     "Muscle Mass": 74.1,
-    "Body Fat %": 20.4
+    "Body Fat %": 20.4,
+    "FTP": 241
   },
   {
     "Date": "2025-12-09",
@@ -1309,7 +1449,8 @@
     "Intensity Min Total": 99,
     "Weight (lbs)": 181.1,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-08",
@@ -1332,7 +1473,8 @@
     "Intensity Min Total": 66,
     "Weight (lbs)": 181.0,
     "Muscle Mass": 74.7,
-    "Body Fat %": 21.5
+    "Body Fat %": 21.5,
+    "FTP": 241
   },
   {
     "Date": "2025-12-07",
@@ -1351,7 +1493,8 @@
     "Fitness Age": 30.725313280424498,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-12-06",
@@ -1377,7 +1520,8 @@
     "Run Avg Speed (m/s)": 3.19,
     "Weight (lbs)": 176.9,
     "Muscle Mass": 73.7,
-    "Body Fat %": 19.9
+    "Body Fat %": 19.9,
+    "FTP": 241
   },
   {
     "Date": "2025-12-05",
@@ -1402,7 +1546,8 @@
     "BP Diastolic": 72,
     "Weight (lbs)": 177.4,
     "Muscle Mass": 73.8,
-    "Body Fat %": 21.5
+    "Body Fat %": 21.5,
+    "FTP": 241
   },
   {
     "Date": "2025-12-04",
@@ -1425,7 +1570,8 @@
     "Intensity Min Total": 106,
     "Weight (lbs)": 180.4,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.3
+    "Body Fat %": 21.3,
+    "FTP": 241
   },
   {
     "Date": "2025-12-03",
@@ -1453,7 +1599,8 @@
     "Run Avg Speed (m/s)": 3.05,
     "Weight (lbs)": 177.6,
     "Muscle Mass": 73.9,
-    "Body Fat %": 21.1
+    "Body Fat %": 21.1,
+    "FTP": 241
   },
   {
     "Date": "2025-12-02",
@@ -1475,7 +1622,8 @@
     "Intensity Min Total": 130,
     "Weight (lbs)": 180.1,
     "Muscle Mass": 74.5,
-    "Body Fat %": 21.5
+    "Body Fat %": 21.5,
+    "FTP": 241
   },
   {
     "Date": "2025-12-01",
@@ -1500,7 +1648,8 @@
     "BP Diastolic": 80,
     "Weight (lbs)": 179.9,
     "Muscle Mass": 74.4,
-    "Body Fat %": 21.3
+    "Body Fat %": 21.3,
+    "FTP": 241
   },
   {
     "Date": "2025-11-30",
@@ -1520,7 +1669,8 @@
     "Fitness Age": 31.098854061195006,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-11-29",
@@ -1540,7 +1690,8 @@
     "Fitness Age": 31.098854061195006,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-11-28",
@@ -1563,7 +1714,8 @@
     "Intensity Min Vig": 51,
     "Intensity Min Total": 105,
     "Run Avg Cadence": 149.765625,
-    "Run Avg Speed (m/s)": 2.78
+    "Run Avg Speed (m/s)": 2.78,
+    "FTP": 241
   },
   {
     "Date": "2025-11-27",
@@ -1586,7 +1738,8 @@
     "Intensity Min Vig": 61,
     "Intensity Min Total": 129,
     "Run Avg Cadence": 151.0625,
-    "Run Avg Speed (m/s)": 2.95
+    "Run Avg Speed (m/s)": 2.95,
+    "FTP": 241
   },
   {
     "Date": "2025-11-26",
@@ -1609,7 +1762,8 @@
     "Intensity Min Total": 58,
     "Weight (lbs)": 180.9,
     "Muscle Mass": 74.7,
-    "Body Fat %": 21.6
+    "Body Fat %": 21.6,
+    "FTP": 241
   },
   {
     "Date": "2025-11-25",
@@ -1632,7 +1786,8 @@
     "Intensity Min Total": 155,
     "Weight (lbs)": 177.3,
     "Muscle Mass": 73.8,
-    "Body Fat %": 20.8
+    "Body Fat %": 20.8,
+    "FTP": 241
   },
   {
     "Date": "2025-11-24",
@@ -1655,7 +1810,8 @@
     "Intensity Min Total": 35,
     "Weight (lbs)": 180.0,
     "Muscle Mass": 74.5,
-    "Body Fat %": 21.2
+    "Body Fat %": 21.2,
+    "FTP": 241
   },
   {
     "Date": "2025-11-23",
@@ -1675,7 +1831,8 @@
     "Fitness Age": 31.133170877204464,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 241
   },
   {
     "Date": "2025-11-22",
@@ -1697,7 +1854,8 @@
     "Intensity Min Total": 105,
     "Weight (lbs)": 178.6,
     "Muscle Mass": 74.1,
-    "Body Fat %": 21.4
+    "Body Fat %": 21.4,
+    "FTP": 241
   },
   {
     "Date": "2025-11-21",
@@ -1723,7 +1881,8 @@
     "Run Avg Speed (m/s)": 3.07,
     "Weight (lbs)": 177.4,
     "Muscle Mass": 73.8,
-    "Body Fat %": 20.7
+    "Body Fat %": 20.7,
+    "FTP": 241
   },
   {
     "Date": "2025-11-20",
@@ -1747,7 +1906,7 @@
     "Weight (lbs)": 178.6,
     "Muscle Mass": 0.0,
     "Body Fat %": 0.0,
-    "FTP": 252
+    "FTP": 241
   },
   {
     "Date": "2025-11-19",
@@ -1770,7 +1929,8 @@
     "Intensity Min Total": 54,
     "Weight (lbs)": 179.7,
     "Muscle Mass": 74.4,
-    "Body Fat %": 21.3
+    "Body Fat %": 21.3,
+    "FTP": 240
   },
   {
     "Date": "2025-11-18",
@@ -1797,7 +1957,8 @@
     "Run Avg Speed (m/s)": 3.28,
     "Weight (lbs)": 178.7,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-17",
@@ -1816,7 +1977,8 @@
     "Fitness Age": 32.65240115231625,
     "Intensity Min Mod": 17,
     "Intensity Min Vig": 13,
-    "Intensity Min Total": 43
+    "Intensity Min Total": 43,
+    "FTP": 240
   },
   {
     "Date": "2025-11-16",
@@ -1838,7 +2000,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 180.8,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.5
+    "Body Fat %": 21.5,
+    "FTP": 240
   },
   {
     "Date": "2025-11-15",
@@ -1861,7 +2024,8 @@
     "Intensity Min Total": 183,
     "Weight (lbs)": 177.5,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-14",
@@ -1887,7 +2051,8 @@
     "Run Avg Speed (m/s)": 3.03,
     "Weight (lbs)": 176.9,
     "Muscle Mass": 73.7,
-    "Body Fat %": 20.3
+    "Body Fat %": 20.3,
+    "FTP": 240
   },
   {
     "Date": "2025-11-13",
@@ -1907,7 +2072,8 @@
     "Fitness Age": 32.69053202924945,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-12",
@@ -1927,7 +2093,8 @@
     "Fitness Age": 32.709597922271946,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-11",
@@ -1950,7 +2117,8 @@
     "Intensity Min Total": 61,
     "Weight (lbs)": 180.1,
     "Muscle Mass": 74.5,
-    "Body Fat %": 21.3
+    "Body Fat %": 21.3,
+    "FTP": 240
   },
   {
     "Date": "2025-11-10",
@@ -1970,7 +2138,8 @@
     "Fitness Age": 32.71436439552758,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-09",
@@ -1990,7 +2159,8 @@
     "Fitness Age": 32.71436439552758,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-08",
@@ -2010,7 +2180,8 @@
     "Fitness Age": 32.71436439552758,
     "Intensity Min Mod": 29,
     "Intensity Min Vig": 4,
-    "Intensity Min Total": 37
+    "Intensity Min Total": 37,
+    "FTP": 240
   },
   {
     "Date": "2025-11-07",
@@ -2030,7 +2201,8 @@
     "Fitness Age": 32.77791676619472,
     "Intensity Min Mod": 58,
     "Intensity Min Vig": 102,
-    "Intensity Min Total": 262
+    "Intensity Min Total": 262,
+    "FTP": 240
   },
   {
     "Date": "2025-11-06",
@@ -2058,7 +2230,8 @@
     "Run Avg Speed (m/s)": 2.96,
     "Weight (lbs)": 180.8,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.4
+    "Body Fat %": 21.4,
+    "FTP": 240
   },
   {
     "Date": "2025-11-05",
@@ -2078,7 +2251,8 @@
     "Fitness Age": 31.328937833946224,
     "Intensity Min Mod": 28,
     "Intensity Min Vig": 31,
-    "Intensity Min Total": 90
+    "Intensity Min Total": 90,
+    "FTP": 240
   },
   {
     "Date": "2025-11-04",
@@ -2098,7 +2272,8 @@
     "Fitness Age": 32.754084399916586,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-03",
@@ -2120,7 +2295,8 @@
     "Intensity Min Total": 76,
     "Weight (lbs)": 181.3,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-02",
@@ -2140,7 +2316,8 @@
     "Fitness Age": 31.35062056884738,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-11-01",
@@ -2163,7 +2340,8 @@
     "Intensity Min Total": 172,
     "Weight (lbs)": 178.8,
     "Muscle Mass": 74.1,
-    "Body Fat %": 21.9
+    "Body Fat %": 21.9,
+    "FTP": 240
   },
   {
     "Date": "2025-10-31",
@@ -2186,7 +2364,8 @@
     "Intensity Min Total": 192,
     "Weight (lbs)": 179.0,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-30",
@@ -2209,7 +2388,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 182.7,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-29",
@@ -2228,7 +2408,8 @@
     "Fitness Age": 31.468334017856886,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-28",
@@ -2251,7 +2432,8 @@
     "Intensity Min Vig": 25,
     "Intensity Min Total": 56,
     "Run Avg Cadence": 163.1875,
-    "Run Avg Speed (m/s)": 3.4
+    "Run Avg Speed (m/s)": 3.4,
+    "FTP": 240
   },
   {
     "Date": "2025-10-27",
@@ -2276,7 +2458,8 @@
     "BP Diastolic": 84,
     "Weight (lbs)": 183.4,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-26",
@@ -2296,7 +2479,8 @@
     "Fitness Age": 32.496875221329375,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-25",
@@ -2319,7 +2503,8 @@
     "Intensity Min Total": 159,
     "Weight (lbs)": 182.7,
     "Muscle Mass": 75.1,
-    "Body Fat %": 22.0
+    "Body Fat %": 22.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-24",
@@ -2344,7 +2529,8 @@
     "BP Diastolic": 74,
     "Weight (lbs)": 180.5,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-23",
@@ -2366,7 +2552,8 @@
     "Intensity Min Total": 107,
     "Weight (lbs)": 182.3,
     "Muscle Mass": 75.0,
-    "Body Fat %": 21.9
+    "Body Fat %": 21.9,
+    "FTP": 240
   },
   {
     "Date": "2025-10-22",
@@ -2385,7 +2572,8 @@
     "Fitness Age": 32.633961475244575,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-21",
@@ -2404,7 +2592,8 @@
     "Fitness Age": 32.58906086538798,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-20",
@@ -2427,7 +2616,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 182.7,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-19",
@@ -2447,7 +2637,8 @@
     "Fitness Age": 33.15415072910112,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-18",
@@ -2466,7 +2657,8 @@
     "Fitness Age": 33.15415072910112,
     "Intensity Min Mod": 42,
     "Intensity Min Vig": 123,
-    "Intensity Min Total": 288
+    "Intensity Min Total": 288,
+    "FTP": 240
   },
   {
     "Date": "2025-10-17",
@@ -2485,7 +2677,8 @@
     "Fitness Age": 33.15415072910112,
     "Intensity Min Mod": 6,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 6
+    "Intensity Min Total": 6,
+    "FTP": 240
   },
   {
     "Date": "2025-10-16",
@@ -2508,7 +2701,8 @@
     "Intensity Min Vig": 63,
     "Intensity Min Total": 127,
     "Run Avg Cadence": 156.859375,
-    "Run Avg Speed (m/s)": 2.8
+    "Run Avg Speed (m/s)": 2.8,
+    "FTP": 240
   },
   {
     "Date": "2025-10-15",
@@ -2533,7 +2727,8 @@
     "BP Diastolic": 74,
     "Weight (lbs)": 181.2,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-14",
@@ -2558,7 +2753,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 181.5,
     "Muscle Mass": 74.8,
-    "Body Fat %": 22.3
+    "Body Fat %": 22.3,
+    "FTP": 240
   },
   {
     "Date": "2025-10-13",
@@ -2583,7 +2779,8 @@
     "BP Diastolic": 73,
     "Weight (lbs)": 182.2,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-12",
@@ -2603,7 +2800,8 @@
     "Fitness Age": 33.14058922167638,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-11",
@@ -2623,7 +2821,8 @@
     "Fitness Age": 33.14058922167638,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-10",
@@ -2651,7 +2850,8 @@
     "Run Avg Speed (m/s)": 3.27,
     "Weight (lbs)": 181.6,
     "Muscle Mass": 74.8,
-    "Body Fat %": 20.9
+    "Body Fat %": 20.9,
+    "FTP": 240
   },
   {
     "Date": "2025-10-09",
@@ -2671,7 +2871,8 @@
     "Fitness Age": 33.34569871134917,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-08",
@@ -2694,7 +2895,8 @@
     "Intensity Min Vig": 10,
     "Intensity Min Total": 22,
     "Run Avg Cadence": 162.140625,
-    "Run Avg Speed (m/s)": 3.31
+    "Run Avg Speed (m/s)": 3.31,
+    "FTP": 240
   },
   {
     "Date": "2025-10-07",
@@ -2714,7 +2916,8 @@
     "Fitness Age": 33.23634635961566,
     "Intensity Min Mod": 3,
     "Intensity Min Vig": 16,
-    "Intensity Min Total": 35
+    "Intensity Min Total": 35,
+    "FTP": 240
   },
   {
     "Date": "2025-10-06",
@@ -2737,7 +2940,8 @@
     "Intensity Min Vig": 28,
     "Intensity Min Total": 60,
     "Run Avg Cadence": 162.875,
-    "Run Avg Speed (m/s)": 3.25
+    "Run Avg Speed (m/s)": 3.25,
+    "FTP": 240
   },
   {
     "Date": "2025-10-05",
@@ -2757,7 +2961,8 @@
     "Fitness Age": 33.23634635961566,
     "Intensity Min Mod": 28,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 28
+    "Intensity Min Total": 28,
+    "FTP": 240
   },
   {
     "Date": "2025-10-04",
@@ -2783,7 +2988,8 @@
     "Run Avg Speed (m/s)": 2.9,
     "Weight (lbs)": 181.4,
     "Muscle Mass": 74.8,
-    "Body Fat %": 21.3
+    "Body Fat %": 21.3,
+    "FTP": 240
   },
   {
     "Date": "2025-10-03",
@@ -2804,7 +3010,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 180.5,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-02",
@@ -2824,7 +3031,8 @@
     "Fitness Age": 33.51763879917772,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-10-01",
@@ -2847,7 +3055,8 @@
     "Intensity Min Vig": 29,
     "Intensity Min Total": 67,
     "Run Avg Cadence": 163.84375,
-    "Run Avg Speed (m/s)": 3.2
+    "Run Avg Speed (m/s)": 3.2,
+    "FTP": 240
   },
   {
     "Date": "2025-09-30",
@@ -2867,7 +3076,8 @@
     "Fitness Age": 34.13811469882529,
     "Intensity Min Mod": 7,
     "Intensity Min Vig": 29,
-    "Intensity Min Total": 65
+    "Intensity Min Total": 65,
+    "FTP": 240
   },
   {
     "Date": "2025-09-29",
@@ -2885,7 +3095,8 @@
     "Fitness Age": 34.13811469882529,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-28",
@@ -2903,7 +3114,8 @@
     "Fitness Age": 34.13811469882529,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-27",
@@ -2926,7 +3138,8 @@
     "Intensity Min Vig": 71,
     "Intensity Min Total": 145,
     "Run Avg Cadence": 165.171875,
-    "Run Avg Speed (m/s)": 2.97
+    "Run Avg Speed (m/s)": 2.97,
+    "FTP": 240
   },
   {
     "Date": "2025-09-26",
@@ -2949,7 +3162,8 @@
     "Intensity Min Total": 84,
     "Weight (lbs)": 183.1,
     "Muscle Mass": 75.2,
-    "Body Fat %": 21.7
+    "Body Fat %": 21.7,
+    "FTP": 240
   },
   {
     "Date": "2025-09-25",
@@ -2972,7 +3186,8 @@
     "Intensity Min Total": 152,
     "Weight (lbs)": 183.7,
     "Muscle Mass": 75.4,
-    "Body Fat %": 21.8
+    "Body Fat %": 21.8,
+    "FTP": 240
   },
   {
     "Date": "2025-09-24",
@@ -2995,7 +3210,8 @@
     "Intensity Min Vig": 28,
     "Intensity Min Total": 59,
     "Run Avg Cadence": 165.578125,
-    "Run Avg Speed (m/s)": 2.95
+    "Run Avg Speed (m/s)": 2.95,
+    "FTP": 240
   },
   {
     "Date": "2025-09-23",
@@ -3013,7 +3229,8 @@
     "Fitness Age": 33.89253019302598,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-22",
@@ -3036,7 +3253,8 @@
     "Intensity Min Total": 69,
     "Weight (lbs)": 182.7,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-21",
@@ -3057,7 +3275,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 182.7,
     "Muscle Mass": 75.1,
-    "Body Fat %": 21.5
+    "Body Fat %": 21.5,
+    "FTP": 240
   },
   {
     "Date": "2025-09-20",
@@ -3083,7 +3302,8 @@
     "Run Avg Speed (m/s)": 2.88,
     "Weight (lbs)": 181.0,
     "Muscle Mass": 74.7,
-    "Body Fat %": 20.8
+    "Body Fat %": 20.8,
+    "FTP": 240
   },
   {
     "Date": "2025-09-19",
@@ -3108,7 +3328,8 @@
     "BP Diastolic": 82,
     "Weight (lbs)": 180.9,
     "Muscle Mass": 74.7,
-    "Body Fat %": 21.6
+    "Body Fat %": 21.6,
+    "FTP": 240
   },
   {
     "Date": "2025-09-18",
@@ -3126,7 +3347,8 @@
     "Fitness Age": 34.01973378085523,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-17",
@@ -3154,7 +3376,8 @@
     "Run Avg Speed (m/s)": 2.93,
     "Weight (lbs)": 180.5,
     "Muscle Mass": 74.6,
-    "Body Fat %": 21.8
+    "Body Fat %": 21.8,
+    "FTP": 240
   },
   {
     "Date": "2025-09-16",
@@ -3177,7 +3400,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 181.2,
     "Muscle Mass": 74.8,
-    "Body Fat %": 21.7
+    "Body Fat %": 21.7,
+    "FTP": 240
   },
   {
     "Date": "2025-09-15",
@@ -3198,7 +3422,8 @@
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
     "BP Systolic": 124,
-    "BP Diastolic": 83
+    "BP Diastolic": 83,
+    "FTP": 240
   },
   {
     "Date": "2025-09-14",
@@ -3216,7 +3441,8 @@
     "Fitness Age": 34.05180692613048,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-13",
@@ -3240,7 +3466,8 @@
     "Intensity Min Total": 109,
     "Weight (lbs)": 184.4,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 240
   },
   {
     "Date": "2025-09-12",
@@ -3262,7 +3489,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 183.3,
     "Muscle Mass": 75.3,
-    "Body Fat %": 21.7
+    "Body Fat %": 21.7,
+    "FTP": 240
   },
   {
     "Date": "2025-09-11",
@@ -3283,7 +3511,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 182.8,
     "Muscle Mass": 75.1,
-    "Body Fat %": 21.6
+    "Body Fat %": 21.6,
+    "FTP": 240
   },
   {
     "Date": "2025-09-10",
@@ -3307,7 +3536,8 @@
     "Run Avg Speed (m/s)": 2.7,
     "Weight (lbs)": 182.3,
     "Muscle Mass": 75.0,
-    "Body Fat %": 21.9
+    "Body Fat %": 21.9,
+    "FTP": 240
   },
   {
     "Date": "2025-09-09",
@@ -3329,7 +3559,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 181.7,
     "Muscle Mass": 74.9,
-    "Body Fat %": 21.2
+    "Body Fat %": 21.2,
+    "FTP": 240
   },
   {
     "Date": "2025-09-08",
@@ -3353,7 +3584,8 @@
     "BP Diastolic": 80,
     "Weight (lbs)": 184.1,
     "Muscle Mass": 75.5,
-    "Body Fat %": 22.3
+    "Body Fat %": 22.3,
+    "FTP": 240
   },
   {
     "Date": "2025-09-07",
@@ -3374,7 +3606,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 185.6,
     "Muscle Mass": 75.8,
-    "Body Fat %": 22.2
+    "Body Fat %": 22.2,
+    "FTP": 240
   },
   {
     "Date": "2025-09-06",
@@ -3399,7 +3632,8 @@
     "BP Diastolic": 85,
     "Weight (lbs)": 184.2,
     "Muscle Mass": 75.5,
-    "Body Fat %": 22.1
+    "Body Fat %": 22.1,
+    "FTP": 240
   },
   {
     "Date": "2025-09-05",
@@ -3423,7 +3657,8 @@
     "BP Diastolic": 76,
     "Weight (lbs)": 184.1,
     "Muscle Mass": 75.4,
-    "Body Fat %": 22.3
+    "Body Fat %": 22.3,
+    "FTP": 240
   },
   {
     "Date": "2025-09-04",
@@ -3471,7 +3706,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 184.0,
     "Muscle Mass": 75.4,
-    "Body Fat %": 22.2
+    "Body Fat %": 22.2,
+    "FTP": 235
   },
   {
     "Date": "2025-09-02",
@@ -3495,7 +3731,8 @@
     "BP Diastolic": 73,
     "Weight (lbs)": 185.2,
     "Muscle Mass": 75.7,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-09-01",
@@ -3519,7 +3756,8 @@
     "BP Diastolic": 77,
     "Weight (lbs)": 185.6,
     "Muscle Mass": 75.8,
-    "Body Fat %": 22.6
+    "Body Fat %": 22.6,
+    "FTP": 235
   },
   {
     "Date": "2025-08-31",
@@ -3540,7 +3778,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 183.8,
     "Muscle Mass": 75.4,
-    "Body Fat %": 21.7
+    "Body Fat %": 21.7,
+    "FTP": 235
   },
   {
     "Date": "2025-08-30",
@@ -3564,7 +3803,8 @@
     "Intensity Min Total": 234,
     "Weight (lbs)": 184.3,
     "Muscle Mass": 75.5,
-    "Body Fat %": 22.6
+    "Body Fat %": 22.6,
+    "FTP": 235
   },
   {
     "Date": "2025-08-29",
@@ -3588,7 +3828,8 @@
     "BP Diastolic": 76,
     "Weight (lbs)": 184.8,
     "Muscle Mass": 75.6,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-08-28",
@@ -3612,7 +3853,8 @@
     "BP Diastolic": 82,
     "Weight (lbs)": 183.4,
     "Muscle Mass": 75.3,
-    "Body Fat %": 22.9
+    "Body Fat %": 22.9,
+    "FTP": 235
   },
   {
     "Date": "2025-08-27",
@@ -3636,7 +3878,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 185.0,
     "Muscle Mass": 75.7,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-08-26",
@@ -3660,7 +3903,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 184.9,
     "Muscle Mass": 75.6,
-    "Body Fat %": 22.5
+    "Body Fat %": 22.5,
+    "FTP": 235
   },
   {
     "Date": "2025-08-25",
@@ -3685,7 +3929,8 @@
     "BP Diastolic": 67,
     "Weight (lbs)": 186.0,
     "Muscle Mass": 75.9,
-    "Body Fat %": 22.4
+    "Body Fat %": 22.4,
+    "FTP": 235
   },
   {
     "Date": "2025-08-24",
@@ -3703,7 +3948,8 @@
     "Fitness Age": 34.32411478154835,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-23",
@@ -3727,7 +3973,8 @@
     "Intensity Min Total": 232,
     "Weight (lbs)": 184.5,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-22",
@@ -3751,7 +3998,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 185.2,
     "Muscle Mass": 75.7,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-08-21",
@@ -3772,7 +4020,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 185.4,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-20",
@@ -3797,7 +4046,8 @@
     "BP Diastolic": 79,
     "Weight (lbs)": 186.5,
     "Muscle Mass": 76.0,
-    "Body Fat %": 22.7
+    "Body Fat %": 22.7,
+    "FTP": 235
   },
   {
     "Date": "2025-08-19",
@@ -3818,7 +4068,8 @@
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
     "BP Systolic": 124,
-    "BP Diastolic": 88
+    "BP Diastolic": 88,
+    "FTP": 235
   },
   {
     "Date": "2025-08-18",
@@ -3839,7 +4090,8 @@
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
     "BP Systolic": 115,
-    "BP Diastolic": 74
+    "BP Diastolic": 74,
+    "FTP": 235
   },
   {
     "Date": "2025-08-17",
@@ -3860,7 +4112,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 186.4,
     "Muscle Mass": 76.0,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-08-16",
@@ -3881,7 +4134,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 122,
     "Intensity Min Vig": 186,
-    "Intensity Min Total": 494
+    "Intensity Min Total": 494,
+    "FTP": 235
   },
   {
     "Date": "2025-08-15",
@@ -3904,7 +4158,8 @@
     "BP Diastolic": 83,
     "Weight (lbs)": 184.8,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-14",
@@ -3925,7 +4180,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 13,
     "Intensity Min Vig": 38,
-    "Intensity Min Total": 89
+    "Intensity Min Total": 89,
+    "FTP": 235
   },
   {
     "Date": "2025-08-13",
@@ -3947,7 +4203,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 185.1,
     "Muscle Mass": 75.7,
-    "Body Fat %": 22.9
+    "Body Fat %": 22.9,
+    "FTP": 235
   },
   {
     "Date": "2025-08-12",
@@ -3970,7 +4227,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 184.1,
     "Muscle Mass": 75.4,
-    "Body Fat %": 22.6
+    "Body Fat %": 22.6,
+    "FTP": 235
   },
   {
     "Date": "2025-08-11",
@@ -3988,7 +4246,8 @@
     "Fitness Age": 34.40560508504159,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-10",
@@ -4006,7 +4265,8 @@
     "Fitness Age": 34.40560508504159,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-09",
@@ -4024,7 +4284,8 @@
     "Fitness Age": 34.40560508504159,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-08",
@@ -4045,7 +4306,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 186.1,
     "Muscle Mass": 75.9,
-    "Body Fat %": 21.9
+    "Body Fat %": 21.9,
+    "FTP": 235
   },
   {
     "Date": "2025-08-07",
@@ -4066,7 +4328,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 187.6,
     "Muscle Mass": 76.3,
-    "Body Fat %": 23.0
+    "Body Fat %": 23.0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-06",
@@ -4087,7 +4350,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 187.7,
     "Muscle Mass": 76.3,
-    "Body Fat %": 23.0
+    "Body Fat %": 23.0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-05",
@@ -4113,7 +4377,8 @@
     "BP Diastolic": 68,
     "Weight (lbs)": 187.2,
     "Muscle Mass": 76.2,
-    "Body Fat %": 23.2
+    "Body Fat %": 23.2,
+    "FTP": 235
   },
   {
     "Date": "2025-08-04",
@@ -4136,7 +4401,8 @@
     "BP Diastolic": 83,
     "Weight (lbs)": 189.2,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-03",
@@ -4154,7 +4420,8 @@
     "Fitness Age": 34.50936295650972,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-02",
@@ -4172,7 +4439,8 @@
     "Fitness Age": 34.50936295650972,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-08-01",
@@ -4197,7 +4465,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 187.9,
     "Muscle Mass": 76.4,
-    "Body Fat %": 23.2
+    "Body Fat %": 23.2,
+    "FTP": 235
   },
   {
     "Date": "2025-07-31",
@@ -4221,7 +4490,8 @@
     "BP Diastolic": 84,
     "Weight (lbs)": 188.3,
     "Muscle Mass": 76.5,
-    "Body Fat %": 23.2
+    "Body Fat %": 23.2,
+    "FTP": 235
   },
   {
     "Date": "2025-07-30",
@@ -4245,7 +4515,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 186.7,
     "Muscle Mass": 76.1,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-07-29",
@@ -4269,7 +4540,8 @@
     "BP Diastolic": 73,
     "Weight (lbs)": 190.9,
     "Muscle Mass": 77.1,
-    "Body Fat %": 23.3
+    "Body Fat %": 23.3,
+    "FTP": 235
   },
   {
     "Date": "2025-07-28",
@@ -4293,7 +4565,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 188.6,
     "Muscle Mass": 76.5,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-07-27",
@@ -4311,14 +4584,16 @@
     "Fitness Age": 33.20400509403589,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-26",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 235
   },
   {
     "Date": "2025-07-25",
@@ -4331,7 +4606,8 @@
     "BP Diastolic": 73,
     "Weight (lbs)": 189.7,
     "Muscle Mass": 76.8,
-    "Body Fat %": 23.5
+    "Body Fat %": 23.5,
+    "FTP": 235
   },
   {
     "Date": "2025-07-24",
@@ -4343,7 +4619,8 @@
     "BP Diastolic": 70,
     "Weight (lbs)": 188.7,
     "Muscle Mass": 76.6,
-    "Body Fat %": 23.5
+    "Body Fat %": 23.5,
+    "FTP": 235
   },
   {
     "Date": "2025-07-23",
@@ -4354,7 +4631,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 187.8,
     "Muscle Mass": 76.3,
-    "Body Fat %": 22.7
+    "Body Fat %": 22.7,
+    "FTP": 235
   },
   {
     "Date": "2025-07-22",
@@ -4367,7 +4645,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 191.4,
     "Muscle Mass": 77.2,
-    "Body Fat %": 23.6
+    "Body Fat %": 23.6,
+    "FTP": 235
   },
   {
     "Date": "2025-07-21",
@@ -4387,7 +4666,8 @@
     "BP Diastolic": 73,
     "Weight (lbs)": 191.7,
     "Muscle Mass": 77.3,
-    "Body Fat %": 23.8
+    "Body Fat %": 23.8,
+    "FTP": 235
   },
   {
     "Date": "2025-07-20",
@@ -4397,7 +4677,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 192.0,
     "Muscle Mass": 77.4,
-    "Body Fat %": 23.5
+    "Body Fat %": 23.5,
+    "FTP": 235
   },
   {
     "Date": "2025-07-19",
@@ -4412,7 +4693,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 39,
     "Intensity Min Vig": 112,
-    "Intensity Min Total": 263
+    "Intensity Min Total": 263,
+    "FTP": 235
   },
   {
     "Date": "2025-07-18",
@@ -4426,7 +4708,8 @@
     "BP Diastolic": 83,
     "Weight (lbs)": 189.8,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-17",
@@ -4441,7 +4724,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 188.6,
     "Muscle Mass": 76.5,
-    "Body Fat %": 22.8
+    "Body Fat %": 22.8,
+    "FTP": 235
   },
   {
     "Date": "2025-07-16",
@@ -4454,7 +4738,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 190.1,
     "Muscle Mass": 76.9,
-    "Body Fat %": 24.0
+    "Body Fat %": 24.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-15",
@@ -4467,7 +4752,8 @@
     "BP Diastolic": 81,
     "Weight (lbs)": 190.6,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-14",
@@ -4480,7 +4766,8 @@
     "BP Diastolic": 79,
     "Weight (lbs)": 190.7,
     "Muscle Mass": 77.1,
-    "Body Fat %": 24.0
+    "Body Fat %": 24.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-13",
@@ -4490,7 +4777,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 190.1,
     "Muscle Mass": 76.9,
-    "Body Fat %": 24.0
+    "Body Fat %": 24.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-12",
@@ -4508,7 +4796,8 @@
     "Intensity Min Total": 229,
     "Weight (lbs)": 192.9,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-11",
@@ -4520,7 +4809,8 @@
     "BP Diastolic": 88,
     "Weight (lbs)": 191.5,
     "Muscle Mass": 77.3,
-    "Body Fat %": 24.1
+    "Body Fat %": 24.1,
+    "FTP": 235
   },
   {
     "Date": "2025-07-10",
@@ -4533,7 +4823,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 190.7,
     "Muscle Mass": 77.1,
-    "Body Fat %": 23.6
+    "Body Fat %": 23.6,
+    "FTP": 235
   },
   {
     "Date": "2025-07-09",
@@ -4546,7 +4837,8 @@
     "BP Diastolic": 72,
     "Weight (lbs)": 192.7,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-08",
@@ -4559,7 +4851,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 193.7,
     "Muscle Mass": 77.8,
-    "Body Fat %": 24.0
+    "Body Fat %": 24.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-07",
@@ -4572,7 +4865,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 194.2,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-06",
@@ -4582,14 +4876,16 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 194.3,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-07-05",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 235
   },
   {
     "Date": "2025-07-04",
@@ -4607,7 +4903,8 @@
     "Intensity Min Total": 312,
     "Weight (lbs)": 191.9,
     "Muscle Mass": 77.4,
-    "Body Fat %": 24.2
+    "Body Fat %": 24.2,
+    "FTP": 235
   },
   {
     "Date": "2025-07-03",
@@ -4620,7 +4917,8 @@
     "BP Diastolic": 77,
     "Weight (lbs)": 192.5,
     "Muscle Mass": 77.5,
-    "Body Fat %": 24.1
+    "Body Fat %": 24.1,
+    "FTP": 235
   },
   {
     "Date": "2025-07-02",
@@ -4633,7 +4931,8 @@
     "BP Diastolic": 72,
     "Weight (lbs)": 192.2,
     "Muscle Mass": 77.4,
-    "Body Fat %": 23.7
+    "Body Fat %": 23.7,
+    "FTP": 235
   },
   {
     "Date": "2025-07-01",
@@ -4646,7 +4945,8 @@
     "BP Diastolic": 69,
     "Weight (lbs)": 193.0,
     "Muscle Mass": 77.6,
-    "Body Fat %": 23.7
+    "Body Fat %": 23.7,
+    "FTP": 235
   },
   {
     "Date": "2025-06-30",
@@ -4659,7 +4959,8 @@
     "BP Diastolic": 77,
     "Weight (lbs)": 194.0,
     "Muscle Mass": 77.9,
-    "Body Fat %": 24.2
+    "Body Fat %": 24.2,
+    "FTP": 235
   },
   {
     "Date": "2025-06-29",
@@ -4669,7 +4970,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 195.0,
     "Muscle Mass": 78.1,
-    "Body Fat %": 24.5
+    "Body Fat %": 24.5,
+    "FTP": 235
   },
   {
     "Date": "2025-06-28",
@@ -4689,7 +4991,8 @@
     "BP Diastolic": 73,
     "Weight (lbs)": 194.8,
     "Muscle Mass": 78.1,
-    "Body Fat %": 24.5
+    "Body Fat %": 24.5,
+    "FTP": 235
   },
   {
     "Date": "2025-06-27",
@@ -4704,7 +5007,8 @@
     "BP Diastolic": 77,
     "Weight (lbs)": 194.0,
     "Muscle Mass": 77.9,
-    "Body Fat %": 24.6
+    "Body Fat %": 24.6,
+    "FTP": 235
   },
   {
     "Date": "2025-06-26",
@@ -4716,7 +5020,8 @@
     "BP Diastolic": 72,
     "Weight (lbs)": 193.9,
     "Muscle Mass": 77.8,
-    "Body Fat %": 24.5
+    "Body Fat %": 24.5,
+    "FTP": 235
   },
   {
     "Date": "2025-06-25",
@@ -4729,7 +5034,8 @@
     "BP Diastolic": 82,
     "Weight (lbs)": 193.8,
     "Muscle Mass": 77.8,
-    "Body Fat %": 24.5
+    "Body Fat %": 24.5,
+    "FTP": 235
   },
   {
     "Date": "2025-06-24",
@@ -4742,7 +5048,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 194.6,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-06-23",
@@ -4755,7 +5062,8 @@
     "BP Diastolic": 79,
     "Weight (lbs)": 195.6,
     "Muscle Mass": 78.3,
-    "Body Fat %": 24.3
+    "Body Fat %": 24.3,
+    "FTP": 235
   },
   {
     "Date": "2025-06-22",
@@ -4766,7 +5074,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 196.2,
     "Muscle Mass": 78.4,
-    "Body Fat %": 24.8
+    "Body Fat %": 24.8,
+    "FTP": 235
   },
   {
     "Date": "2025-06-21",
@@ -4784,7 +5093,8 @@
     "Intensity Min Total": 220,
     "Weight (lbs)": 196.5,
     "Muscle Mass": 0.0,
-    "Body Fat %": 0.0
+    "Body Fat %": 0.0,
+    "FTP": 235
   },
   {
     "Date": "2025-06-20",
@@ -4797,7 +5107,8 @@
     "BP Diastolic": 75,
     "Weight (lbs)": 196.0,
     "Muscle Mass": 78.4,
-    "Body Fat %": 24.7
+    "Body Fat %": 24.7,
+    "FTP": 235
   },
   {
     "Date": "2025-06-19",
@@ -4810,7 +5121,8 @@
     "BP Diastolic": 68,
     "Weight (lbs)": 196.5,
     "Muscle Mass": 78.5,
-    "Body Fat %": 24.8
+    "Body Fat %": 24.8,
+    "FTP": 235
   },
   {
     "Date": "2025-06-18",
@@ -4823,7 +5135,8 @@
     "BP Diastolic": 78,
     "Weight (lbs)": 196.5,
     "Muscle Mass": 78.5,
-    "Body Fat %": 24.7
+    "Body Fat %": 24.7,
+    "FTP": 235
   },
   {
     "Date": "2025-06-17",
@@ -4836,7 +5149,8 @@
     "Intensity Min Total": 0,
     "Weight (lbs)": 197.7,
     "Muscle Mass": 78.8,
-    "Body Fat %": 24.7
+    "Body Fat %": 24.7,
+    "FTP": 235
   },
   {
     "Date": "2025-06-16",
@@ -4846,7 +5160,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 235
   },
   {
     "Date": "2025-06-15",
@@ -4856,7 +5171,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 198.2,
     "Muscle Mass": 78.9,
-    "Body Fat %": 24.8
+    "Body Fat %": 24.8,
+    "FTP": 235
   },
   {
     "Date": "2025-06-14",
@@ -4876,7 +5192,8 @@
     "BP Diastolic": 80,
     "Weight (lbs)": 198.9,
     "Muscle Mass": 79.1,
-    "Body Fat %": 24.4
+    "Body Fat %": 24.4,
+    "FTP": 235
   },
   {
     "Date": "2025-06-13",
@@ -4887,7 +5204,8 @@
     "Intensity Min Vig": null,
     "Weight (lbs)": 196.8,
     "Muscle Mass": 78.6,
-    "Body Fat %": 24.8
+    "Body Fat %": 24.8,
+    "FTP": 235
   },
   {
     "Date": "2025-06-12",
@@ -4914,7 +5232,8 @@
     "BP Diastolic": 70,
     "Weight (lbs)": 197.5,
     "Muscle Mass": 78.7,
-    "Body Fat %": 25.0
+    "Body Fat %": 25.0,
+    "FTP": 215
   },
   {
     "Date": "2025-06-10",
@@ -4927,7 +5246,8 @@
     "Intensity Min Total": 0,
     "BP Systolic": 135,
     "BP Diastolic": 84,
-    "Weight (lbs)": 196.8
+    "Weight (lbs)": 196.8,
+    "FTP": 215
   },
   {
     "Date": "2025-06-09",
@@ -4936,14 +5256,16 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
-    "Weight (lbs)": 197.6
+    "Weight (lbs)": 197.6,
+    "FTP": 215
   },
   {
     "Date": "2025-06-08",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-06-07",
@@ -4958,7 +5280,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 17,
     "Intensity Min Vig": 98,
-    "Intensity Min Total": 213
+    "Intensity Min Total": 213,
+    "FTP": 215
   },
   {
     "Date": "2025-06-06",
@@ -4966,7 +5289,8 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-06-05",
@@ -4975,7 +5299,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
-    "Weight (lbs)": 197.6
+    "Weight (lbs)": 197.6,
+    "FTP": 215
   },
   {
     "Date": "2025-06-04",
@@ -4986,14 +5311,16 @@
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
-    "Weight (lbs)": 198.8
+    "Weight (lbs)": 198.8,
+    "FTP": 215
   },
   {
     "Date": "2025-06-03",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-06-02",
@@ -5002,7 +5329,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 215
   },
   {
     "Date": "2025-06-01",
@@ -5010,7 +5338,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
-    "Weight (lbs)": 197.2
+    "Weight (lbs)": 197.2,
+    "FTP": 215
   },
   {
     "Date": "2025-05-31",
@@ -5025,7 +5354,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 175,
     "Intensity Min Vig": 159,
-    "Intensity Min Total": 493
+    "Intensity Min Total": 493,
+    "FTP": 215
   },
   {
     "Date": "2025-05-30",
@@ -5033,7 +5363,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
-    "Weight (lbs)": 198.4
+    "Weight (lbs)": 198.4,
+    "FTP": 215
   },
   {
     "Date": "2025-05-29",
@@ -5046,7 +5377,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 7,
     "Intensity Min Vig": 5,
-    "Intensity Min Total": 17
+    "Intensity Min Total": 17,
+    "FTP": 215
   },
   {
     "Date": "2025-05-28",
@@ -5055,7 +5387,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 215
   },
   {
     "Date": "2025-05-27",
@@ -5063,7 +5396,8 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-26",
@@ -5074,7 +5408,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 215
   },
   {
     "Date": "2025-05-25",
@@ -5082,7 +5417,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
-    "Weight (lbs)": 199.0
+    "Weight (lbs)": 199.0,
+    "FTP": 215
   },
   {
     "Date": "2025-05-24",
@@ -5097,7 +5433,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 42,
     "Intensity Min Vig": 123,
-    "Intensity Min Total": 288
+    "Intensity Min Total": 288,
+    "FTP": 215
   },
   {
     "Date": "2025-05-23",
@@ -5108,14 +5445,16 @@
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
-    "Weight (lbs)": 199.2
+    "Weight (lbs)": 199.2,
+    "FTP": 215
   },
   {
     "Date": "2025-05-22",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-21",
@@ -5131,7 +5470,8 @@
     "Intensity Min Mod": 9,
     "Intensity Min Vig": 50,
     "Intensity Min Total": 109,
-    "Weight (lbs)": 199.4
+    "Weight (lbs)": 199.4,
+    "FTP": 215
   },
   {
     "Date": "2025-05-20",
@@ -5141,7 +5481,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 215
   },
   {
     "Date": "2025-05-19",
@@ -5149,56 +5490,64 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-18",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-17",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-16",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-15",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-14",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-13",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-12",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 215
   },
   {
     "Date": "2025-05-11",
@@ -5208,7 +5557,8 @@
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
-    "Weight (lbs)": 200.6
+    "Weight (lbs)": 200.6,
+    "FTP": 215
   },
   {
     "Date": "2025-05-10",
@@ -5223,7 +5573,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 92,
     "Intensity Min Vig": 120,
-    "Intensity Min Total": 332
+    "Intensity Min Total": 332,
+    "FTP": 215
   },
   {
     "Date": "2025-05-09",
@@ -5232,7 +5583,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 215
   },
   {
     "Date": "2025-05-08",
@@ -5247,63 +5599,72 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-05-06",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-05-05",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-05-04",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-05-03",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-05-02",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-05-01",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-04-30",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-04-29",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 210
   },
   {
     "Date": "2025-04-28",
@@ -5319,7 +5680,8 @@
     "Intensity Min Mod": 14,
     "Intensity Min Vig": 43,
     "Intensity Min Total": 100,
-    "Weight (lbs)": 202.2
+    "Weight (lbs)": 202.2,
+    "FTP": 210
   },
   {
     "Date": "2025-04-27",
@@ -5328,7 +5690,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-26",
@@ -5343,7 +5706,8 @@
     "Fitness Age": null,
     "Intensity Min Mod": 42,
     "Intensity Min Vig": 99,
-    "Intensity Min Total": 240
+    "Intensity Min Total": 240,
+    "FTP": 210
   },
   {
     "Date": "2025-04-25",
@@ -5352,7 +5716,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-24",
@@ -5361,7 +5726,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-23",
@@ -5370,7 +5736,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-22",
@@ -5380,7 +5747,8 @@
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
     "Intensity Min Total": 0,
-    "Weight (lbs)": 202.4
+    "Weight (lbs)": 202.4,
+    "FTP": 210
   },
   {
     "Date": "2025-04-21",
@@ -5394,7 +5762,8 @@
     "Intensity Min Mod": 12,
     "Intensity Min Vig": 48,
     "Intensity Min Total": 108,
-    "Weight (lbs)": 202.8
+    "Weight (lbs)": 202.8,
+    "FTP": 210
   },
   {
     "Date": "2025-04-20",
@@ -5403,7 +5772,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-19",
@@ -5412,7 +5782,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-18",
@@ -5421,7 +5792,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 210
   },
   {
     "Date": "2025-04-17",
@@ -5438,7 +5810,8 @@
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-15",
@@ -5447,7 +5820,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 203
   },
   {
     "Date": "2025-04-14",
@@ -5456,7 +5830,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 203
   },
   {
     "Date": "2025-04-13",
@@ -5464,7 +5839,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
-    "Weight (lbs)": 203.0
+    "Weight (lbs)": 203.0,
+    "FTP": 203
   },
   {
     "Date": "2025-04-12",
@@ -5477,14 +5853,16 @@
     "Fitness Age": null,
     "Intensity Min Mod": 41,
     "Intensity Min Vig": 91,
-    "Intensity Min Total": 223
+    "Intensity Min Total": 223,
+    "FTP": 203
   },
   {
     "Date": "2025-04-11",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-10",
@@ -5493,7 +5871,8 @@
     "SpO2 Avg": null,
     "Intensity Min Mod": 0,
     "Intensity Min Vig": 0,
-    "Intensity Min Total": 0
+    "Intensity Min Total": 0,
+    "FTP": 203
   },
   {
     "Date": "2025-04-09",
@@ -5507,28 +5886,32 @@
     "Intensity Min Mod": 35,
     "Intensity Min Vig": 71,
     "Intensity Min Total": 177,
-    "Weight (lbs)": 203.8
+    "Weight (lbs)": 203.8,
+    "FTP": 203
   },
   {
     "Date": "2025-04-08",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-07",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-06",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-05",
@@ -5541,14 +5924,16 @@
     "Fitness Age": null,
     "Intensity Min Mod": 11,
     "Intensity Min Vig": 39,
-    "Intensity Min Total": 89
+    "Intensity Min Total": 89,
+    "FTP": 203
   },
   {
     "Date": "2025-04-04",
     "Respiration Avg": null,
     "SpO2 Avg": null,
     "Intensity Min Mod": null,
-    "Intensity Min Vig": null
+    "Intensity Min Vig": null,
+    "FTP": 203
   },
   {
     "Date": "2025-04-03",

@@ -15,7 +15,7 @@
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
     "Lactate Threshold HR": 171,
-    "FTP": 241,
+    "FTP": 260,
     "Run FTP Pace": "7:45"
   },
   {

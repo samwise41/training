@@ -66,12 +66,12 @@ The primary "A" races and secondary objectives for the 2026 season.
 
 | Zone | Range |
 |:---|:---|
-| Zone 1 (Recovery) | < 143W |
-| Zone 2 (Endurance) | 144W – 195W |
-| Zone 3 (Tempo) | 196W – 228W |
-| Sweet Spot | 229W – 244W | 
-| Zone 4 (Threshold)| 245W – 273W |
-| Zone 5 (VO2 Max) | 274W – 312W |
+| Zone 1 (Recovery) | < 133W |
+| Zone 2 (Endurance) | 134W – 180W |
+| Zone 3 (Tempo) | 181W – 210W |
+| Sweet Spot | 211W – 226W | 
+| Zone 4 (Threshold)| 227W – 253W |
+| Zone 5 (VO2 Max) | 254W – 289W |
 
 ### Running Heart Rate Zones (Based on 171 bpm LTHR)
 
@@ -313,5 +313,4 @@ Please generate a raw markdown text of next week's schedule. Please provide evid
 GitHub Training Plan Files:
 - Plan: https://github.com/samwise41/training-plan/blob/main/endurance_plan.md
 - History: https://github.com/samwise41/training-plan/blob/main/MASTER_TRAINING_DATABASE.md
-
 

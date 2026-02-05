@@ -9,6 +9,33 @@ PLAN_FILE = os.path.join(BASE_DIR, 'endurance_plan.md')
 PHASES_FILE = os.path.join(BASE_DIR, 'data', 'phases.json')
 OUTPUT_FILE = os.path.join(BASE_DIR, 'data', 'dashboard', 'top_cards.json')
 
+def parse_date(date_str):
+    """
+    Tries multiple date formats to parse the input string.
+    Returns datetime object set to end-of-day (23:59:59) or None.
+    """
+    if not date_str: return None
+    
+    formats = [
+        "%Y-%m-%d",       # 2026-02-07
+        "%b %d, %Y",      # Feb 07, 2026
+        "%B %d, %Y",      # February 07, 2026
+        "%d-%b-%Y",       # 07-Feb-2026
+        "%m/%d/%Y",       # 02/07/2026
+        "%Y/%m/%d"        # 2026/02/07
+    ]
+    
+    clean_str = date_str.strip()
+    
+    for fmt in formats:
+        try:
+            dt = datetime.strptime(clean_str, fmt)
+            # Set to end of day to ensure "today" falls within the "week ending" today
+            return dt + timedelta(hours=23, minutes=59, seconds=59)
+        except ValueError:
+            continue
+    return None
+
 def load_current_phase_from_json():
     """
     Loads phases.json and finds the current phase/block based on today's date.
@@ -24,16 +51,22 @@ def load_current_phase_from_json():
         
         sorted_weeks = []
         for entry in schedule:
-            # Handle keys from different generator versions
-            d_str = entry.get('date') or entry.get('week_ending') or entry.get('Week Ending')
-            if d_str:
-                try:
-                    # Parse date and set to End of Day
-                    d_obj = datetime.strptime(d_str, "%Y-%m-%d") + timedelta(hours=23, minutes=59)
-                    sorted_weeks.append((d_obj, entry))
-                except ValueError:
-                    continue
+            # Flexible key search for Date
+            d_str = (entry.get('date') or 
+                     entry.get('week_ending') or 
+                     entry.get('Week Ending') or 
+                     entry.get('Week') or 
+                     "")
+            
+            d_obj = parse_date(d_str)
+            if d_obj:
+                sorted_weeks.append((d_obj, entry))
         
+        if not sorted_weeks:
+            print("   -> Warning: No valid dates found in phases.json")
+            return None, None
+
+        # Sort by date
         sorted_weeks.sort(key=lambda x: x[0])
 
         # Find the first week-ending date that is >= today
@@ -43,10 +76,10 @@ def load_current_phase_from_json():
                 current_entry = data
                 break
         
-        # Grace Period: If plan ended recently, show last week
-        if not current_entry and sorted_weeks:
+        # Grace Period: If we passed the last plan date recently, show the last week
+        if not current_entry:
             last_week_date = sorted_weeks[-1][0]
-            if (today - last_week_date).days <= 7:
+            if (today - last_week_date).days <= 14: # 2 week buffer
                  current_entry = sorted_weeks[-1][1]
 
         if current_entry:
@@ -55,11 +88,11 @@ def load_current_phase_from_json():
                  current_entry.get('phase') or 
                  "Unknown Phase")
             
-            # 2. BLOCK (Aggressive Search)
-            b = (current_entry.get('Block / Focus') or 
-                 current_entry.get('Block') or 
+            # 2. BLOCK (Flexible Keys)
+            b = (current_entry.get('Block') or 
                  current_entry.get('block') or 
-                 current_entry.get('focus') or
+                 current_entry.get('Block / Focus') or 
+                 current_entry.get('Focus') or
                  "")
             
             # 3. MICROCYCLE
@@ -68,20 +101,17 @@ def load_current_phase_from_json():
                  current_entry.get('Microcycle') or 
                  "")
             
-            # Format Block String
-            if b and m:
-                block_display = f"{b} ({m})"
-            elif b:
-                block_display = b
-            elif m:
-                block_display = m
-            else:
-                block_display = ""
+            # Construct Display String
+            parts = []
+            if b: parts.append(b)
+            if m: parts.append(f"({m})")
+            
+            block_display = " ".join(parts) if parts else ""
             
             return p, block_display
 
     except Exception as e:
-        print(f"⚠️ Warning: phases.json error: {e}")
+        print(f"⚠️ Warning: Error processing phases.json: {e}")
     
     return None, None
 
@@ -115,22 +145,21 @@ def main():
             event_name = cols[1]
             priority_raw = cols[3].upper()
             
+            # Robust Priority Parsing
             priority = "None"
-            if 'A-' in priority_raw or 'A ' in priority_raw: priority = 'A'
-            elif 'B-' in priority_raw or 'B ' in priority_raw: priority = 'B'
-            elif 'C-' in priority_raw or 'C ' in priority_raw: priority = 'C'
+            if 'A-' in priority_raw or 'A ' in priority_raw or priority_raw == 'A': priority = 'A'
+            elif 'B-' in priority_raw or 'B ' in priority_raw or priority_raw == 'B': priority = 'B'
+            elif 'C-' in priority_raw or 'C ' in priority_raw or priority_raw == 'C': priority = 'C'
 
-            try:
-                date_val = datetime.strptime(date_str, "%B %d, %Y")
-                if date_val.date() >= today.date():
-                    events.append({
-                        "name": event_name,
-                        "date": date_val,
-                        "priority": priority,
-                        "days_out": (date_val - today).days
-                    })
-            except ValueError:
-                continue
+            # Parse Event Date
+            d_obj = parse_date(date_str)
+            if d_obj and d_obj.date() >= today.date():
+                events.append({
+                    "name": event_name,
+                    "date": d_obj,
+                    "priority": priority,
+                    "days_out": (d_obj - today).days
+                })
     else:
         print(f"⚠️ Warning: Plan file not found at {PLAN_FILE}")
 
@@ -141,16 +170,18 @@ def main():
     
     found_event = None
     
-    # Filter for High Priority Events Only (A or B)
+    # Sort ALL events by date first
+    events.sort(key=lambda x: x['date'])
+    
+    # Filter for A or B events
     priority_events = [e for e in events if e['priority'] in ['A', 'B']]
     
     if priority_events:
-        # Sort by date (ascending) to find the EARLIEST high priority race
-        priority_events.sort(key=lambda x: x['date'])
+        # Since 'events' was already sorted by date, 'priority_events' is also sorted by date.
+        # Taking [0] gives us the EARLIEST A or B race.
         found_event = priority_events[0]
     elif events:
-        # Fallback: No A/B races found, just take the next event on the calendar (C or None)
-        events.sort(key=lambda x: x['date'])
+        # Fallback: Just take the next event on the calendar (e.g. C race)
         found_event = events[0]
 
     if found_event:

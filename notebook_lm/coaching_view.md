@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-02-05 13:42:39
+**Generated:** 2026-02-05 13:59:00
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---

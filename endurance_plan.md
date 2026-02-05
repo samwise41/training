@@ -92,10 +92,9 @@ The Master Training Plan is to provide structured training for the athlete over 
 | **Phase** | **Dates** | **Focus** | **Key Workouts** | **Exit Criteria (Milestone)** |
 | :--- | :--- | :--- | :--- | :--- |
 | **1. Base/Prep** | Now – Feb 28 | Aerobic Engine & Swim Form | Z2 Rides, Drill Swims | Ride 3.5h with <5% cardiac drift (HR decoupling). Swim 400m continuous without stopping or form breakdown. |
-| **2. Tri-Build** | Mar 1 – May 15 | Threshold Power & Durability | Sweet Spot Intervals, Brick Runs | Hold 90% FTP for 30 mins continuous. Run 75-90m at Z2 with <5% HR drift (Decoupling). Swim 1,500m continuous (open water confidence).|
-| **3. Peak/Taper** | May 16 – June 20 | Race Specificity | Race Simulations, High Intensity Taper | Complete "Metric Sim" (50mi Bike + 5mi Run). |
-| **4. Century Pivot** | June 21 – Aug 16 | Aerobic Volume | Long Sat Rides (4-5h), Hydration/Fueling | 80-mile Ride w/ Energy Levels Stable (No bonking). |
-| **5. 70.3 Final** | Aug 17 – Sept 11 | Sustained Durability | 70.3 Pacing, Half-Marathon Runs | Race Pace Brick: 2.5h Bike + 40m Run off the bike. |
+| **2. Tri-Build** | Mar 1 – June 20 | Threshold Power & Durability | Sweet Spot Intervals, Brick Runs | Hold 90% FTP for 30 mins continuous. Run 75-90m at Z2 with <5% HR drift (Decoupling). Swim 1,500m continuous (open water confidence).|
+| **3. Century Pivot** | June 21 – Aug 16 | Aerobic Volume | Long Sat Rides (4-5h), Hydration/Fueling | 80-mile Ride w/ Energy Levels Stable (No bonking). |
+| **4. 70.3 Final** | Aug 17 – Sept 11 | Sustained Durability | 70.3 Pacing, Half-Marathon Runs | Race Pace Brick: 2.5h Bike + 40m Run off the bike. |
 
 ### **Standard Microcycle Templates**
 These templates define the "default" week structure.

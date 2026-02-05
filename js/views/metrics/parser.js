@@ -16,7 +16,8 @@ const KEYS = {
     cals: 'calories',
     effect: 'trainingEffectLabel',
     avr: 'avgVerticalRatio', 
-    feeling: 'Feeling'
+    feeling: 'Feeling',
+    norm_pwr: 'normPower'
 };
 
 // Robust Sport Check

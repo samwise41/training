@@ -62,7 +62,7 @@ The Master Training Plan is to provide structured training for the athlete over 
 * **Interval Style:** Athlete prefers longer, sustained efforts (e.g., 2x20m Sweet Spot) over complex, multi-step ladders. Keep structure simple. Athlete likes to leverage the gamification of Zwift for indoor rides, especially for high intensity workouts. Use Zwift races when possible for high intensity workouts and use challenges like Alpe du Zwift for FTP testing.
 
 
-### Cycling Power Zones (Based on 241W FTP)
+### Cycling Power Zones
 
 | Zone | Range |
 |:---|:---|
@@ -73,7 +73,7 @@ The Master Training Plan is to provide structured training for the athlete over 
 | Zone 4 (Threshold)| 245W – 273W |
 | Zone 5 (VO2 Max) | 274W – 312W |
 
-### Running Heart Rate Zones (Based on 171 bpm LTHR)
+### Running Heart Rate Zones
 
 | Zone | Range |
 |:---|:---|

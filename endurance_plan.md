@@ -227,7 +227,24 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 ## 7. Progress Tracker
 
+### Historical FTP Log
 
+| Date | FTP (Watts) | Growth |
+| :--- | :--- | :--- |
+| Feb 05, 2025 | 260 W | +19 W |
+| Dec 23, 2025 | 241 W | +1 W |
+| Sep 06, 2025 | 240 W | +5 W |
+| Jun 25, 2025 | 235 W | +15 W |
+| Jun 07, 2025 | 220 W | +5 W |
+| May 03, 2025 | 215 W | +5 W |
+| Apr 19, 2025 | 210 W | +7 W |
+| Apr 05, 2025 | 203 W | Baseline |
+
+### Historical LTHR Log
+
+| Date | LTHR (bpm) | Growth (bpm) | FTP | Growth (Pace) |
+| :--- | :--- | :--- | :--- | :--- |
+| Dec 26, 2025 | 171 bpm | Baseline | 7:45 min/mile | Baseline |
 
 ## 8. Documentation Workflow
 
@@ -296,4 +313,3 @@ Please generate a raw markdown text of next week's schedule. Please provide evid
 GitHub Training Plan Files:
 - Plan: https://github.com/samwise41/training-plan/blob/main/endurance_plan.md
 - History: https://github.com/samwise41/training-plan/blob/main/MASTER_TRAINING_DATABASE.md
-

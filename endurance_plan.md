@@ -16,6 +16,7 @@ The primary "A" races and secondary objectives for the 2026 season.
 | Aug 15, 2026 | CF Ride for Life Century Ride | Finish ~ 5:30:00 | **A-Race** |  4000+ ft of climb over two mountains  | Needs sustained Z2 endurance (4-5h saddle time). | | | 100 Miles | 5:30:00 | | | 4938 ft | 
 | Sept 11, 2026 | Brineman 70.3 Triathlon | sub 6:00:00 | **B-Race** |  1000 ft of climb total with no single climb over 200 ft.  | Need to pace effort. | 1.2 Miles | 01:00:00 | 52 Miles | 02:45:00 | 13.1 Miles | 02:15:00 | 1332 ft |
 | May 5, 2026 | East Canyon and Back | Finish ~ 2:30:00 | **C-Race** |  5000+ ft of climb | Needs low-cadence/high-torque bike intervals (Strength Endurance). |  |  | 41 Miles | 2:30:00  |  |  | 4905 ft |
+| July 25, 2026 | Solo Century Simulation Roy to Holladay to Roy | Finish ~ 5:30:00 | **C-Race** |  1700+ ft of climb | Need time in saddle and test fueling strategy. |  |  | 100 Miles | 5:30:00  |  |  | 1700 ft |
 
 ## 2. User Profile & Health
 

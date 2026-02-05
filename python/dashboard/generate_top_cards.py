@@ -9,68 +9,99 @@ PLAN_FILE = os.path.join(BASE_DIR, 'endurance_plan.md')
 PHASES_FILE = os.path.join(BASE_DIR, 'data', 'phases.json')
 OUTPUT_FILE = os.path.join(BASE_DIR, 'data', 'dashboard', 'top_cards.json')
 
+def parse_date(date_str):
+    """Tries multiple formats to parse the date string."""
+    formats = [
+        "%Y-%m-%d",       # 2026-02-07
+        "%b %d, %Y",      # Feb 07, 2026
+        "%B %d, %Y",      # February 07, 2026
+        "%d-%b-%Y",       # 07-Feb-2026
+        "%m/%d/%Y"        # 02/07/2026
+    ]
+    
+    for fmt in formats:
+        try:
+            # Add 23:59 to treat it as the end of the day
+            return datetime.strptime(date_str.strip(), fmt) + timedelta(hours=23, minutes=59)
+        except ValueError:
+            continue
+    return None
+
 def load_current_phase_from_json():
-    """
-    Loads phases.json and finds the current phase/block based on today's date.
-    Returns: (phase_string, block_string) or (None, None)
-    """
+    print(f"🔍 [DEBUG] Reading phases from: {PHASES_FILE}")
+    
     if not os.path.exists(PHASES_FILE):
+        print(f"❌ [DEBUG] File not found: {PHASES_FILE}")
         return None, None
 
     try:
         with open(PHASES_FILE, 'r', encoding='utf-8') as f:
             schedule = json.load(f)
         
-        # Get today's date (midnight)
+        print(f"   -> Loaded {len(schedule)} entries from JSON.")
+        if len(schedule) > 0:
+            print(f"   -> Sample Entry keys: {list(schedule[0].keys())}")
+
         today = datetime.now()
+        print(f"   -> Today's Date: {today.strftime('%Y-%m-%d')}")
         
         sorted_weeks = []
         for entry in schedule:
-            # Handle keys from different generator versions
+            # 1. FIND THE DATE KEY
             d_str = entry.get('date') or entry.get('week_ending') or entry.get('Week Ending')
-            if d_str:
-                try:
-                    # Parse date (e.g., "2026-02-07")
-                    # We add 23 hours to make it the END of that day
-                    d_obj = datetime.strptime(d_str, "%Y-%m-%d") + timedelta(hours=23, minutes=59)
-                    sorted_weeks.append((d_obj, entry))
-                except ValueError:
-                    continue
-        
-        sorted_weeks.sort(key=lambda x: x[0])
+            
+            if not d_str:
+                print("   -> [SKIP] Entry missing date/week_ending key.")
+                continue
 
-        # Find the first week-ending date that is >= today
+            # 2. PARSE DATE
+            d_obj = parse_date(d_str)
+            if d_obj:
+                sorted_weeks.append((d_obj, entry))
+            else:
+                print(f"   -> [SKIP] Could not parse date: '{d_str}'")
+
+        if not sorted_weeks:
+            print("❌ [DEBUG] No valid dates found in phases.json.")
+            return None, None
+
+        # Sort by date
+        sorted_weeks.sort(key=lambda x: x[0])
+        print(f"   -> Date Range found: {sorted_weeks[0][0].strftime('%Y-%m-%d')} to {sorted_weeks[-1][0].strftime('%Y-%m-%d')}")
+
+        # 3. FIND CURRENT WEEK
         current_entry = None
-        
-        # 1. Standard Search: Find the first week that ends in the future
         for week_date, data in sorted_weeks:
+            # Check if this week ends in the future (or is today)
             if week_date >= today:
+                print(f"✅ [DEBUG] Found Active Week: {week_date.strftime('%Y-%m-%d')} (>= {today.strftime('%Y-%m-%d')})")
                 current_entry = data
                 break
         
-        # 2. End-of-Plan Grace Period: If today is past the last date, keep showing the last week for 7 days
-        if not current_entry and sorted_weeks:
-            last_week_date = sorted_weeks[-1][0]
-            if (today - last_week_date).days <= 7:
+        # Grace period logic
+        if not current_entry:
+            last_date = sorted_weeks[-1][0]
+            days_diff = (today - last_date).days
+            print(f"⚠️ [DEBUG] No future week found. Last plan date was {last_date.strftime('%Y-%m-%d')} ({days_diff} days ago).")
+            if days_diff <= 7:
+                 print("   -> Within 7-day grace period. Using last week.")
                  current_entry = sorted_weeks[-1][1]
 
         if current_entry:
-            # 1. PHASE (Robust Search)
-            p = (current_entry.get('Phase') or 
-                 current_entry.get('phase') or 
-                 "Unknown Phase")
+            # 4. EXTRACT DATA (Robust Key Search)
+            p = current_entry.get('Phase') or current_entry.get('phase') or "Unknown Phase"
             
-            # 2. BLOCK (Robust Search)
             b = (current_entry.get('Block / Focus') or 
                  current_entry.get('Block') or 
                  current_entry.get('block') or 
                  "")
             
-            # 3. MICROCYCLE (Robust Search)
             m = (current_entry.get('Microcycle Type') or 
                  current_entry.get('microcycle') or 
                  current_entry.get('Microcycle') or 
                  "")
+            
+            print(f"   -> Raw Values Found: Phase='{p}', Block='{b}', Micro='{m}'")
             
             # Construct Block String
             if b and m:
@@ -85,21 +116,23 @@ def load_current_phase_from_json():
             return p, block_display
 
     except Exception as e:
-        print(f"⚠️ Warning: Could not parse phases.json: {e}")
+        print(f"❌ [DEBUG] Exception parsing phases.json: {e}")
     
     return None, None
 
 def main():
-    # 1. Determine Phase & Block (JSON ONLY)
+    print("--- STARTING TOP CARD GENERATION ---")
+
+    # 1. Determine Phase & Block
     phase_part, block_part = load_current_phase_from_json()
     
-    # STRICT FALLBACK: If phases.json fails, go straight to Offseason.
+    # STRICT FALLBACK
     if not phase_part or phase_part == "Unknown Phase":
-        print("   -> No active phase found in phases.json. Defaulting to Offseason.")
+        print("⚠️ [DEBUG] No active phase returned. Defaulting to Offseason.")
         phase_part = "Offseason"
         block_part = ""
 
-    # 2. Flexible Table Parsing for Races (Still uses Markdown Plan)
+    # 2. Flexible Table Parsing for Races
     events = []
     
     if os.path.exists(PLAN_FILE):
@@ -117,24 +150,22 @@ def main():
             
             date_str = cols[0]
             event_name = cols[1]
-            
             priority_raw = cols[3].upper()
+            
             priority = "None"
             if 'A-' in priority_raw or 'A ' in priority_raw: priority = 'A'
             elif 'B-' in priority_raw or 'B ' in priority_raw: priority = 'B'
             elif 'C-' in priority_raw or 'C ' in priority_raw: priority = 'C'
 
-            try:
-                date_val = datetime.strptime(date_str, "%B %d, %Y")
-                if date_val.date() >= today.date():
-                    events.append({
-                        "name": event_name,
-                        "date": date_val,
-                        "priority": priority,
-                        "days_out": (date_val - today).days
-                    })
-            except ValueError:
-                continue
+            # Try parsing event date (supports Markdown formats usually)
+            d_obj = parse_date(date_str)
+            if d_obj and d_obj.date() >= today.date():
+                events.append({
+                    "name": event_name,
+                    "date": d_obj,
+                    "priority": priority,
+                    "days_out": (d_obj - today).days
+                })
     else:
         print(f"⚠️ Warning: Plan file not found at {PLAN_FILE}")
 
@@ -143,24 +174,24 @@ def main():
     next_event_name = "No Event"
     days_to_go = "--"
     
-    events.sort(key=lambda x: x['date'])
+    if events:
+        events.sort(key=lambda x: x['date'])
+        found_event = None
+        
+        # Priority sort: A -> B -> C -> Next Available
+        for level in ['A', 'B', 'C']:
+            level_events = [e for e in events if e['priority'] == level]
+            if level_events:
+                found_event = level_events[0]
+                break
+        
+        if not found_event:
+            found_event = events[0]
 
-    found_event = None
-    for level in ['A', 'B', 'C']:
-        level_events = [e for e in events if e['priority'] == level]
-        if level_events:
-            found_event = level_events[0]
-            break
-            
-    if not found_event and events:
-        found_event = events[0]
-
-    if found_event:
         p_label = f" ({found_event['priority']} Race)" if found_event['priority'] != "None" else ""
         next_event = f"{found_event['name']}{p_label}"
         next_event_name = found_event['name']
         
-        # Calculate Weeks and Days
         total_days = found_event['days_out']
         if total_days >= 0:
             weeks = total_days // 7
@@ -186,7 +217,7 @@ def main():
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(result, f, indent=4)
         
-    print(f"✅ Top cards generated: {phase_part} | {block_part} | {days_to_go}")
+    print(f"\n✅ SUCCESS: {phase_part} | {block_part} | {days_to_go}")
 
 if __name__ == "__main__":
     main()

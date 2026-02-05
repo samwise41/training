@@ -16,8 +16,7 @@ export function renderPlannedWorkouts() {
             // 2. Render groups
             container.innerHTML = generateGroupedCardsHTML(groupedData);
             
-            // 3. Scroll to today ONLY IF incomplete (Blue Ring)
-            // Fix: Removed .ring-emerald-500 from selector so it stays at the top if you are done.
+            // 3. Scroll to today
             setTimeout(() => {
                 const todayCard = container.querySelector('.ring-blue-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -46,9 +45,14 @@ function groupWorkoutsByDate(workouts) {
         if (!dateKey) return;
 
         if (!groups[dateKey]) {
+            // FIX: Force Local Time parsing to avoid UTC offsets
+            // "2026-02-05" -> Split -> Year, Month, Day
+            const [y, m, d] = dateKey.split('-').map(Number);
+            const localDate = new Date(y, m - 1, d); // Month is 0-indexed in JS
+
             groups[dateKey] = {
                 dateStr: dateKey,
-                dateObj: new Date(dateKey), 
+                dateObj: localDate, 
                 workouts: [],
                 totalDuration: 0,
                 isRestDay: true 
@@ -75,8 +79,14 @@ function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
     
     let html = '';
+    
+    // Calculate "Today" in local string format "YYYY-MM-DD"
     const d = new Date();
-    const todayStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
+    const todayStr = [
+        d.getFullYear(),
+        String(d.getMonth() + 1).padStart(2, '0'),
+        String(d.getDate()).padStart(2, '0')
+    ].join('-');
 
     groupedData.forEach(day => {
         // --- Header Logic ---
@@ -94,7 +104,6 @@ function generateGroupedCardsHTML(groupedData) {
         if (isDayComplete) {
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
-            // Only this class triggers the auto-scroll now
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         }
 

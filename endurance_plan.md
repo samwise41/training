@@ -237,6 +237,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | Date | FTP (Watts) | Growth |
 | :--- | :--- | :--- |
+| Feb 05, 2025 | 260 W | +19 W |
 | Dec 23, 2025 | 241 W | +1 W |
 | Sep 06, 2025 | 240 W | +5 W |
 | Jun 25, 2025 | 235 W | +15 W |

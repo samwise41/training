@@ -45,7 +45,7 @@
       "icon": "fa-heart-pulse", "colorVar": "var(--color-bike)", "unit": "EF",
       "good_min": 1.30, "good_max": 1.70, "higher_is_better": true,
       "description": "Power / Heart Rate.", "improvement": "• Long Z2 Rides",
-      "formula": "Avg Power / Avg HR",
+      "formula": "Norm Power / Avg HR",
       "filters": { "min_duration_minutes": 20, "ignore_zero": true, "require_hr": true }
     },
     "strength": {

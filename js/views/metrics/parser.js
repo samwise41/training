@@ -235,7 +235,7 @@ export const extractMetricData = (data, key) => {
         case 'endurance': 
             return data.map(d => {
                 if (!checkSport(d, 'BIKE') || !d._pwr || !d._hr) return null;
-                return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._pwr / d._hr, breakdown: `${Math.round(d._pwr)}W / ${d._hr}bpm` };
+                return { date: d.dateObj, dateStr: d.date, name: d.title || 'Workout', val: d._norm_pwr / d._hr, breakdown: `${Math.round(d._norm_pwr)}W / ${d._hr}bpm` };
             }).filter(Boolean);
 
         case 'strength': 

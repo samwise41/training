@@ -6,8 +6,8 @@
 The Master Training Plan is to provide structured training for the athlete over a long term. The events that are scheduled are listed below, but that will be dynamic as new events are signed up for. 
 
 The primary "A" races and secondary objectives for the 2026 season.
-B Races are prep/training for A Races
-C Races are fun checkpoints
+B Races are prep/training for A Races.
+C Races are fun checkpoints.
 
 | **Date** | **Event Type** | **Goal** | **Priority** |  **Course Profile** | **Training Implication** | **Swim Distance** | **Swim Goal** | **Bike Distance** | **Bike Goal** | **Run Distance** | **Run Goal** | **Elevation Goal** |
 | :--- | :--- | :--- | :--- |  :--- | :--- | :--- | :--- | :--- | :--- |  :--- | :--- | :--- | 

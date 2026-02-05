@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # --- CONFIGURATION ---
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,7 +21,8 @@ def load_current_phase_from_json():
         with open(PHASES_FILE, 'r', encoding='utf-8') as f:
             schedule = json.load(f)
         
-        today = datetime.now().date()
+        # Get today's date (midnight)
+        today = datetime.now()
         
         sorted_weeks = []
         for entry in schedule:
@@ -29,7 +30,9 @@ def load_current_phase_from_json():
             d_str = entry.get('date') or entry.get('week_ending') or entry.get('Week Ending')
             if d_str:
                 try:
-                    d_obj = datetime.strptime(d_str, "%Y-%m-%d").date()
+                    # Parse date (e.g., "2026-02-07")
+                    # We add 23 hours to make it the END of that day
+                    d_obj = datetime.strptime(d_str, "%Y-%m-%d") + timedelta(hours=23, minutes=59)
                     sorted_weeks.append((d_obj, entry))
                 except ValueError:
                     continue
@@ -38,34 +41,38 @@ def load_current_phase_from_json():
 
         # Find the first week-ending date that is >= today
         current_entry = None
+        
+        # 1. Standard Search: Find the first week that ends in the future
         for week_date, data in sorted_weeks:
             if week_date >= today:
                 current_entry = data
                 break
         
-        # Fallback: If we are just past the last date (within 7 days), use the last entry
+        # 2. End-of-Plan Grace Period: If today is past the last date, keep showing the last week for 7 days
         if not current_entry and sorted_weeks:
-            last_date = sorted_weeks[-1][0]
-            if (today - last_date).days < 7:
+            last_week_date = sorted_weeks[-1][0]
+            if (today - last_week_date).days <= 7:
                  current_entry = sorted_weeks[-1][1]
 
         if current_entry:
-            # 1. PHASE
-            p = current_entry.get('Phase') or current_entry.get('phase') or "Unknown Phase"
+            # 1. PHASE (Robust Search)
+            p = (current_entry.get('Phase') or 
+                 current_entry.get('phase') or 
+                 "Unknown Phase")
             
-            # 2. BLOCK (Robust Key Search)
-            b = (current_entry.get('Block') or 
+            # 2. BLOCK (Robust Search)
+            b = (current_entry.get('Block / Focus') or 
+                 current_entry.get('Block') or 
                  current_entry.get('block') or 
-                 current_entry.get('Block / Focus') or 
                  "")
             
-            # 3. MICROCYCLE
+            # 3. MICROCYCLE (Robust Search)
             m = (current_entry.get('Microcycle Type') or 
                  current_entry.get('microcycle') or 
                  current_entry.get('Microcycle') or 
                  "")
             
-            # Construct Display String
+            # Construct Block String
             if b and m:
                 block_display = f"{b} ({m})"
             elif b:

@@ -1,9 +1,6 @@
 
 # Master Training Plan 2026
 
-**Last Updated:** January 17, 2026
-**Status:** Phase 1 (Base/Prep) - Block 2 Week 3 (Loading)
-
 ## 1. Event Schedule
 
 The Master Training Plan is to provide structured training for the athlete over a long term. The events that are scheduled are listed below, but that will be dynamic as new events are signed up for. 

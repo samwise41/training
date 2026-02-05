@@ -227,12 +227,6 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 ## 7. Progress Tracker
 
-**Key Milestones**
-
-* **Dec 23, 2025:** Set new Cycling FTP Baseline: 241W.
-* **Dec 23, 2025:** Validated "Finishing Kick" (Held >328W for final 5 mins).
-* **Dec 26, 2025:** Set new Running LTHR Baseline: 171 bpm.
-
 ### Historical FTP Log
 
 | Date | FTP (Watts) | Growth |

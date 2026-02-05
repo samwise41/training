@@ -43,20 +43,37 @@ def load_current_phase_from_json():
                 current_entry = data
                 break
         
-        # If we are past the last date in the plan, check if it was recent
+        # Fallback: If we are just past the last date (within 7 days), use the last entry
         if not current_entry and sorted_weeks:
             last_date = sorted_weeks[-1][0]
-            # If the plan ended less than 7 days ago, show the last week's phase
             if (today - last_date).days < 7:
                  current_entry = sorted_weeks[-1][1]
 
         if current_entry:
+            # 1. PHASE
             p = current_entry.get('Phase') or current_entry.get('phase') or "Unknown Phase"
-            b = current_entry.get('Block') or current_entry.get('block') or ""
-            m = current_entry.get('Microcycle Type') or current_entry.get('microcycle') or ""
             
-            # Format block string (e.g., "Block 1 (Loading)")
-            block_display = f"{b} ({m})" if m else b
+            # 2. BLOCK (Robust Key Search)
+            b = (current_entry.get('Block') or 
+                 current_entry.get('block') or 
+                 current_entry.get('Block / Focus') or 
+                 "")
+            
+            # 3. MICROCYCLE
+            m = (current_entry.get('Microcycle Type') or 
+                 current_entry.get('microcycle') or 
+                 current_entry.get('Microcycle') or 
+                 "")
+            
+            # Construct Display String
+            if b and m:
+                block_display = f"{b} ({m})"
+            elif b:
+                block_display = b
+            elif m:
+                block_display = m
+            else:
+                block_display = ""
             
             return p, block_display
 
@@ -70,7 +87,6 @@ def main():
     phase_part, block_part = load_current_phase_from_json()
     
     # STRICT FALLBACK: If phases.json fails, go straight to Offseason.
-    # We no longer look at endurance_plan.md for status.
     if not phase_part or phase_part == "Unknown Phase":
         print("   -> No active phase found in phases.json. Defaulting to Offseason.")
         phase_part = "Offseason"

@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-05 02:30:14
+**Generated:** 2026-02-05 13:42:40
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -62,10 +62,10 @@
     "plannedDuration": 45.0,
     "notes": "**Loc:** Zwift. **Focus:** \"Fun Factor\" Rule Application. High Cadence, Anaerobic Capacity. Go full gas.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0
+    "actualDuration": 43.2,
+    "actualWorkout": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (C) on Avon Flyer in New York",
+    "status": "COMPLETED",
+    "compliance": 96
   },
   {
     "date": "2026-02-06",

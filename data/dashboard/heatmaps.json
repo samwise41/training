@@ -4077,6 +4077,29 @@
         ]
     },
     {
+        "date": "2026-02-06",
+        "complianceStatus": "Partial",
+        "plannedDuration": 60.0,
+        "actualDuration": 24.0,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Aerobic Maintenance",
+                "sport": "Other",
+                "actual": 0.0
+            },
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 24.0
+            }
+        ]
+    },
+    {
         "date": "2026-05-09",
         "complianceStatus": "Event",
         "plannedDuration": 0,

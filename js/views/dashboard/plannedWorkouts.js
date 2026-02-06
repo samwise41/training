@@ -45,9 +45,10 @@ function groupWorkoutsByDate(workouts) {
         if (!dateKey) return;
 
         if (!groups[dateKey]) {
-            // Force Local Time parsing to avoid UTC offsets
+            // FIX: Force Local Time parsing to avoid UTC offsets
+            // "2026-02-05" -> Split -> Year, Month, Day
             const [y, m, d] = dateKey.split('-').map(Number);
-            const localDate = new Date(y, m - 1, d); 
+            const localDate = new Date(y, m - 1, d); // Month is 0-indexed in JS
 
             groups[dateKey] = {
                 dateStr: dateKey,
@@ -79,7 +80,7 @@ function generateGroupedCardsHTML(groupedData) {
     
     let html = '';
     
-    // Calculate "Today"
+    // Calculate "Today" in local string format "YYYY-MM-DD"
     const d = new Date();
     const todayStr = [
         d.getFullYear(),
@@ -97,7 +98,7 @@ function generateGroupedCardsHTML(groupedData) {
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        // --- Outer Card Border ---
+        // --- Card Border Logic ---
         let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
         
         if (isDayComplete) {
@@ -112,27 +113,21 @@ function generateGroupedCardsHTML(groupedData) {
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // --- BORDER HIGHLIGHT LOGIC ---
+            // 1. Status Colors
             let statusText = w.status; 
-            let statusColorClass = "text-slate-400";
-            let rowBorderClass = "border border-slate-700/50"; // Default border
+            let statusColorClass = "text-slate-400"; 
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
                 statusColorClass = "text-emerald-400";
-                rowBorderClass = "border border-emerald-500/60"; // Green Highlight
             } else if (w.status === 'MISSED') {
                 statusColorClass = "text-red-400";
-                rowBorderClass = "border border-red-500/60"; // Red Highlight
-            } else if (w.status === 'PLANNED') {
-                statusColorClass = "text-blue-400";
-                rowBorderClass = "border border-blue-500/50"; // Blue Highlight
             }
 
+            // 2. Sport Color Class
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
-            // We use 'mb-1' to create the "split" effect between items
             return `
-                <div class="flex items-start gap-4 p-4 ${rowBorderClass} rounded-md mb-2 last:mb-0 hover:bg-slate-700/50 transition-colors">
+                <div class="flex items-start gap-4 p-4 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/50 transition-colors">
                     
                     <div class="flex flex-col items-start min-w-[85px] border-r border-slate-700/50 pr-3">
                         <div class="flex items-baseline">
@@ -176,7 +171,7 @@ function generateGroupedCardsHTML(groupedData) {
                     <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
                 </div>
                 
-                <div class="flex flex-col flex-1 p-2">
+                <div class="flex flex-col flex-1">
                     ${rowsHtml}
                 </div>
             </div>

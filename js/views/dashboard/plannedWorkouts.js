@@ -86,8 +86,8 @@ function generateGroupedCardsHTML(groupedData) {
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
         // 1. Header Border Colors (Top/Left/Right)
-        // If day is complete -> Green. If day is Today (incomplete) -> Blue. Else -> Slate.
-        let headerBorderColor = "border-slate-700";
+        // Future/Standard days get a subtle border (slate-800) so they don't look "Active"
+        let headerBorderColor = "border-slate-800"; 
         let shadowClass = "";
         
         if (isDayComplete) {
@@ -99,9 +99,9 @@ function generateGroupedCardsHTML(groupedData) {
         }
 
         // --- Header HTML ---
-        // bg-slate-950 matches the dark background in your screenshot
+        // Reverted to bg-slate-900 (Original Color)
         const headerHtml = `
-            <div class="bg-slate-950 rounded-t-xl px-4 py-2 flex justify-between items-center z-10 relative border-t-2 border-l-2 border-r-2 border-b-0 ${headerBorderColor} ${shadowClass} flex-none">
+            <div class="bg-slate-900 rounded-t-xl px-4 py-2 flex justify-between items-center z-10 relative border-t-2 border-l-2 border-r-2 border-b-0 ${headerBorderColor} ${shadowClass} flex-none">
                 <span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
                 ${isToday ? '<span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider border border-blue-500/30">Today</span>' : ''}
             </div>
@@ -113,14 +113,11 @@ function generateGroupedCardsHTML(groupedData) {
             
             // Formatting
             const sportType = w.actualSport || 'Other';
-            
-            // Dynamic Sport Color Class (e.g. icon-run, icon-bike)
+            // Dynamic Sport Color Class
             const sportClass = `icon-${sportType.toLowerCase()}`;
             
-            // Title Parsing: Colorize [SPORT] tag using the dynamic class
+            // Title Parsing: Colorize [SPORT] tag
             let planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
-            
-            // Wrap [SPORT] in a span that uses the generic icon class for color
             planName = planName.replace(/\[(.*?)\]/g, (match) => {
                 return `<span class="${sportClass} font-bold">${match}</span>`;
             });
@@ -139,24 +136,24 @@ function generateGroupedCardsHTML(groupedData) {
             else if (w.status === 'PLANNED') statusTextColor = "text-blue-400";
 
             // --- Stack Borders ---
-            // Left/Right/Top/Bottom borders are colored by THIS item's status.
-            // border-t ensures a crisp line separating it from the item above.
-            // border-b ensures a crisp line separating it from the item below.
             let borderClasses = `border-l-2 border-r-2 border-t border-b ${myBorderColor}`;
             
-            // Rounding & Height Logic for Last Item
+            // Rounding for Last Item
             let extraClasses = "";
             if (isLast) {
                 borderClasses = borderClasses.replace("border-b", "border-b-2"); // Thicker bottom for end
-                extraClasses = "rounded-b-xl flex-grow"; // flex-grow fills the remaining height
+                extraClasses = "rounded-b-xl"; 
+                // NOTE: Removed 'flex-grow' here. 
+                // This ensures the row stays its natural height even if the card container is taller.
             }
 
             const iconHtml = Formatters.getIconForSport(sportType);
             const statusLabel = w.status === 'COMPLETED' ? 'COMPLETED' : w.status;
 
             // Row HTML
+            // Reverted bg to slate-900/slate-800 mix
             return `
-                <div class="flex items-start gap-4 p-4 ${borderClasses} ${extraClasses} bg-slate-950 hover:bg-slate-900 transition-colors mb-0 -mt-[0px]">
+                <div class="flex items-start gap-4 p-4 ${borderClasses} ${extraClasses} bg-slate-900 hover:bg-slate-800 transition-colors mb-0 -mt-[0px]">
                     
                     <div class="flex flex-col items-center min-w-[70px] border-r border-slate-800 pr-3">
                         <div class="flex items-baseline">
@@ -180,7 +177,7 @@ function generateGroupedCardsHTML(groupedData) {
                             <div class="text-sm w-5 text-center shrink-0 ${sportClass}">
                                 ${iconHtml}
                             </div>
-                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-white">${planName}</h4>
+                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-slate-200">${planName}</h4>
                         </div>
                         <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-3">
                             ${notes}
@@ -191,17 +188,17 @@ function generateGroupedCardsHTML(groupedData) {
         }).join('');
 
         // --- ASSEMBLE CARD ---
-        // h-full on wrapper ensures equal height cards in the grid
+        // h-full here ensures the BACKGROUND of the card stretches to match neighbors
+        // but the individual rows inside will just sit at the top (because we removed flex-grow from them)
         html += `
             <div class="flex flex-col h-full mb-0 filter drop-shadow-lg">
                 ${headerHtml}
-                <div class="flex flex-col flex-1">
-                    ${rowsHtml}
+                <div class="flex flex-col flex-1 bg-slate-900 rounded-b-xl"> ${rowsHtml}
                 </div>
             </div>
         `;
     });
 
-    // Grid Container needs items-stretch (default) to ensure equal height columns
+    // auto-rows-fr: Makes all cards in a row the same height
     return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2 pb-10 auto-rows-fr">${html}</div>`;
 }

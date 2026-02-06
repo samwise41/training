@@ -34,138 +34,117 @@ export function renderPlannedWorkouts() {
     return UI.buildCollapsibleSection('planned-workouts-section', 'Planned Workouts', loadingHtml, true);
 }
 
-/**
- * Groups flat workout list by Date
- */
 function groupWorkoutsByDate(workouts) {
     const groups = {};
-
     workouts.forEach(w => {
         const dateKey = w.date; 
         if (!dateKey) return;
-
         if (!groups[dateKey]) {
-            // Force Local Time parsing to avoid UTC offsets
             const [y, m, d] = dateKey.split('-').map(Number);
-            const localDate = new Date(y, m - 1, d); 
-
             groups[dateKey] = {
                 dateStr: dateKey,
-                dateObj: localDate, 
+                dateObj: new Date(y, m - 1, d), 
                 workouts: [],
                 totalDuration: 0,
                 isRestDay: true 
             };
         }
-        
         groups[dateKey].workouts.push(w);
-        
-        const duration = parseFloat(w.plannedDuration) || 0;
-        groups[dateKey].totalDuration += duration;
-        
-        if (w.status !== 'REST' && w.actualSport !== 'Rest') {
-            groups[dateKey].isRestDay = false;
-        }
+        groups[dateKey].totalDuration += (parseFloat(w.plannedDuration) || 0);
+        if (w.status !== 'REST' && w.actualSport !== 'Rest') groups[dateKey].isRestDay = false;
     });
-
     return Object.values(groups).sort((a, b) => a.dateObj - b.dateObj);
 }
 
-/**
- * Generates the HTML
- */
 function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
     
     let html = '';
     
-    // Calculate "Today"
+    // "Today" Helper
     const d = new Date();
-    const todayStr = [
-        d.getFullYear(),
-        String(d.getMonth() + 1).padStart(2, '0'),
-        String(d.getDate()).padStart(2, '0')
-    ].join('-');
+    const todayStr = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, '0'), String(d.getDate()).padStart(2, '0')].join('-');
 
     groupedData.forEach(day => {
-        // --- Header Logic ---
         const isToday = day.dateStr === todayStr;
         const dayNameFull = day.dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-        
-        // Completion Logic
-        const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
-        const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
-        const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        // --- Outer Card Border ---
-        let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
+        // --- 1. HEADER LOGIC ---
+        // The header is the "Cap" of the stack. It usually has neutral borders, 
+        // but its bottom border will merge with the top border of the first workout.
+        // To keep it clean, we give the header a generic slate border.
+        let headerClass = "bg-slate-900 border-t-2 border-l-2 border-r-2 border-slate-700 rounded-t-xl p-2 px-4";
         
-        if (isDayComplete) {
-            cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
-        } else if (isToday) {
-            cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
-        }
-
-        // --- Rows Logic ---
-        const rowsHtml = day.workouts.map(w => {
+        // --- 2. ROW LOGIC ---
+        const rowsHtml = day.workouts.map((w, index) => {
+            const isLast = index === day.workouts.length - 1;
             const planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // --- BORDER COLOR LOGIC (THE FIX) ---
-            let statusText = w.status; 
-            let statusColorClass = "text-slate-400"; 
-            
-            // Replaced 'border-b' with a full border logic
-            // Default border is standard slate
-            let rowBorderClass = "border border-slate-700/50"; 
+            // --- STATUS COLORS (THE CORE LOGIC) ---
+            let statusText = w.status;
+            let statusColor = "text-slate-400";
+            let borderClass = ""; // We will build this string manually
+
+            // Define colors
+            const greenBorder = "border-emerald-500/60";
+            const blueBorder = "border-blue-500/50";
+            const redBorder = "border-red-500/60";
+            const grayBorder = "border-slate-700/50";
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
-                statusColorClass = "text-emerald-400";
-                rowBorderClass = "border border-emerald-500/60"; // Green Border
+                statusColor = "text-emerald-400";
+                borderClass = greenBorder;
             } else if (w.status === 'MISSED') {
-                statusColorClass = "text-red-400";
-                rowBorderClass = "border border-red-500/60"; // Red Border
+                statusColor = "text-red-400";
+                borderClass = redBorder;
             } else if (w.status === 'PLANNED') {
-                statusColorClass = "text-blue-400";
-                rowBorderClass = "border border-blue-500/50"; // Blue Border
+                statusColor = "text-blue-400";
+                borderClass = blueBorder;
+            } else {
+                // Rest or other
+                borderClass = grayBorder;
             }
+
+            // --- BORDER CONSTRUCTION ---
+            // We apply border-2 to Left/Right to make the sides visible "card sides".
+            // We apply border-t and border-b for the dividers.
+            // Result: border-l-2 border-r-2 border-t border-b
+            let fullBorderClasses = `border-l-2 border-r-2 border-t border-b ${borderClass}`;
+            
+            // Rounding logic: Only the LAST item gets rounded bottoms
+            let roundClass = isLast ? "rounded-b-xl border-b-2" : ""; // thicker bottom for last item
 
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
-            // Changed structure: Removed 'border-b', Added 'rounded-md mb-2' and the colored 'rowBorderClass'
-            // Added 'bg-transparent' to ensure no "card inside card" look
             return `
-                <div class="flex items-start gap-4 p-4 ${rowBorderClass} rounded-md mb-2 bg-transparent hover:bg-slate-700/30 transition-colors">
+                <div class="flex items-start gap-4 p-4 ${fullBorderClasses} ${roundClass} bg-slate-800/20 hover:bg-slate-800/40 transition-colors mb-0">
                     
-                    <div class="flex flex-col items-start min-w-[85px] border-r border-slate-700/50 pr-3">
+                    <div class="flex flex-col items-center min-w-[70px] border-r border-slate-700/30 pr-3">
                         <div class="flex items-baseline">
-                            <span class="text-4xl font-bold text-white leading-none tracking-tight">
+                            <span class="text-3xl font-bold text-white leading-none tracking-tight">
                                 ${w.plannedDuration > 0 ? Math.round(w.plannedDuration) : '--'}
                             </span>
-                            <span class="text-xs font-medium text-slate-400 ml-0.5">min</span>
+                            <span class="text-xs font-medium text-slate-400 ml-0.5">m</span>
                         </div>
-                        
-                        <div class="text-[10px] font-bold uppercase tracking-wider mt-1 ${statusColorClass} break-words w-full">
+                        <div class="text-[9px] font-bold uppercase tracking-wider mt-1 ${statusColor} text-center">
                             ${statusText}
                         </div>
-
                         ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
-                            `<div class="text-[10px] font-mono text-slate-300 mt-2 pt-2 border-t border-slate-700/50 w-full">
-                                <div>Act: ${Math.round(w.actualDuration)}m</div>
-                                ${w.compliance != null ? `<div class="mt-0.5 text-slate-400">Cmpl: ${w.compliance}%</div>` : ''}
+                            `<div class="text-[10px] font-mono text-slate-400 mt-2 pt-2 border-t border-slate-700/30 w-full text-center">
+                                Act: ${Math.round(w.actualDuration)}
                              </div>` : ''}
                     </div>
 
                     <div class="flex-1 min-w-0 pt-0.5">
-                        <div class="flex items-start gap-2 mb-2 ${sportColorClass}">
+                        <div class="flex items-center gap-2 mb-2 ${sportColorClass}">
                             <div class="text-sm w-5 text-center mt-0.5 shrink-0">
                                 ${Formatters.getIconForSport(sportType)}
                             </div>
-                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide">${planName}</h4>
+                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-slate-200">${planName}</h4>
                         </div>
-
-                        <div class="text-xs text-slate-300 leading-relaxed font-sans line-clamp-4" title="${notes}">
+                        <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-3" title="${notes}">
                             ${notes}
                         </div>
                     </div>
@@ -173,19 +152,21 @@ function generateGroupedCardsHTML(groupedData) {
             `;
         }).join('');
 
-        // --- Assemble Card ---
+        // --- ASSEMBLE STACK ---
+        // Notice: The container has NO border. The children provide the borders.
         html += `
-            <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full min-h-[180px]">
-                <div class="px-4 py-1.5 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
-                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
+            <div class="flex flex-col h-full mb-4 shadow-lg filter drop-shadow-md">
+                <div class="${headerClass} flex justify-between items-baseline">
+                    <span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
+                    ${isToday ? '<span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">Today</span>' : ''}
                 </div>
                 
-                <div class="flex flex-col flex-1 p-2">
+                <div class="flex flex-col">
                     ${rowsHtml}
                 </div>
             </div>
         `;
     });
 
-    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-0 p-2">${html}</div>`;
+    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2">${html}</div>`;
 }

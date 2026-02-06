@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-02-05 13:59:00
+**Generated:** 2026-02-06 02:30:39
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-02-05 13:31:54",
+  "generated_at": "2026-02-05 18:02:37",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -296,24 +296,24 @@
             "ignore_zero": true,
             "require_hr": true
           },
-          "current_value": 1.25,
+          "current_value": 1.27,
           "status": "Watch",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.01554269248522092
+              "slope": 0.023572134665923037
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.005668304895868263
+              "slope": 0.00717114166765743
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.001816414789145702
+              "slope": 0.00213722583517832
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0013659617009929206
+              "slope": 0.0014696885008174437
             }
           },
           "has_data": true
@@ -335,24 +335,24 @@
             "min_duration_minutes": 10,
             "ignore_zero": true
           },
-          "current_value": 2.35,
+          "current_value": 2.41,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.055720204654338426
+              "slope": 0.08224009188851138
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.02081286372823591
+              "slope": 0.025492843828384078
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.007784617287434804
+              "slope": 0.008788072480079187
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0024190326088012965
+              "slope": 0.002726891996262673
             }
           },
           "has_data": true

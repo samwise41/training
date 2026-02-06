@@ -1,5 +1,5 @@
 # Daily Readiness Scores
-**Generated:** 2026-02-05 13:59:00
+**Generated:** 2026-02-06 02:30:39
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/readiness/readiness.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generatedAt": "2026-02-05T13:31:54.416724",
+  "generatedAt": "2026-02-05T18:02:37.986412",
   "trainingStats": {
     "maxSwim": 46.6,
     "maxBike": 132.7,
@@ -16,7 +16,7 @@
   },
   "upcomingEvents": [
     {
-      "dateStr": "May 5, 2026",
+      "dateStr": "May 9, 2026",
       "name": "East Canyon and Back",
       "goal": "Finish ~ 2:30:00",
       "priority": "C-Race",
@@ -34,7 +34,7 @@
       "dateStr": "June 20, 2026",
       "name": "Jordanelle Olympic Triathlon",
       "goal": "Finish ~ 2:30:00",
-      "priority": "A-Race",
+      "priority": "B-Race",
       "courseProfile": "Hilly Bike / Flat Run",
       "trainingImplication": "Needs low-cadence/high-torque bike intervals (Strength Endurance).",
       "swimDist": "1500 yards",
@@ -44,6 +44,21 @@
       "bikeElevGoal": "1202 ft",
       "runDist": "10 k",
       "runGoal": "00:50:33"
+    },
+    {
+      "dateStr": "July 25, 2026",
+      "name": "Solo Century Simulation Roy to Holladay to Roy",
+      "goal": "Finish ~ 5:30:00",
+      "priority": "C-Race",
+      "courseProfile": "Mostly flat with 1700+ ft of climb. Half of that climb is in the middle 10 miles",
+      "trainingImplication": "Need time in saddle and test fueling strategy.",
+      "swimDist": "",
+      "swimGoal": "",
+      "bikeDist": "100 Miles",
+      "bikeGoal": "5:30:00",
+      "bikeElevGoal": "1700 ft",
+      "runDist": "",
+      "runGoal": ""
     },
     {
       "dateStr": "Aug 15, 2026",
@@ -64,7 +79,7 @@
       "dateStr": "Sept 11, 2026",
       "name": "Brineman 70.3 Triathlon",
       "goal": "sub 6:00:00",
-      "priority": "B-Race",
+      "priority": "A-Race",
       "courseProfile": "1000 ft of climb total with no single climb over 200 ft.",
       "trainingImplication": "Need to pace effort.",
       "swimDist": "1.2 Miles",

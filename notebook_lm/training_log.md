@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-05 02:30:13
+**Generated:** 2026-02-06 02:30:39
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-05",
+    "day": "Thursday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Zwift Race",
+    "plannedDuration": 45.0,
+    "notes": "**Loc:** Zwift. **Focus:** \"Fun Factor\" Rule Application. High Cadence, Anaerobic Capacity. Go full gas.",
+    "actualDuration": 43.2,
+    "id": "21772328343,21772473298",
+    "actualWorkout": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (C) on Avon Flyer in New York",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 2590.0,
+    "distance": 23222.220703125,
+    "averageHR": 172.22702702702702,
+    "maxHR": 190.0,
+    "aerobicTrainingEffect": 3.9000000953674316,
+    "anaerobicTrainingEffect": 2.5,
+    "trainingEffectLabel": "VO2MAX",
+    "avgPower": 260.0,
+    "maxPower": 574.0,
+    "normPower": 274.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 24.9,
+    "maxSpeed": 24.9,
+    "averageBikingCadenceInRevPerMinute": 72,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 544.0,
+    "elevationGain": 177.0,
+    "RPE": null,
+    "Feeling": null,
+    "matchStatus": "Linked Group",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-04",
     "day": "Wednesday",
@@ -7188,9 +7235,9 @@
     "aerobicTrainingEffect": 0.400000006,
     "anaerobicTrainingEffect": 0,
     "trainingEffectLabel": "UNKNOWN",
-    "avgPower": 39,
+    "avgPower": 153,
     "maxPower": 283,
-    "normPower": 60,
+    "normPower": 162,
     "trainingStressScore": 3.5,
     "intensityFactor": 0.254000008,
     "averageSpeed": 3.854000092,
@@ -7393,9 +7440,9 @@
     "aerobicTrainingEffect": 0.300000012,
     "anaerobicTrainingEffect": 0,
     "trainingEffectLabel": "UNKNOWN",
-    "avgPower": 39,
+    "avgPower": 171,
     "maxPower": 562,
-    "normPower": 62,
+    "normPower": 180,
     "trainingStressScore": 4.099999905,
     "intensityFactor": 0.263000011,
     "averageSpeed": 3.538000107,

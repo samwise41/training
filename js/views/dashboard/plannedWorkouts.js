@@ -98,14 +98,12 @@ function generateGroupedCardsHTML(groupedData) {
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
         // --- Outer Card Border ---
-        let cardBorderClass = "border border-slate-700 bg-slate-900"; 
+        let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
         
         if (isDayComplete) {
-            // All Done -> Green Ring
-            cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-900";
+            cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
-            // Today -> Blue Ring
-            cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-900";
+            cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         }
 
         // --- Rows Logic ---
@@ -114,58 +112,60 @@ function generateGroupedCardsHTML(groupedData) {
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // --- SIMPLE BORDER LOGIC ---
+            // --- BORDER COLOR LOGIC (THE FIX) ---
             let statusText = w.status; 
             let statusColorClass = "text-slate-400"; 
             
-            // Base Class: Transparent background, just a border
-            let boxClass = "border rounded-md mb-2 p-3 bg-transparent"; 
-            let borderColor = "border-slate-700/50"; // Default Gray
+            // Replaced 'border-b' with a full border logic
+            // Default border is standard slate
+            let rowBorderClass = "border border-slate-700/50"; 
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
                 statusColorClass = "text-emerald-400";
-                borderColor = "border-emerald-500/60"; // Green Border
+                rowBorderClass = "border border-emerald-500/60"; // Green Border
             } else if (w.status === 'MISSED') {
                 statusColorClass = "text-red-400";
-                borderColor = "border-red-500/60"; // Red Border
+                rowBorderClass = "border border-red-500/60"; // Red Border
             } else if (w.status === 'PLANNED') {
                 statusColorClass = "text-blue-400";
-                borderColor = "border-blue-500/50"; // Blue Border
+                rowBorderClass = "border border-blue-500/50"; // Blue Border
             }
 
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
+            // Changed structure: Removed 'border-b', Added 'rounded-md mb-2' and the colored 'rowBorderClass'
+            // Added 'bg-transparent' to ensure no "card inside card" look
             return `
-                <div class="flex items-start gap-4 ${boxClass} ${borderColor} hover:bg-slate-800/30 transition-colors">
+                <div class="flex items-start gap-4 p-4 ${rowBorderClass} rounded-md mb-2 bg-transparent hover:bg-slate-700/30 transition-colors">
                     
-                    <div class="flex flex-col items-center min-w-[70px] border-r border-slate-700/50 pr-3">
+                    <div class="flex flex-col items-start min-w-[85px] border-r border-slate-700/50 pr-3">
                         <div class="flex items-baseline">
-                            <span class="text-3xl font-bold text-white leading-none tracking-tight">
+                            <span class="text-4xl font-bold text-white leading-none tracking-tight">
                                 ${w.plannedDuration > 0 ? Math.round(w.plannedDuration) : '--'}
                             </span>
-                            <span class="text-xs font-medium text-slate-400 ml-0.5">m</span>
+                            <span class="text-xs font-medium text-slate-400 ml-0.5">min</span>
                         </div>
                         
-                        <div class="text-[9px] font-bold uppercase tracking-wider mt-1 ${statusColorClass} break-words w-full text-center">
+                        <div class="text-[10px] font-bold uppercase tracking-wider mt-1 ${statusColorClass} break-words w-full">
                             ${statusText}
                         </div>
 
                         ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
-                            `<div class="text-[10px] font-mono text-slate-300 mt-2 pt-2 border-t border-slate-700/50 w-full text-center">
-                                Act: ${Math.round(w.actualDuration)}
-                                ${w.compliance != null ? `<div class="mt-0.5 text-slate-500 text-[9px]">${w.compliance}%</div>` : ''}
+                            `<div class="text-[10px] font-mono text-slate-300 mt-2 pt-2 border-t border-slate-700/50 w-full">
+                                <div>Act: ${Math.round(w.actualDuration)}m</div>
+                                ${w.compliance != null ? `<div class="mt-0.5 text-slate-400">Cmpl: ${w.compliance}%</div>` : ''}
                              </div>` : ''}
                     </div>
 
                     <div class="flex-1 min-w-0 pt-0.5">
-                        <div class="flex items-center gap-2 mb-2 ${sportColorClass}">
+                        <div class="flex items-start gap-2 mb-2 ${sportColorClass}">
                             <div class="text-sm w-5 text-center mt-0.5 shrink-0">
                                 ${Formatters.getIconForSport(sportType)}
                             </div>
-                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-slate-200">${planName}</h4>
+                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide">${planName}</h4>
                         </div>
 
-                        <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-4" title="${notes}">
+                        <div class="text-xs text-slate-300 leading-relaxed font-sans line-clamp-4" title="${notes}">
                             ${notes}
                         </div>
                     </div>
@@ -173,14 +173,14 @@ function generateGroupedCardsHTML(groupedData) {
             `;
         }).join('');
 
-        // --- Assemble Outer Card ---
+        // --- Assemble Card ---
         html += `
             <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full min-h-[180px]">
-                <div class="px-4 py-2 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
-                    <span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
+                <div class="px-4 py-1.5 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
                 </div>
                 
-                <div class="p-3 flex flex-col flex-1">
+                <div class="flex flex-col flex-1 p-2">
                     ${rowsHtml}
                 </div>
             </div>

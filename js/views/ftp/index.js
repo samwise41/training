@@ -301,7 +301,7 @@ export function renderFTP(profileData) {
                 </div>
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80 flex flex-col">
                     <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-bolt text-yellow-500"></i>
+                        <i class="fa-solid fa-bolt icon-bike"></i>
                         <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Cycling Power Curve</span>
                     </div>
                     <div id="${cyclingChartId}" class="flex-1 w-full relative min-h-0">
@@ -316,7 +316,7 @@ export function renderFTP(profileData) {
                 </div>
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80 flex flex-col">
                     <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-stopwatch text-sky-500"></i>
+                        <i class="fa-solid fa-stopwatch icon-run"></i>
                         <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Running Pace vs Distance</span>
                     </div>
                     <div id="${runningChartId}" class="flex-1 w-full relative min-h-0">

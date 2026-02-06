@@ -45,10 +45,9 @@ function groupWorkoutsByDate(workouts) {
         if (!dateKey) return;
 
         if (!groups[dateKey]) {
-            // FIX: Force Local Time parsing to avoid UTC offsets
-            // "2026-02-05" -> Split -> Year, Month, Day
+            // Force Local Time parsing to avoid UTC offsets
             const [y, m, d] = dateKey.split('-').map(Number);
-            const localDate = new Date(y, m - 1, d); // Month is 0-indexed in JS
+            const localDate = new Date(y, m - 1, d); 
 
             groups[dateKey] = {
                 dateStr: dateKey,
@@ -80,7 +79,7 @@ function generateGroupedCardsHTML(groupedData) {
     
     let html = '';
     
-    // Calculate "Today" in local string format "YYYY-MM-DD"
+    // Calculate "Today"
     const d = new Date();
     const todayStr = [
         d.getFullYear(),
@@ -98,13 +97,15 @@ function generateGroupedCardsHTML(groupedData) {
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        // --- Card Border Logic ---
-        let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
+        // --- Outer Card Border ---
+        let cardBorderClass = "border border-slate-700 bg-slate-900"; 
         
         if (isDayComplete) {
-            cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
+            // All Done -> Green Ring
+            cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-900";
         } else if (isToday) {
-            cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
+            // Today -> Blue Ring
+            cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-900";
         }
 
         // --- Rows Logic ---
@@ -113,50 +114,58 @@ function generateGroupedCardsHTML(groupedData) {
             const sportType = w.actualSport || 'Other';
             const notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             
-            // 1. Status Colors
+            // --- SIMPLE BORDER LOGIC ---
             let statusText = w.status; 
             let statusColorClass = "text-slate-400"; 
+            
+            // Base Class: Transparent background, just a border
+            let boxClass = "border rounded-md mb-2 p-3 bg-transparent"; 
+            let borderColor = "border-slate-700/50"; // Default Gray
 
             if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') {
                 statusColorClass = "text-emerald-400";
+                borderColor = "border-emerald-500/60"; // Green Border
             } else if (w.status === 'MISSED') {
                 statusColorClass = "text-red-400";
+                borderColor = "border-red-500/60"; // Red Border
+            } else if (w.status === 'PLANNED') {
+                statusColorClass = "text-blue-400";
+                borderColor = "border-blue-500/50"; // Blue Border
             }
 
-            // 2. Sport Color Class
             const sportColorClass = `icon-${sportType.toLowerCase()}`;
 
             return `
-                <div class="flex items-start gap-4 p-4 border-b border-slate-700/50 last:border-0 hover:bg-slate-700/50 transition-colors">
+                <div class="flex items-start gap-4 ${boxClass} ${borderColor} hover:bg-slate-800/30 transition-colors">
                     
-                    <div class="flex flex-col items-start min-w-[85px] border-r border-slate-700/50 pr-3">
+                    <div class="flex flex-col items-center min-w-[70px] border-r border-slate-700/50 pr-3">
                         <div class="flex items-baseline">
-                            <span class="text-4xl font-bold text-white leading-none tracking-tight">
+                            <span class="text-3xl font-bold text-white leading-none tracking-tight">
                                 ${w.plannedDuration > 0 ? Math.round(w.plannedDuration) : '--'}
                             </span>
-                            <span class="text-xs font-medium text-slate-400 ml-0.5">min</span>
+                            <span class="text-xs font-medium text-slate-400 ml-0.5">m</span>
                         </div>
                         
-                        <div class="text-[10px] font-bold uppercase tracking-wider mt-1 ${statusColorClass} break-words w-full">
+                        <div class="text-[9px] font-bold uppercase tracking-wider mt-1 ${statusColorClass} break-words w-full text-center">
                             ${statusText}
                         </div>
 
                         ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
-                            `<div class="text-[10px] font-mono text-slate-300 mt-2 pt-2 border-t border-slate-700/50 w-full">
-                                <div>Act: ${Math.round(w.actualDuration)}m</div>
-                                ${w.compliance != null ? `<div class="mt-0.5 text-slate-400">Cmpl: ${w.compliance}%</div>` : ''}
+                            `<div class="text-[10px] font-mono text-slate-300 mt-2 pt-2 border-t border-slate-700/50 w-full text-center">
+                                Act: ${Math.round(w.actualDuration)}
+                                ${w.compliance != null ? `<div class="mt-0.5 text-slate-500 text-[9px]">${w.compliance}%</div>` : ''}
                              </div>` : ''}
                     </div>
 
                     <div class="flex-1 min-w-0 pt-0.5">
-                        <div class="flex items-start gap-2 mb-2 ${sportColorClass}">
+                        <div class="flex items-center gap-2 mb-2 ${sportColorClass}">
                             <div class="text-sm w-5 text-center mt-0.5 shrink-0">
                                 ${Formatters.getIconForSport(sportType)}
                             </div>
-                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide">${planName}</h4>
+                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-slate-200">${planName}</h4>
                         </div>
 
-                        <div class="text-xs text-slate-300 leading-relaxed font-sans line-clamp-4" title="${notes}">
+                        <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-4" title="${notes}">
                             ${notes}
                         </div>
                     </div>
@@ -164,14 +173,14 @@ function generateGroupedCardsHTML(groupedData) {
             `;
         }).join('');
 
-        // --- Assemble Card ---
+        // --- Assemble Outer Card ---
         html += `
             <div class="rounded-xl overflow-hidden shadow-lg transition-all ${cardBorderClass} flex flex-col h-full min-h-[180px]">
-                <div class="px-4 py-1.5 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
-                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
+                <div class="px-4 py-2 bg-slate-900/60 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
+                    <span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
                 </div>
                 
-                <div class="flex flex-col flex-1">
+                <div class="p-3 flex flex-col flex-1">
                     ${rowsHtml}
                 </div>
             </div>

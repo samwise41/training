@@ -56,20 +56,14 @@ function groupWorkoutsByDate(workouts) {
     return Object.values(groups).sort((a, b) => a.dateObj - b.dateObj);
 }
 
+/**
+ * Returns the border color class based on status
+ */
 function getStatusBorderColor(status) {
     if (status === 'COMPLETED' || status === 'UNPLANNED') return "border-emerald-500";
     if (status === 'MISSED') return "border-red-500";
-    if (status === 'PLANNED') return "border-blue-500"; // Changed to match your 'Blue' planned state
+    if (status === 'PLANNED') return "border-blue-500"; 
     return "border-slate-700";
-}
-
-function getSportColorClass(sport) {
-    const s = (sport || '').toLowerCase();
-    if (s.includes('run')) return "text-pink-500";
-    if (s.includes('bike') || s.includes('cycl')) return "text-purple-500";
-    if (s.includes('swim')) return "text-sky-400";
-    if (s.includes('strength')) return "text-orange-400";
-    return "text-slate-400";
 }
 
 function generateGroupedCardsHTML(groupedData) {
@@ -92,25 +86,22 @@ function generateGroupedCardsHTML(groupedData) {
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
         // 1. Header Border Colors (Top/Left/Right)
+        // If day is complete -> Green. If day is Today (incomplete) -> Blue. Else -> Slate.
         let headerBorderColor = "border-slate-700";
         let shadowClass = "";
         
         if (isDayComplete) {
             headerBorderColor = "border-emerald-500";
-            shadowClass = "shadow-[0_0_15px_-3px_rgba(16,185,129,0.2)]"; // Green Glow
+            shadowClass = "shadow-[0_0_15px_-3px_rgba(16,185,129,0.1)]";
         } else if (isToday) {
             headerBorderColor = "border-blue-500";
-            shadowClass = "shadow-[0_0_15px_-3px_rgba(59,130,246,0.2)]"; // Blue Glow
+            shadowClass = "shadow-[0_0_15px_-3px_rgba(59,130,246,0.1)]";
         }
 
-        // 2. Header Bottom Border (Matches First Workout)
-        const firstWorkoutStatus = day.workouts.length > 0 ? day.workouts[0].status : 'REST';
-        const headerBottomColor = getStatusBorderColor(firstWorkoutStatus);
-
         // --- Header HTML ---
-        // Note: bg-slate-950 for darker look
+        // bg-slate-950 matches the dark background in your screenshot
         const headerHtml = `
-            <div class="bg-slate-950 rounded-t-xl px-4 py-2 flex justify-between items-center z-10 relative border-t-2 border-l-2 border-r-2 border-b ${headerBorderColor} ${headerBottomColor} ${shadowClass}">
+            <div class="bg-slate-950 rounded-t-xl px-4 py-2 flex justify-between items-center z-10 relative border-t-2 border-l-2 border-r-2 border-b-0 ${headerBorderColor} ${shadowClass} flex-none">
                 <span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
                 ${isToday ? '<span class="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider border border-blue-500/30">Today</span>' : ''}
             </div>
@@ -122,20 +113,23 @@ function generateGroupedCardsHTML(groupedData) {
             
             // Formatting
             const sportType = w.actualSport || 'Other';
-            const sportColor = getSportColorClass(sportType);
             
-            // Title Parsing: Colorize [SPORT] tag
+            // Dynamic Sport Color Class (e.g. icon-run, icon-bike)
+            const sportClass = `icon-${sportType.toLowerCase()}`;
+            
+            // Title Parsing: Colorize [SPORT] tag using the dynamic class
             let planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
-            // Regex to wrap [SPORT] in color span
+            
+            // Wrap [SPORT] in a span that uses the generic icon class for color
             planName = planName.replace(/\[(.*?)\]/g, (match) => {
-                return `<span class="${sportColor}">${match}</span>`;
+                return `<span class="${sportClass} font-bold">${match}</span>`;
             });
 
-            // Notes Parsing: Handle **bold**
+            // Notes Parsing
             let notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             notes = notes.replace(/\*\*(.*?)\*\*/g, '<span class="text-slate-200 font-semibold">$1</span>');
 
-            // --- Status & Border Colors ---
+            // --- Status Colors ---
             let statusText = w.status;
             let statusTextColor = "text-slate-400";
             const myBorderColor = getStatusBorderColor(w.status);
@@ -145,19 +139,16 @@ function generateGroupedCardsHTML(groupedData) {
             else if (w.status === 'PLANNED') statusTextColor = "text-blue-400";
 
             // --- Stack Borders ---
-            // Left/Right/Bottom are mine.
-            // If I am NOT the first, I also add a Top border to create the "Double Line" effect with the guy above me.
-            let borderClasses = `border-l-2 border-r-2 border-b ${myBorderColor}`;
+            // Left/Right/Top/Bottom borders are colored by THIS item's status.
+            // border-t ensures a crisp line separating it from the item above.
+            // border-b ensures a crisp line separating it from the item below.
+            let borderClasses = `border-l-2 border-r-2 border-t border-b ${myBorderColor}`;
             
-            if (index > 0) {
-                borderClasses += ` border-t ${myBorderColor}`; 
-            }
-
-            // Rounding for last item
-            let roundingClass = "";
+            // Rounding & Height Logic for Last Item
+            let extraClasses = "";
             if (isLast) {
                 borderClasses = borderClasses.replace("border-b", "border-b-2"); // Thicker bottom for end
-                roundingClass = "rounded-b-xl";
+                extraClasses = "rounded-b-xl flex-grow"; // flex-grow fills the remaining height
             }
 
             const iconHtml = Formatters.getIconForSport(sportType);
@@ -165,7 +156,7 @@ function generateGroupedCardsHTML(groupedData) {
 
             // Row HTML
             return `
-                <div class="flex items-start gap-4 p-4 ${borderClasses} ${roundingClass} bg-slate-950 hover:bg-slate-900 transition-colors mb-0 -mt-[1px]">
+                <div class="flex items-start gap-4 p-4 ${borderClasses} ${extraClasses} bg-slate-950 hover:bg-slate-900 transition-colors mb-0 -mt-[0px]">
                     
                     <div class="flex flex-col items-center min-w-[70px] border-r border-slate-800 pr-3">
                         <div class="flex items-baseline">
@@ -186,7 +177,7 @@ function generateGroupedCardsHTML(groupedData) {
 
                     <div class="flex-1 min-w-0 pt-0.5">
                         <div class="flex items-center gap-2 mb-1.5">
-                            <div class="text-sm w-5 text-center shrink-0 ${sportColor}">
+                            <div class="text-sm w-5 text-center shrink-0 ${sportClass}">
                                 ${iconHtml}
                             </div>
                             <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-white">${planName}</h4>
@@ -200,15 +191,17 @@ function generateGroupedCardsHTML(groupedData) {
         }).join('');
 
         // --- ASSEMBLE CARD ---
+        // h-full on wrapper ensures equal height cards in the grid
         html += `
             <div class="flex flex-col h-full mb-0 filter drop-shadow-lg">
                 ${headerHtml}
-                <div class="flex flex-col h-full">
+                <div class="flex flex-col flex-1">
                     ${rowsHtml}
                 </div>
             </div>
         `;
     });
 
-    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2 pb-10">${html}</div>`;
+    // Grid Container needs items-stretch (default) to ensure equal height columns
+    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2 pb-10 auto-rows-fr">${html}</div>`;
 }

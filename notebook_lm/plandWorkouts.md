@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-06 02:30:39
+**Generated:** 2026-02-06 14:58:45
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -74,10 +74,10 @@
     "plannedDuration": 40.0,
     "notes": "**Loc:** Easy Terrain. **Focus:** Active Recovery. Strict Zone 2 (HR < 152). Flush the legs.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0
+    "actualDuration": 53.1,
+    "actualWorkout": "Roy - Zone 2 - 45 Minutes",
+    "status": "COMPLETED",
+    "compliance": 133
   },
   {
     "date": "2026-02-06",
@@ -86,10 +86,10 @@
     "plannedDuration": 20.0,
     "notes": "**Loc:** Pool. **Focus:** Frequency Rule. 500m-800m total. Drills ONLY. Catch & Pull focus. No intensity.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0
+    "actualDuration": 24.0,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 120
   },
   {
     "date": "2026-02-07",

@@ -66,6 +66,18 @@ function getStatusBorderColor(status) {
     return "border-slate-700";
 }
 
+/**
+ * Returns text color based on sport
+ */
+function getSportTextColor(sport) {
+    const s = (sport || '').toLowerCase();
+    if (s.includes('run')) return "text-pink-500";
+    if (s.includes('bike') || s.includes('cycl')) return "text-purple-500";
+    if (s.includes('swim')) return "text-sky-400";
+    if (s.includes('strength')) return "text-orange-400";
+    return "text-slate-300"; // Default
+}
+
 function generateGroupedCardsHTML(groupedData) {
     if (!groupedData || groupedData.length === 0) return '<p class="text-slate-400 italic p-4">No workouts found.</p>';
     
@@ -85,8 +97,7 @@ function generateGroupedCardsHTML(groupedData) {
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
-        // 1. Header Border Colors (Top/Left/Right)
-        // Future/Standard days get a subtle border (slate-800) so they don't look "Active"
+        // 1. Header Border Colors
         let headerBorderColor = "border-slate-800"; 
         let shadowClass = "";
         
@@ -99,7 +110,7 @@ function generateGroupedCardsHTML(groupedData) {
         }
 
         // --- Header HTML ---
-        // Reverted to bg-slate-900 (Original Color)
+        // Changed bg to slate-900 (lighter than 950)
         const headerHtml = `
             <div class="bg-slate-900 rounded-t-xl px-4 py-2 flex justify-between items-center z-10 relative border-t-2 border-l-2 border-r-2 border-b-0 ${headerBorderColor} ${shadowClass} flex-none">
                 <span class="text-[11px] font-bold text-slate-300 uppercase tracking-widest">${dayNameFull}</span>
@@ -113,71 +124,69 @@ function generateGroupedCardsHTML(groupedData) {
             
             // Formatting
             const sportType = w.actualSport || 'Other';
-            // Dynamic Sport Color Class
-            const sportClass = `icon-${sportType.toLowerCase()}`;
+            const sportTextColor = getSportTextColor(sportType);
+            const iconHtml = Formatters.getIconForSport(sportType);
             
-            // Title Parsing: Colorize [SPORT] tag
+            // Name Parsing: No longer splitting colors. The WHOLE title gets the color.
             let planName = w.plannedWorkout || (w.status === 'REST' ? 'Rest Day' : 'Workout');
-            planName = planName.replace(/\[(.*?)\]/g, (match) => {
-                return `<span class="${sportClass} font-bold">${match}</span>`;
-            });
-
+            
             // Notes Parsing
             let notes = w.notes ? w.notes.replace(/\[.*?\]/g, '').trim() : "No details provided.";
             notes = notes.replace(/\*\*(.*?)\*\*/g, '<span class="text-slate-200 font-semibold">$1</span>');
 
             // --- Status Colors ---
             let statusText = w.status;
-            let statusTextColor = "text-slate-400";
+            let statusLabelColor = "text-slate-400";
             const myBorderColor = getStatusBorderColor(w.status);
 
-            if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') statusTextColor = "text-emerald-400";
-            else if (w.status === 'MISSED') statusTextColor = "text-red-400";
-            else if (w.status === 'PLANNED') statusTextColor = "text-blue-400";
+            if (w.status === 'COMPLETED' || w.status === 'UNPLANNED') statusLabelColor = "text-emerald-400";
+            else if (w.status === 'MISSED') statusLabelColor = "text-red-400";
+            else if (w.status === 'PLANNED') statusLabelColor = "text-blue-400";
 
             // --- Stack Borders ---
+            // border-t ensures separation from the item above
+            // border-b ensures separation from item below
             let borderClasses = `border-l-2 border-r-2 border-t border-b ${myBorderColor}`;
             
-            // Rounding for Last Item
+            // --- Last Item Logic (The Fix) ---
             let extraClasses = "";
             if (isLast) {
-                borderClasses = borderClasses.replace("border-b", "border-b-2"); // Thicker bottom for end
-                extraClasses = "rounded-b-xl"; 
-                // NOTE: Removed 'flex-grow' here. 
-                // This ensures the row stays its natural height even if the card container is taller.
+                borderClasses = borderClasses.replace("border-b", "border-b-2"); // Thicker bottom
+                // flex-grow: This forces the LAST item to stretch if the container is taller (e.g. adjacent card is tall)
+                extraClasses = "rounded-b-xl flex-grow"; 
             }
 
-            const iconHtml = Formatters.getIconForSport(sportType);
             const statusLabel = w.status === 'COMPLETED' ? 'COMPLETED' : w.status;
 
             // Row HTML
-            // Reverted bg to slate-900/slate-800 mix
+            // gap-0 logic relies on parent 'gap-0'. 
+            // bg-slate-900 for lighter card look.
             return `
-                <div class="flex items-start gap-4 p-4 ${borderClasses} ${extraClasses} bg-slate-900 hover:bg-slate-800 transition-colors mb-0 -mt-[0px]">
+                <div class="flex items-start gap-4 p-4 ${borderClasses} ${extraClasses} bg-slate-900 hover:bg-slate-800 transition-colors">
                     
-                    <div class="flex flex-col items-center min-w-[70px] border-r border-slate-800 pr-3">
+                    <div class="flex flex-col items-center min-w-[70px] border-r border-slate-700/50 pr-3">
                         <div class="flex items-baseline">
                             <span class="text-3xl font-bold text-white leading-none tracking-tight">
                                 ${w.plannedDuration > 0 ? Math.round(w.plannedDuration) : '--'}
                             </span>
                             <span class="text-xs font-medium text-slate-500 ml-0.5">min</span>
                         </div>
-                        <div class="text-[9px] font-bold uppercase tracking-wider mt-1 ${statusTextColor} text-center">
+                        <div class="text-[9px] font-bold uppercase tracking-wider mt-1 ${statusLabelColor} text-center">
                             ${statusLabel}
                         </div>
                         ${(w.actualDuration > 0 && w.plannedDuration > 0) ? 
-                            `<div class="text-[10px] font-mono text-slate-400 mt-2 pt-2 border-t border-slate-800 w-full text-center">
+                            `<div class="text-[10px] font-mono text-slate-400 mt-2 pt-2 border-t border-slate-700/50 w-full text-center">
                                 Act: ${Math.round(w.actualDuration)}
                                 ${w.compliance ? `<div class="mt-0.5 opacity-70">${w.compliance}%</div>` : ''}
                              </div>` : ''}
                     </div>
 
                     <div class="flex-1 min-w-0 pt-0.5">
-                        <div class="flex items-center gap-2 mb-1.5">
-                            <div class="text-sm w-5 text-center shrink-0 ${sportClass}">
+                        <div class="flex items-center gap-2 mb-1.5 ${sportTextColor}">
+                            <div class="text-sm w-5 text-center shrink-0">
                                 ${iconHtml}
                             </div>
-                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide text-slate-200">${planName}</h4>
+                            <h4 class="text-sm font-bold leading-tight uppercase tracking-wide">${planName}</h4>
                         </div>
                         <div class="text-xs text-slate-400 leading-relaxed font-sans line-clamp-3">
                             ${notes}
@@ -188,17 +197,18 @@ function generateGroupedCardsHTML(groupedData) {
         }).join('');
 
         // --- ASSEMBLE CARD ---
-        // h-full here ensures the BACKGROUND of the card stretches to match neighbors
-        // but the individual rows inside will just sit at the top (because we removed flex-grow from them)
+        // 'flex-col gap-0' is crucial to remove the "Giant Spaces"
+        // 'h-full' ensures the card takes full height of the grid cell
         html += `
-            <div class="flex flex-col h-full mb-0 filter drop-shadow-lg">
+            <div class="flex flex-col h-full mb-0 filter drop-shadow-lg min-h-[150px]">
                 ${headerHtml}
-                <div class="flex flex-col flex-1 bg-slate-900 rounded-b-xl"> ${rowsHtml}
+                <div class="flex flex-col flex-1 gap-0 bg-slate-900 rounded-b-xl">
+                    ${rowsHtml}
                 </div>
             </div>
         `;
     });
 
-    // auto-rows-fr: Makes all cards in a row the same height
+    // auto-rows-fr matches height across the row
     return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2 pb-10 auto-rows-fr">${html}</div>`;
 }

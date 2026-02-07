@@ -1,10 +1,13 @@
 [
-    { "id": "homemade_gel", "label": "Homemade Gel (1 Sip)", "carbs": 25, "icon": "fa-bolt" },
-    { "id": "rice_krispie", "label": "Homemade Rice Krispie", "carbs": 25, "icon": "fa-bolt" },
-    { "id": "clif_chews", "label": "clif Blocks", "carbs": 8, "icon": "fa-candy-cane" },
-    { "id": "clif_bar", "label": "Clif Bar", "carbs": 22, "icon": "fa-cookie-bite" },
-    { "id": "banana", "label": "Banana", "carbs": 27, "icon": "fa-carrot" },
-    { "id": "redvines", "label": "Red Vines (5)", "carbs": 17, "icon": "fa-candy-cane" },
-    { "id": "fruit_bar", "label": "Fruit Bar", "carbs": 12, "icon": "fa-bar" }
+    { "id": "homemade_gel", "label": "Homemade Gel (1 Sip)", "carbs": 25 },
+    { "id": "rice_krispie", "label": "Homemade Rice Krispie", "carbs": 25},
+    { "id": "clif_chews", "label": "clif Blocks", "carbs": 8 },
+    { "id": "clif_bar", "label": "Clif Bar", "carbs": 22},
+    { "id": "banana", "label": "Banana", "carbs": 27 },
+    { "id": "redvines", "label": "Red Vines (5)", "carbs": 17 },
+    { "id": "fruit_bar", "label": "Fruit Bar", "carbs": 12 }
+
+    //Example
+    //    { "id": "fruit_bar", "label": "Fruit Bar", "carbs": 12, "icon": "fa-bar" }
 
 ]

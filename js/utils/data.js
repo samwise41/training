@@ -17,7 +17,7 @@ const DATA_SOURCES = {
     adherence:  './data/trends/adherence.json',
     METRICS_CONFIG: 'data/metrics/metrics_config.json',
     COACHING_VIEW: 'data/metrics/coaching_view.json',
-    fuelLibrary: './data/fueling/fuelLibrary.json'
+    fuelLibrary: './data/fueling/fuel_library.json'
 };
 
 export const DataManager = {

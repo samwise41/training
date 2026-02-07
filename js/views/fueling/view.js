@@ -113,12 +113,15 @@ export const FuelView = {
                             </button>
 
                             <div class="w-full">
-                                <button id="btn-toggle-food-list" class="w-full text-[10px] text-slate-500 bg-slate-900 py-1 rounded border border-slate-700">Show Solid Food</button>
-                                <div id="food-list-container" class="hidden mt-2 max-h-[120px] overflow-y-auto custom-scrollbar">
-                                    <div id="fuel-menu-container" class="space-y-1">
-                                        ${FuelComponents.renderFuelButtons(state.fuelMenu)}
+                                <button id="btn-toggle-food-list" class="w-full text-[10px] text-slate-500 bg-slate-900 py-1 rounded border border-slate-700 hover:bg-slate-800 transition-colors">Show Solid Food</button>
+                                
+                                <div id="food-list-container" class="hidden mt-2 border-t border-slate-700 pt-2 animate-fade-in">
+                                    <div class="w-full max-h-[120px] overflow-y-auto custom-scrollbar pr-1 mb-2">
+                                        <div id="fuel-menu-container" class="space-y-1">
+                                            ${FuelComponents.renderFuelButtons(state.fuelMenu)}
+                                        </div>
                                     </div>
-                                    <div id="custom-fuel-input-area" class="w-full mt-2 pt-2 border-t border-slate-700 flex gap-2">
+                                    <div id="custom-fuel-input-area" class="flex gap-2">
                                         <input type="number" id="input-custom-carbs" placeholder="g" class="w-16 bg-slate-900 border border-slate-600 rounded px-1 py-1 text-xs text-white text-center">
                                         <button id="btn-log-custom" class="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-[10px] font-bold">ADD</button>
                                     </div>
@@ -223,7 +226,7 @@ export const FuelView = {
                                 <ul class="list-disc pl-4 space-y-1 text-xs text-slate-400">
                                     <li><span class="text-blue-400 font-bold">MIX SIP:</span> +Fluid, +Carbs.</li>
                                     <li><span class="text-cyan-400 font-bold">WATER SIP:</span> +Fluid only.</li>
-                                    <li><span class="text-orange-400 font-bold">FLASK:</span> +Carbs (1/4 flask).</li>
+                                    <li><span class="text-orange-400 font-bold">FLASK:</span> +Carbs.</li>
                                 </ul>
                             </div>
                         </div>

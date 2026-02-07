@@ -117,7 +117,7 @@ export const FuelView = {
                         </div>
 
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g/bottle)</label>
+                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g/btl)</label>
                             <input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
 

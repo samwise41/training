@@ -5,15 +5,17 @@ import { FuelView } from './view.js';
 export const FuelTimer = {
     state: FuelState,
 
+    // Audio Object
+    beepSound: new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"), 
+
     async init() {
         let library = await DataManager.fetchJSON('fuelLibrary');
         
-        // Safety Fallback
         if (!library || library.length === 0) {
             library = [
-                { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt' },
-                { id: 'chews', label: 'Chews', carbs: 24, icon: 'fa-candy-cane' },
-                { id: 'bar', label: 'Bar', carbs: 40, icon: 'fa-cookie-bite' }
+                { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
+                { id: 'chews', label: 'Chews', carbs: 24, icon: 'fa-candy-cane', active: true },
+                { id: 'bar', label: 'Bar', carbs: 40, icon: 'fa-cookie-bite', active: true }
             ];
         }
         
@@ -59,6 +61,18 @@ export const FuelTimer = {
             }
         });
 
+        // Delete from Log
+        const log = document.getElementById('fuel-history-log');
+        if(log) log.addEventListener('click', (e) => {
+            const row = e.target.closest('.btn-delete-log');
+            if(row) {
+                const index = parseInt(row.dataset.index);
+                if(confirm("Remove this entry?")) {
+                    this.removeLogEntry(index);
+                }
+            }
+        });
+
         // Settings Toggles
         const editor = document.getElementById('fuel-library-editor');
         if(editor) editor.addEventListener('click', (e) => {
@@ -77,6 +91,7 @@ export const FuelTimer = {
     },
 
     startTimer() {
+        this.unlockAudio(); // Important: Fixes audio on mobile
         this.readConfigInputs();
         if (this.state.totalTime === 0) {
             this.state.nextDrink = this.state.drinkInterval * 60;
@@ -110,13 +125,24 @@ export const FuelTimer = {
         this.updateDisplays();
     },
 
+    // Browser Audio Unlock Policy
+    unlockAudio() {
+        this.beepSound.play()
+            .then(() => {
+                this.beepSound.pause();
+                this.beepSound.currentTime = 0;
+            })
+            .catch(e => console.log("Audio unlock waiting for gesture", e));
+    },
+
     logSip() {
         const sips = 4; 
         const amount = this.state.carbsPerBottle / sips;
         this.state.totalCarbsConsumed += amount;
         this.state.bottlesConsumed += (1 / sips);
         
-        this.addToLog('drink', 'Bottle Sip', Math.round(amount));
+        // Log bottleAmount so we can reverse it if deleted
+        this.addToLog('drink', 'Bottle Sip', Math.round(amount), (1/sips));
         
         this.state.nextDrink = this.state.drinkInterval * 60;
         this.updateDisplays();
@@ -124,14 +150,35 @@ export const FuelTimer = {
 
     logFood(carbs, name) {
         this.state.totalCarbsConsumed += carbs;
-        this.addToLog('eat', name || 'Food', carbs);
+        this.addToLog('eat', name || 'Food', carbs, 0);
         this.state.nextEat = this.state.eatInterval * 60;
         this.updateDisplays();
     },
 
-    addToLog(type, item, carbs) {
+    addToLog(type, item, carbs, bottleAmount = 0) {
         const timeStr = FuelView.formatTime(this.state.totalTime);
-        this.state.consumptionLog.push({ type, item, carbs, time: timeStr });
+        this.state.consumptionLog.push({ type, item, carbs, bottleAmount, time: timeStr });
+        this.refreshLogUI();
+    },
+
+    removeLogEntry(index) {
+        const entry = this.state.consumptionLog[index];
+        if(!entry) return;
+
+        // Reverse the stats
+        this.state.totalCarbsConsumed -= entry.carbs;
+        if(this.state.totalCarbsConsumed < 0) this.state.totalCarbsConsumed = 0;
+
+        if(entry.type === 'drink') {
+            this.state.bottlesConsumed -= entry.bottleAmount;
+            if(this.state.bottlesConsumed < 0) this.state.bottlesConsumed = 0;
+        }
+
+        // Remove from array
+        this.state.consumptionLog.splice(index, 1);
+        
+        // Refresh UI
+        this.updateDisplays();
         this.refreshLogUI();
     },
 
@@ -150,7 +197,6 @@ export const FuelTimer = {
         const name = nameInput.value.trim();
         const carbs = parseInt(carbsInput.value) || 0;
         if (name && carbs > 0) {
-            // New items default to active so you can use them immediately
             this.state.fuelMenu.push({ id: 'c_'+Date.now(), label: name, carbs, icon: 'fa-utensils', active: true });
             nameInput.value = ''; carbsInput.value = '';
             this.refreshUI();
@@ -183,23 +229,37 @@ export const FuelTimer = {
     updatePacerBottle() {
         const hours = this.state.totalTime / 3600;
         const totalBottles = hours * (this.state.targetHourlyCarbs / this.state.carbsPerBottle);
-        const pct = (1 - (totalBottles % 1)) * 100;
+        
+        let pct = 100;
+        let currentBottle = 1;
+
+        if (totalBottles > 0) {
+            pct = (1 - (totalBottles % 1)) * 100;
+            currentBottle = Math.floor(totalBottles) + 1;
+        }
         
         const liq = document.getElementById('virtual-bottle-liquid');
         if(liq) liq.style.height = `${pct}%`;
         
         document.getElementById('bottle-percent-display').innerText = Math.round(pct);
-        document.getElementById('target-bottle-count').innerText = Math.floor(totalBottles) + 1;
+        document.getElementById('target-bottle-count').innerText = currentBottle;
         document.getElementById('fuel-target-display').innerText = `Target: ${Math.round(hours * this.state.targetHourlyCarbs)}g`;
     },
 
     updateCard(type, sec, interval) {
         const el = document.getElementById(`timer-${type}`);
         const card = document.getElementById(`card-${type}`);
+        
         if(sec <= 0) {
             el.innerText = "NOW!";
+            // Play sound every 5 seconds if alerting
+            if (sec % 5 === 0) {
+                this.beepSound.play().catch(() => {}); 
+            }
+
             const color = type === 'drink' ? 'blue' : 'orange';
             card.classList.toggle(`border-${color}-500`, Math.abs(sec)%2===0);
+            
             if(sec < -60) this.state[type==='drink'?'nextDrink':'nextEat'] = interval * 60; 
         } else {
             el.innerText = FuelView.formatTime(sec);

@@ -19,12 +19,13 @@ export const FuelState = {
     totalCarbsConsumed: 0,
     bottlesConsumed: 0,
     
+    // NEW: Real-time tracking
+    lastTickTimestamp: 0, 
+
     // History
     consumptionLog: [], 
     
     timerId: null,
-
-    // --- PERSISTENCE (This was missing) ---
 
     save() {
         const data = {
@@ -39,6 +40,7 @@ export const FuelState = {
             totalCarbsConsumed: this.totalCarbsConsumed,
             bottlesConsumed: this.bottlesConsumed,
             consumptionLog: this.consumptionLog,
+            lastTickTimestamp: this.lastTickTimestamp, // Save this!
             timestamp: Date.now()
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
@@ -51,7 +53,6 @@ export const FuelState = {
         try {
             const data = JSON.parse(saved);
             
-            // Restore values
             this.totalTime = data.totalTime || 0;
             this.drinkInterval = data.drinkInterval || 15;
             this.eatInterval = data.eatInterval || 45;
@@ -62,11 +63,10 @@ export const FuelState = {
             this.totalCarbsConsumed = data.totalCarbsConsumed || 0;
             this.bottlesConsumed = data.bottlesConsumed || 0;
             this.consumptionLog = data.consumptionLog || [];
+            this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
             
-            // Always load paused for safety
             this.isRunning = false; 
-            
-            return true; // Loaded successfully
+            return true; 
         } catch (e) {
             console.error("Failed to load saved state", e);
             return false;
@@ -86,5 +86,6 @@ export const FuelState = {
         this.consumptionLog = []; 
         this.nextDrink = this.drinkInterval * 60;
         this.nextEat = this.eatInterval * 60;
+        this.lastTickTimestamp = 0;
     }
 };

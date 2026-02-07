@@ -22,7 +22,6 @@ export const FuelView = {
                             <div class="absolute top-3/4 w-full h-[1px] bg-white/10"></div>
                         </div>
                         <div class="text-[10px] text-slate-400 mt-2 z-10">Bottle #<span id="mix-bottle-count" class="text-white font-bold text-lg">1</span></div>
-                        
                         <div id="pulse-indicator" class="absolute top-3 right-3 h-1.5 w-1.5 rounded-full bg-slate-800 z-10"></div>
                     </div>
 
@@ -84,13 +83,11 @@ export const FuelView = {
                         <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center shadow-lg">
                             <div class="text-orange-400 text-xs uppercase font-bold tracking-widest mb-1">Fueling</div>
                             <div id="timer-eat" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">45:00</div>
-                            
                             <div class="w-full max-h-[300px] overflow-y-auto custom-scrollbar pr-1 mb-2">
                                 <div id="fuel-menu-container" class="space-y-2">
                                     ${this.renderFuelButtons(state.fuelMenu)}
                                 </div>
                             </div>
-                            
                             <button id="btn-show-custom-fuel" class="text-[10px] text-slate-500 underline w-full text-center mt-2 py-2">Log Custom Amount</button>
                             <div id="custom-fuel-input-area" class="w-full mt-2 pt-2 border-t border-slate-700/50 hidden flex gap-2">
                                 <input type="number" id="input-custom-carbs" placeholder="g" class="w-20 bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-center">
@@ -115,6 +112,16 @@ export const FuelView = {
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
+                            <label class="block text-[10px] text-purple-400 uppercase font-bold mb-1">Ride Time (min)</label>
+                            <input type="number" id="input-planned-duration" value="${state.plannedDuration}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
+                        </div>
+
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
+                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g/bottle)</label>
+                            <input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
+                        </div>
+
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
                             <label class="block text-[10px] text-emerald-400 uppercase font-bold mb-1">Target Carbs/Hr</label>
                             <input type="number" id="input-target-hourly" value="${state.targetHourlyCarbs}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
@@ -125,8 +132,8 @@ export const FuelView = {
                         </div>
 
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                             <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Eat Timer (min)</label>
-                             <input type="number" id="input-eat-int" value="${state.eatInterval}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
+                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Bottle Vol (ml)</label>
+                            <input type="number" id="input-bottle-vol" value="${state.bottleVolume}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
 
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
@@ -135,18 +142,8 @@ export const FuelView = {
                         </div>
 
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                            <label class="block text-[10px] text-purple-400 uppercase font-bold mb-1">Ride Time (min)</label>
-                            <input type="number" id="input-planned-duration" value="${state.plannedDuration}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
-                        </div>
-
-                        <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Bottle Vol (ml)</label>
-                            <input type="number" id="input-bottle-vol" value="${state.bottleVolume}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
-                        </div>
-
-                        <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g)</label>
-                            <input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
+                             <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Eat Timer (min)</label>
+                             <input type="number" id="input-eat-int" value="${state.eatInterval}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
                     </div>
                     

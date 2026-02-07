@@ -7,7 +7,6 @@ export const FuelTimer = {
     audioCtx: null,
 
     async init() {
-        console.log("Loading Fuel Timer...");
         let library = await DataManager.fetchJSON('fuelLibrary');
         if (!library || library.length === 0) {
             library = [
@@ -17,8 +16,8 @@ export const FuelTimer = {
             ];
         }
         
-        // FIX: Default ACTIVE to true so list shows up immediately
-        if (this.state.totalTime === 0) {
+        // FIX: Check if menu is empty, not just time. Ensures items are populated.
+        if (this.state.fuelMenu.length === 0) {
             this.state.fuelMenu = library.map(item => ({ ...item, active: true }));
         }
         
@@ -31,7 +30,6 @@ export const FuelTimer = {
                 this.updateDisplays();
                 this.refreshLogUI();
                 this.updateBtnState('Resume Session', 'bg-emerald-600');
-                this.enableNavigationGuards();
             }, 100);
         }
 
@@ -39,7 +37,6 @@ export const FuelTimer = {
     },
 
     attachEvents() {
-        // ... (Keep existing attachEvents logic, just ensure init has the fix above) ...
         const bind = (id, fn) => { const el = document.getElementById(id); if(el) el.addEventListener('click', fn); };
 
         bind('btn-fuel-toggle', () => this.toggleTimer());
@@ -104,16 +101,13 @@ export const FuelTimer = {
         });
     },
 
-    // ... (Keep existing logic: toggleHelp, initAudio, playAlertTone, toggleTimer, startTimer, pauseTimer, resetTimer, tick, logSip, logFlask, logFood, addToLog, removeLogEntry, refreshLogUI, addNewItem, updateDisplays, updateBottleVisuals, updateProgressBars, updateCard, readConfigInputs, refreshUI, switchView, updateBtnState, enableNavigationGuards, disableNavigationGuards, handlePopState, handleBeforeUnload) ...
-    
-    // (Paste the full content of those functions here as they were in the previous successful response)
     toggleHelp(show) { document.getElementById('fuel-help-modal').classList.toggle('hidden', !show); },
     initAudio() { if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)(); },
     playAlertTone() { if (!this.audioCtx) this.initAudio(); if (this.audioCtx.state === 'suspended') this.audioCtx.resume(); const osc = this.audioCtx.createOscillator(); const gain = this.audioCtx.createGain(); osc.connect(gain); gain.connect(this.audioCtx.destination); osc.type = 'square'; osc.frequency.setValueAtTime(880, this.audioCtx.currentTime); osc.frequency.setValueAtTime(0, this.audioCtx.currentTime + 0.1); osc.frequency.setValueAtTime(880, this.audioCtx.currentTime + 0.15); gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.3); osc.start(); osc.stop(this.audioCtx.currentTime + 0.3); },
     toggleTimer() { if (this.state.isRunning) this.pauseTimer(); else this.startTimer(); },
-    startTimer() { this.initAudio(); this.audioCtx.resume(); this.enableNavigationGuards(); if (this.state.totalTime === 0) { this.readConfigInputs(); this.state.nextDrink = this.state.drinkInterval * 60; this.state.nextEat = this.state.eatInterval * 60; } this.state.lastTickTimestamp = Date.now(); this.switchView('active'); this.state.isRunning = true; this.state.timerId = setInterval(() => this.tick(), 1000); this.updateBtnState('Pause', 'bg-yellow-600'); this.state.save(); this.updateDisplays(); },
+    startTimer() { this.initAudio(); this.audioCtx.resume(); if (this.state.totalTime === 0) { this.readConfigInputs(); this.state.nextDrink = this.state.drinkInterval * 60; this.state.nextEat = this.state.eatInterval * 60; } this.state.lastTickTimestamp = Date.now(); this.switchView('active'); this.state.isRunning = true; this.state.timerId = setInterval(() => this.tick(), 1000); this.updateBtnState('Pause', 'bg-yellow-600'); this.state.save(); this.updateDisplays(); },
     pauseTimer() { this.state.isRunning = false; clearInterval(this.state.timerId); this.updateBtnState('Resume', 'bg-emerald-600'); this.state.save(); },
-    resetTimer() { if(!confirm("End session?")) return; this.pauseTimer(); this.disableNavigationGuards(); this.state.resetSession(); this.updateDisplays(); this.refreshLogUI(); this.switchView('config'); this.updateBtnState('Start Engine', 'bg-emerald-600'); },
+    resetTimer() { if(!confirm("End session?")) return; this.pauseTimer(); this.state.resetSession(); this.updateDisplays(); this.refreshLogUI(); this.switchView('config'); this.updateBtnState('Start Engine', 'bg-emerald-600'); },
     tick() { const now = Date.now(); const delta = Math.floor((now - this.state.lastTickTimestamp) / 1000); if (delta > 0) { this.state.totalTime += delta; this.state.nextDrink -= delta; this.state.nextEat -= delta; this.state.lastTickTimestamp = now; this.updateDisplays(); this.state.save(); } },
     logSip(type) { const sips = this.state.sipsPerBottle || 4; const vol = this.state.bottleVolume || 750; const fluid = Math.round(vol / sips); const portion = 1 / sips; let carbs = 0; if (type === 'mix') { carbs = Math.round((this.state.carbsPerBottle || 90) / sips); this.state.totalCarbsConsumed += carbs; this.state.bottlesConsumed += portion; this.state.nextDrink = this.state.drinkInterval * 60; } else { this.state.waterBottlesConsumed += portion; this.state.nextDrink = this.state.drinkInterval * 60; } this.state.totalFluidConsumed += fluid; this.addToLog(type === 'mix' ? 'drink' : 'water', type === 'mix' ? 'Mix Sip' : 'Water Sip', carbs, fluid); this.updateDisplays(); this.state.save(); },
     logFlask() { const sqz = this.state.squeezesPerFlask || 4; const portion = 1 / sqz; const carbs = Math.round((this.state.carbsPerFlask || 150) * portion); this.state.totalCarbsConsumed += carbs; this.state.flasksConsumed += portion; this.state.nextEat = this.state.eatInterval * 60; this.addToLog('flask', 'Flask Squeeze', carbs, 0); this.updateDisplays(); this.state.save(); },

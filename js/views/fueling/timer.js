@@ -4,11 +4,15 @@ import { FuelView } from './view.js';
 
 export const FuelTimer = {
     state: FuelState,
-    beepSound: new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"), 
+    
+    // Web Audio Context (Lazily created)
+    audioCtx: null,
 
     async init() {
-        // 1. Load Menu Data
+        // 1. Load Data
         let library = await DataManager.fetchJSON('fuelLibrary');
+        
+        // 2. Safety Fallback
         if (!library || library.length === 0) {
             library = [
                 { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
@@ -17,27 +21,33 @@ export const FuelTimer = {
             ];
         }
         
-        // 2. Check for Crashed/Saved Session
-        const hasSavedSession = this.state.load();
-        
         // 3. Initialize Menu
-        // If we didn't recover a session, default all items to hidden
-        // If we DID recover, we keep the menu state as-is (or we could save menu selection too)
-        // For now, let's re-initialize menu from library
-        this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
-
-        // 4. Render
-        const html = FuelView.getHtml(this.state);
+        // If restoring a session, we trust the saved state. Otherwise default all to hidden.
+        if (this.state.totalTime === 0) {
+            this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
+        } else {
+            // If we have a library update but a saved session, try to merge active states
+            // For simplicity, we just reload the library and default to hidden if starting fresh
+            this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
+        }
         
-        // 5. Post-Render Auto-Restore
-        // If we restored a session, we need to switch the view to "Active" immediately after rendering
+        // 4. Persistence Check
+        const hasSavedSession = this.state.load();
+        if (hasSavedSession) {
+            // Restore menu state if needed, or just let user re-select
+        }
+
+        // 5. Render
+        const html = FuelView.getHtml(this.state);
+
+        // 6. Auto-Restore View if crashed
         if (hasSavedSession && this.state.totalTime > 0) {
             setTimeout(() => {
                 this.switchView('active');
                 this.updateDisplays();
                 this.refreshLogUI();
                 this.updateBtnState('Resume Session', 'bg-emerald-600');
-                this.enableNavigationGuards(); // Re-enable protection
+                this.enableNavigationGuards();
             }, 100);
         }
 
@@ -65,7 +75,6 @@ export const FuelTimer = {
             this.refreshUI();
         });
 
-        // Delegation
         const menu = document.getElementById('fuel-menu-container');
         if(menu) menu.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-quick-fuel');
@@ -89,33 +98,37 @@ export const FuelTimer = {
         });
     },
 
-    // --- SAFETY & NAVIGATION GUARDS ---
-
-    enableNavigationGuards() {
-        // 1. Prevent "Back" Swipe on Mobile
-        // Pushes a dummy state. If user swipes back, they hit this dummy state, 
-        // popping the event, and we just push it back immediately.
-        history.pushState(null, document.title, location.href);
-        window.addEventListener('popstate', this.handlePopState);
-
-        // 2. Prevent Tab Close / Refresh
-        window.addEventListener('beforeunload', this.handleBeforeUnload);
+    // --- AUDIO SYSTEM (Web Audio API) ---
+    
+    initAudio() {
+        if (!this.audioCtx) {
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
     },
 
-    disableNavigationGuards() {
-        window.removeEventListener('popstate', this.handlePopState);
-        window.removeEventListener('beforeunload', this.handleBeforeUnload);
-    },
+    playAlertTone() {
+        if (!this.audioCtx) this.initAudio();
+        if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
 
-    handlePopState(event) {
-        // User tried to go back. Push them forward again to stay on page.
-        history.pushState(null, document.title, location.href);
-        // Optional: Show a toast "Session Active - Swipe Disabled"
-    },
+        // Create Oscillator (Synthesizer)
+        const osc = this.audioCtx.createOscillator();
+        const gain = this.audioCtx.createGain();
 
-    handleBeforeUnload(e) {
-        e.preventDefault();
-        e.returnValue = ''; // Standard browser confirmation trigger
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+
+        // Sound Profile: High Pitch "Beep-Beep"
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, this.audioCtx.currentTime); // A5
+        osc.frequency.setValueAtTime(0, this.audioCtx.currentTime + 0.1); // Silence
+        osc.frequency.setValueAtTime(880, this.audioCtx.currentTime + 0.15); // A5
+        
+        // Envelope
+        gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.3);
+
+        osc.start();
+        osc.stop(this.audioCtx.currentTime + 0.3);
     },
 
     // --- CORE LOGIC ---
@@ -126,11 +139,14 @@ export const FuelTimer = {
     },
 
     startTimer() {
-        this.unlockAudio();
-        this.enableNavigationGuards(); // Lock the app
+        // Unlock Audio on user gesture (Crucial for Mobile)
+        this.initAudio();
+        this.audioCtx.resume().then(() => {
+            console.log("Audio Engine Unlocked");
+        });
+
+        this.enableNavigationGuards();
         
-        // Only read config if we are starting fresh (time is 0)
-        // If resuming a saved session, we trust the loaded state
         if (this.state.totalTime === 0) {
             this.readConfigInputs();
             this.state.nextDrink = this.state.drinkInterval * 60;
@@ -141,8 +157,7 @@ export const FuelTimer = {
         this.state.isRunning = true;
         this.state.timerId = setInterval(() => this.tick(), 1000);
         this.updateBtnState('Pause', 'bg-yellow-600');
-        
-        this.state.save(); // Immediate save
+        this.state.save();
     },
 
     pauseTimer() {
@@ -156,8 +171,8 @@ export const FuelTimer = {
         if(!confirm("End session and clear data?")) return;
 
         this.pauseTimer();
-        this.disableNavigationGuards(); // Unlock the app
-        this.state.resetSession(); // Clears localStorage
+        this.disableNavigationGuards();
+        this.state.resetSession();
         
         this.updateDisplays();
         this.refreshLogUI();
@@ -170,24 +185,19 @@ export const FuelTimer = {
         this.state.nextDrink--;
         this.state.nextEat--;
         this.updateDisplays();
-        this.state.save(); // Save every second
+        this.state.save();
     },
 
-    unlockAudio() {
-        this.beepSound.play().then(() => {
-            this.beepSound.pause();
-            this.beepSound.currentTime = 0;
-        }).catch(() => {});
-    },
-
-    // --- LOGGING ---
+    // --- LOGIC ---
 
     logSip() {
         const sips = 4; 
         const amount = this.state.carbsPerBottle / sips;
         this.state.totalCarbsConsumed += amount;
         this.state.bottlesConsumed += (1 / sips);
+        
         this.addToLog('drink', 'Bottle Sip', Math.round(amount), (1/sips));
+        
         this.state.nextDrink = this.state.drinkInterval * 60;
         this.updateDisplays();
         this.state.save();
@@ -196,6 +206,7 @@ export const FuelTimer = {
     logFood(carbs, name) {
         this.state.totalCarbsConsumed += carbs;
         this.addToLog('eat', name || 'Food', carbs, 0);
+        
         this.state.nextEat = this.state.eatInterval * 60;
         this.updateDisplays();
         this.state.save();
@@ -245,15 +256,7 @@ export const FuelTimer = {
         }
     },
 
-    // --- HELPERS ---
-
-    readConfigInputs() {
-        const getVal = (id) => parseInt(document.getElementById(id).value) || 0;
-        this.state.drinkInterval = getVal('input-drink-int') || 15;
-        this.state.eatInterval = getVal('input-eat-int') || 45;
-        this.state.carbsPerBottle = getVal('input-bottle-carbs') || 90;
-        this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90;
-    },
+    // --- DISPLAY UPDATES ---
 
     updateDisplays() {
         document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
@@ -261,6 +264,41 @@ export const FuelTimer = {
         this.updatePacerBottle();
         this.updateCard('drink', this.state.nextDrink, this.state.drinkInterval);
         this.updateCard('eat', this.state.nextEat, this.state.eatInterval);
+    },
+
+    updateCard(type, sec, interval) {
+        const el = document.getElementById(`timer-${type}`);
+        const card = document.getElementById(`card-${type}`);
+        
+        if (sec <= 0) {
+            // OVERDUE MODE
+            const overdue = Math.abs(sec);
+            el.innerText = `+${FuelView.formatTime(overdue)}`;
+            
+            // Visual Urgency
+            el.classList.remove('text-white');
+            el.classList.add('text-red-500', 'animate-pulse');
+            
+            const color = type === 'drink' ? 'blue' : 'orange';
+            card.classList.add(`border-${color}-500`);
+            card.classList.toggle('bg-slate-700', overdue % 2 === 0);
+
+            // Audio Alert (Every 10s to avoid annoyance)
+            if (overdue % 10 === 0) this.playAlertTone();
+            
+            // Safety Reset extended to 5 minutes (300s)
+            if (sec < -300) {
+                this.state[type==='drink'?'nextDrink':'nextEat'] = interval * 60; 
+            }
+        } else {
+            // NORMAL MODE
+            el.innerText = FuelView.formatTime(sec);
+            
+            // Restore Styles
+            el.classList.add('text-white');
+            el.classList.remove('text-red-500', 'animate-pulse');
+            card.className = `bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center`;
+        }
     },
 
     updateGauge() {
@@ -289,22 +327,14 @@ export const FuelTimer = {
         document.getElementById('fuel-target-display').innerText = `Target: ${Math.round(hours * this.state.targetHourlyCarbs)}g`;
     },
 
-    updateCard(type, sec, interval) {
-        const el = document.getElementById(`timer-${type}`);
-        const card = document.getElementById(`card-${type}`);
-        
-        if(sec <= 0) {
-            el.innerText = "NOW!";
-            if (Math.abs(sec) % 5 === 0) this.beepSound.play().catch(() => {}); 
+    // --- HELPERS ---
 
-            const color = type === 'drink' ? 'blue' : 'orange';
-            card.classList.toggle(`border-${color}-500`, Math.abs(sec)%2===0);
-            
-            if(sec < -60) this.state[type==='drink'?'nextDrink':'nextEat'] = interval * 60; 
-        } else {
-            el.innerText = FuelView.formatTime(sec);
-            card.className = `bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center`;
-        }
+    readConfigInputs() {
+        const getVal = (id) => parseInt(document.getElementById(id).value) || 0;
+        this.state.drinkInterval = getVal('input-drink-int') || 15;
+        this.state.eatInterval = getVal('input-eat-int') || 45;
+        this.state.carbsPerBottle = getVal('input-bottle-carbs') || 90;
+        this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90;
     },
 
     toggleCustomInput(show) {
@@ -341,5 +371,25 @@ export const FuelTimer = {
         const btn = document.getElementById('btn-fuel-toggle');
         btn.innerText = text;
         btn.className = `w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest text-white shadow-lg transition-colors ${bgClass}`;
+    },
+
+    enableNavigationGuards() {
+        history.pushState(null, document.title, location.href);
+        window.addEventListener('popstate', this.handlePopState);
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
+    },
+
+    disableNavigationGuards() {
+        window.removeEventListener('popstate', this.handlePopState);
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    },
+
+    handlePopState(event) {
+        history.pushState(null, document.title, location.href);
+    },
+
+    handleBeforeUnload(e) {
+        e.preventDefault();
+        e.returnValue = ''; 
     }
 };

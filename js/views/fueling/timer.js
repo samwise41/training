@@ -6,16 +6,23 @@ export const FuelTimer = {
     state: FuelState,
 
     async init() {
-        // Load Data
         let library = await DataManager.fetchJSON('fuelLibrary');
+        
+        // Safety Fallback
         if (!library || library.length === 0) {
             library = [
-                { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
-                { id: 'chews', label: 'Chews', carbs: 24, icon: 'fa-candy-cane', active: true },
-                { id: 'bar', label: 'Bar', carbs: 40, icon: 'fa-cookie-bite', active: true }
+                { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt' },
+                { id: 'chews', label: 'Chews', carbs: 24, icon: 'fa-candy-cane' },
+                { id: 'bar', label: 'Bar', carbs: 40, icon: 'fa-cookie-bite' }
             ];
         }
-        this.state.fuelMenu = library.map(item => ({ ...item, active: item.active !== false }));
+        
+        // Default ALL items to FALSE (Hidden) initially
+        this.state.fuelMenu = library.map(item => ({ 
+            ...item, 
+            active: false 
+        }));
+        
         return FuelView.getHtml(this.state);
     },
 
@@ -33,8 +40,15 @@ export const FuelTimer = {
         });
         bind('btn-show-custom-fuel', () => this.toggleCustomInput(true));
         bind('btn-add-item', () => this.addNewItem());
+        
+        // Toggle All / None
+        bind('btn-toggle-all-fuel', () => {
+            const allActive = this.state.fuelMenu.every(i => i.active);
+            this.state.fuelMenu.forEach(i => i.active = !allActive);
+            this.refreshUI();
+        });
 
-        // LISTENER: Quick Fuel Buttons (Delegation)
+        // Quick Fuel Buttons
         const menu = document.getElementById('fuel-menu-container');
         if(menu) menu.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-quick-fuel');
@@ -45,6 +59,7 @@ export const FuelTimer = {
             }
         });
 
+        // Settings Toggles
         const editor = document.getElementById('fuel-library-editor');
         if(editor) editor.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-toggle-active');
@@ -101,7 +116,6 @@ export const FuelTimer = {
         this.state.totalCarbsConsumed += amount;
         this.state.bottlesConsumed += (1 / sips);
         
-        // Log to history
         this.addToLog('drink', 'Bottle Sip', Math.round(amount));
         
         this.state.nextDrink = this.state.drinkInterval * 60;
@@ -110,10 +124,7 @@ export const FuelTimer = {
 
     logFood(carbs, name) {
         this.state.totalCarbsConsumed += carbs;
-        
-        // Log to history
         this.addToLog('eat', name || 'Food', carbs);
-
         this.state.nextEat = this.state.eatInterval * 60;
         this.updateDisplays();
     },
@@ -128,6 +139,8 @@ export const FuelTimer = {
         const logContainer = document.getElementById('fuel-history-log');
         if (logContainer) {
             logContainer.innerHTML = FuelView.renderHistoryLog(this.state.consumptionLog);
+            // Auto scroll to bottom
+            logContainer.scrollTop = logContainer.scrollHeight;
         }
     },
 
@@ -137,6 +150,7 @@ export const FuelTimer = {
         const name = nameInput.value.trim();
         const carbs = parseInt(carbsInput.value) || 0;
         if (name && carbs > 0) {
+            // New items default to active so you can use them immediately
             this.state.fuelMenu.push({ id: 'c_'+Date.now(), label: name, carbs, icon: 'fa-utensils', active: true });
             nameInput.value = ''; carbsInput.value = '';
             this.refreshUI();
@@ -226,6 +240,6 @@ export const FuelTimer = {
     updateBtnState(text, bgClass) {
         const btn = document.getElementById('btn-fuel-toggle');
         btn.innerText = text;
-        btn.className = `w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest text-white shadow-lg ${bgClass}`;
+        btn.className = `w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest text-white shadow-lg transition-colors ${bgClass}`;
     }
 };

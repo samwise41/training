@@ -1,155 +1,192 @@
-import { DataManager } from './utils/data.js';
-// We don't import Views here anymore to prevent crashes
+// js/app.js
 
-const App = {
-    state: {
-        currentView: 'fueling', // Default to Fueling
-        isNavOpen: false
-    },
+(async function initApp() {
+    console.log("🚀 Booting App...");
+    const cacheBuster = Date.now();
+    
+    const safeImport = async (path, name) => {
+        try { return await import(`${path}?t=${cacheBuster}`); } 
+        catch (e) { console.error(`❌ Failed to load ${name}`, e); return null; }
+    };
 
-    async init() {
-        // 1. Setup Navigation (Load shell immediately)
-        this.renderNav();
-        this.attachGlobalListeners();
+    const [
+        dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
+        tooltipMod, uiMod, dataMod, formatMod,
+        fuelMod 
+    ] = await Promise.all([
+        safeImport('./views/dashboard/index.js', 'Dashboard'),
+        safeImport('./views/trends/index.js', 'Trends'),
+        safeImport('./views/gear/index.js', 'Gear'),
+        safeImport('./views/zones/index.js', 'Zones'),
+        safeImport('./views/ftp/index.js', 'FTP'),
+        safeImport('./views/metrics/index.js', 'Metrics'),
+        safeImport('./views/readiness/index.js', 'Readiness'),
+        safeImport('./views/logbook/analyzer.js', 'Analyzer'),
+        safeImport('./utils/tooltipManager.js', 'TooltipManager'),
+        safeImport('./utils/ui.js', 'UI'),
+        safeImport('./utils/data.js', 'DataManager'),
+        safeImport('./utils/formatting.js', 'Formatters'),
+        safeImport('./views/fueling/timer.js', 'FuelTimer')
+    ]);
 
-        // 2. Load the Default View
-        await this.navigate(this.state.currentView);
-        
-        // 3. Load Data in background (if data.js exists)
-        if(DataManager && DataManager.loadCriticalData) {
-            try { await DataManager.loadCriticalData(); } catch(e) { console.warn("Data load issue:", e); }
-        }
-    },
-
-    renderNav() {
-        const navItems = [
-            { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-line' },
-            { id: 'fueling',   label: 'Smart Fuel', icon: 'fa-gas-pump' },
-            { id: 'plan',      label: 'Training Plan', icon: 'fa-calendar-days' },
-            { id: 'trends',    label: 'Trends & Load', icon: 'fa-arrow-trend-up' },
-            { id: 'zones',     label: 'Zones & Profile', icon: 'fa-heart-pulse' },
-            { id: 'gear',      label: 'Gear Garage', icon: 'fa-bicycle' }
-        ];
-
-        const container = document.getElementById('nav-items');
-        if(!container) return;
-
-        container.innerHTML = navItems.map(item => `
-            <button class="nav-item w-full flex items-center gap-4 px-4 py-3 text-sm font-medium rounded-xl transition-all ${item.id === this.state.currentView ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}" 
-                data-target="${item.id}">
-                <div class="w-6 text-center"><i class="fa-solid ${item.icon}"></i></div>
-                <span>${item.label}</span>
-            </button>
-        `).join('');
-    },
-
-    attachGlobalListeners() {
-        const toggle = document.getElementById('nav-toggle');
-        const nav = document.getElementById('side-nav');
-        const overlay = document.getElementById('nav-overlay');
-
-        if(!toggle || !nav || !overlay) return;
-
-        const toggleMenu = () => {
-            this.state.isNavOpen = !this.state.isNavOpen;
-            if (this.state.isNavOpen) {
-                nav.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
-            } else {
-                nav.classList.add('-translate-x-full');
-                overlay.classList.add('opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            }
-        };
-
-        toggle.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        const list = document.getElementById('nav-items');
-        if(list) {
-            list.addEventListener('click', (e) => {
-                const btn = e.target.closest('.nav-item');
-                if (!btn) return;
-                
-                // Update UI classes
-                document.querySelectorAll('.nav-item').forEach(b => {
-                    b.classList.remove('bg-emerald-600', 'text-white', 'shadow-lg');
-                    b.classList.add('text-slate-400', 'hover:bg-slate-800');
-                });
-                btn.classList.remove('text-slate-400', 'hover:bg-slate-800');
-                btn.classList.add('bg-emerald-600', 'text-white', 'shadow-lg');
-
-                this.navigate(btn.dataset.target);
-                toggleMenu();
-            });
-        }
-    },
-
-    async navigate(viewId) {
-        this.state.currentView = viewId;
-        const container = document.getElementById('app-content');
-        
-        // Show Loading Spinner
-        container.innerHTML = `
-            <div class="flex items-center justify-center h-full text-emerald-500">
-                <i class="fa-solid fa-circle-notch fa-spin text-3xl"></i>
-            </div>`;
-
-        try {
-            let html = '';
-            
-            // DYNAMIC IMPORTS: This prevents the whole app from crashing if one file is missing
-            switch(viewId) {
-                case 'dashboard':
-                    // Try to load dashboard, fallback if missing
-                    try {
-                        const mod = await import('./views/dashboard.js');
-                        html = await mod.DashboardView.render();
-                        setTimeout(() => mod.DashboardView.afterRender && mod.DashboardView.afterRender(), 0);
-                    } catch(e) { html = this.errorHtml('Dashboard', e); }
-                    break;
-
-                case 'fueling':
-                    try {
-                        const mod = await import('./views/fueling/timer.js');
-                        html = await mod.FuelTimer.init();
-                        setTimeout(() => mod.FuelTimer.attachEvents && mod.FuelTimer.attachEvents(), 100);
-                    } catch(e) { html = this.errorHtml('Smart Fuel', e); }
-                    break;
-                
-                // You can add other cases here (plan, trends, etc) using the same pattern
-                
-                default:
-                    html = `<div class="p-10 text-center text-slate-500 mt-20">
-                        <i class="fa-solid fa-person-digging text-4xl mb-4 opacity-50"></i><br>
-                        View under construction
-                    </div>`;
-            }
-
-            container.innerHTML = html;
-
-        } catch (error) {
-            console.error("Navigation Error:", error);
-            container.innerHTML = this.errorHtml('Navigation', error);
-        }
-    },
-
-    errorHtml(name, e) {
-        return `
-            <div class="p-8 mt-20 text-center">
-                <div class="inline-block p-4 rounded-full bg-red-900/20 text-red-500 mb-4">
-                    <i class="fa-solid fa-bug text-3xl"></i>
-                </div>
-                <h2 class="text-xl font-bold text-white mb-2">Error Loading ${name}</h2>
-                <p class="text-slate-400 text-sm mb-4">The file might be missing or has a syntax error.</p>
-                <code class="block bg-slate-900 p-4 rounded text-left text-xs font-mono text-red-400 overflow-x-auto">
-                    ${e.message}
-                </code>
-            </div>
-        `;
+    if (tooltipMod?.TooltipManager?.initGlobalListener) {
+        tooltipMod.TooltipManager.initGlobalListener();
+        window.TooltipManager = tooltipMod.TooltipManager; 
     }
-};
+    if (uiMod?.UI?.init) uiMod.UI.init();
+    
+    const DataManager = dataMod?.DataManager;
+    const Formatters = formatMod?.Formatters;
 
-// Start App
-document.addEventListener('DOMContentLoaded', () => App.init());
+    const App = {
+        // Critical Data
+        planMd: "", 
+        rawLogData: [], 
+        readinessData: null, 
+        profileData: null, 
+
+        // Background Data
+        gearData: null, 
+        trendsData: null, 
+        
+        weather: { current: null, hourly: null, code: 0 }, 
+
+        async init() {
+            await this.loadCritical();
+            this.setupNavigation();
+            this.fetchWeather(); 
+            this.handleRouting();
+            this.loadBackground();
+        },
+
+        async loadCritical() {
+            if (DataManager) {
+                const critical = await DataManager.loadCriticalData();
+                Object.assign(this, critical);
+            }
+        },
+
+        async loadBackground() {
+            if (DataManager) {
+                const bg = await DataManager.loadBackgroundData();
+                Object.assign(this, bg);
+                if (window.location.hash.includes('gear')) this.updateGearResult();
+            }
+        },
+
+        handleRouting() {
+            const hashView = window.location.hash.replace('#', '');
+            const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
+            if (window.location.hash !== `#${initialView}`) window.location.hash = initialView; 
+            else this.renderCurrentView(initialView);
+        },
+
+        async fetchWeather() {
+            try {
+                const locRes = await fetch('https://ipapi.co/json/');
+                const locData = await locRes.json();
+                if (locData.latitude) {
+                    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
+                    const weatherData = await weatherRes.json();
+                    this.weather.current = Math.round(weatherData.current_weather.temperature);
+                    this.weather.hourly = weatherData.hourly || null;
+                    this.weather.code = weatherData.current_weather.weathercode;
+                    // Note: updateHeaderUI no longer displays weather text as header is gone, 
+                    // but we keep fetch logic in case views (like Gear) need the data.
+                }
+            } catch (e) { console.error("Weather unavailable", e); }
+        },
+
+        updateHeaderUI(viewName) {
+            // Header removed, logic cleared to prevent errors
+        },
+
+        updateGearResult() {
+            if (this.gearData && gearMod && gearMod.updateGearResult) {
+                gearMod.updateGearResult(this.gearData);
+            }
+        },
+
+        setupNavigation() {
+            // Updated to target the new floating button
+            const menuBtn = document.getElementById('floating-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const btnClose = document.getElementById('btn-sidebar-close'); 
+            
+            const toggleSidebar = () => { 
+                sidebar.classList.toggle('sidebar-closed'); 
+                sidebar.classList.toggle('sidebar-open'); 
+                overlay.classList.toggle('hidden'); 
+            };
+
+            window.addEventListener('hashchange', () => this.renderCurrentView(window.location.hash.replace('#', '')));
+            
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    window.location.hash = e.currentTarget.dataset.view; 
+                    // Always close sidebar on click since it's now always an overlay
+                    if (!overlay.classList.contains('hidden')) toggleSidebar();
+                });
+            });
+
+            if (menuBtn) menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
+            if (overlay) overlay.addEventListener('click', toggleSidebar);
+            if (btnClose) btnClose.addEventListener('click', toggleSidebar);
+        },
+
+        renderCurrentView(view) {
+            localStorage.setItem('currentView', view);
+            this.updateHeaderUI(view);
+
+            document.querySelectorAll('.nav-item').forEach(b => {
+                if (b.dataset.view === view) {
+                    b.classList.remove('text-slate-400', 'border-transparent');
+                    b.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
+                } else {
+                    b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
+                    b.classList.add('text-slate-400', 'border-transparent');
+                }
+            });
+
+            const content = document.getElementById('main-content');
+            content.classList.add('opacity-0');
+            
+            setTimeout(async () => {
+                content.innerHTML = '';
+                const render = {
+                    dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),
+                    trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
+                    metrics: () => metricsMod?.renderMetrics(this.rawLogData),
+                    readiness: () => readinessMod?.renderReadiness(this.readinessData),
+                    ftp: () => ftpMod?.renderFTP(this.profileData),
+                    zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
+                    gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
+                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
+                    fueling: () => fuelMod?.FuelTimer?.init()
+                };
+
+                try {
+                    if (render[view]) {
+                        const html = await render[view]();
+                        content.innerHTML = html !== undefined ? html : `<div class="p-10 text-red-500">Error: View returned undefined (${view})</div>`;
+                        if (view === 'gear') this.updateGearResult();
+                        
+                        if (view === 'fueling' && fuelMod?.FuelTimer?.attachEvents) {
+                            fuelMod.FuelTimer.attachEvents();
+                        }
+                    } else {
+                        content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
+                    }
+                } catch (e) {
+                    console.error(`Render Error (${view}):`, e);
+                    content.innerHTML = `<div class="p-10 text-red-500">Render Error: ${e.message}</div>`;
+                }
+                content.classList.remove('opacity-0');
+            }, 150);
+        }
+    };
+
+    window.App = App;
+    App.init();
+})();

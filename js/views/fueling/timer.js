@@ -60,6 +60,11 @@ export const FuelTimer = {
             this.refreshUI();
         });
 
+        // HELP MODAL
+        bind('btn-fuel-help', () => this.toggleHelp(true));
+        bind('btn-close-help', () => this.toggleHelp(false));
+        bind('btn-dismiss-help', () => this.toggleHelp(false));
+
         const menu = document.getElementById('fuel-menu-container');
         if(menu) menu.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-quick-fuel');
@@ -83,6 +88,16 @@ export const FuelTimer = {
         });
     },
 
+    // --- HELPER LOGIC ---
+    
+    toggleHelp(show) {
+        const modal = document.getElementById('fuel-help-modal');
+        if (show) modal.classList.remove('hidden');
+        else modal.classList.add('hidden');
+    },
+
+    // --- (Keep all existing core logic below: initAudio, startTimer, pauseTimer, etc.) ---
+    
     initAudio() {
         if (!this.audioCtx) {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -128,8 +143,6 @@ export const FuelTimer = {
         this.state.timerId = setInterval(() => this.tick(), 1000);
         this.updateBtnState('Pause', 'bg-yellow-600');
         this.state.save();
-        
-        // Immediate Update
         this.updateDisplays();
     },
 

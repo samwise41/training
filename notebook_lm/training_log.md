@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-07 02:26:18
+**Generated:** 2026-02-07 15:02:38
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-07",
+    "day": "Saturday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Long Steady Distance",
+    "plannedDuration": 135.0,
+    "notes": "**Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m.",
+    "actualDuration": 131.1,
+    "id": 21793591700,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "New York Virtual Cycling",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 7863.0,
+    "distance": 65904.359375,
+    "averageHR": 131.0,
+    "maxHR": 146.0,
+    "aerobicTrainingEffect": 3.0999999046325684,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 153.0,
+    "maxPower": 399.0,
+    "normPower": 163.99427825948962,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 8.380999565124512,
+    "maxSpeed": 20.131999969482422,
+    "averageBikingCadenceInRevPerMinute": 73.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 1148.0,
+    "elevationGain": 519.0,
+    "RPE": 5.0,
+    "Feeling": 4
+  },
   {
     "date": "2026-02-06",
     "day": "Friday",

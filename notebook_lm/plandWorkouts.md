@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-07 02:26:19
+**Generated:** 2026-02-07 15:02:38
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -98,10 +98,10 @@
     "plannedDuration": 135.0,
     "notes": "**Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0
+    "actualDuration": 131.1,
+    "actualWorkout": "New York Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 97
   }
 ]
 ```

@@ -3,16 +3,16 @@ export const FuelState = {
     startTime: null,
     totalTime: 0,
     
-    // Configuration Defaults
+    // Config Defaults
     drinkInterval: 15,
     eatInterval: 45,
     carbsPerBottle: 90, 
     targetHourlyCarbs: 90,
     
-    // Data (Loaded from JSON)
-    fuelMenu: [],
+    // Data
+    fuelMenu: [], // Will be populated from JSON
 
-    // Live Counters
+    // Counters
     nextDrink: 15 * 60,
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
@@ -20,7 +20,6 @@ export const FuelState = {
     
     timerId: null,
 
-    // Helper to reset session data but keep config
     resetSession() {
         this.isRunning = false;
         this.totalTime = 0;

@@ -1,6 +1,7 @@
 import { FuelComponents } from './components.js';
 
 export const FuelView = {
+    // Proxy methods
     formatTime: FuelComponents.formatTime,
     renderHistoryLog: FuelComponents.renderHistoryLog,
     renderFuelButtons: FuelComponents.renderFuelButtons,
@@ -22,39 +23,39 @@ export const FuelView = {
         return `
             <div class="p-2 max-w-5xl mx-auto pb-48 relative">
                 
-                <div class="fixed top-4 left-16 right-4 z-40 flex justify-between items-center h-10 pointer-events-none">
-                    <div class="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700 pointer-events-auto shadow-lg">
+                <div class="fixed top-1 left-16 right-2 z-40 flex justify-between items-center h-10 pointer-events-none">
+                    <div class="flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-700 pointer-events-auto shadow-lg">
                         <div id="pulse-indicator" class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
                         <div class="text-sm font-mono font-bold text-white tracking-widest" id="fuel-total-time">00:00:00</div>
                     </div>
                     <div class="flex items-center gap-2 pointer-events-auto">
                         <div class="hidden xs:block text-[10px] font-mono text-slate-400 bg-slate-900/80 px-2 py-1 rounded border border-slate-700 uppercase">Plan: ${Math.floor(state.plannedDuration/60)}h</div>
-                        <button id="btn-fuel-help" class="h-10 w-10 flex items-center justify-center bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-full text-slate-400 hover:text-white shadow-lg transition-all">
-                            <i class="fa-solid fa-circle-question text-lg"></i>
+                        <button id="btn-fuel-help" class="h-8 w-8 flex items-center justify-center bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-full text-slate-400 hover:text-white shadow-lg transition-all">
+                            <i class="fa-solid fa-circle-question text-sm"></i>
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-2 mb-2 mt-12">
-                    <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800 flex flex-col items-center">
+                <div class="grid grid-cols-3 gap-1 mb-2 mt-10">
+                    <div class="bg-slate-900/60 p-1.5 rounded-xl border border-slate-800 flex flex-col items-center">
                         <div class="text-[9px] text-blue-400 uppercase font-bold mb-1">Mix</div>
-                        <div class="relative w-8 h-12 border border-slate-700 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">
+                        <div class="relative w-8 h-10 border border-slate-700 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">
                             <div id="mix-bottle-liquid" class="absolute bottom-0 left-0 w-full bg-blue-600 transition-all duration-1000" style="height: 100%;"></div>
                             ${bottleLines}
                         </div>
                         <div class="text-[9px] text-slate-500 mt-1">#<span id="mix-bottle-count" class="text-white font-bold">1</span></div>
                     </div>
-                    <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800 flex flex-col items-center">
+                    <div class="bg-slate-900/60 p-1.5 rounded-xl border border-slate-800 flex flex-col items-center">
                         <div class="text-[9px] text-cyan-400 uppercase font-bold mb-1">Water</div>
-                        <div class="relative w-8 h-12 border border-slate-700 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">
+                        <div class="relative w-8 h-10 border border-slate-700 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">
                             <div id="water-bottle-liquid" class="absolute bottom-0 left-0 w-full bg-cyan-600 transition-all duration-1000" style="height: 100%;"></div>
                             ${bottleLines}
                         </div>
                         <div class="text-[9px] text-slate-500 mt-1">#<span id="water-bottle-count" class="text-white font-bold">1</span></div>
                     </div>
-                    <div class="bg-slate-900/60 p-2 rounded-xl border border-slate-800 flex flex-col items-center">
+                    <div class="bg-slate-900/60 p-1.5 rounded-xl border border-slate-800 flex flex-col items-center">
                         <div class="text-[9px] text-orange-400 uppercase font-bold mb-1">Flask</div>
-                        <div class="relative w-8 h-12 border border-slate-700 rounded-lg bg-slate-800/50 overflow-hidden">
+                        <div class="relative w-8 h-10 border border-slate-700 rounded-lg bg-slate-800/50 overflow-hidden">
                             <div id="flask-liquid" class="absolute bottom-0 left-0 w-full bg-orange-500 transition-all duration-1000" style="height: 100%;"></div>
                             ${flaskLines}
                         </div>
@@ -62,23 +63,23 @@ export const FuelView = {
                     </div>
                 </div>
 
-                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 mb-2 flex flex-col gap-2">
+                <div class="bg-slate-900 p-2 rounded-xl border border-slate-700 mb-2 flex flex-col gap-2">
                     <div>
                         <div class="flex justify-between items-end mb-1">
-                            <div class="text-[10px] text-emerald-400 uppercase font-bold">Carbs</div>
-                            <div class="text-[10px] text-slate-300 font-mono"><span id="carb-val">0</span> / <span id="carb-pacer">0</span></div>
+                            <div class="text-[9px] text-emerald-400 uppercase font-bold">Carbs</div>
+                            <div class="text-[9px] text-slate-300 font-mono"><span id="carb-val">0</span> / <span id="carb-pacer">0</span></div>
                         </div>
-                        <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
+                        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
                             <div id="carb-progress-bar" class="h-full bg-emerald-600 transition-all duration-500" style="width: 0%"></div>
                             <div id="carb-pacer-marker" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-glow z-10" style="left: 0%"></div>
                         </div>
                     </div>
                     <div>
                         <div class="flex justify-between items-end mb-1">
-                            <div class="text-[10px] text-cyan-400 uppercase font-bold">Fluid</div>
-                            <div class="text-[10px] text-slate-300 font-mono"><span id="fluid-val">0</span> / <span id="fluid-pacer">0</span></div>
+                            <div class="text-[9px] text-cyan-400 uppercase font-bold">Fluid</div>
+                            <div class="text-[9px] text-slate-300 font-mono"><span id="fluid-val">0</span> / <span id="fluid-pacer">0</span></div>
                         </div>
-                        <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
+                        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
                             <div id="fluid-progress-bar" class="h-full bg-cyan-600 transition-all duration-500" style="width: 0%"></div>
                             <div id="fluid-pacer-marker" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-glow z-10" style="left: 0%"></div>
                         </div>
@@ -88,27 +89,39 @@ export const FuelView = {
                 <div id="fuel-active-view" class="hidden">
                     <div class="flex flex-col gap-2 mb-4">
                         
-                        <div id="card-drink" class="bg-slate-800 border border-slate-700 rounded-xl p-2 flex items-center gap-2">
-                            <div id="timer-drink" class="w-20 text-2xl font-mono font-bold text-white text-center border-r border-slate-700 pr-2">15:00</div>
-                            <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 text-white h-12 rounded-lg font-bold text-[10px] uppercase border-b-4 border-blue-800 active:border-b-0">MIX SIP</button>
-                            <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 text-cyan-100 h-12 rounded-lg font-bold text-[10px] uppercase border-b-4 border-slate-900 active:border-b-0">WATER SIP</button>
+                        <div id="card-drink" class="bg-slate-800 border border-slate-700 rounded-xl p-1 flex items-stretch gap-1 h-14">
+                            <div class="w-16 bg-slate-900 rounded-lg flex flex-col items-center justify-center border border-slate-700/50">
+                                <span class="text-[8px] text-blue-400 font-bold uppercase tracking-wider">Drink</span>
+                                <span id="timer-drink" class="text-lg font-mono font-bold text-white leading-none">15:00</span>
+                            </div>
+                            <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 text-white rounded-lg font-bold text-[10px] uppercase border-b-2 border-blue-800 active:border-b-0 flex flex-col justify-center items-center">
+                                <span>MIX</span>
+                            </button>
+                            <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 text-cyan-100 active:text-white rounded-lg font-bold text-[10px] uppercase border-b-2 border-slate-900 active:border-b-0 flex flex-col justify-center items-center">
+                                <span>WATER</span>
+                            </button>
                         </div>
 
-                        <div id="card-eat" class="bg-slate-800 border border-slate-700 rounded-xl p-2 flex items-center gap-2">
-                            <div id="timer-eat" class="w-20 text-2xl font-mono font-bold text-white text-center border-r border-slate-700 pr-2">45:00</div>
-                            <button id="btn-log-flask" class="flex-[2] bg-orange-600 active:bg-orange-500 text-white h-12 rounded-lg font-bold text-[10px] uppercase border-b-4 border-orange-800 active:border-b-0 flex items-center justify-center gap-2">
+                        <div id="card-eat" class="bg-slate-800 border border-slate-700 rounded-xl p-1 flex items-stretch gap-1 h-14">
+                            <div class="w-16 bg-slate-900 rounded-lg flex flex-col items-center justify-center border border-slate-700/50">
+                                <span class="text-[8px] text-orange-400 font-bold uppercase tracking-wider">Eat</span>
+                                <span id="timer-eat" class="text-lg font-mono font-bold text-white leading-none">45:00</span>
+                            </div>
+                            <button id="btn-log-flask" class="flex-1 bg-orange-600 active:bg-orange-500 text-white rounded-lg font-bold text-[10px] uppercase border-b-2 border-orange-800 active:border-b-0 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-bottle-droplet"></i> FLASK SQUEEZE
                             </button>
                         </div>
 
                         <div class="bg-slate-900/40 border border-slate-800 rounded-xl p-2">
                             <div class="flex justify-between items-center mb-2 px-1">
-                                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Solid Food Menu</span>
-                                <button id="btn-show-custom-fuel" class="text-[9px] text-blue-400 underline">Custom Entry</button>
+                                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Solid Food</span>
+                                <button id="btn-show-custom-fuel" class="text-[9px] text-blue-400 underline">Custom</button>
                             </div>
+                            
                             <div id="fuel-menu-container" class="space-y-1">
                                 ${FuelComponents.renderFuelButtons(state.fuelMenu)}
                             </div>
+
                             <div id="custom-fuel-input-area" class="hidden mt-2 p-2 bg-slate-900 rounded border border-slate-700 flex gap-2">
                                 <input type="number" id="input-custom-carbs" placeholder="g" class="w-16 bg-slate-800 border border-slate-600 rounded px-1 py-1 text-xs text-white text-center">
                                 <button id="btn-log-custom" class="flex-1 bg-emerald-600 text-white rounded px-2 py-1 text-[10px] font-bold">LOG CARBS</button>
@@ -126,6 +139,7 @@ export const FuelView = {
                     <h3 class="text-sm font-bold text-white mb-4 border-b border-slate-700 pb-2 flex items-center gap-2">
                         <i class="fa-solid fa-sliders text-blue-400"></i> Mission Control
                     </h3>
+                    
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50 col-span-2 lg:col-span-1">
                             <label class="block text-[10px] text-purple-400 uppercase font-bold mb-1">Ride Time (min)</label>
@@ -168,6 +182,7 @@ export const FuelView = {
                             <input type="number" id="input-flask-carbs" value="${state.carbsPerFlask}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs">
                         </div>
                     </div>
+                    
                     <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-[10px] text-slate-500 uppercase font-bold">Solid Food Items</span>

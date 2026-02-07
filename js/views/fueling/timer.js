@@ -1,4 +1,5 @@
 import { UI } from '../../utils/ui.js';
+import { DataManager } from '../../utils/data.js';
 
 export const FuelTimer = {
     state: {
@@ -6,19 +7,14 @@ export const FuelTimer = {
         startTime: null,
         totalTime: 0,
         
-        // CONFIG
+        // CONFIG DEFAULTS
         drinkInterval: 15,
         eatInterval: 45,
         carbsPerBottle: 90, 
         targetHourlyCarbs: 90,
         
-        // FUEL LIBRARY (Defaults)
-        fuelMenu: [
-            { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt' },
-            { id: 'chews', label: 'Chews', carbs: 24, icon: 'fa-candy-cane' },
-            { id: 'bar', label: 'Bar', carbs: 40, icon: 'fa-cookie-bite' },
-            { id: 'banana', label: 'Banana', carbs: 27, icon: 'fa-carrot' }
-        ],
+        // FUEL LIBRARY (Loaded from JSON)
+        fuelMenu: [],
 
         // LIVE TRACKING
         nextDrink: 15 * 60,
@@ -31,9 +27,17 @@ export const FuelTimer = {
 
     beepSound: new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"), 
 
-    init() {
+    async init() {
+        // Load the library from JSON
+        const library = await DataManager.fetchJSON('fuelLibrary');
+        if (library) {
+            this.state.fuelMenu = library;
+        }
+
         return `
-            <div class="p-4 max-w-5xl mx-auto pb-20"> <div class="grid grid-cols-12 gap-4 mb-6">
+            <div class="p-4 max-w-5xl mx-auto pb-20">
+                
+                <div class="grid grid-cols-12 gap-4 mb-6">
                     
                     <div class="col-span-12 md:col-span-4 bg-slate-900 p-5 rounded-xl border border-slate-700 flex flex-col justify-center relative overflow-hidden">
                         <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Session Duration</div>
@@ -126,11 +130,8 @@ export const FuelTimer = {
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                        <div class="text-xs text-slate-500 uppercase tracking-widest mb-3">Customize Fuel Menu</div>
-                        <div id="fuel-library-editor" class="space-y-2">
-                            ${this.renderFuelEditor()}
-                        </div>
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 text-xs text-slate-400">
+                        <i class="fa-solid fa-circle-info mr-2"></i> To update the food buttons, edit <code>data/fueling/fuel_library.json</code>
                     </div>
                 </div>
 
@@ -147,23 +148,14 @@ export const FuelTimer = {
     },
 
     renderFuelButtons() {
+        if (!this.state.fuelMenu || this.state.fuelMenu.length === 0) return '<div class="col-span-2 text-xs text-slate-500 italic">No items found in library.</div>';
+        
         return this.state.fuelMenu.map(item => `
             <button class="btn-quick-fuel bg-slate-700 hover:bg-orange-600 hover:text-white text-slate-200 py-2 rounded-lg text-xs font-bold uppercase transition-colors flex flex-col items-center justify-center h-16 border border-slate-600"
                 data-carbs="${item.carbs}">
                 <i class="fa-solid ${item.icon} text-lg mb-1 opacity-70"></i>
                 <span>${item.label} (${item.carbs}g)</span>
             </button>
-        `).join('');
-    },
-
-    renderFuelEditor() {
-        return this.state.fuelMenu.map((item, index) => `
-            <div class="flex gap-2 items-center">
-                <div class="w-8 text-center text-slate-500"><i class="fa-solid ${item.icon}"></i></div>
-                <input type="text" value="${item.label}" class="edit-fuel-label flex-1 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-white" data-index="${index}">
-                <input type="number" value="${item.carbs}" class="edit-fuel-carbs w-20 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-white text-center" data-index="${index}">
-                <span class="text-slate-500 text-xs">g</span>
-            </div>
         `).join('');
     },
 
@@ -207,27 +199,6 @@ export const FuelTimer = {
                 }
             });
         }
-
-        // Config Inputs (Auto-save to state)
-        document.querySelectorAll('.edit-fuel-label').forEach(el => {
-            el.addEventListener('change', (e) => {
-                const idx = e.target.dataset.index;
-                this.state.fuelMenu[idx].label = e.target.value;
-                this.refreshMenuRender();
-            });
-        });
-        document.querySelectorAll('.edit-fuel-carbs').forEach(el => {
-            el.addEventListener('change', (e) => {
-                const idx = e.target.dataset.index;
-                this.state.fuelMenu[idx].carbs = parseInt(e.target.value) || 0;
-                this.refreshMenuRender();
-            });
-        });
-    },
-
-    refreshMenuRender() {
-        const container = document.getElementById('fuel-menu-container');
-        if (container) container.innerHTML = this.renderFuelButtons();
     },
 
     toggleTimer() {
@@ -236,7 +207,6 @@ export const FuelTimer = {
     },
 
     startTimer() {
-        // Read Intervals
         this.state.drinkInterval = parseInt(document.getElementById('input-drink-int').value) || 15;
         this.state.eatInterval = parseInt(document.getElementById('input-eat-int').value) || 45;
         this.state.carbsPerBottle = parseInt(document.getElementById('input-bottle-carbs').value) || 90;
@@ -247,7 +217,6 @@ export const FuelTimer = {
             this.state.nextEat = this.state.eatInterval * 60;
         }
 
-        // Switch Views
         document.getElementById('fuel-config-view').classList.add('hidden');
         document.getElementById('fuel-active-view').classList.remove('hidden');
         document.getElementById('btn-fuel-reset').classList.remove('hidden');
@@ -373,4 +342,27 @@ export const FuelTimer = {
             // Flash effect
             if (Math.abs(secondsLeft) % 2 === 0) {
                 cardEl.classList.add(type === 'drink' ? 'border-blue-500' : 'border-orange-500');
-                c
+                cardEl.classList.add('bg-slate-700');
+            } else {
+                cardEl.classList.remove(type === 'drink' ? 'border-blue-500' : 'border-orange-500');
+                cardEl.classList.remove('bg-slate-700');
+            }
+            // Auto Reset after 60s
+            if (secondsLeft < -60) {
+                 this.state[type === 'drink' ? 'nextDrink' : 'nextEat'] = intervalMins * 60;
+                 cardEl.className = "bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center transition-all duration-300";
+            }
+        } else {
+            timerEl.innerText = this.formatTime(secondsLeft);
+            cardEl.className = `bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center transition-all duration-300`;
+        }
+    },
+
+    formatTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+};

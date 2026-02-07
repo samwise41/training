@@ -44,6 +44,7 @@ export const FuelTimer = {
         
         bind('btn-log-sip-mix', () => this.logSip('mix'));
         bind('btn-log-sip-water', () => this.logSip('water'));
+        bind('btn-log-flask', () => this.logFlask()); // NEW
 
         bind('btn-log-custom', () => {
             const input = document.getElementById('input-custom-carbs');
@@ -60,7 +61,7 @@ export const FuelTimer = {
             this.refreshUI();
         });
 
-        // HELP MODAL
+        // HELP
         bind('btn-fuel-help', () => this.toggleHelp(true));
         bind('btn-close-help', () => this.toggleHelp(false));
         bind('btn-dismiss-help', () => this.toggleHelp(false));
@@ -173,6 +174,8 @@ export const FuelTimer = {
         }
     },
 
+    // --- LOGGING ---
+
     logSip(type) {
         const sipsPerBottle = 4;
         const bottleVol = this.state.bottleVolume || 750;
@@ -191,6 +194,23 @@ export const FuelTimer = {
 
         this.state.totalFluidConsumed += fluidAmount;
         this.addToLog(type === 'mix' ? 'drink' : 'water', type === 'mix' ? 'Mix Sip' : 'Water Sip', carbAmount, fluidAmount);
+        this.updateDisplays();
+        this.state.save();
+    },
+
+    logFlask() {
+        // FLASK LOGIC:
+        // 1 squeeze = 1/4 flask (typical soft flask usage)
+        const portion = 0.25;
+        const carbs = Math.round((this.state.carbsPerFlask || 150) * portion);
+        
+        this.state.totalCarbsConsumed += carbs;
+        this.state.flasksConsumed += portion;
+        
+        // Resets EAT timer (Flasks count as food/fuel)
+        this.state.nextEat = this.state.eatInterval * 60;
+        
+        this.addToLog('flask', 'Flask Squeeze', carbs, 0);
         this.updateDisplays();
         this.state.save();
     },
@@ -225,6 +245,9 @@ export const FuelTimer = {
         } else if (entry.type === 'water') {
              this.state.waterBottlesConsumed -= 0.25;
              if(this.state.waterBottlesConsumed < 0) this.state.waterBottlesConsumed = 0;
+        } else if (entry.type === 'flask') {
+             this.state.flasksConsumed -= 0.25;
+             if(this.state.flasksConsumed < 0) this.state.flasksConsumed = 0;
         }
 
         this.state.consumptionLog.splice(index, 1);
@@ -254,14 +277,7 @@ export const FuelTimer = {
     },
 
     updateDisplays() {
-        // No total time element anymore, so we don't update text
-        // Pulse animation? We could add a class if running
-        const pulse = document.getElementById('pulse-indicator');
-        if (pulse) {
-            if (this.state.isRunning) pulse.classList.add('animate-pulse', 'bg-emerald-500');
-            else pulse.classList.remove('animate-pulse', 'bg-emerald-500');
-        }
-
+        document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
         this.updateBottleVisuals();
         this.updateProgressBars();
         this.updateCard('drink', this.state.nextDrink, this.state.drinkInterval);
@@ -269,17 +285,23 @@ export const FuelTimer = {
     },
 
     updateBottleVisuals() {
-        // MIX BOTTLE: TRACKER (Logged Sips)
+        // MIX
         const mixPct = (1 - (this.state.bottlesConsumed % 1)) * 100;
         const mixEl = document.getElementById('mix-bottle-liquid');
         if(mixEl) mixEl.style.height = `${mixPct}%`;
         document.getElementById('mix-bottle-count').innerText = Math.floor(this.state.bottlesConsumed) + 1;
 
-        // WATER BOTTLE: TRACKER (Logged Sips)
+        // WATER
         const waterPct = (1 - (this.state.waterBottlesConsumed % 1)) * 100;
         const waterEl = document.getElementById('water-bottle-liquid');
         if(waterEl) waterEl.style.height = `${waterPct}%`;
         document.getElementById('water-bottle-count').innerText = Math.floor(this.state.waterBottlesConsumed) + 1;
+
+        // FLASK (NEW)
+        const flaskPct = (1 - (this.state.flasksConsumed % 1)) * 100;
+        const flaskEl = document.getElementById('flask-liquid');
+        if(flaskEl) flaskEl.style.height = `${flaskPct}%`;
+        document.getElementById('flask-count').innerText = Math.floor(this.state.flasksConsumed) + 1;
     },
 
     updateProgressBars() {
@@ -287,7 +309,7 @@ export const FuelTimer = {
         const durationHours = plannedMins / 60;
         const currentHours = this.state.totalTime / 3600;
 
-        // --- CARBS ---
+        // CARBS
         const totalCarbGoal = durationHours * this.state.targetHourlyCarbs;
         const currentCarbTarget = currentHours * this.state.targetHourlyCarbs;
         
@@ -300,7 +322,7 @@ export const FuelTimer = {
         const timePct = Math.min((this.state.totalTime / (plannedMins * 60)) * 100, 100);
         document.getElementById('carb-pacer-marker').style.left = `${timePct}%`;
 
-        // --- FLUID ---
+        // FLUID
         const totalFluidGoal = durationHours * (this.state.targetHourlyFluid || 500);
         const currentFluidTarget = currentHours * (this.state.targetHourlyFluid || 500);
         
@@ -339,8 +361,11 @@ export const FuelTimer = {
         const getVal = (id) => parseInt(document.getElementById(id).value) || 0;
         this.state.drinkInterval = getVal('input-drink-int') || 15;
         this.state.eatInterval = getVal('input-eat-int') || 45;
+        
         this.state.carbsPerBottle = getVal('input-bottle-carbs') || 90;
         this.state.bottleVolume = getVal('input-bottle-vol') || 750;
+        this.state.carbsPerFlask = getVal('input-flask-carbs') || 150; // New Input
+        
         this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90;
         this.state.targetHourlyFluid = getVal('input-target-fluid') || 500;
         this.state.plannedDuration = getVal('input-planned-duration') || 180;

@@ -2,7 +2,6 @@ export const FuelTemplates = {
     header(state, formatTime) {
         return `
         <div class="flex justify-between items-center -mt-14 mb-6 pl-16 pr-2 h-10">
-            
             <div class="flex items-center gap-3">
                 <div id="pulse-indicator" class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
                 <div class="flex flex-col">
@@ -12,7 +11,6 @@ export const FuelTemplates = {
                     </span>
                 </div>
             </div>
-
             <div class="flex items-center gap-3">
                 <div class="text-right hidden xs:block">
                     <span class="block text-[8px] text-slate-600 uppercase font-bold leading-none mb-0.5">Target</span>
@@ -63,7 +61,7 @@ export const FuelTemplates = {
                 <div class="text-[10px] text-${color.split('-')[0]}-400 uppercase font-bold tracking-wider">${label}</div>
                 <div class="text-[10px] text-slate-400 font-mono"><span id="${idBase}-val" class="text-white font-bold">0</span> / <span id="${idBase}-pacer">0</span></div>
             </div>
-            <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden relative border border-slate-700/50">
+            <div class="w-full h-5 bg-slate-950 rounded-full overflow-hidden relative border border-slate-700/50">
                 <div id="${idBase}-progress-bar" class="h-full bg-${color} transition-all duration-500" style="width: 0%"></div>
                 <div id="${idBase}-pacer-marker" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] z-10" style="left: 0%"></div>
             </div>
@@ -74,26 +72,32 @@ export const FuelTemplates = {
         return `
         <div id="fuel-active-view" class="hidden animate-fade-in">
             <div class="flex flex-col gap-2 mb-6">
-                <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-1.5 flex gap-1.5 h-16 shadow-xl items-stretch">
+                
+                <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-1.5 flex gap-1.5 h-24 shadow-xl items-stretch">
                     <div class="w-16 bg-slate-900 rounded-lg flex flex-col items-center justify-center border border-slate-700">
                         <span class="text-[8px] text-blue-400 font-bold uppercase tracking-widest mb-0.5">Drink</span>
                         <span id="timer-drink" class="text-lg font-mono font-bold text-white leading-none">15:00</span>
                     </div>
-                    <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 text-white rounded-lg border-b-2 border-blue-800 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center">
-                        <span class="text-[8px] opacity-80 uppercase leading-none mb-0.5">Mix</span><span class="text-xs font-bold uppercase leading-none">SIP</span>
+                    <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 text-white rounded-lg border-b-4 border-blue-800 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center">
+                        <span class="text-[10px] opacity-80 uppercase leading-none mb-1">Mix</span>
+                        <i class="fa-solid fa-bolt text-xl mb-1"></i>
+                        <span class="text-xs font-bold uppercase leading-none">SIP</span>
                     </button>
-                    <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 text-cyan-100 active:text-white rounded-lg border-b-2 border-slate-900 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center">
-                        <span class="text-[8px] opacity-80 uppercase leading-none mb-0.5">Water</span><span class="text-xs font-bold uppercase leading-none">SIP</span>
+                    <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 text-cyan-100 active:text-white rounded-lg border-b-4 border-slate-900 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center">
+                        <span class="text-[10px] opacity-80 uppercase leading-none mb-1">Water</span>
+                        <i class="fa-solid fa-glass-water text-xl mb-1"></i>
+                        <span class="text-xs font-bold uppercase leading-none">SIP</span>
                     </button>
                 </div>
 
-                <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-1.5 flex gap-1.5 h-16 shadow-xl items-stretch">
+                <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-1.5 flex gap-1.5 h-24 shadow-xl items-stretch">
                     <div class="w-16 bg-slate-900 rounded-lg flex flex-col items-center justify-center border border-slate-700">
                         <span class="text-[8px] text-orange-400 font-bold uppercase tracking-widest mb-0.5">Fuel</span>
                         <span id="timer-eat" class="text-lg font-mono font-bold text-white leading-none">45:00</span>
                     </div>
-                    <button id="btn-log-flask" class="flex-1 bg-orange-600 active:bg-orange-500 text-white rounded-lg border-b-2 border-orange-800 active:border-b-0 active:translate-y-0.5 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-bottle-droplet text-lg"></i><span class="text-xs font-bold uppercase">Flask Squeeze</span>
+                    <button id="btn-log-flask" class="flex-1 bg-orange-600 active:bg-orange-500 text-white rounded-lg border-b-4 border-orange-800 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center gap-1">
+                        <i class="fa-solid fa-bottle-droplet text-2xl"></i>
+                        <span class="text-sm font-bold uppercase">Flask Squeeze</span>
                     </button>
                 </div>
 
@@ -153,8 +157,8 @@ export const FuelTemplates = {
     footer() {
         return `
         <div class="mt-6 grid grid-cols-1 gap-3">
-            <button id="btn-fuel-toggle" class="w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest bg-emerald-600 active:bg-emerald-500 text-white shadow-lg transition-colors">Start Engine</button>
-            <button id="btn-fuel-reset" class="hidden w-full py-3 rounded-xl font-bold text-sm uppercase bg-slate-700 active:bg-slate-600 text-slate-300 transition-colors">Reset / Configure</button>
+            <button id="btn-fuel-toggle" class="w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest bg-emerald-600 active:bg-emerald-500 md:hover:bg-emerald-500 text-white shadow-lg transition-colors">Start Engine</button>
+            <button id="btn-fuel-reset" class="hidden w-full py-3 rounded-xl font-bold text-sm uppercase tracking-widest bg-slate-700 active:bg-slate-600 text-slate-300 transition-colors">Reset / Configure</button>
         </div>
         <div id="fuel-help-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
             <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-6 shadow-2xl">

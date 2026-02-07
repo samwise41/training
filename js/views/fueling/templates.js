@@ -1,3 +1,6 @@
+
+import { FuelComponents } from './components.js';
+
 export const FuelTemplates = {
     header(state, formatTime) {
         return `

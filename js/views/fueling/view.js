@@ -26,16 +26,7 @@ export const FuelView = {
                     <i class="fa-solid fa-circle-question text-xl"></i>
                 </button>
 
-                <div class="mb-4 bg-slate-900 p-5 rounded-xl border border-slate-700 flex flex-col justify-center relative overflow-hidden">
-                    <div class="flex justify-between items-start">
-                        <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Ride Time</div>
-                        <div id="pulse-indicator" class="h-2 w-2 rounded-full bg-slate-800"></div>
-                    </div>
-                    <div id="fuel-total-time" class="text-5xl font-mono font-bold text-white tracking-tighter z-10">00:00:00</div>
-                    <div class="text-[10px] text-slate-600 mt-1">Plan: ${Math.floor(state.plannedDuration/60)}h ${state.plannedDuration%60}m</div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="grid grid-cols-3 gap-2 mb-4 mt-8">
                     <div class="bg-slate-900 p-2 rounded-xl border border-slate-700 flex flex-col items-center">
                         <div class="text-[9px] text-blue-400 uppercase font-bold mb-1">Mix</div>
                         <div class="relative w-8 h-14 border border-slate-600 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">

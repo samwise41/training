@@ -17,8 +17,9 @@ export const FuelTimer = {
             ];
         }
         
-        // DEFAULT ALL SOLID FOOD AS UNSELECTED (AS REQUESTED)
+        // Ensure menu items exist if not loaded from save
         if (this.state.totalTime === 0) {
+            // Default inactive as requested
             this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
         }
         
@@ -31,6 +32,7 @@ export const FuelTimer = {
                 this.updateDisplays();
                 this.refreshLogUI();
                 this.updateBtnState('Resume Session', 'bg-emerald-600');
+                this.enableNavigationGuards();
             }, 100);
         }
 
@@ -42,15 +44,24 @@ export const FuelTimer = {
 
         bind('btn-fuel-toggle', () => this.toggleTimer());
         bind('btn-fuel-reset', () => this.resetTimer());
+        
         bind('btn-log-sip-mix', () => this.logSip('mix'));
         bind('btn-log-sip-water', () => this.logSip('water'));
         bind('btn-log-flask', () => this.logFlask());
+
+        // Help
         bind('btn-fuel-help', () => this.toggleHelp(true));
+        bind('btn-close-help', () => this.toggleHelp(false));
         bind('btn-dismiss-help', () => this.toggleHelp(false));
 
+        // Custom Input
         bind('btn-show-custom-fuel', () => {
             const area = document.getElementById('custom-fuel-input-area');
-            if(area) area.classList.toggle('hidden');
+            const btn = document.getElementById('btn-show-custom-fuel');
+            if(area) {
+                area.classList.toggle('hidden');
+                btn.innerText = area.classList.contains('hidden') ? 'Custom' : 'Hide';
+            }
         });
 
         bind('btn-log-custom', () => {
@@ -60,10 +71,22 @@ export const FuelTimer = {
             if(val > 0) { 
                 this.logFood(val, "Custom Entry"); 
                 input.value = ''; 
-                if(area) area.classList.add('hidden'); 
+                if(area) {
+                    area.classList.add('hidden');
+                    document.getElementById('btn-show-custom-fuel').innerText = 'Custom';
+                }
             }
         });
 
+        // Config buttons
+        bind('btn-add-item', () => this.addNewItem());
+        bind('btn-toggle-all-fuel', () => {
+            const allActive = this.state.fuelMenu.every(i => i.active);
+            this.state.fuelMenu.forEach(i => i.active = !allActive);
+            this.refreshUI();
+        });
+
+        // Event Delegation
         const menu = document.getElementById('fuel-menu-container');
         if(menu) menu.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-quick-fuel');
@@ -73,7 +96,7 @@ export const FuelTimer = {
         const log = document.getElementById('fuel-history-log');
         if(log) log.addEventListener('click', (e) => {
             const row = e.target.closest('.btn-delete-log');
-            if(row) this.removeLogEntry(parseInt(row.dataset.index));
+            if(row && confirm("Delete entry?")) this.removeLogEntry(parseInt(row.dataset.index));
         });
 
         const editor = document.getElementById('fuel-library-editor');
@@ -84,13 +107,6 @@ export const FuelTimer = {
                 this.state.fuelMenu[idx].active = !this.state.fuelMenu[idx].active;
                 this.refreshUI();
             }
-        });
-        
-        bind('btn-add-item', () => this.addNewItem());
-        bind('btn-toggle-all-fuel', () => {
-            const allActive = this.state.fuelMenu.every(i => i.active);
-            this.state.fuelMenu.forEach(i => i.active = !allActive);
-            this.refreshUI();
         });
     },
 
@@ -127,28 +143,23 @@ export const FuelTimer = {
     },
 
     startTimer() {
-        try {
-            this.initAudio();
-            this.audioCtx.resume();
-            
-            // Only read config if we haven't started yet
-            if (this.state.totalTime === 0) {
-                this.readConfigInputs(); 
-                this.state.nextDrink = this.state.drinkInterval * 60;
-                this.state.nextEat = this.state.eatInterval * 60;
-            }
-            
-            this.state.lastTickTimestamp = Date.now();
-            this.switchView('active');
-            this.state.isRunning = true;
-            this.state.timerId = setInterval(() => this.tick(), 1000);
-            this.updateBtnState('Pause', 'bg-yellow-600');
-            this.state.save();
-            this.updateDisplays();
-        } catch(e) {
-            console.error("Failed to start timer:", e);
-            alert("Error starting timer. Check inputs.");
+        this.initAudio();
+        this.audioCtx.resume();
+        this.enableNavigationGuards();
+        
+        if (this.state.totalTime === 0) {
+            this.readConfigInputs();
+            this.state.nextDrink = this.state.drinkInterval * 60;
+            this.state.nextEat = this.state.eatInterval * 60;
         }
+        
+        this.state.lastTickTimestamp = Date.now();
+        this.switchView('active');
+        this.state.isRunning = true;
+        this.state.timerId = setInterval(() => this.tick(), 1000);
+        this.updateBtnState('Pause', 'bg-yellow-600');
+        this.state.save();
+        this.updateDisplays();
     },
 
     pauseTimer() {
@@ -161,6 +172,7 @@ export const FuelTimer = {
     resetTimer() {
         if(!confirm("End session and clear data?")) return;
         this.pauseTimer();
+        this.disableNavigationGuards();
         this.state.resetSession();
         this.updateDisplays();
         this.refreshLogUI();
@@ -370,5 +382,25 @@ export const FuelTimer = {
         const btn = document.getElementById('btn-fuel-toggle');
         btn.innerText = text;
         btn.className = `w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest text-white shadow-lg transition-colors ${bgClass}`;
+    },
+
+    enableNavigationGuards() {
+        history.pushState(null, document.title, location.href);
+        window.addEventListener('popstate', this.handlePopState);
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
+    },
+
+    disableNavigationGuards() {
+        window.removeEventListener('popstate', this.handlePopState);
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    },
+
+    handlePopState(event) {
+        history.pushState(null, document.title, location.href);
+    },
+
+    handleBeforeUnload(e) {
+        e.preventDefault();
+        e.returnValue = ''; 
     }
 };

@@ -122,6 +122,15 @@
                 <span>Zones</span>
             </button>
 
+            <div class="px-3 mb-2 mt-8">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tools</span>
+            </div>
+
+            <button class="nav-item text-slate-400 border-transparent" data-view="fueling">
+                <div class="w-5 flex justify-center"><i class="fa-solid fa-stopwatch"></i></div>
+                <span>Fuel Timer</span>
+            </button>
+
         </nav>
     </aside>
 
@@ -181,13 +190,6 @@
         document.body.appendChild(script);
     </script>
     
-    <!-- <script>
-        const script = document.createElement('script');
-        script.type = 'module';
-        // Force reload of app.js
-        script.src = 'js/app.js?t=' + Date.now();
-        document.body.appendChild(script);
-    </script> -->
     <div id="app-tooltip" class="fixed z-[9999] bg-slate-900 border border-slate-600 rounded-lg shadow-2xl transition-opacity duration-200 opacity-0 pointer-events-none max-w-xs text-xs p-3">
     </div>
 </body>

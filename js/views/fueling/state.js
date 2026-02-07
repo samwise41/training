@@ -9,8 +9,7 @@ export const FuelState = {
     
     carbsPerBottle: 90, 
     bottleVolume: 750, 
-    
-    carbsPerFlask: 150, // NEW: Homemade Gel Flask size
+    carbsPerFlask: 150, // Flask Capacity
     
     targetHourlyCarbs: 90,
     targetHourlyFluid: 500,
@@ -26,7 +25,7 @@ export const FuelState = {
     
     bottlesConsumed: 0,      
     waterBottlesConsumed: 0, 
-    flasksConsumed: 0, // NEW: Track flask inventory
+    flasksConsumed: 0, 
     
     consumptionLog: [], 
     lastTickTimestamp: 0, 
@@ -40,7 +39,7 @@ export const FuelState = {
             eatInterval: this.eatInterval,
             carbsPerBottle: this.carbsPerBottle,
             bottleVolume: this.bottleVolume,
-            carbsPerFlask: this.carbsPerFlask, // Save config
+            carbsPerFlask: this.carbsPerFlask,
             targetHourlyCarbs: this.targetHourlyCarbs,
             targetHourlyFluid: this.targetHourlyFluid,
             plannedDuration: this.plannedDuration,
@@ -50,7 +49,7 @@ export const FuelState = {
             totalFluidConsumed: this.totalFluidConsumed,
             bottlesConsumed: this.bottlesConsumed,
             waterBottlesConsumed: this.waterBottlesConsumed,
-            flasksConsumed: this.flasksConsumed, // Save count
+            flasksConsumed: this.flasksConsumed,
             consumptionLog: this.consumptionLog,
             lastTickTimestamp: this.lastTickTimestamp,
             timestamp: Date.now()
@@ -69,7 +68,7 @@ export const FuelState = {
             
             this.carbsPerBottle = data.carbsPerBottle || 90;
             this.bottleVolume = data.bottleVolume || 750;
-            this.carbsPerFlask = data.carbsPerFlask || 150; // Load config
+            this.carbsPerFlask = data.carbsPerFlask || 150;
             
             this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
             this.targetHourlyFluid = data.targetHourlyFluid || 500;
@@ -81,7 +80,7 @@ export const FuelState = {
             
             this.bottlesConsumed = data.bottlesConsumed || 0;
             this.waterBottlesConsumed = data.waterBottlesConsumed || 0;
-            this.flasksConsumed = data.flasksConsumed || 0; // Load count
+            this.flasksConsumed = data.flasksConsumed || 0;
             
             this.consumptionLog = data.consumptionLog || [];
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();

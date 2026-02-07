@@ -66,7 +66,10 @@ export const FuelView = {
                     </div>
 
                     <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 mb-6">
-                        <div class="text-[10px] text-slate-500 uppercase font-bold mb-3 border-b border-slate-800 pb-2">Session Intake Log</div>
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-2">
+                            <span class="text-[10px] text-slate-500 uppercase font-bold">Session Intake Log</span>
+                            <span class="text-[9px] text-slate-600 italic">Tap item to remove</span>
+                        </div>
                         <div id="fuel-history-log" class="space-y-1 max-h-[150px] overflow-y-auto custom-scrollbar text-sm text-slate-400">
                             <div class="italic opacity-50 text-xs text-center py-2">No intake recorded yet.</div>
                         </div>
@@ -111,13 +114,13 @@ export const FuelView = {
         
         return activeItems.map(item => `
             <div class="flex gap-2 w-full h-14">
-                <button class="btn-quick-fuel w-[30%] bg-slate-800 border border-slate-600 active:bg-slate-600 text-slate-400 rounded-lg font-bold text-xs uppercase flex flex-col items-center justify-center transition-all"
+                <button class="btn-quick-fuel w-[30%] bg-slate-800 border border-slate-600 active:bg-slate-600 active:border-slate-500 md:hover:border-slate-400 text-slate-400 rounded-lg font-bold text-xs uppercase flex flex-col items-center justify-center transition-all"
                     data-carbs="${Math.round(item.carbs / 2)}" data-name="1/2 ${item.label}">
                     <span class="text-[9px] opacity-60">1/2</span>
                     <span>${Math.round(item.carbs / 2)}</span>
                 </button>
 
-                <button class="btn-quick-fuel flex-1 bg-slate-700 border border-slate-600 active:bg-orange-600 active:text-white text-slate-200 rounded-lg font-bold text-sm uppercase flex flex-col items-center justify-center transition-all"
+                <button class="btn-quick-fuel flex-1 bg-slate-700 border border-slate-600 active:bg-orange-600 active:text-white md:hover:bg-slate-600 text-slate-200 rounded-lg font-bold text-sm uppercase flex flex-col items-center justify-center transition-all"
                     data-carbs="${item.carbs}" data-name="${item.label}">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid ${item.icon} opacity-70"></i>
@@ -132,13 +135,24 @@ export const FuelView = {
     renderHistoryLog(log) {
         if (!log || log.length === 0) return '<div class="italic opacity-50 text-xs text-center py-2">Session started. Ready to log.</div>';
         
-        return log.slice().reverse().map(entry => `
-            <div class="flex justify-between items-center py-2 border-b border-slate-800/50 last:border-0">
-                <span class="font-mono text-slate-500 text-xs w-12">${entry.time}</span>
-                <span class="text-slate-300 flex-1 truncate px-2">${entry.item}</span>
-                <span class="font-bold ${entry.type === 'drink' ? 'text-blue-400' : 'text-emerald-400'}">${entry.carbs > 0 ? '+' + entry.carbs + 'g' : '-'}</span>
+        // Added: 'btn-delete-log' class and data-index for deletion
+        return log.slice().reverse().map((entry, index) => {
+            // Because we reversed the array for display, the visual index 0 is actually the last item in the array.
+            // We need the REAL index from the original array to delete correctly.
+            // log.length - 1 - index gives the original index.
+            const realIndex = log.length - 1 - index;
+            
+            return `
+            <div class="btn-delete-log flex justify-between items-center py-2 border-b border-slate-800/50 last:border-0 cursor-pointer active:bg-red-900/20 transition-colors" data-index="${realIndex}">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <span class="text-red-500/50 hover:text-red-500"><i class="fa-solid fa-trash-can text-[10px]"></i></span>
+                    <span class="font-mono text-slate-500 text-xs">${entry.time}</span>
+                    <span class="text-slate-300 truncate">${entry.item}</span>
+                </div>
+                <span class="font-bold ${entry.type === 'drink' ? 'text-blue-400' : 'text-emerald-400'} whitespace-nowrap pl-2">${entry.carbs > 0 ? '+' + entry.carbs + 'g' : '-'}</span>
             </div>
-        `).join('');
+            `;
+        }).join('');
     },
 
     renderFuelEditor(menu) {

@@ -4,13 +4,10 @@ import { FuelView } from './view.js';
 
 export const FuelTimer = {
     state: FuelState,
-    
-    // Web Audio Context
     audioCtx: null,
 
     async init() {
         let library = await DataManager.fetchJSON('fuelLibrary');
-        
         if (!library || library.length === 0) {
             library = [
                 { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
@@ -21,13 +18,9 @@ export const FuelTimer = {
         
         if (this.state.totalTime === 0) {
             this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
-        } else {
-            // Preserve existing menu selection logic if needed, or reset
-            this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
         }
         
         const hasSavedSession = this.state.load();
-
         const html = FuelView.getHtml(this.state);
 
         if (hasSavedSession && this.state.totalTime > 0) {
@@ -48,7 +41,11 @@ export const FuelTimer = {
 
         bind('btn-fuel-toggle', () => this.toggleTimer());
         bind('btn-fuel-reset', () => this.resetTimer());
-        bind('btn-log-sip', () => this.logSip());
+        
+        // NEW: Split Drink Buttons
+        bind('btn-log-sip-mix', () => this.logSip('mix'));
+        bind('btn-log-sip-water', () => this.logSip('water'));
+
         bind('btn-log-custom', () => {
             const input = document.getElementById('input-custom-carbs');
             const val = parseInt(input.value) || 0;
@@ -96,26 +93,19 @@ export const FuelTimer = {
     playAlertTone() {
         if (!this.audioCtx) this.initAudio();
         if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
-
         const osc = this.audioCtx.createOscillator();
         const gain = this.audioCtx.createGain();
-
         osc.connect(gain);
         gain.connect(this.audioCtx.destination);
-
         osc.type = 'square';
         osc.frequency.setValueAtTime(880, this.audioCtx.currentTime); 
         osc.frequency.setValueAtTime(0, this.audioCtx.currentTime + 0.1); 
         osc.frequency.setValueAtTime(880, this.audioCtx.currentTime + 0.15); 
-        
         gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.3);
-
         osc.start();
         osc.stop(this.audioCtx.currentTime + 0.3);
     },
-
-    // --- CORE LOGIC (UPDATED FOR BACKGROUND TIME) ---
 
     toggleTimer() {
         if (this.state.isRunning) this.pauseTimer();
@@ -133,9 +123,7 @@ export const FuelTimer = {
             this.state.nextEat = this.state.eatInterval * 60;
         }
         
-        // CRITICAL FIX: Mark the exact start time
         this.state.lastTickTimestamp = Date.now();
-
         this.switchView('active');
         this.state.isRunning = true;
         this.state.timerId = setInterval(() => this.tick(), 1000);
@@ -152,11 +140,9 @@ export const FuelTimer = {
 
     resetTimer() {
         if(!confirm("End session and clear data?")) return;
-
         this.pauseTimer();
         this.disableNavigationGuards();
         this.state.resetSession();
-        
         this.updateDisplays();
         this.refreshLogUI();
         this.switchView('config');
@@ -164,33 +150,35 @@ export const FuelTimer = {
     },
 
     tick() {
-        // CRITICAL FIX: Calculate time difference (Delta) instead of just adding 1
         const now = Date.now();
         const delta = Math.floor((now - this.state.lastTickTimestamp) / 1000);
-
         if (delta > 0) {
             this.state.totalTime += delta;
             this.state.nextDrink -= delta;
             this.state.nextEat -= delta;
-            
-            // Update timestamp for next tick
             this.state.lastTickTimestamp = now;
-            
             this.updateDisplays();
             this.state.save();
         }
     },
 
-    // --- LOGIC ---
+    logSip(type) {
+        // Standard sip logic: 1 sip = 1/4 bottle
+        const sipsPerBottle = 4;
+        const bottleVol = this.state.bottleVolume || 750;
+        const fluidAmount = Math.round(bottleVol / sipsPerBottle);
+        let carbAmount = 0;
 
-    logSip() {
-        const sips = 4; 
-        const amount = this.state.carbsPerBottle / sips;
-        this.state.totalCarbsConsumed += amount;
-        this.state.bottlesConsumed += (1 / sips);
-        
-        this.addToLog('drink', 'Bottle Sip', Math.round(amount), (1/sips));
-        
+        if (type === 'mix') {
+            carbAmount = Math.round((this.state.carbsPerBottle || 90) / sipsPerBottle);
+            this.state.totalCarbsConsumed += carbAmount;
+            this.state.bottlesConsumed += (1 / sipsPerBottle);
+        }
+
+        // Add fluid for both
+        this.state.totalFluidConsumed += fluidAmount;
+
+        this.addToLog(type === 'mix' ? 'drink' : 'water', type === 'mix' ? 'Bottle Mix' : 'Water', carbAmount, fluidAmount);
         this.state.nextDrink = this.state.drinkInterval * 60;
         this.updateDisplays();
         this.state.save();
@@ -204,9 +192,9 @@ export const FuelTimer = {
         this.state.save();
     },
 
-    addToLog(type, item, carbs, bottleAmount = 0) {
+    addToLog(type, item, carbs, fluid = 0) {
         const timeStr = FuelView.formatTime(this.state.totalTime);
-        this.state.consumptionLog.push({ type, item, carbs, bottleAmount, time: timeStr });
+        this.state.consumptionLog.push({ type, item, carbs, fluid, time: timeStr });
         this.refreshLogUI();
     },
 
@@ -217,8 +205,12 @@ export const FuelTimer = {
         this.state.totalCarbsConsumed -= entry.carbs;
         if(this.state.totalCarbsConsumed < 0) this.state.totalCarbsConsumed = 0;
 
+        this.state.totalFluidConsumed -= (entry.fluid || 0);
+        if(this.state.totalFluidConsumed < 0) this.state.totalFluidConsumed = 0;
+
         if(entry.type === 'drink') {
-            this.state.bottlesConsumed -= entry.bottleAmount;
+            const sips = 4;
+            this.state.bottlesConsumed -= (1/sips);
             if(this.state.bottlesConsumed < 0) this.state.bottlesConsumed = 0;
         }
 
@@ -250,6 +242,9 @@ export const FuelTimer = {
 
     updateDisplays() {
         document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
+        document.getElementById('fuel-consumed-display').innerText = Math.round(this.state.totalCarbsConsumed);
+        document.getElementById('fluid-consumed-display').innerText = Math.round(this.state.totalFluidConsumed);
+        
         this.updateGauge();
         this.updatePacerBottle();
         this.updateCard('drink', this.state.nextDrink, this.state.drinkInterval);
@@ -263,19 +258,13 @@ export const FuelTimer = {
         if (sec <= 0) {
             const overdue = Math.abs(sec);
             el.innerText = `+${FuelView.formatTime(overdue)}`;
-            
             el.classList.remove('text-white');
             el.classList.add('text-red-500', 'animate-pulse');
-            
             const color = type === 'drink' ? 'blue' : 'orange';
             card.classList.add(`border-${color}-500`);
             card.classList.toggle('bg-slate-700', overdue % 2 === 0);
-
             if (overdue % 10 === 0) this.playAlertTone();
-            
-            if (sec < -300) {
-                this.state[type==='drink'?'nextDrink':'nextEat'] = interval * 60; 
-            }
+            if (sec < -300) this.state[type==='drink'?'nextDrink':'nextEat'] = interval * 60; 
         } else {
             el.innerText = FuelView.formatTime(sec);
             el.classList.add('text-white');
@@ -285,7 +274,6 @@ export const FuelTimer = {
     },
 
     updateGauge() {
-        document.getElementById('fuel-consumed-display').innerText = Math.round(this.state.totalCarbsConsumed);
         const pct = Math.min((this.state.totalCarbsConsumed / 300) * 100, 100);
         const el = document.getElementById('fuel-gauge-fill');
         if(el) el.style.width = `${pct}%`;
@@ -296,18 +284,14 @@ export const FuelTimer = {
         const totalBottles = hours * (this.state.targetHourlyCarbs / this.state.carbsPerBottle);
         let pct = 100;
         let currentBottle = 1;
-
         if (totalBottles > 0) {
             pct = (1 - (totalBottles % 1)) * 100;
             currentBottle = Math.floor(totalBottles) + 1;
         }
-        
         const liq = document.getElementById('virtual-bottle-liquid');
         if(liq) liq.style.height = `${pct}%`;
-        
         document.getElementById('bottle-percent-display').innerText = Math.round(pct);
         document.getElementById('target-bottle-count').innerText = currentBottle;
-        document.getElementById('fuel-target-display').innerText = `Target: ${Math.round(hours * this.state.targetHourlyCarbs)}g`;
     },
 
     readConfigInputs() {
@@ -315,6 +299,7 @@ export const FuelTimer = {
         this.state.drinkInterval = getVal('input-drink-int') || 15;
         this.state.eatInterval = getVal('input-eat-int') || 45;
         this.state.carbsPerBottle = getVal('input-bottle-carbs') || 90;
+        this.state.bottleVolume = getVal('input-bottle-vol') || 750;
         this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90;
     },
 

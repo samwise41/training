@@ -8,8 +8,9 @@ export const FuelState = {
     drinkInterval: 15,
     eatInterval: 45,
     carbsPerBottle: 90, 
-    bottleVolume: 750, // New: mL per bottle
+    bottleVolume: 750, 
     targetHourlyCarbs: 90,
+    plannedDuration: 180, // New: Planned ride time in minutes
     
     // Data
     fuelMenu: [], 
@@ -18,8 +19,9 @@ export const FuelState = {
     nextDrink: 15 * 60,
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
-    totalFluidConsumed: 0, // New: mL tracked
-    bottlesConsumed: 0,
+    totalFluidConsumed: 0,
+    bottlesConsumed: 0,      // Mix Bottles
+    waterBottlesConsumed: 0, // New: Water Bottles
     
     // History
     consumptionLog: [], 
@@ -36,13 +38,15 @@ export const FuelState = {
             drinkInterval: this.drinkInterval,
             eatInterval: this.eatInterval,
             carbsPerBottle: this.carbsPerBottle,
-            bottleVolume: this.bottleVolume, // Save config
+            bottleVolume: this.bottleVolume,
             targetHourlyCarbs: this.targetHourlyCarbs,
+            plannedDuration: this.plannedDuration, // Save Plan
             nextDrink: this.nextDrink,
             nextEat: this.nextEat,
             totalCarbsConsumed: this.totalCarbsConsumed,
-            totalFluidConsumed: this.totalFluidConsumed, // Save fluid
+            totalFluidConsumed: this.totalFluidConsumed,
             bottlesConsumed: this.bottlesConsumed,
+            waterBottlesConsumed: this.waterBottlesConsumed, // Save Water Count
             consumptionLog: this.consumptionLog,
             lastTickTimestamp: this.lastTickTimestamp,
             timestamp: Date.now()
@@ -61,13 +65,17 @@ export const FuelState = {
             this.drinkInterval = data.drinkInterval || 15;
             this.eatInterval = data.eatInterval || 45;
             this.carbsPerBottle = data.carbsPerBottle || 90;
-            this.bottleVolume = data.bottleVolume || 750; // Load config
+            this.bottleVolume = data.bottleVolume || 750;
             this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
+            this.plannedDuration = data.plannedDuration || 180;
+            
             this.nextDrink = data.nextDrink;
             this.nextEat = data.nextEat;
             this.totalCarbsConsumed = data.totalCarbsConsumed || 0;
-            this.totalFluidConsumed = data.totalFluidConsumed || 0; // Load fluid
+            this.totalFluidConsumed = data.totalFluidConsumed || 0;
             this.bottlesConsumed = data.bottlesConsumed || 0;
+            this.waterBottlesConsumed = data.waterBottlesConsumed || 0;
+            
             this.consumptionLog = data.consumptionLog || [];
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
             
@@ -88,8 +96,9 @@ export const FuelState = {
         this.isRunning = false;
         this.totalTime = 0;
         this.totalCarbsConsumed = 0;
-        this.totalFluidConsumed = 0; // Reset fluid
+        this.totalFluidConsumed = 0;
         this.bottlesConsumed = 0;
+        this.waterBottlesConsumed = 0;
         this.consumptionLog = []; 
         this.nextDrink = this.drinkInterval * 60;
         this.nextEat = this.eatInterval * 60;

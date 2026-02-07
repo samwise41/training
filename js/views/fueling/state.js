@@ -1,25 +1,41 @@
+// ==========================================
+// USER CONFIGURATION (EDIT DEFAULTS HERE)
+// ==========================================
+const DEFAULT_CONFIG = {
+    // TIMERS (Minutes)
+    drinkInterval: 15,
+    eatInterval: 45,
+
+    // BOTTLE SETTINGS
+    bottleVolume: 750,       // Size of your bottle in ml
+    sipsPerBottle: 4,        // How many sips to empty a bottle (draws the lines)
+    carbsPerBottle: 90,      // Grams of carbs in your Mix bottle
+
+    // FLASK SETTINGS
+    carbsPerFlask: 150,      // Grams of carbs in your Flask
+    squeezesPerFlask: 4,     // How many squeezes to empty a flask
+
+    // RIDE GOALS
+    targetHourlyCarbs: 90,   // Grams per hour
+    targetHourlyFluid: 500,  // ML per hour
+    plannedDuration: 180     // Minutes
+};
+
 export const FuelState = {
+    // Session Data
     isRunning: false,
     startTime: null,
     totalTime: 0,
     
-    // Config Defaults
-    drinkInterval: 15,
-    eatInterval: 45,
+    // Load Defaults
+    ...DEFAULT_CONFIG,
     
-    carbsPerBottle: 90, 
-    bottleVolume: 750, 
-    carbsPerFlask: 150, // Flask Capacity
-    
-    targetHourlyCarbs: 90,
-    targetHourlyFluid: 500,
-    plannedDuration: 180, 
-    
+    // Menu Data
     fuelMenu: [], 
 
     // Live Counters
-    nextDrink: 15 * 60,
-    nextEat: 45 * 60,
+    nextDrink: DEFAULT_CONFIG.drinkInterval * 60,
+    nextEat: DEFAULT_CONFIG.eatInterval * 60,
     totalCarbsConsumed: 0,
     totalFluidConsumed: 0,
     
@@ -33,16 +49,9 @@ export const FuelState = {
 
     save() {
         const data = {
+            // Save System State
             isRunning: this.isRunning,
             totalTime: this.totalTime,
-            drinkInterval: this.drinkInterval,
-            eatInterval: this.eatInterval,
-            carbsPerBottle: this.carbsPerBottle,
-            bottleVolume: this.bottleVolume,
-            carbsPerFlask: this.carbsPerFlask,
-            targetHourlyCarbs: this.targetHourlyCarbs,
-            targetHourlyFluid: this.targetHourlyFluid,
-            plannedDuration: this.plannedDuration,
             nextDrink: this.nextDrink,
             nextEat: this.nextEat,
             totalCarbsConsumed: this.totalCarbsConsumed,
@@ -52,7 +61,19 @@ export const FuelState = {
             flasksConsumed: this.flasksConsumed,
             consumptionLog: this.consumptionLog,
             lastTickTimestamp: this.lastTickTimestamp,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+
+            // Save Config (So changes persist during ride)
+            drinkInterval: this.drinkInterval,
+            eatInterval: this.eatInterval,
+            carbsPerBottle: this.carbsPerBottle,
+            bottleVolume: this.bottleVolume,
+            sipsPerBottle: this.sipsPerBottle,       // Saved
+            carbsPerFlask: this.carbsPerFlask,
+            squeezesPerFlask: this.squeezesPerFlask, // Saved
+            targetHourlyCarbs: this.targetHourlyCarbs,
+            targetHourlyFluid: this.targetHourlyFluid,
+            plannedDuration: this.plannedDuration
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
     },
@@ -60,30 +81,34 @@ export const FuelState = {
     load() {
         const saved = localStorage.getItem('fuel_timer_state');
         if (!saved) return false;
+
         try {
             const data = JSON.parse(saved);
+            
+            // Restore Counts
             this.totalTime = data.totalTime || 0;
-            this.drinkInterval = data.drinkInterval || 15;
-            this.eatInterval = data.eatInterval || 45;
-            
-            this.carbsPerBottle = data.carbsPerBottle || 90;
-            this.bottleVolume = data.bottleVolume || 750;
-            this.carbsPerFlask = data.carbsPerFlask || 150;
-            
-            this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
-            this.targetHourlyFluid = data.targetHourlyFluid || 500;
-            this.plannedDuration = data.plannedDuration || 180;
             this.nextDrink = data.nextDrink;
             this.nextEat = data.nextEat;
             this.totalCarbsConsumed = data.totalCarbsConsumed || 0;
             this.totalFluidConsumed = data.totalFluidConsumed || 0;
-            
             this.bottlesConsumed = data.bottlesConsumed || 0;
             this.waterBottlesConsumed = data.waterBottlesConsumed || 0;
             this.flasksConsumed = data.flasksConsumed || 0;
-            
             this.consumptionLog = data.consumptionLog || [];
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
+            
+            // Restore Config (Or use Defaults if missing in save)
+            this.drinkInterval = data.drinkInterval || DEFAULT_CONFIG.drinkInterval;
+            this.eatInterval = data.eatInterval || DEFAULT_CONFIG.eatInterval;
+            this.carbsPerBottle = data.carbsPerBottle || DEFAULT_CONFIG.carbsPerBottle;
+            this.bottleVolume = data.bottleVolume || DEFAULT_CONFIG.bottleVolume;
+            this.sipsPerBottle = data.sipsPerBottle || DEFAULT_CONFIG.sipsPerBottle;
+            this.carbsPerFlask = data.carbsPerFlask || DEFAULT_CONFIG.carbsPerFlask;
+            this.squeezesPerFlask = data.squeezesPerFlask || DEFAULT_CONFIG.squeezesPerFlask;
+            this.targetHourlyCarbs = data.targetHourlyCarbs || DEFAULT_CONFIG.targetHourlyCarbs;
+            this.targetHourlyFluid = data.targetHourlyFluid || DEFAULT_CONFIG.targetHourlyFluid;
+            this.plannedDuration = data.plannedDuration || DEFAULT_CONFIG.plannedDuration;
+
             this.isRunning = false; 
             return true; 
         } catch (e) { return false; }

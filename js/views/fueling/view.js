@@ -89,42 +89,43 @@ export const FuelView = {
                 <div id="fuel-active-view" class="hidden">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
                         
-                        <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center min-h-[140px]">
+                        <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-4 flex flex-col items-center justify-start min-h-[220px]">
                             <div class="text-blue-400 text-[10px] uppercase font-bold tracking-widest mb-1">Hydration</div>
-                            <div id="timer-drink" class="text-5xl font-mono font-bold text-white mb-3 tracking-tighter">15:00</div>
-                            <div class="flex gap-2 w-full">
-                                <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 md:hover:bg-blue-500 text-white py-3 rounded-lg font-bold text-xs uppercase transition-colors border-b-4 border-blue-800 active:border-b-0 active:translate-y-1">
-                                    <div class="text-[9px] opacity-70">Mix</div>
-                                    SIP
+                            <div id="timer-drink" class="text-5xl font-mono font-bold text-white mb-6 tracking-tighter mt-4">15:00</div>
+                            
+                            <div class="flex flex-col gap-3 w-full mt-auto">
+                                <button id="btn-log-sip-mix" class="w-full bg-blue-600 active:bg-blue-500 md:hover:bg-blue-500 text-white py-3 rounded-lg font-bold text-sm uppercase transition-colors border-b-4 border-blue-800 active:border-b-0 active:translate-y-1 flex justify-between px-4 items-center">
+                                    <span class="text-xs opacity-70">Mix</span>
+                                    <span>SIP</span>
                                 </button>
-                                <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 md:hover:bg-cyan-600 text-cyan-200 active:text-white py-3 rounded-lg font-bold text-xs uppercase transition-colors border-b-4 border-slate-900 active:border-b-0 active:translate-y-1">
-                                    <div class="text-[9px] opacity-70">Water</div>
-                                    SIP
+                                <button id="btn-log-sip-water" class="w-full bg-slate-700 active:bg-cyan-600 md:hover:bg-cyan-600 text-cyan-200 active:text-white py-3 rounded-lg font-bold text-sm uppercase transition-colors border-b-4 border-slate-900 active:border-b-0 active:translate-y-1 flex justify-between px-4 items-center">
+                                    <span class="text-xs opacity-70">Water</span>
+                                    <span>SIP</span>
                                 </button>
                             </div>
                         </div>
 
-                        <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center min-h-[140px]">
+                        <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-xl p-4 flex flex-col items-center justify-start min-h-[220px]">
                             <div class="text-orange-400 text-[10px] uppercase font-bold tracking-widest mb-1">Fueling</div>
                             <div id="timer-eat" class="text-5xl font-mono font-bold text-white mb-3 tracking-tighter">45:00</div>
                             
-                            <button id="btn-log-flask" class="w-full mb-2 bg-orange-600 active:bg-orange-500 md:hover:bg-orange-500 text-white py-2 rounded-lg font-bold text-xs uppercase transition-colors border-b-4 border-orange-800 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-2">
+                            <button id="btn-log-flask" class="w-full mb-3 bg-orange-600 active:bg-orange-500 md:hover:bg-orange-500 text-white py-2 rounded-lg font-bold text-xs uppercase transition-colors border-b-4 border-orange-800 active:border-b-0 active:translate-y-1 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-bottle-droplet"></i> Flask Squeeze
                             </button>
 
-                            <div class="w-full">
-                                <button id="btn-toggle-food-list" class="w-full text-[10px] text-slate-500 bg-slate-900 py-1 rounded border border-slate-700 hover:bg-slate-800 transition-colors">Show Solid Food</button>
+                            <div class="w-full border-t border-slate-700 pt-2 flex flex-col gap-2 flex-1 min-h-0">
+                                <div class="flex justify-between items-center">
+                                    <div class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Solid Food</div>
+                                    <button id="btn-show-custom-fuel" class="text-[9px] text-slate-500 underline">Custom</button>
+                                </div>
                                 
-                                <div id="food-list-container" class="hidden mt-2 border-t border-slate-700 pt-2 animate-fade-in">
-                                    <div class="w-full max-h-[120px] overflow-y-auto custom-scrollbar pr-1 mb-2">
-                                        <div id="fuel-menu-container" class="space-y-1">
-                                            ${FuelComponents.renderFuelButtons(state.fuelMenu)}
-                                        </div>
-                                    </div>
-                                    <div id="custom-fuel-input-area" class="flex gap-2">
-                                        <input type="number" id="input-custom-carbs" placeholder="g" class="w-16 bg-slate-900 border border-slate-600 rounded px-1 py-1 text-xs text-white text-center">
-                                        <button id="btn-log-custom" class="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-[10px] font-bold">ADD</button>
-                                    </div>
+                                <div id="fuel-menu-container" class="space-y-1 overflow-y-auto custom-scrollbar h-24 pr-1">
+                                    ${FuelComponents.renderFuelButtons(state.fuelMenu)}
+                                </div>
+
+                                <div id="custom-fuel-input-area" class="hidden w-full flex gap-2">
+                                    <input type="number" id="input-custom-carbs" placeholder="g" class="w-16 bg-slate-900 border border-slate-600 rounded px-1 py-1 text-xs text-white text-center">
+                                    <button id="btn-log-custom" class="flex-1 bg-slate-700 text-white rounded px-2 py-1 text-[10px] font-bold">ADD</button>
                                 </div>
                             </div>
                         </div>

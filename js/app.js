@@ -1,204 +1,143 @@
-// js/app.js
+import { DataManager } from './utils/data.js';
+import { UI } from './utils/ui.js';
 
-(async function initApp() {
-    console.log("🚀 Booting App...");
-    const cacheBuster = Date.now();
-    
-    const safeImport = async (path, name) => {
-        try { return await import(`${path}?t=${cacheBuster}`); } 
-        catch (e) { console.error(`❌ Failed to load ${name}`, e); return null; }
-    };
+// Import Views
+import { DashboardView } from './views/dashboard.js';
+import { PlanView } from './views/plan.js';
+import { TrendsView } from './views/trends.js';
+import { GearView } from './views/gear.js';
+import { ZonesView } from './views/zones.js';
+import { FuelTimer } from './views/fueling/timer.js'; // The Fuel App
 
-    const [
-        dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
-        tooltipMod, uiMod, dataMod, formatMod,
-        fuelMod 
-    ] = await Promise.all([
-        safeImport('./views/dashboard/index.js', 'Dashboard'),
-        safeImport('./views/trends/index.js', 'Trends'),
-        safeImport('./views/gear/index.js', 'Gear'),
-        safeImport('./views/zones/index.js', 'Zones'),
-        safeImport('./views/ftp/index.js', 'FTP'),
-        safeImport('./views/metrics/index.js', 'Metrics'),
-        safeImport('./views/readiness/index.js', 'Readiness'),
-        safeImport('./views/logbook/analyzer.js', 'Analyzer'),
-        safeImport('./utils/tooltipManager.js', 'TooltipManager'),
-        safeImport('./utils/ui.js', 'UI'),
-        safeImport('./utils/data.js', 'DataManager'),
-        safeImport('./utils/formatting.js', 'Formatters'),
-        safeImport('./views/fueling/timer.js', 'FuelTimer')
-    ]);
+const App = {
+    state: {
+        currentView: 'dashboard',
+        isNavOpen: false
+    },
 
-    if (tooltipMod?.TooltipManager?.initGlobalListener) {
-        tooltipMod.TooltipManager.initGlobalListener();
-        window.TooltipManager = tooltipMod.TooltipManager; 
-    }
-    if (uiMod?.UI?.init) uiMod.UI.init();
-    
-    const DataManager = dataMod?.DataManager;
-    const Formatters = formatMod?.Formatters;
-
-    const App = {
-        // Critical Data
-        planMd: "", 
-        rawLogData: [], 
-        readinessData: null, 
-        profileData: null, 
-
-        // Background Data
-        gearData: null, 
-        trendsData: null, 
+    async init() {
+        // 1. Load Critical Data
+        await DataManager.loadCriticalData();
         
-        weather: { current: null, hourly: null, code: 0 }, 
+        // 2. Setup Navigation
+        this.renderNav();
+        this.attachGlobalListeners();
 
-        async init() {
-            await this.loadCritical();
-            this.setupNavigation();
-            this.fetchWeather(); 
-            this.handleRouting();
-            this.loadBackground();
-        },
+        // 3. Load Default View
+        this.navigate('dashboard');
+        
+        // 4. Load Background Data
+        DataManager.loadBackgroundData();
+    },
 
-        async loadCritical() {
-            if (DataManager) {
-                const critical = await DataManager.loadCriticalData();
-                Object.assign(this, critical);
+    renderNav() {
+        const navItems = [
+            { id: 'dashboard', label: 'Dashboard', icon: 'fa-chart-line' },
+            { id: 'fueling',   label: 'Smart Fuel', icon: 'fa-gas-pump', highlight: true }, // Highlighted
+            { id: 'plan',      label: 'Training Plan', icon: 'fa-calendar-days' },
+            { id: 'trends',    label: 'Trends & Load', icon: 'fa-arrow-trend-up' },
+            { id: 'zones',     label: 'Zones & Profile', icon: 'fa-heart-pulse' },
+            { id: 'gear',      label: 'Gear Garage', icon: 'fa-bicycle' }
+        ];
+
+        const container = document.getElementById('nav-items');
+        container.innerHTML = navItems.map(item => `
+            <button class="nav-item w-full flex items-center gap-4 px-4 py-3 text-sm font-medium rounded-xl transition-all ${item.highlight ? 'text-emerald-400 bg-emerald-900/10 border border-emerald-900/30' : 'text-slate-400 hover:bg-slate-800 hover:text-white'}" 
+                data-target="${item.id}">
+                <div class="w-6 text-center"><i class="fa-solid ${item.icon}"></i></div>
+                <span>${item.label}</span>
+            </button>
+        `).join('');
+    },
+
+    attachGlobalListeners() {
+        // Floating Nav Button Toggle
+        const toggle = document.getElementById('nav-toggle');
+        const nav = document.getElementById('side-nav');
+        const overlay = document.getElementById('nav-overlay');
+
+        const toggleMenu = () => {
+            this.state.isNavOpen = !this.state.isNavOpen;
+            if (this.state.isNavOpen) {
+                nav.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                nav.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
             }
-        },
+        };
 
-        async loadBackground() {
-            if (DataManager) {
-                const bg = await DataManager.loadBackgroundData();
-                Object.assign(this, bg);
-                // Refresh Gear if active to populate data
-                if (window.location.hash.includes('gear')) this.updateGearResult();
-            }
-        },
+        toggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
 
-        handleRouting() {
-            const hashView = window.location.hash.replace('#', '');
-            const initialView = hashView || localStorage.getItem('currentView') || 'dashboard';
-            if (window.location.hash !== `#${initialView}`) window.location.hash = initialView; 
-            else this.renderCurrentView(initialView);
-        },
-
-        async fetchWeather() {
-            try {
-                const locRes = await fetch('https://ipapi.co/json/');
-                const locData = await locRes.json();
-                if (locData.latitude) {
-                    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${locData.latitude}&longitude=${locData.longitude}&current_weather=true&hourly=temperature_2m,weathercode&temperature_unit=fahrenheit&forecast_days=1`);
-                    const weatherData = await weatherRes.json();
-                    this.weather.current = Math.round(weatherData.current_weather.temperature);
-                    this.weather.hourly = weatherData.hourly || null;
-                    this.weather.code = weatherData.current_weather.weathercode;
-                    this.updateHeaderUI();
-                }
-            } catch (e) { console.error("Weather unavailable", e); }
-        },
-
-        updateHeaderUI(viewName) {
-            const titles = { 
-                dashboard: 'Weekly Schedule', 
-                trends: 'Trends & KPIs', 
-                plan: 'Logbook Analysis', 
-                gear: 'Gear Choice', 
-                zones: 'Training Zones', 
-                ftp: 'Performance Profile', 
-                readiness: 'Race Readiness', 
-                metrics: 'Performance Metrics',
-                fueling: 'Cockpit Mode' 
-            };
-            if (viewName) {
-                const titleEl = document.getElementById('header-title-dynamic');
-                if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
-            }
-            if (this.weather.current !== null && Formatters) {
-                const condition = Formatters.getWeatherInfo(this.weather.code);
-                const wInfo = document.getElementById('weather-info');
-                const wIcon = document.getElementById('weather-icon-top');
-                if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
-                if (wIcon) wIcon.innerText = condition[1];
-            }
-        },
-
-        updateGearResult() {
-            if (this.gearData && gearMod && gearMod.updateGearResult) {
-                gearMod.updateGearResult(this.gearData);
-            }
-        },
-
-        setupNavigation() {
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            const btnClose = document.getElementById('btn-sidebar-close'); 
-            const toggleSidebar = () => { sidebar.classList.toggle('sidebar-closed'); sidebar.classList.toggle('sidebar-open'); overlay.classList.toggle('hidden'); };
-
-            window.addEventListener('hashchange', () => this.renderCurrentView(window.location.hash.replace('#', '')));
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    window.location.hash = e.currentTarget.dataset.view; 
-                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) toggleSidebar();
-                });
-            });
-            if (menuBtn) menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
-            if (overlay) overlay.addEventListener('click', toggleSidebar);
-            if (btnClose) btnClose.addEventListener('click', toggleSidebar);
-        },
-
-        renderCurrentView(view) {
-            localStorage.setItem('currentView', view);
-            this.updateHeaderUI(view);
-
-            document.querySelectorAll('.nav-item').forEach(b => {
-                if (b.dataset.view === view) {
-                    b.classList.remove('text-slate-400', 'border-transparent');
-                    b.classList.add('bg-slate-800', 'text-white', 'border-slate-600');
-                } else {
-                    b.classList.remove('bg-slate-800', 'text-white', 'border-slate-600');
-                    b.classList.add('text-slate-400', 'border-transparent');
-                }
-            });
-
-            const content = document.getElementById('main-content');
-            content.classList.add('opacity-0');
+        // Nav Item Clicks
+        document.getElementById('nav-items').addEventListener('click', (e) => {
+            const btn = e.target.closest('.nav-item');
+            if (!btn) return;
             
-            setTimeout(async () => {
-                content.innerHTML = '';
-                const render = {
-                    dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),
-                    trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
-                    metrics: () => metricsMod?.renderMetrics(this.rawLogData),
-                    readiness: () => readinessMod?.renderReadiness(this.readinessData),
-                    ftp: () => ftpMod?.renderFTP(this.profileData),
-                    zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
-                    gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
-                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
-                    fueling: () => fuelMod?.FuelTimer?.init()
-                };
+            // Visual Active State
+            document.querySelectorAll('.nav-item').forEach(b => {
+                b.classList.remove('bg-emerald-600', 'text-white', 'shadow-lg');
+                b.classList.add('text-slate-400', 'hover:bg-slate-800');
+            });
+            btn.classList.remove('text-slate-400', 'hover:bg-slate-800');
+            btn.classList.add('bg-emerald-600', 'text-white', 'shadow-lg');
 
-                try {
-                    if (render[view]) {
-                        const html = await render[view]();
-                        content.innerHTML = html !== undefined ? html : `<div class="p-10 text-red-500">Error: View returned undefined (${view})</div>`;
-                        if (view === 'gear') this.updateGearResult();
-                        
-                        if (view === 'fueling' && fuelMod?.FuelTimer?.attachEvents) {
-                            fuelMod.FuelTimer.attachEvents();
-                        }
-                    } else {
-                        content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
-                    }
-                } catch (e) {
-                    console.error(`Render Error (${view}):`, e);
-                    content.innerHTML = `<div class="p-10 text-red-500">Render Error: ${e.message}</div>`;
-                }
-                content.classList.remove('opacity-0');
-            }, 150);
+            this.navigate(btn.dataset.target);
+            toggleMenu(); // Close menu on select
+        });
+    },
+
+    async navigate(viewId) {
+        this.state.currentView = viewId;
+        const container = document.getElementById('app-content');
+        
+        // Show Loading
+        container.innerHTML = UI.loader();
+
+        try {
+            let html = '';
+            
+            // Route Logic
+            switch(viewId) {
+                case 'dashboard':
+                    html = await DashboardView.render();
+                    break;
+                case 'fueling':
+                    html = await FuelTimer.init();
+                    break;
+                case 'plan':
+                    html = await PlanView.render();
+                    break;
+                case 'trends':
+                    html = await TrendsView.render();
+                    break;
+                case 'zones':
+                    html = await ZonesView.render();
+                    break;
+                case 'gear':
+                    html = await GearView.render();
+                    break;
+                default:
+                    html = '<div class="p-10 text-center text-slate-500">View not found</div>';
+            }
+
+            // Render
+            container.innerHTML = html;
+
+            // Post-Render Logic
+            if (viewId === 'dashboard') DashboardView.afterRender();
+            if (viewId === 'plan') PlanView.afterRender();
+            if (viewId === 'fueling') FuelTimer.attachEvents();
+            
+        } catch (error) {
+            console.error("Navigation Error:", error);
+            container.innerHTML = `<div class="p-10 text-center text-red-500">Error loading view: ${error.message}</div>`;
         }
-    };
+    }
+};
 
-    window.App = App;
-    App.init();
-})();
+// Start App
+document.addEventListener('DOMContentLoaded', () => App.init());

@@ -24,13 +24,21 @@ export const FuelView = {
                     </div>
 
                     <div class="col-span-6 md:col-span-4 bg-slate-900 p-4 rounded-xl border border-slate-700 flex flex-col justify-center relative overflow-hidden">
-                        <div class="relative z-10">
-                            <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Total Carbs</div>
-                            <div class="flex items-baseline gap-2">
-                                <span id="fuel-consumed-display" class="text-4xl font-bold text-emerald-400">0</span>
-                                <span class="text-sm text-slate-400">g</span>
+                        <div class="relative z-10 space-y-2">
+                            <div>
+                                <div class="text-[10px] text-slate-500 uppercase tracking-widest">Carbs</div>
+                                <div class="flex items-baseline gap-1">
+                                    <span id="fuel-consumed-display" class="text-3xl font-bold text-emerald-400 leading-none">0</span>
+                                    <span class="text-xs text-slate-400">g</span>
+                                </div>
                             </div>
-                            <div id="fuel-target-display" class="text-xs text-slate-500 mt-1">Target: 0g</div>
+                            <div class="border-t border-slate-800 pt-1">
+                                <div class="text-[10px] text-slate-500 uppercase tracking-widest">Fluid</div>
+                                <div class="flex items-baseline gap-1">
+                                    <span id="fluid-consumed-display" class="text-2xl font-bold text-cyan-400 leading-none">0</span>
+                                    <span class="text-xs text-slate-400">ml</span>
+                                </div>
+                            </div>
                         </div>
                         <div id="fuel-gauge-fill" class="absolute bottom-0 left-0 w-full h-1 bg-emerald-500/20 transition-all duration-1000"></div>
                     </div>
@@ -42,9 +50,17 @@ export const FuelView = {
                         <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-blue-400 text-xs uppercase font-bold tracking-widest mb-1">Hydration</div>
                             <div id="timer-drink" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">15:00</div>
-                            <button id="btn-log-sip" class="w-full bg-slate-700 active:bg-blue-600 md:hover:bg-blue-600 text-blue-200 py-4 rounded-lg font-bold text-sm uppercase transition-colors border border-slate-600">
-                                <i class="fa-solid fa-glass-water mr-2"></i> Log Sip
-                            </button>
+                            
+                            <div class="flex gap-2 w-full">
+                                <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 md:hover:bg-blue-500 text-white py-4 rounded-lg font-bold text-sm uppercase transition-colors border-b-4 border-blue-800 active:border-b-0 active:translate-y-1">
+                                    <div class="text-xs opacity-70">Carb Mix</div>
+                                    <i class="fa-solid fa-bolt"></i> Sip
+                                </button>
+                                <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 md:hover:bg-cyan-600 text-cyan-200 active:text-white py-4 rounded-lg font-bold text-sm uppercase transition-colors border-b-4 border-slate-900 active:border-b-0 active:translate-y-1">
+                                    <div class="text-xs opacity-70">Water</div>
+                                    <i class="fa-solid fa-glass-water"></i> Sip
+                                </button>
+                            </div>
                         </div>
 
                         <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
@@ -81,8 +97,8 @@ export const FuelView = {
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div><label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Drink (min)</label><input type="number" id="input-drink-int" value="${state.drinkInterval}" class="w-full bg-slate-900 border-slate-600 rounded p-2 text-white"></div>
                         <div><label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Eat (min)</label><input type="number" id="input-eat-int" value="${state.eatInterval}" class="w-full bg-slate-900 border-slate-600 rounded p-2 text-white"></div>
-                        <div><label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Bottle (g)</label><input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-900 border-slate-600 rounded p-2 text-white"></div>
-                        <div><label class="block text-[10px] text-emerald-400 uppercase font-bold mb-1">Target (g/hr)</label><input type="number" id="input-target-hourly" value="${state.targetHourlyCarbs}" class="w-full bg-slate-900 border-slate-600 rounded p-2 text-white"></div>
+                        <div><label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Carbs/Bottle (g)</label><input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-900 border-slate-600 rounded p-2 text-white"></div>
+                        <div><label class="block text-[10px] text-cyan-400 uppercase font-bold mb-1">Vol/Bottle (ml)</label><input type="number" id="input-bottle-vol" value="${state.bottleVolume}" class="w-full bg-slate-900 border-slate-600 rounded p-2 text-white"></div>
                     </div>
                     
                     <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
@@ -119,7 +135,6 @@ export const FuelView = {
                     <span class="text-[9px] opacity-60">1/2</span>
                     <span>${Math.round(item.carbs / 2)}</span>
                 </button>
-
                 <button class="btn-quick-fuel flex-1 bg-slate-700 border border-slate-600 active:bg-orange-600 active:text-white md:hover:bg-slate-600 text-slate-200 rounded-lg font-bold text-sm uppercase flex flex-col items-center justify-center transition-all"
                     data-carbs="${item.carbs}" data-name="${item.label}">
                     <div class="flex items-center gap-2">
@@ -135,13 +150,20 @@ export const FuelView = {
     renderHistoryLog(log) {
         if (!log || log.length === 0) return '<div class="italic opacity-50 text-xs text-center py-2">Session started. Ready to log.</div>';
         
-        // Added: 'btn-delete-log' class and data-index for deletion
         return log.slice().reverse().map((entry, index) => {
-            // Because we reversed the array for display, the visual index 0 is actually the last item in the array.
-            // We need the REAL index from the original array to delete correctly.
-            // log.length - 1 - index gives the original index.
             const realIndex = log.length - 1 - index;
+            // Determine icon and color based on type
+            let color = 'text-emerald-400';
+            let unit = 'g';
+            if (entry.type === 'drink') { color = 'text-blue-400'; unit = 'ml'; }
+            if (entry.type === 'water') { color = 'text-cyan-400'; unit = 'ml'; }
             
+            // Format value (show carbs for food, volume for drink)
+            let valDisplay = '';
+            if (entry.carbs > 0) valDisplay = `+${entry.carbs}g`;
+            if (entry.fluid > 0) valDisplay += ` / ${entry.fluid}ml`;
+            if (valDisplay === '') valDisplay = '-';
+
             return `
             <div class="btn-delete-log flex justify-between items-center py-2 border-b border-slate-800/50 last:border-0 cursor-pointer active:bg-red-900/20 transition-colors" data-index="${realIndex}">
                 <div class="flex items-center gap-3 overflow-hidden">
@@ -149,7 +171,7 @@ export const FuelView = {
                     <span class="font-mono text-slate-500 text-xs">${entry.time}</span>
                     <span class="text-slate-300 truncate">${entry.item}</span>
                 </div>
-                <span class="font-bold ${entry.type === 'drink' ? 'text-blue-400' : 'text-emerald-400'} whitespace-nowrap pl-2">${entry.carbs > 0 ? '+' + entry.carbs + 'g' : '-'}</span>
+                <span class="font-bold ${color} whitespace-nowrap pl-2 text-xs">${valDisplay}</span>
             </div>
             `;
         }).join('');

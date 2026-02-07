@@ -6,10 +6,8 @@ export const FuelTimer = {
     state: FuelState,
 
     async init() {
-        // 1. Load Data
+        // Load Data
         let library = await DataManager.fetchJSON('fuelLibrary');
-        
-        // 2. Safety Fallback
         if (!library || library.length === 0) {
             library = [
                 { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
@@ -17,7 +15,6 @@ export const FuelTimer = {
                 { id: 'bar', label: 'Bar', carbs: 40, icon: 'fa-cookie-bite', active: true }
             ];
         }
-        
         this.state.fuelMenu = library.map(item => ({ ...item, active: item.active !== false }));
         return FuelView.getHtml(this.state);
     },
@@ -31,17 +28,21 @@ export const FuelTimer = {
         bind('btn-log-custom', () => {
             const input = document.getElementById('input-custom-carbs');
             const val = parseInt(input.value) || 0;
-            if(val > 0) { this.logFood(val); input.value = ''; }
+            if(val > 0) { this.logFood(val, "Custom Entry"); input.value = ''; }
             this.toggleCustomInput(false);
         });
         bind('btn-show-custom-fuel', () => this.toggleCustomInput(true));
         bind('btn-add-item', () => this.addNewItem());
 
-        // Delegation for Lists
+        // LISTENER: Quick Fuel Buttons (Delegation)
         const menu = document.getElementById('fuel-menu-container');
         if(menu) menu.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-quick-fuel');
-            if(btn) this.logFood(parseInt(btn.dataset.carbs));
+            if(btn) {
+                const carbs = parseInt(btn.dataset.carbs);
+                const name = btn.dataset.name;
+                this.logFood(carbs, name);
+            }
         });
 
         const editor = document.getElementById('fuel-library-editor');
@@ -82,6 +83,7 @@ export const FuelTimer = {
         this.pauseTimer();
         this.state.resetSession();
         this.updateDisplays();
+        this.refreshLogUI(); // Clear Log
         this.switchView('config');
         this.updateBtnState('Start Engine', 'bg-emerald-600');
     },
@@ -98,14 +100,35 @@ export const FuelTimer = {
         const amount = this.state.carbsPerBottle / sips;
         this.state.totalCarbsConsumed += amount;
         this.state.bottlesConsumed += (1 / sips);
+        
+        // Log to history
+        this.addToLog('drink', 'Bottle Sip', Math.round(amount));
+        
         this.state.nextDrink = this.state.drinkInterval * 60;
         this.updateDisplays();
     },
 
-    logFood(carbs) {
+    logFood(carbs, name) {
         this.state.totalCarbsConsumed += carbs;
+        
+        // Log to history
+        this.addToLog('eat', name || 'Food', carbs);
+
         this.state.nextEat = this.state.eatInterval * 60;
         this.updateDisplays();
+    },
+
+    addToLog(type, item, carbs) {
+        const timeStr = FuelView.formatTime(this.state.totalTime);
+        this.state.consumptionLog.push({ type, item, carbs, time: timeStr });
+        this.refreshLogUI();
+    },
+
+    refreshLogUI() {
+        const logContainer = document.getElementById('fuel-history-log');
+        if (logContainer) {
+            logContainer.innerHTML = FuelView.renderHistoryLog(this.state.consumptionLog);
+        }
     },
 
     addNewItem() {
@@ -119,8 +142,6 @@ export const FuelTimer = {
             this.refreshUI();
         }
     },
-
-    // --- Helpers ---
 
     readConfigInputs() {
         const getVal = (id) => parseInt(document.getElementById(id).value) || 0;

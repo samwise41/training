@@ -10,7 +10,8 @@ export const FuelState = {
     carbsPerBottle: 90, 
     bottleVolume: 750, 
     targetHourlyCarbs: 90,
-    plannedDuration: 180, // New: Planned ride time in minutes
+    targetHourlyFluid: 500, // NEW: ml/hr target
+    plannedDuration: 180, 
     
     // Data
     fuelMenu: [], 
@@ -20,8 +21,8 @@ export const FuelState = {
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
     totalFluidConsumed: 0,
-    bottlesConsumed: 0,      // Mix Bottles
-    waterBottlesConsumed: 0, // New: Water Bottles
+    bottlesConsumed: 0,      
+    waterBottlesConsumed: 0, 
     
     // History
     consumptionLog: [], 
@@ -40,13 +41,14 @@ export const FuelState = {
             carbsPerBottle: this.carbsPerBottle,
             bottleVolume: this.bottleVolume,
             targetHourlyCarbs: this.targetHourlyCarbs,
-            plannedDuration: this.plannedDuration, // Save Plan
+            targetHourlyFluid: this.targetHourlyFluid, // Save fluid target
+            plannedDuration: this.plannedDuration,
             nextDrink: this.nextDrink,
             nextEat: this.nextEat,
             totalCarbsConsumed: this.totalCarbsConsumed,
             totalFluidConsumed: this.totalFluidConsumed,
             bottlesConsumed: this.bottlesConsumed,
-            waterBottlesConsumed: this.waterBottlesConsumed, // Save Water Count
+            waterBottlesConsumed: this.waterBottlesConsumed,
             consumptionLog: this.consumptionLog,
             lastTickTimestamp: this.lastTickTimestamp,
             timestamp: Date.now()
@@ -67,6 +69,7 @@ export const FuelState = {
             this.carbsPerBottle = data.carbsPerBottle || 90;
             this.bottleVolume = data.bottleVolume || 750;
             this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
+            this.targetHourlyFluid = data.targetHourlyFluid || 500; // Load fluid target
             this.plannedDuration = data.plannedDuration || 180;
             
             this.nextDrink = data.nextDrink;

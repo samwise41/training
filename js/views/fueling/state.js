@@ -8,6 +8,7 @@ export const FuelState = {
     drinkInterval: 15,
     eatInterval: 45,
     carbsPerBottle: 90, 
+    bottleVolume: 750, // New: mL per bottle
     targetHourlyCarbs: 90,
     
     // Data
@@ -17,13 +18,14 @@ export const FuelState = {
     nextDrink: 15 * 60,
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
+    totalFluidConsumed: 0, // New: mL tracked
     bottlesConsumed: 0,
     
-    // NEW: Real-time tracking
-    lastTickTimestamp: 0, 
-
     // History
     consumptionLog: [], 
+    
+    // Real-time tracking
+    lastTickTimestamp: 0, 
     
     timerId: null,
 
@@ -34,13 +36,15 @@ export const FuelState = {
             drinkInterval: this.drinkInterval,
             eatInterval: this.eatInterval,
             carbsPerBottle: this.carbsPerBottle,
+            bottleVolume: this.bottleVolume, // Save config
             targetHourlyCarbs: this.targetHourlyCarbs,
             nextDrink: this.nextDrink,
             nextEat: this.nextEat,
             totalCarbsConsumed: this.totalCarbsConsumed,
+            totalFluidConsumed: this.totalFluidConsumed, // Save fluid
             bottlesConsumed: this.bottlesConsumed,
             consumptionLog: this.consumptionLog,
-            lastTickTimestamp: this.lastTickTimestamp, // Save this!
+            lastTickTimestamp: this.lastTickTimestamp,
             timestamp: Date.now()
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
@@ -57,10 +61,12 @@ export const FuelState = {
             this.drinkInterval = data.drinkInterval || 15;
             this.eatInterval = data.eatInterval || 45;
             this.carbsPerBottle = data.carbsPerBottle || 90;
+            this.bottleVolume = data.bottleVolume || 750; // Load config
             this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
             this.nextDrink = data.nextDrink;
             this.nextEat = data.nextEat;
             this.totalCarbsConsumed = data.totalCarbsConsumed || 0;
+            this.totalFluidConsumed = data.totalFluidConsumed || 0; // Load fluid
             this.bottlesConsumed = data.bottlesConsumed || 0;
             this.consumptionLog = data.consumptionLog || [];
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
@@ -82,6 +88,7 @@ export const FuelState = {
         this.isRunning = false;
         this.totalTime = 0;
         this.totalCarbsConsumed = 0;
+        this.totalFluidConsumed = 0; // Reset fluid
         this.bottlesConsumed = 0;
         this.consumptionLog = []; 
         this.nextDrink = this.drinkInterval * 60;

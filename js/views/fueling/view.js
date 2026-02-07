@@ -14,7 +14,7 @@ export const FuelView = {
 
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-col items-center">
-                        <div class="text-[10px] text-blue-400 uppercase font-bold mb-2">Mix (Pacer)</div>
+                        <div class="text-[10px] text-blue-400 uppercase font-bold mb-2">Mix (Logged)</div>
                         <div class="relative w-12 h-20 border-2 border-slate-600 rounded-b-xl rounded-t-md bg-slate-800/50 overflow-hidden">
                             <div id="mix-bottle-liquid" class="absolute bottom-0 left-0 w-full bg-blue-600 transition-all duration-1000" style="height: 100%;"></div>
                             <div class="absolute top-1/4 w-full h-[1px] bg-white/10"></div>
@@ -22,7 +22,7 @@ export const FuelView = {
                             <div class="absolute top-3/4 w-full h-[1px] bg-white/10"></div>
                         </div>
                         <div class="text-[10px] text-slate-500 mt-2">Bottle #<span id="mix-bottle-count" class="text-white font-bold">1</span></div>
-                        <div class="text-[9px] text-slate-600 italic">Should be here</div>
+                        <div class="text-[9px] text-slate-600 italic">Verify Level</div>
                     </div>
 
                     <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-col items-center">

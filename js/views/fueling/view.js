@@ -1,4 +1,12 @@
+import { FuelComponents } from './components.js';
+
 export const FuelView = {
+    // Proxy methods to keep Timer.js happy
+    formatTime: FuelComponents.formatTime,
+    renderHistoryLog: FuelComponents.renderHistoryLog,
+    renderFuelButtons: FuelComponents.renderFuelButtons,
+    renderFuelEditor: FuelComponents.renderFuelEditor,
+
     getHtml(state) {
         return `
             <div class="p-4 max-w-5xl mx-auto pb-48 relative">
@@ -17,7 +25,6 @@ export const FuelView = {
                 </div>
 
                 <div class="grid grid-cols-3 gap-2 mb-4">
-                    
                     <div class="bg-slate-900 p-2 rounded-xl border border-slate-700 flex flex-col items-center">
                         <div class="text-[9px] text-blue-400 uppercase font-bold mb-1">Mix</div>
                         <div class="relative w-8 h-14 border border-slate-600 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">
@@ -25,7 +32,6 @@ export const FuelView = {
                         </div>
                         <div class="text-[9px] text-slate-500 mt-1">#<span id="mix-bottle-count" class="text-white font-bold">1</span></div>
                     </div>
-
                     <div class="bg-slate-900 p-2 rounded-xl border border-slate-700 flex flex-col items-center">
                         <div class="text-[9px] text-cyan-400 uppercase font-bold mb-1">Water</div>
                         <div class="relative w-8 h-14 border border-slate-600 rounded-b-lg rounded-t-sm bg-slate-800/50 overflow-hidden">
@@ -33,7 +39,6 @@ export const FuelView = {
                         </div>
                         <div class="text-[9px] text-slate-500 mt-1">#<span id="water-bottle-count" class="text-white font-bold">1</span></div>
                     </div>
-
                     <div class="bg-slate-900 p-2 rounded-xl border border-slate-700 flex flex-col items-center">
                         <div class="text-[9px] text-orange-400 uppercase font-bold mb-1">Flask</div>
                         <div class="relative w-8 h-14 border border-slate-600 rounded-lg bg-slate-800/50 overflow-hidden">
@@ -41,7 +46,6 @@ export const FuelView = {
                         </div>
                         <div class="text-[9px] text-slate-500 mt-1">#<span id="flask-count" class="text-white font-bold">1</span></div>
                     </div>
-
                 </div>
 
                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 mb-6 flex flex-col gap-4">
@@ -69,7 +73,6 @@ export const FuelView = {
 
                 <div id="fuel-active-view" class="hidden">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        
                         <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-blue-400 text-xs uppercase font-bold tracking-widest mb-1">Hydration</div>
                             <div id="timer-drink" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">15:00</div>
@@ -84,7 +87,6 @@ export const FuelView = {
                                 </button>
                             </div>
                         </div>
-
                         <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-orange-400 text-xs uppercase font-bold tracking-widest mb-1">Fueling</div>
                             <div id="timer-eat" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">45:00</div>
@@ -95,7 +97,7 @@ export const FuelView = {
 
                             <div class="w-full max-h-[180px] overflow-y-auto custom-scrollbar pr-1 mb-2 border-t border-slate-700 pt-2">
                                 <div id="fuel-menu-container" class="space-y-2">
-                                    ${this.renderFuelButtons(state.fuelMenu)}
+                                    ${FuelComponents.renderFuelButtons(state.fuelMenu)}
                                 </div>
                             </div>
                             
@@ -106,7 +108,6 @@ export const FuelView = {
                             </div>
                         </div>
                     </div>
-
                     <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 mb-6">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-2">
                             <span class="text-[10px] text-slate-500 uppercase font-bold">Log</span>
@@ -119,12 +120,10 @@ export const FuelView = {
                 <div id="fuel-config-view" class="bg-slate-800 rounded-xl p-6 border border-slate-700 mb-6">
                     <h3 class="text-lg font-bold text-white mb-4 border-b border-slate-700 pb-2">Mission Control</h3>
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50 col-span-2">
                             <label class="block text-[10px] text-orange-400 uppercase font-bold mb-1">Flask Capacity (g Carbs)</label>
                             <input type="number" id="input-flask-carbs" value="${state.carbsPerFlask}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
-
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-emerald-400 uppercase font-bold mb-1">Target Carbs/Hr</label><input type="number" id="input-target-hourly" value="${state.targetHourlyCarbs}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white"></div>
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-cyan-400 uppercase font-bold mb-1">Target Fluid/Hr</label><input type="number" id="input-target-fluid" value="${state.targetHourlyFluid}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white"></div>
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-purple-400 uppercase font-bold mb-1">Ride Time (min)</label><input type="number" id="input-planned-duration" value="${state.plannedDuration}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white"></div>
@@ -139,7 +138,7 @@ export const FuelView = {
                             <span class="text-[10px] text-slate-500 uppercase font-bold">Active Menu Items</span>
                             <button id="btn-toggle-all-fuel" class="text-[10px] text-blue-400 hover:text-blue-300 underline font-bold px-2 py-1">Select / Unselect All</button>
                         </div>
-                        <div id="fuel-library-editor" class="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar mb-3">${this.renderFuelEditor(state.fuelMenu)}</div>
+                        <div id="fuel-library-editor" class="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar mb-3">${FuelComponents.renderFuelEditor(state.fuelMenu)}</div>
                         <div class="pt-3 border-t border-slate-700/50 flex gap-2">
                             <input type="text" id="new-item-name" placeholder="Name (e.g. Pizza)" class="flex-1 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-white">
                             <input type="number" id="new-item-carbs" placeholder="g" class="w-16 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-white text-center">
@@ -161,12 +160,11 @@ export const FuelView = {
                         </div>
                         <div class="p-4 space-y-6 text-sm text-slate-300">
                             <div>
-                                <h4 class="text-emerald-400 font-bold uppercase text-xs mb-2">Inventory (Top Row)</h4>
+                                <h4 class="text-emerald-400 font-bold uppercase text-xs mb-2">Inventory</h4>
                                 <ul class="list-disc pl-4 space-y-1 text-xs text-slate-400">
                                     <li><span class="text-blue-400 font-bold">Mix:</span> Carb Drink bottles.</li>
                                     <li><span class="text-cyan-400 font-bold">Water:</span> Plain Water bottles.</li>
-                                    <li><span class="text-orange-400 font-bold">Flask:</span> Gel/Syrup Flasks.</li>
-                                    <li>These visuals empty as you log sips, matching your physical gear.</li>
+                                    <li><span class="text-orange-400 font-bold">Flask:</span> Homemade Gel Flasks.</li>
                                 </ul>
                             </div>
                             <div>
@@ -174,7 +172,7 @@ export const FuelView = {
                                 <ul class="list-disc pl-4 space-y-1 text-xs text-slate-400">
                                     <li><span class="text-blue-400 font-bold">MIX SIP:</span> +Fluid, +Carbs.</li>
                                     <li><span class="text-cyan-400 font-bold">WATER SIP:</span> +Fluid only.</li>
-                                    <li><span class="text-orange-400 font-bold">FLASK:</span> +Carbs only (1/4 flask).</li>
+                                    <li><span class="text-orange-400 font-bold">FLASK:</span> +Carbs (1/4 flask).</li>
                                 </ul>
                             </div>
                         </div>
@@ -183,51 +181,7 @@ export const FuelView = {
                         </div>
                     </div>
                 </div>
-
             </div>
         `;
-    },
-
-    renderFuelButtons(menu) {
-        const activeItems = menu.filter(i => i.active);
-        if (activeItems.length === 0) return '<div class="text-xs text-slate-500 italic text-center p-2">No solid food active.</div>';
-        
-        return activeItems.map(item => `
-            <div class="flex gap-2 w-full h-12">
-                <button class="btn-quick-fuel w-[30%] bg-slate-800 border border-slate-600 active:bg-slate-600 text-slate-400 rounded-lg font-bold text-xs uppercase flex flex-col items-center justify-center transition-all"
-                    data-carbs="${Math.round(item.carbs / 2)}" data-name="1/2 ${item.label}">
-                    <span class="text-[9px] opacity-60">1/2</span>
-                    <span>${Math.round(item.carbs / 2)}</span>
-                </button>
-                <button class="btn-quick-fuel flex-1 bg-slate-700 border border-slate-600 active:bg-orange-600 active:text-white text-slate-200 rounded-lg font-bold text-xs uppercase flex items-center justify-between px-4 transition-all"
-                    data-carbs="${item.carbs}" data-name="${item.label}">
-                    <div class="flex items-center gap-2"><i class="fa-solid ${item.icon} opacity-70"></i> <span>${item.label}</span></div>
-                    <span class="text-xs opacity-60 font-normal">${item.carbs}g</span>
-                </button>
-            </div>
-        `).join('');
-    },
-
-    renderHistoryLog(log) {
-        if (!log || log.length === 0) return '<div class="italic opacity-50 text-xs text-center py-2">Ready to log.</div>';
-        
-        return log.slice().reverse().map((entry, index) => {
-            const realIndex = log.length - 1 - index;
-            let color = 'text-emerald-400';
-            if (entry.type === 'drink') color = 'text-blue-400';
-            if (entry.type === 'water') color = 'text-cyan-400';
-            if (entry.type === 'flask') color = 'text-orange-400';
-            
-            let valDisplay = '';
-            if (entry.carbs > 0) valDisplay = `+${entry.carbs}g`;
-            if (entry.fluid > 0) valDisplay += ` / ${entry.fluid}ml`;
-            if (valDisplay === '') valDisplay = '-';
-
-            return `
-            <div class="btn-delete-log flex justify-between items-center py-2 border-b border-slate-800/50 last:border-0 cursor-pointer active:bg-red-900/20 transition-colors" data-index="${realIndex}">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <span class="text-red-500/50 hover:text-red-500"><i class="fa-solid fa-trash-can text-[10px]"></i></span>
-                    <span class="font-mono text-slate-500 text-xs">${entry.time}</span>
-                    <span class="text-slate-300 truncate">${entry.item}</span>
-                </div>
-                <span class="font-bold ${color} whitespace-nowrap pl-2 text-xs">
+    }
+};

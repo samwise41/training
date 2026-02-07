@@ -173,10 +173,7 @@ export const FuelTimer = {
             this.state.bottlesConsumed += (1 / sipsPerBottle);
             this.state.nextDrink = this.state.drinkInterval * 60;
         } else {
-            // Water Sip: Just track volume and bottle count
             this.state.waterBottlesConsumed += (1 / sipsPerBottle);
-            // Optional: Resets drink timer for water too? 
-            // Usually yes, hydration is hydration.
             this.state.nextDrink = this.state.drinkInterval * 60;
         }
 
@@ -211,11 +208,9 @@ export const FuelTimer = {
         if(this.state.totalFluidConsumed < 0) this.state.totalFluidConsumed = 0;
 
         if(entry.type === 'drink') {
-             // Was Mix
              this.state.bottlesConsumed -= 0.25;
              if(this.state.bottlesConsumed < 0) this.state.bottlesConsumed = 0;
         } else if (entry.type === 'water') {
-             // Was Water
              this.state.waterBottlesConsumed -= 0.25;
              if(this.state.waterBottlesConsumed < 0) this.state.waterBottlesConsumed = 0;
         }
@@ -246,6 +241,8 @@ export const FuelTimer = {
         }
     },
 
+    // --- DISPLAY UPDATES ---
+
     updateDisplays() {
         document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
         document.getElementById('fuel-consumed-display').innerText = Math.round(this.state.totalCarbsConsumed);
@@ -273,24 +270,27 @@ export const FuelTimer = {
 
         // 2. Water Bottle (Tracker based on Sips)
         const waterSips = this.state.waterBottlesConsumed * 4;
-        const waterPct = (1 - ((waterSips % 4) / 4)) * 100;
+        // Remaining in current bottle = 100% minus (sips % 4) * 25%
+        // e.g. 1 sip (0.25) -> 3 sips left -> 75% full
+        // Calculation: 1 - (0.25 % 1) = 0.75
+        const waterPct = (1 - (this.state.waterBottlesConsumed % 1)) * 100;
+        
         const waterEl = document.getElementById('water-bottle-liquid');
         if(waterEl) waterEl.style.height = `${waterPct}%`;
         document.getElementById('water-bottle-count').innerText = this.state.waterBottlesConsumed.toFixed(1);
     },
 
     updateTargetWidget() {
-        // Calculate Mission Progress
         const plannedMins = this.state.plannedDuration || 180;
         const totalCarbGoal = (plannedMins / 60) * this.state.targetHourlyCarbs;
         
         document.getElementById('mission-target-text').innerText = `${Math.round(this.state.totalCarbsConsumed)} / ${Math.round(totalCarbGoal)}g`;
         
-        // Update Bar
+        // Progress Bar (Percent of ride goal)
         const pct = Math.min((this.state.totalCarbsConsumed / totalCarbGoal) * 100, 100);
         document.getElementById('mission-progress-bar').style.width = `${pct}%`;
 
-        // Update Status Message
+        // Status Message (Are you ahead or behind schedule?)
         const currentTarget = (this.state.totalTime / 3600) * this.state.targetHourlyCarbs;
         const diff = this.state.totalCarbsConsumed - currentTarget;
         const msgEl = document.getElementById('mission-status-msg');

@@ -1,22 +1,18 @@
 export const FuelState = {
-    // Session State
     isRunning: false,
     startTime: null,
     totalTime: 0,
     
-    // Config Defaults
     drinkInterval: 15,
     eatInterval: 45,
     carbsPerBottle: 90, 
     bottleVolume: 750, 
     targetHourlyCarbs: 90,
-    targetHourlyFluid: 500, // NEW: ml/hr target
-    plannedDuration: 180, 
+    targetHourlyFluid: 500,
+    plannedDuration: 180, // Minutes
     
-    // Data
     fuelMenu: [], 
 
-    // Live Counters
     nextDrink: 15 * 60,
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
@@ -24,12 +20,8 @@ export const FuelState = {
     bottlesConsumed: 0,      
     waterBottlesConsumed: 0, 
     
-    // History
     consumptionLog: [], 
-    
-    // Real-time tracking
     lastTickTimestamp: 0, 
-    
     timerId: null,
 
     save() {
@@ -41,7 +33,7 @@ export const FuelState = {
             carbsPerBottle: this.carbsPerBottle,
             bottleVolume: this.bottleVolume,
             targetHourlyCarbs: this.targetHourlyCarbs,
-            targetHourlyFluid: this.targetHourlyFluid, // Save fluid target
+            targetHourlyFluid: this.targetHourlyFluid,
             plannedDuration: this.plannedDuration,
             nextDrink: this.nextDrink,
             nextEat: this.nextEat,
@@ -59,40 +51,30 @@ export const FuelState = {
     load() {
         const saved = localStorage.getItem('fuel_timer_state');
         if (!saved) return false;
-
         try {
             const data = JSON.parse(saved);
-            
             this.totalTime = data.totalTime || 0;
             this.drinkInterval = data.drinkInterval || 15;
             this.eatInterval = data.eatInterval || 45;
             this.carbsPerBottle = data.carbsPerBottle || 90;
             this.bottleVolume = data.bottleVolume || 750;
             this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
-            this.targetHourlyFluid = data.targetHourlyFluid || 500; // Load fluid target
+            this.targetHourlyFluid = data.targetHourlyFluid || 500;
             this.plannedDuration = data.plannedDuration || 180;
-            
             this.nextDrink = data.nextDrink;
             this.nextEat = data.nextEat;
             this.totalCarbsConsumed = data.totalCarbsConsumed || 0;
             this.totalFluidConsumed = data.totalFluidConsumed || 0;
             this.bottlesConsumed = data.bottlesConsumed || 0;
             this.waterBottlesConsumed = data.waterBottlesConsumed || 0;
-            
             this.consumptionLog = data.consumptionLog || [];
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
-            
             this.isRunning = false; 
             return true; 
-        } catch (e) {
-            console.error("Failed to load saved state", e);
-            return false;
-        }
+        } catch (e) { return false; }
     },
 
-    clearSave() {
-        localStorage.removeItem('fuel_timer_state');
-    },
+    clearSave() { localStorage.removeItem('fuel_timer_state'); },
 
     resetSession() {
         this.clearSave();

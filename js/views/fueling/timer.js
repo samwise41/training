@@ -128,6 +128,9 @@ export const FuelTimer = {
         this.state.timerId = setInterval(() => this.tick(), 1000);
         this.updateBtnState('Pause', 'bg-yellow-600');
         this.state.save();
+        
+        // Immediate Update
+        this.updateDisplays();
     },
 
     pauseTimer() {
@@ -243,35 +246,70 @@ export const FuelTimer = {
 
     updateDisplays() {
         document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
-        document.getElementById('fuel-consumed-display').innerText = Math.round(this.state.totalCarbsConsumed);
-        document.getElementById('fluid-consumed-display').innerText = Math.round(this.state.totalFluidConsumed);
-        
-        this.updateProgressBars(); // Ensure this calls the right function now!
+        this.updateBottleVisuals();
+        this.updateProgressBars();
         this.updateCard('drink', this.state.nextDrink, this.state.drinkInterval);
         this.updateCard('eat', this.state.nextEat, this.state.eatInterval);
     },
 
-    updateProgressBars() {
-        const durationHours = (this.state.plannedDuration || 180) / 60;
+    updateBottleVisuals() {
+        // 1. Mix Bottle (Pacer based on TIME)
+        const hours = this.state.totalTime / 3600;
+        const totalMixTarget = hours * (this.state.targetHourlyCarbs / this.state.carbsPerBottle);
+        let mixPct = 100;
+        let currentMix = 1;
+        if (totalMixTarget > 0) {
+            mixPct = (1 - (totalMixTarget % 1)) * 100;
+            currentMix = Math.floor(totalMixTarget) + 1;
+        }
+        const mixEl = document.getElementById('mix-bottle-liquid');
+        if(mixEl) mixEl.style.height = `${mixPct}%`;
+        document.getElementById('mix-bottle-count').innerText = this.state.bottlesConsumed.toFixed(1);
+
+        // 2. Water Bottle (Tracker based on LOGGED SIPS)
+        // Logic: 1 sip = 0.25 (25%)
+        // We only care about the fractional part of the current bottle
+        const waterFraction = this.state.waterBottlesConsumed % 1; 
+        const waterPct = (1 - waterFraction) * 100;
         
-        // 1. Carb Calculations
-        const carbGoal = durationHours * this.state.targetHourlyCarbs;
-        const carbPct = Math.min((this.state.totalCarbsConsumed / carbGoal) * 100, 100);
+        const waterEl = document.getElementById('water-bottle-liquid');
+        if(waterEl) waterEl.style.height = `${waterPct}%`;
+        document.getElementById('water-bottle-count').innerText = Math.floor(this.state.waterBottlesConsumed) + 1;
+    },
+
+    updateProgressBars() {
+        const plannedMins = this.state.plannedDuration || 180;
+        const durationHours = plannedMins / 60;
+        const currentHours = this.state.totalTime / 3600;
+
+        // --- CARBS ---
+        const totalCarbGoal = durationHours * this.state.targetHourlyCarbs;
+        const currentCarbTarget = currentHours * this.state.targetHourlyCarbs;
+        
         document.getElementById('carb-val').innerText = Math.round(this.state.totalCarbsConsumed);
-        document.getElementById('carb-target').innerText = Math.round(carbGoal);
+        document.getElementById('carb-pacer').innerText = Math.round(currentCarbTarget); // "Where I should be now"
+        
+        // Green Bar (Actual)
+        const carbPct = Math.min((this.state.totalCarbsConsumed / totalCarbGoal) * 100, 100);
         document.getElementById('carb-progress-bar').style.width = `${carbPct}%`;
         
-        // 2. Fluid Calculations
-        const fluidGoal = durationHours * (this.state.targetHourlyFluid || 500);
-        const fluidPct = Math.min((this.state.totalFluidConsumed / fluidGoal) * 100, 100);
-        document.getElementById('fluid-val').innerText = Math.round(this.state.totalFluidConsumed);
-        document.getElementById('fluid-target').innerText = Math.round(fluidGoal);
-        document.getElementById('fluid-progress-bar').style.width = `${fluidPct}%`;
+        // Pacer Marker (Target)
+        const timePct = Math.min((this.state.totalTime / (plannedMins * 60)) * 100, 100);
+        document.getElementById('carb-pacer-marker').style.left = `${timePct}%`;
 
-        // 3. Pacer Markers (Where should I be right now?)
-        const progressPct = Math.min((this.state.totalTime / (this.state.plannedDuration * 60)) * 100, 100);
-        document.getElementById('carb-pacer-marker').style.left = `${progressPct}%`;
-        document.getElementById('fluid-pacer-marker').style.left = `${progressPct}%`;
+        // --- FLUID ---
+        const totalFluidGoal = durationHours * (this.state.targetHourlyFluid || 500);
+        const currentFluidTarget = currentHours * (this.state.targetHourlyFluid || 500);
+        
+        document.getElementById('fluid-val').innerText = Math.round(this.state.totalFluidConsumed);
+        document.getElementById('fluid-pacer').innerText = Math.round(currentFluidTarget);
+        
+        // Blue Bar (Actual)
+        const fluidPct = Math.min((this.state.totalFluidConsumed / totalFluidGoal) * 100, 100);
+        document.getElementById('fluid-progress-bar').style.width = `${fluidPct}%`;
+        
+        // Pacer Marker (Target) - same time based marker
+        document.getElementById('fluid-pacer-marker').style.left = `${timePct}%`;
     },
 
     updateCard(type, sec, interval) {
@@ -303,7 +341,7 @@ export const FuelTimer = {
         this.state.carbsPerBottle = getVal('input-bottle-carbs') || 90;
         this.state.bottleVolume = getVal('input-bottle-vol') || 750;
         this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90;
-        this.state.targetHourlyFluid = getVal('input-target-fluid') || 500; // New
+        this.state.targetHourlyFluid = getVal('input-target-fluid') || 500;
         this.state.plannedDuration = getVal('input-planned-duration') || 180;
     },
 

@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-07 15:02:38
+**Generated:** 2026-02-07 19:08:46
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---

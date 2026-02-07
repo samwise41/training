@@ -4,13 +4,11 @@ import { FuelView } from './view.js';
 
 export const FuelTimer = {
     state: FuelState,
-
-    // Audio Object
     beepSound: new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"), 
 
     async init() {
+        // 1. Load Menu Data
         let library = await DataManager.fetchJSON('fuelLibrary');
-        
         if (!library || library.length === 0) {
             library = [
                 { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
@@ -19,13 +17,31 @@ export const FuelTimer = {
             ];
         }
         
-        // Default ALL items to FALSE (Hidden) initially
-        this.state.fuelMenu = library.map(item => ({ 
-            ...item, 
-            active: false 
-        }));
+        // 2. Check for Crashed/Saved Session
+        const hasSavedSession = this.state.load();
         
-        return FuelView.getHtml(this.state);
+        // 3. Initialize Menu
+        // If we didn't recover a session, default all items to hidden
+        // If we DID recover, we keep the menu state as-is (or we could save menu selection too)
+        // For now, let's re-initialize menu from library
+        this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
+
+        // 4. Render
+        const html = FuelView.getHtml(this.state);
+        
+        // 5. Post-Render Auto-Restore
+        // If we restored a session, we need to switch the view to "Active" immediately after rendering
+        if (hasSavedSession && this.state.totalTime > 0) {
+            setTimeout(() => {
+                this.switchView('active');
+                this.updateDisplays();
+                this.refreshLogUI();
+                this.updateBtnState('Resume Session', 'bg-emerald-600');
+                this.enableNavigationGuards(); // Re-enable protection
+            }, 100);
+        }
+
+        return html;
     },
 
     attachEvents() {
@@ -43,37 +59,25 @@ export const FuelTimer = {
         bind('btn-show-custom-fuel', () => this.toggleCustomInput(true));
         bind('btn-add-item', () => this.addNewItem());
         
-        // Toggle All / None
         bind('btn-toggle-all-fuel', () => {
             const allActive = this.state.fuelMenu.every(i => i.active);
             this.state.fuelMenu.forEach(i => i.active = !allActive);
             this.refreshUI();
         });
 
-        // Quick Fuel Buttons
+        // Delegation
         const menu = document.getElementById('fuel-menu-container');
         if(menu) menu.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-quick-fuel');
-            if(btn) {
-                const carbs = parseInt(btn.dataset.carbs);
-                const name = btn.dataset.name;
-                this.logFood(carbs, name);
-            }
+            if(btn) this.logFood(parseInt(btn.dataset.carbs), btn.dataset.name);
         });
 
-        // Delete from Log
         const log = document.getElementById('fuel-history-log');
         if(log) log.addEventListener('click', (e) => {
             const row = e.target.closest('.btn-delete-log');
-            if(row) {
-                const index = parseInt(row.dataset.index);
-                if(confirm("Remove this entry?")) {
-                    this.removeLogEntry(index);
-                }
-            }
+            if(row && confirm("Remove this entry?")) this.removeLogEntry(parseInt(row.dataset.index));
         });
 
-        // Settings Toggles
         const editor = document.getElementById('fuel-library-editor');
         if(editor) editor.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-toggle-active');
@@ -85,35 +89,78 @@ export const FuelTimer = {
         });
     },
 
+    // --- SAFETY & NAVIGATION GUARDS ---
+
+    enableNavigationGuards() {
+        // 1. Prevent "Back" Swipe on Mobile
+        // Pushes a dummy state. If user swipes back, they hit this dummy state, 
+        // popping the event, and we just push it back immediately.
+        history.pushState(null, document.title, location.href);
+        window.addEventListener('popstate', this.handlePopState);
+
+        // 2. Prevent Tab Close / Refresh
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
+    },
+
+    disableNavigationGuards() {
+        window.removeEventListener('popstate', this.handlePopState);
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    },
+
+    handlePopState(event) {
+        // User tried to go back. Push them forward again to stay on page.
+        history.pushState(null, document.title, location.href);
+        // Optional: Show a toast "Session Active - Swipe Disabled"
+    },
+
+    handleBeforeUnload(e) {
+        e.preventDefault();
+        e.returnValue = ''; // Standard browser confirmation trigger
+    },
+
+    // --- CORE LOGIC ---
+
     toggleTimer() {
         if (this.state.isRunning) this.pauseTimer();
         else this.startTimer();
     },
 
     startTimer() {
-        this.unlockAudio(); // Important: Fixes audio on mobile
-        this.readConfigInputs();
+        this.unlockAudio();
+        this.enableNavigationGuards(); // Lock the app
+        
+        // Only read config if we are starting fresh (time is 0)
+        // If resuming a saved session, we trust the loaded state
         if (this.state.totalTime === 0) {
+            this.readConfigInputs();
             this.state.nextDrink = this.state.drinkInterval * 60;
             this.state.nextEat = this.state.eatInterval * 60;
         }
+        
         this.switchView('active');
         this.state.isRunning = true;
         this.state.timerId = setInterval(() => this.tick(), 1000);
         this.updateBtnState('Pause', 'bg-yellow-600');
+        
+        this.state.save(); // Immediate save
     },
 
     pauseTimer() {
         this.state.isRunning = false;
         clearInterval(this.state.timerId);
         this.updateBtnState('Resume', 'bg-emerald-600');
+        this.state.save();
     },
 
     resetTimer() {
+        if(!confirm("End session and clear data?")) return;
+
         this.pauseTimer();
-        this.state.resetSession();
+        this.disableNavigationGuards(); // Unlock the app
+        this.state.resetSession(); // Clears localStorage
+        
         this.updateDisplays();
-        this.refreshLogUI(); // Clear Log
+        this.refreshLogUI();
         this.switchView('config');
         this.updateBtnState('Start Engine', 'bg-emerald-600');
     },
@@ -123,29 +170,27 @@ export const FuelTimer = {
         this.state.nextDrink--;
         this.state.nextEat--;
         this.updateDisplays();
+        this.state.save(); // Save every second
     },
 
-    // Browser Audio Unlock Policy
     unlockAudio() {
-        this.beepSound.play()
-            .then(() => {
-                this.beepSound.pause();
-                this.beepSound.currentTime = 0;
-            })
-            .catch(e => console.log("Audio unlock waiting for gesture", e));
+        this.beepSound.play().then(() => {
+            this.beepSound.pause();
+            this.beepSound.currentTime = 0;
+        }).catch(() => {});
     },
+
+    // --- LOGGING ---
 
     logSip() {
         const sips = 4; 
         const amount = this.state.carbsPerBottle / sips;
         this.state.totalCarbsConsumed += amount;
         this.state.bottlesConsumed += (1 / sips);
-        
-        // Log bottleAmount so we can reverse it if deleted
         this.addToLog('drink', 'Bottle Sip', Math.round(amount), (1/sips));
-        
         this.state.nextDrink = this.state.drinkInterval * 60;
         this.updateDisplays();
+        this.state.save();
     },
 
     logFood(carbs, name) {
@@ -153,6 +198,7 @@ export const FuelTimer = {
         this.addToLog('eat', name || 'Food', carbs, 0);
         this.state.nextEat = this.state.eatInterval * 60;
         this.updateDisplays();
+        this.state.save();
     },
 
     addToLog(type, item, carbs, bottleAmount = 0) {
@@ -165,7 +211,6 @@ export const FuelTimer = {
         const entry = this.state.consumptionLog[index];
         if(!entry) return;
 
-        // Reverse the stats
         this.state.totalCarbsConsumed -= entry.carbs;
         if(this.state.totalCarbsConsumed < 0) this.state.totalCarbsConsumed = 0;
 
@@ -174,19 +219,16 @@ export const FuelTimer = {
             if(this.state.bottlesConsumed < 0) this.state.bottlesConsumed = 0;
         }
 
-        // Remove from array
         this.state.consumptionLog.splice(index, 1);
-        
-        // Refresh UI
         this.updateDisplays();
         this.refreshLogUI();
+        this.state.save();
     },
 
     refreshLogUI() {
         const logContainer = document.getElementById('fuel-history-log');
         if (logContainer) {
             logContainer.innerHTML = FuelView.renderHistoryLog(this.state.consumptionLog);
-            // Auto scroll to bottom
             logContainer.scrollTop = logContainer.scrollHeight;
         }
     },
@@ -202,6 +244,8 @@ export const FuelTimer = {
             this.refreshUI();
         }
     },
+
+    // --- HELPERS ---
 
     readConfigInputs() {
         const getVal = (id) => parseInt(document.getElementById(id).value) || 0;
@@ -229,7 +273,6 @@ export const FuelTimer = {
     updatePacerBottle() {
         const hours = this.state.totalTime / 3600;
         const totalBottles = hours * (this.state.targetHourlyCarbs / this.state.carbsPerBottle);
-        
         let pct = 100;
         let currentBottle = 1;
 
@@ -252,10 +295,7 @@ export const FuelTimer = {
         
         if(sec <= 0) {
             el.innerText = "NOW!";
-            // Play sound every 5 seconds if alerting
-            if (sec % 5 === 0) {
-                this.beepSound.play().catch(() => {}); 
-            }
+            if (Math.abs(sec) % 5 === 0) this.beepSound.play().catch(() => {}); 
 
             const color = type === 'drink' ? 'blue' : 'orange';
             card.classList.toggle(`border-${color}-500`, Math.abs(sec)%2===0);

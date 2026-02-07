@@ -11,7 +11,8 @@
 
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
-        tooltipMod, uiMod, dataMod, formatMod 
+        tooltipMod, uiMod, dataMod, formatMod,
+        fuelMod 
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
@@ -24,7 +25,8 @@
         safeImport('./utils/tooltipManager.js', 'TooltipManager'),
         safeImport('./utils/ui.js', 'UI'),
         safeImport('./utils/data.js', 'DataManager'),
-        safeImport('./utils/formatting.js', 'Formatters')
+        safeImport('./utils/formatting.js', 'Formatters'),
+        safeImport('./views/fueling/timer.js', 'FuelTimer')
     ]);
 
     if (tooltipMod?.TooltipManager?.initGlobalListener) {
@@ -46,7 +48,6 @@
         // Background Data
         gearData: null, 
         trendsData: null, 
-        // REMOVED: garminData (Cleanup)
         
         weather: { current: null, hourly: null, code: 0 }, 
 
@@ -97,7 +98,17 @@
         },
 
         updateHeaderUI(viewName) {
-            const titles = { dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', gear: 'Gear Choice', zones: 'Training Zones', ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics' };
+            const titles = { 
+                dashboard: 'Weekly Schedule', 
+                trends: 'Trends & KPIs', 
+                plan: 'Logbook Analysis', 
+                gear: 'Gear Choice', 
+                zones: 'Training Zones', 
+                ftp: 'Performance Profile', 
+                readiness: 'Race Readiness', 
+                metrics: 'Performance Metrics',
+                fueling: 'Cockpit Mode' 
+            };
             if (viewName) {
                 const titleEl = document.getElementById('header-title-dynamic');
                 if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
@@ -163,7 +174,8 @@
                     ftp: () => ftpMod?.renderFTP(this.profileData),
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
-                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData)
+                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
+                    fueling: () => fuelMod?.FuelTimer?.init()
                 };
 
                 try {
@@ -171,6 +183,10 @@
                         const html = await render[view]();
                         content.innerHTML = html !== undefined ? html : `<div class="p-10 text-red-500">Error: View returned undefined (${view})</div>`;
                         if (view === 'gear') this.updateGearResult();
+                        
+                        if (view === 'fueling' && fuelMod?.FuelTimer?.attachEvents) {
+                            fuelMod.FuelTimer.attachEvents();
+                        }
                     } else {
                         content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }

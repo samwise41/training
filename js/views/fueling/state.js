@@ -1,5 +1,5 @@
-
 export const FuelState = {
+    // Session State
     isRunning: false,
     startTime: null,
     totalTime: 0,
@@ -13,7 +13,7 @@ export const FuelState = {
     // Data
     fuelMenu: [], 
 
-    // Counters
+    // Live Counters
     nextDrink: 15 * 60,
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
@@ -24,7 +24,64 @@ export const FuelState = {
     
     timerId: null,
 
+    // --- PERSISTENCE ---
+
+    save() {
+        const data = {
+            isRunning: this.isRunning,
+            totalTime: this.totalTime,
+            drinkInterval: this.drinkInterval,
+            eatInterval: this.eatInterval,
+            carbsPerBottle: this.carbsPerBottle,
+            targetHourlyCarbs: this.targetHourlyCarbs,
+            nextDrink: this.nextDrink,
+            nextEat: this.nextEat,
+            totalCarbsConsumed: this.totalCarbsConsumed,
+            bottlesConsumed: this.bottlesConsumed,
+            consumptionLog: this.consumptionLog,
+            // Don't save fuelMenu here, let it load from JSON so updates apply
+            timestamp: Date.now()
+        };
+        localStorage.setItem('fuel_timer_state', JSON.stringify(data));
+    },
+
+    load() {
+        const saved = localStorage.getItem('fuel_timer_state');
+        if (!saved) return false;
+
+        try {
+            const data = JSON.parse(saved);
+            
+            // Restore values
+            this.totalTime = data.totalTime || 0;
+            this.drinkInterval = data.drinkInterval || 15;
+            this.eatInterval = data.eatInterval || 45;
+            this.carbsPerBottle = data.carbsPerBottle || 90;
+            this.targetHourlyCarbs = data.targetHourlyCarbs || 90;
+            this.nextDrink = data.nextDrink;
+            this.nextEat = data.nextEat;
+            this.totalCarbsConsumed = data.totalCarbsConsumed || 0;
+            this.bottlesConsumed = data.bottlesConsumed || 0;
+            this.consumptionLog = data.consumptionLog || [];
+            
+            // Note: We always load 'paused' initially for safety, 
+            // unless you want it to auto-run on refresh. 
+            // Keeping it paused lets the user get ready before resuming.
+            this.isRunning = false; 
+            
+            return true; // Loaded successfully
+        } catch (e) {
+            console.error("Failed to load saved state", e);
+            return false;
+        }
+    },
+
+    clearSave() {
+        localStorage.removeItem('fuel_timer_state');
+    },
+
     resetSession() {
+        this.clearSave();
         this.isRunning = false;
         this.totalTime = 0;
         this.totalCarbsConsumed = 0;

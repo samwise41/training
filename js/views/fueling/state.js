@@ -24,7 +24,7 @@ export const FuelState = {
     
     timerId: null,
 
-    // --- PERSISTENCE ---
+    // --- PERSISTENCE (This was missing) ---
 
     save() {
         const data = {
@@ -39,7 +39,6 @@ export const FuelState = {
             totalCarbsConsumed: this.totalCarbsConsumed,
             bottlesConsumed: this.bottlesConsumed,
             consumptionLog: this.consumptionLog,
-            // Don't save fuelMenu here, let it load from JSON so updates apply
             timestamp: Date.now()
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
@@ -64,9 +63,7 @@ export const FuelState = {
             this.bottlesConsumed = data.bottlesConsumed || 0;
             this.consumptionLog = data.consumptionLog || [];
             
-            // Note: We always load 'paused' initially for safety, 
-            // unless you want it to auto-run on refresh. 
-            // Keeping it paused lets the user get ready before resuming.
+            // Always load paused for safety
             this.isRunning = false; 
             
             return true; // Loaded successfully

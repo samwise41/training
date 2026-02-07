@@ -3,41 +3,63 @@ export const FuelView = {
         return `
             <div class="p-4 max-w-5xl mx-auto pb-48">
                 
-                <div class="grid grid-cols-12 gap-4 mb-6">
-                    
-                    <div class="col-span-12 md:col-span-4 bg-slate-900 p-5 rounded-xl border border-slate-700 flex flex-col justify-center relative overflow-hidden">
-                        <div class="flex justify-between items-start">
-                            <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Ride Time</div>
-                            <div id="pulse-indicator" class="h-2 w-2 rounded-full bg-slate-800"></div>
+                <div class="mb-4 bg-slate-900 p-5 rounded-xl border border-slate-700 flex flex-col justify-center relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <div class="text-xs text-slate-500 uppercase tracking-widest mb-1">Ride Time</div>
+                        <div id="pulse-indicator" class="h-2 w-2 rounded-full bg-slate-800"></div>
+                    </div>
+                    <div id="fuel-total-time" class="text-5xl font-mono font-bold text-white tracking-tighter z-10">00:00:00</div>
+                    <div class="text-[10px] text-slate-600 mt-1">Plan: ${Math.floor(state.plannedDuration/60)}h ${state.plannedDuration%60}m</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-col items-center">
+                        <div class="text-[10px] text-blue-400 uppercase font-bold mb-2">Mix (Pacer)</div>
+                        <div class="relative w-12 h-20 border-2 border-slate-600 rounded-b-xl rounded-t-md bg-slate-800/50 overflow-hidden">
+                            <div id="mix-bottle-liquid" class="absolute bottom-0 left-0 w-full bg-blue-600 transition-all duration-1000" style="height: 100%;"></div>
+                            <div class="absolute top-1/4 w-full h-[1px] bg-white/10"></div>
+                            <div class="absolute top-2/4 w-full h-[1px] bg-white/10"></div>
+                            <div class="absolute top-3/4 w-full h-[1px] bg-white/10"></div>
                         </div>
-                        <div id="fuel-total-time" class="text-5xl font-mono font-bold text-white tracking-tighter z-10">00:00:00</div>
-                        <div class="text-[10px] text-slate-600 mt-1">Plan: ${Math.floor(state.plannedDuration/60)}h ${state.plannedDuration%60}m</div>
+                        <div class="text-[10px] text-slate-500 mt-2">Bottle #<span id="mix-bottle-count" class="text-white font-bold">1</span></div>
+                        <div class="text-[9px] text-slate-600 italic">Should be here</div>
                     </div>
 
-                    <div class="col-span-12 md:col-span-8 bg-slate-900 p-5 rounded-xl border border-slate-700 flex flex-col justify-center gap-4">
-                        
-                        <div>
-                            <div class="flex justify-between items-end mb-1">
-                                <div class="text-[10px] text-emerald-400 uppercase font-bold">Carbs (g)</div>
-                                <div class="text-xs text-slate-300 font-mono"><span id="carb-val">0</span> <span class="text-slate-600">/</span> <span id="carb-target">0</span></div>
-                            </div>
-                            <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden relative">
-                                <div id="carb-progress-bar" class="h-full bg-emerald-500 transition-all duration-500" style="width: 0%"></div>
-                                <div id="carb-pacer-marker" class="absolute top-0 bottom-0 w-1 bg-white/30" style="left: 0%"></div>
-                            </div>
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-col items-center">
+                        <div class="text-[10px] text-cyan-400 uppercase font-bold mb-2">Water (Logged)</div>
+                        <div class="relative w-12 h-20 border-2 border-slate-600 rounded-b-xl rounded-t-md bg-slate-800/50 overflow-hidden">
+                            <div id="water-bottle-liquid" class="absolute bottom-0 left-0 w-full bg-cyan-600 transition-all duration-1000" style="height: 100%;"></div>
+                            <div class="absolute top-1/4 w-full h-[1px] bg-white/10"></div>
+                            <div class="absolute top-2/4 w-full h-[1px] bg-white/10"></div>
+                            <div class="absolute top-3/4 w-full h-[1px] bg-white/10"></div>
                         </div>
+                        <div class="text-[10px] text-slate-500 mt-2">Bottle #<span id="water-bottle-count" class="text-white font-bold">1</span></div>
+                        <div class="text-[9px] text-slate-600 italic">Verify Level</div>
+                    </div>
+                </div>
 
-                        <div>
-                            <div class="flex justify-between items-end mb-1">
-                                <div class="text-[10px] text-cyan-400 uppercase font-bold">Fluid (ml)</div>
-                                <div class="text-xs text-slate-300 font-mono"><span id="fluid-val">0</span> <span class="text-slate-600">/</span> <span id="fluid-target">0</span></div>
-                            </div>
-                            <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden relative">
-                                <div id="fluid-progress-bar" class="h-full bg-cyan-500 transition-all duration-500" style="width: 0%"></div>
-                                <div id="fluid-pacer-marker" class="absolute top-0 bottom-0 w-1 bg-white/30" style="left: 0%"></div>
-                            </div>
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 mb-6 flex flex-col gap-4">
+                    
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <div class="text-[10px] text-emerald-400 uppercase font-bold">Carbs (g)</div>
+                            <div class="text-xs text-slate-300 font-mono"><span id="carb-val">0</span> / <span id="carb-pacer">0</span> <span class="text-[9px] text-slate-500">(Target)</span></div>
                         </div>
+                        <div class="w-full h-5 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
+                            <div id="carb-progress-bar" class="h-full bg-emerald-600 transition-all duration-500" style="width: 0%"></div>
+                            <div id="carb-pacer-marker" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] z-10" style="left: 0%"></div>
+                        </div>
+                    </div>
 
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <div class="text-[10px] text-cyan-400 uppercase font-bold">Fluid (ml)</div>
+                            <div class="text-xs text-slate-300 font-mono"><span id="fluid-val">0</span> / <span id="fluid-pacer">0</span> <span class="text-[9px] text-slate-500">(Target)</span></div>
+                        </div>
+                        <div class="w-full h-5 bg-slate-800 rounded-full overflow-hidden relative border border-slate-700">
+                            <div id="fluid-progress-bar" class="h-full bg-cyan-600 transition-all duration-500" style="width: 0%"></div>
+                            <div id="fluid-pacer-marker" class="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)] z-10" style="left: 0%"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -47,7 +69,6 @@ export const FuelView = {
                         <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-blue-400 text-xs uppercase font-bold tracking-widest mb-1">Hydration</div>
                             <div id="timer-drink" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">15:00</div>
-                            
                             <div class="flex gap-2 w-full">
                                 <button id="btn-log-sip-mix" class="flex-1 bg-blue-600 active:bg-blue-500 md:hover:bg-blue-500 text-white py-4 rounded-lg font-bold text-sm uppercase transition-colors border-b-4 border-blue-800 active:border-b-0 active:translate-y-1">
                                     <div class="text-xs opacity-70">Mix</div>
@@ -63,13 +84,11 @@ export const FuelView = {
                         <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-orange-400 text-xs uppercase font-bold tracking-widest mb-1">Fueling</div>
                             <div id="timer-eat" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">45:00</div>
-                            
                             <div class="w-full max-h-[300px] overflow-y-auto custom-scrollbar pr-1 mb-2">
                                 <div id="fuel-menu-container" class="space-y-2">
                                     ${this.renderFuelButtons(state.fuelMenu)}
                                 </div>
                             </div>
-                            
                             <button id="btn-show-custom-fuel" class="text-[10px] text-slate-500 underline w-full text-center mt-2 py-2">Log Custom Amount</button>
                             <div id="custom-fuel-input-area" class="w-full mt-2 pt-2 border-t border-slate-700/50 hidden flex gap-2">
                                 <input type="number" id="input-custom-carbs" placeholder="g" class="w-20 bg-slate-900 border border-slate-600 rounded px-2 py-1 text-white text-center">
@@ -104,7 +123,14 @@ export const FuelView = {
                             <label class="block text-[10px] text-purple-400 uppercase font-bold mb-1">Ride Time (min)</label>
                             <input type="number" id="input-planned-duration" value="${state.plannedDuration}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
-                        
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
+                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Bottle Vol (ml)</label>
+                            <input type="number" id="input-bottle-vol" value="${state.bottleVolume}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
+                        </div>
+                        <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
+                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g)</label>
+                            <input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
+                        </div>
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
                              <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Drink Timer</label>
                              <input type="number" id="input-drink-int" value="${state.drinkInterval}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
@@ -112,14 +138,6 @@ export const FuelView = {
                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
                              <label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Eat Timer</label>
                              <input type="number" id="input-eat-int" value="${state.eatInterval}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
-                        </div>
-                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Bottle Vol (ml)</label>
-                            <input type="number" id="input-bottle-vol" value="${state.bottleVolume}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
-                        </div>
-                         <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50">
-                            <label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g)</label>
-                            <input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white">
                         </div>
                     </div>
                     

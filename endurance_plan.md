@@ -210,18 +210,9 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 **Target:** 60-90g Carbs/Hour for long events.
 
-**Commercial Products**
+**Active Food List**
 
-* Pure Organic Fruit Bars: 15g Carbs per bar.
-* Rice Krispie Treat: 17g Carbs per bar
-
-**Active Testing Recipes**
-
-* Recipe V2 (Current Testing):
-  * 180g Table Sugar (Sucrose)
-  * 250ml Water
-  * 1/2 tsp Salt (~1200mg Sodium)
-  * 1/4 tsp Citric Acid
+* For active recipes see the data/recipes.json or notebook_lm/recipes.md
 
 
 ## 7. Progress Tracker

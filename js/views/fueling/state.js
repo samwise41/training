@@ -1,3 +1,4 @@
+
 export const FuelState = {
     isRunning: false,
     startTime: null,
@@ -10,16 +11,16 @@ export const FuelState = {
     targetHourlyCarbs: 90,
     
     // Data
-    fuelMenu: [],
+    fuelMenu: [], 
 
-    // Live Counters
+    // Counters
     nextDrink: 15 * 60,
     nextEat: 45 * 60,
     totalCarbsConsumed: 0,
     bottlesConsumed: 0,
     
-    // NEW: History Tracking
-    consumptionLog: [], // Stores { time, item, carbs }
+    // History
+    consumptionLog: [], 
     
     timerId: null,
 
@@ -28,7 +29,7 @@ export const FuelState = {
         this.totalTime = 0;
         this.totalCarbsConsumed = 0;
         this.bottlesConsumed = 0;
-        this.consumptionLog = []; // Clear history
+        this.consumptionLog = []; 
         this.nextDrink = this.drinkInterval * 60;
         this.nextEat = this.eatInterval * 60;
     }

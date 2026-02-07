@@ -88,16 +88,12 @@ export const FuelTimer = {
         });
     },
 
-    // --- HELPER LOGIC ---
-    
     toggleHelp(show) {
         const modal = document.getElementById('fuel-help-modal');
         if (show) modal.classList.remove('hidden');
         else modal.classList.add('hidden');
     },
 
-    // --- (Keep all existing core logic below: initAudio, startTimer, pauseTimer, etc.) ---
-    
     initAudio() {
         if (!this.audioCtx) {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -258,7 +254,14 @@ export const FuelTimer = {
     },
 
     updateDisplays() {
-        document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
+        // No total time element anymore, so we don't update text
+        // Pulse animation? We could add a class if running
+        const pulse = document.getElementById('pulse-indicator');
+        if (pulse) {
+            if (this.state.isRunning) pulse.classList.add('animate-pulse', 'bg-emerald-500');
+            else pulse.classList.remove('animate-pulse', 'bg-emerald-500');
+        }
+
         this.updateBottleVisuals();
         this.updateProgressBars();
         this.updateCard('drink', this.state.nextDrink, this.state.drinkInterval);

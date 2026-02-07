@@ -52,6 +52,11 @@ SOURCES = [
         "url": "https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json",
         "filename": "garmin_health.md",
         "title": "Health Trends"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/samwise41/training/main/data/recipes.json",
+        "filename": "recipes.md",
+        "title": "Recipes"
     }
 ]
 

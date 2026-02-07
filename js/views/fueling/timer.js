@@ -18,7 +18,7 @@ export const FuelTimer = {
         }
         
         if (this.state.totalTime === 0) {
-            this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
+            this.state.fuelMenu = library.map(item => ({ ...item, active: true }));
         }
         
         const hasSavedSession = this.state.load();
@@ -47,13 +47,24 @@ export const FuelTimer = {
         bind('btn-log-sip-water', () => this.logSip('water'));
         bind('btn-log-flask', () => this.logFlask());
 
+        // Custom Input Visibility Logic
+        bind('btn-show-custom-fuel', () => {
+            const area = document.getElementById('custom-fuel-input-area');
+            const btn = document.getElementById('btn-show-custom-fuel');
+            if(area.classList.contains('hidden')) {
+                area.classList.remove('hidden');
+                btn.innerText = 'Hide Custom';
+            } else {
+                area.classList.add('hidden');
+                btn.innerText = 'Custom';
+            }
+        });
+
         bind('btn-log-custom', () => {
             const input = document.getElementById('input-custom-carbs');
             const val = parseInt(input.value) || 0;
             if(val > 0) { this.logFood(val, "Custom Entry"); input.value = ''; }
-            this.toggleCustomInput(false);
         });
-        bind('btn-show-custom-fuel', () => this.toggleCustomInput(true));
         bind('btn-add-item', () => this.addNewItem());
         
         bind('btn-toggle-all-fuel', () => {
@@ -62,7 +73,6 @@ export const FuelTimer = {
             this.refreshUI();
         });
 
-        // Help Modal
         bind('btn-fuel-help', () => this.toggleHelp(true));
         bind('btn-close-help', () => this.toggleHelp(false));
         bind('btn-dismiss-help', () => this.toggleHelp(false));
@@ -180,7 +190,6 @@ export const FuelTimer = {
     // --- LOGIC ---
 
     logSip(type) {
-        // USE STATE FOR SIPS PER BOTTLE
         const sipsPerBottle = this.state.sipsPerBottle || 4;
         const bottleVol = this.state.bottleVolume || 750;
         
@@ -205,7 +214,6 @@ export const FuelTimer = {
     },
 
     logFlask() {
-        // USE STATE FOR SQUEEZES PER FLASK
         const squeezes = this.state.squeezesPerFlask || 4;
         const portion = 1 / squeezes;
         const carbs = Math.round((this.state.carbsPerFlask || 150) * portion);
@@ -243,7 +251,6 @@ export const FuelTimer = {
         this.state.totalFluidConsumed -= (entry.fluid || 0);
         if(this.state.totalFluidConsumed < 0) this.state.totalFluidConsumed = 0;
 
-        // REVERSE BOTTLE COUNTS based on configured sips/squeezes
         if(entry.type === 'drink') {
              this.state.bottlesConsumed -= (1 / (this.state.sipsPerBottle || 4));
              if(this.state.bottlesConsumed < 0) this.state.bottlesConsumed = 0;
@@ -282,7 +289,9 @@ export const FuelTimer = {
     },
 
     updateDisplays() {
-        document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
+        const timeEl = document.getElementById('fuel-total-time');
+        if (timeEl) timeEl.innerText = FuelView.formatTime(this.state.totalTime);
+        
         this.updateBottleVisuals();
         this.updateProgressBars();
         this.updateCard('drink', this.state.nextDrink, this.state.drinkInterval);
@@ -290,23 +299,24 @@ export const FuelTimer = {
     },
 
     updateBottleVisuals() {
+        if(!document.getElementById('mix-bottle-liquid')) return;
+
         const mixPct = (1 - (this.state.bottlesConsumed % 1)) * 100;
-        const mixEl = document.getElementById('mix-bottle-liquid');
-        if(mixEl) mixEl.style.height = `${mixPct}%`;
+        document.getElementById('mix-bottle-liquid').style.height = `${mixPct}%`;
         document.getElementById('mix-bottle-count').innerText = Math.floor(this.state.bottlesConsumed) + 1;
 
         const waterPct = (1 - (this.state.waterBottlesConsumed % 1)) * 100;
-        const waterEl = document.getElementById('water-bottle-liquid');
-        if(waterEl) waterEl.style.height = `${waterPct}%`;
+        document.getElementById('water-bottle-liquid').style.height = `${waterPct}%`;
         document.getElementById('water-bottle-count').innerText = Math.floor(this.state.waterBottlesConsumed) + 1;
 
         const flaskPct = (1 - (this.state.flasksConsumed % 1)) * 100;
-        const flaskEl = document.getElementById('flask-liquid');
-        if(flaskEl) flaskEl.style.height = `${flaskPct}%`;
+        document.getElementById('flask-liquid').style.height = `${flaskPct}%`;
         document.getElementById('flask-count').innerText = Math.floor(this.state.flasksConsumed) + 1;
     },
 
     updateProgressBars() {
+        if(!document.getElementById('carb-val')) return;
+
         const plannedMins = this.state.plannedDuration || 180;
         const durationHours = plannedMins / 60;
         const currentHours = this.state.totalTime / 3600;
@@ -338,6 +348,7 @@ export const FuelTimer = {
     updateCard(type, sec, interval) {
         const el = document.getElementById(`timer-${type}`);
         const card = document.getElementById(`card-${type}`);
+        if(!el) return;
         
         if (sec <= 0) {
             const overdue = Math.abs(sec);
@@ -353,7 +364,7 @@ export const FuelTimer = {
             el.innerText = FuelView.formatTime(sec);
             el.classList.add('text-white');
             el.classList.remove('text-red-500', 'animate-pulse');
-            card.className = `bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center`;
+            card.className = `bg-slate-800 border-2 border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center min-h-[220px]`;
         }
     },
 
@@ -365,8 +376,8 @@ export const FuelTimer = {
         this.state.bottleVolume = getVal('input-bottle-vol') || 750;
         this.state.carbsPerFlask = getVal('input-flask-carbs') || 150;
         
-        this.state.sipsPerBottle = getVal('input-sips-bottle') || 4;    // New Input
-        this.state.squeezesPerFlask = getVal('input-sqz-flask') || 4;   // New Input
+        this.state.sipsPerBottle = getVal('input-sips-bottle') || 4;    
+        this.state.squeezesPerFlask = getVal('input-sqz-flask') || 4;   
         
         this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90;
         this.state.targetHourlyFluid = getVal('input-target-fluid') || 500;

@@ -5,14 +5,12 @@ import { FuelView } from './view.js';
 export const FuelTimer = {
     state: FuelState,
     
-    // Web Audio Context (Lazily created)
+    // Web Audio Context
     audioCtx: null,
 
     async init() {
-        // 1. Load Data
         let library = await DataManager.fetchJSON('fuelLibrary');
         
-        // 2. Safety Fallback
         if (!library || library.length === 0) {
             library = [
                 { id: 'gel', label: 'Gel', carbs: 22, icon: 'fa-bolt', active: true },
@@ -21,26 +19,17 @@ export const FuelTimer = {
             ];
         }
         
-        // 3. Initialize Menu
-        // If restoring a session, we trust the saved state. Otherwise default all to hidden.
         if (this.state.totalTime === 0) {
             this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
         } else {
-            // If we have a library update but a saved session, try to merge active states
-            // For simplicity, we just reload the library and default to hidden if starting fresh
+            // Preserve existing menu selection logic if needed, or reset
             this.state.fuelMenu = library.map(item => ({ ...item, active: false }));
         }
         
-        // 4. Persistence Check
         const hasSavedSession = this.state.load();
-        if (hasSavedSession) {
-            // Restore menu state if needed, or just let user re-select
-        }
 
-        // 5. Render
         const html = FuelView.getHtml(this.state);
 
-        // 6. Auto-Restore View if crashed
         if (hasSavedSession && this.state.totalTime > 0) {
             setTimeout(() => {
                 this.switchView('active');
@@ -98,8 +87,6 @@ export const FuelTimer = {
         });
     },
 
-    // --- AUDIO SYSTEM (Web Audio API) ---
-    
     initAudio() {
         if (!this.audioCtx) {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -110,20 +97,17 @@ export const FuelTimer = {
         if (!this.audioCtx) this.initAudio();
         if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
 
-        // Create Oscillator (Synthesizer)
         const osc = this.audioCtx.createOscillator();
         const gain = this.audioCtx.createGain();
 
         osc.connect(gain);
         gain.connect(this.audioCtx.destination);
 
-        // Sound Profile: High Pitch "Beep-Beep"
         osc.type = 'square';
-        osc.frequency.setValueAtTime(880, this.audioCtx.currentTime); // A5
-        osc.frequency.setValueAtTime(0, this.audioCtx.currentTime + 0.1); // Silence
-        osc.frequency.setValueAtTime(880, this.audioCtx.currentTime + 0.15); // A5
+        osc.frequency.setValueAtTime(880, this.audioCtx.currentTime); 
+        osc.frequency.setValueAtTime(0, this.audioCtx.currentTime + 0.1); 
+        osc.frequency.setValueAtTime(880, this.audioCtx.currentTime + 0.15); 
         
-        // Envelope
         gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.3);
 
@@ -131,7 +115,7 @@ export const FuelTimer = {
         osc.stop(this.audioCtx.currentTime + 0.3);
     },
 
-    // --- CORE LOGIC ---
+    // --- CORE LOGIC (UPDATED FOR BACKGROUND TIME) ---
 
     toggleTimer() {
         if (this.state.isRunning) this.pauseTimer();
@@ -139,12 +123,8 @@ export const FuelTimer = {
     },
 
     startTimer() {
-        // Unlock Audio on user gesture (Crucial for Mobile)
         this.initAudio();
-        this.audioCtx.resume().then(() => {
-            console.log("Audio Engine Unlocked");
-        });
-
+        this.audioCtx.resume();
         this.enableNavigationGuards();
         
         if (this.state.totalTime === 0) {
@@ -153,6 +133,9 @@ export const FuelTimer = {
             this.state.nextEat = this.state.eatInterval * 60;
         }
         
+        // CRITICAL FIX: Mark the exact start time
+        this.state.lastTickTimestamp = Date.now();
+
         this.switchView('active');
         this.state.isRunning = true;
         this.state.timerId = setInterval(() => this.tick(), 1000);
@@ -181,11 +164,21 @@ export const FuelTimer = {
     },
 
     tick() {
-        this.state.totalTime++;
-        this.state.nextDrink--;
-        this.state.nextEat--;
-        this.updateDisplays();
-        this.state.save();
+        // CRITICAL FIX: Calculate time difference (Delta) instead of just adding 1
+        const now = Date.now();
+        const delta = Math.floor((now - this.state.lastTickTimestamp) / 1000);
+
+        if (delta > 0) {
+            this.state.totalTime += delta;
+            this.state.nextDrink -= delta;
+            this.state.nextEat -= delta;
+            
+            // Update timestamp for next tick
+            this.state.lastTickTimestamp = now;
+            
+            this.updateDisplays();
+            this.state.save();
+        }
     },
 
     // --- LOGIC ---
@@ -206,7 +199,6 @@ export const FuelTimer = {
     logFood(carbs, name) {
         this.state.totalCarbsConsumed += carbs;
         this.addToLog('eat', name || 'Food', carbs, 0);
-        
         this.state.nextEat = this.state.eatInterval * 60;
         this.updateDisplays();
         this.state.save();
@@ -256,8 +248,6 @@ export const FuelTimer = {
         }
     },
 
-    // --- DISPLAY UPDATES ---
-
     updateDisplays() {
         document.getElementById('fuel-total-time').innerText = FuelView.formatTime(this.state.totalTime);
         this.updateGauge();
@@ -271,11 +261,9 @@ export const FuelTimer = {
         const card = document.getElementById(`card-${type}`);
         
         if (sec <= 0) {
-            // OVERDUE MODE
             const overdue = Math.abs(sec);
             el.innerText = `+${FuelView.formatTime(overdue)}`;
             
-            // Visual Urgency
             el.classList.remove('text-white');
             el.classList.add('text-red-500', 'animate-pulse');
             
@@ -283,18 +271,13 @@ export const FuelTimer = {
             card.classList.add(`border-${color}-500`);
             card.classList.toggle('bg-slate-700', overdue % 2 === 0);
 
-            // Audio Alert (Every 10s to avoid annoyance)
             if (overdue % 10 === 0) this.playAlertTone();
             
-            // Safety Reset extended to 5 minutes (300s)
             if (sec < -300) {
                 this.state[type==='drink'?'nextDrink':'nextEat'] = interval * 60; 
             }
         } else {
-            // NORMAL MODE
             el.innerText = FuelView.formatTime(sec);
-            
-            // Restore Styles
             el.classList.add('text-white');
             el.classList.remove('text-red-500', 'animate-pulse');
             card.className = `bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center`;
@@ -326,8 +309,6 @@ export const FuelTimer = {
         document.getElementById('target-bottle-count').innerText = currentBottle;
         document.getElementById('fuel-target-display').innerText = `Target: ${Math.round(hours * this.state.targetHourlyCarbs)}g`;
     },
-
-    // --- HELPERS ---
 
     readConfigInputs() {
         const getVal = (id) => parseInt(document.getElementById(id).value) || 0;

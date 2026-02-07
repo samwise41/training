@@ -1,7 +1,7 @@
 export const FuelView = {
     getHtml(state) {
         return `
-            <div class="p-4 max-w-5xl mx-auto pb-24">
+            <div class="p-4 max-w-5xl mx-auto pb-32">
                 
                 <div class="grid grid-cols-12 gap-4 mb-6">
                     <div class="col-span-12 md:col-span-4 bg-slate-900 p-5 rounded-xl border border-slate-700 flex flex-col justify-center relative overflow-hidden">
@@ -38,24 +38,37 @@ export const FuelView = {
 
                 <div id="fuel-active-view" class="hidden">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        
                         <div id="card-drink" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-blue-400 text-xs uppercase font-bold tracking-widest mb-1">Hydration</div>
                             <div id="timer-drink" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">15:00</div>
-                            <button id="btn-log-sip" class="w-full bg-slate-700 hover:bg-blue-600 text-blue-200 py-3 rounded-lg font-bold text-xs uppercase"><i class="fa-solid fa-glass-water mr-2"></i> Log Sip</button>
+                            <button id="btn-log-sip" class="w-full bg-slate-700 hover:bg-blue-600 text-blue-200 py-3 rounded-lg font-bold text-xs uppercase">
+                                <i class="fa-solid fa-glass-water mr-2"></i> Log Sip
+                            </button>
                         </div>
 
                         <div id="card-eat" class="bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 flex flex-col items-center justify-center">
                             <div class="text-orange-400 text-xs uppercase font-bold tracking-widest mb-1">Fueling</div>
                             <div id="timer-eat" class="text-7xl font-mono font-bold text-white mb-4 tracking-tighter">45:00</div>
-                            <div class="w-full max-h-[220px] overflow-y-auto custom-scrollbar pr-1">
-                                <div class="grid grid-cols-2 gap-2" id="fuel-menu-container">
+                            
+                            <div class="w-full max-h-[300px] overflow-y-auto custom-scrollbar pr-1 mb-2">
+                                <div id="fuel-menu-container" class="space-y-2">
                                     ${this.renderFuelButtons(state.fuelMenu)}
                                 </div>
                             </div>
-                            <div class="w-full mt-3 pt-3 border-t border-slate-700/50 flex gap-2">
+                            
+                            <button id="btn-show-custom-fuel" class="text-[10px] text-slate-500 underline w-full text-center">Log Custom Amount</button>
+                            <div id="custom-fuel-input-area" class="w-full mt-2 pt-2 border-t border-slate-700/50 hidden flex gap-2">
                                 <input type="number" id="input-custom-carbs" placeholder="Custom g" class="w-24 bg-slate-900 border border-slate-600 rounded px-2 py-1 text-sm text-center text-white">
                                 <button id="btn-log-custom" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white rounded px-2 py-1 text-xs font-bold">ADD</button>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-xl border border-slate-800 p-4">
+                        <div class="text-[10px] text-slate-500 uppercase font-bold mb-3 border-b border-slate-800 pb-2">Session Log</div>
+                        <div id="fuel-history-log" class="space-y-1 max-h-[150px] overflow-y-auto custom-scrollbar text-sm text-slate-400">
+                            <div class="italic opacity-50 text-xs">No intake yet.</div>
                         </div>
                     </div>
                 </div>
@@ -87,13 +100,42 @@ export const FuelView = {
         `;
     },
 
+    // Renders the Two-Button Row Layout
     renderFuelButtons(menu) {
         const activeItems = menu.filter(i => i.active);
-        if (activeItems.length === 0) return '<div class="col-span-2 text-xs text-slate-500 italic p-2 text-center">No active items.</div>';
+        if (activeItems.length === 0) return '<div class="text-xs text-slate-500 italic text-center p-2">No items active. Check settings.</div>';
+        
         return activeItems.map(item => `
-            <button class="btn-quick-fuel bg-slate-700 hover:bg-orange-600 hover:text-white text-slate-200 py-2 rounded-lg text-xs font-bold uppercase transition-colors flex flex-col items-center justify-center h-14 border border-slate-600" data-carbs="${item.carbs}">
-                <i class="fa-solid ${item.icon} mb-1 opacity-70"></i> <span>${item.label} (${item.carbs})</span>
-            </button>
+            <div class="flex gap-2 w-full h-16">
+                <button class="btn-quick-fuel w-[30%] bg-slate-800 border border-slate-600 hover:bg-orange-900/40 text-slate-400 rounded-lg font-bold text-xs uppercase flex flex-col items-center justify-center transition-colors active:bg-orange-800"
+                    data-carbs="${Math.round(item.carbs / 2)}" data-name="1/2 ${item.label}">
+                    <span class="text-[9px] opacity-60">1/2</span>
+                    <span>${Math.round(item.carbs / 2)}</span>
+                </button>
+
+                <button class="btn-quick-fuel flex-1 bg-slate-700 border border-slate-600 hover:bg-orange-600 hover:text-white text-slate-200 rounded-lg font-bold text-sm uppercase flex flex-col items-center justify-center transition-colors active:bg-emerald-600"
+                    data-carbs="${item.carbs}" data-name="${item.label}">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid ${item.icon} opacity-70"></i>
+                        <span>${item.label}</span>
+                    </div>
+                    <span class="text-xs opacity-60 font-normal">${item.carbs}g</span>
+                </button>
+            </div>
+        `).join('');
+    },
+
+    // Renders the Scrolling History Log
+    renderHistoryLog(log) {
+        if (!log || log.length === 0) return '<div class="italic opacity-50 text-xs text-center py-2">Session started. Ready to log.</div>';
+        
+        // Show newest first
+        return log.slice().reverse().map(entry => `
+            <div class="flex justify-between items-center py-1 border-b border-slate-800/50 last:border-0 animate-fade-in">
+                <span class="font-mono text-slate-500 text-xs">${entry.time}</span>
+                <span class="text-slate-300">${entry.item}</span>
+                <span class="font-bold ${entry.type === 'drink' ? 'text-blue-400' : 'text-emerald-400'}">${entry.carbs > 0 ? '+' + entry.carbs + 'g' : '-'}</span>
+            </div>
         `).join('');
     },
 

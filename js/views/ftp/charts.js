@@ -32,18 +32,14 @@ export const FTPCharts = {
             gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
         }
 
-        // X-Axis (Fixed: Added 1mi and 10k)
+        // X-Axis
         let ticks = [];
         if (xType === 'time') {
-            ticks = [{v:1,l:'1s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
+            ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
         } else {
             ticks = [
-                {v:0.248,l:'400m'},
-                {v:1.0,l:'1mi'},
-                {v:3.106,l:'5k'},
-                {v:6.213,l:'10k'},
-                {v:13.109,l:'Half'},
-                {v:26.218,l:'Full'}
+                {v:0.248,l:'400m'}, {v:1.0,l:'1mi'}, {v:3.106,l:'5k'},
+                {v:6.213,l:'10k'}, {v:13.109,l:'Half'}, {v:26.218,l:'Full'}
             ];
         }
         
@@ -154,7 +150,7 @@ export const FTPCharts = {
         });
     },
 
-    // --- 3. CHART.JS RENDERERS ---
+    // --- 3. CHART.JS RENDERERS (With TooltipManager Integration) ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
@@ -165,34 +161,23 @@ export const FTPCharts = {
                 labels: data.map(d => d.date),
                 datasets: [
                     { 
-                        label: 'FTP (w)', 
-                        data: data.map(d => d.ftp), 
-                        borderColor: color, 
-                        backgroundColor: color+'20', 
-                        borderWidth: 2, 
-                        pointRadius: 0, 
-                        pointHitRadius: 10,
-                        pointHoverRadius: 4, 
-                        tension: 0.2,
-                        yAxisID: 'y' 
+                        label: 'FTP', data: data.map(d => d.ftp), 
+                        borderColor: color, backgroundColor: color+'20', 
+                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y' 
                     },
                     { 
-                        label: 'W/kg', 
-                        data: data.map(d => d.wkg), 
-                        borderColor: '#34d399', 
-                        borderWidth: 2,      // SOLID LINE (removed borderDash)
-                        pointRadius: 0, 
-                        pointHitRadius: 10,
-                        pointHoverRadius: 4,
-                        tension: 0.2,
-                        yAxisID: 'y1' 
+                        label: 'W/kg', data: data.map(d => d.wkg), 
+                        borderColor: '#34d399', borderWidth: 2, 
+                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y1' 
                     }
                 ]
             },
             options: this._getCommonOptions({
                 y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 },
                 y1: { position: 'right', grid: { display: false }, ticks: { color: '#34d399' }, suggestedMin: 2.0 }
-            }, true) // Enable Legend
+            }, true)
         });
     },
 
@@ -206,55 +191,46 @@ export const FTPCharts = {
                 labels: data.map(d => d.date),
                 datasets: [
                     { 
-                        label: 'Pace', 
-                        data: data.map(d => d.pace), 
-                        borderColor: color, 
-                        backgroundColor: color+'20', 
-                        borderWidth: 2, 
-                        pointRadius: 0, 
-                        pointHitRadius: 10,
-                        pointHoverRadius: 4, 
-                        tension: 0.2,
-                        yAxisID: 'y' 
+                        label: 'Pace', data: data.map(d => d.pace), 
+                        borderColor: color, backgroundColor: color+'20', 
+                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y' 
                     },
                     { 
-                        label: 'LTHR', 
-                        data: data.map(d => d.lthr), 
-                        borderColor: '#ef4444', 
-                        borderWidth: 1, 
-                        borderDash: [3,3], 
-                        pointRadius: 0, 
-                        pointHitRadius: 10,
-                        pointHoverRadius: 4, 
-                        tension: 0.2,
-                        yAxisID: 'y1' 
+                        label: 'LTHR', data: data.map(d => d.lthr), 
+                        borderColor: '#ef4444', borderWidth: 1, borderDash: [3,3], 
+                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y1' 
                     }
                 ]
             },
             options: this._getCommonOptions({
                 y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: formatPaceSec }, reverse: true },
                 y1: { position: 'right', grid: { display: false }, ticks: { color: '#ef4444' }, suggestedMin: 130 }
-            }, true) // Enable Legend
+            }, true)
         });
     },
 
     _getCommonOptions(scales, showLegend = false) {
+        // Base config derived from TooltipManager if available
+        const baseConfig = (window.TooltipManager && window.TooltipManager.createChartConfig)
+            ? window.TooltipManager.createChartConfig()
+            : { interaction: { mode: 'index', intersect: false }, plugins: { tooltip: { enabled: true } } };
+
         return {
+            ...baseConfig, // Inherit interaction modes & plugins from manager
             responsive: true,
             maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
             scales: { 
                 x: { display: true, ticks: { maxTicksLimit: 6, color: '#64748b', font: { size: 10 } }, grid: { display: false } }, 
                 ...scales 
             },
             plugins: {
+                ...baseConfig.plugins,
                 legend: { 
                     display: showLegend,
                     labels: { color: '#cbd5e1', font: { size: 10, family: 'monospace' }, boxWidth: 10 }
-                },
-                tooltip: window.TooltipManager && window.TooltipManager.createChartConfig 
-                    ? window.TooltipManager.createChartConfig().tooltip 
-                    : { enabled: true } // Basic fallback
+                }
             }
         };
     }

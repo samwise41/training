@@ -9,7 +9,7 @@ const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.
 
 export const FTPCharts = {
     
-    // --- 1. SVG RENDERER (Power Curves) ---
+    // --- 1. SVG RENDERER ---
     renderSvgCurve(data, options) {
         const { width = 600, height = 250, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
@@ -32,12 +32,11 @@ export const FTPCharts = {
             gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
         }
 
-        // X-Axis (Updated to include ALL key distances)
+        // X-Axis (Fixed: Added 1mi and 10k)
         let ticks = [];
         if (xType === 'time') {
-            ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'},{v:18000,l:'5h'}];
+            ticks = [{v:1,l:'1s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
         } else {
-            // Explicitly list all key running distances
             ticks = [
                 {v:0.248,l:'400m'},
                 {v:1.0,l:'1mi'},
@@ -48,10 +47,8 @@ export const FTPCharts = {
             ];
         }
         
-        // Filter to show only ticks within or near the data range
         ticks.filter(t => t.v >= minX * 0.9 && t.v <= maxX * 1.1).forEach(t => {
             const x = getLogX(t.v, minX, maxX, width, pad);
-            // Only draw if x is within bounds
             if (x >= pad.l && x <= width - pad.r) {
                 gridHtml += `<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/><text x="${x}" y="${height-15}" text-anchor="middle" font-size="10" fill="#94a3b8">${t.l}</text>`;
             }
@@ -168,7 +165,7 @@ export const FTPCharts = {
                 labels: data.map(d => d.date),
                 datasets: [
                     { 
-                        label: 'FTP', 
+                        label: 'FTP (w)', 
                         data: data.map(d => d.ftp), 
                         borderColor: color, 
                         backgroundColor: color+'20', 
@@ -183,8 +180,7 @@ export const FTPCharts = {
                         label: 'W/kg', 
                         data: data.map(d => d.wkg), 
                         borderColor: '#34d399', 
-                        borderWidth: 1.5,
-                        // SOLID LINE (removed borderDash)
+                        borderWidth: 2,      // SOLID LINE (removed borderDash)
                         pointRadius: 0, 
                         pointHitRadius: 10,
                         pointHoverRadius: 4,
@@ -258,13 +254,8 @@ export const FTPCharts = {
                 },
                 tooltip: window.TooltipManager && window.TooltipManager.createChartConfig 
                     ? window.TooltipManager.createChartConfig().tooltip 
-                    : this._getExternalTooltipConfig()
+                    : { enabled: true } // Basic fallback
             }
         };
-    },
-
-    _getExternalTooltipConfig() {
-        // Fallback if TooltipManager isn't available
-        return { enabled: true }; 
     }
 };

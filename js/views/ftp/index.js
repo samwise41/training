@@ -24,7 +24,6 @@ export function renderFTP(profileData) {
 
     const components = {
         gauge: FTPTemplates.gauge(bio.wkg, bio.gauge_percent, bio.category),
-        // Calls the specific cyclingStats/runningStats functions we just added
         bikeStats: FTPTemplates.cyclingStats(bio),
         runStats: FTPTemplates.runningStats(bio)
     };
@@ -44,14 +43,29 @@ export async function initCharts() {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
             const pts = data.map(d => ({ x: d.seconds, yAll: d.all_time_watts, y6w: d.six_week_watts })).filter(d => d.x >= 1);
-            el.innerHTML = FTPCharts.renderSvgCurve(pts, { width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor, showPoints: false });
+            
+            // Render HTML
+            el.innerHTML = FTPCharts.renderSvgCurve(pts, { 
+                containerId: ids.cycleCurve, // Pass ID for hooks
+                width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor 
+            });
+            
+            // Attach Events for Tooltips
+            FTPCharts.setupSvgInteractions(ids.cycleCurve, pts, { width: 600, xType: 'time', colorAll: bikeColor, color6w: bikeColor });
         }
     });
 
     FTPData.fetchRunning().then(data => {
         const el = document.getElementById(ids.runCurve);
         if (el && data.length) {
-            el.innerHTML = FTPCharts.renderSvgCurve(data, { width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor, showPoints: true });
+            // Render HTML
+            el.innerHTML = FTPCharts.renderSvgCurve(data, { 
+                containerId: ids.runCurve, // Pass ID for hooks
+                width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor 
+            });
+            
+            // Attach Events for Tooltips
+            FTPCharts.setupSvgInteractions(ids.runCurve, data, { width: 600, xType: 'distance', colorAll: runColor, color6w: runColor });
         }
     });
 

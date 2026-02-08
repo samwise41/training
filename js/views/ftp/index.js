@@ -3,15 +3,12 @@ import { FTPData } from './data.js';
 import { FTPCharts } from './charts.js';
 import { FTPTemplates } from './templates.js';
 
+// STRICT: No fallbacks. If CSS var is missing, it returns ""
 const getColor = (varName) => {
     if (typeof window !== "undefined" && window.getComputedStyle) {
-        const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-        if (val) return val;
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
     }
-    // Fallbacks matching Tailwind defaults for Purple-400 and Pink-400
-    if (varName === '--color-bike') return '#c084fc';
-    if (varName === '--color-run') return '#f472b6';
-    return '#888888';
+    return '';
 };
 
 export function renderFTP(profileData) {
@@ -38,7 +35,7 @@ export async function initCharts() {
     const ids = window.ftpChartIds;
     if (!ids) return;
 
-    // These should now correctly pull from styles.css or fallback
+    // Pull directly from CSS. If these are empty strings, charts will look broken (as requested).
     const bikeColor = getColor('--color-bike');
     const runColor = getColor('--color-run');
 

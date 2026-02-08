@@ -193,7 +193,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 | PLANNED | Tuesday | [BIKE] Spin / Drill Focus | 45 mins | | | **Focus:** Flush. High cadence (95-100 rpm). Low power (Zone 1/2). No grinding. | 2026-02-10 |
 | PLANNED | Wednesday | [SWIM] Technique Focus | 30 mins | | | **Focus:** Form only. 30 mins easy. Focus on body rotation and high elbow catch. | 2026-02-11 |
 | PLANNED | Thursday | [BIKE] Short Threshold | 45 mins | | | **Focus:** Maintenance. 10m Warmup; **1 x 8min @ Threshold** (Just one effort to keep blood volume up); Cooldown. | 2026-02-12 |
-| PLANNED | Friday | Rest | 0 mins | | | **Focus:** Total Recovery. Sleep + Mobility. | 2026-02-13 |
+| PLANNED | Friday | [SWIM] Touch swim - Drills | 15 mins | | | **Focus:** Do not tire yourself out. Just get wet, do some drills, and get out. | 2026-02-13 |
 | PLANNED | Saturday | [BIKE] Aerobic Maintenance | 90 mins | | | **Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride. | 2026-02-14 |
 | PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Prepare for Phase 2 Build. | 2026-02-15 |
 

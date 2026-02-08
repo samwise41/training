@@ -57,7 +57,13 @@ SOURCES = [
         "url": "https://raw.githubusercontent.com/samwise41/training/main/data/recipes.json",
         "filename": "recipes.md",
         "title": "Recipes"
+    },
+    {
+        "url": "https://raw.githubusercontent.com/samwise41/training/main/data/phases.json",
+        "filename": "phases.md",
+        "title": "Training Phases"
     }
+
 ]
 
 def ensure_dir(directory):

@@ -24,8 +24,9 @@ export function renderFTP(profileData) {
 
     const components = {
         gauge: FTPTemplates.gauge(bio.wkg, bio.gauge_percent, bio.category),
-        bikeStats: FTPTemplates.stats('Cycling FTP', bio.ftp_watts || '--', `${(bio.wkg || 0).toFixed(2)} W/kg`, 'fa-bicycle'),
-        runStats: FTPTemplates.stats('Running Profile', bio.run_ftp_pace || '--', `LTHR: ${bio.lthr || '--'}`, 'fa-person-running')
+        // Use specific templates to restore original styling
+        bikeStats: FTPTemplates.cyclingStats(bio),
+        runStats: FTPTemplates.runningStats(bio)
     };
 
     return FTPTemplates.layout(window.ftpChartIds, components);
@@ -35,32 +36,33 @@ export async function initCharts() {
     const ids = window.ftpChartIds;
     if (!ids) return;
 
-    const bikeColor = getColor('--color-bike') || '#c084fc';
-    const runColor = getColor('--color-run') || '#f472b6';
+    const bikeColor = getColor('--color-bike') || '#c084fc'; // Purple
+    const runColor = getColor('--color-run') || '#f472b6';   // Pink
 
     // 1. Power Curves (SVG)
     FTPData.fetchCycling().then(data => {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
             const pts = data.map(d => ({ x: d.seconds, yAll: d.all_time_watts, y6w: d.six_week_watts })).filter(d => d.x >= 1);
-            el.innerHTML = FTPCharts.renderSvgCurve(pts, { width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor });
+            // Cycle: No points (Continuous line)
+            el.innerHTML = FTPCharts.renderSvgCurve(pts, { width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor, showPoints: false });
         }
     });
 
     FTPData.fetchRunning().then(data => {
         const el = document.getElementById(ids.runCurve);
         if (el && data.length) {
-            el.innerHTML = FTPCharts.renderSvgCurve(data, { width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor });
+            // Run: Show Points (Discrete distances) -> Tooltips work again
+            el.innerHTML = FTPCharts.renderSvgCurve(data, { width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor, showPoints: true });
         }
     });
 
     // 2. History Charts (Chart.js)
     const history = await FTPData.fetchGarminHistory();
     if (history.length) {
-        // Sort
         const sorted = history.sort((a,b) => new Date(a["Date"]) - new Date(b["Date"]));
         
-        // Bike Data Preparation
+        // Bike Data
         const bikeData = sorted
             .filter(d => d["FTP"] > 0 && d["Weight (lbs)"] > 0)
             .map(d => ({
@@ -69,7 +71,7 @@ export async function initCharts() {
                 wkg: parseFloat((d["FTP"] / (d["Weight (lbs)"] / 2.20462)).toFixed(2))
             }));
 
-        // Run Data Preparation
+        // Run Data
         const runData = sorted
             .filter(d => d["Run FTP Pace"] || d["Lactate Threshold HR"])
             .map(d => {

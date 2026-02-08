@@ -12,7 +12,7 @@ export const FTPTemplates = {
                 
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-bolt text-purple-400"></i>
+                        <i class="fa-solid fa-bolt text-lg" style="color: var(--color-bike)"></i>
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Curve (Strava)</span>
                     </div>
                     <div id="${ids.cycleCurve}" class="flex-1 w-full relative min-h-0 flex items-center justify-center text-xs text-slate-500 italic">Loading...</div>
@@ -32,7 +32,7 @@ export const FTPTemplates = {
                 
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-stopwatch text-pink-400"></i>
+                        <i class="fa-solid fa-stopwatch text-lg" style="color: var(--color-run)"></i>
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pace Curve (Strava)</span>
                     </div>
                     <div id="${ids.runCurve}" class="flex-1 w-full relative min-h-0 flex items-center justify-center text-xs text-slate-500 italic">Loading...</div>
@@ -70,7 +70,7 @@ export const FTPTemplates = {
     cyclingStats(bio) {
         return `<div class="bg-slate-800/50 border border-slate-700 p-6 rounded-xl text-center shadow-lg flex flex-col justify-center h-full">
             <div class="flex items-center justify-center gap-2 mb-2">
-                <i class="fa-solid fa-bicycle text-purple-400 text-2xl"></i>
+                <i class="fa-solid fa-bicycle text-2xl" style="color: var(--color-bike)"></i>
                 <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Cycling FTP</span>
             </div>
             <div class="flex flex-col mt-2">
@@ -83,7 +83,7 @@ export const FTPTemplates = {
     runningStats(bio) {
         return `<div class="bg-slate-800/50 border border-slate-700 p-6 rounded-xl text-center shadow-lg h-full flex flex-col justify-center">
             <div class="flex items-center justify-center gap-2 mb-6">
-                <i class="fa-solid fa-person-running text-pink-400 text-xl"></i>
+                <i class="fa-solid fa-person-running text-xl" style="color: var(--color-run)"></i>
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Running Profile</span>
             </div>
             <div class="grid grid-cols-3 gap-4">

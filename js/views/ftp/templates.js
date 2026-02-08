@@ -67,7 +67,6 @@ export const FTPTemplates = {
         </div>`;
     },
 
-    // RESTORED: Specific Cycling Stats Card (Purple Accents)
     cyclingStats(bio) {
         return `<div class="bg-slate-800/50 border border-slate-700 p-6 rounded-xl text-center shadow-lg flex flex-col justify-center h-full">
             <div class="flex items-center justify-center gap-2 mb-2">
@@ -75,13 +74,12 @@ export const FTPTemplates = {
                 <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Cycling FTP</span>
             </div>
             <div class="flex flex-col mt-2">
-                <span class="text-5xl font-black text-white">${bio.ftp_watts || '--'}</span>
+                <span class="text-5xl font-black text-white">${bio.ftp_watts > 0 ? bio.ftp_watts : '--'}</span>
                 <span class="text-sm text-slate-400 font-mono mt-2">${(bio.wkg || 0).toFixed(2)} W/kg</span>
             </div>
         </div>`;
     },
 
-    // RESTORED: Specific Running Stats Card (Pink Accents + 3 Col Grid)
     runningStats(bio) {
         return `<div class="bg-slate-800/50 border border-slate-700 p-6 rounded-xl text-center shadow-lg h-full flex flex-col justify-center">
             <div class="flex items-center justify-center gap-2 mb-6">

@@ -150,7 +150,7 @@ export const FTPCharts = {
         });
     },
 
-    // --- 3. CHART.JS RENDERERS (With TooltipManager Integration) ---
+    // --- 3. CHART.JS RENDERERS ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
@@ -161,7 +161,7 @@ export const FTPCharts = {
                 labels: data.map(d => d.date),
                 datasets: [
                     { 
-                        label: 'FTP', data: data.map(d => d.ftp), 
+                        label: 'FTP (w)', data: data.map(d => d.ftp), 
                         borderColor: color, backgroundColor: color+'20', 
                         borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y' 
@@ -217,8 +217,14 @@ export const FTPCharts = {
             ? window.TooltipManager.createChartConfig()
             : { interaction: { mode: 'index', intersect: false }, plugins: { tooltip: { enabled: true } } };
 
+        // Force 'usePointStyle: true' to make tooltip color boxes circles (dots) instead of squares
+        if (baseConfig.plugins && baseConfig.plugins.tooltip) {
+            baseConfig.plugins.tooltip.usePointStyle = true;
+            baseConfig.plugins.tooltip.boxWidth = 8; // Keep it tight like the SVG dots
+        }
+
         return {
-            ...baseConfig, // Inherit interaction modes & plugins from manager
+            ...baseConfig, 
             responsive: true,
             maintainAspectRatio: false,
             scales: { 
@@ -229,7 +235,12 @@ export const FTPCharts = {
                 ...baseConfig.plugins,
                 legend: { 
                     display: showLegend,
-                    labels: { color: '#cbd5e1', font: { size: 10, family: 'monospace' }, boxWidth: 10 }
+                    labels: { 
+                        color: '#cbd5e1', 
+                        font: { size: 10, family: 'monospace' }, 
+                        boxWidth: 10,
+                        usePointStyle: true // Also makes legend items circles
+                    }
                 }
             }
         };

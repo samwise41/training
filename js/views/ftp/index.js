@@ -5,8 +5,12 @@ import { FTPTemplates } from './templates.js';
 
 const getColor = (varName) => {
     if (typeof window !== "undefined" && window.getComputedStyle) {
-        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        if (val) return val;
     }
+    // Fallbacks matching Tailwind defaults for Purple-400 and Pink-400
+    if (varName === '--color-bike') return '#c084fc';
+    if (varName === '--color-run') return '#f472b6';
     return '#888888';
 };
 
@@ -14,7 +18,6 @@ export function renderFTP(profileData) {
     const bio = profileData || { wkg: 0, gauge_percent: 0, category: { label: "Unknown", color: "#64748b" } };
     const ts = Date.now();
     
-    // Store IDs globally so initCharts can find them
     window.ftpChartIds = {
         cycleCurve: `curve-bike-${ts}`,
         runCurve: `curve-run-${ts}`,
@@ -35,22 +38,21 @@ export async function initCharts() {
     const ids = window.ftpChartIds;
     if (!ids) return;
 
-    const bikeColor = getColor('--color-bike') || '#c084fc';
-    const runColor = getColor('--color-run') || '#f472b6';
+    // These should now correctly pull from styles.css or fallback
+    const bikeColor = getColor('--color-bike');
+    const runColor = getColor('--color-run');
 
     // 1. Power Curves (SVG)
     FTPData.fetchCycling().then(data => {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
             const pts = data.map(d => ({ x: d.seconds, yAll: d.all_time_watts, y6w: d.six_week_watts })).filter(d => d.x >= 1);
-            
-            // Render HTML
             el.innerHTML = FTPCharts.renderSvgCurve(pts, { 
-                containerId: ids.cycleCurve, // Pass ID for hooks
-                width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor 
+                containerId: ids.cycleCurve,
+                width: 600, height: 250, xType: 'time', 
+                colorAll: bikeColor, color6w: bikeColor, 
+                showPoints: false 
             });
-            
-            // Attach Events for Tooltips
             FTPCharts.setupSvgInteractions(ids.cycleCurve, pts, { width: 600, xType: 'time', colorAll: bikeColor, color6w: bikeColor });
         }
     });
@@ -58,13 +60,12 @@ export async function initCharts() {
     FTPData.fetchRunning().then(data => {
         const el = document.getElementById(ids.runCurve);
         if (el && data.length) {
-            // Render HTML
             el.innerHTML = FTPCharts.renderSvgCurve(data, { 
-                containerId: ids.runCurve, // Pass ID for hooks
-                width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor 
+                containerId: ids.runCurve,
+                width: 600, height: 250, xType: 'distance', 
+                colorAll: runColor, color6w: runColor, 
+                showPoints: true 
             });
-            
-            // Attach Events for Tooltips
             FTPCharts.setupSvgInteractions(ids.runCurve, data, { width: 600, xType: 'distance', colorAll: runColor, color6w: runColor });
         }
     });
@@ -74,7 +75,6 @@ export async function initCharts() {
     if (history.length) {
         const sorted = history.sort((a,b) => new Date(a["Date"]) - new Date(b["Date"]));
         
-        // Bike Data
         const bikeData = sorted
             .filter(d => d["FTP"] > 0 && d["Weight (lbs)"] > 0)
             .map(d => ({
@@ -83,7 +83,6 @@ export async function initCharts() {
                 wkg: parseFloat((d["FTP"] / (d["Weight (lbs)"] / 2.20462)).toFixed(2))
             }));
 
-        // Run Data
         const runData = sorted
             .filter(d => d["Run FTP Pace"] || d["Lactate Threshold HR"])
             .map(d => {

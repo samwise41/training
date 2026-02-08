@@ -24,7 +24,7 @@ export function renderFTP(profileData) {
 
     const components = {
         gauge: FTPTemplates.gauge(bio.wkg, bio.gauge_percent, bio.category),
-        // Use specific templates to restore original styling
+        // Calls the specific cyclingStats/runningStats functions we just added
         bikeStats: FTPTemplates.cyclingStats(bio),
         runStats: FTPTemplates.runningStats(bio)
     };
@@ -36,15 +36,14 @@ export async function initCharts() {
     const ids = window.ftpChartIds;
     if (!ids) return;
 
-    const bikeColor = getColor('--color-bike') || '#c084fc'; // Purple
-    const runColor = getColor('--color-run') || '#f472b6';   // Pink
+    const bikeColor = getColor('--color-bike') || '#c084fc';
+    const runColor = getColor('--color-run') || '#f472b6';
 
     // 1. Power Curves (SVG)
     FTPData.fetchCycling().then(data => {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
             const pts = data.map(d => ({ x: d.seconds, yAll: d.all_time_watts, y6w: d.six_week_watts })).filter(d => d.x >= 1);
-            // Cycle: No points (Continuous line)
             el.innerHTML = FTPCharts.renderSvgCurve(pts, { width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor, showPoints: false });
         }
     });
@@ -52,7 +51,6 @@ export async function initCharts() {
     FTPData.fetchRunning().then(data => {
         const el = document.getElementById(ids.runCurve);
         if (el && data.length) {
-            // Run: Show Points (Discrete distances) -> Tooltips work again
             el.innerHTML = FTPCharts.renderSvgCurve(data, { width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor, showPoints: true });
         }
     });

@@ -181,13 +181,13 @@ export function renderFTP(profileData) {
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Curve (Strava)</span>
                     </div>
                     <div id="${window.ftpChartIds.cycleCurve}" class="flex-1 w-full relative min-h-0">
-                        <div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading...</div>
+                        <div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading Strava Data...</div>
                     </div>
                 </div>
 
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Cycling FTP History</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Cycling FTP (W/kg)</span>
                         <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
                     </div>
                     <div class="relative w-full flex-1 min-h-0">
@@ -205,7 +205,7 @@ export function renderFTP(profileData) {
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pace Curve (Strava)</span>
                     </div>
                     <div id="${window.ftpChartIds.runCurve}" class="flex-1 w-full relative min-h-0">
-                        <div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading...</div>
+                        <div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading Strava Data...</div>
                     </div>
                 </div>
 
@@ -256,14 +256,22 @@ export async function initCharts() {
         if (data && data.length > 0) {
             // Sort by Date
             const sorted = data.sort((a,b) => new Date(a["Date"]) - new Date(b["Date"]));
-            const dates = sorted.map(d => d["Date"] ? d["Date"].slice(5) : '');
             
-            // Map Data Fields
-            const bikeVals = sorted.map(d => d["FTP"] || null);
-            const lthrVals = sorted.map(d => d["Lactate Threshold HR"] || null);
+            // --- BIKE DATA: FILTER FOR W/KG ---
+            // Only keep entries that have BOTH FTP and Weight
+            const bikeEntries = sorted.filter(d => d["FTP"] > 0 && d["Weight (lbs)"] > 0);
             
-            // Parse "7:45" string to seconds
-            const runVals = sorted.map(d => {
+            const bikeDates = bikeEntries.map(d => d["Date"].slice(5)); // "MM-DD"
+            const bikeVals = bikeEntries.map(d => {
+                const kg = d["Weight (lbs)"] / 2.20462;
+                return parseFloat((d["FTP"] / kg).toFixed(2)); // Calc W/kg
+            });
+
+            // --- RUN DATA: FILTER FOR PACE OR LTHR ---
+            const runEntries = sorted.filter(d => d["Run FTP Pace"] || d["Lactate Threshold HR"]);
+            const runDates = runEntries.map(d => d["Date"].slice(5));
+            
+            const runVals = runEntries.map(d => {
                 const s = d["Run FTP Pace"];
                 if (typeof s === 'string' && s.includes(':')) {
                     const [mm, ss] = s.split(':').map(Number);
@@ -271,14 +279,15 @@ export async function initCharts() {
                 }
                 return null;
             });
+            const lthrVals = runEntries.map(d => d["Lactate Threshold HR"] || null);
 
-            // Cycling Chart
+            // RENDER: Bike Chart (W/kg)
             new Chart(bCanvas, {
                 type: 'line',
                 data: {
-                    labels: dates,
+                    labels: bikeDates,
                     datasets: [{
-                        label: 'FTP (w)',
+                        label: 'W/kg',
                         data: bikeVals,
                         borderColor: bikeColor,
                         backgroundColor: bikeColor + '20',
@@ -292,17 +301,21 @@ export async function initCharts() {
                     maintainAspectRatio: false,
                     scales: {
                         x: { display: false },
-                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 }
+                        y: { 
+                            grid: { color: '#334155' }, 
+                            ticks: { color: '#94a3b8' },
+                            title: { display: true, text: 'W/kg', color: '#64748b' }
+                        }
                     },
                     plugins: { legend: { display: false } }
                 }
             });
 
-            // Running Chart
+            // RENDER: Run Chart
             new Chart(rCanvas, {
                 type: 'line',
                 data: {
-                    labels: dates,
+                    labels: runDates,
                     datasets: [
                         {
                             label: 'Pace (min/mi)',

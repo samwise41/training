@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-02-08 02:53:22
+**Generated:** 2026-02-08 14:24:12
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-02-07 14:52:19",
+  "generated_at": "2026-02-08 13:45:48",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -66,12 +66,12 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 82.9,
+          "current_value": 87.73,
           "status": "Watch",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -5.910714285714284
+              "slope": -15.257142857142858
             },
             "90d": {
               "direction": "Falling",
@@ -142,12 +142,12 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 626.43,
+          "current_value": 624.55,
           "status": "Watch",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 8.236484983314794
+              "slope": 9.522167487684728
             },
             "90d": {
               "direction": "Rising",
@@ -296,12 +296,12 @@
             "ignore_zero": true,
             "require_hr": true
           },
-          "current_value": 1.27,
+          "current_value": 1.28,
           "status": "Watch",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.016510226577498937
+              "slope": 0.015224282471072922
             },
             "90d": {
               "direction": "Rising",
@@ -335,12 +335,12 @@
             "min_duration_minutes": 10,
             "ignore_zero": true
           },
-          "current_value": 2.39,
+          "current_value": 2.42,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.05890285606940021
+              "slope": 0.061044759406493045
             },
             "90d": {
               "direction": "Rising",
@@ -374,12 +374,12 @@
             "min_duration_minutes": 70,
             "ignore_zero": false
           },
-          "current_value": 4.06,
+          "current_value": 4.38,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.8658741258741258
+              "slope": 0.933090909090909
             },
             "90d": {
               "direction": "Rising",

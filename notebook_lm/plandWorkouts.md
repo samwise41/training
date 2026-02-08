@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-08 02:53:23
+**Generated:** 2026-02-08 14:24:13
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -8,100 +8,88 @@
 ```json
 [
   {
-    "date": "2026-02-01",
-    "day": "Sunday",
-    "plannedWorkout": "Rest",
-    "plannedDuration": 0.0,
-    "notes": "**Focus:** Sleep and mobility.",
-    "actualSport": "Other",
-    "actualDuration": 0.0,
-    "actualWorkout": "Activity",
-    "status": "COMPLETED",
-    "compliance": 100
-  },
-  {
-    "date": "2026-02-02",
+    "date": "2026-02-09",
     "day": "Monday",
     "plannedWorkout": "[RUN] Tempo / Threshold",
     "plannedDuration": 45.0,
-    "notes": "**Loc:** Treadmill/Outdoor. **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **6 x 20s Strides** (High Cadence); Cooldown.",
+    "notes": "**Focus:** Anaerobic Impact. 10m Warmup; 20m @ Tempo; **8 x 20s Hill Sprints** (Max Effort) to spike Anaerobic score.",
     "actualSport": "Run",
-    "actualDuration": 35.5,
-    "actualWorkout": "Roy - Threshold",
-    "status": "COMPLETED",
-    "compliance": 79
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
   },
   {
-    "date": "2026-02-03",
+    "date": "2026-02-10",
     "day": "Tuesday",
     "plannedWorkout": "[BIKE] Strength / Low Cadence",
     "plannedDuration": 60.0,
-    "notes": "**Loc:** Peloton/Zwift. **Focus:** Torque Efficiency. Warmup, then 4 x 8min @ Sweet Spot at **55-60 RPM**. Grind it out to build force.",
+    "notes": "**Focus:** Torque Maintenance. 4 x 10min @ Sweet Spot (229-244W) at **55-60 RPM**. **No ERG Mode.**",
     "actualSport": "Bike",
-    "actualDuration": 60.5,
-    "actualWorkout": "Innsbruck Virtual Cycling",
-    "status": "COMPLETED",
-    "compliance": 101
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
   },
   {
-    "date": "2026-02-04",
+    "date": "2026-02-11",
     "day": "Wednesday",
     "plannedWorkout": "[SWIM] Technique Focus",
     "plannedDuration": 40.0,
-    "notes": "**Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work.",
+    "notes": "**Focus:** Consistency. 400m Continuous swim test at steady pace (70%).",
     "actualSport": "Swim",
-    "actualDuration": 40.0,
-    "actualWorkout": "Pool Swim",
-    "status": "COMPLETED",
-    "compliance": 100
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
   },
   {
-    "date": "2026-02-05",
+    "date": "2026-02-12",
     "day": "Thursday",
-    "plannedWorkout": "[BIKE] Zwift Race",
-    "plannedDuration": 45.0,
-    "notes": "**Loc:** Zwift. **Focus:** \"Fun Factor\" Rule Application. High Cadence, Anaerobic Capacity. Go full gas.",
+    "plannedWorkout": "[BIKE] Threshold + Endurance",
+    "plannedDuration": 90.0,
+    "notes": "**Focus:** Winter Volume Reallocation. 3 x 9min @ Threshold (100% FTP). Remaining time strict Zone 2.",
     "actualSport": "Bike",
-    "actualDuration": 43.2,
-    "actualWorkout": "Zwift - Race: Zwift Crit Racing Club - Avon Flyer (C) on Avon Flyer in New York",
-    "status": "COMPLETED",
-    "compliance": 96
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
   },
   {
-    "date": "2026-02-06",
+    "date": "2026-02-13",
     "day": "Friday",
     "plannedWorkout": "[RUN] Aerobic Maintenance",
     "plannedDuration": 40.0,
-    "notes": "**Loc:** Easy Terrain. **Focus:** Active Recovery. Strict Zone 2 (HR < 152). Flush the legs.",
+    "notes": "**Focus:** Recovery. Zone 2 strict. Optional: Add 15m \"Touch Swim\" afterwards.",
     "actualSport": "Run",
-    "actualDuration": 53.1,
-    "actualWorkout": "Roy - Zone 2 - 45 Minutes",
-    "status": "COMPLETED",
-    "compliance": 133
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
   },
   {
-    "date": "2026-02-06",
-    "day": "Friday",
-    "plannedWorkout": "[SWIM] Touch Swim",
-    "plannedDuration": 20.0,
-    "notes": "**Loc:** Pool. **Focus:** Frequency Rule. 500m-800m total. Drills ONLY. Catch & Pull focus. No intensity.",
-    "actualSport": "Swim",
-    "actualDuration": 24.0,
-    "actualWorkout": "Pool Swim",
-    "status": "COMPLETED",
-    "compliance": 120
-  },
-  {
-    "date": "2026-02-07",
+    "date": "2026-02-14",
     "day": "Saturday",
     "plannedWorkout": "[BIKE] Long Steady Distance",
-    "plannedDuration": 135.0,
-    "notes": "**Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m.",
+    "plannedDuration": 120.0,
+    "notes": "**Focus:** Winter Cap Applied. **2.0 Hours Hard Cap.** Intensity: New Zone 2 (144-195W). Fuel: 60g carb/hr.",
     "actualSport": "Bike",
-    "actualDuration": 131.1,
-    "actualWorkout": "New York Virtual Cycling",
-    "status": "COMPLETED",
-    "compliance": 97
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
+  },
+  {
+    "date": "2026-02-15",
+    "day": "Sunday",
+    "plannedWorkout": "Rest",
+    "plannedDuration": 0.0,
+    "notes": "**Focus:** Total recovery.",
+    "actualSport": "Other",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0
   }
 ]
 ```

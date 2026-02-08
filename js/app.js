@@ -91,14 +91,12 @@
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     this.weather.code = weatherData.current_weather.weathercode;
-                    // Note: updateHeaderUI no longer displays weather text as header is gone, 
-                    // but we keep fetch logic in case views (like Gear) need the data.
                 }
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
         updateHeaderUI(viewName) {
-            // Header removed, logic cleared to prevent errors
+            // Header removed, kept for compatibility
         },
 
         updateGearResult() {
@@ -108,7 +106,6 @@
         },
 
         setupNavigation() {
-            // Updated to target the new floating button
             const menuBtn = document.getElementById('floating-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -125,7 +122,6 @@
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     window.location.hash = e.currentTarget.dataset.view; 
-                    // Always close sidebar on click since it's now always an overlay
                     if (!overlay.classList.contains('hidden')) toggleSidebar();
                 });
             });
@@ -153,6 +149,9 @@
             content.classList.add('opacity-0');
             
             setTimeout(async () => {
+                // FIX: Force scroll to top when changing views
+                window.scrollTo({ top: 0, behavior: 'instant' });
+
                 content.innerHTML = '';
                 const render = {
                     dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),

@@ -112,7 +112,6 @@ const renderLogChart = (containerId, data, options) => {
 
     let gridHtml = '';
     
-    // Grid Lines
     const ySteps = 5;
     for (let i = 0; i <= ySteps; i++) {
         const pct = i / ySteps;
@@ -150,7 +149,7 @@ const renderLogChart = (containerId, data, options) => {
 
 // --- INTERACTION LOGIC ---
 const setupChartInteractions = (containerId, data, options) => {
-    // (Kept simple for brevity, logic remains same as original file if needed for tooltips)
+    // (Kept simple for brevity)
 };
 
 // --- HELPERS ---
@@ -174,7 +173,8 @@ export function renderFTP(profileData) {
     
     const cyclingChartId = `cycle-chart-${Date.now()}`;
     const runningChartId = `run-chart-${Date.now()}`;
-    const historyChartId = `history-chart-${Date.now()}`; // NEW
+    const bikeHistoryId = `bike-hist-${Date.now()}`; // NEW
+    const runHistoryId = `run-hist-${Date.now()}`;   // NEW
 
     // Load Charts Async
     (async () => {
@@ -193,68 +193,107 @@ export function renderFTP(profileData) {
             rEl.innerHTML = renderLogChart(runningChartId, chartData, { width: 800, height: 300, xType: 'distance', colorAll: runColor, color6w: runColor, showPoints: true });
         }
 
-        // 2. NEW: Garmin History Chart (using Chart.js for better Date handling)
+        // 2. NEW: Garmin History Charts (Separated)
         const healthData = await fetchGarminHealth();
-        const hCtx = document.getElementById(historyChartId);
         
-        if (hCtx && healthData.length > 0) {
+        if (healthData.length > 0) {
             // Sort by date
             const sorted = healthData.sort((a,b) => new Date(a.calendarDate) - new Date(b.calendarDate));
             const bikePoints = [];
-            const runPoints = [];
+            
+            // Run Data: FTP Pace (or Power) AND LTHR
+            const runFtpPoints = [];
+            const lthrPoints = [];
 
             sorted.forEach(d => {
-                if (d.ftp) bikePoints.push({ x: d.calendarDate, y: d.ftp });
-                // Checks for 'runningFtp' or falls back to 'thresholdPower' if Garmin names vary
-                if (d.runningFtp || d.running_ftp) runPoints.push({ x: d.calendarDate, y: d.runningFtp || d.running_ftp });
+                const date = d.calendarDate || d.date;
+                
+                // Bike FTP
+                if (d.ftp) bikePoints.push({ x: date, y: d.ftp });
+                
+                // Run FTP (Garmin 'runningFtp' is usually watts, 'thresholdPower' is watts)
+                // If you want Pace, we might need a converter, but raw data is safer.
+                // Assuming watts for consistency with standard Garmin export.
+                const rVal = d.runningFtp || d.running_ftp || d.thresholdPower;
+                if (rVal) runFtpPoints.push({ x: date, y: rVal });
+
+                // LTHR
+                const lthr = d.lactateThresholdHeartRate || d.lthr;
+                if (lthr) lthrPoints.push({ x: date, y: lthr });
             });
 
-            new Chart(hCtx, {
-                type: 'line',
-                data: {
-                    datasets: [
-                        {
-                            label: 'Cycling FTP',
+            // CHART 1: BIKE HISTORY
+            const bCtx = document.getElementById(bikeHistoryId);
+            if(bCtx) {
+                new Chart(bCtx, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: 'Cycling FTP (w)',
                             data: bikePoints,
                             borderColor: bikeColor,
                             backgroundColor: bikeColor + '20',
                             tension: 0.2,
-                            pointRadius: 3,
-                            borderWidth: 2
-                        },
-                        {
-                            label: 'Running FTP',
-                            data: runPoints,
-                            borderColor: runColor,
-                            backgroundColor: runColor + '20',
-                            tension: 0.2,
-                            pointRadius: 3,
-                            borderWidth: 2
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { display: false }, // Hide date labels to keep it clean
-                        y: { 
-                            grid: { color: '#334155' },
-                            ticks: { color: '#94a3b8' } 
-                        }
+                            borderWidth: 2,
+                            pointRadius: 2
+                        }]
                     },
-                    plugins: {
-                        legend: { labels: { color: '#cbd5e1', font: { family: 'monospace' } } },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: '#1e293b',
-                            borderColor: '#475569',
-                            borderWidth: 1
-                        }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { x: { display: false }, y: { grid: { color: '#334155' } } },
+                        plugins: { legend: { display: false } }
                     }
-                }
-            });
+                });
+            }
+
+            // CHART 2: RUN HISTORY (Dual Axis: Power vs HR)
+            const rCtx = document.getElementById(runHistoryId);
+            if(rCtx) {
+                new Chart(rCtx, {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            {
+                                label: 'Run FTP',
+                                data: runFtpPoints,
+                                borderColor: runColor,
+                                backgroundColor: runColor + '20',
+                                tension: 0.2,
+                                borderWidth: 2,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'LTHR (bpm)',
+                                data: lthrPoints,
+                                borderColor: '#ef4444', // Red for Heart Rate
+                                borderDash: [5, 5],
+                                tension: 0.2,
+                                borderWidth: 1.5,
+                                pointRadius: 0,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        scales: { 
+                            x: { display: false }, 
+                            y: { 
+                                type: 'linear', display: true, position: 'left',
+                                grid: { color: '#334155' } 
+                            },
+                            y1: { 
+                                type: 'linear', display: true, position: 'right',
+                                grid: { drawOnChartArea: false } // only want the grid lines for one axis
+                            }
+                        },
+                        plugins: { legend: { labels: { color: '#cbd5e1' } } }
+                    }
+                });
+            }
         }
     })();
 
@@ -265,36 +304,43 @@ export function renderFTP(profileData) {
                     <div class="col-span-1 h-full">${gaugeHtml}</div>
                     <div class="col-span-1 h-full">${cyclingStatsHtml}</div>
                 </div>
-                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80 flex flex-col">
-                    <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-bolt text-purple-400"></i>
-                        <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Cycling Power Curve</span>
+                
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
+                    <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Curve</span>
                     </div>
-                    <div id="${cyclingChartId}" class="flex-1 w-full relative min-h-0"><div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading...</div></div>
+                    <div id="${cyclingChartId}" class="flex-1 w-full relative min-h-0"><div class="text-xs text-slate-500 italic p-4">Loading...</div></div>
+                </div>
+
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
+                    <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Cycling FTP History</span>
+                        <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
+                    </div>
+                    <div class="relative w-full flex-1 min-h-0">
+                        <canvas id="${bikeHistoryId}"></canvas>
+                    </div>
                 </div>
             </div>
 
             <div class="flex flex-col gap-6">
                 <div class="h-64">${runningStatsHtml}</div>
-                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80 flex flex-col">
-                    <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-                        <i class="fa-solid fa-stopwatch text-pink-400"></i>
-                        <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Running Pace Curve</span>
+                
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
+                    <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pace Curve</span>
                     </div>
-                    <div id="${runningChartId}" class="flex-1 w-full relative min-h-0"><div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading...</div></div>
+                    <div id="${runningChartId}" class="flex-1 w-full relative min-h-0"><div class="text-xs text-slate-500 italic p-4">Loading...</div></div>
                 </div>
-            </div>
 
-            <div class="col-span-1 lg:col-span-2 bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80">
-                <div class="flex items-center justify-between mb-4 border-b border-slate-700 pb-2">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-emerald-400"></i>
-                        <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">FTP Progression</span>
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
+                    <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Run FTP & LTHR</span>
+                        <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
                     </div>
-                    <span class="text-[10px] text-slate-600 font-mono">Source: Garmin Health</span>
-                </div>
-                <div class="relative w-full h-60">
-                    <canvas id="${historyChartId}"></canvas>
+                    <div class="relative w-full flex-1 min-h-0">
+                        <canvas id="${runHistoryId}"></canvas>
+                    </div>
                 </div>
             </div>
         </div>

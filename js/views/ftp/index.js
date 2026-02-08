@@ -10,16 +10,16 @@ const getColor = (varName) => {
     return defaults[varName] || '#888888';
 };
 
-const formatPace = (val) => {
-    if (!val) return '--';
-    const m = Math.floor(val);
-    const s = Math.round((val - m) * 60);
+// Formats seconds (465) back to "7:45"
+const formatPaceSeconds = (val) => {
+    if (!val) return '';
+    const m = Math.floor(val / 60);
+    const s = Math.round(val % 60);
     return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
 // --- 2. DATA FETCHERS ---
 
-// Strava Data (Power Curves)
 const fetchCyclingData = async () => {
     try {
         const res = await fetch('strava_data/cycling/power_curve_graph.json');
@@ -37,18 +37,13 @@ const fetchRunningData = async () => {
     } catch (e) { return []; }
 };
 
-// Garmin Data (History)
 const fetchGarminHealth = async () => {
     try {
-        // Direct Raw Link
         const url = 'https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json';
         const res = await fetch(url);
         if (!res.ok) throw new Error("GitHub Raw fetch failed");
         return await res.json();
-    } catch (e) { 
-        console.error("Garmin Fetch Error:", e);
-        return []; 
-    }
+    } catch (e) { console.error("Garmin Fetch Error:", e); return []; }
 };
 
 const parseRunningMarkdown = (md) => {
@@ -65,7 +60,6 @@ const parseRunningMarkdown = (md) => {
             const label = cols[1];
             const distKey = Object.keys(distMap).find(k => label.toLowerCase().includes(k.toLowerCase())) || label;
             const dist = distMap[distKey];
-            
             if (dist) {
                 const parseTime = (str) => {
                     if (!str || str === '--') return null;
@@ -76,10 +70,8 @@ const parseRunningMarkdown = (md) => {
                 };
                 const timeAllTime = parseTime(cols[2]);
                 const time6Week = parseTime(cols[4]);
-
                 const paceAllTime = timeAllTime ? (timeAllTime / 60) / dist : null;
                 const pace6Week = time6Week ? (time6Week / 60) / dist : null;
-
                 if (paceAllTime) rows.push({ label: distKey, x: dist, yAll: paceAllTime, y6w: pace6Week });
             }
         }
@@ -87,52 +79,39 @@ const parseRunningMarkdown = (md) => {
     return rows.sort((a,b) => a.x - b.x);
 };
 
-// --- 3. SVG ENGINE (Restored for Power Curves) ---
-
+// --- 3. SVG ENGINE (For Power Curves) ---
+// (Kept identical to previous version to ensure top charts work)
 const getLogX = (val, min, max, width, pad) => {
     const logMin = Math.log(min || 1);
     const logMax = Math.log(max);
     const logVal = Math.log(val || 1);
     return pad.l + ((logVal - logMin) / (logMax - logMin)) * (width - pad.l - pad.r);
 };
-
 const getLinY = (val, min, max, height, pad) => {
     return height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
 };
-
 const renderSvgChart = (containerId, data, options) => {
     const { width = 800, height = 300, colorAll, color6w, xType } = options;
     const pad = { t: 20, b: 30, l: 40, r: 20 };
-    
-    // Calculate Bounds
     const xValues = data.map(d => d.x);
     const yValues = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v !== null && v > 0);
-    
     if (xValues.length === 0 || yValues.length === 0) return `<div class="text-xs text-slate-500 p-4 text-center">No Data</div>`;
-
     const minX = Math.min(...xValues);
     const maxX = Math.max(...xValues);
     let minY = Math.min(...yValues);
     let maxY = Math.max(...yValues);
-    
-    // Add buffer
     const buf = (maxY - minY) * 0.1;
     minY = Math.max(0, minY - buf);
     maxY = maxY + buf;
-
-    // Grid
     let gridHtml = '';
     const ySteps = 4;
     for (let i = 0; i <= ySteps; i++) {
         const pct = i / ySteps;
         const val = minY + (pct * (maxY - minY));
         const y = getLinY(val, minY, maxY, height, pad);
-        const label = xType === 'distance' ? formatPace(val) : Math.round(val);
-        gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width - pad.r}" y2="${y}" stroke="#334155" stroke-width="1" opacity="0.3" />
-                     <text x="${pad.l - 5}" y="${y + 3}" text-anchor="end" font-size="10" fill="#94a3b8">${label}</text>`;
+        const label = xType === 'distance' ? formatPaceSeconds(val * 60) : Math.round(val);
+        gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width - pad.r}" y2="${y}" stroke="#334155" stroke-width="1" opacity="0.3" /><text x="${pad.l - 5}" y="${y + 3}" text-anchor="end" font-size="10" fill="#94a3b8">${label}</text>`;
     }
-
-    // Paths
     const genPath = (key) => {
         let d = '';
         data.forEach((pt, i) => {
@@ -143,11 +122,8 @@ const renderSvgChart = (containerId, data, options) => {
         });
         return d;
     };
-
     const path6w = genPath('y6w');
     const pathAll = genPath('yAll');
-
-    // Points
     let pointsHtml = '';
     if (options.showPoints) {
         data.forEach(pt => {
@@ -155,23 +131,13 @@ const renderSvgChart = (containerId, data, options) => {
             if (pt.yAll) pointsHtml += `<circle cx="${x}" cy="${getLinY(pt.yAll, minY, maxY, height, pad)}" r="3" fill="#0f172a" stroke="${colorAll}" stroke-width="2" />`;
         });
     }
-
-    return `
-        <svg viewBox="0 0 ${width} ${height}" class="w-full h-full" preserveAspectRatio="none">
-            ${gridHtml}
-            <path d="${path6w}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.7" />
-            <path d="${pathAll}" fill="none" stroke="${colorAll}" stroke-width="2" />
-            ${pointsHtml}
-        </svg>
-    `;
+    return `<svg viewBox="0 0 ${width} ${height}" class="w-full h-full" preserveAspectRatio="none">${gridHtml}<path d="${path6w}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.7" /><path d="${pathAll}" fill="none" stroke="${colorAll}" stroke-width="2" />${pointsHtml}</svg>`;
 };
 
-// --- 4. MAIN EXPORTS ---
+// --- 4. EXPORTS ---
 
 export function renderFTP(profileData) {
     const bio = profileData || { wkg: 0, gauge_percent: 0, category: { label: "Unknown", color: "#64748b" } };
-    
-    // Generate IDs
     const ts = Date.now();
     window.ftpChartIds = {
         cycleCurve: `curve-bike-${ts}`,
@@ -204,7 +170,7 @@ export function renderFTP(profileData) {
 
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">FTP Progress</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Cycling FTP History</span>
                         <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
                     </div>
                     <div class="relative w-full flex-1 min-h-0">
@@ -228,7 +194,7 @@ export function renderFTP(profileData) {
 
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Run FTP & LTHR</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Run FTP Pace & LTHR</span>
                         <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
                     </div>
                     <div class="relative w-full flex-1 min-h-0">
@@ -240,6 +206,7 @@ export function renderFTP(profileData) {
     `;
 }
 
+// --- 5. INITIALIZE CHARTS ---
 export async function initCharts() {
     const ids = window.ftpChartIds;
     if (!ids) return;
@@ -247,7 +214,7 @@ export async function initCharts() {
     const bikeColor = getColor('--color-bike');
     const runColor = getColor('--color-run');
 
-    // --- 1. RENDER SVG POWER CURVES (STRAVA) ---
+    // 1. Strava SVG Charts
     fetchCyclingData().then(data => {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
@@ -263,7 +230,7 @@ export async function initCharts() {
         } else if (el) { el.innerHTML = '<div class="text-xs text-red-500 p-4">No Strava Run Data</div>'; }
     });
 
-    // --- 2. RENDER CHART.JS HISTORY (GARMIN) ---
+    // 2. Garmin History Charts (Chart.js)
     const bCanvas = document.getElementById(ids.bikeHist);
     const rCanvas = document.getElementById(ids.runHist);
 
@@ -271,16 +238,26 @@ export async function initCharts() {
         const data = await fetchGarminHealth();
         
         if (data.length > 0) {
-            const sorted = data.sort((a,b) => new Date(a.calendarDate) - new Date(b.calendarDate));
+            // UPDATED: Sort by "Date"
+            const sorted = data.sort((a,b) => new Date(a["Date"]) - new Date(b["Date"]));
             
-            // Extract Dates & Values
-            const dates = sorted.map(d => d.calendarDate.slice(5)); // "10-14"
-            const bikeVals = sorted.map(d => d.ftp || d.cyclingFtp);
-            const runVals = sorted.map(d => d.runningFtp || d.running_ftp || d.thresholdPower);
-            const lthrVals = sorted.map(d => d.lactateThresholdHeartRate || d.lthr);
-
-            // Filter out empty days for cleaner charts? 
-            // ChartJS handles nulls well, but let's keep it simple for now.
+            // UPDATED: Extract using "Date"
+            const dates = sorted.map(d => d["Date"] ? d["Date"].slice(5) : ''); 
+            
+            // UPDATED: Map to "FTP", "Run FTP Pace", "Lactate Threshold HR"
+            const bikeVals = sorted.map(d => d["FTP"]);
+            
+            // Parse "7:45" to seconds (e.g., 465) for plotting
+            const runVals = sorted.map(d => {
+                const s = d["Run FTP Pace"];
+                if (typeof s === 'string' && s.includes(':')) {
+                    const [mm, ss] = s.split(':').map(Number);
+                    return (mm * 60) + ss;
+                }
+                return null;
+            });
+            
+            const lthrVals = sorted.map(d => d["Lactate Threshold HR"]);
 
             // Bike Chart
             new Chart(bCanvas, {
@@ -302,7 +279,7 @@ export async function initCharts() {
                     maintainAspectRatio: false,
                     scales: {
                         x: { display: false },
-                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 }
                     },
                     plugins: { legend: { display: false } }
                 }
@@ -315,7 +292,7 @@ export async function initCharts() {
                     labels: dates,
                     datasets: [
                         {
-                            label: 'Pace (w)',
+                            label: 'Pace (min/mi)',
                             data: runVals,
                             borderColor: runColor,
                             backgroundColor: runColor + '20',
@@ -342,21 +319,45 @@ export async function initCharts() {
                     interaction: { mode: 'index', intersect: false },
                     scales: {
                         x: { display: false },
-                        y: { type: 'linear', display: true, position: 'left', grid: { color: '#334155' } },
-                        y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } }
+                        y: { 
+                            type: 'linear', display: true, position: 'left', 
+                            grid: { color: '#334155' },
+                            ticks: { 
+                                color: '#94a3b8',
+                                // CUSTOM TICK FORMATTER: Seconds -> "MM:SS"
+                                callback: function(val) { return formatPaceSeconds(val); }
+                            },
+                            reverse: true // Lower pace (faster) is usually "higher" on graph visually
+                        },
+                        y1: { 
+                            type: 'linear', display: true, position: 'right', 
+                            grid: { drawOnChartArea: false },
+                            ticks: { color: '#ef4444' },
+                            suggestedMin: 130
+                        }
                     },
-                    plugins: { legend: { labels: { color: '#cbd5e1', boxWidth: 10, font: { size: 10 } } } }
+                    plugins: { 
+                        legend: { labels: { color: '#cbd5e1', boxWidth: 10, font: { size: 10 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.dataset.yAxisID === 'y') {
+                                        return label + formatPaceSeconds(context.parsed.y);
+                                    }
+                                    return label + context.parsed.y;
+                                }
+                            }
+                        }
+                    }
                 }
             });
-        } else {
-            // Show error/empty message on canvas containers
-            if (bCanvas) bCanvas.parentNode.innerHTML = '<div class="text-xs text-slate-500 p-4">No Garmin History Found</div>';
-            if (rCanvas) rCanvas.parentNode.innerHTML = '<div class="text-xs text-slate-500 p-4">No Garmin History Found</div>';
         }
     }
 }
 
-// --- SUB-COMPONENTS ---
+// --- SUB-COMPONENTS (Unchanged) ---
 const renderGauge = (wkgNum, percent, cat) => `
     <div class="gauge-wrapper w-full h-full flex items-center justify-center p-4 bg-slate-800/50 border border-slate-700 rounded-xl shadow-lg relative overflow-hidden">
         <svg viewBox="0 0 300 160" class="gauge-svg w-full h-full max-h-[220px]" preserveAspectRatio="xMidYMid meet">
@@ -405,8 +406,3 @@ const renderRunningStats = (bio) => `
             </div>
             <div class="flex flex-col border-l border-slate-700 pl-4">
                 <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">5K Est</span>
-                <span class="text-xl font-bold text-white leading-none">${bio.five_k_time || '--'}</span>
-            </div>
-        </div>
-    </div>
-`;

@@ -1,5 +1,5 @@
 # Recipes
-**Generated:** 2026-02-07 19:08:46
+**Generated:** 2026-02-08 02:53:23
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/recipes.json
 
 ---
@@ -92,7 +92,7 @@
   "cereal_treats": [
     {
       "name": "Plain Rice Krispie Treats",
-      "servings": 8,
+      "servings": 40,
       "carbs_per_serving_grams": 25.6,
       "ingredients": [
         {

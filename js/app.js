@@ -149,16 +149,16 @@
             content.classList.add('opacity-0');
             
             setTimeout(async () => {
-                // FIX: Force scroll to top when changing views
                 window.scrollTo({ top: 0, behavior: 'instant' });
-
                 content.innerHTML = '';
+                
                 const render = {
                     dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),
                     trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
                     metrics: () => metricsMod?.renderMetrics(this.rawLogData),
                     readiness: () => readinessMod?.renderReadiness(this.readinessData),
-                    ftp: () => ftpMod?.renderFTP(this.profileData),
+                    // UPDATE 1: Pass rawLogData to FTP
+                    ftp: () => ftpMod?.renderFTP(this.profileData, this.rawLogData),
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
@@ -173,6 +173,11 @@
                         
                         if (view === 'fueling' && fuelMod?.FuelTimer?.attachEvents) {
                             fuelMod.FuelTimer.attachEvents();
+                        }
+                        
+                        // UPDATE 2: Initialize FTP Charts
+                        if (view === 'ftp' && ftpMod?.initCharts) {
+                            ftpMod.initCharts(this.rawLogData);
                         }
                     } else {
                         content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;

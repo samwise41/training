@@ -1,6 +1,8 @@
 # **Coaching Prompt**
 
-I have a training plan location in this github location. Can you review this file thoroughly, **specifically cross-referencing `COACH_BRIEFING.md`, garmin_health.md and `MASTER_TRAINING_DATABASE.md`**. Please generate my training for the next week? 
+I have a training plan location in this github location. Can you review this file thoroughly, **specifically cross-referencing the following sources
+
+ `coaching_view.json`, garmin_health.md and `trainjn_log.md`**. Please generate my training for the next week? 
 
 Please generate a raw markdown text of next week's schedule. Please provide evidence that you followed the Weekly Generator Checklist SOP. If I forget to attach the GitHub repo, please remind me before spinning your wheels. 
 

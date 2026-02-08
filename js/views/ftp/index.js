@@ -1,6 +1,6 @@
 // js/views/ftp/index.js
 
-// --- 1. SETUP & UTILS ---
+// --- 1. CONFIG & UTILS ---
 
 const getColor = (varName) => {
     if (typeof window !== "undefined" && window.getComputedStyle) {
@@ -10,15 +10,174 @@ const getColor = (varName) => {
     return defaults[varName] || '#888888';
 };
 
-// --- 2. HTML RENDERER ---
-export function renderFTP(profileData) {
-    const bio = profileData || { weight_lbs: 0, ftp_watts: 0, wkg: 0, gauge_percent: 0, category: { label: "Unknown", color: "#64748b" } };
+const formatPace = (val) => {
+    if (!val) return '--';
+    const m = Math.floor(val);
+    const s = Math.round((val - m) * 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+};
+
+// --- 2. DATA FETCHERS ---
+
+// Strava Data (Power Curves)
+const fetchCyclingData = async () => {
+    try {
+        const res = await fetch('strava_data/cycling/power_curve_graph.json');
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (e) { return []; }
+};
+
+const fetchRunningData = async () => {
+    try {
+        const res = await fetch('strava_data/running/my_running_prs.md');
+        if (!res.ok) return [];
+        const text = await res.text();
+        return parseRunningMarkdown(text);
+    } catch (e) { return []; }
+};
+
+// Garmin Data (History)
+const fetchGarminHealth = async () => {
+    try {
+        // Direct Raw Link
+        const url = 'https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json';
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("GitHub Raw fetch failed");
+        return await res.json();
+    } catch (e) { 
+        console.error("Garmin Fetch Error:", e);
+        return []; 
+    }
+};
+
+const parseRunningMarkdown = (md) => {
+    const rows = [];
+    const distMap = { 
+        '400m': 0.248, '1/2 mile': 0.5, '1 mile': 1.0, '2 mile': 2.0, 
+        '5k': 3.106, '10k': 6.213, '15k': 9.32, '10 mile': 10.0, 
+        '20k': 12.42, 'Half-Marathon': 13.109, '30k': 18.64, 'Marathon': 26.218, '50k': 31.06
+    };
+
+    md.split('\n').forEach(line => {
+        const cols = line.split('|').map(c => c.trim());
+        if (cols.length >= 6 && !line.includes('---') && cols[1] !== 'Distance') {
+            const label = cols[1];
+            const distKey = Object.keys(distMap).find(k => label.toLowerCase().includes(k.toLowerCase())) || label;
+            const dist = distMap[distKey];
+            
+            if (dist) {
+                const parseTime = (str) => {
+                    if (!str || str === '--') return null;
+                    const parts = str.replace(/\*\*/g, '').split(':').map(Number);
+                    if (parts.length === 3) return parts[0]*3600 + parts[1]*60 + parts[2];
+                    if (parts.length === 2) return parts[0]*60 + parts[1];
+                    return null;
+                };
+                const timeAllTime = parseTime(cols[2]);
+                const time6Week = parseTime(cols[4]);
+
+                const paceAllTime = timeAllTime ? (timeAllTime / 60) / dist : null;
+                const pace6Week = time6Week ? (time6Week / 60) / dist : null;
+
+                if (paceAllTime) rows.push({ label: distKey, x: dist, yAll: paceAllTime, y6w: pace6Week });
+            }
+        }
+    });
+    return rows.sort((a,b) => a.x - b.x);
+};
+
+// --- 3. SVG ENGINE (Restored for Power Curves) ---
+
+const getLogX = (val, min, max, width, pad) => {
+    const logMin = Math.log(min || 1);
+    const logMax = Math.log(max);
+    const logVal = Math.log(val || 1);
+    return pad.l + ((logVal - logMin) / (logMax - logMin)) * (width - pad.l - pad.r);
+};
+
+const getLinY = (val, min, max, height, pad) => {
+    return height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
+};
+
+const renderSvgChart = (containerId, data, options) => {
+    const { width = 800, height = 300, colorAll, color6w, xType } = options;
+    const pad = { t: 20, b: 30, l: 40, r: 20 };
     
-    // Create unique IDs
+    // Calculate Bounds
+    const xValues = data.map(d => d.x);
+    const yValues = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v !== null && v > 0);
+    
+    if (xValues.length === 0 || yValues.length === 0) return `<div class="text-xs text-slate-500 p-4 text-center">No Data</div>`;
+
+    const minX = Math.min(...xValues);
+    const maxX = Math.max(...xValues);
+    let minY = Math.min(...yValues);
+    let maxY = Math.max(...yValues);
+    
+    // Add buffer
+    const buf = (maxY - minY) * 0.1;
+    minY = Math.max(0, minY - buf);
+    maxY = maxY + buf;
+
+    // Grid
+    let gridHtml = '';
+    const ySteps = 4;
+    for (let i = 0; i <= ySteps; i++) {
+        const pct = i / ySteps;
+        const val = minY + (pct * (maxY - minY));
+        const y = getLinY(val, minY, maxY, height, pad);
+        const label = xType === 'distance' ? formatPace(val) : Math.round(val);
+        gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width - pad.r}" y2="${y}" stroke="#334155" stroke-width="1" opacity="0.3" />
+                     <text x="${pad.l - 5}" y="${y + 3}" text-anchor="end" font-size="10" fill="#94a3b8">${label}</text>`;
+    }
+
+    // Paths
+    const genPath = (key) => {
+        let d = '';
+        data.forEach((pt, i) => {
+            if (pt[key] === null) return;
+            const x = getLogX(pt.x, minX, maxX, width, pad);
+            const y = getLinY(pt[key], minY, maxY, height, pad);
+            d += (i === 0 || d === '') ? `M ${x} ${y}` : ` L ${x} ${y}`;
+        });
+        return d;
+    };
+
+    const path6w = genPath('y6w');
+    const pathAll = genPath('yAll');
+
+    // Points
+    let pointsHtml = '';
+    if (options.showPoints) {
+        data.forEach(pt => {
+            const x = getLogX(pt.x, minX, maxX, width, pad);
+            if (pt.yAll) pointsHtml += `<circle cx="${x}" cy="${getLinY(pt.yAll, minY, maxY, height, pad)}" r="3" fill="#0f172a" stroke="${colorAll}" stroke-width="2" />`;
+        });
+    }
+
+    return `
+        <svg viewBox="0 0 ${width} ${height}" class="w-full h-full" preserveAspectRatio="none">
+            ${gridHtml}
+            <path d="${path6w}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.7" />
+            <path d="${pathAll}" fill="none" stroke="${colorAll}" stroke-width="2" />
+            ${pointsHtml}
+        </svg>
+    `;
+};
+
+// --- 4. MAIN EXPORTS ---
+
+export function renderFTP(profileData) {
+    const bio = profileData || { wkg: 0, gauge_percent: 0, category: { label: "Unknown", color: "#64748b" } };
+    
+    // Generate IDs
     const ts = Date.now();
     window.ftpChartIds = {
-        bikeHist: `bike-hist-${ts}`,
-        runHist: `run-hist-${ts}`
+        cycleCurve: `curve-bike-${ts}`,
+        runCurve: `curve-run-${ts}`,
+        bikeHist: `hist-bike-${ts}`,
+        runHist: `hist-run-${ts}`
     };
 
     const gaugeHtml = renderGauge(bio.wkg, bio.gauge_percent, bio.category);
@@ -33,9 +192,19 @@ export function renderFTP(profileData) {
                     <div class="col-span-1 h-full">${cyclingStatsHtml}</div>
                 </div>
                 
-                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80 flex flex-col">
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
+                    <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-bolt text-purple-400"></i>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Curve (Strava)</span>
+                    </div>
+                    <div id="${window.ftpChartIds.cycleCurve}" class="flex-1 w-full relative min-h-0">
+                        <div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading Strava Data...</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Cycling FTP History</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">FTP Progress</span>
                         <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
                     </div>
                     <div class="relative w-full flex-1 min-h-0">
@@ -47,7 +216,17 @@ export function renderFTP(profileData) {
             <div class="flex flex-col gap-6">
                 <div class="h-64">${runningStatsHtml}</div>
                 
-                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-80 flex flex-col">
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
+                    <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-stopwatch text-pink-400"></i>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pace Curve (Strava)</span>
+                    </div>
+                    <div id="${window.ftpChartIds.runCurve}" class="flex-1 w-full relative min-h-0">
+                        <div class="flex items-center justify-center h-full text-slate-500 text-xs italic">Loading Strava Data...</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center justify-between mb-2 border-b border-slate-700 pb-2">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Run FTP & LTHR</span>
                         <span class="text-[9px] text-slate-600 font-mono">Garmin</span>
@@ -61,57 +240,60 @@ export function renderFTP(profileData) {
     `;
 }
 
-// --- 3. CHART INITIALIZATION (FIXED) ---
 export async function initCharts() {
-    const { bikeHist, runHist } = window.ftpChartIds || {};
-    const bCanvas = document.getElementById(bikeHist);
-    const rCanvas = document.getElementById(runHist);
+    const ids = window.ftpChartIds;
+    if (!ids) return;
 
-    if (!bCanvas || !rCanvas) return;
+    const bikeColor = getColor('--color-bike');
+    const runColor = getColor('--color-run');
 
-    try {
-        const url = 'https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json';
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Fetch failed");
+    // --- 1. RENDER SVG POWER CURVES (STRAVA) ---
+    fetchCyclingData().then(data => {
+        const el = document.getElementById(ids.cycleCurve);
+        if (el && data.length) {
+            const chartData = data.map(d => ({ x: d.seconds, yAll: d.all_time_watts, y6w: d.six_week_watts })).filter(d => d.x >= 1);
+            el.innerHTML = renderSvgChart(ids.cycleCurve, chartData, { width: 600, height: 250, xType: 'time', colorAll: bikeColor, color6w: bikeColor });
+        } else if (el) { el.innerHTML = '<div class="text-xs text-red-500 p-4">No Strava Cycle Data</div>'; }
+    });
+
+    fetchRunningData().then(data => {
+        const el = document.getElementById(ids.runCurve);
+        if (el && data.length) {
+            el.innerHTML = renderSvgChart(ids.runCurve, data, { width: 600, height: 250, xType: 'distance', colorAll: runColor, color6w: runColor, showPoints: true });
+        } else if (el) { el.innerHTML = '<div class="text-xs text-red-500 p-4">No Strava Run Data</div>'; }
+    });
+
+    // --- 2. RENDER CHART.JS HISTORY (GARMIN) ---
+    const bCanvas = document.getElementById(ids.bikeHist);
+    const rCanvas = document.getElementById(ids.runHist);
+
+    if (bCanvas && rCanvas) {
+        const data = await fetchGarminHealth();
         
-        const rawData = await res.json();
-        
-        // Sort Data Chronologically
-        const sorted = rawData.sort((a,b) => new Date(a.calendarDate) - new Date(b.calendarDate));
+        if (data.length > 0) {
+            const sorted = data.sort((a,b) => new Date(a.calendarDate) - new Date(b.calendarDate));
+            
+            // Extract Dates & Values
+            const dates = sorted.map(d => d.calendarDate.slice(5)); // "10-14"
+            const bikeVals = sorted.map(d => d.ftp || d.cyclingFtp);
+            const runVals = sorted.map(d => d.runningFtp || d.running_ftp || d.thresholdPower);
+            const lthrVals = sorted.map(d => d.lactateThresholdHeartRate || d.lthr);
 
-        // --- PREPARE BIKE DATA ---
-        // We must separate Labels (Dates) and Data (Values) arrays for Chart.js to work without an adapter
-        const bikeEntries = sorted.filter(d => (d.ftp && d.ftp > 0) || (d.cyclingFtp && d.cyclingFtp > 0));
-        
-        const bikeLabels = bikeEntries.map(d => d.calendarDate.substring(5)); // Remove Year for shorter label "10-14"
-        const bikeValues = bikeEntries.map(d => d.ftp || d.cyclingFtp);
+            // Filter out empty days for cleaner charts? 
+            // ChartJS handles nulls well, but let's keep it simple for now.
 
-        // --- PREPARE RUN DATA ---
-        // Filter entries that have EITHER run power OR LTHR
-        const runEntries = sorted.filter(d => (d.runningFtp > 0) || (d.thresholdPower > 0) || (d.lactateThresholdHeartRate > 0));
-        
-        const runLabels = runEntries.map(d => d.calendarDate.substring(5));
-        const runFtpValues = runEntries.map(d => d.runningFtp || d.thresholdPower || null); // Use null to span gaps
-        const lthrValues = runEntries.map(d => d.lactateThresholdHeartRate || d.lthr || null);
-
-        // Colors
-        const bikeColor = getColor('--color-bike');
-        const runColor = getColor('--color-run');
-
-        // --- RENDER CYCLING CHART ---
-        if (bikeValues.length > 0) {
+            // Bike Chart
             new Chart(bCanvas, {
                 type: 'line',
                 data: {
-                    labels: bikeLabels, // Explicit Labels Array
+                    labels: dates,
                     datasets: [{
                         label: 'FTP (w)',
-                        data: bikeValues, // Explicit Data Array
+                        data: bikeVals,
                         borderColor: bikeColor,
                         backgroundColor: bikeColor + '20',
-                        tension: 0.2,
                         borderWidth: 2,
-                        pointRadius: 3,
+                        pointRadius: 2,
                         spanGaps: true
                     }]
                 },
@@ -119,51 +301,36 @@ export async function initCharts() {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { 
-                            display: true, // SHOW X AXIS
-                            ticks: { maxTicksLimit: 6, color: '#64748b', font: { size: 10 } },
-                            grid: { display: false }
-                        },
-                        y: { 
-                            grid: { color: '#334155' },
-                            ticks: { color: '#94a3b8' },
-                            suggestedMin: 150 // Start scale at 150w so line isn't flat
-                        }
+                        x: { display: false },
+                        y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
                     },
                     plugins: { legend: { display: false } }
                 }
             });
-        } else {
-            // Mock Data for Visual Confirmation if real data is empty
-            renderMockChart(bCanvas, bikeColor, 'No Bike Data'); 
-        }
 
-        // --- RENDER RUNNING CHART ---
-        if (runFtpValues.length > 0 || lthrValues.length > 0) {
+            // Run Chart
             new Chart(rCanvas, {
                 type: 'line',
                 data: {
-                    labels: runLabels,
+                    labels: dates,
                     datasets: [
                         {
-                            label: 'Run FTP (w)',
-                            data: runFtpValues,
+                            label: 'Pace (w)',
+                            data: runVals,
                             borderColor: runColor,
                             backgroundColor: runColor + '20',
-                            tension: 0.2,
                             borderWidth: 2,
-                            pointRadius: 3,
+                            pointRadius: 2,
                             spanGaps: true,
                             yAxisID: 'y'
                         },
                         {
-                            label: 'LTHR (bpm)',
-                            data: lthrValues,
-                            borderColor: '#ef4444', 
-                            borderDash: [4, 4],
-                            tension: 0.2,
-                            borderWidth: 1.5,
-                            pointRadius: 2,
+                            label: 'LTHR',
+                            data: lthrVals,
+                            borderColor: '#ef4444',
+                            borderWidth: 1,
+                            borderDash: [3,3],
+                            pointRadius: 0,
                             spanGaps: true,
                             yAxisID: 'y1'
                         }
@@ -174,54 +341,22 @@ export async function initCharts() {
                     maintainAspectRatio: false,
                     interaction: { mode: 'index', intersect: false },
                     scales: {
-                        x: { 
-                            display: true, 
-                            ticks: { maxTicksLimit: 6, color: '#64748b', font: { size: 10 } },
-                            grid: { display: false }
-                        },
-                        y: {
-                            type: 'linear', display: true, position: 'left',
-                            grid: { color: '#334155' },
-                            ticks: { color: '#94a3b8' },
-                            suggestedMin: 200 // Run Power usually higher
-                        },
-                        y1: {
-                            type: 'linear', display: true, position: 'right',
-                            grid: { drawOnChartArea: false },
-                            ticks: { color: '#ef4444' },
-                            suggestedMin: 130 // HR usually 130+
-                        }
+                        x: { display: false },
+                        y: { type: 'linear', display: true, position: 'left', grid: { color: '#334155' } },
+                        y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } }
                     },
-                    plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } }
+                    plugins: { legend: { labels: { color: '#cbd5e1', boxWidth: 10, font: { size: 10 } } } }
                 }
             });
         } else {
-            renderMockChart(rCanvas, runColor, 'No Run Data');
+            // Show error/empty message on canvas containers
+            if (bCanvas) bCanvas.parentNode.innerHTML = '<div class="text-xs text-slate-500 p-4">No Garmin History Found</div>';
+            if (rCanvas) rCanvas.parentNode.innerHTML = '<div class="text-xs text-slate-500 p-4">No Garmin History Found</div>';
         }
-
-    } catch (e) {
-        console.error("FTP Chart Error:", e);
     }
 }
 
-// Fallback to show something if data fetch fails
-function renderMockChart(canvas, color, label) {
-    new Chart(canvas, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-            datasets: [{
-                label: label,
-                data: [200, 210, 205, 220, 225],
-                borderColor: color,
-                tension: 0.3
-            }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-}
-
-// --- SUB-COMPONENTS (Unchanged) ---
+// --- SUB-COMPONENTS ---
 const renderGauge = (wkgNum, percent, cat) => `
     <div class="gauge-wrapper w-full h-full flex items-center justify-center p-4 bg-slate-800/50 border border-slate-700 rounded-xl shadow-lg relative overflow-hidden">
         <svg viewBox="0 0 300 160" class="gauge-svg w-full h-full max-h-[220px]" preserveAspectRatio="xMidYMid meet">

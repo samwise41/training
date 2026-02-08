@@ -1,82 +1,72 @@
 [
     {
-        "id": "PLAN-2026-02-01-Other",
-        "date": "2026-02-01",
-        "day": "Sunday",
-        "plannedWorkout": "Rest",
-        "plannedDuration": 0.0,
-        "activityType": "Other",
-        "notes": "**Focus:** Sleep and mobility.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-02-Run",
-        "date": "2026-02-02",
+        "id": "PLAN-2026-02-09-Run",
+        "date": "2026-02-09",
         "day": "Monday",
         "plannedWorkout": "[RUN] Tempo / Threshold",
         "plannedDuration": 45.0,
         "activityType": "Run",
-        "notes": "**Loc:** Treadmill/Outdoor. **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **6 x 20s Strides** (High Cadence); Cooldown.",
+        "notes": "**Focus:** Anaerobic Impact. 10m Warmup; 20m @ Tempo; **8 x 20s Hill Sprints** (Max Effort) to spike Anaerobic score.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-02-03-Bike",
-        "date": "2026-02-03",
+        "id": "PLAN-2026-02-10-Bike",
+        "date": "2026-02-10",
         "day": "Tuesday",
         "plannedWorkout": "[BIKE] Strength / Low Cadence",
         "plannedDuration": 60.0,
         "activityType": "Bike",
-        "notes": "**Loc:** Peloton/Zwift. **Focus:** Torque Efficiency. Warmup, then 4 x 8min @ Sweet Spot at **55-60 RPM**. Grind it out to build force.",
+        "notes": "**Focus:** Torque Maintenance. 4 x 10min @ Sweet Spot (229-244W) at **55-60 RPM**. **No ERG Mode.**",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-02-04-Swim",
-        "date": "2026-02-04",
+        "id": "PLAN-2026-02-11-Swim",
+        "date": "2026-02-11",
         "day": "Wednesday",
         "plannedWorkout": "[SWIM] Technique Focus",
         "plannedDuration": 40.0,
         "activityType": "Swim",
-        "notes": "**Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work.",
+        "notes": "**Focus:** Consistency. 400m Continuous swim test at steady pace (70%).",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-02-05-Bike",
-        "date": "2026-02-05",
+        "id": "PLAN-2026-02-12-Bike",
+        "date": "2026-02-12",
         "day": "Thursday",
-        "plannedWorkout": "[BIKE] Zwift Race",
-        "plannedDuration": 45.0,
+        "plannedWorkout": "[BIKE] Threshold + Endurance",
+        "plannedDuration": 90.0,
         "activityType": "Bike",
-        "notes": "**Loc:** Zwift. **Focus:** \"Fun Factor\" Rule Application. High Cadence, Anaerobic Capacity. Go full gas.",
+        "notes": "**Focus:** Winter Volume Reallocation. 3 x 9min @ Threshold (100% FTP). Remaining time strict Zone 2.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-02-06-Run",
-        "date": "2026-02-06",
+        "id": "PLAN-2026-02-13-Run",
+        "date": "2026-02-13",
         "day": "Friday",
         "plannedWorkout": "[RUN] Aerobic Maintenance",
         "plannedDuration": 40.0,
         "activityType": "Run",
-        "notes": "**Loc:** Easy Terrain. **Focus:** Active Recovery. Strict Zone 2 (HR < 152). Flush the legs.",
+        "notes": "**Focus:** Recovery. Zone 2 strict. Optional: Add 15m \"Touch Swim\" afterwards.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-02-06-Swim",
-        "date": "2026-02-06",
-        "day": "Friday",
-        "plannedWorkout": "[SWIM] Touch Swim",
-        "plannedDuration": 20.0,
-        "activityType": "Swim",
-        "notes": "**Loc:** Pool. **Focus:** Frequency Rule. 500m-800m total. Drills ONLY. Catch & Pull focus. No intensity.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-07-Bike",
-        "date": "2026-02-07",
+        "id": "PLAN-2026-02-14-Bike",
+        "date": "2026-02-14",
         "day": "Saturday",
         "plannedWorkout": "[BIKE] Long Steady Distance",
-        "plannedDuration": 135.0,
+        "plannedDuration": 120.0,
         "activityType": "Bike",
-        "notes": "**Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m.",
+        "notes": "**Focus:** Winter Cap Applied. **2.0 Hours Hard Cap.** Intensity: New Zone 2 (144-195W). Fuel: 60g carb/hr.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-15-Other",
+        "date": "2026-02-15",
+        "day": "Sunday",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0.0,
+        "activityType": "Other",
+        "notes": "**Focus:** Total recovery.",
         "status": "PLANNED"
     }
 ]

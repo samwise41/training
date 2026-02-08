@@ -13,7 +13,7 @@ export const FTPTemplates = {
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
                         <i class="fa-solid fa-bolt text-purple-400"></i>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Curve</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Power Curve (Strava)</span>
                     </div>
                     <div id="${ids.cycleCurve}" class="flex-1 w-full relative min-h-0 flex items-center justify-center text-xs text-slate-500 italic">Loading...</div>
                 </div>
@@ -33,7 +33,7 @@ export const FTPTemplates = {
                 <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-64 flex flex-col">
                     <div class="flex items-center gap-2 mb-2 border-b border-slate-700 pb-2">
                         <i class="fa-solid fa-stopwatch text-pink-400"></i>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pace Curve</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pace Curve (Strava)</span>
                     </div>
                     <div id="${ids.runCurve}" class="flex-1 w-full relative min-h-0 flex items-center justify-center text-xs text-slate-500 italic">Loading...</div>
                 </div>
@@ -67,15 +67,40 @@ export const FTPTemplates = {
         </div>`;
     },
 
-    stats(title, mainVal, subVal, icon) {
+    // RESTORED: Specific Cycling Stats Card (Purple Accents)
+    cyclingStats(bio) {
         return `<div class="bg-slate-800/50 border border-slate-700 p-6 rounded-xl text-center shadow-lg flex flex-col justify-center h-full">
             <div class="flex items-center justify-center gap-2 mb-2">
-                <i class="fa-solid ${icon} text-2xl"></i>
-                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">${title}</span>
+                <i class="fa-solid fa-bicycle text-purple-400 text-2xl"></i>
+                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Cycling FTP</span>
             </div>
             <div class="flex flex-col mt-2">
-                <span class="text-5xl font-black text-white">${mainVal}</span>
-                <span class="text-sm text-slate-400 font-mono mt-2">${subVal}</span>
+                <span class="text-5xl font-black text-white">${bio.ftp_watts || '--'}</span>
+                <span class="text-sm text-slate-400 font-mono mt-2">${(bio.wkg || 0).toFixed(2)} W/kg</span>
+            </div>
+        </div>`;
+    },
+
+    // RESTORED: Specific Running Stats Card (Pink Accents + 3 Col Grid)
+    runningStats(bio) {
+        return `<div class="bg-slate-800/50 border border-slate-700 p-6 rounded-xl text-center shadow-lg h-full flex flex-col justify-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <i class="fa-solid fa-person-running text-pink-400 text-xl"></i>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Running Profile</span>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">Pace</span>
+                    <span class="text-xl font-bold text-white leading-none">${bio.run_ftp_pace || '--'}</span>
+                </div>
+                <div class="flex flex-col border-l border-slate-700 pl-4">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">LTHR</span>
+                    <span class="text-xl font-bold text-white leading-none">${bio.lthr || '--'}</span>
+                </div>
+                <div class="flex flex-col border-l border-slate-700 pl-4">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase mb-1">5K Est</span>
+                    <span class="text-xl font-bold text-white leading-none">${bio.five_k_time || '--'}</span>
+                </div>
             </div>
         </div>`;
     }

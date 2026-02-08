@@ -150,7 +150,7 @@ export const FTPCharts = {
         });
     },
 
-    // --- 3. CHART.JS RENDERERS ---
+    // --- 3. CHART.JS RENDERERS (Updated for Solid Dots) ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
@@ -163,12 +163,14 @@ export const FTPCharts = {
                     { 
                         label: 'FTP (w)', data: data.map(d => d.ftp), 
                         borderColor: color, backgroundColor: color+'20', 
+                        pointBackgroundColor: color, // SOLID DOT
                         borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y' 
                     },
                     { 
                         label: 'W/kg', data: data.map(d => d.wkg), 
                         borderColor: '#34d399', borderWidth: 2, 
+                        pointBackgroundColor: '#34d399', // SOLID DOT
                         pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y1' 
                     }
@@ -193,12 +195,14 @@ export const FTPCharts = {
                     { 
                         label: 'Pace', data: data.map(d => d.pace), 
                         borderColor: color, backgroundColor: color+'20', 
+                        pointBackgroundColor: color, // SOLID DOT
                         borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y' 
                     },
                     { 
                         label: 'LTHR', data: data.map(d => d.lthr), 
                         borderColor: '#ef4444', borderWidth: 1, borderDash: [3,3], 
+                        pointBackgroundColor: '#ef4444', // SOLID DOT
                         pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y1' 
                     }
@@ -212,15 +216,13 @@ export const FTPCharts = {
     },
 
     _getCommonOptions(scales, showLegend = false) {
-        // Base config derived from TooltipManager if available
         const baseConfig = (window.TooltipManager && window.TooltipManager.createChartConfig)
             ? window.TooltipManager.createChartConfig()
             : { interaction: { mode: 'index', intersect: false }, plugins: { tooltip: { enabled: true } } };
 
-        // Force 'usePointStyle: true' to make tooltip color boxes circles (dots) instead of squares
         if (baseConfig.plugins && baseConfig.plugins.tooltip) {
             baseConfig.plugins.tooltip.usePointStyle = true;
-            baseConfig.plugins.tooltip.boxWidth = 8; // Keep it tight like the SVG dots
+            baseConfig.plugins.tooltip.boxWidth = 8;
         }
 
         return {
@@ -236,10 +238,8 @@ export const FTPCharts = {
                 legend: { 
                     display: showLegend,
                     labels: { 
-                        color: '#cbd5e1', 
-                        font: { size: 10, family: 'monospace' }, 
-                        boxWidth: 10,
-                        usePointStyle: true // Also makes legend items circles
+                        color: '#cbd5e1', font: { size: 10, family: 'monospace' }, boxWidth: 10,
+                        usePointStyle: true
                     }
                 }
             }

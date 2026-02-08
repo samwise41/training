@@ -1,3 +1,6 @@
+
+| Status | Day | Planned Workout | Planned Duration | Actual Workout | Actual Duration | Notes / Targets | Date |
+|:---|:---|:---|:---|:---|:---|:---|:---|
 | PLANNED | Monday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Anaerobic Impact. 10m Warmup; 20m @ Tempo; **8 x 20s Hill Sprints** (Max Effort) to spike Anaerobic score. | 2026-02-09 |
 | PLANNED | Tuesday | [BIKE] Strength / Low Cadence | 60 mins | | | **Focus:** Torque Maintenance. 4 x 10min @ Sweet Spot (229-244W) at **55-60 RPM**. **No ERG Mode.** | 2026-02-10 |
 | PLANNED | Wednesday | [SWIM] Technique Focus | 40 mins | | | **Focus:** Consistency. 400m Continuous swim test at steady pace (70%). | 2026-02-11 |

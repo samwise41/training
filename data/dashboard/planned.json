@@ -1,5 +1,15 @@
 [
     {
+        "id": "PLAN-2026-02-08-Other",
+        "date": "2026-02-08",
+        "day": "Sunday",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0.0,
+        "activityType": "Other",
+        "notes": "**Focus:** Prepare for Phase 2 Build.",
+        "status": "PLANNED"
+    },
+    {
         "id": "PLAN-2026-02-09-Run",
         "date": "2026-02-09",
         "day": "Monday",
@@ -57,16 +67,6 @@
         "plannedDuration": 90.0,
         "activityType": "Bike",
         "notes": "**Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-15-Other",
-        "date": "2026-02-15",
-        "day": "Sunday",
-        "plannedWorkout": "Rest",
-        "plannedDuration": 0.0,
-        "activityType": "Other",
-        "notes": "**Focus:** Prepare for Phase 2 Build.",
         "status": "PLANNED"
     }
 ]

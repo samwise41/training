@@ -18,7 +18,7 @@ export function renderPlannedWorkouts() {
             
             // 3. Scroll to today
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500'); 
+                const todayCard = container.querySelector('.ring-blue-500, .ring-emerald-500'); 
                 if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
         } catch (error) {
@@ -46,7 +46,6 @@ function groupWorkoutsByDate(workouts) {
 
         if (!groups[dateKey]) {
             // FIX: Force Local Time parsing to avoid UTC offsets
-            // "2026-02-05" -> Split -> Year, Month, Day
             const [y, m, d] = dateKey.split('-').map(Number);
             const localDate = new Date(y, m - 1, d); // Month is 0-indexed in JS
 
@@ -93,8 +92,10 @@ function generateGroupedCardsHTML(groupedData) {
         const isToday = day.dateStr === todayStr;
         const dayNameFull = day.dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         
-        // Completion Logic
-        const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
+        // --- FIX: Completion Logic ---
+        // Removed "&& w.actualSport !== 'Rest'" so that completed Rest days are counted as valid active workouts.
+        const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.status !== 'SKIPPED');
+        
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
@@ -102,8 +103,10 @@ function generateGroupedCardsHTML(groupedData) {
         let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
         
         if (isDayComplete) {
+            // Green Ring for Complete
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
+            // Blue Ring for Today (Incomplete)
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         }
 

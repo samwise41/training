@@ -33,7 +33,7 @@
       "filters": { "ignore_zero": true }
     },
     "subjective_bike": {
-      "id": "subjective_bike", "title": "Bike Efficiency", "sport": "Bike",
+      "id": "subjective_bike", "title": "Perceived Bike Efficiency", "sport": "Bike",
       "icon": "fa-person-biking", "colorVar": "var(--color-bike)", "unit": "W/RPE",
       "good_min": 25, "good_max": 50, "higher_is_better": true,
       "description": "Power per RPE.", "improvement": "• Aerobic Base Work",

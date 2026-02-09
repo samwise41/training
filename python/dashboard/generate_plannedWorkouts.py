@@ -4,7 +4,7 @@ from datetime import datetime
 
 # --- SETUP PATHS ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
-# Adjust this depth if your folder structure is different
+# Root: samwise41/training/training-..../
 root_dir = os.path.dirname(os.path.dirname(current_dir)) 
 data_dir = os.path.join(root_dir, 'data')
 dashboard_dir = os.path.join(data_dir, 'dashboard')
@@ -107,7 +107,6 @@ def main():
 
     # 4. Process Plans
     output_list = []
-    # Use local date if possible, otherwise server time
     today_str = datetime.now().strftime('%Y-%m-%d')
 
     for plan in full_plan:
@@ -136,14 +135,11 @@ def main():
             "actualWorkout": None,
             "status": "PLANNED",
             "compliance": 0,
-            "completed": False # Helper flag for UI
+            "completed": False 
         }
 
         # --- FIX: ROBUST REST DETECTION ---
-        # 1. Normalize Title
         workout_title = str(item['plannedWorkout']).lower()
-        
-        # 2. Check for Rest keywords
         is_rest_day = (plan_sport == 'Rest') or \
                       ('rest' in workout_title) or \
                       ('off' in workout_title) or \
@@ -152,11 +148,12 @@ def main():
         if is_rest_day:
             item['actualSport'] = 'Rest' 
             
-            # If Rest Day is Today or Past -> Mark as COMPLETED (so it's not Missed)
+            # If Rest Day is Today or Past -> Force COMPLETED (Green Check)
             if date_str <= today_str:
-                item['status'] = 'REST' # UI should interpret this as neutral/complete
+                item['status'] = 'COMPLETED' 
                 item['completed'] = True
                 item['compliance'] = 100
+                item['actualDuration'] = plan_dur # Give full credit for rest
             else:
                 item['status'] = 'PLANNED'
             

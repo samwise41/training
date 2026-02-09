@@ -103,7 +103,7 @@
       "filters": { "ignore_zero": true }
     },
     "subjective_swim": {
-      "id": "subjective_swim", "title": "Swim Efficiency", "sport": "Swim",
+      "id": "subjective_swim", "title": "Perceived Swim Efficiency", "sport": "Swim",
       "icon": "fa-person-swimming", "colorVar": "var(--color-swim)", "unit": "Spd/RPE",
       "good_min": 0.15, "good_max": 0.3, "higher_is_better": true,
       "description": "Speed relative to effort.", "improvement": "• Drill Sets",

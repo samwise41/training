@@ -140,10 +140,9 @@
 
             const content = document.getElementById('main-content');
             
-            // --- FIX: Global Layout Spacing ---
-            // Applies padding to ALL views to clear the Nav Menu.
-            // Mobile: pt-20 (Top Nav) | Desktop: pl-24 (Left Sidebar)
-            content.className = "flex-1 p-4 overflow-y-auto w-full pt-20 md:pt-6 md:pl-24 transition-all duration-300";
+            // --- FIX: INCREASED DESKTOP PADDING ---
+            // Changed md:pl-24 -> md:pl-64 to clear the full-width text sidebar
+            content.className = "flex-1 p-4 overflow-y-auto w-full pt-20 md:pt-6 md:pl-64 transition-all duration-300";
 
             content.classList.add('opacity-0');
             

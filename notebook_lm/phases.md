@@ -1,5 +1,5 @@
 # Training Phases
-**Generated:** 2026-02-08 14:24:13
+**Generated:** 2026-02-09 02:38:17
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/phases.json
 
 ---

@@ -9,7 +9,8 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "REST",
-        "compliance": 0
+        "compliance": 100,
+        "completed": true
     },
     {
         "date": "2026-02-09",
@@ -21,7 +22,8 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",
-        "compliance": 0
+        "compliance": 0,
+        "completed": false
     },
     {
         "date": "2026-02-10",
@@ -33,7 +35,8 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",
-        "compliance": 0
+        "compliance": 0,
+        "completed": false
     },
     {
         "date": "2026-02-11",
@@ -45,7 +48,8 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",
-        "compliance": 0
+        "compliance": 0,
+        "completed": false
     },
     {
         "date": "2026-02-12",
@@ -57,7 +61,8 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",
-        "compliance": 0
+        "compliance": 0,
+        "completed": false
     },
     {
         "date": "2026-02-13",
@@ -69,7 +74,8 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",
-        "compliance": 0
+        "compliance": 0,
+        "completed": false
     },
     {
         "date": "2026-02-14",
@@ -81,6 +87,7 @@
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",
-        "compliance": 0
+        "compliance": 0,
+        "completed": false
     }
 ]

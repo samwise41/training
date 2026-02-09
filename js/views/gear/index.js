@@ -1,81 +1,63 @@
+import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
 
-// --- MAIN EXPORT ---
-export function renderGear(gearData, currentTemp, hourlyWeather) {
-    // Default to 50F if no weather data yet
-    const temp = currentTemp ? Math.round(currentTemp) : 50;
+// --- 1. COMPONENT: HOURLY FORECAST (Restored from your original) ---
+const buildHourlyForecast = (hourlyWeather) => {
+    if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
+        return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
+    }
+
+    const times = hourlyWeather.time.slice(0, 24); 
+    const temps = hourlyWeather.temperature_2m;
+    const codes = hourlyWeather.weathercode;
     
-    const html = `
-        <div class="space-y-6 pb-20">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <div>
-                    <h2 class="text-2xl font-black text-white uppercase tracking-tight italic">
-                        Gear Check
-                    </h2>
-                    <p class="text-slate-400 text-sm">
-                        Recommendations based on 
-                        <span class="text-blue-400 font-bold text-lg mx-1">${temp}°F</span> 
-                        base temperature.
-                    </p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 gap-4">
-                ${renderBodyPartCard("Head & Neck", "head", temp)}
-                ${renderBodyPartCard("Upper Body", "upper", temp)}
-                ${renderBodyPartCard("Lower Body", "lower", temp)}
-                ${renderBodyPartCard("Hands & Feet", "extremities", temp)}
-            </div>
-        </div>
-    `;
-    return html;
-}
-
-// --- HELPER FUNCTIONS ---
-
-function renderBodyPartCard(title, partKey, baseTemp) {
-    const regular = getGearForCondition(partKey, baseTemp, 'regular');
-    const windy = getGearForCondition(partKey, baseTemp, 'windy');
-    const dark = getGearForCondition(partKey, baseTemp, 'dark');
-
-    return `
-    <div class="bg-slate-800/50 border border-slate-700 rounded-xl overflow-hidden shadow-lg">
-        <div class="bg-slate-900/50 p-2 md:p-3 border-b border-slate-700 flex items-center gap-2">
-            <span class="text-xs md:text-sm font-bold text-slate-300 uppercase tracking-widest">${title}</span>
-        </div>
-
-        <div class="grid grid-cols-3 divide-x divide-slate-700">
+    let itemsHtml = '';
+    times.forEach((t, index) => {
+        const date = new Date(t);
+        if (index < 24 && temps[index] !== undefined) { 
+            const h = date.getHours();
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const hourLabel = h % 12 === 0 ? 12 : h % 12;
+            const icon = Formatters.getWeatherInfo(codes[index])[1]; 
             
-            <div class="p-2 md:p-4 flex flex-col gap-2">
-                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
-                    <i class="fa-solid fa-sun text-yellow-500 text-[10px] md:text-xs"></i>
-                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Standard</span>
-                </div>
-                ${renderList(regular)}
-            </div>
+            itemsHtml += `
+                <div class="hourly-item">
+                    <span class="text-[10px] text-slate-400 font-bold">${hourLabel} ${ampm}</span>
+                    <span class="text-lg">${icon}</span>
+                    <span class="text-xs font-bold text-slate-200">${Math.round(temps[index])}°</span>
+                </div>`;
+        }
+    });
 
-            <div class="p-2 md:p-4 flex flex-col gap-2 bg-slate-800/30">
-                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
-                    <i class="fa-solid fa-wind text-blue-400 text-[10px] md:text-xs"></i>
-                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Wind/Rain</span>
-                </div>
-                ${renderList(windy)}
-            </div>
+    return `<div class="mb-6"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p><div class="hourly-scroll">${itemsHtml}</div></div>`;
+};
 
-            <div class="p-2 md:p-4 flex flex-col gap-2 bg-slate-900/30">
-                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
-                    <i class="fa-solid fa-moon text-purple-400 text-[10px] md:text-xs"></i>
-                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Dark/Night</span>
-                </div>
-                ${renderList(dark)}
-            </div>
+// --- 2. COMPONENT: TEMP SELECTOR (Restored) ---
+const buildTempOptions = (defaultVal) => {
+    let tempOptions = `<option value="25" ${defaultVal <= 25 ? 'selected' : ''}>&lt;30°F</option>`;
+    for (let i = 30; i <= 70; i += 5) tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
+    tempOptions += `<option value="75" ${defaultVal >= 75 ? 'selected' : ''}>70°F+</option>`;
+    return tempOptions;
+};
 
-        </div>
-    </div>`;
+// --- 3. HELPER: DATA LOOKUP ---
+function getGearForTemp(gearList, temp) {
+    if (!gearList) return { upper: "—", lower: "—", extremities: "—" };
+    
+    // Find the rule where temp fits in range
+    const match = gearList.find(r => {
+        const min = r.min !== undefined ? r.min : -999;
+        const max = r.max !== undefined ? r.max : 999;
+        return temp >= min && temp < max;
+    });
+
+    return match || { upper: "—", lower: "—", extremities: "—" };
 }
 
-function renderList(items) {
-    if (!items || items.length === 0) return '<span class="text-[9px] md:text-xs text-slate-600 italic">None</span>';
+function renderList(text) {
+    if (!text || text === "—") return '<span class="text-[9px] md:text-xs text-slate-600 italic">None</span>';
+    // Split by comma or new line if your text is formatted that way, otherwise just wrap the string
+    const items = text.split(',').map(s => s.trim()).filter(s => s);
     
     return items.map(item => `
         <div class="flex items-start gap-1.5 leading-tight">
@@ -85,63 +67,144 @@ function renderList(items) {
     `).join('');
 }
 
-function getGearForCondition(part, temp, condition) {
-    let effectiveTemp = temp;
-    
-    if (condition === 'windy') effectiveTemp -= 5; 
-    if (condition === 'dark') effectiveTemp -= 5;  
-
-    // Get Base Items
-    let items = [...getRules(part, effectiveTemp)];
-
-    // Add Condition Specific Modifiers
-    if (condition === 'windy') {
-        if (part === 'upper' && effectiveTemp < 60) items.push("Wind Shell"); 
-        if (part === 'head' && effectiveTemp < 50) items.push("Visor/Cap");
-    }
-
-    if (condition === 'dark') {
-        if (part === 'upper') items.push("Reflective Vest");
-        if (part === 'head') items.push("Headlamp");
-        if (part === 'extremities') items.push("Reflective Bands");
-    }
-
-    return [...new Set(items)]; 
+// --- 4. COMPONENT: NEW 3-COLUMN CARD ---
+function renderBodyPartCard(title, standardText, weatherText, darkText) {
+    return `
+    <div class="bg-slate-800/50 border border-slate-700 rounded-xl overflow-hidden shadow-lg mb-4">
+        <div class="bg-slate-900/50 p-2 md:p-3 border-b border-slate-700 flex items-center gap-2">
+            <span class="text-xs md:text-sm font-bold text-slate-300 uppercase tracking-widest">${title}</span>
+        </div>
+        <div class="grid grid-cols-3 divide-x divide-slate-700">
+            <div class="p-2 md:p-4 flex flex-col gap-2">
+                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
+                    <i class="fa-solid fa-sun text-yellow-500 text-[10px] md:text-xs"></i>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Standard</span>
+                </div>
+                ${renderList(standardText)}
+            </div>
+            <div class="p-2 md:p-4 flex flex-col gap-2 bg-slate-800/30">
+                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
+                    <i class="fa-solid fa-wind text-blue-400 text-[10px] md:text-xs"></i>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Wind/Rain</span>
+                </div>
+                ${renderList(weatherText)}
+            </div>
+            <div class="p-2 md:p-4 flex flex-col gap-2 bg-slate-900/30">
+                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
+                    <i class="fa-solid fa-moon text-purple-400 text-[10px] md:text-xs"></i>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Dark/Night</span>
+                </div>
+                ${renderList(darkText)}
+            </div>
+        </div>
+    </div>`;
 }
 
-function getRules(part, t) {
-    const rules = {
-        head: [
-            { max: 25, items: ["Hvy Beanie", "Neck Gaiter"] },
-            { max: 35, items: ["Beanie", "Neck Buff"] },
-            { max: 45, items: ["Light Beanie"] },
-            { max: 55, items: ["Headband"] },
-            { max: 100, items: ["Cap / Visor"] }
-        ],
-        upper: [
-            { max: 20, items: ["Thermal Base", "Insul. Jacket", "Shell"] },
-            { max: 30, items: ["LS Base", "Mid-Layer", "Vest"] },
-            { max: 40, items: ["LS Tech Shirt", "Light Jkt/Vest"] },
-            { max: 50, items: ["LS Tech Shirt", "Gilet (Vest)"] },
-            { max: 60, items: ["SS Shirt + Arm Warmers"] },
-            { max: 100, items: ["Singlet / SS Shirt"] }
-        ],
-        lower: [
-            { max: 25, items: ["Thermal Tights"] },
-            { max: 35, items: ["Fleece Tights"] },
-            { max: 45, items: ["Full Tights"] },
-            { max: 55, items: ["Capris / 3/4"] },
-            { max: 100, items: ["Shorts"] }
-        ],
-        extremities: [
-            { max: 25, items: ["Hvy Mittens", "Wool Socks"] },
-            { max: 35, items: ["Wind Gloves", "Wool Socks"] },
-            { max: 45, items: ["Light Gloves", "Crew Socks"] },
-            { max: 55, items: ["Liners (Opt)", "Tech Socks"] },
-            { max: 100, items: ["No Gloves", "Light Socks"] }
-        ]
-    };
+// --- 5. RENDER MAIN CONTENT ---
+function generateContentHTML(gearData, selectedTemp) {
+    const standardTemp = selectedTemp;
+    const weatherTemp = selectedTemp - 10; // Rule: -10F for wind/rain
+    const darkTemp = selectedTemp - 5;     // Rule: -5F for dark
 
-    const match = rules[part].find(r => t <= r.max);
-    return match ? match.items : [];
+    // --- CYCLING ---
+    const bikeStd = getGearForTemp(gearData.bike, standardTemp);
+    const bikeWth = getGearForTemp(gearData.bike, weatherTemp);
+    const bikeDrk = getGearForTemp(gearData.bike, darkTemp);
+
+    // Append modifiers for visualization
+    const bikeWthUpper = bikeWth.upper !== "—" ? `${bikeWth.upper}, Rain Shell` : "Rain Shell";
+    const bikeDrkUpper = bikeDrk.upper !== "—" ? `${bikeDrk.upper}, Reflective Vest` : "Reflective Vest";
+    const bikeDrkExt   = bikeDrk.extremities !== "—" ? `${bikeDrk.extremities}, Viz Bands` : "Viz Bands";
+
+    const bikeHtml = `
+        <div class="mb-8">
+            <h3 class="flex items-center gap-2 text-lg font-bold text-purple-400 uppercase tracking-widest mb-4">
+                <i class="fa-solid fa-bicycle"></i> Cycling
+            </h3>
+            ${renderBodyPartCard("Upper Body", bikeStd.upper, bikeWthUpper, bikeDrkUpper)}
+            ${renderBodyPartCard("Lower Body", bikeStd.lower, bikeWth.lower, bikeDrk.lower)}
+            ${renderBodyPartCard("Extremities", bikeStd.extremities, bikeWth.extremities, bikeDrkExt)}
+        </div>
+    `;
+
+    // --- RUNNING ---
+    const runStd = getGearForTemp(gearData.run, standardTemp);
+    const runWth = getGearForTemp(gearData.run, weatherTemp);
+    const runDrk = getGearForTemp(gearData.run, darkTemp);
+
+    const runWthUpper = runWth.upper !== "—" ? `${runWth.upper}, Wind Shell` : "Wind Shell";
+    const runDrkUpper = runDrk.upper !== "—" ? `${runDrk.upper}, Viz Vest` : "Viz Vest";
+    const runDrkHead  = runDrk.extremities !== "—" ? `${runDrk.extremities}, Headlamp` : "Headlamp";
+
+    const runHtml = `
+        <div class="mb-8">
+            <h3 class="flex items-center gap-2 text-lg font-bold text-pink-400 uppercase tracking-widest mb-4">
+                <i class="fa-solid fa-person-running"></i> Running
+            </h3>
+            ${renderBodyPartCard("Upper Body", runStd.upper, runWthUpper, runDrkUpper)}
+            ${renderBodyPartCard("Lower Body", runStd.lower, runWth.lower, runDrk.lower)}
+            ${renderBodyPartCard("Extremities", runStd.extremities, runWth.extremities, runDrkHead)}
+        </div>
+    `;
+
+    return bikeHtml + runHtml;
+}
+
+// --- EXPORTS ---
+
+// Called by App.js to render the initial page
+export function renderGear(gearData, currentTemp, hourlyWeather) {
+    if (!gearData) {
+        return `
+            <div class="p-12 flex flex-col items-center justify-center text-slate-500 animate-pulse">
+                <i class="fa-solid fa-bicycle text-4xl mb-4 text-slate-600"></i>
+                <div class="text-sm font-mono">Loading Gear Locker...</div>
+            </div>`;
+    }
+
+    // Determine Default Temp
+    let defaultVal = 50;
+    if (currentTemp !== null && currentTemp !== undefined) {
+        // Round to nearest 5 for the selector
+        defaultVal = Math.round(currentTemp / 5) * 5;
+        if (defaultVal < 25) defaultVal = 25;
+        if (defaultVal > 75) defaultVal = 75;
+    }
+
+    // Build Static Parts
+    const hourlyHtml = buildHourlyForecast(hourlyWeather);
+    const tempOptions = buildTempOptions(defaultVal);
+    
+    // Build Dynamic Content
+    const contentHtml = generateContentHTML(gearData, defaultVal);
+
+    // Layout
+    return `
+        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-4 md:p-6 mb-8 pb-20">
+            ${hourlyHtml}
+            
+            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto sticky top-0 z-10 bg-slate-900/90 p-4 rounded-xl border border-slate-700 shadow-xl backdrop-blur-md">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Base Temperature</label>
+                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-xl font-bold text-white bg-transparent border-none focus:ring-0 cursor-pointer">
+                    ${tempOptions}
+                </select>
+            </div>
+
+            <div id="gear-results-container">
+                ${contentHtml}
+            </div>
+        </div>`;
+}
+
+// Called by App.js when the dropdown changes
+export function updateGearResult(gearData) {
+    const tempSelect = document.getElementById('gear-temp');
+    if (!tempSelect || !gearData) return;
+    
+    const temp = parseInt(tempSelect.value);
+    const container = document.getElementById('gear-results-container');
+    
+    if (container) {
+        container.innerHTML = generateContentHTML(gearData, temp);
+    }
 }

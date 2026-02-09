@@ -1,7 +1,10 @@
 import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
 
-// --- 1. COMPONENT: HOURLY FORECAST (Restored from your original) ---
+// --- CONFIGURATION ---
+const PREFER_RUNNING_FIRST = true; // Set to false to show Cycling on top
+
+// --- 1. COMPONENT: HOURLY FORECAST ---
 const buildHourlyForecast = (hourlyWeather) => {
     if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
         return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
@@ -32,7 +35,7 @@ const buildHourlyForecast = (hourlyWeather) => {
     return `<div class="mb-6"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p><div class="hourly-scroll">${itemsHtml}</div></div>`;
 };
 
-// --- 2. COMPONENT: TEMP SELECTOR (Restored) ---
+// --- 2. COMPONENT: TEMP SELECTOR ---
 const buildTempOptions = (defaultVal) => {
     let tempOptions = `<option value="25" ${defaultVal <= 25 ? 'selected' : ''}>&lt;30°F</option>`;
     for (let i = 30; i <= 70; i += 5) tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
@@ -44,7 +47,6 @@ const buildTempOptions = (defaultVal) => {
 function getGearForTemp(gearList, temp) {
     if (!gearList) return { upper: "—", lower: "—", extremities: "—" };
     
-    // Find the rule where temp fits in range
     const match = gearList.find(r => {
         const min = r.min !== undefined ? r.min : -999;
         const max = r.max !== undefined ? r.max : 999;
@@ -56,7 +58,6 @@ function getGearForTemp(gearList, temp) {
 
 function renderList(text) {
     if (!text || text === "—") return '<span class="text-[9px] md:text-xs text-slate-600 italic">None</span>';
-    // Split by comma or new line if your text is formatted that way, otherwise just wrap the string
     const items = text.split(',').map(s => s.trim()).filter(s => s);
     
     return items.map(item => `
@@ -103,22 +104,22 @@ function renderBodyPartCard(title, standardText, weatherText, darkText) {
 // --- 5. RENDER MAIN CONTENT ---
 function generateContentHTML(gearData, selectedTemp) {
     const standardTemp = selectedTemp;
-    const weatherTemp = selectedTemp - 10; // Rule: -10F for wind/rain
-    const darkTemp = selectedTemp - 5;     // Rule: -5F for dark
+    const weatherTemp = selectedTemp - 10;
+    const darkTemp = selectedTemp - 5;
 
-    // --- CYCLING ---
+    // --- CYCLING SECTION ---
     const bikeStd = getGearForTemp(gearData.bike, standardTemp);
     const bikeWth = getGearForTemp(gearData.bike, weatherTemp);
     const bikeDrk = getGearForTemp(gearData.bike, darkTemp);
 
-    // Append modifiers for visualization
     const bikeWthUpper = bikeWth.upper !== "—" ? `${bikeWth.upper}, Rain Shell` : "Rain Shell";
     const bikeDrkUpper = bikeDrk.upper !== "—" ? `${bikeDrk.upper}, Reflective Vest` : "Reflective Vest";
     const bikeDrkExt   = bikeDrk.extremities !== "—" ? `${bikeDrk.extremities}, Viz Bands` : "Viz Bands";
 
+    // Use var(--color-bike) for exact CSS match
     const bikeHtml = `
         <div class="mb-8">
-            <h3 class="flex items-center gap-2 text-lg font-bold text-purple-400 uppercase tracking-widest mb-4">
+            <h3 class="flex items-center gap-2 text-lg font-bold uppercase tracking-widest mb-4" style="color: var(--color-bike)">
                 <i class="fa-solid fa-bicycle"></i> Cycling
             </h3>
             ${renderBodyPartCard("Upper Body", bikeStd.upper, bikeWthUpper, bikeDrkUpper)}
@@ -127,7 +128,7 @@ function generateContentHTML(gearData, selectedTemp) {
         </div>
     `;
 
-    // --- RUNNING ---
+    // --- RUNNING SECTION ---
     const runStd = getGearForTemp(gearData.run, standardTemp);
     const runWth = getGearForTemp(gearData.run, weatherTemp);
     const runDrk = getGearForTemp(gearData.run, darkTemp);
@@ -136,9 +137,10 @@ function generateContentHTML(gearData, selectedTemp) {
     const runDrkUpper = runDrk.upper !== "—" ? `${runDrk.upper}, Viz Vest` : "Viz Vest";
     const runDrkHead  = runDrk.extremities !== "—" ? `${runDrk.extremities}, Headlamp` : "Headlamp";
 
+    // Use var(--color-run) for exact CSS match
     const runHtml = `
         <div class="mb-8">
-            <h3 class="flex items-center gap-2 text-lg font-bold text-pink-400 uppercase tracking-widest mb-4">
+            <h3 class="flex items-center gap-2 text-lg font-bold uppercase tracking-widest mb-4" style="color: var(--color-run)">
                 <i class="fa-solid fa-person-running"></i> Running
             </h3>
             ${renderBodyPartCard("Upper Body", runStd.upper, runWthUpper, runDrkUpper)}
@@ -147,12 +149,12 @@ function generateContentHTML(gearData, selectedTemp) {
         </div>
     `;
 
-    return bikeHtml + runHtml;
+    // --- ORDERING LOGIC ---
+    return PREFER_RUNNING_FIRST ? (runHtml + bikeHtml) : (bikeHtml + runHtml);
 }
 
 // --- EXPORTS ---
 
-// Called by App.js to render the initial page
 export function renderGear(gearData, currentTemp, hourlyWeather) {
     if (!gearData) {
         return `
@@ -162,23 +164,17 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
             </div>`;
     }
 
-    // Determine Default Temp
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
-        // Round to nearest 5 for the selector
         defaultVal = Math.round(currentTemp / 5) * 5;
         if (defaultVal < 25) defaultVal = 25;
         if (defaultVal > 75) defaultVal = 75;
     }
 
-    // Build Static Parts
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
     const tempOptions = buildTempOptions(defaultVal);
-    
-    // Build Dynamic Content
     const contentHtml = generateContentHTML(gearData, defaultVal);
 
-    // Layout
     return `
         <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-4 md:p-6 mb-8 pb-20">
             ${hourlyHtml}
@@ -196,7 +192,6 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
         </div>`;
 }
 
-// Called by App.js when the dropdown changes
 export function updateGearResult(gearData) {
     const tempSelect = document.getElementById('gear-temp');
     if (!tempSelect || !gearData) return;

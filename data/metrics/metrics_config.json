@@ -57,7 +57,7 @@
       "filters": { "min_duration_minutes": 10, "ignore_zero": true }
     },
     "subjective_run": {
-      "id": "subjective_run", "title": "Run Efficiency", "sport": "Run",
+      "id": "subjective_run", "title": "Perceived Run Efficiency", "sport": "Run",
       "icon": "fa-person-running", "colorVar": "var(--color-run)", "unit": "Spd/RPE",
       "good_min": 0.6, "good_max": 1.0, "higher_is_better": true,
       "description": "Speed per RPE.", "improvement": "• Improve Form",

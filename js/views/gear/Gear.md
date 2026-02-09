@@ -33,7 +33,7 @@ This master reference guide is built from your personal logs and gear kit.
 ## 🌡️ Running Matrix
 | Temp Range | Upper Body | Lower Body | Extremities |
 | :--- | :--- | :--- | :--- |
-| **Below 35°F** | Thermal Long Sleeve Top<br>Short Sleeved Shirt | Thermal Leggings | Hat<br>Gloves |
+| **Below 35°F** | Thermal Long Sleeve Top<br>Short Sleeved Shirt<br>(Add Long Sleeved for short runs) | Thermal Leggings | Hat<br>Gloves |
 | **35°F – 40°F** | Thermal Long Sleeve Top<br>Short Sleeved Shirt<br>(Add Long Sleeved for short runs) | Thermal Leggings | Hat<br>Gloves |
 | **40°F – 45°F** | Short Sleeved Shirt<br>Long Sleeved Shirt<br>(Shed Long Sleeved when warm) | Shorts | Hat<br>Gloves |
 | **45°F – 50°F** | Short Sleeved Shirt | Shorts | Optional Gloves |

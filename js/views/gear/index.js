@@ -1,8 +1,9 @@
 // js/views/gear/index.js
 import { Formatters } from '../../utils/formatting.js';
-import { UI } from '../../utils/ui.js';
 
 // --- COMPONENTS ---
+
+// 1. Hourly Weather Scroller (Kept from original)
 const buildHourlyForecast = (hourlyWeather) => {
     if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
         return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
@@ -22,124 +23,215 @@ const buildHourlyForecast = (hourlyWeather) => {
             const icon = Formatters.getWeatherInfo(codes[index])[1]; 
             
             itemsHtml += `
-                <div class="hourly-item">
-                    <span class="text-[10px] text-slate-400 font-bold">${hourLabel} ${ampm}</span>
-                    <span class="text-lg">${icon}</span>
+                <div class="hourly-item flex flex-col items-center min-w-[50px] p-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                    <span class="text-[10px] text-slate-400 font-bold mb-1">${hourLabel} ${ampm}</span>
+                    <span class="text-xl mb-1">${icon}</span>
                     <span class="text-xs font-bold text-slate-200">${Math.round(temps[index])}°</span>
                 </div>`;
         }
     });
 
-    return `<div class="mb-6"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p><div class="hourly-scroll">${itemsHtml}</div></div>`;
+    return `
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">24h Forecast</span>
+            </div>
+            <div class="hourly-scroll flex gap-2 overflow-x-auto pb-2 scrollbar-hide">${itemsHtml}</div>
+        </div>`;
 };
 
+// 2. Temperature Selector
 const buildTempOptions = (defaultVal) => {
-    let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
-    for (let i = 30; i <= 70; i++) tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
-    tempOptions += `<option value="75" ${defaultVal === 75 ? 'selected' : ''}>70°F+</option>`;
+    let tempOptions = `<option value="20">&lt; 25°F</option>`;
+    for (let i = 25; i <= 85; i+=5) {
+        tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
+    }
+    tempOptions += `<option value="90" ${defaultVal >= 90 ? 'selected' : ''}>90°F+</option>`;
     return tempOptions;
 };
 
-const generateRow = (idPrefix, sportType, label) => {
-    // --- UPDATED: Use Shared Icon Formatter ---
-    // This ensures "Bike" gets the purple icon, "Run" gets pink, etc.
-    const iconHtml = Formatters.getIconForSport(sportType);
-
-    // Note: We remove the manual colorClass logic because the icon itself
-    // now carries the correct color (e.g. class="icon-bike")
+// 3. Body Part Card (The new Matrix Layout)
+const renderBodyPartCard = (sport, partLabel, partId) => {
+    const idPrefix = `${sport}-${partId}`; // e.g., 'bike-upper'
     
     return `
-    <div class="gear-row-container flex flex-col md:flex-row gap-4 items-stretch mb-4">
-        <div class="activity-header min-w-[140px] flex items-center gap-3 p-4 bg-slate-800/40 rounded-lg border border-slate-700">
-            <span class="text-lg">${iconHtml}</span>
-            <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
+    <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl overflow-hidden mb-4">
+        <div class="bg-slate-900/40 px-4 py-2 border-b border-slate-700/50 flex items-center justify-between">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${partLabel}</span>
         </div>
-        <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span><p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span><p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span><p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-700/50">
+            
+            <div class="p-4 flex flex-col gap-1.5">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-sun text-yellow-500/80 text-xs"></i>
+                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Standard</span>
+                </div>
+                <p id="${idPrefix}-standard" class="text-sm text-slate-200 font-medium leading-snug">--</p>
+            </div>
+
+            <div class="p-4 flex flex-col gap-1.5 bg-blue-900/5">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-wind text-blue-400/80 text-xs"></i>
+                    <span class="text-[9px] font-bold text-blue-400/60 uppercase tracking-wider">Wind / Rain</span>
+                </div>
+                <p id="${idPrefix}-windy" class="text-sm text-slate-200 font-medium leading-snug">--</p>
+            </div>
+
+            <div class="p-4 flex flex-col gap-1.5 bg-purple-900/5">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-moon text-purple-400/80 text-xs"></i>
+                    <span class="text-[9px] font-bold text-purple-400/60 uppercase tracking-wider">Dark / Night</span>
+                </div>
+                <p id="${idPrefix}-dark" class="text-sm text-slate-200 font-medium leading-snug">--</p>
+            </div>
+
         </div>
     </div>`;
 };
 
-const renderLayout = (hourlyHtml, tempOptions) => {
+// 4. Sport Section Wrapper
+const renderSportSection = (sport, label) => {
     return `
-        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
-            ${hourlyHtml}
-            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto">
-                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Temperature</label>
-                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">${tempOptions}</select>
+    <div class="mb-10">
+        <div class="flex items-center gap-3 mb-4 pl-1">
+            <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-lg">
+                ${Formatters.getIconForSport(sport)}
             </div>
-            <div class="mb-10">
-                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions</h3>
-                <div class="flex flex-col gap-4">${generateRow('bike-standard', 'bike', 'Cycling')}${generateRow('run-standard', 'run', 'Running')}</div>
-            </div>
-            <div>
-                <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)</h3>
-                <div class="flex flex-col gap-4">${generateRow('bike-weather', 'bike', 'Cycling')}${generateRow('run-weather', 'run', 'Running')}</div>
-            </div>
-        </div>`;
+            <h3 class="text-lg font-bold text-white uppercase tracking-tight italic">${label} Gear</h3>
+        </div>
+        
+        <div class="space-y-4">
+            ${renderBodyPartCard(sport, 'Upper Body', 'upper')}
+            ${renderBodyPartCard(sport, 'Lower Body', 'lower')}
+            ${renderBodyPartCard(sport, 'Head, Hands & Feet', 'extremities')}
+        </div>
+    </div>`;
 };
 
-// --- LOGIC ---
+
+// --- LOGIC & UPDATES ---
+
 function updateGearUI(gearData) {
     if (!gearData) return;
     
     const tempSelect = document.getElementById('gear-temp');
     if (!tempSelect) return;
-    const temp = parseInt(tempSelect.value);
     
-    const processActivity = (activity, prefixBase) => {
-        const list = gearData[activity] || [];
-        const findMatch = (t) => {
-            const match = list.find(r => {
-                if (r.min === -999) return t < r.max;
-                if (r.max === 999) return t >= r.min;
-                return t >= r.min && t <= r.max;
-            });
-            return match || { upper: "—", lower: "—", extremities: "—" };
-        };
-
-        const standard = findMatch(temp);
-        const weather = findMatch(temp - 10);
-
-        const updateUI = (prefix, data) => {
-            const u = document.getElementById(`${prefix}-upper`);
-            const l = document.getElementById(`${prefix}-lower`);
-            const e = document.getElementById(`${prefix}-extremities`);
-            if (u) u.innerHTML = data.upper;
-            if (l) l.innerHTML = data.lower;
-            if (e) e.innerHTML = data.extremities;
-        };
-
-        updateUI(`${prefixBase}-standard`, standard);
-        updateUI(`${prefixBase}-weather`, weather);
+    // Round to nearest 5 for cleaner lookup logic
+    let inputTemp = parseInt(tempSelect.value);
+    
+    // Helper to find gear range in JSON
+    const lookupGear = (list, t) => {
+        if (!list) return { upper: "—", lower: "—", extremities: "—" };
+        const match = list.find(r => {
+            if (r.min === -999) return t < r.max;
+            if (r.max === 999) return t >= r.min;
+            return t >= r.min && t <= r.max;
+        });
+        return match || { upper: "Check Plan", lower: "Check Plan", extremities: "Check Plan" };
     };
 
-    processActivity('bike', 'bike');
-    processActivity('run', 'run');
+    // Process a specific sport (bike/run)
+    const updateSport = (sport) => {
+        const list = gearData[sport] || [];
+        
+        // 1. Standard Conditions (Base Temp)
+        const standard = lookupGear(list, inputTemp);
+        
+        // 2. Windy/Rainy (Base Temp - 10F + Shell Logic)
+        const windyTemp = inputTemp - 10;
+        const windy = lookupGear(list, windyTemp);
+        
+        // 3. Dark (Base Temp - 5F + Viz Logic)
+        const darkTemp = inputTemp - 5;
+        const dark = lookupGear(list, darkTemp);
+
+        // Helper to update text content
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = val;
+        };
+
+        // --- Apply Standard ---
+        setVal(`${sport}-upper-standard`, standard.upper);
+        setVal(`${sport}-lower-standard`, standard.lower);
+        setVal(`${sport}-extremities-standard`, standard.extremities);
+
+        // --- Apply Windy (Add visual cues) ---
+        // If the JSON text doesn't already say "Shell" or "Jacket", imply it needs outer layer due to wind
+        let windyUpper = windy.upper;
+        if (windyTemp < 60 && !windyUpper.toLowerCase().includes('jacket') && !windyUpper.toLowerCase().includes('shell')) {
+            windyUpper += ` <span class="text-blue-400 font-bold">+ Shell</span>`;
+        }
+        setVal(`${sport}-upper-windy`, windyUpper);
+        setVal(`${sport}-lower-windy`, windy.lower);
+        setVal(`${sport}-extremities-windy`, windy.extremities);
+
+        // --- Apply Dark (Add Viz) ---
+        let darkUpper = dark.upper + ` <span class="text-purple-400 font-bold">+ Viz Vest</span>`;
+        let darkExt = dark.extremities;
+        
+        // Add Headlamp/Lights based on sport
+        if (sport === 'bike') {
+            darkExt += ` <span class="text-purple-400 font-bold">+ Lights</span>`;
+        } else {
+            darkExt += ` <span class="text-purple-400 font-bold">+ Headlamp</span>`;
+        }
+        
+        setVal(`${sport}-upper-dark`, darkUpper);
+        setVal(`${sport}-lower-dark`, dark.lower);
+        setVal(`${sport}-extremities-dark`, darkExt);
+    };
+
+    updateSport('bike');
+    updateSport('run');
 }
 
-// --- EXPORTS ---
+
+// --- MAIN EXPORTS ---
+
 export function renderGear(gearData, currentTemp, hourlyWeather) {
     if (!gearData) {
         return `
             <div class="p-12 flex flex-col items-center justify-center text-slate-500 animate-pulse">
-                <i class="fa-solid fa-bicycle text-4xl mb-4 text-slate-600"></i>
+                <i class="fa-solid fa-shirt text-4xl mb-4 text-slate-600"></i>
                 <div class="text-sm font-mono">Loading Gear Locker...</div>
             </div>`;
     }
 
+    // Determine default temp selection (rounded to nearest 5)
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
-        if (currentTemp < 30) defaultVal = 25;
-        else if (currentTemp > 70) defaultVal = 75;
-        else defaultVal = currentTemp;
+        defaultVal = Math.round(currentTemp / 5) * 5;
     }
 
     const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    return renderLayout(hourlyHtml, tempOptions);
+    
+    return `
+        <div class="space-y-6 pb-20">
+            <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6">
+                ${hourlyHtml}
+                <div class="max-w-xs mx-auto">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center mb-2">Base Temperature</label>
+                    <div class="relative">
+                        <select id="gear-temp" onchange="window.App.updateGearResult()" class="w-full bg-slate-900 border border-slate-700 text-white text-center text-lg font-bold py-3 rounded-lg appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            ${tempOptions}
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-500">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <div>${renderSportSection('bike', 'Cycling')}</div>
+                <div>${renderSportSection('run', 'Running')}</div>
+            </div>
+        </div>
+    `;
 }
 
 export function updateGearResult(gearData) {

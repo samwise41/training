@@ -4,7 +4,7 @@ from datetime import datetime
 
 # --- SETUP PATHS ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
-# Root: samwise41/training/training-..../
+# Adjust this depth if your folder structure is different
 root_dir = os.path.dirname(os.path.dirname(current_dir)) 
 data_dir = os.path.join(root_dir, 'data')
 dashboard_dir = os.path.join(data_dir, 'dashboard')
@@ -23,7 +23,7 @@ def normalize_sport(sport_str):
     if 'bik' in s or 'cycl' in s or 'ride' in s: return 'Bike'
     if 'swim' in s: return 'Swim'
     if 'strength' in s or 'gym' in s or 'weight' in s: return 'Strength'
-    if 'rest' in s: return 'Rest'
+    if 'rest' in s or 'off' in s or 'recovery' in s: return 'Rest'
     return 'Other'
 
 def get_day_name(date_str):
@@ -107,6 +107,7 @@ def main():
 
     # 4. Process Plans
     output_list = []
+    # Use local date if possible, otherwise server time
     today_str = datetime.now().strftime('%Y-%m-%d')
 
     for plan in full_plan:
@@ -134,19 +135,33 @@ def main():
             "actualDuration": 0.0,
             "actualWorkout": None,
             "status": "PLANNED",
-            "compliance": 0
+            "compliance": 0,
+            "completed": False # Helper flag for UI
         }
 
         # --- FIX: ROBUST REST DETECTION ---
-        # Checks if the Sport is Rest OR if the Title contains "Rest"
-        workout_title = item['plannedWorkout'].lower()
-        is_rest_day = (plan_sport == 'Rest') or ('rest' in workout_title)
+        # 1. Normalize Title
+        workout_title = str(item['plannedWorkout']).lower()
+        
+        # 2. Check for Rest keywords
+        is_rest_day = (plan_sport == 'Rest') or \
+                      ('rest' in workout_title) or \
+                      ('off' in workout_title) or \
+                      ('recovery' in workout_title and 'day' in workout_title)
 
         if is_rest_day:
-            item['status'] = 'REST'
-            item['actualSport'] = 'Rest' # Normalize category for UI
+            item['actualSport'] = 'Rest' 
+            
+            # If Rest Day is Today or Past -> Mark as COMPLETED (so it's not Missed)
+            if date_str <= today_str:
+                item['status'] = 'REST' # UI should interpret this as neutral/complete
+                item['completed'] = True
+                item['compliance'] = 100
+            else:
+                item['status'] = 'PLANNED'
+            
             output_list.append(item)
-            continue # Skip matching logic (prevents "MISSED")
+            continue 
 
         # --- MATCHING LOGIC ---
         if key in actuals_map:
@@ -154,6 +169,7 @@ def main():
             item['actualDuration'] = round(data['duration'], 1)
             item['actualWorkout'] = ", ".join(data['names'])
             item['status'] = 'COMPLETED'
+            item['completed'] = True
             
             if plan_dur > 0:
                 item['compliance'] = round((item['actualDuration'] / plan_dur) * 100)
@@ -163,6 +179,7 @@ def main():
             del actuals_map[key]
         
         else:
+            # Only mark as missed if strictly in the past (not today)
             if date_str < today_str:
                 item['status'] = 'MISSED'
         
@@ -182,7 +199,8 @@ def main():
             "status": "UNPLANNED",
             "actualDuration": round(data['duration'], 1),
             "actualWorkout": ", ".join(data['names']),
-            "compliance": 100
+            "compliance": 100,
+            "completed": True
         }
         output_list.append(extra_item)
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-09 13:53:08",
+  "generated_at": "2026-02-09 14:15:25",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -233,7 +233,7 @@
       "metrics": [
         {
           "id": "subjective_bike",
-          "title": "Bike Efficiency",
+          "title": "Perceived Bike Efficiency",
           "sport": "Bike",
           "icon": "fa-person-biking",
           "colorVar": "var(--color-bike)",
@@ -395,7 +395,7 @@
       "metrics": [
         {
           "id": "subjective_run",
-          "title": "Run Efficiency",
+          "title": "Perceived Run Efficiency",
           "sport": "Run",
           "icon": "fa-person-running",
           "colorVar": "var(--color-run)",

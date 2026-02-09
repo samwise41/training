@@ -36,19 +36,14 @@
     if (uiMod?.UI?.init) uiMod.UI.init();
     
     const DataManager = dataMod?.DataManager;
-    const Formatters = formatMod?.Formatters;
 
     const App = {
-        // Critical Data
         planMd: "", 
         rawLogData: [], 
         readinessData: null, 
         profileData: null, 
-
-        // Background Data
         gearData: null, 
         trendsData: null, 
-        
         weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
@@ -95,9 +90,7 @@
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
-        updateHeaderUI(viewName) {
-            // Header removed, kept for compatibility
-        },
+        updateHeaderUI(viewName) {},
 
         updateGearResult() {
             if (this.gearData && gearMod && gearMod.updateGearResult) {
@@ -146,6 +139,12 @@
             });
 
             const content = document.getElementById('main-content');
+            
+            // --- FIX: Global Layout Spacing ---
+            // Applies padding to ALL views to clear the Nav Menu.
+            // Mobile: pt-20 (Top Nav) | Desktop: pl-24 (Left Sidebar)
+            content.className = "flex-1 p-4 overflow-y-auto w-full pt-20 md:pt-6 md:pl-24 transition-all duration-300";
+
             content.classList.add('opacity-0');
             
             setTimeout(async () => {
@@ -157,8 +156,7 @@
                     trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
                     metrics: () => metricsMod?.renderMetrics(this.rawLogData),
                     readiness: () => readinessMod?.renderReadiness(this.readinessData),
-                    // UPDATE 1: Pass rawLogData to FTP
-                    ftp: () => ftpMod?.renderFTP(this.profileData, this.rawLogData),
+                    ftp: () => ftpMod?.renderFTP(this.profileData),
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
@@ -175,9 +173,8 @@
                             fuelMod.FuelTimer.attachEvents();
                         }
                         
-                        // UPDATE 2: Initialize FTP Charts
                         if (view === 'ftp' && ftpMod?.initCharts) {
-                            ftpMod.initCharts(this.rawLogData);
+                            ftpMod.initCharts();
                         }
                     } else {
                         content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;

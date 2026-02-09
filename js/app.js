@@ -140,9 +140,11 @@
 
             const content = document.getElementById('main-content');
             
-            // --- FIX: INCREASED DESKTOP PADDING ---
-            // Changed md:pl-24 -> md:pl-64 to clear the full-width text sidebar
-            content.className = "flex-1 p-4 overflow-y-auto w-full pt-20 md:pt-6 md:pl-64 transition-all duration-300";
+            // --- FIX: RESTORE LAYOUT BUFFER ---
+            // 1. Removed 'w-full' (causes scrollbar when combined with margin)
+            // 2. Changed 'md:pl-64' to 'md:ml-64' (Margin Left). 
+            //    This lets the standard 'p-4' create the gap between sidebar and text.
+            content.className = "flex-1 p-4 overflow-y-auto pt-20 md:pt-6 md:ml-64 transition-all duration-300";
 
             content.classList.add('opacity-0');
             

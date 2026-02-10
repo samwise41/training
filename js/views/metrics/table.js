@@ -10,15 +10,24 @@ const getTrendIcon = (trendObj, higherIsBetter) => {
 };
 
 const getStatusBadge = (status) => {
+    // 1. Define Color Maps for All 3 States
     const map = {
         'On Target':  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-        'Off Target': 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+        'Warning':    'bg-amber-500/10 text-amber-400 border-amber-500/20',   // Yellow
+        'Off Target': 'bg-rose-500/10 text-rose-400 border-rose-500/20',      // Red
         'Neutral':    'bg-slate-700/50 text-slate-400 border-slate-600',
         'No Data':    'bg-slate-800 text-slate-600 border-slate-700'
     };
+    
     const cls = map[status] || map['Neutral'];
-    let icon = status === 'On Target' ? '✅ ' : (status === 'Off Target' ? '⚠️ ' : '');
-    return `<span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${cls} whitespace-nowrap">${icon}${status}</span>`;
+    
+    // 2. Define Icons
+    let icon = '';
+    if (status === 'On Target') icon = '<i class="fa-solid fa-check mr-1"></i>';
+    else if (status === 'Warning') icon = '<i class="fa-solid fa-triangle-exclamation mr-1"></i>';
+    else if (status === 'Off Target') icon = '<i class="fa-solid fa-circle-xmark mr-1"></i>';
+
+    return `<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${cls} whitespace-nowrap">${icon}${status}</span>`;
 };
 
 export const renderSummaryTable = async () => {

@@ -44,11 +44,12 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
             badgeClass = 'text-amber-400 bg-amber-500/10 border-amber-500/50';
             badgeIcon = 'fa-triangle-exclamation';
         } else {
-            // Off Target (or undefined)
-            badgeClass = 'text-red-400 bg-red-500/10 border-red-500/50';
+            // Off Target -> RED
+            badgeClass = 'text-rose-400 bg-rose-500/10 border-rose-500/50';
             badgeIcon = 'fa-circle-xmark';
         }
         
+        // Removed hidden class so it shows on all screens
         statusHtml = `
             <div class="flex items-center gap-1.5 px-2 py-0.5 rounded border ${badgeClass} ml-3">
                 <i class="fa-solid ${badgeIcon} text-[10px]"></i>

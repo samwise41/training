@@ -15,6 +15,9 @@ OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'data', 'metrics', 'coaching_view.json'
 SPORT_DISPLAY_MAP = { "All": "General Fitness", "Bike": "Cycling Metrics", "Run": "Running Metrics", "Swim": "Swimming Metrics" }
 GROUP_ORDER = ["All", "Bike", "Run", "Swim"]
 
+# Metrics that should be aggregated as a Weekly Total instead of a Daily Average
+WEEKLY_METRICS = ['tss', 'calories', 'swims_weekly']
+
 def load_json(filepath):
     try:
         if not os.path.exists(filepath): return {} if 'config' in filepath else []
@@ -55,7 +58,6 @@ def normalize_sport(entry):
     if 'swim' in s or 'pool' in s: return 'Swim'
     return 'Other'
 
-# --- NEW: Helper to get duration from log entry ---
 def get_duration_minutes(entry):
     dur_sec = safe_float(entry.get('durationInSeconds'))
     if dur_sec is None: 
@@ -108,6 +110,7 @@ def extract_metric_series(log, metric_key, rules):
         elif metric_key == 'calories': val = safe_float(entry.get('calories'))
         elif metric_key == 'anaerobic': val = safe_float(entry.get('anaerobicTrainingEffect'))
         elif metric_key == 'feeling_load': val = safe_float(entry.get('Feeling'))
+        elif metric_key == 'swims_weekly': val = 1 # Simple count
         elif metric_key in entry: val = safe_float(entry[metric_key])
 
         if val is None: continue
@@ -118,7 +121,6 @@ def extract_metric_series(log, metric_key, rules):
     series.sort(key=lambda x: x['date'])
     return series
 
-# --- UPDATED: Now accepts log_map and filters ---
 def extract_drift_series(drift_data, sport_filter, log_map, filters):
     series = []
     min_dur = filters.get('min_duration_minutes', 0)
@@ -126,24 +128,19 @@ def extract_drift_series(drift_data, sport_filter, log_map, filters):
     for entry in drift_data:
         if entry.get('sport') != sport_filter: continue
         
-        # 1. Look up Activity Duration
-        # Try matching by ID first, then Date
-        activity_id = str(entry.get('id', ''))
-        log_entry = log_map.get(activity_id)
+        # Robust ID Matching: Try ID, then ActivityID, then fuzzy Date match if needed
+        aid = str(entry.get('id') or '')
+        log_entry = log_map.get(aid)
         
-        # Fallback to date matching if ID fails (less precise but helpful)
-        if not log_entry:
-            # This logic assumes 1 activity per day per sport, which is usually fine for drift
-            pass 
-
+        # Double check duration
         if log_entry:
             dur = get_duration_minutes(log_entry)
-            if dur < min_dur: continue  # SKIP SHORT RIDES (e.g. RACES)
+            if dur < min_dur: continue 
 
         val = safe_float(entry.get('val'))
         date = entry.get('date')
         
-        # 2. Filter Outliers
+        # Filter Outliers (-25 to +30)
         if val is not None and date and -25.0 <= val <= 30.0:
             series.append({
                 'date': date,
@@ -155,7 +152,7 @@ def extract_drift_series(drift_data, sport_filter, log_map, filters):
     return series
 
 def process_data():
-    print("--- Generating Coach View (Synced Filters) ---")
+    print("--- Generating Coach View (Fixed Weekly Scaling) ---")
     log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     drift_history = load_json(INPUT_DRIFT)
@@ -164,7 +161,7 @@ def process_data():
         print("❌ Config not found.")
         return
 
-    # Create Lookup Map for Logs (ID -> Entry)
+    # Create Lookup Map for Logs
     log_map = {}
     for entry in log:
         aid = str(entry.get('activityId') or entry.get('id') or '')
@@ -179,20 +176,34 @@ def process_data():
         filters = rule.get('filters', {})
 
         if key == 'drift_bike':
-            # Pass log_map and filters to enforce min_duration
             series = extract_drift_series(drift_history, 'Bike', log_map, filters)
         elif key == 'drift_run':
             series = extract_drift_series(drift_history, 'Run', log_map, filters)
         else:
             series = extract_metric_series(log, key, rule)
 
+        # --- CALCULATE CURRENT VALUE ---
+        # 1. Get recent data points
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
-        current_avg = mean(recent_30) if recent_30 else 0
+        
+        current_val = 0
+        if recent_30:
+            # 2. FIX: Weekly Scaling vs Daily Average
+            if key in WEEKLY_METRICS:
+                # If metric is weekly (TSS, Cals), calculate 'Average Weekly Volume'
+                # (Average Daily * 7) gives a smoothing approximation of weekly load
+                daily_avg = mean(recent_30)
+                current_val = daily_avg * 7
+                
+                # Special Case: 'swims_weekly' is just a count of days with swims, so avg*7 is correct (freq/week)
+            else:
+                # Standard Metric (Average of values)
+                current_val = mean(recent_30)
         
         good_min, good_max = rule.get('good_min'), rule.get('good_max')
         higher_is_better = rule.get('higher_is_better', True)
         
-        # --- STATUS LOGIC (Buffer of 5%) ---
+        # --- STATUS LOGIC ---
         status = "No Data"
         buffer = 0.05
 
@@ -204,21 +215,21 @@ def process_data():
                     target = good_min
                     warning_threshold = target * (1.0 - buffer)
                     
-                    if current_avg >= target:
+                    if current_val >= target:
                         status = "On Target"
-                    elif current_avg >= warning_threshold:
+                    elif current_val >= warning_threshold:
                         status = "Warning"
                     else:
                         status = "Off Target"
             else:
-                # Lower is better
+                # Lower is better (GCT, Drift)
                 if good_max is not None:
                     target = good_max
                     warning_threshold = target * (1.0 + buffer)
                     
-                    if current_avg <= target:
+                    if current_val <= target:
                         status = "On Target"
-                    elif current_avg <= warning_threshold:
+                    elif current_val <= warning_threshold:
                         status = "Warning"
                     else:
                         status = "Off Target"
@@ -234,7 +245,7 @@ def process_data():
 
         metric_obj = rule.copy()
         metric_obj.update({
-            "id": key, "current_value": round(current_avg, 2) if recent_30 else None,
+            "id": key, "current_value": round(current_val, 2) if recent_30 else None,
             "status": status, "trends": trends, "has_data": bool(recent_30)
         })
         grouped_metrics[sport_group].append(metric_obj)

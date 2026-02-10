@@ -66,8 +66,8 @@ window.toggleMetricsTime = (range) => {
     document.querySelectorAll('[id^="btn-metric-"]').forEach(btn => {
         const isActive = btn.id === `btn-metric-${range}`;
         btn.className = isActive 
-            ? "bg-slate-600 text-white shadow-sm px-3 py-1 rounded text-[10px] transition-all font-bold" 
-            : "bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white";
+            ? "bg-slate-600 text-white shadow-md px-3 py-1 rounded text-[10px] font-bold transition-all border border-slate-500" 
+            : "bg-slate-900/50 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white border border-transparent hover:border-slate-600";
     });
 };
 
@@ -147,33 +147,29 @@ async function populateView(rawData) {
     }
 }
 
-// --- MAIN RENDERER (Must return string synchronously) ---
+// --- MAIN RENDERER ---
 export function renderMetrics(rawData) {
     try {
         if (!UI || typeof UI.buildCollapsibleSection !== 'function') {
             throw new Error("UI Utility is missing or invalid imports.");
         }
 
-        const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
+        // --- BUTTON BUILDER ---
+        const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-900/50 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white border border-transparent hover:border-slate-600">${label}</button>`;
         
-        // --- FIX: Sticky Header Logic (Separated from Content) ---
-        // 1. sticky top-0: Sticks to viewport top.
-        // 2. z-40: Sits above charts.
-        // 3. Inner Container (max-w-7xl): Aligns inner text with the page content.
-        const headerHtml = `
-            <div id="metrics-toggle-bar" class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 w-full py-3 mb-6 shadow-md transition-all">
-                <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-                    <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-bullseye text-emerald-500"></i> Performance Lab
-                    </h2>
-                    <div class="flex gap-1.5 p-1 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                        ${buildToggle('30d', '30D')}
-                        ${buildToggle('90d', '90D')}
-                        ${buildToggle('6m', '6M')}
-                        ${buildToggle('1y', '1Y')}
-                    </div>
-                </div>
-            </div>`;
+        // --- FIX: Header Placement ---
+        // fixed: Sticks to the viewport, ignoring parent scroll.
+        // top-3: Adjusts to sit vertically centered in your 50px-60px header bar.
+        // right-4: Puts it in the empty space on the right.
+        // z-[60]: Ensures it sits on top of the header bar itself if needed.
+        const togglesHtml = `
+            <div id="metrics-toggles-fixed" class="fixed top-3.5 right-4 z-[60] flex gap-1">
+                 ${buildToggle('30d', '30D')}
+                 ${buildToggle('90d', '90D')}
+                 ${buildToggle('6m', '6M')}
+                 ${buildToggle('1y', '1Y')}
+            </div>
+        `;
 
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', '<div id="metrics-table-container" class="min-h-[100px] flex items-center justify-center text-slate-500 text-xs">Loading Analysis...</div>', true);
 
@@ -220,10 +216,10 @@ export function renderMetrics(rawData) {
 
         setTimeout(() => populateView(rawData), 0);
 
-        // --- RETURN: Two separate blocks (Header + Content) ---
+        // We inject the togglesHtml (which is fixed) + the normal content
         return `
-            ${headerHtml}
-            <div class="max-w-7xl mx-auto space-y-6 pb-12 relative px-4 md:px-0">
+            ${togglesHtml}
+            <div class="max-w-7xl mx-auto space-y-6 pb-12 pt-6 relative px-4 md:px-0">
                 ${tableSection}
                 ${chartsSection}
             </div>

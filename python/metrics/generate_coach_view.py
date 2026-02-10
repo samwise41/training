@@ -55,6 +55,13 @@ def normalize_sport(entry):
     if 'swim' in s or 'pool' in s: return 'Swim'
     return 'Other'
 
+# --- NEW: Helper to get duration from log entry ---
+def get_duration_minutes(entry):
+    dur_sec = safe_float(entry.get('durationInSeconds'))
+    if dur_sec is None: 
+        dur_sec = safe_float(entry.get('duration')) or 0
+    return dur_sec / 60.0
+
 def extract_metric_series(log, metric_key, rules):
     series = []
     filters = rules.get('filters', {})
@@ -67,9 +74,7 @@ def extract_metric_series(log, metric_key, rules):
         if target_sport != 'All' and entry_sport != target_sport:
             continue
         
-        dur_sec = safe_float(entry.get('durationInSeconds'))
-        if dur_sec is None: dur_sec = safe_float(entry.get('duration')) or 0
-        duration_min = dur_sec / 60.0
+        duration_min = get_duration_minutes(entry)
         
         if filters.get('min_duration_minutes') and duration_min < filters['min_duration_minutes']:
             continue
@@ -113,26 +118,44 @@ def extract_metric_series(log, metric_key, rules):
     series.sort(key=lambda x: x['date'])
     return series
 
-def extract_drift_series(drift_data, sport_filter):
+# --- UPDATED: Now accepts log_map and filters ---
+def extract_drift_series(drift_data, sport_filter, log_map, filters):
     series = []
+    min_dur = filters.get('min_duration_minutes', 0)
+
     for entry in drift_data:
         if entry.get('sport') != sport_filter: continue
+        
+        # 1. Look up Activity Duration
+        # Try matching by ID first, then Date
+        activity_id = str(entry.get('id', ''))
+        log_entry = log_map.get(activity_id)
+        
+        # Fallback to date matching if ID fails (less precise but helpful)
+        if not log_entry:
+            # This logic assumes 1 activity per day per sport, which is usually fine for drift
+            pass 
+
+        if log_entry:
+            dur = get_duration_minutes(log_entry)
+            if dur < min_dur: continue  # SKIP SHORT RIDES (e.g. RACES)
+
         val = safe_float(entry.get('val'))
         date = entry.get('date')
         
-        # --- FIX: Outlier Filtering ---
-        # Filter out extreme values (e.g. 100.0) which are likely errors
+        # 2. Filter Outliers
         if val is not None and date and -25.0 <= val <= 30.0:
             series.append({
                 'date': date,
                 'days_ago': get_days_ago(date),
                 'value': val
             })
+            
     series.sort(key=lambda x: x['date'])
     return series
 
 def process_data():
-    print("--- Generating Coach View (Filtered Drift) ---")
+    print("--- Generating Coach View (Synced Filters) ---")
     log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     drift_history = load_json(INPUT_DRIFT)
@@ -141,16 +164,25 @@ def process_data():
         print("❌ Config not found.")
         return
 
+    # Create Lookup Map for Logs (ID -> Entry)
+    log_map = {}
+    for entry in log:
+        aid = str(entry.get('activityId') or entry.get('id') or '')
+        if aid: log_map[aid] = entry
+
     grouped_metrics = {k: [] for k in GROUP_ORDER}
     
     for key, rule in config.get('metrics', {}).items():
         sport_group = rule.get('sport', 'All')
         if sport_group not in grouped_metrics: sport_group = 'All'
-            
+        
+        filters = rule.get('filters', {})
+
         if key == 'drift_bike':
-            series = extract_drift_series(drift_history, 'Bike')
+            # Pass log_map and filters to enforce min_duration
+            series = extract_drift_series(drift_history, 'Bike', log_map, filters)
         elif key == 'drift_run':
-            series = extract_drift_series(drift_history, 'Run')
+            series = extract_drift_series(drift_history, 'Run', log_map, filters)
         else:
             series = extract_metric_series(log, key, rule)
 
@@ -179,7 +211,7 @@ def process_data():
                     else:
                         status = "Off Target"
             else:
-                # Lower is better (e.g. Drift)
+                # Lower is better
                 if good_max is not None:
                     target = good_max
                     warning_threshold = target * (1.0 + buffer)

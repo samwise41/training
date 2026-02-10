@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-10 16:57:52",
+  "generated_at": "2026-02-10 17:59:57",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -58,8 +58,8 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 65.72,
-          "status": "Off Target",
+          "current_value": 460.07,
+          "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
@@ -134,8 +134,8 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 606.14,
-          "status": "Off Target",
+          "current_value": 4243.0,
+          "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
@@ -723,27 +723,27 @@
           "filters": {
             "ignore_zero": false
           },
-          "current_value": null,
-          "status": "No Data",
+          "current_value": 7,
+          "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Flat",
-              "slope": 0
+              "slope": 0.0
             },
             "90d": {
               "direction": "Flat",
-              "slope": 0
+              "slope": 0.0
             },
             "6m": {
               "direction": "Flat",
-              "slope": 0
+              "slope": 0.0
             },
             "1y": {
               "direction": "Flat",
-              "slope": 0
+              "slope": 0.0
             }
           },
-          "has_data": false
+          "has_data": true
         }
       ]
     }

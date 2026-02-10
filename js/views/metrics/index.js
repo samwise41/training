@@ -115,11 +115,16 @@ async function populateView(rawData) {
         if (rawData && rawData.length > 0) {
             cleanData = normalizeMetricsData(rawData);
 
-            // --- MERGE DRIFT DATA ---
+            // --- MERGE DRIFT DATA (With Outlier Filter) ---
             if (driftData.length > 0) {
                 const driftMap = {};
                 driftData.forEach(d => {
                     if (!d.date) return;
+                    
+                    // FIX: Filter out unrealistic values (e.g. 100.0 or -50.0)
+                    // Valid drift is usually between -25% and +30%
+                    if (d.val != null && (d.val < -25 || d.val > 30)) return;
+
                     if (!driftMap[d.date]) driftMap[d.date] = {};
                     driftMap[d.date][d.sport] = d.val;
                 });
@@ -154,14 +159,8 @@ export function renderMetrics(rawData) {
             throw new Error("UI Utility is missing or invalid imports.");
         }
 
-        // --- BUTTON BUILDER ---
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-900/50 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white border border-transparent hover:border-slate-600">${label}</button>`;
         
-        // --- FIX: Header Placement ---
-        // fixed: Sticks to the viewport, ignoring parent scroll.
-        // top-3: Adjusts to sit vertically centered in your 50px-60px header bar.
-        // right-4: Puts it in the empty space on the right.
-        // z-[60]: Ensures it sits on top of the header bar itself if needed.
         const togglesHtml = `
             <div id="metrics-toggles-fixed" class="fixed top-3.5 right-4 z-[60] flex gap-1">
                  ${buildToggle('30d', '30D')}
@@ -216,7 +215,6 @@ export function renderMetrics(rawData) {
 
         setTimeout(() => populateView(rawData), 0);
 
-        // We inject the togglesHtml (which is fixed) + the normal content
         return `
             ${togglesHtml}
             <div class="max-w-7xl mx-auto space-y-6 pb-12 pt-6 relative px-4 md:px-0">

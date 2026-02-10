@@ -20,6 +20,58 @@ const calculateVisualTrend = (data) => {
     return { start: intercept, end: intercept + slope * (n - 1) };
 };
 
+// --- HELPER: Rolling 7-Day Sum ---
+const calculateRollingSum = (data, windowSize = 7) => {
+    if (!data || data.length === 0) return [];
+    
+    // 1. Create a dense map of all dates in range to handle gaps
+    const dateMap = {};
+    const startDate = new Date(data[0].date);
+    const endDate = new Date(data[data.length - 1].date);
+    
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        dateMap[d.toISOString().split('T')[0]] = 0;
+    }
+    
+    // 2. Fill with actual values
+    data.forEach(item => {
+        if(dateMap[item.dateStr]) dateMap[item.dateStr] += item.val;
+    });
+
+    // 3. Calculate Rolling Sum
+    const result = [];
+    const sortedDates = Object.keys(dateMap).sort();
+    
+    sortedDates.forEach((dateStr, i) => {
+        // Only start outputting when we have a full window (optional, but cleaner)
+        // or just sum whatever is available in the window
+        let sum = 0;
+        let count = 0;
+        for (let j = 0; j < windowSize; j++) {
+            if (i - j >= 0) {
+                sum += dateMap[sortedDates[i - j]];
+                count++;
+            }
+        }
+        
+        // Find original object metadata if it exists, or create dummy
+        const original = data.find(d => d.dateStr === dateStr);
+        result.push({
+            date: new Date(dateStr),
+            dateStr: dateStr,
+            val: sum,
+            name: original ? "7-Day Total" : "No Activity",
+            breakdown: original ? original.name : "" 
+        });
+    });
+
+    // Filter back to only dates that had actual data points originally? 
+    // Or return the dense series? 
+    // For chart readability, let's return points that match the input dates so we don't have too many empty dots.
+    const final = result.filter(r => data.some(d => d.dateStr === r.dateStr));
+    return final;
+};
+
 // --- CHART BUILDER (GENERIC) ---
 const buildMetricChart = (displayData, key, def, timeRange) => {
     if (key === 'training_balance') return buildStackedBarChart(displayData, def);
@@ -30,7 +82,7 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     const icon = def.icon || 'fa-chart-line';
     const unit = def.unit || '';
     
-    // --- NEW: 3-TIER STATUS BADGE ---
+    // --- STATUS BADGE ---
     let statusHtml = '';
     if (def.status && def.status !== 'Neutral' && def.status !== 'No Data') {
         const s = def.status.toLowerCase();
@@ -44,12 +96,10 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
             badgeClass = 'text-amber-400 bg-amber-500/10 border-amber-500/50';
             badgeIcon = 'fa-triangle-exclamation';
         } else {
-            // Off Target -> RED
             badgeClass = 'text-rose-400 bg-rose-500/10 border-rose-500/50';
             badgeIcon = 'fa-circle-xmark';
         }
         
-        // Removed hidden class so it shows on all screens
         statusHtml = `
             <div class="flex items-center gap-1.5 px-2 py-0.5 rounded border ${badgeClass} ml-3">
                 <i class="fa-solid ${badgeIcon} text-[10px]"></i>
@@ -57,7 +107,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
             </div>
         `;
     }
-    // ------------------------------------
 
     if (!displayData || displayData.length < 2) {
         return `
@@ -304,7 +353,15 @@ export const updateCharts = async (allData, timeRange) => {
                 full = full.filter(d => d.val !== 0);
             }
             
-            const display = full.filter(d => d.date >= cutoff);
+            let display = full.filter(d => d.date >= cutoff);
+
+            // --- FIX: Rolling Sum for Volume Metrics ---
+            // If metric is TSS or Calories, convert daily points to 7-Day Rolling Sum
+            if (key === 'tss' || key === 'calories') {
+                display = calculateRollingSum(display, 7);
+            }
+            // -------------------------------------------
+
             el.innerHTML = buildMetricChart(display, key, def, timeRange);
         } else {
             el.innerHTML = buildMetricChart([], key, def, timeRange);

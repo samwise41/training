@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-10 14:53:56",
+  "generated_at": "2026-02-10 16:22:20",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -233,7 +233,7 @@
       "metrics": [
         {
           "id": "subjective_bike",
-          "title": "Perceived Bike Efficiency",
+          "title": "Perceived Efficiency",
           "sport": "Bike",
           "icon": "fa-person-biking",
           "colorVar": "var(--color-bike)",
@@ -375,15 +375,15 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.010170454545454533
+              "slope": 0.27934017595307914
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.025379756801679657
+              "slope": 0.022603351528801007
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.016741973658705788
+              "slope": 0.007824854651162793
             }
           },
           "has_data": true
@@ -395,7 +395,7 @@
       "metrics": [
         {
           "id": "subjective_run",
-          "title": "Perceived Run Efficiency",
+          "title": "Perceived Efficiency",
           "sport": "Run",
           "icon": "fa-person-running",
           "colorVar": "var(--color-run)",

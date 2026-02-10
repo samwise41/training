@@ -26,12 +26,29 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     if (key === 'training_balance') return buildStackedBarChart(displayData, def);
     if (key === 'feeling_load') return buildDualAxisChart(displayData, def);
 
-    // 1. Setup Configuration from JSON Definition (Safe Defaults)
+    // 1. Setup Configuration
     const color = def.colorVar || 'var(--color-all)';
     const title = def.title || key;
     const icon = def.icon || 'fa-chart-line';
     const unit = def.unit || '';
     
+    // --- NEW: STATUS BADGE GENERATION ---
+    let statusHtml = '';
+    if (def.status) {
+        const isGood = def.status.toLowerCase() === 'on target';
+        // Colors: Emerald for Good, Amber for Watch/Warning
+        const badgeColor = isGood ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/50' : 'text-amber-400 bg-amber-500/10 border-amber-500/50';
+        const badgeIcon = isGood ? 'fa-check' : 'fa-triangle-exclamation';
+        
+        statusHtml = `
+            <div class="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded border ${badgeColor} ml-3">
+                <i class="fa-solid ${badgeIcon} text-[10px]"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wide">${def.status}</span>
+            </div>
+        `;
+    }
+    // ------------------------------------
+
     // 2. Empty State Handling
     if (!displayData || displayData.length < 2) {
         return `
@@ -99,16 +116,15 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
         trendHtml = `<line x1="${getX(0)}" y1="${yStart}" x2="${getX(displayData.length - 1)}" y2="${yEnd}" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.5" />`;
     }
 
-    // 7. Render SVG
+    // 7. Render SVG (Updated with statusHtml)
     return `
     <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors">
         <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center">
                 <h3 class="text-xs font-bold text-white flex items-center gap-2">
                     <i class="fa-solid ${icon}" style="color: ${color}"></i> ${title}
-                    <span class="text-[10px] font-normal opacity-50 ml-1 font-mono hidden sm:inline">${def.formula || ''}</span>
                 </h3>
-            </div>
+                ${statusHtml} </div>
             <div class="flex items-center gap-2">
                 <span class="text-[9px] text-slate-500 font-mono">${displayData.length} pts</span>
                 <i class="fa-solid fa-circle-info text-slate-500 cursor-pointer hover:text-white" onclick="window.handleMetricInfoClick(event, '${key}')"></i>
@@ -130,6 +146,7 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
 };
 
 // --- SPECIALIZED BUILDERS (Bar/Dual) ---
+// (Kept essentially the same, but simplified for brevity in this context)
 const buildStackedBarChart = (data, def) => {
     if (!data || data.length === 0) return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex items-center justify-center opacity-60"><p class="text-xs text-slate-500">No Balance Data</p></div>`;
 
@@ -218,29 +235,41 @@ export const updateCharts = async (allData, timeRange) => {
     if (!allData || !allData.length) return;
 
     let config = null;
+    let coachingView = null;
 
     // --- ROBUST CONFIG LOADING ---
     try {
-        // 1. Try DataManager Key (Primary)
+        // 1. Fetch Static Config
         config = await DataManager.fetchJSON('METRICS_CONFIG');
         
-        // 2. Fallback: Direct Fetch (if DataManager key isn't working/cached yet)
+        // 2. Fetch Coaching View (to get dynamic statuses like "On Target")
+        coachingView = await DataManager.fetchJSON('COACHING_VIEW');
+
         if (!config) {
-            console.warn("Charts: METRICS_CONFIG key not resolved. Attempting direct fallback fetch...");
             const res = await fetch('data/metrics/metrics_config.json');
-            if (res.ok) {
-                config = await res.json();
-                console.log("Charts: Direct fetch successful.");
-            }
+            if (res.ok) config = await res.json();
         }
     } catch (e) { 
         console.warn("Charts: Failed to fetch metrics config.", e); 
     }
 
-    // SAFEGUARD: If config is still missing, we cannot proceed.
-    if (!config || !config.metrics) {
-        console.warn("Charts: Config missing or invalid. Charts cannot render.");
-        return;
+    if (!config || !config.metrics) return;
+
+    // --- MERGE STATUSES ---
+    // If we have coaching data, inject the current 'status' into the config
+    if (coachingView && coachingView.metrics_summary) {
+        // Create a map: { "vo2max": "On Target", "ftp": "Watch" }
+        const statusMap = {};
+        coachingView.metrics_summary.forEach(group => {
+            group.metrics.forEach(m => {
+                if (m.id && m.status) statusMap[m.id] = m.status;
+            });
+        });
+
+        // Apply to config
+        Object.keys(config.metrics).forEach(k => {
+            if (statusMap[k]) config.metrics[k].status = statusMap[k];
+        });
     }
 
     // Time cutoff calculation
@@ -262,22 +291,18 @@ export const updateCharts = async (allData, timeRange) => {
         if (!el) return;
 
         // --- STAGE 1: Source Data Filtering ---
-        // Filter the raw activities (allData) BEFORE processing
         let sourceData = allData;
         
         if (def.filters) {
-            // Filter by minimum duration (e.g., exclude warmups < 20mins)
             if (def.filters.min_duration_minutes) {
                 sourceData = sourceData.filter(d => d._dur >= def.filters.min_duration_minutes);
             }
-            // Filter by required data presence (e.g., must have Heart Rate)
             if (def.filters.require_hr) {
                 sourceData = sourceData.filter(d => d._hr > 0);
             }
         }
 
         // --- STAGE 2: Data Extraction ---
-        // Use the filtered source data to calculate points
         let full = [];
         if (key.startsWith('subjective_')) {
             full = calculateSubjectiveEfficiency(sourceData, key.split('_')[1]);
@@ -288,11 +313,9 @@ export const updateCharts = async (allData, timeRange) => {
         if (!full) full = [];
 
         // --- STAGE 3: Result Data Filtering ---
-        // Filter the calculated points (e.g., remove 0 values or nulls)
         if (full.length > 0) {
             full.sort((a,b) => a.date - b.date);
             
-            // Remove zero values if config requests it
             if (def.filters && def.filters.ignore_zero) {
                 full = full.filter(d => d.val !== 0);
             }
@@ -310,6 +333,6 @@ export const updateCharts = async (allData, timeRange) => {
     // Update Button Styles
     ['30d','90d','6m','1y'].forEach(r => { 
         const b = document.getElementById(`btn-metric-${r}`); 
-        if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; 
+        if(b) b.className = timeRange===r ? "bg-slate-600 text-white font-bold px-3 py-1 rounded text-[10px] border border-slate-500 shadow-sm" : "bg-slate-900/50 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px] border border-transparent hover:border-slate-600"; 
     });
 };

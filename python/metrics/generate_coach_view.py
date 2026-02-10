@@ -119,7 +119,10 @@ def extract_drift_series(drift_data, sport_filter):
         if entry.get('sport') != sport_filter: continue
         val = safe_float(entry.get('val'))
         date = entry.get('date')
-        if val is not None and date:
+        
+        # --- FIX: Outlier Filtering ---
+        # Filter out extreme values (e.g. 100.0) which are likely errors
+        if val is not None and date and -25.0 <= val <= 30.0:
             series.append({
                 'date': date,
                 'days_ago': get_days_ago(date),
@@ -129,7 +132,7 @@ def extract_drift_series(drift_data, sport_filter):
     return series
 
 def process_data():
-    print("--- Generating Coach View (3-Tier Status) ---")
+    print("--- Generating Coach View (Filtered Drift) ---")
     log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     drift_history = load_json(INPUT_DRIFT)
@@ -157,7 +160,7 @@ def process_data():
         good_min, good_max = rule.get('good_min'), rule.get('good_max')
         higher_is_better = rule.get('higher_is_better', True)
         
-        # --- UPDATED STATUS LOGIC (Buffer of 5%) ---
+        # --- STATUS LOGIC (Buffer of 5%) ---
         status = "No Data"
         buffer = 0.05
 
@@ -176,7 +179,7 @@ def process_data():
                     else:
                         status = "Off Target"
             else:
-                # Lower is better (e.g. Drift, Lower Ratio)
+                # Lower is better (e.g. Drift)
                 if good_max is not None:
                     target = good_max
                     warning_threshold = target * (1.0 + buffer)

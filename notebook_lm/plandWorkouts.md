@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-09 02:38:16
+**Generated:** 2026-02-10 02:46:59
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -16,8 +16,9 @@
     "actualSport": "Rest",
     "actualDuration": 0.0,
     "actualWorkout": null,
-    "status": "REST",
-    "compliance": 0
+    "status": "COMPLETED",
+    "compliance": 100,
+    "completed": true
   },
   {
     "date": "2026-02-09",
@@ -26,10 +27,11 @@
     "plannedDuration": 30.0,
     "notes": "**Focus:** Neuromuscular Priming. 15m Warmup; **4 x 20s Hill Sprints** (Reduced reps); 10m Cooldown.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0
+    "actualDuration": 30.6,
+    "actualWorkout": "Roy Running",
+    "status": "COMPLETED",
+    "compliance": 102,
+    "completed": true
   },
   {
     "date": "2026-02-10",
@@ -41,7 +43,8 @@
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
-    "compliance": 0
+    "compliance": 0,
+    "completed": false
   },
   {
     "date": "2026-02-11",
@@ -53,7 +56,8 @@
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
-    "compliance": 0
+    "compliance": 0,
+    "completed": false
   },
   {
     "date": "2026-02-12",
@@ -65,7 +69,8 @@
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
-    "compliance": 0
+    "compliance": 0,
+    "completed": false
   },
   {
     "date": "2026-02-13",
@@ -77,7 +82,8 @@
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
-    "compliance": 0
+    "compliance": 0,
+    "completed": false
   },
   {
     "date": "2026-02-14",
@@ -89,7 +95,8 @@
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
-    "compliance": 0
+    "compliance": 0,
+    "completed": false
   }
 ]
 ```

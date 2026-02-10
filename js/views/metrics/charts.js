@@ -40,8 +40,9 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
         const badgeColor = isGood ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/50' : 'text-amber-400 bg-amber-500/10 border-amber-500/50';
         const badgeIcon = isGood ? 'fa-check' : 'fa-triangle-exclamation';
         
+        // FIX: Removed 'hidden' so it shows on mobile
         statusHtml = `
-            <div class="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded border ${badgeColor} ml-3">
+            <div class="flex items-center gap-1.5 px-2 py-0.5 rounded border ${badgeColor} ml-3">
                 <i class="fa-solid ${badgeIcon} text-[10px]"></i>
                 <span class="text-[10px] font-bold uppercase tracking-wide">${def.status}</span>
             </div>
@@ -146,7 +147,7 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
 };
 
 // --- SPECIALIZED BUILDERS (Bar/Dual) ---
-// (Kept essentially the same, but simplified for brevity in this context)
+// (Kept essentially the same)
 const buildStackedBarChart = (data, def) => {
     if (!data || data.length === 0) return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex items-center justify-center opacity-60"><p class="text-xs text-slate-500">No Balance Data</p></div>`;
 
@@ -330,9 +331,11 @@ export const updateCharts = async (allData, timeRange) => {
         }
     });
 
-    // Update Button Styles
+    // Update Button Styles (Reverted to Original Emerald Logic)
     ['30d','90d','6m','1y'].forEach(r => { 
         const b = document.getElementById(`btn-metric-${r}`); 
-        if(b) b.className = timeRange===r ? "bg-slate-600 text-white font-bold px-3 py-1 rounded text-[10px] border border-slate-500 shadow-sm" : "bg-slate-900/50 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px] border border-transparent hover:border-slate-600"; 
+        if(b) b.className = timeRange===r 
+            ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" 
+            : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; 
     });
 };

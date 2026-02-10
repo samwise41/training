@@ -9,7 +9,6 @@ let metricsState = { timeRange: '6m', configMap: {} };
 let cleanData = [];
 
 // --- Global Handlers ---
-
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     if(window.TooltipManager) {
         e.stopPropagation();
@@ -156,10 +155,8 @@ export function renderMetrics(rawData) {
 
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
         
-        // --- FIX: Sticky Header Logic ---
-        // 1. sticky top-0: Sticks to the top of the scroll container
-        // 2. z-30: Sits above charts and tooltips
-        // 3. -mx-4 px-4: Breaks out of the parent padding to touch the edges (Full Width)
+        // --- FIX: Sticky Header Logic (Reverted to top-0) ---
+        // Using top-0 forces it to the absolute top of the viewport.
         const headerHtml = `
             <div id="metrics-toggle-bar" class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 -mx-4 px-4 py-3 mb-6 transition-all flex justify-between items-center shadow-md">
                 <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">

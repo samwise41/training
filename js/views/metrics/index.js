@@ -66,7 +66,7 @@ window.toggleMetricsTime = (range) => {
     document.querySelectorAll('[id^="btn-metric-"]').forEach(btn => {
         const isActive = btn.id === `btn-metric-${range}`;
         btn.className = isActive 
-            ? "bg-slate-700 text-white px-3 py-1 rounded text-[10px] transition-all" 
+            ? "bg-slate-600 text-white shadow-sm px-3 py-1 rounded text-[10px] transition-all font-bold" 
             : "bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white";
     });
 };
@@ -86,19 +86,15 @@ async function populateView(rawData) {
             metricsState.configMap = {};
             coachingData.metrics_summary.forEach(group => {
                 group.metrics.forEach(m => {
-                    // --- THE FIX: RESOLVE COLORS HERE ---
-                    // If the config says "var(--color-bad)", we resolve it to "#ef4444"
-                    // so the charting library can actually use it.
                     if (m.colorVar && m.colorVar.startsWith('var(--')) {
                         m.colorVar = resolveCssVar(m.colorVar);
                     }
-                    // ------------------------------------
                     metricsState.configMap[m.id] = m;
                 });
             });
         }
 
-        // 2. Fetch Drift History (NEW)
+        // 2. Fetch Drift History
         let driftData = [];
         try {
             const res = await fetch('data/metrics/drift_history.json');
@@ -119,7 +115,7 @@ async function populateView(rawData) {
         if (rawData && rawData.length > 0) {
             cleanData = normalizeMetricsData(rawData);
 
-            // --- MERGE DRIFT DATA (Sport-Aware) ---
+            // --- MERGE DRIFT DATA ---
             if (driftData.length > 0) {
                 const driftMap = {};
                 driftData.forEach(d => {
@@ -140,7 +136,6 @@ async function populateView(rawData) {
                     }
                 });
             }
-            // --------------------------------------
 
             setTimeout(() => {
                 updateCharts(cleanData, metricsState.timeRange);
@@ -152,22 +147,30 @@ async function populateView(rawData) {
     }
 }
 
-// --- MAIN RENDERER (Must return string synchronously) ---
+// --- MAIN RENDERER ---
 export function renderMetrics(rawData) {
     try {
-        // Ensure UI exists before using it
         if (!UI || typeof UI.buildCollapsibleSection !== 'function') {
             throw new Error("UI Utility is missing or invalid imports.");
         }
 
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
         
+        // --- FIX: Sticky Header Logic ---
+        // 1. sticky top-0: Sticks to the top of the scroll container
+        // 2. z-30: Sits above charts and tooltips
+        // 3. -mx-4 px-4: Breaks out of the parent padding to touch the edges (Full Width)
         const headerHtml = `
-            <div class="flex justify-between items-center bg-slate-900/40 p-3 rounded-xl border border-slate-800 backdrop-blur-sm sticky top-0 z-10 mb-6">
+            <div id="metrics-toggle-bar" class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 -mx-4 px-4 py-3 mb-6 transition-all flex justify-between items-center shadow-md">
                 <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                     <i class="fa-solid fa-bullseye text-emerald-500"></i> Performance Lab
                 </h2>
-                <div class="flex gap-1.5">${buildToggle('30d', '30d')}${buildToggle('90d', '90d')}${buildToggle('6m', '6m')}${buildToggle('1y', '1y')}</div>
+                <div class="flex gap-1.5 p-1 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                    ${buildToggle('30d', '30D')}
+                    ${buildToggle('90d', '90D')}
+                    ${buildToggle('6m', '6M')}
+                    ${buildToggle('1y', '1Y')}
+                </div>
             </div>`;
 
         const tableSection = UI.buildCollapsibleSection('metrics-table-section', 'Physiological Trends', '<div id="metrics-table-container" class="min-h-[100px] flex items-center justify-center text-slate-500 text-xs">Loading Analysis...</div>', true);
@@ -191,36 +194,19 @@ export function renderMetrics(rawData) {
                 </div>
 
                 ${buildSectionHeader('Cycling Metrics', 'fa-person-biking', 'icon-bike')}
-
-
                 <div id="metric-chart-endurance"></div>
-
                 <div id="metric-chart-drift_bike"></div> 
-
                 <div id="metric-chart-strength"></div>
-
-                <div id="metric-chart-strength"></div>
-
                 <div id="metric-chart-subjective_bike"></div>
 
                 ${buildSectionHeader('Running Metrics', 'fa-person-running', 'icon-run')}
-
                 <div id="metric-chart-run"></div>
-
-               <div id="metric-chart-drift_run"></div>  
-
+                <div id="metric-chart-drift_run"></div>  
                 <div id="metric-chart-vertical_ratio"></div>
-
                 <div id="metric-chart-gct"></div>
-
                 <div id="metric-chart-vert"></div>
-
- 
-
                 <div id="metric-chart-mechanical"></div>
-
                 <div id="metric-chart-subjective_run"></div>
-
 
                 ${buildSectionHeader('Swimming Metrics', 'fa-person-swimming', 'icon-swim')}
                 <div id="metric-chart-swims_weekly"></div>
@@ -230,7 +216,6 @@ export function renderMetrics(rawData) {
         
         const chartsSection = UI.buildCollapsibleSection('metrics-charts-section', 'Detailed Charts', chartsGrid, true);
 
-        // Trigger Async Load
         setTimeout(() => populateView(rawData), 0);
 
         return `

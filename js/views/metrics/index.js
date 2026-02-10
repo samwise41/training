@@ -9,6 +9,7 @@ let metricsState = { timeRange: '6m', configMap: {} };
 let cleanData = [];
 
 // --- Global Handlers ---
+
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     if(window.TooltipManager) {
         e.stopPropagation();
@@ -146,7 +147,7 @@ async function populateView(rawData) {
     }
 }
 
-// --- MAIN RENDERER ---
+// --- MAIN RENDERER (Must return string synchronously) ---
 export function renderMetrics(rawData) {
     try {
         if (!UI || typeof UI.buildCollapsibleSection !== 'function') {
@@ -155,18 +156,22 @@ export function renderMetrics(rawData) {
 
         const buildToggle = (range, label) => `<button id="btn-metric-${range}" onclick="window.toggleMetricsTime('${range}')" class="bg-slate-800 text-slate-400 px-3 py-1 rounded text-[10px] transition-all hover:text-white">${label}</button>`;
         
-        // --- FIX: Sticky Header Logic (Reverted to top-0) ---
-        // Using top-0 forces it to the absolute top of the viewport.
+        // --- FIX: Sticky Header Logic (Separated from Content) ---
+        // 1. sticky top-0: Sticks to viewport top.
+        // 2. z-40: Sits above charts.
+        // 3. Inner Container (max-w-7xl): Aligns inner text with the page content.
         const headerHtml = `
-            <div id="metrics-toggle-bar" class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 -mx-4 px-4 py-3 mb-6 transition-all flex justify-between items-center shadow-md">
-                <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-bullseye text-emerald-500"></i> Performance Lab
-                </h2>
-                <div class="flex gap-1.5 p-1 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                    ${buildToggle('30d', '30D')}
-                    ${buildToggle('90d', '90D')}
-                    ${buildToggle('6m', '6M')}
-                    ${buildToggle('1y', '1Y')}
+            <div id="metrics-toggle-bar" class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50 w-full py-3 mb-6 shadow-md transition-all">
+                <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+                    <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-emerald-500"></i> Performance Lab
+                    </h2>
+                    <div class="flex gap-1.5 p-1 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                        ${buildToggle('30d', '30D')}
+                        ${buildToggle('90d', '90D')}
+                        ${buildToggle('6m', '6M')}
+                        ${buildToggle('1y', '1Y')}
+                    </div>
                 </div>
             </div>`;
 
@@ -215,9 +220,10 @@ export function renderMetrics(rawData) {
 
         setTimeout(() => populateView(rawData), 0);
 
+        // --- RETURN: Two separate blocks (Header + Content) ---
         return `
-            <div class="max-w-7xl mx-auto space-y-6 pb-12 relative">
-                ${headerHtml}
+            ${headerHtml}
+            <div class="max-w-7xl mx-auto space-y-6 pb-12 relative px-4 md:px-0">
                 ${tableSection}
                 ${chartsSection}
             </div>

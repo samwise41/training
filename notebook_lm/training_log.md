@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-10 02:46:58
+**Generated:** 2026-02-11 02:44:20
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-10",
+    "day": "Tuesday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Spin / Drill Focus",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Flush. High cadence (95-100 rpm). Low power (Zone 1/2). No grinding.",
+    "actualDuration": 45.2,
+    "id": 21824173013,
+    "actualWorkout": "Thio Virtual Cycling",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 2715.0,
+    "distance": 20014.529296875,
+    "averageHR": 131.0,
+    "maxHR": 147.0,
+    "aerobicTrainingEffect": 2.4000000953674316,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 161.0,
+    "maxPower": 386.0,
+    "normPower": 168.65487825369186,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 7.370999813079835,
+    "maxSpeed": 12.935999870300293,
+    "averageBikingCadenceInRevPerMinute": 85.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 418.0,
+    "elevationGain": 249.0,
+    "RPE": null,
+    "Feeling": null,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-09",
     "day": "Monday",

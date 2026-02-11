@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-10 02:46:59
+**Generated:** 2026-02-11 02:44:21
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -40,11 +40,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Flush. High cadence (95-100 rpm). Low power (Zone 1/2). No grinding.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 45.2,
+    "actualWorkout": "Thio Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 100,
+    "completed": true
   },
   {
     "date": "2026-02-11",

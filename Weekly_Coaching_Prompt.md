@@ -1,13 +1,37 @@
 # **Coaching Prompt**
 
-I have a training plan location in this github location. Can you review this file thoroughly, **specifically cross-referencing `COACH_BRIEFING.md`, garmin_health.md and `MASTER_TRAINING_DATABASE.md`**. Please generate my training for the next week? 
+I have a training plan location in this github location. Can you review this file thoroughly, **specifically cross-referencing the following sources
+
+https://raw.githubusercontent.com/samwise41/training/main/Weekly_Coaching_Prompt.md
+
+https://raw.githubusercontent.com/samwise41/training/main/endurance_plan.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/adherence.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/coaching_view.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/garmin_health.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/profile.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/readiness.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/trends.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/recipes.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/training_log.md
+
+https://raw.githubusercontent.com/samwise41/training/main/notebook_lm/phases.md
+
+Please generate my training for the next week? 
 
 Please generate a raw markdown text of next week's schedule. Please provide evidence that you followed the Weekly Generator Checklist SOP. If I forget to attach the GitHub repo, please remind me before spinning your wheels. 
 
 **ADAPTIVE LOGIC INSTRUCTIONS:**
-1. **Analyze (Trends):** Read `COACH_BRIEFING.md` first. Identify any metrics flagged with "⚠️ Low" or "⚠️ High", or those showing "Improving" or "Declining" trends that may require attention. Read `garmin_health.md` first. Identify any trends in the wrong direction that may require attention.
-2. **Analyze (History):** Review the "Actual Workout" column in `MASTER_TRAINING_DATABASE.md`. Check when the last workout labeled "Zwift Race" occurred. 
-3.  **Progression & Scaling Rules:** Review the progression scaling rules and make sure that all rules are incorporated. If a rule is violated, please explain why you chose to violate that rule.
+1. **Analyze (Trends):** Read `coaching_view.md` first. Identify any metrics flagged with "⚠️ Low" or "⚠️ High", or those showing "Improving" or "Declining" trends that may require attention. Read `garmin_health.md` first. Identify any trends in the wrong direction that may require attention.
+2. **Analyze (History):** Review the "Actual Workout" column in `training_log.md`. Check when the last workout labeled "Zwift Race" occurred. 
+3.  **Progression & Scaling Rules:** Review the progression scaling rules and make sure that all rules are incorporated. If a rule is violated, please explain why you chose to violate that rule. Make sure to review the phases.md source and determine the microcyle we are in. 
 4.  **Inventory Check (Zwift Library):**
    - **Trigger:** Before prescribing a custom/manual bike workout description.
    - **Action:** specificially review the `.zwo` files in the `zwift_library/` folder.
@@ -33,4 +57,4 @@ Please generate a raw markdown text of next week's schedule. Please provide evid
 
 GitHub Training Plan Files:
 - Plan: https://github.com/samwise41/training-plan/blob/main/endurance_plan.md
-- History: https://github.com/samwise41/training-plan/blob/main/MASTER_TRAINING_DATABASE.md
+- History: https://github.com/samwise41/training-plan/blob/main/data/training_log.md

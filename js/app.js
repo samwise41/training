@@ -11,7 +11,8 @@
 
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
-        tooltipMod, uiMod, dataMod, formatMod 
+        tooltipMod, uiMod, dataMod, formatMod,
+        fuelMod 
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
@@ -24,7 +25,8 @@
         safeImport('./utils/tooltipManager.js', 'TooltipManager'),
         safeImport('./utils/ui.js', 'UI'),
         safeImport('./utils/data.js', 'DataManager'),
-        safeImport('./utils/formatting.js', 'Formatters')
+        safeImport('./utils/formatting.js', 'Formatters'),
+        safeImport('./views/fueling/timer.js', 'FuelTimer')
     ]);
 
     if (tooltipMod?.TooltipManager?.initGlobalListener) {
@@ -34,20 +36,14 @@
     if (uiMod?.UI?.init) uiMod.UI.init();
     
     const DataManager = dataMod?.DataManager;
-    const Formatters = formatMod?.Formatters;
 
     const App = {
-        // Critical Data
         planMd: "", 
         rawLogData: [], 
         readinessData: null, 
         profileData: null, 
-
-        // Background Data
         gearData: null, 
         trendsData: null, 
-        // REMOVED: garminData (Cleanup)
-        
         weather: { current: null, hourly: null, code: 0 }, 
 
         async init() {
@@ -69,7 +65,6 @@
             if (DataManager) {
                 const bg = await DataManager.loadBackgroundData();
                 Object.assign(this, bg);
-                // Refresh Gear if active to populate data
                 if (window.location.hash.includes('gear')) this.updateGearResult();
             }
         },
@@ -91,25 +86,11 @@
                     this.weather.current = Math.round(weatherData.current_weather.temperature);
                     this.weather.hourly = weatherData.hourly || null;
                     this.weather.code = weatherData.current_weather.weathercode;
-                    this.updateHeaderUI();
                 }
             } catch (e) { console.error("Weather unavailable", e); }
         },
 
-        updateHeaderUI(viewName) {
-            const titles = { dashboard: 'Weekly Schedule', trends: 'Trends & KPIs', plan: 'Logbook Analysis', gear: 'Gear Choice', zones: 'Training Zones', ftp: 'Performance Profile', readiness: 'Race Readiness', metrics: 'Performance Metrics' };
-            if (viewName) {
-                const titleEl = document.getElementById('header-title-dynamic');
-                if (titleEl) titleEl.innerText = titles[viewName] || 'Dashboard';
-            }
-            if (this.weather.current !== null && Formatters) {
-                const condition = Formatters.getWeatherInfo(this.weather.code);
-                const wInfo = document.getElementById('weather-info');
-                const wIcon = document.getElementById('weather-icon-top');
-                if (wInfo) wInfo.innerText = `${this.weather.current}°F • ${condition[0]}`;
-                if (wIcon) wIcon.innerText = condition[1];
-            }
-        },
+        updateHeaderUI(viewName) {},
 
         updateGearResult() {
             if (this.gearData && gearMod && gearMod.updateGearResult) {
@@ -118,19 +99,26 @@
         },
 
         setupNavigation() {
-            const menuBtn = document.getElementById('mobile-menu-btn');
+            const menuBtn = document.getElementById('floating-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             const btnClose = document.getElementById('btn-sidebar-close'); 
-            const toggleSidebar = () => { sidebar.classList.toggle('sidebar-closed'); sidebar.classList.toggle('sidebar-open'); overlay.classList.toggle('hidden'); };
+            
+            const toggleSidebar = () => { 
+                sidebar.classList.toggle('sidebar-closed'); 
+                sidebar.classList.toggle('sidebar-open'); 
+                overlay.classList.toggle('hidden'); 
+            };
 
             window.addEventListener('hashchange', () => this.renderCurrentView(window.location.hash.replace('#', '')));
+            
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     window.location.hash = e.currentTarget.dataset.view; 
-                    if (window.innerWidth < 1024 && !overlay.classList.contains('hidden')) toggleSidebar();
+                    if (!overlay.classList.contains('hidden')) toggleSidebar();
                 });
             });
+
             if (menuBtn) menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleSidebar(); });
             if (overlay) overlay.addEventListener('click', toggleSidebar);
             if (btnClose) btnClose.addEventListener('click', toggleSidebar);
@@ -151,10 +139,19 @@
             });
 
             const content = document.getElementById('main-content');
+            
+            // --- FIX: RESTORE LAYOUT BUFFER ---
+            // 1. Removed 'w-full' (causes scrollbar when combined with margin)
+            // 2. Changed 'md:pl-64' to 'md:ml-64' (Margin Left). 
+            //    This lets the standard 'p-4' create the gap between sidebar and text.
+            content.className = "flex-1 p-4 overflow-y-auto pt-20 md:pt-6 md:ml-64 transition-all duration-300";
+
             content.classList.add('opacity-0');
             
             setTimeout(async () => {
+                window.scrollTo({ top: 0, behavior: 'instant' });
                 content.innerHTML = '';
+                
                 const render = {
                     dashboard: () => dashMod?.renderDashboard(this.plannedData, this.rawLogData, this.planMd, this.readinessData),
                     trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
@@ -163,7 +160,8 @@
                     ftp: () => ftpMod?.renderFTP(this.profileData),
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
-                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData)
+                    plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
+                    fueling: () => fuelMod?.FuelTimer?.init()
                 };
 
                 try {
@@ -171,6 +169,14 @@
                         const html = await render[view]();
                         content.innerHTML = html !== undefined ? html : `<div class="p-10 text-red-500">Error: View returned undefined (${view})</div>`;
                         if (view === 'gear') this.updateGearResult();
+                        
+                        if (view === 'fueling' && fuelMod?.FuelTimer?.attachEvents) {
+                            fuelMod.FuelTimer.attachEvents();
+                        }
+                        
+                        if (view === 'ftp' && ftpMod?.initCharts) {
+                            ftpMod.initCharts();
+                        }
                     } else {
                         content.innerHTML = `<div class="p-10 text-center text-slate-500">View not found: ${view}</div>`;
                     }

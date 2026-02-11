@@ -33,7 +33,7 @@
       "filters": { "ignore_zero": true }
     },
     "subjective_bike": {
-      "id": "subjective_bike", "title": "Bike Efficiency", "sport": "Bike",
+      "id": "subjective_bike", "title": "Perceived Efficiency", "sport": "Bike",
       "icon": "fa-person-biking", "colorVar": "var(--color-bike)", "unit": "W/RPE",
       "good_min": 25, "good_max": 50, "higher_is_better": true,
       "description": "Power per RPE.", "improvement": "• Aerobic Base Work",
@@ -57,7 +57,7 @@
       "filters": { "min_duration_minutes": 10, "ignore_zero": true }
     },
     "subjective_run": {
-      "id": "subjective_run", "title": "Run Efficiency", "sport": "Run",
+      "id": "subjective_run", "title": "Perceived Efficiency", "sport": "Run",
       "icon": "fa-person-running", "colorVar": "var(--color-run)", "unit": "Spd/RPE",
       "good_min": 0.6, "good_max": 1.0, "higher_is_better": true,
       "description": "Speed per RPE.", "improvement": "• Improve Form",
@@ -103,7 +103,7 @@
       "filters": { "ignore_zero": true }
     },
     "subjective_swim": {
-      "id": "subjective_swim", "title": "Swim Efficiency", "sport": "Swim",
+      "id": "subjective_swim", "title": "Perceived Swim Efficiency", "sport": "Swim",
       "icon": "fa-person-swimming", "colorVar": "var(--color-swim)", "unit": "Spd/RPE",
       "good_min": 0.15, "good_max": 0.3, "higher_is_better": true,
       "description": "Speed relative to effort.", "improvement": "• Drill Sets",

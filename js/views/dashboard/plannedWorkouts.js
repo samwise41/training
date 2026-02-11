@@ -16,11 +16,16 @@ export function renderPlannedWorkouts() {
             // 2. Render groups
             container.innerHTML = generateGroupedCardsHTML(groupedData);
             
-            // 3. Scroll to today
+            // 3. Scroll to today ONLY IF INCOMPLETE
+            // FIX: Removed '.ring-emerald-500' from selector. 
+            // Now it only auto-scrolls if today is actively "In Progress" (Blue).
             setTimeout(() => {
-                const todayCard = container.querySelector('.ring-blue-500'); 
-                if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const incompleteTodayCard = container.querySelector('.ring-blue-500'); 
+                if (incompleteTodayCard) {
+                    incompleteTodayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             }, 500);
+
         } catch (error) {
             console.error("Failed to load schedule:", error);
             container.innerHTML = `<p class="text-slate-400 italic p-4">Unable to load schedule.</p>`;
@@ -45,10 +50,9 @@ function groupWorkoutsByDate(workouts) {
         if (!dateKey) return;
 
         if (!groups[dateKey]) {
-            // FIX: Force Local Time parsing to avoid UTC offsets
-            // "2026-02-05" -> Split -> Year, Month, Day
+            // Force Local Time parsing to avoid UTC offsets
             const [y, m, d] = dateKey.split('-').map(Number);
-            const localDate = new Date(y, m - 1, d); // Month is 0-indexed in JS
+            const localDate = new Date(y, m - 1, d); 
 
             groups[dateKey] = {
                 dateStr: dateKey,
@@ -93,17 +97,24 @@ function generateGroupedCardsHTML(groupedData) {
         const isToday = day.dateStr === todayStr;
         const dayNameFull = day.dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         
-        // Completion Logic
-        const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.actualSport !== 'Rest');
+        // --- Completion Logic ---
+        // Exclude "SKIPPED" and "REST" from the count of active workouts needed.
+        const activeWorkouts = day.workouts.filter(w => w.status !== 'REST' && w.status !== 'SKIPPED');
+        
+        // Check how many are marked complete (green)
         const completedCount = activeWorkouts.filter(w => w.status === 'COMPLETED' || w.status === 'UNPLANNED').length;
+        
+        // A day is complete if there ARE active workouts and ALL of them are finished.
         const isDayComplete = activeWorkouts.length > 0 && activeWorkouts.length === completedCount;
 
         // --- Card Border Logic ---
         let cardBorderClass = "border border-slate-700 hover:border-slate-500 bg-slate-800"; 
         
         if (isDayComplete) {
+            // Green Ring for Complete
             cardBorderClass = "ring-2 ring-emerald-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         } else if (isToday) {
+            // Blue Ring for Today (Incomplete)
             cardBorderClass = "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-900 bg-slate-800";
         }
 

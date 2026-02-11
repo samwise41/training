@@ -1,3 +1,11 @@
+# Training Phases
+**Generated:** 2026-02-11 02:44:22
+**Source:** https://raw.githubusercontent.com/samwise41/training/main/data/phases.json
+
+---
+
+## Data Content
+```json
 [
   {
     "Week Ending": "2/7/2026",
@@ -9,7 +17,7 @@
     "Week Ending": "2/14/2026",
     "Phase": "1. Base/Prep",
     "block": "Block 2",
-    "Microcycle Type": "🟢 Deload (Week 4)"
+    "Microcycle Type": "\ud83d\udfe2 Deload (Week 4)"
   },
   {
     "Week Ending": "2/21/2026",
@@ -45,7 +53,7 @@
     "Week Ending": "3/28/2026",
     "Phase": "2. Tri-Build",
     "block": "Block 1 (Threshold)",
-    "Microcycle Type": "🟢 Deload (Week 4)"
+    "Microcycle Type": "\ud83d\udfe2 Deload (Week 4)"
   },
   {
     "Week Ending": "4/4/2026",
@@ -69,7 +77,7 @@
     "Week Ending": "4/25/2026",
     "Phase": "2. Tri-Build",
     "block": "Block 2 (Durability)",
-    "Microcycle Type": "🟢 Deload (Week 4)"
+    "Microcycle Type": "\ud83d\udfe2 Deload (Week 4)"
   },
   {
     "Week Ending": "5/2/2026",
@@ -93,13 +101,13 @@
     "Week Ending": "5/23/2026",
     "Phase": "3. Peak/Taper",
     "block": "Peak Block",
-    "Microcycle Type": "🔴 Peak (Race Sim)"
+    "Microcycle Type": "\ud83d\udd34 Peak (Race Sim)"
   },
   {
     "Week Ending": "5/30/2026",
     "Phase": "3. Peak/Taper",
     "block": "Peak Block",
-    "Microcycle Type": "🔴 Peak (Highest Intensity)"
+    "Microcycle Type": "\ud83d\udd34 Peak (Highest Intensity)"
   },
   {
     "Week Ending": "6/6/2026",
@@ -117,13 +125,13 @@
     "Week Ending": "6/20/2026",
     "Phase": "3. Peak/Taper",
     "block": "RACE WEEK",
-    "Microcycle Type": "🏆 A-RACE: Jordanelle Olympic"
+    "Microcycle Type": "\ud83c\udfc6 A-RACE: Jordanelle Olympic"
   },
   {
     "Week Ending": "6/27/2026",
     "Phase": "4. Century Pivot",
     "block": "Block 1 (Vol)",
-    "Microcycle Type": "🟢 Recovery / Transition"
+    "Microcycle Type": "\ud83d\udfe2 Recovery / Transition"
   },
   {
     "Week Ending": "7/4/2026",
@@ -141,7 +149,7 @@
     "Week Ending": "7/18/2026",
     "Phase": "4. Century Pivot",
     "block": "Block 1 (Vol)",
-    "Microcycle Type": "🟢 Deload"
+    "Microcycle Type": "\ud83d\udfe2 Deload"
   },
   {
     "Week Ending": "7/25/2026",
@@ -165,13 +173,13 @@
     "Week Ending": "8/15/2026",
     "Phase": "4. Century Pivot",
     "block": "RACE WEEK",
-    "Microcycle Type": "🏆 A-RACE: CF Century Ride"
+    "Microcycle Type": "\ud83c\udfc6 A-RACE: CF Century Ride"
   },
   {
     "Week Ending": "8/22/2026",
     "Phase": "5. 70.3 Final",
     "block": "Final Block",
-    "Microcycle Type": "🟢 Recovery / Transition"
+    "Microcycle Type": "\ud83d\udfe2 Recovery / Transition"
   },
   {
     "Week Ending": "8/29/2026",
@@ -189,6 +197,7 @@
     "Week Ending": "9/12/2026",
     "Phase": "5. 70.3 Final",
     "block": "RACE WEEK",
-    "Microcycle Type": "🏆 B-RACE: Brineman 70.3"
+    "Microcycle Type": "\ud83c\udfc6 B-RACE: Brineman 70.3"
   }
 ]
+```

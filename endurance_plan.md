@@ -1,14 +1,13 @@
 
 # Master Training Plan 2026
 
-**Last Updated:** January 17, 2026
-**Status:** Phase 1 (Base/Prep) - Block 2 Week 3 (Loading)
-
 ## 1. Event Schedule
 
 The Master Training Plan is to provide structured training for the athlete over a long term. The events that are scheduled are listed below, but that will be dynamic as new events are signed up for. 
 
-The primary "A" races and secondary objectives for the 2026 season.
+* The primary "A" races and secondary objectives for the 2026 season.
+* B Races are prep/training for A Races.
+* C Races are fun checkpoints.
 
 | **Date** | **Event Type** | **Goal** | **Priority** |  **Course Profile** | **Training Implication** | **Swim Distance** | **Swim Goal** | **Bike Distance** | **Bike Goal** | **Run Distance** | **Run Goal** | **Elevation Goal** |
 | :--- | :--- | :--- | :--- |  :--- | :--- | :--- | :--- | :--- | :--- |  :--- | :--- | :--- | 
@@ -63,7 +62,7 @@ The primary "A" races and secondary objectives for the 2026 season.
 * **Interval Style:** Athlete prefers longer, sustained efforts (e.g., 2x20m Sweet Spot) over complex, multi-step ladders. Keep structure simple. Athlete likes to leverage the gamification of Zwift for indoor rides, especially for high intensity workouts. Use Zwift races when possible for high intensity workouts and use challenges like Alpe du Zwift for FTP testing.
 
 
-### Cycling Power Zones (Based on 241W FTP)
+### Cycling Power Zones
 
 | Zone | Range |
 |:---|:---|
@@ -74,7 +73,7 @@ The primary "A" races and secondary objectives for the 2026 season.
 | Zone 4 (Threshold)| 245W – 273W |
 | Zone 5 (VO2 Max) | 274W – 312W |
 
-### Running Heart Rate Zones (Based on 171 bpm LTHR)
+### Running Heart Rate Zones
 
 | Zone | Range |
 |:---|:---|
@@ -93,10 +92,9 @@ The primary "A" races and secondary objectives for the 2026 season.
 | **Phase** | **Dates** | **Focus** | **Key Workouts** | **Exit Criteria (Milestone)** |
 | :--- | :--- | :--- | :--- | :--- |
 | **1. Base/Prep** | Now – Feb 28 | Aerobic Engine & Swim Form | Z2 Rides, Drill Swims | Ride 3.5h with <5% cardiac drift (HR decoupling). Swim 400m continuous without stopping or form breakdown. |
-| **2. Tri-Build** | Mar 1 – May 15 | Threshold Power & Durability | Sweet Spot Intervals, Brick Runs | Hold 90% FTP for 30 mins continuous. Run 75-90m at Z2 with <5% HR drift (Decoupling). Swim 1,500m continuous (open water confidence).|
-| **3. Peak/Taper** | May 16 – June 20 | Race Specificity | Race Simulations, High Intensity Taper | Complete "Metric Sim" (50mi Bike + 5mi Run). |
-| **4. Century Pivot** | June 21 – Aug 16 | Aerobic Volume | Long Sat Rides (4-5h), Hydration/Fueling | 80-mile Ride w/ Energy Levels Stable (No bonking). |
-| **5. 70.3 Final** | Aug 17 – Sept 11 | Sustained Durability | 70.3 Pacing, Half-Marathon Runs | Race Pace Brick: 2.5h Bike + 40m Run off the bike. |
+| **2. Tri-Build** | Mar 1 – June 20 | Threshold Power & Durability | Sweet Spot Intervals, Brick Runs | Hold 90% FTP for 30 mins continuous. Run 75-90m at Z2 with <5% HR drift (Decoupling). Swim 1,500m continuous (open water confidence).|
+| **3. Century Pivot** | June 21 – Aug 16 | Aerobic Volume | Long Sat Rides (4-5h), Hydration/Fueling | 80-mile Ride w/ Energy Levels Stable (No bonking). |
+| **4. 70.3 Final** | Aug 17 – Sept 11 | Sustained Durability | 70.3 Pacing, Half-Marathon Runs | Race Pace Brick: 2.5h Bike + 40m Run off the bike. |
 
 ### **Standard Microcycle Templates**
 These templates define the "default" week structure.
@@ -191,15 +189,13 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Sleep and mobility. | 2026-02-01 |
-| PLANNED | Monday | [RUN] Tempo / Threshold | 45 mins | | | **Loc:** Treadmill/Outdoor. **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **6 x 20s Strides** (High Cadence); Cooldown. | 2026-02-02 |
-| PLANNED | Tuesday | [BIKE] Strength / Low Cadence | 60 mins | | | **Loc:** Peloton/Zwift. **Focus:** Torque Efficiency. Warmup, then 4 x 8min @ Sweet Spot at **55-60 RPM**. Grind it out to build force. | 2026-02-03 |
-| PLANNED | Wednesday | [SWIM] Technique Focus | 40 mins | | | **Loc:** Pool. **Focus:** Form Consistency. Non-negotiable session. Use pull buoy if legs are fatigued from strength work. | 2026-02-04 |
-| PLANNED | Thursday | [BIKE] Zwift Race | 45 mins | | | **Loc:** Zwift. **Focus:** "Fun Factor" Rule Application. High Cadence, Anaerobic Capacity. Go full gas. | 2026-02-05 |
-| PLANNED | Friday | [RUN] Aerobic Maintenance | 40 mins | | | **Loc:** Easy Terrain. **Focus:** Active Recovery. Strict Zone 2 (HR < 152). Flush the legs. | 2026-02-06 |
-| PLANNED | Friday | [SWIM] Touch Swim | 20 mins | | | **Loc:** Pool. **Focus:** Frequency Rule. 500m-800m total. Drills ONLY. Catch & Pull focus. No intensity. | 2026-02-06 |
-| PLANNED | Saturday | [BIKE] Long Steady Distance | 135 mins | | | **Loc:** Zwift. **Focus:** Aerobic Volume. Winter Cap slightly extended for progression. Fuel every 45m. | 2026-02-07 |
-
+| PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Prepare for Phase 2 Build. | 2026-02-08 |
+| PLANNED | Monday | [RUN] Hill Sprints (Micro) | 30 mins | | | **Focus:** Neuromuscular Priming. 15m Warmup; **4 x 20s Hill Sprints** (Reduced reps); 10m Cooldown. | 2026-02-09 |
+| PLANNED | Tuesday | [BIKE] Spin / Drill Focus | 45 mins | | | **Focus:** Flush. High cadence (95-100 rpm). Low power (Zone 1/2). No grinding. | 2026-02-10 |
+| PLANNED | Wednesday | [SWIM] Technique Focus | 30 mins | | | **Focus:** Form only. 30 mins easy. Focus on body rotation and high elbow catch. | 2026-02-11 |
+| PLANNED | Thursday | [BIKE] Short Threshold | 45 mins | | | **Focus:** Maintenance. 10m Warmup; **1 x 8min @ Threshold** (Just one effort to keep blood volume up); Cooldown. | 2026-02-12 |
+| PLANNED | Friday | [SWIM] Touch swim - Drills | 15 mins | | | **Focus:** Do not tire yourself out. Just get wet, do some drills, and get out. | 2026-02-13 |
+| PLANNED | Saturday | [BIKE] Aerobic Maintenance | 90 mins | | | **Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride. | 2026-02-14 |
 
 
 
@@ -212,18 +208,9 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 **Target:** 60-90g Carbs/Hour for long events.
 
-**Commercial Products**
+**Active Food List**
 
-* Pure Organic Fruit Bars: 15g Carbs per bar.
-* Rice Krispie Treat: 17g Carbs per bar
-
-**Active Testing Recipes**
-
-* Recipe V2 (Current Testing):
-  * 180g Table Sugar (Sucrose)
-  * 250ml Water
-  * 1/2 tsp Salt (~1200mg Sodium)
-  * 1/4 tsp Citric Acid
+* For active recipes see the data/recipes.json or notebook_lm/recipes.md
 
 
 ## 7. Progress Tracker
@@ -314,4 +301,3 @@ Please generate a raw markdown text of next week's schedule. Please provide evid
 GitHub Training Plan Files:
 - Plan: https://github.com/samwise41/training-plan/blob/main/endurance_plan.md
 - History: https://github.com/samwise41/training-plan/blob/main/MASTER_TRAINING_DATABASE.md
-

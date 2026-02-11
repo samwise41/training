@@ -1,7 +1,5 @@
 // js/utils/data.js
 
-const CACHE_BUSTER = Date.now();
-
 const DATA_SOURCES = {
     // 1. CRITICAL (Loaded at startup)
     planMd:     './endurance_plan.md',
@@ -17,24 +15,31 @@ const DATA_SOURCES = {
     schedule:   './data/dashboard/plannedWorkouts.json',
     topCards:   './data/dashboard/top_cards.json',
     adherence:  './data/trends/adherence.json',
-    METRICS_CONFIG: 'data/metrics/metrics_config.json',  // <--- NEW: The Rules
-    COACHING_VIEW: 'data/metrics/coaching_view.json',    // <--- NEW: The Graded Output
-    
+    METRICS_CONFIG: 'data/metrics/metrics_config.json',
+    COACHING_VIEW: 'data/metrics/coaching_view.json',
+    fuelLibrary: './data/fueling/fuel_library.json'
 };
 
 export const DataManager = {
     _cache: {},
 
     async fetchJSON(key) {
-        if (this._cache[key]) return this._cache[key];
+        // FIX 1: Bypass internal memory cache to force a network check every time
+        // if (this._cache[key]) return this._cache[key];
         
         const url = DATA_SOURCES[key];
         if (!url) return null;
 
         try {
-            const res = await fetch(`${url}?t=${CACHE_BUSTER}`);
+            // FIX 2: Generate a unique timestamp for EVERY request
+            // This forces the browser to ignore its own cache
+            const timestamp = Date.now();
+            const res = await fetch(`${url}?t=${timestamp}`);
+            
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
+            
+            // We still update the cache object, mostly for debugging
             this._cache[key] = data;
             return data;
         } catch (e) {
@@ -44,19 +49,25 @@ export const DataManager = {
     },
 
     async fetchText(key) {
-        if (this._cache[key]) return this._cache[key];
+        // FIX 1: Bypass internal memory cache
+        // if (this._cache[key]) return this._cache[key];
+        
         const url = DATA_SOURCES[key];
         try {
-            const res = await fetch(`${url}?t=${CACHE_BUSTER}`);
+            // FIX 2: Dynamic timestamp
+            const timestamp = Date.now();
+            const res = await fetch(`${url}?t=${timestamp}`);
+            
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const text = await res.text();
+            
             this._cache[key] = text;
             return text;
         } catch (e) { return ""; }
     },
 
     async loadCriticalData() {
-        console.log("🚀 Loading Critical Data...");
+        console.log("🚀 Loading Critical Data (Fresh Fetch)...");
         const [planMd, log, readiness, profile] = await Promise.all([
             this.fetchText('planMd'),
             this.fetchJSON('log'),
@@ -73,7 +84,7 @@ export const DataManager = {
     },
 
     async loadBackgroundData() {
-        console.log("💤 Loading Background Data...");
+        console.log("💤 Loading Background Data (Fresh Fetch)...");
         const [gear, trends, adherence] = await Promise.all([
             this.fetchJSON('gear'),
             this.fetchJSON('trends'),
@@ -83,7 +94,7 @@ export const DataManager = {
         return { 
             gearData: gear, 
             trendsData: trends,
-            adherenceData: adherence // Optional, used by Trends view
+            adherenceData: adherence 
         };
     }
 };

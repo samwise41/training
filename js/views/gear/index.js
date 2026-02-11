@@ -1,8 +1,10 @@
-// js/views/gear/index.js
 import { Formatters } from '../../utils/formatting.js';
 import { UI } from '../../utils/ui.js';
 
-// --- COMPONENTS ---
+// --- CONFIGURATION ---
+const PREFER_RUNNING_FIRST = true; // Set to false to show Cycling on top
+
+// --- 1. COMPONENT: HOURLY FORECAST ---
 const buildHourlyForecast = (hourlyWeather) => {
     if (!hourlyWeather || !hourlyWeather.time || !Array.isArray(hourlyWeather.time)) {
         return `<div class="mb-6 text-center text-xs text-slate-500 italic">Weather data not available</div>`;
@@ -33,94 +35,126 @@ const buildHourlyForecast = (hourlyWeather) => {
     return `<div class="mb-6"><p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Hourly Forecast</p><div class="hourly-scroll">${itemsHtml}</div></div>`;
 };
 
+// --- 2. COMPONENT: TEMP SELECTOR ---
 const buildTempOptions = (defaultVal) => {
-    let tempOptions = `<option value="25" ${defaultVal === 25 ? 'selected' : ''}>&lt;30°F</option>`;
-    for (let i = 30; i <= 70; i++) tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
-    tempOptions += `<option value="75" ${defaultVal === 75 ? 'selected' : ''}>70°F+</option>`;
+    let tempOptions = `<option value="25" ${defaultVal <= 25 ? 'selected' : ''}>&lt;30°F</option>`;
+    for (let i = 30; i <= 70; i += 5) tempOptions += `<option value="${i}" ${i === defaultVal ? 'selected' : ''}>${i}°F</option>`;
+    tempOptions += `<option value="75" ${defaultVal >= 75 ? 'selected' : ''}>70°F+</option>`;
     return tempOptions;
 };
 
-const generateRow = (idPrefix, sportType, label) => {
-    // --- UPDATED: Use Shared Icon Formatter ---
-    // This ensures "Bike" gets the purple icon, "Run" gets pink, etc.
-    const iconHtml = Formatters.getIconForSport(sportType);
-
-    // Note: We remove the manual colorClass logic because the icon itself
-    // now carries the correct color (e.g. class="icon-bike")
+// --- 3. HELPER: DATA LOOKUP ---
+function getGearForTemp(gearList, temp) {
+    if (!gearList) return { upper: "—", lower: "—", extremities: "—" };
     
-    return `
-    <div class="gear-row-container flex flex-col md:flex-row gap-4 items-stretch mb-4">
-        <div class="activity-header min-w-[140px] flex items-center gap-3 p-4 bg-slate-800/40 rounded-lg border border-slate-700">
-            <span class="text-lg">${iconHtml}</span>
-            <span class="text-xs font-bold text-slate-200 uppercase tracking-widest">${label}</span>
+    const match = gearList.find(r => {
+        const min = r.min !== undefined ? r.min : -999;
+        const max = r.max !== undefined ? r.max : 999;
+        return temp >= min && temp < max;
+    });
+
+    return match || { upper: "—", lower: "—", extremities: "—" };
+}
+
+function renderList(text) {
+    if (!text || text === "—") return '<span class="text-[9px] md:text-xs text-slate-600 italic">None</span>';
+    const items = text.split(',').map(s => s.trim()).filter(s => s);
+    
+    return items.map(item => `
+        <div class="flex items-start gap-1.5 leading-tight">
+            <span class="text-emerald-500 text-[8px] mt-[3px] shrink-0">●</span>
+            <span class="text-[10px] md:text-sm text-slate-300 break-words">${item}</span>
         </div>
-        <div class="gear-bubbles-row grid grid-cols-1 sm:grid-cols-3 gap-3 flex-1">
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-1">Upper Body</span><p id="${idPrefix}-upper" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest mb-1">Lower Body</span><p id="${idPrefix}-lower" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
-            <div class="gear-bubble bg-slate-900/60 border border-slate-800 p-4 rounded-lg flex flex-col gap-1 h-full"><span class="text-[9px] font-bold text-purple-500 uppercase tracking-widest mb-1">Extremities</span><p id="${idPrefix}-extremities" class="text-sm text-slate-100 font-medium leading-relaxed">--</p></div>
+    `).join('');
+}
+
+// --- 4. COMPONENT: NEW 3-COLUMN CARD ---
+function renderBodyPartCard(title, standardText, weatherText, darkText) {
+    return `
+    <div class="bg-slate-800/50 border border-slate-700 rounded-xl overflow-hidden shadow-lg mb-4">
+        <div class="bg-slate-900/50 p-2 md:p-3 border-b border-slate-700 flex items-center gap-2">
+            <span class="text-xs md:text-sm font-bold text-slate-300 uppercase tracking-widest">${title}</span>
+        </div>
+        <div class="grid grid-cols-3 divide-x divide-slate-700">
+            <div class="p-2 md:p-4 flex flex-col gap-2">
+                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
+                    <i class="fa-solid fa-sun text-yellow-500 text-[10px] md:text-xs"></i>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Standard</span>
+                </div>
+                ${renderList(standardText)}
+            </div>
+            <div class="p-2 md:p-4 flex flex-col gap-2 bg-slate-800/30">
+                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
+                    <i class="fa-solid fa-wind text-blue-400 text-[10px] md:text-xs"></i>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Wind/Rain</span>
+                </div>
+                ${renderList(weatherText)}
+            </div>
+            <div class="p-2 md:p-4 flex flex-col gap-2 bg-slate-900/30">
+                <div class="flex flex-col xl:flex-row items-start xl:items-center gap-1 xl:gap-2 mb-1 border-b border-slate-700/50 pb-1 xl:border-0 xl:pb-0">
+                    <i class="fa-solid fa-moon text-purple-400 text-[10px] md:text-xs"></i>
+                    <span class="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase">Dark/Night</span>
+                </div>
+                ${renderList(darkText)}
+            </div>
         </div>
     </div>`;
-};
+}
 
-const renderLayout = (hourlyHtml, tempOptions) => {
-    return `
-        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-6 mb-8">
-            ${hourlyHtml}
-            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto">
-                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Temperature</label>
-                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-lg py-3">${tempOptions}</select>
-            </div>
-            <div class="mb-10">
-                <h3 class="text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Standard Conditions</h3>
-                <div class="flex flex-col gap-4">${generateRow('bike-standard', 'bike', 'Cycling')}${generateRow('run-standard', 'run', 'Running')}</div>
-            </div>
-            <div>
-                <h3 class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-4 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> Windy & Rainy (-10°F)</h3>
-                <div class="flex flex-col gap-4">${generateRow('bike-weather', 'bike', 'Cycling')}${generateRow('run-weather', 'run', 'Running')}</div>
-            </div>
-        </div>`;
-};
+// --- 5. RENDER MAIN CONTENT ---
+function generateContentHTML(gearData, selectedTemp) {
+    const standardTemp = selectedTemp;
+    const weatherTemp = selectedTemp - 10;
+    const darkTemp = selectedTemp - 5;
 
-// --- LOGIC ---
-function updateGearUI(gearData) {
-    if (!gearData) return;
-    
-    const tempSelect = document.getElementById('gear-temp');
-    if (!tempSelect) return;
-    const temp = parseInt(tempSelect.value);
-    
-    const processActivity = (activity, prefixBase) => {
-        const list = gearData[activity] || [];
-        const findMatch = (t) => {
-            const match = list.find(r => {
-                if (r.min === -999) return t < r.max;
-                if (r.max === 999) return t >= r.min;
-                return t >= r.min && t <= r.max;
-            });
-            return match || { upper: "—", lower: "—", extremities: "—" };
-        };
+    // --- CYCLING SECTION ---
+    const bikeStd = getGearForTemp(gearData.bike, standardTemp);
+    const bikeWth = getGearForTemp(gearData.bike, weatherTemp);
+    const bikeDrk = getGearForTemp(gearData.bike, darkTemp);
 
-        const standard = findMatch(temp);
-        const weather = findMatch(temp - 10);
+    const bikeWthUpper = bikeWth.upper !== "—" ? `${bikeWth.upper}, Rain Shell` : "Rain Shell";
+    const bikeDrkUpper = bikeDrk.upper !== "—" ? `${bikeDrk.upper}, Reflective Vest` : "Reflective Vest";
+    const bikeDrkExt   = bikeDrk.extremities !== "—" ? `${bikeDrk.extremities}, Viz Bands` : "Viz Bands";
 
-        const updateUI = (prefix, data) => {
-            const u = document.getElementById(`${prefix}-upper`);
-            const l = document.getElementById(`${prefix}-lower`);
-            const e = document.getElementById(`${prefix}-extremities`);
-            if (u) u.innerHTML = data.upper;
-            if (l) l.innerHTML = data.lower;
-            if (e) e.innerHTML = data.extremities;
-        };
+    // Use var(--color-bike) for exact CSS match
+    const bikeHtml = `
+        <div class="mb-8">
+            <h3 class="flex items-center gap-2 text-lg font-bold uppercase tracking-widest mb-4" style="color: var(--color-bike)">
+                <i class="fa-solid fa-bicycle"></i> Cycling
+            </h3>
+            ${renderBodyPartCard("Upper Body", bikeStd.upper, bikeWthUpper, bikeDrkUpper)}
+            ${renderBodyPartCard("Lower Body", bikeStd.lower, bikeWth.lower, bikeDrk.lower)}
+            ${renderBodyPartCard("Extremities", bikeStd.extremities, bikeWth.extremities, bikeDrkExt)}
+        </div>
+    `;
 
-        updateUI(`${prefixBase}-standard`, standard);
-        updateUI(`${prefixBase}-weather`, weather);
-    };
+    // --- RUNNING SECTION ---
+    const runStd = getGearForTemp(gearData.run, standardTemp);
+    const runWth = getGearForTemp(gearData.run, weatherTemp);
+    const runDrk = getGearForTemp(gearData.run, darkTemp);
 
-    processActivity('bike', 'bike');
-    processActivity('run', 'run');
+    const runWthUpper = runWth.upper !== "—" ? `${runWth.upper}, Wind Shell` : "Wind Shell";
+    const runDrkUpper = runDrk.upper !== "—" ? `${runDrk.upper}, Viz Vest` : "Viz Vest";
+    const runDrkHead  = runDrk.extremities !== "—" ? `${runDrk.extremities}, Headlamp` : "Headlamp";
+
+    // Use var(--color-run) for exact CSS match
+    const runHtml = `
+        <div class="mb-8">
+            <h3 class="flex items-center gap-2 text-lg font-bold uppercase tracking-widest mb-4" style="color: var(--color-run)">
+                <i class="fa-solid fa-person-running"></i> Running
+            </h3>
+            ${renderBodyPartCard("Upper Body", runStd.upper, runWthUpper, runDrkUpper)}
+            ${renderBodyPartCard("Lower Body", runStd.lower, runWth.lower, runDrk.lower)}
+            ${renderBodyPartCard("Extremities", runStd.extremities, runWth.extremities, runDrkHead)}
+        </div>
+    `;
+
+    // --- ORDERING LOGIC ---
+    return PREFER_RUNNING_FIRST ? (runHtml + bikeHtml) : (bikeHtml + runHtml);
 }
 
 // --- EXPORTS ---
+
 export function renderGear(gearData, currentTemp, hourlyWeather) {
     if (!gearData) {
         return `
@@ -132,16 +166,40 @@ export function renderGear(gearData, currentTemp, hourlyWeather) {
 
     let defaultVal = 50;
     if (currentTemp !== null && currentTemp !== undefined) {
-        if (currentTemp < 30) defaultVal = 25;
-        else if (currentTemp > 70) defaultVal = 75;
-        else defaultVal = currentTemp;
+        defaultVal = Math.round(currentTemp / 5) * 5;
+        if (defaultVal < 25) defaultVal = 25;
+        if (defaultVal > 75) defaultVal = 75;
     }
 
-    const tempOptions = buildTempOptions(defaultVal);
     const hourlyHtml = buildHourlyForecast(hourlyWeather);
-    return renderLayout(hourlyHtml, tempOptions);
+    const tempOptions = buildTempOptions(defaultVal);
+    const contentHtml = generateContentHTML(gearData, defaultVal);
+
+    return `
+        <div class="bg-slate-800/30 border border-slate-800 rounded-xl p-4 md:p-6 mb-8 pb-20">
+            ${hourlyHtml}
+            
+            <div class="flex flex-col gap-2 mb-8 max-w-md mx-auto sticky top-0 z-10 bg-slate-900/90 p-4 rounded-xl border border-slate-700 shadow-xl backdrop-blur-md">
+                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Select Base Temperature</label>
+                <select id="gear-temp" onchange="window.App.updateGearResult()" class="gear-select text-center text-xl font-bold text-white bg-transparent border-none focus:ring-0 cursor-pointer">
+                    ${tempOptions}
+                </select>
+            </div>
+
+            <div id="gear-results-container">
+                ${contentHtml}
+            </div>
+        </div>`;
 }
 
 export function updateGearResult(gearData) {
-    updateGearUI(gearData);
+    const tempSelect = document.getElementById('gear-temp');
+    if (!tempSelect || !gearData) return;
+    
+    const temp = parseInt(tempSelect.value);
+    const container = document.getElementById('gear-results-container');
+    
+    if (container) {
+        container.innerHTML = generateContentHTML(gearData, temp);
+    }
 }

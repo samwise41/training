@@ -20,19 +20,94 @@ const calculateVisualTrend = (data) => {
     return { start: intercept, end: intercept + slope * (n - 1) };
 };
 
+// --- HELPER: Rolling 7-Day Sum ---
+const calculateRollingSum = (data, windowSize = 7) => {
+    if (!data || data.length === 0) return [];
+    
+    // 1. Create a dense map of all dates in range to handle gaps
+    const dateMap = {};
+    const startDate = new Date(data[0].date);
+    const endDate = new Date(data[data.length - 1].date);
+    
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        dateMap[d.toISOString().split('T')[0]] = 0;
+    }
+    
+    // 2. Fill with actual values
+    data.forEach(item => {
+        if(dateMap[item.dateStr]) dateMap[item.dateStr] += item.val;
+    });
+
+    // 3. Calculate Rolling Sum
+    const result = [];
+    const sortedDates = Object.keys(dateMap).sort();
+    
+    sortedDates.forEach((dateStr, i) => {
+        // Only start outputting when we have a full window (optional, but cleaner)
+        // or just sum whatever is available in the window
+        let sum = 0;
+        let count = 0;
+        for (let j = 0; j < windowSize; j++) {
+            if (i - j >= 0) {
+                sum += dateMap[sortedDates[i - j]];
+                count++;
+            }
+        }
+        
+        // Find original object metadata if it exists, or create dummy
+        const original = data.find(d => d.dateStr === dateStr);
+        result.push({
+            date: new Date(dateStr),
+            dateStr: dateStr,
+            val: sum,
+            name: original ? "7-Day Total" : "No Activity",
+            breakdown: original ? original.name : "" 
+        });
+    });
+
+    // Filter back to only dates that had actual data points originally? 
+    // Or return the dense series? 
+    // For chart readability, let's return points that match the input dates so we don't have too many empty dots.
+    const final = result.filter(r => data.some(d => d.dateStr === r.dateStr));
+    return final;
+};
+
 // --- CHART BUILDER (GENERIC) ---
 const buildMetricChart = (displayData, key, def, timeRange) => {
-    // Special handling for complex chart types defined in the JSON keys
     if (key === 'training_balance') return buildStackedBarChart(displayData, def);
     if (key === 'feeling_load') return buildDualAxisChart(displayData, def);
 
-    // 1. Setup Configuration from JSON Definition (Safe Defaults)
     const color = def.colorVar || 'var(--color-all)';
     const title = def.title || key;
     const icon = def.icon || 'fa-chart-line';
     const unit = def.unit || '';
     
-    // 2. Empty State Handling
+    // --- STATUS BADGE ---
+    let statusHtml = '';
+    if (def.status && def.status !== 'Neutral' && def.status !== 'No Data') {
+        const s = def.status.toLowerCase();
+        let badgeClass = '';
+        let badgeIcon = '';
+
+        if (s === 'on target') {
+            badgeClass = 'text-emerald-400 bg-emerald-500/10 border-emerald-500/50';
+            badgeIcon = 'fa-check';
+        } else if (s === 'warning') {
+            badgeClass = 'text-amber-400 bg-amber-500/10 border-amber-500/50';
+            badgeIcon = 'fa-triangle-exclamation';
+        } else {
+            badgeClass = 'text-rose-400 bg-rose-500/10 border-rose-500/50';
+            badgeIcon = 'fa-circle-xmark';
+        }
+        
+        statusHtml = `
+            <div class="flex items-center gap-1.5 px-2 py-0.5 rounded border ${badgeClass} ml-3">
+                <i class="fa-solid ${badgeIcon} text-[10px]"></i>
+                <span class="text-[10px] font-bold uppercase tracking-wide">${def.status}</span>
+            </div>
+        `;
+    }
+
     if (!displayData || displayData.length < 2) {
         return `
         <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex flex-col justify-center items-center opacity-60">
@@ -41,7 +116,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
         </div>`;
     }
 
-    // 3. Dimensions & Scales
     const width = 800, height = 240;
     const pad = { t: 20, b: 30, l: 40, r: 40 };
     const getX = (i) => pad.l + (i / (displayData.length - 1)) * (width - pad.l - pad.r);
@@ -49,7 +123,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     const vals = displayData.map(d => d.val);
     let minV = Math.min(...vals), maxV = Math.max(...vals);
     
-    // Respect JSON "Good" ranges for Y-axis scaling if relevant
     if (def.good_min != null) minV = Math.min(minV, def.good_min);
     if (def.good_max != null) maxV = Math.max(maxV, def.good_max);
     
@@ -58,7 +131,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     const dMax = maxV + range * 0.1;
     const getY = (val) => height - pad.b - ((val - dMin) / (dMax - dMin)) * (height - pad.t - pad.b);
 
-    // 4. Target Lines (Dashed lines for Good Min/Max)
     const isInverted = def.higher_is_better === false;
     const colorGood = 'var(--color-done)';     
     const colorBad = 'var(--color-missed'; 
@@ -75,7 +147,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
         targetsHtml += `<line x1="${pad.l}" y1="${yVal}" x2="${width - pad.r}" y2="${yVal}" stroke="${maxLineColor}" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />`;
     }
 
-    // 5. Draw Line & Points
     let pathD = `M ${getX(0)} ${getY(displayData[0].val)}`;
     let pointsHtml = '';
     
@@ -83,14 +154,12 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
         const x = getX(i), y = getY(d.val);
         pathD += ` L ${x} ${y}`;
         
-        // Interactive Click Handler
         pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="${color}" stroke-width="2" 
             class="cursor-pointer hover:stroke-white transition-all" 
             onclick="window.handleMetricChartClick(event, '${d.dateStr}', '${d.name.replace(/'/g, "")}', '${d.val.toFixed(2)}', '${unit}', '${d.breakdown||""}', '${color}')">
         </circle>`;
     });
 
-    // 6. Visual Trend Line
     const trend = calculateVisualTrend(displayData);
     let trendHtml = '';
     if (trend) {
@@ -99,15 +168,14 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
         trendHtml = `<line x1="${getX(0)}" y1="${yStart}" x2="${getX(displayData.length - 1)}" y2="${yEnd}" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.5" />`;
     }
 
-    // 7. Render SVG
     return `
     <div class="bg-slate-800/30 border border-slate-700 rounded-xl p-4 h-full flex flex-col hover:border-slate-600 transition-colors">
         <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center">
                 <h3 class="text-xs font-bold text-white flex items-center gap-2">
                     <i class="fa-solid ${icon}" style="color: ${color}"></i> ${title}
-                    <span class="text-[10px] font-normal opacity-50 ml-1 font-mono hidden sm:inline">${def.formula || ''}</span>
                 </h3>
+                ${statusHtml}
             </div>
             <div class="flex items-center gap-2">
                 <span class="text-[9px] text-slate-500 font-mono">${displayData.length} pts</span>
@@ -119,7 +187,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
                 <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#475569" stroke-width="1" />
                 <text x="${pad.l-5}" y="${getY(dMax)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMax.toFixed(1)}</text>
                 <text x="${pad.l-5}" y="${getY(dMin)+3}" text-anchor="end" font-size="9" fill="#64748b">${dMin.toFixed(1)}</text>
-                
                 ${targetsHtml}
                 ${trendHtml}
                 <path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.9" />
@@ -129,7 +196,6 @@ const buildMetricChart = (displayData, key, def, timeRange) => {
     </div>`;
 };
 
-// --- SPECIALIZED BUILDERS (Bar/Dual) ---
 const buildStackedBarChart = (data, def) => {
     if (!data || data.length === 0) return `<div class="bg-slate-800/30 border border-slate-700 rounded-xl p-6 h-full flex items-center justify-center opacity-60"><p class="text-xs text-slate-500">No Balance Data</p></div>`;
 
@@ -213,37 +279,39 @@ const buildDualAxisChart = (data, def) => {
     </div>`;
 };
 
-// --- MAIN UPDATE LOOP ---
 export const updateCharts = async (allData, timeRange) => {
     if (!allData || !allData.length) return;
 
     let config = null;
+    let coachingView = null;
 
-    // --- ROBUST CONFIG LOADING ---
     try {
-        // 1. Try DataManager Key (Primary)
         config = await DataManager.fetchJSON('METRICS_CONFIG');
-        
-        // 2. Fallback: Direct Fetch (if DataManager key isn't working/cached yet)
+        coachingView = await DataManager.fetchJSON('COACHING_VIEW');
+
         if (!config) {
-            console.warn("Charts: METRICS_CONFIG key not resolved. Attempting direct fallback fetch...");
             const res = await fetch('data/metrics/metrics_config.json');
-            if (res.ok) {
-                config = await res.json();
-                console.log("Charts: Direct fetch successful.");
-            }
+            if (res.ok) config = await res.json();
         }
     } catch (e) { 
         console.warn("Charts: Failed to fetch metrics config.", e); 
     }
 
-    // SAFEGUARD: If config is still missing, we cannot proceed.
-    if (!config || !config.metrics) {
-        console.warn("Charts: Config missing or invalid. Charts cannot render.");
-        return;
+    if (!config || !config.metrics) return;
+
+    if (coachingView && coachingView.metrics_summary) {
+        const statusMap = {};
+        coachingView.metrics_summary.forEach(group => {
+            group.metrics.forEach(m => {
+                if (m.id && m.status) statusMap[m.id] = m.status;
+            });
+        });
+
+        Object.keys(config.metrics).forEach(k => {
+            if (statusMap[k]) config.metrics[k].status = statusMap[k];
+        });
     }
 
-    // Time cutoff calculation
     const cutoff = new Date();
     cutoff.setHours(0, 0, 0, 0); 
 
@@ -252,32 +320,23 @@ export const updateCharts = async (allData, timeRange) => {
     else if (timeRange === '6m') cutoff.setMonth(cutoff.getMonth() - 6);
     else if (timeRange === '1y') cutoff.setFullYear(cutoff.getFullYear() - 1);
     
-    // Iterate over every metric defined in the JSON
     Object.keys(config.metrics).forEach(key => {
         const def = config.metrics[key];
         const elementId = `metric-chart-${key}`;
         const el = document.getElementById(elementId);
         
-        // Skip if there is no container in the DOM for this metric
         if (!el) return;
 
-        // --- STAGE 1: Source Data Filtering ---
-        // Filter the raw activities (allData) BEFORE processing
         let sourceData = allData;
-        
         if (def.filters) {
-            // Filter by minimum duration (e.g., exclude warmups < 20mins)
             if (def.filters.min_duration_minutes) {
                 sourceData = sourceData.filter(d => d._dur >= def.filters.min_duration_minutes);
             }
-            // Filter by required data presence (e.g., must have Heart Rate)
             if (def.filters.require_hr) {
                 sourceData = sourceData.filter(d => d._hr > 0);
             }
         }
 
-        // --- STAGE 2: Data Extraction ---
-        // Use the filtered source data to calculate points
         let full = [];
         if (key.startsWith('subjective_')) {
             full = calculateSubjectiveEfficiency(sourceData, key.split('_')[1]);
@@ -287,29 +346,32 @@ export const updateCharts = async (allData, timeRange) => {
 
         if (!full) full = [];
 
-        // --- STAGE 3: Result Data Filtering ---
-        // Filter the calculated points (e.g., remove 0 values or nulls)
         if (full.length > 0) {
             full.sort((a,b) => a.date - b.date);
             
-            // Remove zero values if config requests it
             if (def.filters && def.filters.ignore_zero) {
                 full = full.filter(d => d.val !== 0);
             }
             
-            // Apply Date Cutoff
-            const display = full.filter(d => d.date >= cutoff);
-            
-            // Render
+            let display = full.filter(d => d.date >= cutoff);
+
+            // --- FIX: Rolling Sum for Volume Metrics ---
+            // If metric is TSS or Calories, convert daily points to 7-Day Rolling Sum
+            if (key === 'tss' || key === 'calories') {
+                display = calculateRollingSum(display, 7);
+            }
+            // -------------------------------------------
+
             el.innerHTML = buildMetricChart(display, key, def, timeRange);
         } else {
             el.innerHTML = buildMetricChart([], key, def, timeRange);
         }
     });
 
-    // Update Button Styles
     ['30d','90d','6m','1y'].forEach(r => { 
         const b = document.getElementById(`btn-metric-${r}`); 
-        if(b) b.className = timeRange===r ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; 
+        if(b) b.className = timeRange===r 
+            ? "bg-emerald-500 text-white font-bold px-3 py-1 rounded text-[10px]" 
+            : "bg-slate-800 text-slate-400 hover:text-white px-3 py-1 rounded text-[10px]"; 
     });
 };

@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4151,6 +4151,24 @@
                 "name": "Thio Virtual Cycling",
                 "sport": "Bike",
                 "actual": 45.2
+            }
+        ]
+    },
+    {
+        "date": "2026-02-11",
+        "complianceStatus": "Completed",
+        "plannedDuration": 30.0,
+        "actualDuration": 36.4,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 36.4
             }
         ]
     },

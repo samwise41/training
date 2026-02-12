@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Other",
-            "Bike"
+            "Bike",
+            "Other"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4169,6 +4169,24 @@
                 "name": "Pool Swim",
                 "sport": "Swim",
                 "actual": 36.4
+            }
+        ]
+    },
+    {
+        "date": "2026-02-12",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 45.7,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Zwift - Temple Trek in Watopia",
+                "sport": "Bike",
+                "actual": 45.7
             }
         ]
     },

@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-11 02:44:21
+**Generated:** 2026-02-12 02:39:06
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -53,11 +53,11 @@
     "plannedDuration": 30.0,
     "notes": "**Focus:** Form only. 30 mins easy. Focus on body rotation and high elbow catch.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 36.4,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 121,
+    "completed": true
   },
   {
     "date": "2026-02-12",

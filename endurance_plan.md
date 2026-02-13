@@ -17,6 +17,9 @@ The Master Training Plan is to provide structured training for the athlete over 
 | May 9, 2026 | East Canyon and Back | Finish ~ 2:30:00 | **C-Race** |  5000+ ft of climb | Needs low-cadence/high-torque bike intervals (Strength Endurance). |  |  | 41 Miles | 2:30:00  |  |  | 4905 ft |
 | July 25, 2026 | Solo Century Simulation Roy to Holladay to Roy | Finish ~ 5:30:00 | **C-Race** |  Mostly flat with 1700+ ft of climb. Half of that climb is in the middle 10 miles | Need time in saddle and test fueling strategy. |  |  | 100 Miles | 5:30:00  |  |  | 1700 ft |
 
+
+**Zwift Games:** Zwift games run from Febraury 16th to March 29th. Please prescribe one zwift race during those weeks so i can participate in the Zwift Games.
+
 ## 2. User Profile & Health
 
 ### Biometrics & Fitness

@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-12 02:39:05
+**Generated:** 2026-02-13 02:40:15
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-12",
+    "day": "Thursday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Short Threshold",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Maintenance. 10m Warmup; **1 x 8min @ Threshold** (Just one effort to keep blood volume up); Cooldown.",
+    "actualDuration": 45.7,
+    "id": 21845519067,
+    "actualWorkout": "Zwift - Temple Trek in Watopia",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 2741.0,
+    "distance": 23996.830078125,
+    "averageHR": 129.0,
+    "maxHR": 159.0,
+    "aerobicTrainingEffect": 2.700000047683716,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 156.0,
+    "maxPower": 439.0,
+    "normPower": 183.61995035095802,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 8.753999710083008,
+    "maxSpeed": 15.197999954223633,
+    "averageBikingCadenceInRevPerMinute": 72.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 410.0,
+    "elevationGain": 111.0,
+    "RPE": null,
+    "Feeling": null,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-11",
     "day": "Wednesday",

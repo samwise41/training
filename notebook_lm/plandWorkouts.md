@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-12 02:39:06
+**Generated:** 2026-02-13 02:40:16
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -66,11 +66,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Maintenance. 10m Warmup; **1 x 8min @ Threshold** (Just one effort to keep blood volume up); Cooldown.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 45.7,
+    "actualWorkout": "Zwift - Temple Trek in Watopia",
+    "status": "COMPLETED",
+    "compliance": 102,
+    "completed": true
   },
   {
     "date": "2026-02-13",

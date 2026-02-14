@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-13 02:40:16
+**Generated:** 2026-02-14 02:27:26
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -79,11 +79,11 @@
     "plannedDuration": 15.0,
     "notes": "**Focus:** Do not tire yourself out. Just get wet, do some drills, and get out.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 24.8,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 165,
+    "completed": true
   },
   {
     "date": "2026-02-14",

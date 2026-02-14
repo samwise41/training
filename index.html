@@ -157,5 +157,18 @@
     
     <div id="app-tooltip" class="fixed z-[9999] bg-slate-900 border border-slate-600 rounded-lg shadow-2xl transition-opacity duration-200 opacity-0 pointer-events-none max-w-xs text-xs p-3">
     </div>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('ServiceWorker registered successfully with scope: ', registration.scope);
+                })
+                .catch((error) => {
+                    console.error('ServiceWorker registration failed: ', error);
+                });
+        });
+    }
+</script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 {
   "name": "Performance Lab",
   "short_name": "Training",
-  "start_url": "./index.html",
+  "start_url": "/training/",
+  "scope": "/training/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",

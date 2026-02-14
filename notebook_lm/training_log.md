@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-14 02:27:25
+**Generated:** 2026-02-14 16:18:09
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-14",
+    "day": "Saturday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Aerobic Maintenance",
+    "plannedDuration": 90.0,
+    "notes": "**Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride.",
+    "actualDuration": 91.2,
+    "id": 21866973652,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "New York Virtual Cycling",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 5471.0,
+    "distance": 45167.1484375,
+    "averageHR": 123.0,
+    "maxHR": 142.0,
+    "aerobicTrainingEffect": 2.799999952316284,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 153.0,
+    "maxPower": 435.0,
+    "normPower": 165.08481011386016,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 8.255000114440918,
+    "maxSpeed": 20.051000595092773,
+    "averageBikingCadenceInRevPerMinute": 74.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 800.0,
+    "elevationGain": 372.0,
+    "RPE": null,
+    "Feeling": null
+  },
   {
     "date": "2026-02-13",
     "day": "Friday",

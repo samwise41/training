@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-14 02:27:26
+**Generated:** 2026-02-14 16:18:10
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -92,11 +92,11 @@
     "plannedDuration": 90.0,
     "notes": "**Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 91.2,
+    "actualWorkout": "New York Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 101,
+    "completed": true
   }
 ]
 ```

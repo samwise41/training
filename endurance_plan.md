@@ -192,14 +192,15 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Prepare for Phase 2 Build. | 2026-02-08 |
-| PLANNED | Monday | [RUN] Hill Sprints (Micro) | 30 mins | | | **Focus:** Neuromuscular Priming. 15m Warmup; **4 x 20s Hill Sprints** (Reduced reps); 10m Cooldown. | 2026-02-09 |
-| PLANNED | Tuesday | [BIKE] Spin / Drill Focus | 45 mins | | | **Focus:** Flush. High cadence (95-100 rpm). Low power (Zone 1/2). No grinding. | 2026-02-10 |
-| PLANNED | Wednesday | [SWIM] Technique Focus | 30 mins | | | **Focus:** Form only. 30 mins easy. Focus on body rotation and high elbow catch. | 2026-02-11 |
-| PLANNED | Thursday | [BIKE] Short Threshold | 45 mins | | | **Focus:** Maintenance. 10m Warmup; **1 x 8min @ Threshold** (Just one effort to keep blood volume up); Cooldown. | 2026-02-12 |
-| PLANNED | Friday | [SWIM] Touch swim - Drills | 15 mins | | | **Focus:** Do not tire yourself out. Just get wet, do some drills, and get out. | 2026-02-13 |
-| PLANNED | Saturday | [BIKE] Aerobic Maintenance | 90 mins | | | **Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride. | 2026-02-14 |
-
+| PLANNED | Monday | [SWIM] Technique Focus | 40 mins | | | **Focus:** Form Consistency. 400m Continuous swim test @ 70% effort. Focus on smooth rotation. | 2026-02-16 |
+| PLANNED | Tuesday | [BIKE] Zwift Race | 60 mins | | | **Focus:** Zwift Games / Anaerobic Impact (1.29). Race hard. Treat this as your VO2 Max session. | 2026-02-17 |
+| PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **4 x 20s Strides**; Cooldown. | 2026-02-18 |
+| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 90 mins | | | **Focus:** Fix HR Drift (8.65%). Strict Zone 2 (144-195W). Do not surge. | 2026-02-19 |
+| PLANNED | Friday | [RUN] Aerobic Maintenance | 40 mins | | | **Focus:** Recovery Run. Zone 2 strict. | 2026-02-20 |
+| PLANNED | Friday | [SWIM] Endurance Drills | 30 mins | | | **Focus:** Frequency (Swim #2). 500-800m total. Fins allowed. Keep it easy. | 2026-02-20 |
+| PLANNED | Saturday | [SWIM] Tech / Recovery | 20 mins | | | **Focus:** Priming (Swim #3). Short 20 min swim *before* the ride to wake up the body. | 2026-02-21 |
+| PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady. Ride immediately after swim. | 2026-02-21 |
+| PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Sleep catch-up. | 2026-02-22 |
 
 
 ## 6. Fueling Strategy & Equipment

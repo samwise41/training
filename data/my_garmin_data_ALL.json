@@ -9,8 +9,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -138,13 +138,13 @@
         "activityUUID": "6fb3a789-22cc-4c67-a52a-0ba8005d3411",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -158,8 +158,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -263,13 +263,13 @@
         "activityUUID": "27de814d-b38e-497f-aa8b-c23dc19b04f5",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 2
     },
@@ -283,8 +283,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -410,13 +410,13 @@
         "activityUUID": "0afff56b-7e2d-4bfe-866d-a66b112beb27",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -430,8 +430,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -536,13 +536,13 @@
         "activityUUID": "045ac0fe-3606-4db5-9b8c-98f867987b17",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 5.0,
         "Feeling": 5
     },
@@ -556,8 +556,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -684,13 +684,13 @@
         "activityUUID": "e89bffc9-ff91-4874-8891-c31eca3f010c",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -704,8 +704,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -860,13 +860,13 @@
         "activityUUID": "cb14bde5-0585-41ae-a697-73b92d30df43",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 6.0,
         "Feeling": 4
     },
@@ -880,8 +880,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1012,13 +1012,13 @@
         "activityUUID": "6950e72d-cd85-4f14-9cbd-50ddd976acad",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 5.0,
         "Feeling": 4
     },
@@ -1032,8 +1032,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1250,13 +1250,13 @@
         "activityUUID": "64f5ccf4-1cc1-418d-bd14-4ba30f853258",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 3
     },
@@ -1270,8 +1270,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -1374,13 +1374,13 @@
         "activityUUID": "0ceeeb66-e4a2-4759-8ab4-43c61077e3a8",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 3.0,
         "Feeling": 2
     },
@@ -1394,8 +1394,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1518,13 +1518,13 @@
         "activityUUID": "ab48ec67-0ddd-4e4e-a019-b011d3df8e05",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -1538,8 +1538,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1665,13 +1665,13 @@
         "activityUUID": "998c64fc-d01c-4cd2-a413-ce210740e27d",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": true,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -1685,8 +1685,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -1791,13 +1791,13 @@
         "activityUUID": "446e6388-759a-442d-8e93-cba5787ba59b",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 5.0,
         "Feeling": 2
     },
@@ -1811,8 +1811,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1939,13 +1939,13 @@
         "activityUUID": "301bbfa9-4b4e-48bf-912f-b2d537028186",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -1959,8 +1959,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2176,13 +2176,13 @@
         "activityUUID": "8af72e72-6ddc-4f3e-a2df-339375340ef8",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": true,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 7.0,
         "Feeling": 4
     },
@@ -2196,8 +2196,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2325,13 +2325,13 @@
         "activityUUID": "d534feb6-718e-49a9-a6e2-7498d90cc9ae",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -2345,8 +2345,8 @@
             "typeKey": "indoor_cycling",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2438,13 +2438,13 @@
         "activityUUID": "7b7f7354-c9ad-46e0-835e-49dff8e4f61f",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 5.0,
         "Feeling": null
     },
@@ -2458,8 +2458,8 @@
             "typeKey": "indoor_cycling",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2551,13 +2551,13 @@
         "activityUUID": "18b0af33-a4f3-41b1-bad2-6894b34d4daf",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 8.0,
         "Feeling": 5
     },
@@ -2571,8 +2571,8 @@
             "typeKey": "treadmill_running",
             "parentTypeId": 1,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2738,13 +2738,13 @@
         "activityUUID": "cd8136ca-171a-4842-860f-01050c936354",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 6.0,
         "Feeling": 5
     },
@@ -2758,8 +2758,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2887,13 +2887,13 @@
         "activityUUID": "d0d72081-ec2b-417f-810e-44622d95b120",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -2907,8 +2907,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3109,13 +3109,13 @@
         "activityUUID": "35f06260-848d-4837-8e24-8d1bb6214681",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 4
     },
@@ -3129,8 +3129,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -3234,13 +3234,13 @@
         "activityUUID": "37bdeb83-71c6-4564-93ee-3faf8401959b",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 3.0,
         "Feeling": 2
     },
@@ -3254,8 +3254,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3384,13 +3384,13 @@
         "activityUUID": "3d309ac0-d2be-454f-8aba-a147cddf2a14",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 6.0,
         "Feeling": 1
     },
@@ -3404,8 +3404,8 @@
             "typeKey": "indoor_running",
             "parentTypeId": 1,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3548,13 +3548,13 @@
         "activityUUID": "126777fa-545e-4355-a6d7-3477c4c03d08",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 10,
         "Feeling": 4
     },
@@ -3568,8 +3568,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3785,13 +3785,13 @@
         "activityUUID": "02d4ae60-72ca-407e-98fb-65a704e64360",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 5
     },
@@ -3805,8 +3805,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -3912,13 +3912,13 @@
         "activityUUID": "431f93f6-d26e-4be4-b236-3efd6c3f989f",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": true,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 5
     },
@@ -3932,8 +3932,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4059,13 +4059,13 @@
         "activityUUID": "f571533a-b967-43d1-92fc-47829afeea53",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 6.0,
         "Feeling": 4
     },
@@ -4079,8 +4079,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4207,13 +4207,13 @@
         "activityUUID": "a2184980-36af-49d0-a563-2bd7360bfdc6",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 3.0,
         "Feeling": 2
     },
@@ -4227,8 +4227,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -4331,13 +4331,13 @@
         "activityUUID": "a1e6a542-3826-46a2-8dd8-2339ec952368",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 4
     },
@@ -4351,8 +4351,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4544,13 +4544,13 @@
         "activityUUID": "08e6e351-89cd-4c6c-a738-0e9b03ecc99a",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 5.0,
         "Feeling": 5
     },
@@ -4564,8 +4564,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4691,13 +4691,13 @@
         "activityUUID": "b4e486ac-951d-49fb-8f04-c32f3140ab5c",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 3.0,
         "Feeling": 4
     },
@@ -4711,8 +4711,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4834,13 +4834,13 @@
         "activityUUID": "6c35383b-3e57-4e2f-8de5-602b37f51c8d",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -4854,8 +4854,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4983,13 +4983,13 @@
         "activityUUID": "74d8c190-24fb-4ece-abc4-75dd36476329",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 9.0,
         "Feeling": 5
     },
@@ -5003,8 +5003,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5124,13 +5124,13 @@
         "activityUUID": "7ee62198-70af-402f-88aa-5af4fec98d3a",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -5144,8 +5144,8 @@
             "typeKey": "swimming",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5223,13 +5223,13 @@
         "activityUUID": "306954a7-d7f7-4eec-b37d-e00ccf3f54d2",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": true,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -5243,8 +5243,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5372,13 +5372,13 @@
         "activityUUID": "53371d42-38a4-4bab-aeef-a3bf4f2293f0",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 7.0,
         "Feeling": 5
     },
@@ -5392,8 +5392,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -5497,13 +5497,13 @@
         "activityUUID": "ab104525-b10a-4080-85c2-08b2aa2fa3d7",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 4
     },
@@ -5517,8 +5517,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5646,13 +5646,13 @@
         "activityUUID": "9350ebd2-845c-4171-b5a8-0efe48c9841c",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },
@@ -5666,8 +5666,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -5771,13 +5771,13 @@
         "activityUUID": "396f3adf-ac47-41a5-bff7-8aa5fbee5c3f",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 4.0,
         "Feeling": 4
     },
@@ -5791,8 +5791,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -6007,13 +6007,13 @@
         "activityUUID": "dbb8ba23-b526-477b-b53f-2f1f4a5ae423",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": 3.0,
         "Feeling": 3
     },
@@ -6027,8 +6027,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -6155,13 +6155,13 @@
         "activityUUID": "47a652b6-4a2c-420b-a61e-990a003d04d1",
         "autoCalcCalories": false,
         "favorite": false,
+        "decoDive": false,
         "elevationCorrected": false,
         "atpActivity": false,
-        "decoDive": false,
         "pr": false,
         "purposeful": false,
-        "parent": false,
         "manualActivity": false,
+        "parent": false,
         "RPE": null,
         "Feeling": null
     },

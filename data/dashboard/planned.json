@@ -1,72 +1,92 @@
 [
     {
-        "id": "PLAN-2026-02-08-Other",
-        "date": "2026-02-08",
+        "id": "PLAN-2026-02-16-Swim",
+        "date": "2026-02-16",
+        "day": "Monday",
+        "plannedWorkout": "[SWIM] Technique Focus",
+        "plannedDuration": 40.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** Form Consistency. 400m Continuous swim test @ 70% effort. Focus on smooth rotation.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-17-Bike",
+        "date": "2026-02-17",
+        "day": "Tuesday",
+        "plannedWorkout": "[BIKE] Zwift Race",
+        "plannedDuration": 60.0,
+        "activityType": "Bike",
+        "notes": "**Focus:** Zwift Games / Anaerobic Impact (1.29). Race hard. Treat this as your VO2 Max session.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-18-Run",
+        "date": "2026-02-18",
+        "day": "Wednesday",
+        "plannedWorkout": "[RUN] Tempo / Threshold",
+        "plannedDuration": 45.0,
+        "activityType": "Run",
+        "notes": "**Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **4 x 20s Strides**; Cooldown.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-19-Bike",
+        "date": "2026-02-19",
+        "day": "Thursday",
+        "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
+        "plannedDuration": 90.0,
+        "activityType": "Bike",
+        "notes": "**Focus:** Fix HR Drift (8.65%). Strict Zone 2 (144-195W). Do not surge.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-20-Run",
+        "date": "2026-02-20",
+        "day": "Friday",
+        "plannedWorkout": "[RUN] Aerobic Maintenance",
+        "plannedDuration": 40.0,
+        "activityType": "Run",
+        "notes": "**Focus:** Recovery Run. Zone 2 strict.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-20-Swim",
+        "date": "2026-02-20",
+        "day": "Friday",
+        "plannedWorkout": "[SWIM] Endurance Drills",
+        "plannedDuration": 30.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** Frequency (Swim #2). 500-800m total. Fins allowed. Keep it easy.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-21-Swim",
+        "date": "2026-02-21",
+        "day": "Saturday",
+        "plannedWorkout": "[SWIM] Tech / Recovery",
+        "plannedDuration": 20.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** Priming (Swim #3). Short 20 min swim *before* the ride to wake up the body.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-21-Bike",
+        "date": "2026-02-21",
+        "day": "Saturday",
+        "plannedWorkout": "[BIKE] Long Steady Distance",
+        "plannedDuration": 120.0,
+        "activityType": "Bike",
+        "notes": "**Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady. Ride immediately after swim.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-02-22-Other",
+        "date": "2026-02-22",
         "day": "Sunday",
         "plannedWorkout": "Rest",
         "plannedDuration": 0.0,
         "activityType": "Other",
-        "notes": "**Focus:** Prepare for Phase 2 Build.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-09-Run",
-        "date": "2026-02-09",
-        "day": "Monday",
-        "plannedWorkout": "[RUN] Hill Sprints (Micro)",
-        "plannedDuration": 30.0,
-        "activityType": "Run",
-        "notes": "**Focus:** Neuromuscular Priming. 15m Warmup; **4 x 20s Hill Sprints** (Reduced reps); 10m Cooldown.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-10-Bike",
-        "date": "2026-02-10",
-        "day": "Tuesday",
-        "plannedWorkout": "[BIKE] Spin / Drill Focus",
-        "plannedDuration": 45.0,
-        "activityType": "Bike",
-        "notes": "**Focus:** Flush. High cadence (95-100 rpm). Low power (Zone 1/2). No grinding.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-11-Swim",
-        "date": "2026-02-11",
-        "day": "Wednesday",
-        "plannedWorkout": "[SWIM] Technique Focus",
-        "plannedDuration": 30.0,
-        "activityType": "Swim",
-        "notes": "**Focus:** Form only. 30 mins easy. Focus on body rotation and high elbow catch.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-12-Bike",
-        "date": "2026-02-12",
-        "day": "Thursday",
-        "plannedWorkout": "[BIKE] Short Threshold",
-        "plannedDuration": 45.0,
-        "activityType": "Bike",
-        "notes": "**Focus:** Maintenance. 10m Warmup; **1 x 8min @ Threshold** (Just one effort to keep blood volume up); Cooldown.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-13-Swim",
-        "date": "2026-02-13",
-        "day": "Friday",
-        "plannedWorkout": "[SWIM] Touch swim - Drills",
-        "plannedDuration": 15.0,
-        "activityType": "Swim",
-        "notes": "**Focus:** Do not tire yourself out. Just get wet, do some drills, and get out.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-02-14-Bike",
-        "date": "2026-02-14",
-        "day": "Saturday",
-        "plannedWorkout": "[BIKE] Aerobic Maintenance",
-        "plannedDuration": 90.0,
-        "activityType": "Bike",
-        "notes": "**Focus:** Volume Cut. 1.5 Hours max. Zone 2 steady. Enjoy the ride.",
+        "notes": "**Focus:** Sleep catch-up.",
         "status": "PLANNED"
     }
 ]

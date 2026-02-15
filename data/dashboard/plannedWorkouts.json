@@ -1,5 +1,18 @@
 [
     {
+        "date": "2026-02-15",
+        "day": "Sunday",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0.0,
+        "notes": "**Focus:** Sleep catch-up.",
+        "actualSport": "Rest",
+        "actualDuration": 0.0,
+        "actualWorkout": null,
+        "status": "COMPLETED",
+        "compliance": 100,
+        "completed": true
+    },
+    {
         "date": "2026-02-16",
         "day": "Monday",
         "plannedWorkout": "[SWIM] Technique Focus",
@@ -97,19 +110,6 @@
         "plannedDuration": 120.0,
         "notes": "**Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady. Ride immediately after swim.",
         "actualSport": "Bike",
-        "actualDuration": 0.0,
-        "actualWorkout": null,
-        "status": "PLANNED",
-        "compliance": 0,
-        "completed": false
-    },
-    {
-        "date": "2026-02-22",
-        "day": "Sunday",
-        "plannedWorkout": "Rest",
-        "plannedDuration": 0.0,
-        "notes": "**Focus:** Sleep catch-up.",
-        "actualSport": "Rest",
         "actualDuration": 0.0,
         "actualWorkout": null,
         "status": "PLANNED",

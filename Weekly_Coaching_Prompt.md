@@ -37,7 +37,7 @@ Please generate a raw markdown text of next week's schedule. Please provide evid
    - **Action:** specificially review the `.zwo` files in the `zwift_library/` folder.
    - **Matching Logic:** Parse the XML to find a workout that matches the specific duration and physiological focus (e.g., "Low Cadence" or "Sweet Spot").
    - **Priority:** If a suitable file exists, prescribe it by name (e.g., "Do [BIKE] 'Hill Grinder.zwo'"). The file is suitable if it very closely matches the desired function and duration of the workout. If not, write a new custom description. You do not need to force a new workout into an old custom Zwift workout. 
-5. **Diagnose & Prescribe:** You are the coach. Alter the standard microcycle based on the following rules:
+5. **Diagnose & Prescribe:** You are the coach. prescribe a schedule for the upcoming week (Sunday through Saturday). Alter the standard microcycle based on the following rules:
    - **The "Fun Factor" Rule:** If I have not done a "Zwift Race" in the past 2 weeks, you MUST substitute one of the high-intensity bike sessions (Threshold or Sweet Spot) with a `[BIKE] Zwift Race`.
    - **Zwift Games:** Zwift games run from Febraury 16th to March 29th. Please prescribe one zwift race during those weeks so i can participate in the Zwift Games.
    - **Weakness Targeting:** For every flagged metric in the Briefing, alter the drills to fix it. Do not just copy the standard template though.

@@ -198,7 +198,6 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 | PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 90 mins | | | **Focus:** Fix HR Drift (8.65%). Strict Zone 2 (144-195W). Do not surge. | 2026-02-19 |
 | PLANNED | Friday | [RUN] Aerobic Maintenance | 40 mins | | | **Focus:** Recovery Run. Zone 2 strict. | 2026-02-20 |
 | PLANNED | Friday | [SWIM] Endurance Drills | 30 mins | | | **Focus:** Frequency (Swim #2). 500-800m total. Fins allowed. Keep it easy. | 2026-02-20 |
-| PLANNED | Saturday | [SWIM] Tech / Recovery | 20 mins | | | **Focus:** Priming (Swim #3). Short 20 min swim *before* the ride to wake up the body. | 2026-02-21 |
 | PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady. Ride immediately after swim. | 2026-02-21 |
 | PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Sleep catch-up. | 2026-02-15 |
 

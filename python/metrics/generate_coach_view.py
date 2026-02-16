@@ -128,14 +128,19 @@ def extract_drift_series(drift_data, sport_filter, log_map, filters):
     for entry in drift_data:
         if entry.get('sport') != sport_filter: continue
         
+        # Robust ID Matching: Try ID, then ActivityID
         aid = str(entry.get('id') or '')
         log_entry = log_map.get(aid)
         
-        # --- NEW: Respect the 'exclude' flag from training_log.json ---
-        if log_entry and log_entry.get('exclude') is True:
-            continue
-        
         if log_entry:
+            # Respect standard 'exclude' flag
+            if log_entry.get('exclude') is True:
+                continue
+            # Respect new 'ignore_drift' flag
+            if log_entry.get('ignore_drift') is True:
+                continue
+                
+            # Enforce minimum duration
             dur = get_duration_minutes(log_entry)
             if dur < min_dur: continue 
 
@@ -154,7 +159,7 @@ def extract_drift_series(drift_data, sport_filter, log_map, filters):
     return series
 
 def process_data():
-    print("--- Generating Coach View (Fixed Weekly Scaling) ---")
+    print("--- Generating Coach View ---")
     log = load_json(INPUT_LOG)
     config = load_json(INPUT_CONFIG)
     drift_history = load_json(INPUT_DRIFT)
@@ -163,7 +168,7 @@ def process_data():
         print("❌ Config not found.")
         return
 
-    # Create Lookup Map for Logs
+    # Create Lookup Map for Logs (ID -> Log Entry)
     log_map = {}
     for entry in log:
         aid = str(entry.get('activityId') or entry.get('id') or '')
@@ -189,6 +194,7 @@ def process_data():
         
         current_val = 0
         if recent_30:
+            # Scale to Weekly Average for volume metrics
             if key in WEEKLY_METRICS:
                 daily_avg = mean(recent_30)
                 current_val = daily_avg * 7
@@ -198,7 +204,7 @@ def process_data():
         good_min, good_max = rule.get('good_min'), rule.get('good_max')
         higher_is_better = rule.get('higher_is_better', True)
         
-        # --- STATUS LOGIC ---
+        # --- STATUS LOGIC (3-Tier with 5% Buffer) ---
         status = "No Data"
         buffer = 0.05
 
@@ -217,6 +223,7 @@ def process_data():
                     else:
                         status = "Off Target"
             else:
+                # Lower is better (e.g. GCT, Drift)
                 if good_max is not None:
                     target = good_max
                     warning_threshold = target * (1.0 + buffer)

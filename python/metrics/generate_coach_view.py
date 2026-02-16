@@ -128,11 +128,13 @@ def extract_drift_series(drift_data, sport_filter, log_map, filters):
     for entry in drift_data:
         if entry.get('sport') != sport_filter: continue
         
-        # Robust ID Matching: Try ID, then ActivityID, then fuzzy Date match if needed
         aid = str(entry.get('id') or '')
         log_entry = log_map.get(aid)
         
-        # Double check duration
+        # --- NEW: Respect the 'exclude' flag from training_log.json ---
+        if log_entry and log_entry.get('exclude') is True:
+            continue
+        
         if log_entry:
             dur = get_duration_minutes(log_entry)
             if dur < min_dur: continue 
@@ -183,21 +185,14 @@ def process_data():
             series = extract_metric_series(log, key, rule)
 
         # --- CALCULATE CURRENT VALUE ---
-        # 1. Get recent data points
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
         
         current_val = 0
         if recent_30:
-            # 2. FIX: Weekly Scaling vs Daily Average
             if key in WEEKLY_METRICS:
-                # If metric is weekly (TSS, Cals), calculate 'Average Weekly Volume'
-                # (Average Daily * 7) gives a smoothing approximation of weekly load
                 daily_avg = mean(recent_30)
                 current_val = daily_avg * 7
-                
-                # Special Case: 'swims_weekly' is just a count of days with swims, so avg*7 is correct (freq/week)
             else:
-                # Standard Metric (Average of values)
                 current_val = mean(recent_30)
         
         good_min, good_max = rule.get('good_min'), rule.get('good_max')
@@ -222,7 +217,6 @@ def process_data():
                     else:
                         status = "Off Target"
             else:
-                # Lower is better (GCT, Drift)
                 if good_max is not None:
                     target = good_max
                     warning_threshold = target * (1.0 + buffer)

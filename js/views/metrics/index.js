@@ -8,8 +8,7 @@ import { normalizeMetricsData } from './parser.js';
 let metricsState = { timeRange: '6m', configMap: {} };
 let cleanData = [];
 
-// --- Global Handlers ---
-
+// ... (Global Handlers remain exactly the same) ...
 window.handleMetricChartClick = (e, date, name, val, unit, breakdown, color) => {
     if(window.TooltipManager) {
         e.stopPropagation();
@@ -80,7 +79,6 @@ function resolveCssVar(colorString) {
 // --- ASYNC LOGIC ---
 async function populateView(rawData) {
     try {
-        // 1. Fetch Config
         const coachingData = await DataManager.fetchJSON('COACHING_VIEW');
         if (coachingData && coachingData.metrics_summary) {
             metricsState.configMap = {};
@@ -94,7 +92,6 @@ async function populateView(rawData) {
             });
         }
 
-        // 2. Fetch Drift History
         let driftData = [];
         try {
             const res = await fetch('data/metrics/drift_history.json');
@@ -103,26 +100,21 @@ async function populateView(rawData) {
             console.warn("Could not load drift history", e); 
         }
 
-        // 3. Render Table
         const tableContainer = document.getElementById('metrics-table-container');
         if (tableContainer) {
             tableContainer.innerHTML = await renderSummaryTable();
         }
 
-        // 4. Render Charts
         if (!rawData || rawData.length === 0) rawData = await DataManager.fetchJSON('log');
 
         if (rawData && rawData.length > 0) {
             cleanData = normalizeMetricsData(rawData);
 
-            // --- MERGE DRIFT DATA (With Outlier Filter) ---
+            // --- MERGE DRIFT DATA ---
             if (driftData.length > 0) {
                 const driftMap = {};
                 driftData.forEach(d => {
                     if (!d.date) return;
-                    
-                    // FIX: Filter out unrealistic values (e.g. 100.0 or -50.0)
-                    // Valid drift is usually between -25% and +30%
                     if (d.val != null && (d.val < -25 || d.val > 30)) return;
 
                     if (!driftMap[d.date]) driftMap[d.date] = {};
@@ -131,7 +123,11 @@ async function populateView(rawData) {
 
                 cleanData.forEach(day => {
                     const dateKey = day.dateStr || (day.date ? day.date.split('T')[0] : null);
+                    
                     if (dateKey && driftMap[dateKey]) {
+                        // --- NEW: Discard drift if ignore_drift is true ---
+                        if (day.ignore_drift === true) return;
+
                         if (driftMap[dateKey].Bike !== undefined) {
                             day._drift_bike = driftMap[dateKey].Bike;
                         }
@@ -152,7 +148,7 @@ async function populateView(rawData) {
     }
 }
 
-// --- MAIN RENDERER ---
+// --- MAIN RENDERER (Remains the same) ---
 export function renderMetrics(rawData) {
     try {
         if (!UI || typeof UI.buildCollapsibleSection !== 'function') {

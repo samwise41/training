@@ -58,11 +58,15 @@ def normalize_sport(entry):
     if 'swim' in s or 'pool' in s: return 'Swim'
     return 'Other'
 
+# --- FIX: Synced exactly to JS duration parsing ---
 def get_duration_minutes(entry):
-    dur_sec = safe_float(entry.get('durationInSeconds'))
-    if dur_sec is None: 
-        dur_sec = safe_float(entry.get('duration')) or 0
-    return dur_sec / 60.0
+    if 'durationInSeconds' in entry and entry['durationInSeconds'] is not None:
+        return safe_float(entry['durationInSeconds']) / 60.0
+    if 'duration' in entry and entry['duration'] is not None:
+        return safe_float(entry['duration']) / 60.0
+    if 'actualDuration' in entry and entry['actualDuration'] is not None:
+        return safe_float(entry['actualDuration'])
+    return 0.0
 
 def extract_metric_series(log, metric_key, rules):
     series = []
@@ -121,37 +125,37 @@ def extract_metric_series(log, metric_key, rules):
     series.sort(key=lambda x: x['date'])
     return series
 
-def extract_drift_series(drift_data, sport_filter, log_map, filters):
+def extract_drift_series(drift_data, sport_filter, log_map, log_date_map, filters):
     series = []
     min_dur = filters.get('min_duration_minutes', 0)
 
     for entry in drift_data:
         if entry.get('sport') != sport_filter: continue
         
-        # Robust ID Matching: Try ID, then ActivityID
         aid = str(entry.get('id') or '')
+        date_str = entry.get('date', '').split('T')[0]
+        
+        # --- FIX: Match by ID first, fallback to Date + Sport ---
         log_entry = log_map.get(aid)
+        if not log_entry:
+            log_entry = log_date_map.get(f"{date_str}_{sport_filter}")
         
         if log_entry:
-            # Respect standard 'exclude' flag
-            if log_entry.get('exclude') is True:
-                continue
-            # Respect new 'ignore_drift' flag
-            if log_entry.get('ignore_drift') is True:
-                continue
-                
-            # Enforce minimum duration
+            if log_entry.get('exclude') is True: continue
+            if log_entry.get('ignore_drift') is True: continue
+            
             dur = get_duration_minutes(log_entry)
             if dur < min_dur: continue 
+        else:
+            # If we cannot verify duration, strictly exclude it
+            if min_dur > 0: continue
 
         val = safe_float(entry.get('val'))
-        date = entry.get('date')
         
-        # Filter Outliers (-25 to +30)
-        if val is not None and date and -25.0 <= val <= 30.0:
+        if val is not None and date_str and -25.0 <= val <= 30.0:
             series.append({
-                'date': date,
-                'days_ago': get_days_ago(date),
+                'date': date_str,
+                'days_ago': get_days_ago(date_str),
                 'value': val
             })
             
@@ -168,11 +172,17 @@ def process_data():
         print("❌ Config not found.")
         return
 
-    # Create Lookup Map for Logs (ID -> Log Entry)
+    # Create Lookup Maps for Logs (ID and Date)
     log_map = {}
+    log_date_map = {}
     for entry in log:
         aid = str(entry.get('activityId') or entry.get('id') or '')
         if aid: log_map[aid] = entry
+        
+        date_str = entry.get('date', '').split('T')[0]
+        sport = normalize_sport(entry)
+        if date_str and sport:
+            log_date_map[f"{date_str}_{sport}"] = entry
 
     grouped_metrics = {k: [] for k in GROUP_ORDER}
     
@@ -183,34 +193,32 @@ def process_data():
         filters = rule.get('filters', {})
 
         if key == 'drift_bike':
-            series = extract_drift_series(drift_history, 'Bike', log_map, filters)
+            series = extract_drift_series(drift_history, 'Bike', log_map, log_date_map, filters)
         elif key == 'drift_run':
-            series = extract_drift_series(drift_history, 'Run', log_map, filters)
+            series = extract_drift_series(drift_history, 'Run', log_map, log_date_map, filters)
         else:
             series = extract_metric_series(log, key, rule)
 
-        # --- CALCULATE CURRENT VALUE ---
         recent_30 = [x['value'] for x in series if x['days_ago'] <= 30]
         
         current_val = 0
         if recent_30:
-            # Scale to Weekly Average for volume metrics
+            # --- FIX: True Average Weekly Calculation ---
             if key in WEEKLY_METRICS:
-                daily_avg = mean(recent_30)
-                current_val = daily_avg * 7
+                total_30d = sum(recent_30)
+                # Divide sum of last 30 days by 4.28 weeks to get average weekly volume
+                current_val = total_30d / (30.0 / 7.0)
             else:
                 current_val = mean(recent_30)
         
         good_min, good_max = rule.get('good_min'), rule.get('good_max')
         higher_is_better = rule.get('higher_is_better', True)
         
-        # --- STATUS LOGIC (3-Tier with 5% Buffer) ---
         status = "No Data"
         buffer = 0.05
 
         if recent_30:
             status = "Neutral"
-            
             if higher_is_better:
                 if good_min is not None:
                     target = good_min
@@ -223,7 +231,7 @@ def process_data():
                     else:
                         status = "Off Target"
             else:
-                # Lower is better (e.g. GCT, Drift)
+                # Lower is better (Drift, GCT)
                 if good_max is not None:
                     target = good_max
                     warning_threshold = target * (1.0 + buffer)
@@ -234,7 +242,6 @@ def process_data():
                         status = "Warning"
                     else:
                         status = "Off Target"
-        # ---------------------------------------------
 
         trends = {}
         for period, label in [(30, "30d"), (90, "90d"), (180, "6m"), (365, "1y")]:

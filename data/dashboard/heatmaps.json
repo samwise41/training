@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4223,6 +4223,24 @@
                 "name": "New York Virtual Cycling",
                 "sport": "Bike",
                 "actual": 91.2
+            }
+        ]
+    },
+    {
+        "date": "2026-02-16",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 41.3,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 41.3
             }
         ]
     },

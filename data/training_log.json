@@ -2222,7 +2222,8 @@
         "RPE": 7,
         "Feeling": 3,
         "status": "COMPLETED",
-        "avgVerticalRatio": 7.980000019073486
+        "avgVerticalRatio": 7.980000019073486,
+        "ignore_drift": true
     },
     {
         "actualSport": "Bike",
@@ -3212,7 +3213,8 @@
         "RPE": 5,
         "Feeling": 1,
         "status": "COMPLETED",
-        "avgVerticalRatio": 8.180000305175781
+        "avgVerticalRatio": 8.180000305175781,
+        "ignore_drift": true
     },
     {
         "actualSport": "Run",
@@ -3254,7 +3256,8 @@
         "RPE": 7,
         "Feeling": 4,
         "status": "COMPLETED",
-        "avgVerticalRatio": 8.130000114440918
+        "avgVerticalRatio": 8.130000114440918,
+        "ignore_drift": true
     },
     {
         "actualSport": "Swim",

@@ -2521,8 +2521,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 68.9,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2619,8 +2619,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 95.9,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3345,8 +3345,8 @@
         "plannedDuration": 150.0,
         "actualDuration": 144.9,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3441,8 +3441,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 91.0,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3643,8 +3643,8 @@
         "plannedDuration": 120.0,
         "actualDuration": 142.2,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3667,8 +3667,8 @@
         "plannedDuration": 40.0,
         "actualDuration": 77.80000000000001,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3763,8 +3763,8 @@
         "plannedDuration": 75.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4241,6 +4241,24 @@
                 "name": "Pool Swim",
                 "sport": "Swim",
                 "actual": 41.3
+            }
+        ]
+    },
+    {
+        "date": "2026-02-17",
+        "complianceStatus": "Partial",
+        "plannedDuration": 60.0,
+        "actualDuration": 28.4,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Zwift - Race: Stage 1: Zwift Games: Kaze Kicker on Kaze Kicker in Makuri Islands",
+                "sport": "Bike",
+                "actual": 28.4
             }
         ]
     },

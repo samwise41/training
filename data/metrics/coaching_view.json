@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-17 14:20:24",
+  "generated_at": "2026-02-17 14:24:22",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -204,24 +204,24 @@
           "description": "Subjective vs Objective.",
           "improvement": "\u2022 Align RPE with TSS",
           "formula": "RPE vs TSS",
-          "current_value": 3.75,
+          "current_value": 3.76,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.06470588235294118
+              "slope": -0.049019607843137275
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.009183673469387752
+              "slope": 0.009699879951980789
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0022362088115512775
+              "slope": 0.0026458036984352766
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0031495439663897858
+              "slope": 0.003349734217809602
             }
           },
           "has_data": true
@@ -248,24 +248,24 @@
             "min_duration_minutes": 20,
             "ignore_zero": true
           },
-          "current_value": 31.22,
+          "current_value": 29.04,
           "status": "On Target",
           "trends": {
             "30d": {
-              "direction": "Rising",
-              "slope": 1.3175000000000001
+              "direction": "Falling",
+              "slope": -1.527916182733256
             },
             "90d": {
-              "direction": "Rising",
-              "slope": 0.2695874812344854
+              "direction": "Falling",
+              "slope": -0.4156045083477481
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.6049152141452669
+              "slope": 0.2453341016365051
             },
             "1y": {
-              "direction": "Rising",
-              "slope": 0.02310992557191282
+              "direction": "Falling",
+              "slope": -0.04202417519983372
             }
           },
           "has_data": true

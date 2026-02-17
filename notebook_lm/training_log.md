@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-16 02:36:08
+**Generated:** 2026-02-17 02:32:40
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-16",
+    "day": "Monday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": false
+    },
+    "plannedWorkout": "[SWIM] Technique Focus",
+    "plannedDuration": 40.0,
+    "notes": "**Focus:** Form Consistency. 400m Continuous swim test @ 70% effort. Focus on smooth rotation.",
+    "actualDuration": 41.3,
+    "id": 21884976976,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 2480.763916015625,
+    "distance": 1500.0,
+    "averageHR": 119.0,
+    "maxHR": 169.0,
+    "aerobicTrainingEffect": 2.5,
+    "anaerobicTrainingEffect": 2.5999999046325684,
+    "trainingEffectLabel": "SPEED",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.8289999961853028,
+    "maxSpeed": 1.0360000133514404,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 394.0,
+    "elevationGain": null,
+    "RPE": 5.0,
+    "Feeling": 4,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-15",
     "day": "Sunday",
@@ -16,7 +63,7 @@
     "notes": "**Focus:** Sleep catch-up.",
     "actualDuration": 0,
     "id": "PLAN-2026-02-15-Other",
-    "status": "PLANNED"
+    "status": "UNKNOWN"
   },
   {
     "date": "2026-02-14",
@@ -2183,7 +2230,8 @@
     "RPE": 7,
     "Feeling": 3,
     "status": "COMPLETED",
-    "avgVerticalRatio": 7.980000019073486
+    "avgVerticalRatio": 7.980000019073486,
+    "ignore_drift": true
   },
   {
     "actualSport": "Bike",
@@ -3173,7 +3221,8 @@
     "RPE": 5,
     "Feeling": 1,
     "status": "COMPLETED",
-    "avgVerticalRatio": 8.180000305175781
+    "avgVerticalRatio": 8.180000305175781,
+    "ignore_drift": true
   },
   {
     "actualSport": "Run",
@@ -3215,7 +3264,8 @@
     "RPE": 7,
     "Feeling": 4,
     "status": "COMPLETED",
-    "avgVerticalRatio": 8.130000114440918
+    "avgVerticalRatio": 8.130000114440918,
+    "ignore_drift": true
   },
   {
     "actualSport": "Swim",

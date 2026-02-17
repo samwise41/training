@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-16 02:36:09
+**Generated:** 2026-02-17 02:32:40
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -27,11 +27,11 @@
     "plannedDuration": 40.0,
     "notes": "**Focus:** Form Consistency. 400m Continuous swim test @ 70% effort. Focus on smooth rotation.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 41.3,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 103,
+    "completed": true
   },
   {
     "date": "2026-02-17",

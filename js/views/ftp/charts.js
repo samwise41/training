@@ -1,3 +1,5 @@
+import { TooltipManager } from '../../utils/tooltipManager.js';
+
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
@@ -64,7 +66,7 @@ export const FTPCharts = {
                 ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
             </svg>
-            <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[150px] pointer-events-none transition-all duration-75 text-xs"></div>
+            <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[220px] pointer-events-none transition-all duration-75 text-xs"></div>
         </div>`;
     },
 
@@ -108,29 +110,29 @@ export const FTPCharts = {
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
                 const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
-                
-                // Date extraction
-                const dateStr = closest.date || 'Best Effort';
+                const dateStr = closest.date || '--';
 
+                // --- 3-COLUMN LAYOUT (Label | Date | Value) ---
                 tooltip.innerHTML = `
-                    <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t flex justify-between items-center">
+                    <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
                         <span class="font-bold text-slate-200">${label}</span>
-                        <span class="text-[10px] font-mono text-slate-400 ml-2">${dateStr}</span>
                     </div>
                     <div class="p-3 space-y-2">
-                        <div class="flex justify-between items-center gap-4">
+                        <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
                             <div class="flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full" style="background:${colorAll}"></span>
                                 <span class="text-slate-400">All Time</span>
                             </div>
-                            <span class="font-mono text-white font-bold text-sm">${valAll}</span>
+                            <span class="font-mono text-slate-500 text-[10px] text-center truncate">${dateStr}</span>
+                            <span class="font-mono text-white font-bold text-sm text-right">${valAll}</span>
                         </div>
-                        <div class="flex justify-between items-center gap-4">
+                        <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
                             <div class="flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full border border-slate-500" style="background:${color6w}"></span>
                                 <span class="text-slate-400">6 Weeks</span>
                             </div>
-                            <span class="font-mono text-white font-bold text-sm">${val6w}</span>
+                            <span class="font-mono text-slate-500 text-[10px] text-center">--</span>
+                            <span class="font-mono text-white font-bold text-sm text-right">${val6w}</span>
                         </div>
                     </div>`;
 
@@ -232,7 +234,7 @@ export const FTPCharts = {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    enabled: false, // DISABLE DEFAULT TOOLTIP
+                    enabled: false, 
                     external: (context) => {
                         const tooltipModel = context.tooltip;
                         
@@ -241,7 +243,7 @@ export const FTPCharts = {
                         if (!tooltipEl) {
                             tooltipEl = document.createElement('div');
                             tooltipEl.id = 'chartjs-tooltip';
-                            tooltipEl.className = 'absolute bg-slate-900/95 border border-slate-600 rounded shadow-xl pointer-events-none transition-all duration-75 text-xs z-50 min-w-[150px]';
+                            tooltipEl.className = 'absolute bg-slate-900/95 border border-slate-600 rounded shadow-xl pointer-events-none transition-all duration-75 text-xs z-50 min-w-[200px]';
                             document.body.appendChild(tooltipEl);
                         }
 
@@ -252,32 +254,27 @@ export const FTPCharts = {
 
                         // Set Content
                         if (tooltipModel.body) {
-                            const label = tooltipModel.title || [];
-                            const dateStr = label.length ? label[0] : '';
-                            
+                            const dateStr = tooltipModel.title || '';
                             let innerHtml = `
-                                <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t flex justify-between items-center">
-                                    <span class="font-bold text-slate-200">History</span>
-                                    <span class="text-[10px] font-mono text-slate-400 ml-2">${dateStr}</span>
+                                <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
+                                    <span class="font-bold text-slate-200">Metrics</span>
                                 </div>
                                 <div class="p-3 space-y-2">`;
 
                             tooltipModel.dataPoints.forEach(dp => {
                                 const ds = context.chart.data.datasets[dp.datasetIndex];
                                 let val = dp.formattedValue;
-                                
-                                // Format formatting for Pace if needed
-                                if(ds.label === 'Pace') {
-                                    val = formatPaceSec(dp.raw);
-                                }
+                                if(ds.label === 'Pace') val = formatPaceSec(dp.raw);
 
+                                // --- 3-COLUMN LAYOUT FOR HISTORY (Label | Date | Value) ---
                                 innerHtml += `
-                                    <div class="flex justify-between items-center gap-4">
+                                    <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
                                         <div class="flex items-center gap-2">
                                             <span class="w-2 h-2 rounded-full" style="background:${ds.borderColor}"></span>
                                             <span class="text-slate-400">${ds.label}</span>
                                         </div>
-                                        <span class="font-mono text-white font-bold text-sm">${val}</span>
+                                        <span class="font-mono text-slate-500 text-[10px] text-center">${dateStr}</span>
+                                        <span class="font-mono text-white font-bold text-sm text-right">${val}</span>
                                     </div>`;
                             });
 
@@ -287,15 +284,13 @@ export const FTPCharts = {
 
                         // Position (Above Lines)
                         const position = context.chart.canvas.getBoundingClientRect();
-                        
-                        // Calculate specific X/Y
                         const tooltipX = position.left + window.pageXOffset + tooltipModel.caretX;
-                        const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY - 10; // Lift it slightly
+                        const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY - 10; 
 
                         tooltipEl.style.opacity = 1;
                         tooltipEl.style.left = tooltipX + 'px';
                         tooltipEl.style.top = tooltipY + 'px';
-                        tooltipEl.style.transform = 'translate(-50%, -100%)'; // Move strictly above
+                        tooltipEl.style.transform = 'translate(-50%, -100%)'; 
                         tooltipEl.style.pointerEvents = 'none';
                     }
                 }

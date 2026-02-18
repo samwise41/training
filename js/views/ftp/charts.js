@@ -110,7 +110,10 @@ export const FTPCharts = {
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
                 const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
-                const dateStr = closest.date || '--';
+                
+                // --- DATE EXTRACTION ---
+                const dateAll = closest.dateAll || '--';
+                const date6w = closest.date6w || '--';
 
                 // --- 3-COLUMN LAYOUT (Label | Date | Value) ---
                 tooltip.innerHTML = `
@@ -123,7 +126,7 @@ export const FTPCharts = {
                                 <span class="w-2 h-2 rounded-full" style="background:${colorAll}"></span>
                                 <span class="text-slate-400">All Time</span>
                             </div>
-                            <span class="font-mono text-slate-500 text-[10px] text-center truncate">${dateStr}</span>
+                            <span class="font-mono text-slate-500 text-[10px] text-center truncate">${dateAll}</span>
                             <span class="font-mono text-white font-bold text-sm text-right">${valAll}</span>
                         </div>
                         <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
@@ -131,7 +134,7 @@ export const FTPCharts = {
                                 <span class="w-2 h-2 rounded-full border border-slate-500" style="background:${color6w}"></span>
                                 <span class="text-slate-400">6 Weeks</span>
                             </div>
-                            <span class="font-mono text-slate-500 text-[10px] text-center">--</span>
+                            <span class="font-mono text-slate-500 text-[10px] text-center truncate">${date6w}</span>
                             <span class="font-mono text-white font-bold text-sm text-right">${val6w}</span>
                         </div>
                     </div>`;
@@ -257,7 +260,7 @@ export const FTPCharts = {
                             const dateStr = tooltipModel.title || '';
                             let innerHtml = `
                                 <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
-                                    <span class="font-bold text-slate-200">Metrics</span>
+                                    <span class="font-bold text-slate-200">History</span>
                                 </div>
                                 <div class="p-3 space-y-2">`;
 

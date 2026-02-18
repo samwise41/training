@@ -1,5 +1,3 @@
-import { TooltipManager } from '../../utils/tooltipManager.js';
-
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
@@ -79,7 +77,7 @@ export const FTPCharts = {
         return html;
     },
 
-    // --- 2. SVG INTERACTION (Updated Tooltip Style & Position) ---
+    // --- 2. SVG INTERACTION (Curve Tooltip) ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
@@ -107,17 +105,17 @@ export const FTPCharts = {
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
 
-                const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m` : `${closest.x.toFixed(1)}mi`);
+                const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
                 const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
                 
-                // Date extraction (assuming 'date' prop exists in data, fallback if not)
+                // Date extraction
                 const dateStr = closest.date || 'Best Effort';
 
                 tooltip.innerHTML = `
                     <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t flex justify-between items-center">
                         <span class="font-bold text-slate-200">${label}</span>
-                        <span class="text-[10px] font-mono text-slate-400">${dateStr}</span>
+                        <span class="text-[10px] font-mono text-slate-400 ml-2">${dateStr}</span>
                     </div>
                     <div class="p-3 space-y-2">
                         <div class="flex justify-between items-center gap-4">
@@ -138,11 +136,8 @@ export const FTPCharts = {
 
                 tooltip.classList.remove('hidden');
                 
-                // Position Tooltip Above Line if possible
+                // Position Tooltip
                 const relX = (closest.px / width) * rect.width;
-                const tooltipRect = tooltip.getBoundingClientRect();
-                
-                // Horizontal
                 if (closest.px > width * 0.6) {
                     tooltip.style.left = 'auto';
                     tooltip.style.right = `${rect.width - relX + 15}px`;
@@ -150,8 +145,6 @@ export const FTPCharts = {
                     tooltip.style.right = 'auto';
                     tooltip.style.left = `${relX + 15}px`;
                 }
-
-                // Vertical (Try to center or put above)
                 tooltip.style.top = '10px'; 
             }
         });
@@ -162,7 +155,7 @@ export const FTPCharts = {
         });
     },
 
-    // --- 3. CHART.JS RENDERERS (Updated Tooltips) ---
+    // --- 3. CHART.JS RENDERERS (Custom Tooltip) ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
@@ -173,7 +166,7 @@ export const FTPCharts = {
                 labels: data.map(d => d.date),
                 datasets: [
                     { 
-                        label: 'FTP (w)', data: data.map(d => d.ftp), 
+                        label: 'FTP', data: data.map(d => d.ftp), 
                         borderColor: color, backgroundColor: color+'20', 
                         pointBackgroundColor: color,
                         borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, 
@@ -241,56 +234,69 @@ export const FTPCharts = {
                 tooltip: {
                     enabled: false, // DISABLE DEFAULT TOOLTIP
                     external: (context) => {
-                        // Custom Tooltip Logic to match Power Curve Style
                         const tooltipModel = context.tooltip;
+                        
+                        // Handle Removal
+                        let tooltipEl = document.getElementById('chartjs-tooltip');
+                        if (!tooltipEl) {
+                            tooltipEl = document.createElement('div');
+                            tooltipEl.id = 'chartjs-tooltip';
+                            tooltipEl.className = 'absolute bg-slate-900/95 border border-slate-600 rounded shadow-xl pointer-events-none transition-all duration-75 text-xs z-50 min-w-[150px]';
+                            document.body.appendChild(tooltipEl);
+                        }
+
                         if (tooltipModel.opacity === 0) {
-                            if (window.TooltipManager) window.TooltipManager.hide();
+                            tooltipEl.style.opacity = 0;
                             return;
                         }
 
-                        if (window.TooltipManager) {
-                            const dataPoint = context.chart.data.datasets[0].data[tooltipModel.dataPoints[0].dataIndex];
-                            const label = context.chart.data.labels[tooltipModel.dataPoints[0].dataIndex];
+                        // Set Content
+                        if (tooltipModel.body) {
+                            const label = tooltipModel.title || [];
+                            const dateStr = label.length ? label[0] : '';
                             
-                            // Determine values based on dataset
-                            const bodyLines = tooltipModel.body.map(b => b.lines);
-                            
-                            let html = `
-                                <div class="min-w-[150px]">
-                                    <div class="flex items-center justify-between border-b border-slate-600 pb-2 mb-2">
-                                        <span class="text-xs font-bold text-slate-200">${label}</span>
-                                    </div>
-                                    <div class="space-y-1">`;
-                            
+                            let innerHtml = `
+                                <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t flex justify-between items-center">
+                                    <span class="font-bold text-slate-200">History</span>
+                                    <span class="text-[10px] font-mono text-slate-400 ml-2">${dateStr}</span>
+                                </div>
+                                <div class="p-3 space-y-2">`;
+
                             tooltipModel.dataPoints.forEach(dp => {
                                 const ds = context.chart.data.datasets[dp.datasetIndex];
-                                const val = dp.formattedValue;
-                                html += `
-                                    <div class="flex justify-between items-center text-xs">
+                                let val = dp.formattedValue;
+                                
+                                // Format formatting for Pace if needed
+                                if(ds.label === 'Pace') {
+                                    val = formatPaceSec(dp.raw);
+                                }
+
+                                innerHtml += `
+                                    <div class="flex justify-between items-center gap-4">
                                         <div class="flex items-center gap-2">
                                             <span class="w-2 h-2 rounded-full" style="background:${ds.borderColor}"></span>
                                             <span class="text-slate-400">${ds.label}</span>
                                         </div>
-                                        <span class="font-mono text-white font-bold">${val}</span>
+                                        <span class="font-mono text-white font-bold text-sm">${val}</span>
                                     </div>`;
                             });
-                            
-                            html += `</div></div>`;
 
-                            // Use TooltipManager to show it
-                            // Note: TooltipManager usually takes an element reference. 
-                            // For Chart.js, we might need to manually position or attach to canvas.
-                            // Here we pass the canvas element and position manually if needed, 
-                            // or relies on TooltipManager's absolute positioning capability if updated.
-                            
-                            // SIMPLE FALLBACK: Use tooltipModel properties for positioning if TooltipManager isn't set up for coordinates
-                            const position = context.chart.canvas.getBoundingClientRect();
-                            // window.TooltipManager.showAt(position.left + tooltipModel.caretX, position.top + tooltipModel.caretY, html);
-                            // Assuming existing show() uses event target, which behaves differently. 
-                            
-                            // Reverting to Standard Tooltip for History Charts for stability unless TooltipManager supports coords
-                            // IF YOU WANT CUSTOM HTML TOOLTIPS FOR CHARTJS, WE NEED A COORDINATE-BASED SHOW FUNCTION.
+                            innerHtml += `</div>`;
+                            tooltipEl.innerHTML = innerHtml;
                         }
+
+                        // Position (Above Lines)
+                        const position = context.chart.canvas.getBoundingClientRect();
+                        
+                        // Calculate specific X/Y
+                        const tooltipX = position.left + window.pageXOffset + tooltipModel.caretX;
+                        const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY - 10; // Lift it slightly
+
+                        tooltipEl.style.opacity = 1;
+                        tooltipEl.style.left = tooltipX + 'px';
+                        tooltipEl.style.top = tooltipY + 'px';
+                        tooltipEl.style.transform = 'translate(-50%, -100%)'; // Move strictly above
+                        tooltipEl.style.pointerEvents = 'none';
                     }
                 }
             }

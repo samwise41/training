@@ -7,6 +7,31 @@ const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / 
 const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
 const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.round(val % 60); return `${m}:${s.toString().padStart(2, '0')}`; };
 
+// --- CUSTOM PLUGIN: Vertical Line for Chart.js ---
+const verticalLinePlugin = {
+    id: 'verticalLine',
+    afterDraw: (chart) => {
+        // Only draw if we have an active tooltip/hover state
+        if (chart.tooltip?._active?.length) {
+            const ctx = chart.ctx;
+            ctx.save();
+            const activePoint = chart.tooltip._active[0];
+            const x = activePoint.element.x;
+            const topY = chart.scales.y.top;
+            const bottomY = chart.scales.y.bottom;
+            
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#cbd5e1'; // matches SVG guide stroke
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.restore();
+        }
+    }
+};
+
 export const FTPCharts = {
     
     // --- 1. SVG RENDERER ---
@@ -40,7 +65,6 @@ export const FTPCharts = {
         if (xType === 'time') {
             ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
         } else {
-            // Use Central Definition for Running Ticks
             ticks = KEY_DISTANCES.map(d => ({ v: d.val, l: d.label }));
         }
         
@@ -70,6 +94,7 @@ export const FTPCharts = {
                 <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2"/>
                 ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
+                <circle id="${options.containerId}-lock-dot" cx="0" cy="${height-pad.b}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
             </svg>
             <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[220px] pointer-events-none transition-all duration-75 text-xs"></div>
         </div>`;
@@ -84,22 +109,24 @@ export const FTPCharts = {
         return html;
     },
 
-    // --- 2. SVG INTERACTION ---
+    // --- 2. SVG INTERACTION (Sticky Tooltip) ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
+        const lockDot = document.getElementById(`${containerId}-lock-dot`);
         const tooltip = document.getElementById(`${containerId}-tooltip`);
         if (!svg || !guide || !tooltip) return;
 
         const { width = 600, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
-        const xVals = data.map(d => d.x);
-        const minX = Math.min(...xVals), maxX = Math.max(...xVals);
+        const minX = Math.min(...data.map(d => d.x)), maxX = Math.max(...data.map(d => d.x));
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
-        svg.addEventListener('mousemove', (e) => {
+        let isLocked = false;
+
+        const updateTooltip = (clientX) => {
             const rect = svg.getBoundingClientRect();
-            const mouseX = (e.clientX - rect.left) * (width / rect.width);
+            const mouseX = (clientX - rect.left) * (width / rect.width);
             
             let closest = lookup[0], minDist = Infinity;
             for (const pt of lookup) {
@@ -107,10 +134,18 @@ export const FTPCharts = {
                 if (dist < minDist) { minDist = dist; closest = pt; }
             }
 
-            if (closest && minDist < 50) {
+            if (closest && (isLocked || minDist < 50)) {
                 guide.setAttribute('x1', closest.px);
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
+                
+                // Show Lock Dot if locked
+                if(isLocked) {
+                    lockDot.setAttribute('cx', closest.px);
+                    lockDot.style.opacity = '1';
+                } else {
+                    lockDot.style.opacity = '0';
+                }
 
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
@@ -153,15 +188,27 @@ export const FTPCharts = {
                 }
                 tooltip.style.top = '10px'; 
             }
+        };
+
+        svg.addEventListener('click', (e) => {
+            isLocked = true; // Lock it
+            updateTooltip(e.clientX);
+        });
+
+        svg.addEventListener('mousemove', (e) => {
+            if (!isLocked) updateTooltip(e.clientX);
         });
 
         svg.addEventListener('mouseleave', () => {
-            guide.style.opacity = '0';
-            tooltip.classList.add('hidden');
+            if (!isLocked) {
+                guide.style.opacity = '0';
+                tooltip.classList.add('hidden');
+                lockDot.style.opacity = '0';
+            }
         });
     },
 
-    // --- 3. CHART.JS RENDERERS ---
+    // --- 3. CHART.JS RENDERERS (Clean Lines + Vertical Guide) ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
@@ -175,14 +222,14 @@ export const FTPCharts = {
                         label: 'FTP', data: data.map(d => d.ftp), 
                         borderColor: color, backgroundColor: color+'20', 
                         pointBackgroundColor: color,
-                        borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, 
+                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y' 
                     },
                     { 
                         label: 'W/kg', data: data.map(d => d.wkg), 
                         borderColor: '#34d399', borderWidth: 2, 
                         pointBackgroundColor: '#34d399',
-                        pointRadius: 3, pointHoverRadius: 5, 
+                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y1' 
                     }
                 ]
@@ -190,7 +237,8 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 },
                 y1: { position: 'right', grid: { display: false }, ticks: { color: '#34d399' }, suggestedMin: 2.0 }
-            })
+            }),
+            plugins: [verticalLinePlugin]
         });
     },
 
@@ -207,14 +255,14 @@ export const FTPCharts = {
                         label: 'Pace', data: data.map(d => d.pace), 
                         borderColor: color, backgroundColor: color+'20', 
                         pointBackgroundColor: color,
-                        borderWidth: 2, pointRadius: 3, pointHoverRadius: 5, 
+                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y' 
                     },
                     { 
                         label: 'LTHR', data: data.map(d => d.lthr), 
                         borderColor: '#ef4444', borderWidth: 1, borderDash: [3,3], 
                         pointBackgroundColor: '#ef4444',
-                        pointRadius: 3, pointHoverRadius: 5, 
+                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
                         tension: 0.2, yAxisID: 'y1' 
                     }
                 ]
@@ -222,7 +270,8 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: formatPaceSec }, reverse: true },
                 y1: { position: 'right', grid: { display: false }, ticks: { color: '#ef4444' }, suggestedMin: 130 }
-            })
+            }),
+            plugins: [verticalLinePlugin]
         });
     },
 
@@ -287,10 +336,22 @@ export const FTPCharts = {
                         const tooltipX = position.left + window.pageXOffset + tooltipModel.caretX;
                         const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY - 10; 
 
+                        // Smart Positioning: Flip left if on right side
+                        let leftPos = tooltipX;
+                        let transform = 'translate(-50%, -100%)'; // Default: Center Above
+
+                        if (tooltipModel.caretX > context.chart.width * 0.6) {
+                            leftPos = tooltipX - 10; // Shift slightly left of cursor
+                            transform = 'translate(-100%, -100%)'; // Anchor bottom-right corner
+                        } else {
+                            leftPos = tooltipX + 10; // Shift slightly right of cursor
+                            transform = 'translate(0, -100%)'; // Anchor bottom-left corner
+                        }
+
                         tooltipEl.style.opacity = 1;
-                        tooltipEl.style.left = tooltipX + 'px';
+                        tooltipEl.style.left = leftPos + 'px';
                         tooltipEl.style.top = tooltipY + 'px';
-                        tooltipEl.style.transform = 'translate(-50%, -100%)'; 
+                        tooltipEl.style.transform = transform;
                         tooltipEl.style.pointerEvents = 'none';
                     }
                 }

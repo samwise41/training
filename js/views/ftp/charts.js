@@ -1,20 +1,15 @@
 import { TooltipManager } from '../../utils/tooltipManager.js';
+import { KEY_DISTANCES } from './data.js';
 
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
-
-// Standard Y (Higher = Top)
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
-
-// Inverted Y (Lower = Top, for Pace)
-const getInvY = (val, min, max, height, pad) => pad.t + ((val - min) / (max - min)) * (height - pad.t - pad.b);
-
 const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
 const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.round(val % 60); return `${m}:${s.toString().padStart(2, '0')}`; };
 
 export const FTPCharts = {
     
-    // --- 1. SVG RENDERER (Power/Pace Curve) ---
+    // --- 1. SVG RENDERER ---
     renderSvgCurve(data, options) {
         const { width = 600, height = 250, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
@@ -26,22 +21,16 @@ export const FTPCharts = {
         const minX = Math.min(...xVals), maxX = Math.max(...xVals);
         let minY = Math.min(...yVals), maxY = Math.max(...yVals);
         
-        // Axis Buffer
         const buf = (maxY - minY) * 0.1; 
         minY = Math.max(0, minY - buf); 
         maxY += buf;
-
-        // Determine Y-Function (Pace is inverted)
-        const getY = xType === 'distance' ? 
-            (v) => getInvY(v, minY, maxY, height, pad) : 
-            (v) => getLinY(v, minY, maxY, height, pad);
 
         let gridHtml = '';
         
         // Y-Axis Grid
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
-            const y = getY(val);
+            const y = getLinY(val, minY, maxY, height, pad);
             const lbl = xType === 'distance' ? formatPace(val) : Math.round(val);
             gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
         }
@@ -51,7 +40,8 @@ export const FTPCharts = {
         if (xType === 'time') {
             ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
         } else {
-            ticks = [{v:0.248,l:'400m'}, {v:1.0,l:'1mi'}, {v:3.106,l:'5k'}, {v:6.213,l:'10k'}, {v:13.109,l:'Half'}, {v:26.218,l:'Full'}];
+            // Use Central Definition for Running Ticks
+            ticks = KEY_DISTANCES.map(d => ({ v: d.val, l: d.label }));
         }
         
         ticks.filter(t => t.v >= minX * 0.9 && t.v <= maxX * 1.1).forEach(t => {
@@ -66,7 +56,7 @@ export const FTPCharts = {
             data.forEach((p, i) => {
                 if (!p[key]) return;
                 const x = getLogX(p.x, minX, maxX, width, pad);
-                const y = getY(p[key]);
+                const y = getLinY(p[key], minY, maxY, height, pad);
                 d += (i===0 || d==='') ? `M ${x} ${y}` : ` L ${x} ${y}`;
             });
             return d;
@@ -78,18 +68,18 @@ export const FTPCharts = {
                 ${gridHtml}
                 <path d="${genPath('y6w')}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.7"/>
                 <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2"/>
-                ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w, getY) : ''}
+                ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
             </svg>
             <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[220px] pointer-events-none transition-all duration-75 text-xs"></div>
         </div>`;
     },
 
-    _renderPoints(data, minX, maxX, minY, maxY, width, height, pad, cAll, c6w, getY) {
+    _renderPoints(data, minX, maxX, minY, maxY, width, height, pad, cAll, c6w) {
         let html = '';
         data.forEach(p => {
             const x = getLogX(p.x, minX, maxX, width, pad);
-            if(p.yAll) html += `<circle cx="${x}" cy="${getY(p.yAll)}" r="3" fill="#0f172a" stroke="${cAll}" stroke-width="2" />`;
+            if(p.yAll) html += `<circle cx="${x}" cy="${getLinY(p.yAll, minY, maxY, height, pad)}" r="3" fill="#0f172a" stroke="${cAll}" stroke-width="2" />`;
         });
         return html;
     },
@@ -125,7 +115,6 @@ export const FTPCharts = {
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
                 const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
-                
                 const dateAll = closest.dateAll || '--';
                 const date6w = closest.date6w || '--';
 

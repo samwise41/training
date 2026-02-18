@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-17 02:32:40
+**Generated:** 2026-02-18 02:35:52
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-17",
+    "day": "Tuesday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Zwift Race",
+    "plannedDuration": 60.0,
+    "notes": "**Focus:** Zwift Games / Anaerobic Impact (1.29). Race hard. Treat this as your VO2 Max session.",
+    "actualDuration": 55.0,
+    "id": "21895429228,21895599183",
+    "actualWorkout": "Zwift - Race: Stage 1: Zwift Games: Kaze Kicker on Kaze Kicker in Makuri Islands",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 2583.0,
+    "distance": 21317.120849609375,
+    "averageHR": 155.015873015873,
+    "maxHR": 192.0,
+    "aerobicTrainingEffect": 3.799999952316284,
+    "anaerobicTrainingEffect": 2.299999952316284,
+    "trainingEffectLabel": "TEMPO",
+    "avgPower": 182.60627177700349,
+    "maxPower": 619.0,
+    "normPower": 201.03398032405812,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 10.621000289916992,
+    "maxSpeed": 16.02899932861328,
+    "averageBikingCadenceInRevPerMinute": 76.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 532.0,
+    "elevationGain": 189.0,
+    "RPE": 9,
+    "Feeling": 4,
+    "matchStatus": "Linked Group",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-16",
     "day": "Monday",

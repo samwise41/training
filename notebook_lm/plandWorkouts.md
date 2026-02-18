@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-17 02:32:40
+**Generated:** 2026-02-18 02:35:53
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -40,11 +40,11 @@
     "plannedDuration": 60.0,
     "notes": "**Focus:** Zwift Games / Anaerobic Impact (1.29). Race hard. Treat this as your VO2 Max session.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 55.0,
+    "actualWorkout": "Zwift - Race: Stage 1: Zwift Games: Kaze Kicker on Kaze Kicker in Makuri Islands",
+    "status": "COMPLETED",
+    "compliance": 92,
+    "completed": true
   },
   {
     "date": "2026-02-18",

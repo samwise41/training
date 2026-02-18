@@ -1,9 +1,7 @@
-// js/views/ftp/index.js
 import { FTPData } from './data.js';
 import { FTPCharts } from './charts.js';
 import { FTPTemplates } from './templates.js';
 
-// STRICT: No fallbacks. If CSS var is missing, it returns ""
 const getColor = (varName) => {
     if (typeof window !== "undefined" && window.getComputedStyle) {
         return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
@@ -35,7 +33,6 @@ export async function initCharts() {
     const ids = window.ftpChartIds;
     if (!ids) return;
 
-    // Pull directly from CSS. If these are empty strings, charts will look broken (as requested).
     const bikeColor = getColor('--color-bike');
     const runColor = getColor('--color-run');
 
@@ -43,7 +40,14 @@ export async function initCharts() {
     FTPData.fetchCycling().then(data => {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
-            const pts = data.map(d => ({ x: d.seconds, yAll: d.all_time_watts, y6w: d.six_week_watts })).filter(d => d.x >= 1);
+            // Map data and INCLUDE DATE
+            const pts = data.map(d => ({ 
+                x: d.seconds, 
+                yAll: d.all_time_watts, 
+                y6w: d.six_week_watts,
+                date: d.date // Make sure this prop exists in your JSON!
+            })).filter(d => d.x >= 1);
+            
             el.innerHTML = FTPCharts.renderSvgCurve(pts, { 
                 containerId: ids.cycleCurve,
                 width: 600, height: 250, xType: 'time', 
@@ -67,7 +71,7 @@ export async function initCharts() {
         }
     });
 
-    // 2. History Charts (Chart.js)
+    // 2. History Charts (Chart.js) - No changes needed here logic-wise
     const history = await FTPData.fetchGarminHistory();
     if (history.length) {
         const sorted = history.sort((a,b) => new Date(a["Date"]) - new Date(b["Date"]));

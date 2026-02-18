@@ -1,40 +1,41 @@
 import { KEY_DISTANCES } from './data.js';
 
-// --- SHARED GLOBALS ---
-let globalTooltipEl = null;
-const activeSvgCharts = []; // Track SVG charts to manage "unsticking"
-
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
 const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
 const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.round(val % 60); return `${m}:${s.toString().padStart(2, '0')}`; };
 
-// Get or Create Global Tooltip (Shared by ALL charts)
-const getGlobalTooltip = () => {
-    if (!globalTooltipEl) {
-        globalTooltipEl = document.getElementById('ftp-global-tooltip');
-        if (!globalTooltipEl) {
-            globalTooltipEl = document.createElement('div');
-            globalTooltipEl.id = 'ftp-global-tooltip';
-            globalTooltipEl.className = 'fixed hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl z-[9999] min-w-[220px] pointer-events-none transition-opacity duration-75 text-xs';
-            document.body.appendChild(globalTooltipEl);
-        }
-    }
-    return globalTooltipEl;
+// --- GLOBAL STATE FOR LOCKING ---
+// We track all active charts here to handle "click outside to unstick"
+const registry = {
+    svgs: [],     // { id, element, reset() }
+    charts: []    // Chart.js instances
 };
 
-// Global Click Listener to Clear/Unlock Charts
+// Global Click Listener (Handles Unsticking)
 document.addEventListener('click', (e) => {
-    // 1. Reset SVG Charts
-    activeSvgCharts.forEach(chart => {
-        if (chart.isLocked && !chart.svg.contains(e.target)) {
-            chart.isLocked = false;
-            chart.reset();
+    // 1. Reset SVGs if clicked outside
+    registry.svgs.forEach(item => {
+        if (item.isLocked && !item.element.contains(e.target)) {
+            item.reset();
         }
     });
 
-    // 2. Reset Chart.js Charts (Handled via Chart.js options below)
+    // 2. Reset Chart.js instances if clicked outside
+    registry.charts.forEach(chart => {
+        if (chart.options.isLocked && chart.canvas && !chart.canvas.contains(e.target)) {
+            chart.options.isLocked = false;
+            chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+            chart.setActiveElements([]);
+            chart.tooltip.setActiveElements([], {x:0,y:0});
+            chart.update();
+            
+            // Hide the custom tooltip element associated with this chart
+            const tooltipEl = document.getElementById(`tooltip-${chart.canvas.id}`);
+            if (tooltipEl) tooltipEl.style.opacity = 0;
+        }
+    });
 });
 
 // --- CUSTOM PLUGIN: Vertical Line for Chart.js ---
@@ -79,9 +80,8 @@ export const FTPCharts = {
         minY = Math.max(0, minY - buf); 
         maxY += buf;
 
+        // Grid & Ticks
         let gridHtml = '';
-        
-        // Y-Axis Grid
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
@@ -89,7 +89,6 @@ export const FTPCharts = {
             gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
         }
 
-        // X-Axis Grid
         let ticks = [];
         if (xType === 'time') {
             ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
@@ -115,6 +114,7 @@ export const FTPCharts = {
             return d;
         };
 
+        // Note: Tooltip is appended to body dynamically in interactions, not here
         return `
         <div class="relative w-full h-full group select-none">
             <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">
@@ -123,7 +123,7 @@ export const FTPCharts = {
                 <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2"/>
                 ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
-                <circle id="${options.containerId}-lock-dot" cx="0" cy="${pad.t}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
+                <circle id="${options.containerId}-lock-dot" cx="0" cy="${height-pad.b}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
             </svg>
         </div>`;
     },
@@ -137,33 +137,42 @@ export const FTPCharts = {
         return html;
     },
 
-    // --- 2. SVG INTERACTION (Using Global Tooltip) ---
+    // --- 2. SVG INTERACTION ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
         const lockDot = document.getElementById(`${containerId}-lock-dot`);
+        
         if (!svg || !guide) return;
 
-        const tooltip = getGlobalTooltip();
+        // Create specific tooltip for this chart (appended to body for z-index)
+        let tooltip = document.getElementById(`tooltip-${containerId}`);
+        if (!tooltip) {
+            tooltip = document.createElement('div');
+            tooltip.id = `tooltip-${containerId}`;
+            tooltip.className = 'fixed hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl z-[9999] min-w-[220px] pointer-events-none transition-opacity duration-75 text-xs';
+            document.body.appendChild(tooltip);
+        }
+
         const { width = 600, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
         const minX = Math.min(...data.map(d => d.x)), maxX = Math.max(...data.map(d => d.x));
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
-        // State Object
+        // Register for global click management
         const state = { 
             isLocked: false, 
-            svg: svg,
+            element: svg,
             reset: () => {
+                state.isLocked = false;
                 guide.style.opacity = '0';
                 lockDot.style.opacity = '0';
                 tooltip.classList.add('hidden');
-                tooltip.classList.remove('block');
             }
         };
-        activeSvgCharts.push(state);
+        registry.svgs.push(state);
 
-        const updateView = (clientX) => {
+        const updateView = (clientX, clientY) => {
             const rect = svg.getBoundingClientRect();
             const mouseX = (clientX - rect.left) * (width / rect.width);
             
@@ -180,7 +189,6 @@ export const FTPCharts = {
                 guide.style.opacity = '1';
                 
                 lockDot.setAttribute('cx', closest.px);
-                lockDot.setAttribute('cy', height - pad.b);
                 lockDot.style.opacity = state.isLocked ? '1' : '0';
 
                 // Content
@@ -214,18 +222,21 @@ export const FTPCharts = {
                     </div>`;
 
                 tooltip.classList.remove('hidden');
-                tooltip.classList.add('block');
 
-                // Position Global Tooltip
-                // Scale closest.px (SVG coords) to Screen Coords
-                const screenX = rect.left + (closest.px / width * rect.width);
-                const screenY = rect.top + window.scrollY; // Top of chart
-
-                // Flip Logic
+                // Position calculation (Global Coordinates)
+                const chartLeft = rect.left + window.scrollX;
+                const chartTop = rect.top + window.scrollY;
+                const ptX = (closest.px / width) * rect.width;
+                
+                const screenX = chartLeft + ptX;
+                const screenY = chartTop; // Align top of tooltip to top of chart area? Or cursor?
+                // Let's align to the point's X, but keep Y at top of chart to avoid covering data
+                
                 let leftPos = screenX;
                 let transform = 'translate(-50%, -100%)'; 
 
-                if (screenX > window.innerWidth * 0.6) {
+                // Flip Logic
+                if (ptX > rect.width * 0.6) {
                     leftPos = screenX - 10; 
                     transform = 'translate(-100%, -100%)'; 
                 } else {
@@ -234,7 +245,7 @@ export const FTPCharts = {
                 }
 
                 tooltip.style.left = `${leftPos}px`;
-                tooltip.style.top = `${screenY}px`; // Position at top of chart area (or mouse Y if preferred)
+                tooltip.style.top = `${screenY + (state.isLocked ? 0 : 20)}px`; // slightly offset
                 tooltip.style.transform = transform;
             }
         };
@@ -242,11 +253,11 @@ export const FTPCharts = {
         svg.addEventListener('click', (e) => {
             e.stopPropagation();
             state.isLocked = true;
-            updateView(e.clientX);
+            updateView(e.clientX, e.clientY);
         });
 
         svg.addEventListener('mousemove', (e) => {
-            if (!state.isLocked) updateView(e.clientX);
+            if (!state.isLocked) updateView(e.clientX, e.clientY);
         });
 
         svg.addEventListener('mouseleave', () => {
@@ -254,7 +265,7 @@ export const FTPCharts = {
         });
     },
 
-    // --- 3. CHART.JS RENDERERS (Shared Tooltip Logic) ---
+    // --- 3. CHART.JS RENDERERS ---
     renderBikeHistory(canvasId, data, color) {
         this._renderHistoryChart(canvasId, data, color, 'Bike');
     },
@@ -288,27 +299,31 @@ export const FTPCharts = {
             }
         ];
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'line',
             data: { labels: data.map(d => d.date), datasets },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 interaction: { mode: 'index', intersect: false },
+                isLocked: false,
                 events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
                 
-                // --- CUSTOM LOCKING LOGIC ---
                 onClick: (e, elements, chart) => {
                     e.native.stopPropagation();
                     if (elements.length > 0) {
                         chart.options.isLocked = true;
-                        chart.options.events = ['click']; // Disable hover
+                        chart.options.events = ['click']; // disable hover
                         chart.setActiveElements(elements);
                         chart.tooltip.setActiveElements(elements);
                         chart.update();
                     } else {
-                        // Click background -> Unlock
-                        this._unlockChart(chart);
+                        // Reset if clicked background
+                        chart.options.isLocked = false;
+                        chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+                        chart.setActiveElements([]);
+                        chart.tooltip.setActiveElements([], {x:0,y:0});
+                        chart.update();
                     }
                 },
                 scales: { 
@@ -318,50 +333,32 @@ export const FTPCharts = {
                 },
                 plugins: {
                     legend: { display: false },
-                    verticalLine: false, // Handled by custom plugin
                     tooltip: {
-                        enabled: false,
-                        external: (context) => this._updateGlobalTooltip(context)
+                        enabled: false, // Custom external
+                        external: (context) => this._updateChartJsTooltip(context, canvasId)
                     }
                 }
             },
-            plugins: [verticalLinePlugin, {
-                id: 'clickWatcher',
-                start: (chart) => {
-                    // Register global click listener for this chart instance
-                    const handler = (e) => {
-                        if (chart.options.isLocked && !chart.canvas.contains(e.target)) {
-                            this._unlockChart(chart);
-                        }
-                    };
-                    document.addEventListener('click', handler);
-                    chart._clickCleanup = () => document.removeEventListener('click', handler);
-                },
-                stop: (chart) => { if(chart._clickCleanup) chart._clickCleanup(); }
-            }]
+            plugins: [verticalLinePlugin]
         });
+        
+        registry.charts.push(chart);
     },
 
-    _unlockChart(chart) {
-        chart.options.isLocked = false;
-        chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
-        chart.setActiveElements([]);
-        chart.tooltip.setActiveElements([], {x:0,y:0});
-        chart.update();
-        getGlobalTooltip().classList.add('hidden');
-    },
-
-    _updateGlobalTooltip(context) {
+    _updateChartJsTooltip(context, canvasId) {
         const tooltipModel = context.tooltip;
-        const tooltipEl = getGlobalTooltip();
+        
+        // Create unique tooltip for this chart
+        let tooltipEl = document.getElementById(`tooltip-${canvasId}`);
+        if (!tooltipEl) {
+            tooltipEl = document.createElement('div');
+            tooltipEl.id = `tooltip-${canvasId}`;
+            tooltipEl.className = 'fixed pointer-events-none transition-opacity duration-75 text-xs bg-slate-900/95 border border-slate-600 rounded shadow-xl z-[9999] min-w-[220px]';
+            document.body.appendChild(tooltipEl);
+        }
 
         if (tooltipModel.opacity === 0) {
-            // Only hide if not locked (locking is handled by chart options state)
-            // But Chart.js calls external(0) when mouse leaves. 
-            // If locked, we don't want to hide. 
-            // However, chart.js stops sending events when we remove them in onClick.
-            // So this only fires when NOT locked.
-            tooltipEl.classList.add('hidden');
+            tooltipEl.style.opacity = 0;
             return;
         }
 
@@ -394,11 +391,14 @@ export const FTPCharts = {
         }
 
         const position = context.chart.canvas.getBoundingClientRect();
-        const tooltipX = position.left + window.pageXOffset + tooltipModel.caretX;
-        const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY; // Chart.js caretY is relative to top
-
-        tooltipEl.classList.remove('hidden');
-        tooltipEl.classList.add('block');
+        
+        // Coordinates relative to viewport
+        const chartLeft = position.left + window.scrollX;
+        const chartTop = position.top + window.scrollY;
+        
+        // Chart.js gives caretX/Y relative to the canvas
+        const tooltipX = chartLeft + tooltipModel.caretX;
+        const tooltipY = chartTop + tooltipModel.caretY;
 
         // Smart Positioning
         let leftPos = tooltipX;
@@ -412,6 +412,7 @@ export const FTPCharts = {
             transform = 'translate(0, -100%)';
         }
 
+        tooltipEl.style.opacity = 1;
         tooltipEl.style.left = leftPos + 'px';
         tooltipEl.style.top = (tooltipY - 10) + 'px';
         tooltipEl.style.transform = transform;

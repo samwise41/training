@@ -3,42 +3,13 @@ import { KEY_DISTANCES } from './data.js';
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
-
-// Formatter for Minutes:Seconds (expects input in seconds)
+const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
 const formatPaceSec = (val) => { 
-    if (!val || isNaN(val)) return '';
+    if (!val) return '';
     const m = Math.floor(val / 60); 
     const s = Math.round(val % 60); 
     return `${m}:${s.toString().padStart(2, '0')}`; 
 };
-
-// --- GLOBAL STATE FOR LOCKING ---
-const registry = {
-    svgs: [],     
-    charts: []    
-};
-
-// Global Click Listener (Handles Unsticking)
-document.addEventListener('click', (e) => {
-    registry.svgs.forEach(item => {
-        if (item.isLocked && !item.element.contains(e.target)) {
-            item.reset();
-        }
-    });
-
-    registry.charts.forEach(chart => {
-        if (chart.options.isLocked && chart.canvas && !chart.canvas.contains(e.target)) {
-            chart.options.isLocked = false;
-            chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
-            chart.setActiveElements([]);
-            chart.tooltip.setActiveElements([], {x:0,y:0});
-            chart.update();
-            
-            const tooltipEl = document.getElementById(`tooltip-${chart.canvas.id}`);
-            if (tooltipEl) tooltipEl.style.opacity = 0;
-        }
-    });
-});
 
 // --- CUSTOM PLUGIN: Vertical Line for Chart.js ---
 const verticalLinePlugin = {
@@ -64,18 +35,37 @@ const verticalLinePlugin = {
     }
 };
 
+// Track Chart Instances for Global Clicks
+const activeChartInstances = {};
+
+// Global Click Listener for "Unsticking"
+document.addEventListener('click', (e) => {
+    Object.values(activeChartInstances).forEach(chart => {
+        if (chart.canvas && !chart.canvas.contains(e.target)) {
+            // Clicked outside chart -> Unlock
+            if (chart.options.isLocked) {
+                chart.options.isLocked = false;
+                chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+                chart.setActiveElements([]);
+                chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                chart.update();
+            }
+        }
+    });
+});
+
 export const FTPCharts = {
     
-    // --- 1. SVG RENDERER (Power/Pace Curves) ---
+    // --- 1. SVG RENDERER ---
     renderSvgCurve(data, options) {
         const { width = 600, height = 250, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
         const xVals = data.map(d => d.x);
+        const yVals = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v);
         
         if (!xVals.length) return '<div class="text-xs text-slate-500 p-4 text-center">No Data</div>';
 
         const minX = Math.min(...xVals), maxX = Math.max(...xVals);
-        const yVals = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v);
         let minY = Math.min(...yVals), maxY = Math.max(...yVals);
         
         const buf = (maxY - minY) * 0.1; 
@@ -85,12 +75,13 @@ export const FTPCharts = {
         // Font Style to match Chart.js
         const fontStyle = 'font-family="ui-sans-serif, system-ui, sans-serif" font-size="10"';
 
-        // Grid & Y-Axis Labels
         let gridHtml = '';
+        
+        // Y-Axis Grid
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
-            // FIX: Use formatPaceSec for distance/running (val is in seconds)
+            // FIX: Use formatPaceSec for distance charts (val is in seconds)
             const lbl = xType === 'distance' ? formatPaceSec(val) : Math.round(val);
             
             gridHtml += `
@@ -98,7 +89,7 @@ export const FTPCharts = {
                 <text x="${pad.l-5}" y="${y+3}" text-anchor="end" ${fontStyle} fill="#94a3b8">${lbl}</text>`;
         }
 
-        // X-Axis Grid & Labels
+        // X-Axis Grid
         let ticks = [];
         if (xType === 'time') {
             ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
@@ -136,6 +127,7 @@ export const FTPCharts = {
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
                 <circle id="${options.containerId}-lock-dot" cx="0" cy="${height-pad.b}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
             </svg>
+            <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[220px] pointer-events-none transition-all duration-75 text-xs"></div>
         </div>`;
     },
 
@@ -148,40 +140,33 @@ export const FTPCharts = {
         return html;
     },
 
-    // --- 2. SVG INTERACTION (Tooltip logic) ---
+    // --- 2. SVG INTERACTION ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
         const lockDot = document.getElementById(`${containerId}-lock-dot`);
-        
-        if (!svg || !guide) return;
-
-        let tooltip = document.getElementById(`tooltip-${containerId}`);
-        if (!tooltip) {
-            tooltip = document.createElement('div');
-            tooltip.id = `tooltip-${containerId}`;
-            tooltip.className = 'fixed hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl z-[9999] min-w-[220px] pointer-events-none transition-opacity duration-75 text-xs';
-            document.body.appendChild(tooltip);
-        }
+        const tooltip = document.getElementById(`${containerId}-tooltip`);
+        if (!svg || !guide || !tooltip) return;
 
         const { width = 600, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
         const minX = Math.min(...data.map(d => d.x)), maxX = Math.max(...data.map(d => d.x));
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
-        const state = { 
-            isLocked: false, 
-            element: svg,
-            reset: () => {
-                state.isLocked = false;
-                guide.style.opacity = '0';
-                lockDot.style.opacity = '0';
-                tooltip.classList.add('hidden');
-            }
-        };
-        registry.svgs.push(state);
+        let isLocked = false;
 
-        const updateView = (clientX, clientY) => {
+        const reset = () => {
+            isLocked = false;
+            guide.style.opacity = '0';
+            tooltip.classList.add('hidden');
+            lockDot.style.opacity = '0';
+        };
+
+        document.addEventListener('click', (e) => {
+            if (isLocked && !svg.contains(e.target)) reset();
+        });
+
+        const updateTooltip = (clientX) => {
             const rect = svg.getBoundingClientRect();
             const mouseX = (clientX - rect.left) * (width / rect.width);
             
@@ -191,17 +176,17 @@ export const FTPCharts = {
                 if (dist < minDist) { minDist = dist; closest = pt; }
             }
 
-            if (closest && (state.isLocked || minDist < 50)) {
+            if (closest && (isLocked || minDist < 50)) {
                 guide.setAttribute('x1', closest.px);
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
                 
                 lockDot.setAttribute('cx', closest.px);
                 lockDot.setAttribute('cy', height - pad.b);
-                lockDot.style.opacity = state.isLocked ? '1' : '0';
+                lockDot.style.opacity = isLocked ? '1' : '0';
 
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
-                // FIX: Use formatPaceSec for Tooltip values too
+                // FIX: Use formatPaceSec for tooltips too
                 const valAll = xType === 'distance' ? formatPaceSec(closest.yAll) : `${Math.round(closest.yAll)}w`;
                 const val6w = closest.y6w ? (xType === 'distance' ? formatPaceSec(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
                 const dateAll = closest.dateAll || '--';
@@ -231,221 +216,206 @@ export const FTPCharts = {
                     </div>`;
 
                 tooltip.classList.remove('hidden');
-
-                const chartLeft = rect.left + window.scrollX;
-                const chartTop = rect.top + window.scrollY;
-                const ptX = (closest.px / width) * rect.width;
                 
-                const screenX = chartLeft + ptX;
-                const screenY = chartTop;
-                
-                let leftPos = screenX;
-                let transform = 'translate(-50%, -100%)'; 
-
-                if (ptX > rect.width * 0.6) {
-                    leftPos = screenX - 10; 
-                    transform = 'translate(-100%, -100%)'; 
+                const relX = (closest.px / width) * rect.width;
+                if (closest.px > width * 0.6) {
+                    tooltip.style.left = 'auto';
+                    tooltip.style.right = `${rect.width - relX + 15}px`;
                 } else {
-                    leftPos = screenX + 10; 
-                    transform = 'translate(0, -100%)'; 
+                    tooltip.style.right = 'auto';
+                    tooltip.style.left = `${relX + 15}px`;
                 }
-
-                tooltip.style.left = `${leftPos}px`;
-                tooltip.style.top = `${screenY + (state.isLocked ? 0 : 20)}px`; 
-                tooltip.style.transform = transform;
+                tooltip.style.top = '10px'; 
             }
         };
 
         svg.addEventListener('click', (e) => {
             e.stopPropagation();
-            state.isLocked = true;
-            updateView(e.clientX, e.clientY);
+            isLocked = true;
+            updateTooltip(e.clientX);
         });
 
         svg.addEventListener('mousemove', (e) => {
-            if (!state.isLocked) updateView(e.clientX, e.clientY);
+            if (!isLocked) updateTooltip(e.clientX);
         });
 
         svg.addEventListener('mouseleave', () => {
-            if (!state.isLocked) state.reset();
+            if (!isLocked) reset();
         });
     },
 
     // --- 3. CHART.JS RENDERERS ---
     renderBikeHistory(canvasId, data, color) {
-        this._renderHistoryChart(canvasId, data, color, 'Bike');
-    },
-
-    renderRunHistory(canvasId, data, color) {
-        this._renderHistoryChart(canvasId, data, color, 'Run');
-    },
-
-    _renderHistoryChart(canvasId, data, color, type) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
 
-        const isRun = type === 'Run';
-        const secAxisColor = isRun ? '#ef4444' : '#34d399';
-
-        const datasets = [
-            { 
-                label: isRun ? 'Pace' : 'FTP', 
-                data: data.map(d => isRun ? d.pace : d.ftp), 
-                borderColor: color, backgroundColor: color+'20', 
-                pointBackgroundColor: color,
-                borderWidth: 2, pointRadius: 0, pointHitRadius: 20, pointHoverRadius: 4, 
-                tension: 0.2, yAxisID: 'y' 
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.map(d => d.date),
+                datasets: [
+                    { 
+                        label: 'FTP', data: data.map(d => d.ftp), 
+                        borderColor: color, backgroundColor: color+'20', 
+                        pointBackgroundColor: color,
+                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y' 
+                    },
+                    { 
+                        label: 'W/kg', data: data.map(d => d.wkg), 
+                        borderColor: '#34d399', borderWidth: 2, 
+                        pointBackgroundColor: '#34d399',
+                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y1' 
+                    }
+                ]
             },
-            { 
-                label: isRun ? 'LTHR' : 'W/kg', 
-                data: data.map(d => isRun ? d.lthr : d.wkg), 
-                borderColor: secAxisColor, borderWidth: 1, 
-                borderDash: isRun ? [3,3] : [],
-                pointBackgroundColor: secAxisColor,
-                pointRadius: 0, pointHitRadius: 20, pointHoverRadius: 4, 
-                tension: 0.2, yAxisID: 'y1' 
-            }
-        ];
+            options: this._getCommonOptions({
+                y: { display: true, position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 },
+                y1: { display: true, position: 'right', grid: { display: false }, ticks: { color: '#34d399' }, suggestedMin: 2.0 }
+            }),
+            plugins: [verticalLinePlugin]
+        });
+        activeChartInstances[canvasId] = chart;
+    },
+
+    renderRunHistory(canvasId, data, color) {
+        const ctx = document.getElementById(canvasId);
+        if (!ctx || !data.length) return;
 
         const chart = new Chart(ctx, {
             type: 'line',
-            data: { labels: data.map(d => d.date), datasets },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                isLocked: false,
-                events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-                
-                onClick: (e, elements, chart) => {
-                    e.native.stopPropagation();
-                    if (elements.length > 0) {
-                        chart.options.isLocked = true;
-                        chart.options.events = ['click']; // disable hover
-                        chart.setActiveElements(elements);
-                        chart.tooltip.setActiveElements(elements);
-                        chart.update();
-                    } else {
-                        // Reset if clicked background
-                        chart.options.isLocked = false;
-                        chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
-                        chart.setActiveElements([]);
-                        chart.tooltip.setActiveElements([], {x:0,y:0});
-                        chart.update();
-                    }
-                },
-                scales: { 
-                    x: { 
-                        display: true, 
-                        grid: { display: false },
-                        ticks: { 
-                            maxTicksLimit: 8, // Relaxed limit to show dates
-                            color: '#64748b',
-                            font: { family: 'ui-sans-serif, system-ui, sans-serif', size: 10 }
-                        } 
+            data: {
+                labels: data.map(d => d.date),
+                datasets: [
+                    { 
+                        label: 'Pace', data: data.map(d => d.pace), 
+                        borderColor: color, backgroundColor: color+'20', 
+                        pointBackgroundColor: color,
+                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y' 
                     },
-                    y: { 
-                        display: true, // Force display
-                        position: 'left', 
-                        grid: { color: '#334155' }, 
-                        ticks: { 
-                            color: '#94a3b8', 
-                            callback: isRun ? formatPaceSec : null,
-                            font: { family: 'ui-sans-serif, system-ui, sans-serif', size: 10 }
-                        }, 
-                        reverse: isRun 
-                    },
-                    y1: { 
-                        display: true, // Force display
-                        position: 'right', 
-                        grid: { display: false }, 
-                        ticks: { 
-                            color: secAxisColor, 
-                            font: { family: 'ui-sans-serif, system-ui, sans-serif', size: 10 }
-                        }, 
-                        suggestedMin: isRun ? 130 : 2.0 
+                    { 
+                        label: 'LTHR', data: data.map(d => d.lthr), 
+                        borderColor: '#ef4444', borderWidth: 1, borderDash: [3,3], 
+                        pointBackgroundColor: '#ef4444',
+                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
+                        tension: 0.2, yAxisID: 'y1' 
                     }
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        enabled: false, 
-                        external: (context) => this._updateChartJsTooltip(context, canvasId)
-                    }
-                }
+                ]
             },
+            options: this._getCommonOptions({
+                y: { display: true, position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: formatPaceSec }, reverse: true },
+                y1: { display: true, position: 'right', grid: { display: false }, ticks: { color: '#ef4444' }, suggestedMin: 130 }
+            }),
             plugins: [verticalLinePlugin]
         });
-        
-        registry.charts.push(chart);
+        activeChartInstances[canvasId] = chart;
     },
 
-    _updateChartJsTooltip(context, canvasId) {
-        const tooltipModel = context.tooltip;
-        
-        let tooltipEl = document.getElementById(`tooltip-${canvasId}`);
-        if (!tooltipEl) {
-            tooltipEl = document.createElement('div');
-            tooltipEl.id = `tooltip-${canvasId}`;
-            tooltipEl.className = 'fixed pointer-events-none transition-opacity duration-75 text-xs bg-slate-900/95 border border-slate-600 rounded shadow-xl z-[9999] min-w-[220px]';
-            document.body.appendChild(tooltipEl);
-        }
+    _getCommonOptions(scales) {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            isLocked: false,
+            events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+            onClick: (e, elements, chart) => {
+                e.native.stopPropagation();
+                if (elements.length > 0) {
+                    chart.options.isLocked = true;
+                    chart.options.events = ['click'];
+                    chart.setActiveElements(elements);
+                    chart.tooltip.setActiveElements(elements);
+                    chart.update();
+                } else {
+                    chart.options.isLocked = false;
+                    chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+                    chart.setActiveElements([]);
+                    chart.tooltip.setActiveElements([], {x:0,y:0});
+                    chart.update();
+                }
+            },
+            scales: { 
+                // FIX: Relaxed maxTicksLimit to show dates
+                x: { 
+                    display: true, 
+                    ticks: { maxTicksLimit: 8, color: '#64748b' }, 
+                    grid: { display: false } 
+                }, 
+                ...scales 
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: false, 
+                    external: (context) => {
+                        const tooltipModel = context.tooltip;
+                        
+                        let tooltipEl = document.getElementById('chartjs-tooltip');
+                        if (!tooltipEl) {
+                            tooltipEl = document.createElement('div');
+                            tooltipEl.id = 'chartjs-tooltip';
+                            tooltipEl.className = 'absolute bg-slate-900/95 border border-slate-600 rounded shadow-xl pointer-events-none transition-all duration-75 text-xs z-50 min-w-[200px]';
+                            document.body.appendChild(tooltipEl);
+                        }
 
-        if (tooltipModel.opacity === 0) {
-            tooltipEl.style.opacity = 0;
-            return;
-        }
+                        if (tooltipModel.opacity === 0) {
+                            tooltipEl.style.opacity = 0;
+                            return;
+                        }
 
-        if (tooltipModel.body) {
-            const dateStr = tooltipModel.title || '';
-            let innerHtml = `
-                <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
-                    <span class="font-bold text-slate-200">${dateStr}</span>
-                </div>
-                <div class="p-3 space-y-2">`;
+                        if (tooltipModel.body) {
+                            const dateStr = tooltipModel.title || '';
+                            let innerHtml = `
+                                <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
+                                    <span class="font-bold text-slate-200">${dateStr}</span>
+                                </div>
+                                <div class="p-3 space-y-2">`;
 
-            tooltipModel.dataPoints.forEach(dp => {
-                const ds = context.chart.data.datasets[dp.datasetIndex];
-                let val = dp.formattedValue;
-                if(ds.label === 'Pace') val = formatPaceSec(dp.raw);
+                            tooltipModel.dataPoints.forEach(dp => {
+                                const ds = context.chart.data.datasets[dp.datasetIndex];
+                                let val = dp.formattedValue;
+                                if(ds.label === 'Pace') val = formatPaceSec(dp.raw);
 
-                innerHtml += `
-                    <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full" style="background:${ds.borderColor}"></span>
-                            <span class="text-slate-400">${ds.label}</span>
-                        </div>
-                        <span class="font-mono text-slate-500 text-[10px] text-center">--</span>
-                        <span class="font-mono text-white font-bold text-sm text-right">${val}</span>
-                    </div>`;
-            });
+                                innerHtml += `
+                                    <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full" style="background:${ds.borderColor}"></span>
+                                            <span class="text-slate-400">${ds.label}</span>
+                                        </div>
+                                        <span class="font-mono text-slate-500 text-[10px] text-center">--</span>
+                                        <span class="font-mono text-white font-bold text-sm text-right">${val}</span>
+                                    </div>`;
+                            });
 
-            innerHtml += `</div>`;
-            tooltipEl.innerHTML = innerHtml;
-        }
+                            innerHtml += `</div>`;
+                            tooltipEl.innerHTML = innerHtml;
+                        }
 
-        const position = context.chart.canvas.getBoundingClientRect();
-        
-        const chartLeft = position.left + window.scrollX;
-        const chartTop = position.top + window.scrollY;
-        
-        const tooltipX = chartLeft + tooltipModel.caretX;
-        const tooltipY = chartTop + tooltipModel.caretY;
+                        const position = context.chart.canvas.getBoundingClientRect();
+                        const tooltipX = position.left + window.pageXOffset + tooltipModel.caretX;
+                        const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY - 10; 
 
-        let leftPos = tooltipX;
-        let transform = 'translate(-50%, -100%)';
+                        let leftPos = tooltipX;
+                        let transform = 'translate(-50%, -100%)';
 
-        if (tooltipModel.caretX > context.chart.width * 0.6) {
-            leftPos = tooltipX - 10;
-            transform = 'translate(-100%, -100%)';
-        } else {
-            leftPos = tooltipX + 10;
-            transform = 'translate(0, -100%)';
-        }
+                        if (tooltipModel.caretX > context.chart.width * 0.6) {
+                            leftPos = tooltipX - 10;
+                            transform = 'translate(-100%, -100%)';
+                        } else {
+                            leftPos = tooltipX + 10;
+                            transform = 'translate(0, -100%)';
+                        }
 
-        tooltipEl.style.opacity = 1;
-        tooltipEl.style.left = leftPos + 'px';
-        tooltipEl.style.top = (tooltipY - 10) + 'px';
-        tooltipEl.style.transform = transform;
+                        tooltipEl.style.opacity = 1;
+                        tooltipEl.style.left = leftPos + 'px';
+                        tooltipEl.style.top = tooltipY + 'px';
+                        tooltipEl.style.transform = transform;
+                        tooltipEl.style.pointerEvents = 'none';
+                    }
+                }
+            }
+        };
     }
 };

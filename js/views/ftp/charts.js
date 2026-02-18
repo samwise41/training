@@ -11,7 +11,6 @@ const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.
 const verticalLinePlugin = {
     id: 'verticalLine',
     afterDraw: (chart) => {
-        // Only draw if we have an active tooltip/hover state
         if (chart.tooltip?._active?.length) {
             const ctx = chart.ctx;
             ctx.save();
@@ -24,13 +23,32 @@ const verticalLinePlugin = {
             ctx.moveTo(x, topY);
             ctx.lineTo(x, bottomY);
             ctx.lineWidth = 1;
-            ctx.strokeStyle = '#cbd5e1'; // matches SVG guide stroke
+            ctx.strokeStyle = '#cbd5e1'; 
             ctx.setLineDash([4, 4]);
             ctx.stroke();
             ctx.restore();
         }
     }
 };
+
+// Track Chart Instances for Global Clicks
+const activeChartInstances = {};
+
+// Global Click Listener for "Unsticking"
+document.addEventListener('click', (e) => {
+    Object.values(activeChartInstances).forEach(chart => {
+        if (chart.canvas && !chart.canvas.contains(e.target)) {
+            // Clicked outside chart -> Unlock
+            if (chart.options.isLocked) {
+                chart.options.isLocked = false;
+                chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+                chart.setActiveElements([]);
+                chart.tooltip.setActiveElements([], { x: 0, y: 0 });
+                chart.update();
+            }
+        }
+    });
+});
 
 export const FTPCharts = {
     
@@ -52,7 +70,6 @@ export const FTPCharts = {
 
         let gridHtml = '';
         
-        // Y-Axis Grid
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
@@ -60,7 +77,6 @@ export const FTPCharts = {
             gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
         }
 
-        // X-Axis Grid
         let ticks = [];
         if (xType === 'time') {
             ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
@@ -94,7 +110,7 @@ export const FTPCharts = {
                 <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2"/>
                 ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
-                <circle id="${options.containerId}-lock-dot" cx="0" cy="${height-pad.b}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
+                <circle id="${options.containerId}-lock-dot" cx="0" cy="${pad.t}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
             </svg>
             <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[220px] pointer-events-none transition-all duration-75 text-xs"></div>
         </div>`;
@@ -109,7 +125,7 @@ export const FTPCharts = {
         return html;
     },
 
-    // --- 2. SVG INTERACTION (Sticky Tooltip) ---
+    // --- 2. SVG INTERACTION ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
@@ -123,6 +139,18 @@ export const FTPCharts = {
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
         let isLocked = false;
+
+        const reset = () => {
+            isLocked = false;
+            guide.style.opacity = '0';
+            tooltip.classList.add('hidden');
+            lockDot.style.opacity = '0';
+        };
+
+        // Document click unstick
+        document.addEventListener('click', (e) => {
+            if (isLocked && !svg.contains(e.target)) reset();
+        });
 
         const updateTooltip = (clientX) => {
             const rect = svg.getBoundingClientRect();
@@ -139,13 +167,10 @@ export const FTPCharts = {
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
                 
-                // Show Lock Dot if locked
-                if(isLocked) {
-                    lockDot.setAttribute('cx', closest.px);
-                    lockDot.style.opacity = '1';
-                } else {
-                    lockDot.style.opacity = '0';
-                }
+                // Red Dot
+                lockDot.setAttribute('cx', closest.px);
+                lockDot.setAttribute('cy', height - pad.b);
+                lockDot.style.opacity = isLocked ? '1' : '0';
 
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
@@ -191,7 +216,8 @@ export const FTPCharts = {
         };
 
         svg.addEventListener('click', (e) => {
-            isLocked = true; // Lock it
+            e.stopPropagation();
+            isLocked = true; // Click always locks to new position
             updateTooltip(e.clientX);
         });
 
@@ -200,20 +226,16 @@ export const FTPCharts = {
         });
 
         svg.addEventListener('mouseleave', () => {
-            if (!isLocked) {
-                guide.style.opacity = '0';
-                tooltip.classList.add('hidden');
-                lockDot.style.opacity = '0';
-            }
+            if (!isLocked) reset();
         });
     },
 
-    // --- 3. CHART.JS RENDERERS (Clean Lines + Vertical Guide) ---
+    // --- 3. CHART.JS RENDERERS (Clean Lines, Sticky, Vertical Guide) ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: data.map(d => d.date),
@@ -240,13 +262,14 @@ export const FTPCharts = {
             }),
             plugins: [verticalLinePlugin]
         });
+        activeChartInstances[canvasId] = chart;
     },
 
     renderRunHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
 
-        new Chart(ctx, {
+        const chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: data.map(d => d.date),
@@ -273,6 +296,7 @@ export const FTPCharts = {
             }),
             plugins: [verticalLinePlugin]
         });
+        activeChartInstances[canvasId] = chart;
     },
 
     _getCommonOptions(scales) {
@@ -280,6 +304,27 @@ export const FTPCharts = {
             responsive: true,
             maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
+            isLocked: false, // Custom flag
+            events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+            onClick: (e, elements, chart) => {
+                e.native.stopPropagation(); // Stop bubbling to document
+
+                if (elements.length > 0) {
+                    // Clicked chart -> Lock
+                    chart.options.isLocked = true;
+                    chart.options.events = ['click']; // Disable hover events to freeze state
+                    chart.setActiveElements(elements);
+                    chart.tooltip.setActiveElements(elements);
+                    chart.update();
+                } else {
+                    // Clicked background -> Unlock
+                    chart.options.isLocked = false;
+                    chart.options.events = ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'];
+                    chart.setActiveElements([]);
+                    chart.tooltip.setActiveElements([], {x:0,y:0});
+                    chart.update();
+                }
+            },
             scales: { 
                 x: { display: true, ticks: { maxTicksLimit: 6, color: '#64748b', font: { size: 10 } }, grid: { display: false } }, 
                 ...scales 
@@ -338,21 +383,20 @@ export const FTPCharts = {
 
                         // Smart Positioning: Flip left if on right side
                         let leftPos = tooltipX;
-                        let transform = 'translate(-50%, -100%)'; // Default: Center Above
+                        let transform = 'translate(-50%, -100%)'; 
 
                         if (tooltipModel.caretX > context.chart.width * 0.6) {
-                            leftPos = tooltipX - 10; // Shift slightly left of cursor
-                            transform = 'translate(-100%, -100%)'; // Anchor bottom-right corner
+                            leftPos = tooltipX - 10; 
+                            transform = 'translate(-100%, -100%)'; 
                         } else {
-                            leftPos = tooltipX + 10; // Shift slightly right of cursor
-                            transform = 'translate(0, -100%)'; // Anchor bottom-left corner
+                            leftPos = tooltipX + 10; 
+                            transform = 'translate(0, -100%)'; 
                         }
 
                         tooltipEl.style.opacity = 1;
                         tooltipEl.style.left = leftPos + 'px';
                         tooltipEl.style.top = tooltipY + 'px';
                         tooltipEl.style.transform = transform;
-                        tooltipEl.style.pointerEvents = 'none';
                     }
                 }
             }

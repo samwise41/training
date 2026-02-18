@@ -40,12 +40,14 @@ export async function initCharts() {
     FTPData.fetchCycling().then(data => {
         const el = document.getElementById(ids.cycleCurve);
         if (el && data.length) {
-            // FIX: Map 'at_date' to 'date' so the tooltip can find it
+            // FIX: Map correct date fields from JSON
+            // at_date = All Time Date, sw_date = Six Week Date
             const pts = data.map(d => ({ 
                 x: d.seconds, 
                 yAll: d.all_time_watts, 
                 y6w: d.six_week_watts,
-                date: d.at_date 
+                dateAll: d.at_date, 
+                date6w: d.sw_date
             })).filter(d => d.x >= 1);
             
             el.innerHTML = FTPCharts.renderSvgCurve(pts, { 
@@ -61,6 +63,7 @@ export async function initCharts() {
     FTPData.fetchRunning().then(data => {
         const el = document.getElementById(ids.runCurve);
         if (el && data.length) {
+            // Data is already parsed with dateAll/date6w in data.js
             el.innerHTML = FTPCharts.renderSvgCurve(data, { 
                 containerId: ids.runCurve,
                 width: 600, height: 250, xType: 'distance', 

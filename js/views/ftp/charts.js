@@ -3,26 +3,29 @@ import { KEY_DISTANCES } from './data.js';
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
-const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
-const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.round(val % 60); return `${m}:${s.toString().padStart(2, '0')}`; };
+
+// Formatter for Minutes:Seconds (expects input in seconds)
+const formatPaceSec = (val) => { 
+    if (!val || isNaN(val)) return '';
+    const m = Math.floor(val / 60); 
+    const s = Math.round(val % 60); 
+    return `${m}:${s.toString().padStart(2, '0')}`; 
+};
 
 // --- GLOBAL STATE FOR LOCKING ---
-// We track all active charts here to handle "click outside to unstick"
 const registry = {
-    svgs: [],     // { id, element, reset() }
-    charts: []    // Chart.js instances
+    svgs: [],     
+    charts: []    
 };
 
 // Global Click Listener (Handles Unsticking)
 document.addEventListener('click', (e) => {
-    // 1. Reset SVGs if clicked outside
     registry.svgs.forEach(item => {
         if (item.isLocked && !item.element.contains(e.target)) {
             item.reset();
         }
     });
 
-    // 2. Reset Chart.js instances if clicked outside
     registry.charts.forEach(chart => {
         if (chart.options.isLocked && chart.canvas && !chart.canvas.contains(e.target)) {
             chart.options.isLocked = false;
@@ -31,7 +34,6 @@ document.addEventListener('click', (e) => {
             chart.tooltip.setActiveElements([], {x:0,y:0});
             chart.update();
             
-            // Hide the custom tooltip element associated with this chart
             const tooltipEl = document.getElementById(`tooltip-${chart.canvas.id}`);
             if (tooltipEl) tooltipEl.style.opacity = 0;
         }
@@ -64,7 +66,7 @@ const verticalLinePlugin = {
 
 export const FTPCharts = {
     
-    // --- 1. SVG RENDERER ---
+    // --- 1. SVG RENDERER (Power/Pace Curves) ---
     renderSvgCurve(data, options) {
         const { width = 600, height = 250, colorAll, color6w, xType } = options;
         const pad = { t: 20, b: 40, l: 40, r: 20 };
@@ -80,15 +82,23 @@ export const FTPCharts = {
         minY = Math.max(0, minY - buf); 
         maxY += buf;
 
-        // Grid & Ticks
+        // Font Style to match Chart.js
+        const fontStyle = 'font-family="ui-sans-serif, system-ui, sans-serif" font-size="10"';
+
+        // Grid & Y-Axis Labels
         let gridHtml = '';
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
-            const lbl = xType === 'distance' ? formatPace(val) : Math.round(val);
-            gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
+            // FIX: Use formatPaceSec for distance/running (val is in seconds)
+            const lbl = xType === 'distance' ? formatPaceSec(val) : Math.round(val);
+            
+            gridHtml += `
+                <line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/>
+                <text x="${pad.l-5}" y="${y+3}" text-anchor="end" ${fontStyle} fill="#94a3b8">${lbl}</text>`;
         }
 
+        // X-Axis Grid & Labels
         let ticks = [];
         if (xType === 'time') {
             ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
@@ -99,7 +109,9 @@ export const FTPCharts = {
         ticks.filter(t => t.v >= minX * 0.9 && t.v <= maxX * 1.1).forEach(t => {
             const x = getLogX(t.v, minX, maxX, width, pad);
             if (x >= pad.l && x <= width - pad.r) {
-                gridHtml += `<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/><text x="${x}" y="${height-15}" text-anchor="middle" font-size="10" fill="#94a3b8">${t.l}</text>`;
+                gridHtml += `
+                    <line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/>
+                    <text x="${x}" y="${height-15}" text-anchor="middle" ${fontStyle} fill="#94a3b8">${t.l}</text>`;
             }
         });
 
@@ -114,7 +126,6 @@ export const FTPCharts = {
             return d;
         };
 
-        // Note: Tooltip is appended to body dynamically in interactions, not here
         return `
         <div class="relative w-full h-full group select-none">
             <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">
@@ -137,7 +148,7 @@ export const FTPCharts = {
         return html;
     },
 
-    // --- 2. SVG INTERACTION ---
+    // --- 2. SVG INTERACTION (Tooltip logic) ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
@@ -145,7 +156,6 @@ export const FTPCharts = {
         
         if (!svg || !guide) return;
 
-        // Create specific tooltip for this chart (appended to body for z-index)
         let tooltip = document.getElementById(`tooltip-${containerId}`);
         if (!tooltip) {
             tooltip = document.createElement('div');
@@ -159,7 +169,6 @@ export const FTPCharts = {
         const minX = Math.min(...data.map(d => d.x)), maxX = Math.max(...data.map(d => d.x));
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
-        // Register for global click management
         const state = { 
             isLocked: false, 
             element: svg,
@@ -183,18 +192,18 @@ export const FTPCharts = {
             }
 
             if (closest && (state.isLocked || minDist < 50)) {
-                // UI Updates
                 guide.setAttribute('x1', closest.px);
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
                 
                 lockDot.setAttribute('cx', closest.px);
+                lockDot.setAttribute('cy', height - pad.b);
                 lockDot.style.opacity = state.isLocked ? '1' : '0';
 
-                // Content
                 const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
-                const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
-                const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
+                // FIX: Use formatPaceSec for Tooltip values too
+                const valAll = xType === 'distance' ? formatPaceSec(closest.yAll) : `${Math.round(closest.yAll)}w`;
+                const val6w = closest.y6w ? (xType === 'distance' ? formatPaceSec(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
                 const dateAll = closest.dateAll || '--';
                 const date6w = closest.date6w || '--';
 
@@ -223,19 +232,16 @@ export const FTPCharts = {
 
                 tooltip.classList.remove('hidden');
 
-                // Position calculation (Global Coordinates)
                 const chartLeft = rect.left + window.scrollX;
                 const chartTop = rect.top + window.scrollY;
                 const ptX = (closest.px / width) * rect.width;
                 
                 const screenX = chartLeft + ptX;
-                const screenY = chartTop; // Align top of tooltip to top of chart area? Or cursor?
-                // Let's align to the point's X, but keep Y at top of chart to avoid covering data
+                const screenY = chartTop;
                 
                 let leftPos = screenX;
                 let transform = 'translate(-50%, -100%)'; 
 
-                // Flip Logic
                 if (ptX > rect.width * 0.6) {
                     leftPos = screenX - 10; 
                     transform = 'translate(-100%, -100%)'; 
@@ -245,7 +251,7 @@ export const FTPCharts = {
                 }
 
                 tooltip.style.left = `${leftPos}px`;
-                tooltip.style.top = `${screenY + (state.isLocked ? 0 : 20)}px`; // slightly offset
+                tooltip.style.top = `${screenY + (state.isLocked ? 0 : 20)}px`; 
                 tooltip.style.transform = transform;
             }
         };
@@ -279,6 +285,8 @@ export const FTPCharts = {
         if (!ctx || !data.length) return;
 
         const isRun = type === 'Run';
+        const secAxisColor = isRun ? '#ef4444' : '#34d399';
+
         const datasets = [
             { 
                 label: isRun ? 'Pace' : 'FTP', 
@@ -291,9 +299,9 @@ export const FTPCharts = {
             { 
                 label: isRun ? 'LTHR' : 'W/kg', 
                 data: data.map(d => isRun ? d.lthr : d.wkg), 
-                borderColor: '#ef4444', borderWidth: 1, 
+                borderColor: secAxisColor, borderWidth: 1, 
                 borderDash: isRun ? [3,3] : [],
-                pointBackgroundColor: '#ef4444',
+                pointBackgroundColor: secAxisColor,
                 pointRadius: 0, pointHitRadius: 20, pointHoverRadius: 4, 
                 tension: 0.2, yAxisID: 'y1' 
             }
@@ -327,14 +335,41 @@ export const FTPCharts = {
                     }
                 },
                 scales: { 
-                    x: { display: true, ticks: { maxTicksLimit: 6, color: '#64748b' }, grid: { display: false } },
-                    y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: isRun ? formatPaceSec : null }, reverse: isRun },
-                    y1: { position: 'right', grid: { display: false }, ticks: { color: '#ef4444' }, suggestedMin: isRun ? 130 : 2.0 }
+                    x: { 
+                        display: true, 
+                        grid: { display: false },
+                        ticks: { 
+                            maxTicksLimit: 8, // Relaxed limit to show dates
+                            color: '#64748b',
+                            font: { family: 'ui-sans-serif, system-ui, sans-serif', size: 10 }
+                        } 
+                    },
+                    y: { 
+                        display: true, // Force display
+                        position: 'left', 
+                        grid: { color: '#334155' }, 
+                        ticks: { 
+                            color: '#94a3b8', 
+                            callback: isRun ? formatPaceSec : null,
+                            font: { family: 'ui-sans-serif, system-ui, sans-serif', size: 10 }
+                        }, 
+                        reverse: isRun 
+                    },
+                    y1: { 
+                        display: true, // Force display
+                        position: 'right', 
+                        grid: { display: false }, 
+                        ticks: { 
+                            color: secAxisColor, 
+                            font: { family: 'ui-sans-serif, system-ui, sans-serif', size: 10 }
+                        }, 
+                        suggestedMin: isRun ? 130 : 2.0 
+                    }
                 },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        enabled: false, // Custom external
+                        enabled: false, 
                         external: (context) => this._updateChartJsTooltip(context, canvasId)
                     }
                 }
@@ -348,7 +383,6 @@ export const FTPCharts = {
     _updateChartJsTooltip(context, canvasId) {
         const tooltipModel = context.tooltip;
         
-        // Create unique tooltip for this chart
         let tooltipEl = document.getElementById(`tooltip-${canvasId}`);
         if (!tooltipEl) {
             tooltipEl = document.createElement('div');
@@ -392,15 +426,12 @@ export const FTPCharts = {
 
         const position = context.chart.canvas.getBoundingClientRect();
         
-        // Coordinates relative to viewport
         const chartLeft = position.left + window.scrollX;
         const chartTop = position.top + window.scrollY;
         
-        // Chart.js gives caretX/Y relative to the canvas
         const tooltipX = chartLeft + tooltipModel.caretX;
         const tooltipY = chartTop + tooltipModel.caretY;
 
-        // Smart Positioning
         let leftPos = tooltipX;
         let transform = 'translate(-50%, -100%)';
 

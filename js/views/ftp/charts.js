@@ -1,248 +1,226 @@
-// js/views/ftp/charts.js
-import { TooltipManager } from '../../utils/tooltipManager.js';
+import { Formatters } from '../../utils/formatting.js';
 
-// --- HELPERS ---
-const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
-const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
-const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
-const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.round(val % 60); return `${m}:${s.toString().padStart(2, '0')}`; };
+// --- 1. GLOBAL HANDLERS (Tooltip Logic) ---
 
-export const FTPCharts = {
-    
-    // --- 1. SVG RENDERER ---
-    renderSvgCurve(data, options) {
-        const { width = 600, height = 250, colorAll, color6w, xType } = options;
-        const pad = { t: 20, b: 40, l: 40, r: 20 };
-        const xVals = data.map(d => d.x);
-        const yVals = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v);
+// FTP History Tooltip (Updated to match Power Curve style)
+window.handleFTPClick = (e, date, ftp, weight, wkg, source) => {
+    if (window.TooltipManager) {
+        e.stopPropagation();
         
-        if (!xVals.length) return '<div class="text-xs text-slate-500 p-4 text-center">No Data</div>';
-
-        const minX = Math.min(...xVals), maxX = Math.max(...xVals);
-        let minY = Math.min(...yVals), maxY = Math.max(...yVals);
-        const buf = (maxY - minY) * 0.1; minY = Math.max(0, minY - buf); maxY += buf;
-
-        let gridHtml = '';
+        // Define color based on source
+        const isZwift = source.toLowerCase().includes('zwift');
+        const colorClass = isZwift ? 'text-orange-400' : 'text-emerald-400';
+        const borderColor = isZwift ? 'border-orange-500/30' : 'border-emerald-500/30';
         
-        // Y-Axis
-        for (let i = 0; i <= 4; i++) {
-            const val = minY + (i/4 * (maxY - minY));
-            const y = getLinY(val, minY, maxY, height, pad);
-            const lbl = xType === 'distance' ? formatPace(val) : Math.round(val);
-            gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
-        }
-
-        // X-Axis
-        let ticks = [];
-        if (xType === 'time') {
-            ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
-        } else {
-            ticks = [
-                {v:0.248,l:'400m'}, {v:1.0,l:'1mi'}, {v:3.106,l:'5k'},
-                {v:6.213,l:'10k'}, {v:13.109,l:'Half'}, {v:26.218,l:'Full'}
-            ];
-        }
-        
-        ticks.filter(t => t.v >= minX * 0.9 && t.v <= maxX * 1.1).forEach(t => {
-            const x = getLogX(t.v, minX, maxX, width, pad);
-            if (x >= pad.l && x <= width - pad.r) {
-                gridHtml += `<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/><text x="${x}" y="${height-15}" text-anchor="middle" font-size="10" fill="#94a3b8">${t.l}</text>`;
-            }
-        });
-
-        const genPath = (key) => {
-            let d = '';
-            data.forEach((p, i) => {
-                if (!p[key]) return;
-                const x = getLogX(p.x, minX, maxX, width, pad);
-                const y = getLinY(p[key], minY, maxY, height, pad);
-                d += (i===0 || d==='') ? `M ${x} ${y}` : ` L ${x} ${y}`;
-            });
-            return d;
-        };
-
-        return `
-        <div class="relative w-full h-full group select-none">
-            <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">
-                ${gridHtml}
-                <path d="${genPath('y6w')}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.7"/>
-                <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2"/>
-                ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
-                <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
-                <circle id="${options.containerId}-lock-dot" cx="0" cy="${pad.t}" r="3" fill="#ef4444" opacity="0" />
-            </svg>
-            <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-700 rounded shadow-xl p-3 z-50 min-w-[140px] pointer-events-none transition-all duration-75"></div>
-        </div>`;
-    },
-
-    _renderPoints(data, minX, maxX, minY, maxY, width, height, pad, cAll, c6w) {
-        let html = '';
-        data.forEach(p => {
-            const x = getLogX(p.x, minX, maxX, width, pad);
-            if(p.yAll) html += `<circle cx="${x}" cy="${getLinY(p.yAll, minY, maxY, height, pad)}" r="3" fill="#0f172a" stroke="${cAll}" stroke-width="2" />`;
-        });
-        return html;
-    },
-
-    // --- 2. SVG INTERACTION ---
-    setupSvgInteractions(containerId, data, options) {
-        const svg = document.getElementById(`${containerId}-svg`);
-        const guide = document.getElementById(`${containerId}-guide`);
-        const tooltip = document.getElementById(`${containerId}-tooltip`);
-        if (!svg || !guide || !tooltip) return;
-
-        const { width = 600, colorAll, color6w, xType } = options;
-        const pad = { t: 20, b: 40, l: 40, r: 20 };
-        const xVals = data.map(d => d.x);
-        const minX = Math.min(...xVals), maxX = Math.max(...xVals);
-        const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
-
-        svg.addEventListener('mousemove', (e) => {
-            const rect = svg.getBoundingClientRect();
-            const mouseX = (e.clientX - rect.left) * (width / rect.width);
-            
-            let closest = lookup[0], minDist = Infinity;
-            for (const pt of lookup) {
-                const dist = Math.abs(pt.px - mouseX);
-                if (dist < minDist) { minDist = dist; closest = pt; }
-            }
-
-            if (closest && minDist < 50) {
-                guide.setAttribute('x1', closest.px);
-                guide.setAttribute('x2', closest.px);
-                guide.style.opacity = '1';
-
-                const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m` : `${closest.x.toFixed(1)}mi`);
-                const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
-                const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
-
-                tooltip.innerHTML = `
-                    <div class="border-b border-slate-700 pb-1 mb-2">
-                        <span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">${label}</span>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex justify-between items-center text-xs gap-3">
-                            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background:${colorAll}"></span><span class="text-slate-400">All Time</span></div>
-                            <span class="font-mono text-white font-bold">${valAll}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs gap-3">
-                            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full border border-slate-500" style="background:${color6w}"></span><span class="text-slate-400">6 Weeks</span></div>
-                            <span class="font-mono text-white font-bold">${val6w}</span>
-                        </div>
-                    </div>`;
-
-                tooltip.classList.remove('hidden');
+        const html = `
+            <div class="min-w-[180px]">
+                <div class="flex items-center justify-between border-b ${borderColor} pb-2 mb-2">
+                    <span class="text-xs font-bold text-slate-200">${date}</span>
+                    <i class="fa-solid fa-bolt ${colorClass} text-xs"></i>
+                </div>
                 
-                const relX = (closest.px / width) * rect.width;
-                if (closest.px > width * 0.6) {
-                    tooltip.style.left = 'auto';
-                    tooltip.style.right = `${rect.width - relX + 15}px`;
-                } else {
-                    tooltip.style.right = 'auto';
-                    tooltip.style.left = `${relX + 15}px`;
-                }
-            }
-        });
+                <div class="flex justify-between items-end mb-1">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">FTP</span>
+                    <span class="text-lg font-bold text-white">${ftp} <span class="text-[10px] text-slate-500">w</span></span>
+                </div>
 
-        svg.addEventListener('mouseleave', () => {
-            guide.style.opacity = '0';
-            tooltip.classList.add('hidden');
-        });
-    },
+                <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-700/50">
+                    <div>
+                        <div class="text-[9px] text-slate-500 uppercase">Ratio</div>
+                        <div class="text-xs font-mono ${colorClass}">${wkg} w/kg</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-[9px] text-slate-500 uppercase">Weight</div>
+                        <div class="text-xs font-mono text-slate-300">${weight} kg</div>
+                    </div>
+                </div>
+                
+                <div class="mt-2 text-[9px] text-right italic text-slate-500">
+                    via ${source}
+                </div>
+            </div>
+        `;
+        window.TooltipManager.show(e.currentTarget, html, e);
+    }
+};
 
-    // --- 3. CHART.JS RENDERERS (Updated for Solid Dots) ---
-    renderBikeHistory(canvasId, data, color) {
-        const ctx = document.getElementById(canvasId);
-        if (!ctx || !data.length) return;
+// Power Curve Tooltip (Now includes Date)
+window.handlePowerCurveClick = (e, durationLabel, power, wkg, date) => {
+    if (window.TooltipManager) {
+        e.stopPropagation();
+        const html = `
+            <div class="min-w-[160px]">
+                <div class="flex items-center justify-between border-b border-blue-500/30 pb-2 mb-2">
+                    <span class="text-xs font-bold text-slate-200">${durationLabel}</span>
+                    <span class="text-[9px] text-slate-400 font-mono">${date}</span>
+                </div>
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map(d => d.date),
-                datasets: [
-                    { 
-                        label: 'FTP (w)', data: data.map(d => d.ftp), 
-                        borderColor: color, backgroundColor: color+'20', 
-                        pointBackgroundColor: color, // SOLID DOT
-                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y' 
-                    },
-                    { 
-                        label: 'W/kg', data: data.map(d => d.wkg), 
-                        borderColor: '#34d399', borderWidth: 2, 
-                        pointBackgroundColor: '#34d399', // SOLID DOT
-                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y1' 
-                    }
-                ]
-            },
-            options: this._getCommonOptions({
-                y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 },
-                y1: { position: 'right', grid: { display: false }, ticks: { color: '#34d399' }, suggestedMin: 2.0 }
-            }, true)
-        });
-    },
+                <div class="flex justify-between items-end mb-1">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Power</span>
+                    <span class="text-lg font-bold text-blue-400">${power} <span class="text-[10px] text-slate-500">w</span></span>
+                </div>
 
-    renderRunHistory(canvasId, data, color) {
-        const ctx = document.getElementById(canvasId);
-        if (!ctx || !data.length) return;
+                <div class="flex justify-between items-end mt-1">
+                    <span class="text-[10px] text-slate-500 uppercase">Intensity</span>
+                    <span class="text-xs font-mono text-slate-300">${wkg} w/kg</span>
+                </div>
+            </div>
+        `;
+        window.TooltipManager.show(e.currentTarget, html, e);
+    }
+};
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map(d => d.date),
-                datasets: [
-                    { 
-                        label: 'Pace', data: data.map(d => d.pace), 
-                        borderColor: color, backgroundColor: color+'20', 
-                        pointBackgroundColor: color, // SOLID DOT
-                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y' 
-                    },
-                    { 
-                        label: 'LTHR', data: data.map(d => d.lthr), 
-                        borderColor: '#ef4444', borderWidth: 1, borderDash: [3,3], 
-                        pointBackgroundColor: '#ef4444', // SOLID DOT
-                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y1' 
-                    }
-                ]
-            },
-            options: this._getCommonOptions({
-                y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: formatPaceSec }, reverse: true },
-                y1: { position: 'right', grid: { display: false }, ticks: { color: '#ef4444' }, suggestedMin: 130 }
-            }, true)
-        });
-    },
 
-    _getCommonOptions(scales, showLegend = false) {
-        const baseConfig = (window.TooltipManager && window.TooltipManager.createChartConfig)
-            ? window.TooltipManager.createChartConfig()
-            : { interaction: { mode: 'index', intersect: false }, plugins: { tooltip: { enabled: true } } };
+// --- 2. CHART RENDERERS ---
 
-        if (baseConfig.plugins && baseConfig.plugins.tooltip) {
-            baseConfig.plugins.tooltip.usePointStyle = true;
-            baseConfig.plugins.tooltip.boxWidth = 8;
+export const renderFTPHistoryChart = (history) => {
+    if (!history || history.length < 2) return '<div class="p-8 text-center text-slate-500 italic">Not enough FTP history data</div>';
+
+    // Sort by date ascending
+    const data = [...history].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    const width = 800;
+    const height = 300;
+    const pad = { t: 20, b: 40, l: 50, r: 20 };
+
+    // Scales
+    const dates = data.map(d => new Date(d.date).getTime());
+    const ftps = data.map(d => d.ftp);
+    
+    const minTime = Math.min(...dates);
+    const maxTime = Math.max(...dates);
+    const minFtp = Math.min(...ftps) * 0.9;
+    const maxFtp = Math.max(...ftps) * 1.1;
+
+    const getX = (dateStr) => {
+        const t = new Date(dateStr).getTime();
+        return pad.l + ((t - minTime) / (maxTime - minTime)) * (width - pad.l - pad.r);
+    };
+
+    const getY = (val) => {
+        return height - pad.b - ((val - minFtp) / (maxFtp - minFtp)) * (height - pad.t - pad.b);
+    };
+
+    // Generate Path
+    let pathD = `M ${getX(data[0].date)} ${getY(data[0].ftp)}`;
+    let pointsHtml = '';
+    let areaPathD = pathD;
+
+    data.forEach((d, i) => {
+        const x = getX(d.date);
+        const y = getY(d.ftp);
+        
+        if (i > 0) {
+            // Step chart logic (optional, linear is fine for FTP usually, but let's stick to linear)
+            pathD += ` L ${x} ${y}`;
+            areaPathD += ` L ${x} ${y}`;
         }
 
-        return {
-            ...baseConfig, 
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { 
-                x: { display: true, ticks: { maxTicksLimit: 6, color: '#64748b', font: { size: 10 } }, grid: { display: false } }, 
-                ...scales 
-            },
-            plugins: {
-                ...baseConfig.plugins,
-                legend: { 
-                    display: showLegend,
-                    labels: { 
-                        color: '#cbd5e1', font: { size: 10, family: 'monospace' }, boxWidth: 10,
-                        usePointStyle: true
-                    }
-                }
-            }
-        };
-    }
+        // Tooltip Data Prep
+        const wkg = (d.ftp / d.weight).toFixed(2);
+        
+        // Point
+        pointsHtml += `
+            <circle cx="${x}" cy="${y}" r="4" 
+                fill="#0f172a" stroke="#34d399" stroke-width="2"
+                class="cursor-pointer hover:stroke-white hover:scale-125 transition-all z-10 relative"
+                onclick="window.handleFTPClick(event, '${d.date}', '${d.ftp}', '${d.weight}', '${wkg}', '${d.source}')"
+            />`;
+    });
+
+    // Close Area for gradient
+    areaPathD += ` L ${getX(data[data.length-1].date)} ${height - pad.b} L ${getX(data[0].date)} ${height - pad.b} Z`;
+
+    return `
+        <div class="relative w-full h-[300px] select-none">
+            <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
+                <defs>
+                    <linearGradient id="ftpGradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#34d399" stop-opacity="0.2"/>
+                        <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+                
+                <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#334155" stroke-width="1" />
+                <line x1="${pad.l}" y1="${height - pad.b}" x2="${width - pad.r}" y2="${height - pad.b}" stroke="#334155" stroke-width="1" />
+                
+                <text x="${pad.l - 10}" y="${getY(maxFtp)}" text-anchor="end" fill="#94a3b8" font-size="10">${Math.round(maxFtp)}w</text>
+                <text x="${pad.l - 10}" y="${getY(minFtp)}" text-anchor="end" fill="#94a3b8" font-size="10">${Math.round(minFtp)}w</text>
+
+                <path d="${areaPathD}" fill="url(#ftpGradient)" stroke="none" />
+                <path d="${pathD}" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                
+                ${pointsHtml}
+            </svg>
+        </div>
+    `;
+};
+
+export const renderPowerCurve = (curveData, weight = 75) => {
+    if (!curveData || curveData.length === 0) return '<div class="p-8 text-center text-slate-500 italic">No Power Curve Data</div>';
+
+    const width = 800;
+    const height = 300;
+    const pad = { t: 20, b: 30, l: 50, r: 20 };
+
+    // Logarithmic Scale Logic for X-Axis (Duration)
+    const minDur = 1; // 1 second
+    const maxDur = Math.max(...curveData.map(d => d.duration));
+    
+    // Y-Axis (Watts)
+    const maxWatts = Math.max(...curveData.map(d => d.watts)) * 1.1;
+    
+    const getX = (sec) => {
+        // Simple log scale: x = log(sec)
+        const logMin = Math.log(minDur);
+        const logMax = Math.log(maxDur);
+        const logVal = Math.log(sec);
+        return pad.l + ((logVal - logMin) / (logMax - logMin)) * (width - pad.l - pad.r);
+    };
+
+    const getY = (watts) => {
+        return height - pad.b - (watts / maxWatts) * (height - pad.t - pad.b);
+    };
+
+    let pathD = '';
+    let pointsHtml = '';
+
+    curveData.forEach((d, i) => {
+        const x = getX(d.duration);
+        const y = getY(d.watts);
+        
+        pathD += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+
+        // Only add points for key durations to avoid clutter
+        // 1s, 5s, 15s, 30s, 1m, 5m, 10m, 20m, 1h
+        const keyDurations = [1, 5, 15, 30, 60, 300, 600, 1200, 3600, 7200];
+        
+        // Find closest data point to key duration or if it's a "peak"
+        if (keyDurations.includes(d.duration) || i % 10 === 0) {
+            const label = Formatters.formatDuration(d.duration);
+            const wkg = (d.watts / weight).toFixed(2);
+            
+            // Fix: Pass d.date (assuming date exists in json) or fallback
+            const dateStr = d.date ? d.date.split('T')[0] : 'Unknown';
+
+            pointsHtml += `<circle cx="${x}" cy="${y}" r="3" fill="#0f172a" stroke="#3b82f6" stroke-width="2"
+                class="cursor-pointer hover:scale-150 transition-all"
+                onclick="window.handlePowerCurveClick(event, '${label}', ${d.watts}, '${wkg}', '${dateStr}')" />`;
+        }
+    });
+
+    return `
+        <div class="relative w-full h-[300px] select-none">
+            <svg viewBox="0 0 ${width} ${height}" class="w-full h-full overflow-visible">
+                <line x1="${pad.l}" y1="${height - pad.b}" x2="${width - pad.r}" y2="${height - pad.b}" stroke="#334155" stroke-width="1"/>
+                <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${height - pad.b}" stroke="#334155" stroke-width="1"/>
+
+                <path d="${pathD}" fill="none" stroke="#3b82f6" stroke-width="2" />
+                
+                ${pointsHtml}
+                
+                <text x="${width-10}" y="${height-10}" text-anchor="end" fill="#64748b" font-size="10">Duration (Log Scale)</text>
+            </svg>
+        </div>
+    `;
 };

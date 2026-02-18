@@ -157,7 +157,7 @@
                     trends: () => trendsMod?.renderTrends(null, this.trendsData).html,
                     metrics: () => metricsMod?.renderMetrics(this.rawLogData),
                     readiness: () => readinessMod?.renderReadiness(this.readinessData),
-                    ftp: () => ftpMod?.renderFTP(this.profileData),
+                    ftp: () => ftpMod?.renderFTP ? ftpMod.renderFTP(this.profileData) : "FTP Module Error",
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),

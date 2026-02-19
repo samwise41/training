@@ -4,14 +4,23 @@ import { KEY_DISTANCES } from './data.js';
 // --- HELPERS ---
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
-const formatPace = (val) => { const m = Math.floor(val); const s = Math.round((val - m) * 60); return `${m}:${s.toString().padStart(2,'0')}`; };
-const formatPaceSec = (val) => { const m = Math.floor(val / 60); const s = Math.round(val % 60); return `${m}:${s.toString().padStart(2, '0')}`; };
+const formatPace = (val) => { 
+    if (!val) return '--';
+    const m = Math.floor(val); 
+    const s = Math.round((val - m) * 60); 
+    return `${m}:${s.toString().padStart(2,'0')}`; 
+};
+const formatPaceSec = (val) => { 
+    if (!val) return '--';
+    const m = Math.floor(val / 60); 
+    const s = Math.round(val % 60); 
+    return `${m}:${s.toString().padStart(2, '0')}`; 
+};
 
-// --- CUSTOM PLUGIN: Vertical Line for Chart.js ---
+// Custom Chart.js Plugin for Vertical Guide
 const verticalLinePlugin = {
     id: 'verticalLine',
     afterDraw: (chart) => {
-        // Only draw if we have an active tooltip/hover state
         if (chart.tooltip?._active?.length) {
             const ctx = chart.ctx;
             ctx.save();
@@ -19,12 +28,11 @@ const verticalLinePlugin = {
             const x = activePoint.element.x;
             const topY = chart.scales.y.top;
             const bottomY = chart.scales.y.bottom;
-            
             ctx.beginPath();
             ctx.moveTo(x, topY);
             ctx.lineTo(x, bottomY);
             ctx.lineWidth = 1;
-            ctx.strokeStyle = '#cbd5e1'; // matches SVG guide stroke
+            ctx.strokeStyle = '#475569';
             ctx.setLineDash([4, 4]);
             ctx.stroke();
             ctx.restore();
@@ -34,10 +42,9 @@ const verticalLinePlugin = {
 
 export const FTPCharts = {
     
-    // --- 1. SVG RENDERER ---
     renderSvgCurve(data, options) {
         const { width = 600, height = 250, colorAll, color6w, xType } = options;
-        const pad = { t: 20, b: 40, l: 40, r: 20 };
+        const pad = { t: 20, b: 40, l: 45, r: 20 }; // Increased left pad for pace labels
         const xVals = data.map(d => d.x);
         const yVals = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v);
         
@@ -52,26 +59,27 @@ export const FTPCharts = {
 
         let gridHtml = '';
         
-        // Y-Axis Grid
+        // Y-Axis Grid (Fix: Added proper formatting for Pace)
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
             const lbl = xType === 'distance' ? formatPace(val) : Math.round(val);
-            gridHtml += `<line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/><text x="${pad.l-5}" y="${y+3}" text-anchor="end" font-size="10" fill="#94a3b8">${lbl}</text>`;
+            gridHtml += `
+                <line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/>
+                <text x="${pad.l-8}" y="${y+3}" text-anchor="end" class="font-mono" style="font-size: 10px; fill: #64748b;">${lbl}</text>`;
         }
 
         // X-Axis Grid
-        let ticks = [];
-        if (xType === 'time') {
-            ticks = [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}];
-        } else {
-            ticks = KEY_DISTANCES.map(d => ({ v: d.val, l: d.label }));
-        }
+        let ticks = (xType === 'time') 
+            ? [{v:1,l:'1s'},{v:5,l:'5s'},{v:30,l:'30s'},{v:60,l:'1m'},{v:300,l:'5m'},{v:1200,l:'20m'},{v:3600,l:'1h'}]
+            : KEY_DISTANCES.map(d => ({ v: d.val, l: d.label }));
         
         ticks.filter(t => t.v >= minX * 0.9 && t.v <= maxX * 1.1).forEach(t => {
             const x = getLogX(t.v, minX, maxX, width, pad);
             if (x >= pad.l && x <= width - pad.r) {
-                gridHtml += `<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/><text x="${x}" y="${height-15}" text-anchor="middle" font-size="10" fill="#94a3b8">${t.l}</text>`;
+                gridHtml += `
+                    <line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/>
+                    <text x="${x}" y="${height-15}" text-anchor="middle" class="font-mono" style="font-size: 10px; fill: #64748b;">${t.l}</text>`;
             }
         });
 
@@ -90,43 +98,26 @@ export const FTPCharts = {
         <div class="relative w-full h-full group select-none">
             <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">
                 ${gridHtml}
-                <path d="${genPath('y6w')}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.7"/>
-                <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2"/>
-                ${options.showPoints ? this._renderPoints(data, minX, maxX, minY, maxY, width, height, pad, colorAll, color6w) : ''}
-                <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
-                <circle id="${options.containerId}-lock-dot" cx="0" cy="${height-pad.b}" r="3" fill="#ef4444" opacity="0" style="pointer-events: none;" />
+                <path d="${genPath('y6w')}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
+                <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2.5"/>
+                <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
             </svg>
-            <div id="${options.containerId}-tooltip" class="absolute hidden bg-slate-900/95 border border-slate-600 rounded shadow-xl p-0 z-50 min-w-[220px] pointer-events-none transition-all duration-75 text-xs"></div>
         </div>`;
     },
 
-    _renderPoints(data, minX, maxX, minY, maxY, width, height, pad, cAll, c6w) {
-        let html = '';
-        data.forEach(p => {
-            const x = getLogX(p.x, minX, maxX, width, pad);
-            if(p.yAll) html += `<circle cx="${x}" cy="${getLinY(p.yAll, minY, maxY, height, pad)}" r="3" fill="#0f172a" stroke="${cAll}" stroke-width="2" />`;
-        });
-        return html;
-    },
-
-    // --- 2. SVG INTERACTION (Sticky Tooltip) ---
     setupSvgInteractions(containerId, data, options) {
         const svg = document.getElementById(`${containerId}-svg`);
         const guide = document.getElementById(`${containerId}-guide`);
-        const lockDot = document.getElementById(`${containerId}-lock-dot`);
-        const tooltip = document.getElementById(`${containerId}-tooltip`);
-        if (!svg || !guide || !tooltip) return;
+        if (!svg || !guide) return;
 
         const { width = 600, colorAll, color6w, xType } = options;
-        const pad = { t: 20, b: 40, l: 40, r: 20 };
+        const pad = { t: 20, b: 40, l: 45, r: 20 };
         const minX = Math.min(...data.map(d => d.x)), maxX = Math.max(...data.map(d => d.x));
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
-        let isLocked = false;
-
-        const updateTooltip = (clientX) => {
+        svg.addEventListener('mousemove', (e) => {
             const rect = svg.getBoundingClientRect();
-            const mouseX = (clientX - rect.left) * (width / rect.width);
+            const mouseX = (e.clientX - rect.left) * (width / rect.width);
             
             let closest = lookup[0], minDist = Infinity;
             for (const pt of lookup) {
@@ -134,81 +125,38 @@ export const FTPCharts = {
                 if (dist < minDist) { minDist = dist; closest = pt; }
             }
 
-            if (closest && (isLocked || minDist < 50)) {
+            if (closest && minDist < 40) {
                 guide.setAttribute('x1', closest.px);
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
-                
-                // Show Lock Dot if locked
-                if(isLocked) {
-                    lockDot.setAttribute('cx', closest.px);
-                    lockDot.style.opacity = '1';
-                } else {
-                    lockDot.style.opacity = '0';
-                }
 
-                const label = closest.label || (xType === 'time' ? `${Math.floor(closest.x/60)}m ${Math.floor(closest.x%60)}s` : `${closest.x.toFixed(1)}mi`);
+                const label = closest.label || (xType === 'time' ? formatPaceSec(closest.x) : `${closest.x.toFixed(1)}mi`);
                 const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
                 const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
-                const dateAll = closest.dateAll || '--';
-                const date6w = closest.date6w || '--';
 
-                tooltip.innerHTML = `
-                    <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
-                        <span class="font-bold text-slate-200">${label}</span>
-                    </div>
-                    <div class="p-3 space-y-2">
-                        <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full" style="background:${colorAll}"></span>
-                                <span class="text-slate-400">All Time</span>
-                            </div>
-                            <span class="font-mono text-slate-500 text-[10px] text-center truncate">${dateAll}</span>
-                            <span class="font-mono text-white font-bold text-sm text-right">${valAll}</span>
+                const html = `
+                    <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${label}</div>
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between gap-4">
+                            <span class="text-slate-400">All Time (${closest.dateAll||'--'})</span>
+                            <span class="font-mono text-white font-bold">${valAll}</span>
                         </div>
-                        <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full border border-slate-500" style="background:${color6w}"></span>
-                                <span class="text-slate-400">6 Weeks</span>
-                            </div>
-                            <span class="font-mono text-slate-500 text-[10px] text-center truncate">${date6w}</span>
-                            <span class="font-mono text-white font-bold text-sm text-right">${val6w}</span>
+                        <div class="flex justify-between gap-4">
+                            <span class="text-slate-400">6 Weeks (${closest.date6w||'--'})</span>
+                            <span class="font-mono text-white font-bold">${val6w}</span>
                         </div>
                     </div>`;
-
-                tooltip.classList.remove('hidden');
                 
-                const relX = (closest.px / width) * rect.width;
-                if (closest.px > width * 0.6) {
-                    tooltip.style.left = 'auto';
-                    tooltip.style.right = `${rect.width - relX + 15}px`;
-                } else {
-                    tooltip.style.right = 'auto';
-                    tooltip.style.left = `${relX + 15}px`;
-                }
-                tooltip.style.top = '10px'; 
+                TooltipManager.show(svg, html, e);
             }
-        };
-
-        svg.addEventListener('click', (e) => {
-            isLocked = true; // Lock it
-            updateTooltip(e.clientX);
-        });
-
-        svg.addEventListener('mousemove', (e) => {
-            if (!isLocked) updateTooltip(e.clientX);
         });
 
         svg.addEventListener('mouseleave', () => {
-            if (!isLocked) {
-                guide.style.opacity = '0';
-                tooltip.classList.add('hidden');
-                lockDot.style.opacity = '0';
-            }
+            guide.style.opacity = '0';
+            TooltipManager.hide();
         });
     },
 
-    // --- 3. CHART.JS RENDERERS (Clean Lines + Vertical Guide) ---
     renderBikeHistory(canvasId, data, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx || !data.length) return;
@@ -219,24 +167,30 @@ export const FTPCharts = {
                 labels: data.map(d => d.date),
                 datasets: [
                     { 
-                        label: 'FTP', data: data.map(d => d.ftp), 
-                        borderColor: color, backgroundColor: color+'20', 
-                        pointBackgroundColor: color,
-                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y' 
+                        label: 'Watts', data: data.map(d => d.ftp), 
+                        borderColor: color, backgroundColor: color+'15', 
+                        borderWidth: 2, pointRadius: 0, tension: 0.15, yAxisID: 'y' 
                     },
                     { 
                         label: 'W/kg', data: data.map(d => d.wkg), 
-                        borderColor: '#34d399', borderWidth: 2, 
-                        pointBackgroundColor: '#34d399',
-                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y1' 
+                        borderColor: '#10b981', borderWidth: 2, 
+                        pointRadius: 0, tension: 0.15, yAxisID: 'y1' 
                     }
                 ]
             },
             options: this._getCommonOptions({
-                y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, suggestedMin: 150 },
-                y1: { position: 'right', grid: { display: false }, ticks: { color: '#34d399' }, suggestedMin: 2.0 }
+                y: { 
+                    type: 'linear', position: 'left',
+                    title: { display: true, text: 'Watts', color: color, font: { size: 9, weight: 'bold' } },
+                    grid: { color: '#334155' }, 
+                    ticks: { color: '#94a3b8', font: { family: 'monospace' } } 
+                },
+                y1: { 
+                    type: 'linear', position: 'right',
+                    title: { display: true, text: 'W/kg', color: '#10b981', font: { size: 9, weight: 'bold' } },
+                    grid: { display: false }, 
+                    ticks: { color: '#10b981', font: { family: 'monospace' } } 
+                }
             }),
             plugins: [verticalLinePlugin]
         });
@@ -253,23 +207,29 @@ export const FTPCharts = {
                 datasets: [
                     { 
                         label: 'Pace', data: data.map(d => d.pace), 
-                        borderColor: color, backgroundColor: color+'20', 
-                        pointBackgroundColor: color,
-                        borderWidth: 2, pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y' 
+                        borderColor: color, backgroundColor: color+'15', 
+                        borderWidth: 2, pointRadius: 0, tension: 0.15, yAxisID: 'y' 
                     },
                     { 
                         label: 'LTHR', data: data.map(d => d.lthr), 
-                        borderColor: '#ef4444', borderWidth: 1, borderDash: [3,3], 
-                        pointBackgroundColor: '#ef4444',
-                        pointRadius: 0, pointHitRadius: 10, pointHoverRadius: 4, 
-                        tension: 0.2, yAxisID: 'y1' 
+                        borderColor: '#ef4444', borderWidth: 2, borderDash: [4,2],
+                        pointRadius: 0, tension: 0.15, yAxisID: 'y1' 
                     }
                 ]
             },
             options: this._getCommonOptions({
-                y: { position: 'left', grid: { color: '#334155' }, ticks: { color: '#94a3b8', callback: formatPaceSec }, reverse: true },
-                y1: { position: 'right', grid: { display: false }, ticks: { color: '#ef4444' }, suggestedMin: 130 }
+                y: { 
+                    type: 'linear', position: 'left', reverse: true,
+                    title: { display: true, text: 'Pace', color: color, font: { size: 9, weight: 'bold' } },
+                    grid: { color: '#334155' }, 
+                    ticks: { color: '#94a3b8', font: { family: 'monospace' }, callback: formatPaceSec } 
+                },
+                y1: { 
+                    type: 'linear', position: 'right',
+                    title: { display: true, text: 'BPM', color: '#ef4444', font: { size: 9, weight: 'bold' } },
+                    grid: { display: false }, 
+                    ticks: { color: '#ef4444', font: { family: 'monospace' } } 
+                }
             }),
             plugins: [verticalLinePlugin]
         });
@@ -277,82 +237,37 @@ export const FTPCharts = {
 
     _getCommonOptions(scales) {
         return {
-            responsive: true,
-            maintainAspectRatio: false,
+            responsive: true, maintainAspectRatio: false,
             interaction: { mode: 'index', intersect: false },
             scales: { 
-                x: { display: true, ticks: { maxTicksLimit: 6, color: '#64748b', font: { size: 10 } }, grid: { display: false } }, 
+                x: { 
+                    ticks: { maxTicksLimit: 8, color: '#64748b', font: { size: 9, family: 'monospace' } }, 
+                    grid: { display: false } 
+                }, 
                 ...scales 
             },
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    enabled: false, 
+                    enabled: false,
                     external: (context) => {
-                        const tooltipModel = context.tooltip;
+                        const { chart, tooltip } = context;
+                        if (tooltip.opacity === 0) { TooltipManager.hide(); return; }
+
+                        const date = tooltip.title[0];
+                        let itemsHtml = `<div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${date}</div>`;
                         
-                        let tooltipEl = document.getElementById('chartjs-tooltip');
-                        if (!tooltipEl) {
-                            tooltipEl = document.createElement('div');
-                            tooltipEl.id = 'chartjs-tooltip';
-                            tooltipEl.className = 'absolute bg-slate-900/95 border border-slate-600 rounded shadow-xl pointer-events-none transition-all duration-75 text-xs z-50 min-w-[200px]';
-                            document.body.appendChild(tooltipEl);
-                        }
+                        tooltip.dataPoints.forEach(dp => {
+                            let val = dp.formattedValue;
+                            if (dp.dataset.label === 'Pace') val = formatPaceSec(dp.raw);
+                            itemsHtml += `
+                                <div class="flex justify-between gap-6 items-center mb-1">
+                                    <span style="color:${dp.dataset.borderColor}" class="text-[10px] font-bold uppercase">${dp.dataset.label}</span>
+                                    <span class="font-mono text-white">${val}</span>
+                                </div>`;
+                        });
 
-                        if (tooltipModel.opacity === 0) {
-                            tooltipEl.style.opacity = 0;
-                            return;
-                        }
-
-                        if (tooltipModel.body) {
-                            const dateStr = tooltipModel.title || '';
-                            let innerHtml = `
-                                <div class="px-3 py-2 border-b border-slate-700 bg-slate-800/50 rounded-t">
-                                    <span class="font-bold text-slate-200">History</span>
-                                </div>
-                                <div class="p-3 space-y-2">`;
-
-                            tooltipModel.dataPoints.forEach(dp => {
-                                const ds = context.chart.data.datasets[dp.datasetIndex];
-                                let val = dp.formattedValue;
-                                if(ds.label === 'Pace') val = formatPaceSec(dp.raw);
-
-                                innerHtml += `
-                                    <div class="grid grid-cols-[auto_1fr_auto] gap-4 items-center">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full" style="background:${ds.borderColor}"></span>
-                                            <span class="text-slate-400">${ds.label}</span>
-                                        </div>
-                                        <span class="font-mono text-slate-500 text-[10px] text-center">${dateStr}</span>
-                                        <span class="font-mono text-white font-bold text-sm text-right">${val}</span>
-                                    </div>`;
-                            });
-
-                            innerHtml += `</div>`;
-                            tooltipEl.innerHTML = innerHtml;
-                        }
-
-                        const position = context.chart.canvas.getBoundingClientRect();
-                        const tooltipX = position.left + window.pageXOffset + tooltipModel.caretX;
-                        const tooltipY = position.top + window.pageYOffset + tooltipModel.caretY - 10; 
-
-                        // Smart Positioning: Flip left if on right side
-                        let leftPos = tooltipX;
-                        let transform = 'translate(-50%, -100%)'; // Default: Center Above
-
-                        if (tooltipModel.caretX > context.chart.width * 0.6) {
-                            leftPos = tooltipX - 10; // Shift slightly left of cursor
-                            transform = 'translate(-100%, -100%)'; // Anchor bottom-right corner
-                        } else {
-                            leftPos = tooltipX + 10; // Shift slightly right of cursor
-                            transform = 'translate(0, -100%)'; // Anchor bottom-left corner
-                        }
-
-                        tooltipEl.style.opacity = 1;
-                        tooltipEl.style.left = leftPos + 'px';
-                        tooltipEl.style.top = tooltipY + 'px';
-                        tooltipEl.style.transform = transform;
-                        tooltipEl.style.pointerEvents = 'none';
+                        TooltipManager.show(chart.canvas, itemsHtml, { clientX: tooltip.caretX + chart.canvas.getBoundingClientRect().left, clientY: tooltip.caretY });
                     }
                 }
             }

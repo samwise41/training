@@ -74,12 +74,13 @@ export async function initCharts() {
     // 2. History Charts (Chart.js)
     const history = await FTPData.fetchGarminHistory();
     if (history.length) {
+        // Sort by date to ensure chronological order
         const sorted = history.sort((a,b) => new Date(a["Date"]) - new Date(b["Date"]));
         
         const bikeData = sorted
             .filter(d => d["FTP"] > 0 && d["Weight (lbs)"] > 0)
             .map(d => ({
-                date: d["Date"].slice(5),
+                date: d["Date"], // Pass full date for better X-axis formatting
                 ftp: d["FTP"],
                 wkg: parseFloat((d["FTP"] / (d["Weight (lbs)"] / 2.20462)).toFixed(2))
             }));
@@ -93,7 +94,7 @@ export async function initCharts() {
                     sec = (m * 60) + s;
                 }
                 return {
-                    date: d["Date"].slice(5),
+                    date: d["Date"], // Pass full date for better X-axis formatting
                     pace: sec,
                     lthr: d["Lactate Threshold HR"] || null
                 };

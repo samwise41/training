@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-18 02:35:53
+**Generated:** 2026-02-19 02:35:22
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -53,11 +53,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **4 x 20s Strides**; Cooldown.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 42.2,
+    "actualWorkout": "Roy - 2-18 Run Workout",
+    "status": "COMPLETED",
+    "compliance": 94,
+    "completed": true
   },
   {
     "date": "2026-02-19",

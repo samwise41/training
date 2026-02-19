@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-18 02:35:52
+**Generated:** 2026-02-19 02:35:22
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-18",
+    "day": "Wednesday",
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[RUN] Tempo / Threshold",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Leg Speed. 10m Warmup; 20m @ Tempo (RPE 6-7); **4 x 20s Strides**; Cooldown.",
+    "actualDuration": 42.2,
+    "id": 21907220773,
+    "actualWorkout": "Roy - 2-18 Run Workout",
+    "actualSport": "Run",
+    "sportTypeId": 1,
+    "duration": 2532.908935546875,
+    "distance": 7841.25,
+    "averageHR": 161.0,
+    "maxHR": 183.0,
+    "aerobicTrainingEffect": 3.799999952316284,
+    "anaerobicTrainingEffect": 0.4000000059604645,
+    "trainingEffectLabel": "LACTATE_THRESHOLD",
+    "avgPower": 365.0,
+    "maxPower": 648.0,
+    "normPower": 380.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 3.0959999561309814,
+    "maxSpeed": 4.692999839782715,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 170.953125,
+    "avgStrideLength": 107.6300048828125,
+    "avgVerticalOscillation": 8.169999694824218,
+    "avgVerticalRatio": 7.639999866485596,
+    "avgGroundContactTime": 248.6999969482422,
+    "vO2MaxValue": 53.0,
+    "calories": 656.0,
+    "elevationGain": 72.0,
+    "RPE": 6.0,
+    "Feeling": 3,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-17",
     "day": "Tuesday",

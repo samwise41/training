@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4300,19 +4300,20 @@
     },
     {
         "date": "2026-02-20",
-        "complianceStatus": "Partial",
+        "complianceStatus": "Completed",
         "plannedDuration": 70.0,
-        "actualDuration": 27.0,
+        "actualDuration": 75.9,
         "sports": [
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[RUN] Aerobic Maintenance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy Running",
+                "sport": "Run",
+                "actual": 48.9
             },
             {
                 "name": "Pool Swim",

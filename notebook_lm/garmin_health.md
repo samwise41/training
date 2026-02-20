@@ -1,5 +1,5 @@
 # Health Trends
-**Generated:** 2026-02-19 02:35:22
+**Generated:** 2026-02-20 02:30:28
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json
 
 ---
@@ -8,15 +8,53 @@
 ```json
 [
   {
-    "Date": "2026-02-18",
-    "Respiration Avg": null,
-    "SpO2 Avg": null,
-    "Fitness Age": 31.10468281148501,
-    "Intensity Min Mod": null,
-    "Intensity Min Vig": null,
+    "Date": "2026-02-19",
+    "Resting HR": 54,
+    "Min HR": 63,
+    "Max HR": 64,
+    "Stress Avg": 37,
+    "Stress Max": 40,
+    "Steps Goal": 4600,
+    "Body Batt Max": 22,
+    "Body Batt Min": 22,
+    "Respiration Avg": 19.0,
+    "SpO2 Avg": 94.0,
+    "Fitness Age": 30.619677112183236,
+    "Intensity Min Mod": 0,
+    "Intensity Min Vig": 0,
+    "Intensity Min Total": 0,
     "Lactate Threshold HR": 171,
     "FTP": 260,
     "Run FTP Pace": "7:45"
+  },
+  {
+    "Date": "2026-02-18",
+    "Respiration Avg": 15.0,
+    "SpO2 Avg": 95.0,
+    "Fitness Age": null,
+    "Intensity Min Mod": 3,
+    "Intensity Min Vig": 43,
+    "Lactate Threshold HR": 171,
+    "FTP": 260,
+    "Run FTP Pace": "7:45",
+    "Resting HR": 52,
+    "Min HR": 49,
+    "Max HR": 180,
+    "Stress Avg": 40,
+    "Stress Max": 93,
+    "Steps": 11871,
+    "Steps Goal": 4600,
+    "Daily Distance (m)": 11661,
+    "Body Batt Max": 77,
+    "Body Batt Min": 15,
+    "Sleep Hours": 5.9,
+    "VO2 Max": 53.0,
+    "Intensity Min Total": 89,
+    "Run Avg Cadence": 170.953125,
+    "Run Avg Speed (m/s)": 3.1,
+    "Weight (lbs)": 176.3,
+    "Muscle Mass": 73.6,
+    "Body Fat %": 20.2
   },
   {
     "Date": "2026-02-17",

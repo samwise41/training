@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-19 02:35:22
+**Generated:** 2026-02-20 02:30:28
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -66,11 +66,11 @@
     "plannedDuration": 90.0,
     "notes": "**Focus:** Fix HR Drift (8.65%). Strict Zone 2 (144-195W). Do not surge.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 85.7,
+    "actualWorkout": "City of London Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 95,
+    "completed": true
   },
   {
     "date": "2026-02-20",

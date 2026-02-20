@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Bike",
-            "Other"
+            "Other",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2521,8 +2521,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 68.9,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2619,8 +2619,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 95.9,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3345,8 +3345,8 @@
         "plannedDuration": 150.0,
         "actualDuration": 144.9,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3441,8 +3441,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 91.0,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3643,8 +3643,8 @@
         "plannedDuration": 120.0,
         "actualDuration": 142.2,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3667,8 +3667,8 @@
         "plannedDuration": 40.0,
         "actualDuration": 77.80000000000001,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3763,8 +3763,8 @@
         "plannedDuration": 75.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4295,6 +4295,29 @@
                 "name": "City of London Virtual Cycling",
                 "sport": "Bike",
                 "actual": 85.7
+            }
+        ]
+    },
+    {
+        "date": "2026-02-20",
+        "complianceStatus": "Partial",
+        "plannedDuration": 70.0,
+        "actualDuration": 27.0,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Aerobic Maintenance",
+                "sport": "Other",
+                "actual": 0.0
+            },
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 27.0
             }
         ]
     },

@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-21 02:24:37
+**Generated:** 2026-02-21 18:10:51
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -105,11 +105,11 @@
     "plannedDuration": 120.0,
     "notes": "**Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady. Ride immediately after swim.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 117.2,
+    "actualWorkout": "City of London Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 98,
+    "completed": true
   }
 ]
 ```

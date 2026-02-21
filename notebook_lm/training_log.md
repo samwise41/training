@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-21 02:24:36
+**Generated:** 2026-02-21 18:10:50
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-21",
+    "day": "Saturday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Long Steady Distance",
+    "plannedDuration": 120.0,
+    "notes": "**Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady. Ride immediately after swim.",
+    "actualDuration": 117.2,
+    "id": 21938507002,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "City of London Virtual Cycling",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 7032.0,
+    "distance": 56052.96875,
+    "averageHR": 141.0,
+    "maxHR": 159.0,
+    "aerobicTrainingEffect": 3.4000000953674316,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 174.0,
+    "maxPower": 414.0,
+    "normPower": 181.0837211803995,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 7.9710001945495605,
+    "maxSpeed": 21.71299934387207,
+    "averageBikingCadenceInRevPerMinute": 82.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 1169.0,
+    "elevationGain": 577.0,
+    "RPE": null,
+    "Feeling": null
+  },
   {
     "date": "2026-02-20",
     "day": "Friday",

@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-20 02:30:27
+**Generated:** 2026-02-21 02:24:36
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,100 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-20",
+    "day": "Friday",
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[RUN] Aerobic Maintenance",
+    "plannedDuration": 40.0,
+    "notes": "**Focus:** Recovery Run. Zone 2 strict.",
+    "actualDuration": 48.9,
+    "id": 21931743036,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "Roy Running",
+    "actualSport": "Run",
+    "sportTypeId": 1,
+    "duration": 2934.339111328125,
+    "distance": 9075.25,
+    "averageHR": 154.0,
+    "maxHR": 167.0,
+    "aerobicTrainingEffect": 3.5999999046325684,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "TEMPO",
+    "avgPower": 352.0,
+    "maxPower": 539.0,
+    "normPower": 362.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 3.092999935150147,
+    "maxSpeed": 3.686000108718872,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 172.546875,
+    "avgStrideLength": 106.98000488281251,
+    "avgVerticalOscillation": 8.290000152587892,
+    "avgVerticalRatio": 7.760000228881836,
+    "avgGroundContactTime": 252.3000030517578,
+    "vO2MaxValue": 52.0,
+    "calories": 731.0,
+    "elevationGain": 43.0,
+    "RPE": 5.0,
+    "Feeling": 4
+  },
+  {
+    "date": "2026-02-20",
+    "day": "Friday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": false
+    },
+    "plannedWorkout": "[SWIM] Endurance Drills",
+    "plannedDuration": 30.0,
+    "notes": "**Focus:** Frequency (Swim #2). 500-800m total. Fins allowed. Keep it easy.",
+    "actualDuration": 27.0,
+    "id": 21927294547,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 1622.280029296875,
+    "distance": 650.0,
+    "averageHR": 120.0,
+    "maxHR": 154.0,
+    "aerobicTrainingEffect": 2.0,
+    "anaerobicTrainingEffect": 1.600000023841858,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.8289999961853028,
+    "maxSpeed": 1.8600000143051147,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 278.0,
+    "elevationGain": null,
+    "RPE": 3.0,
+    "Feeling": 2,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-19",
     "day": "Thursday",
@@ -99,7 +193,8 @@
     "RPE": 6.0,
     "Feeling": 3,
     "matchStatus": "Linked",
-    "status": "COMPLETED"
+    "status": "COMPLETED",
+    "ignore_drift": true
   },
   {
     "date": "2026-02-17",

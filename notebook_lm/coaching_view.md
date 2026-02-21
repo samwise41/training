@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-02-20 02:30:27
+**Generated:** 2026-02-21 02:24:36
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-02-19 14:26:00",
+  "generated_at": "2026-02-20 23:18:49",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -28,24 +28,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 53.0,
+          "current_value": 52.86,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.05714285714285714
+              "slope": -0.14285714285714285
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.17334839073969507
+              "slope": 0.15302089215132694
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0951219512195122
+              "slope": 0.09108818011257036
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.24111943164362515
+              "slope": 0.23592032967032966
             }
           },
           "has_data": true
@@ -75,11 +75,11 @@
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.9398069467760618
+              "slope": -0.6716246466694676
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.472997399153262
+              "slope": 0.5065972146382647
             },
             "1y": {
               "direction": "Rising",
@@ -109,19 +109,19 @@
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.06637362197532759
+              "slope": 0.08109889932713665
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.002444613493303933
+              "slope": 0.003137254362129057
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.010447710422420193
+              "slope": -0.012682843654480672
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.003199270713626856
+              "slope": -0.003059852722753066
             }
           },
           "has_data": true
@@ -142,24 +142,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 3993.03,
+          "current_value": 4074.0,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -8.86324786324786
+              "slope": -9.686918445539135
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.45981866235030794
+              "slope": -0.46652872444011684
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.17423953569610195
+              "slope": 0.40899950846775984
             },
             "1y": {
               "direction": "Falling",
-              "slope": -1.4219589944215032
+              "slope": -1.4239795750597792
             }
           },
           "has_data": true
@@ -212,24 +212,24 @@
           "description": "Subjective vs Objective.",
           "improvement": "\u2022 Align RPE with TSS",
           "formula": "RPE vs TSS",
-          "current_value": 3.71,
+          "current_value": 3.56,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.05882352941176471
+              "slope": -0.04953560371517028
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.004561824729891958
+              "slope": 0.002624434389140274
             },
             "6m": {
-              "direction": "Rising",
-              "slope": 0.0019958988380041004
+              "direction": "Falling",
+              "slope": -0.0007098164992901844
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0029873039581777457
+              "slope": 0.0023074791545960654
             }
           },
           "has_data": true
@@ -269,7 +269,7 @@
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.2453341016365051
+              "slope": 0.22833658260051992
             },
             "1y": {
               "direction": "Falling",
@@ -309,7 +309,7 @@
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0022535363693738882
+              "slope": 0.00219462983638382
             },
             "1y": {
               "direction": "Rising",
@@ -348,7 +348,7 @@
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.009609193334208286
+              "slope": 0.009643458662826093
             },
             "1y": {
               "direction": "Rising",
@@ -387,7 +387,7 @@
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.04566521739130435
+              "slope": -0.09741106719367591
             },
             "1y": {
               "direction": "Falling",
@@ -419,23 +419,23 @@
             "ignore_zero": true
           },
           "current_value": 0.6,
-          "status": "Warning",
+          "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.03323214465663546
+              "slope": -0.020587333198847944
             },
             "90d": {
-              "direction": "Falling",
-              "slope": -0.0006251729191465727
+              "direction": "Rising",
+              "slope": 0.00044703148051498357
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0022485190529391674
+              "slope": 0.001975778893425501
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0022485190529391674
+              "slope": 0.001975778893425501
             }
           },
           "has_data": true
@@ -463,19 +463,19 @@
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.015115648353466238
+              "slope": -0.012486616687577553
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.0069417476354276175
+              "slope": 0.006411074413365324
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0024758389356552423
+              "slope": 0.0024020732694181287
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0024758389356552423
+              "slope": 0.0024020732694181287
             }
           },
           "has_data": true
@@ -501,19 +501,19 @@
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.04392857210976737
+              "slope": -0.027499976612272718
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.03863637416393726
+              "slope": -0.04029870714460101
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.01501299360492377
+              "slope": -0.015619052892305604
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.01501299360492377
+              "slope": -0.015619052892305604
             }
           },
           "has_data": true
@@ -534,24 +534,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 252.23,
+          "current_value": 252.24,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.6928563799176898
+              "slope": -0.4559515090215774
             },
             "90d": {
               "direction": "Falling",
-              "slope": -1.6605194884735184
+              "slope": -1.7614285357815032
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.5368625631404831
+              "slope": -0.5692276100329797
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.5368625631404831
+              "slope": -0.5692276100329797
             }
           },
           "has_data": true
@@ -572,24 +572,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 8.36,
+          "current_value": 8.35,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.07000004904610771
+              "slope": -0.05261906215122761
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.07201298997615156
+              "slope": -0.07414286030908326
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.02615685919691384
+              "slope": -0.027988412824533463
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.02615685919691384
+              "slope": -0.027988412824533463
             }
           },
           "has_data": true
@@ -611,24 +611,24 @@
             "min_duration_minutes": 40,
             "ignore_zero": false
           },
-          "current_value": 4.87,
+          "current_value": 3.46,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 4.306
+              "slope": 2.6199999999999997
             },
             "90d": {
-              "direction": "Rising",
-              "slope": 0.21377622377622377
+              "direction": "Falling",
+              "slope": -0.23681818181818184
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.03935087719298242
+              "slope": -0.12808771929824558
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.03935087719298242
+              "slope": -0.12808771929824558
             }
           },
           "has_data": true
@@ -654,24 +654,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 0.19,
+          "current_value": 0.21,
           "status": "On Target",
           "trends": {
             "30d": {
-              "direction": "Falling",
-              "slope": -0.00217797592991874
+              "direction": "Rising",
+              "slope": 0.0039315470982165665
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.0007973974992450882
+              "slope": 0.001995576290307906
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0009104786893152251
+              "slope": 0.0015668905666766954
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0009104786893152251
+              "slope": 0.0015668905666766954
             }
           },
           "has_data": true
@@ -693,24 +693,24 @@
             "ignore_zero": true,
             "require_hr": true
           },
-          "current_value": 0.36,
+          "current_value": 0.38,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.02432475847610696
+              "slope": 0.018883136430696636
             },
             "90d": {
-              "direction": "Falling",
-              "slope": -0.0007751470527994787
+              "direction": "Rising",
+              "slope": 0.00013847707792048844
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.0011605030126981659
+              "slope": -0.0006309593451036868
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.0011605030126981659
+              "slope": -0.0006309593451036868
             }
           },
           "has_data": true

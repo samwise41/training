@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4304,8 +4304,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 75.9,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4319,6 +4319,22 @@
                 "name": "Pool Swim",
                 "sport": "Swim",
                 "actual": 27.0
+            }
+        ]
+    },
+    {
+        "date": "2026-02-21",
+        "complianceStatus": "Missed",
+        "plannedDuration": 120.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[BIKE] Long Steady Distance",
+                "sport": "Other",
+                "actual": 0.0
             }
         ]
     },

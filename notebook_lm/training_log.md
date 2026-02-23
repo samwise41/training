@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-22 02:35:40
+**Generated:** 2026-02-23 02:36:28
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,17 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-22",
+    "day": "Sunday",
+    "activityType": "Other",
+    "plannedWorkout": "Rest",
+    "plannedDuration": 0.0,
+    "notes": "**Focus:** Sleep catch-up and complete rest.",
+    "actualDuration": 0,
+    "id": "PLAN-2026-02-22-Other",
+    "status": "PLANNED"
+  },
   {
     "date": "2026-02-21",
     "day": "Saturday",

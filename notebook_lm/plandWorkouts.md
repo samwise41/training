@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-22 02:35:41
+**Generated:** 2026-02-23 02:36:29
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -49,10 +49,10 @@
   {
     "date": "2026-02-25",
     "day": "Wednesday",
-    "plannedWorkout": "[RUN] Tempo / Threshold",
-    "plannedDuration": 45.0,
-    "notes": "**Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean.",
-    "actualSport": "Run",
+    "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
+    "plannedDuration": 90.0,
+    "notes": "**Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here.",
+    "actualSport": "Bike",
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
@@ -62,10 +62,10 @@
   {
     "date": "2026-02-26",
     "day": "Thursday",
-    "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
-    "plannedDuration": 90.0,
-    "notes": "**Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here.",
-    "actualSport": "Bike",
+    "plannedWorkout": "[RUN] Tempo / Threshold",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean.",
+    "actualSport": "Run",
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",

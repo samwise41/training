@@ -9,9 +9,15 @@
   "description": "Personal Training & Metrics Dashboard",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cstyle%3E.icon{fill:none;stroke:%233b82f6;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}.head{fill:%233b82f6;stroke:none}%3C/style%3E%3Cg transform='translate(64, 24)'%3E%3Ccircle class='head' cx='0' cy='-12' r='7'/%3E%3Cpath class='icon' d='M-18 -4 c 8 -10, 28 -10, 36 0'/%3E%3Cpath class='icon' d='M-24 8 q 12 8, 24 0 t 24 0'/%3E%3Cpath class='icon' d='M-24 20 q 12 8, 24 0 t 24 0'/%3E%3C/g%3E%3Cg transform='translate(32, 90)'%3E%3Ccircle class='head' cx='0' cy='-24' r='7'/%3E%3Cpath class='icon' d='M0 -14 v 14 l -10 12 m 10 -12 l 10 8'/%3E%3Cpath class='icon' d='M0 -14 l -8 8 m 8 -8 l 8 8'/%3E%3C/g%3E%3Cg transform='translate(96, 90)'%3E%3Ccircle class='head' cx='0' cy='-24' r='7'/%3E%3Ccircle class='icon' cx='-14' cy='12' r='10'/%3E%3Ccircle class='icon' cx='14' cy='12' r='10'/%3E%3Cpath class='icon' d='M-14 12 l 14 -22 h 8 l 6 22'/%3E%3Cpath class='icon' d='M0 -10 l -4 8'/%3E%3C/g%3E%3C/svg%3E",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Other",
-            "Bike"
+            "Bike",
+            "Other"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4337,6 +4337,24 @@
                 "name": "City of London Virtual Cycling",
                 "sport": "Bike",
                 "actual": 117.2
+            }
+        ]
+    },
+    {
+        "date": "2026-02-23",
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 37.6,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 37.6
             }
         ]
     },

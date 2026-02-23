@@ -195,8 +195,8 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 | PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Sleep catch-up and complete rest. | 2026-02-22 |
 | PLANNED | Monday | [SWIM] Technique Focus | 40 mins | | | **Focus:** Form Consistency. Use a pull buoy if your legs are heavy from the weekend. Smooth rotation. | 2026-02-23 |
 | PLANNED | Tuesday | [BIKE] Zwift Race | 60 mins | | | **Focus:** Zwift Games (Stage 2) / Anaerobic Impact. 15m Warmup, Race hard, 15m Cooldown. Empty the tank. | 2026-02-24 |
-| PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean. | 2026-02-25 |
-| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 90 mins | | | **Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here. | 2026-02-26 |
+| PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean. | 2026-02-26 |
+| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 90 mins | | | **Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here. | 2026-02-25 |
 | PLANNED | Friday | [RUN] Aerobic Maintenance | 45 mins | | | **Focus:** Active Recovery. Strict Zone 2 HR. | 2026-02-27 |
 | PLANNED | Friday | [SWIM] Touch Swim | 20 mins | | | **Focus:** Frequency. Drills only. Catch and pull focus. | 2026-02-27 |
 | PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady to protect your HR Drift gains. | 2026-02-28 |

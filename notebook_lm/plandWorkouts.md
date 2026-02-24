@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-23 02:36:29
+**Generated:** 2026-02-24 02:33:01
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -27,11 +27,11 @@
     "plannedDuration": 40.0,
     "notes": "**Focus:** Form Consistency. Use a pull buoy if your legs are heavy from the weekend. Smooth rotation.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 37.6,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 94,
+    "completed": true
   },
   {
     "date": "2026-02-24",

@@ -25,7 +25,7 @@ The Master Training Plan is to provide structured training for the athlete over 
 ### Biometrics & Fitness
 
 * **Weight:** 176 lbs.
-* **Cycling FTP:** 260 Watts (Earned Feb 5th, 2026 via Zwift Crit Race).
+* **Cycling FTP:** 260 Watts (Earned Feb 24th, 2026 via Zwift Games Hudson Hustle).
 * **Running Fitness:**
   * **Lactate Threshold HR (LTHR):** 171 bpm (Validated Dec 26, 2025).
   * **Functional Threshold Pace (FTP):** 7:45 min/mile (Wind-adjusted estimate).
@@ -69,12 +69,12 @@ The Master Training Plan is to provide structured training for the athlete over 
 
 | Zone | Range |
 |:---|:---|
-| Zone 1 (Recovery) | < 143W |
-| Zone 2 (Endurance) | 144W – 195W |
-| Zone 3 (Tempo) | 196W – 228W |
-| Sweet Spot | 229W – 244W | 
-| Zone 4 (Threshold)| 245W – 273W |
-| Zone 5 (VO2 Max) | 274W – 312W |
+| Zone 1 (Recovery) | < 146W |
+| Zone 2 (Endurance) | 147W – 199W |
+| Zone 3 (Tempo) | 200W – 233W |
+| Sweet Spot | 234W – 249W | 
+| Zone 4 (Threshold)| 250W – 278W |
+| Zone 5 (VO2 Max) | 279W – 318W |
 
 ### Running Heart Rate Zones
 
@@ -222,6 +222,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | Date | FTP (Watts) | Growth |
 | :--- | :--- | :--- |
+| Feb 24, 2025 | 265 W | +5 W |
 | Feb 05, 2025 | 260 W | +19 W |
 | Dec 23, 2025 | 241 W | +1 W |
 | Sep 06, 2025 | 240 W | +5 W |

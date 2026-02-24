@@ -4,14 +4,11 @@ import { TooltipManager } from '../../utils/tooltipManager.js';
 import { KEY_DISTANCES } from './data.js';
 
 // --- HELPERS ---
+const FONT_FAMILY = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
+
 const getLogX = (val, min, max, width, pad) => pad.l + ((Math.log(val||1) - Math.log(min||1)) / (Math.log(max) - Math.log(min||1))) * (width - pad.l - pad.r);
 const getLinY = (val, min, max, height, pad) => height - pad.b - ((val - min) / (max - min)) * (height - pad.t - pad.b);
-const formatPace = (val) => { 
-    if (!val) return '--';
-    const m = Math.floor(val); 
-    const s = Math.round((val - m) * 60); 
-    return `${m}:${s.toString().padStart(2,'0')}`; 
-};
+
 const formatPaceSec = (val) => { 
     if (!val) return '--';
     const m = Math.floor(val / 60); 
@@ -69,7 +66,7 @@ export const FTPCharts = {
         const xVals = data.map(d => d.x);
         const yVals = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v);
         
-        if (!xVals.length) return '<div class="text-xs text-slate-500 p-4 text-center font-mono">No Data</div>';
+        if (!xVals.length) return `<div class="text-xs text-slate-500 p-4 text-center font-mono" style="font-family: ${FONT_FAMILY};">No Data</div>`;
 
         const minX = Math.min(...xVals), maxX = Math.max(...xVals);
         let minY = Math.min(...yVals), maxY = Math.max(...yVals);
@@ -84,10 +81,10 @@ export const FTPCharts = {
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
-            const lbl = xType === 'distance' ? formatPace(val) : Math.round(val);
+            const lbl = xType === 'distance' ? formatPaceSec(val) : Math.round(val);
             gridHtml += `
                 <line x1="${pad.l}" y1="${y}" x2="${width-pad.r}" y2="${y}" stroke="#334155" opacity="0.3"/>
-                <text x="${pad.l-8}" y="${y+3}" text-anchor="end" class="font-mono" style="font-size: 10px; fill: #64748b;">${lbl}</text>`;
+                <text x="${pad.l-8}" y="${y+3}" text-anchor="end" class="font-mono" style="font-family: ${FONT_FAMILY}; font-size: 10px; fill: #64748b;">${lbl}</text>`;
         }
 
         // X-Axis Grid
@@ -100,7 +97,7 @@ export const FTPCharts = {
             if (x >= pad.l && x <= width - pad.r) {
                 gridHtml += `
                     <line x1="${x}" y1="${pad.t}" x2="${x}" y2="${height-pad.b}" stroke="#334155" opacity="0.3"/>
-                    <text x="${x}" y="${height-15}" text-anchor="middle" class="font-mono" style="font-size: 10px; fill: #64748b;">${t.l}</text>`;
+                    <text x="${x}" y="${height-15}" text-anchor="middle" class="font-mono" style="font-family: ${FONT_FAMILY}; font-size: 10px; fill: #64748b;">${t.l}</text>`;
             }
         });
 
@@ -117,13 +114,13 @@ export const FTPCharts = {
 
         return `
         <div class="relative w-full h-full group select-none flex flex-col">
-            <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full min-h-0 flex-grow cursor-crosshair" preserveAspectRatio="none">
+            <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full min-h-0 flex-grow cursor-crosshair touch-none" preserveAspectRatio="none">
                 ${gridHtml}
                 <path d="${genPath('y6w')}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
                 <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2.5"/>
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
             </svg>
-            <div class="flex justify-center gap-6 mt-2 text-[10px] font-mono text-slate-400 shrink-0">
+            <div class="flex justify-center gap-6 mt-2 text-[10px] font-mono text-slate-400 shrink-0" style="font-family: ${FONT_FAMILY};">
                 <div class="flex items-center gap-2">
                     <div style="width: 12px; height: 2px; background-color: ${colorAll};"></div>
                     <span>All time</span>
@@ -151,19 +148,19 @@ export const FTPCharts = {
             svg.dataset.locked = svg.dataset.locked === 'true' ? 'false' : 'true';
         });
 
-        svg.addEventListener('mousemove', (e) => {
+        const handleInteraction = (e) => {
             if (svg.dataset.locked === 'true') {
-                // If it's locked but TooltipManager was forcibly hidden (e.g. Esc or click out), unlock it
                 if (TooltipManager.tooltipEl && TooltipManager.tooltipEl.style.opacity === '0') {
                     svg.dataset.locked = 'false';
                     guide.style.opacity = '0';
                 } else {
-                    return; // Retain current locked visual state
+                    return; 
                 }
             }
 
             const rect = svg.getBoundingClientRect();
-            const mouseX = (e.clientX - rect.left) * (width / rect.width);
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const mouseX = (clientX - rect.left) * (width / rect.width);
             
             let closest = lookup[0], minDist = Infinity;
             for (const pt of lookup) {
@@ -171,37 +168,52 @@ export const FTPCharts = {
                 if (dist < minDist) { minDist = dist; closest = pt; }
             }
 
-            if (closest && minDist < 40) {
+            // Always snap inside the bounds instead of dropping out in between plot points
+            if (closest) {
                 guide.setAttribute('x1', closest.px);
                 guide.setAttribute('x2', closest.px);
                 guide.style.opacity = '1';
 
                 const label = closest.label || (xType === 'time' ? formatPaceSec(closest.x) : `${closest.x.toFixed(1)}mi`);
-                const valAll = xType === 'distance' ? formatPace(closest.yAll) : `${Math.round(closest.yAll)}w`;
-                const val6w = closest.y6w ? (xType === 'distance' ? formatPace(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
+                const valAll = xType === 'distance' ? formatPaceSec(closest.yAll) : `${Math.round(closest.yAll)}w`;
+                const val6w = closest.y6w ? (xType === 'distance' ? formatPaceSec(closest.y6w) : `${Math.round(closest.y6w)}w`) : '--';
 
                 const html = `
-                    <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${label}</div>
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between gap-6">
-                            <span class="font-bold" style="color: ${colorAll};">All time (${closest.dateAll||'--'})</span>
+                    <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2 font-mono" style="font-family: ${FONT_FAMILY};">${label}</div>
+                    <div class="space-y-1.5 font-mono" style="font-family: ${FONT_FAMILY};">
+                        <div class="flex justify-between gap-6 items-center">
+                            <div>
+                                <span class="font-bold" style="color: ${colorAll};">All time</span>
+                                <span class="text-slate-400 font-normal opacity-75 text-[10px] ml-1">(${closest.dateAll||'--'})</span>
+                            </div>
                             <span class="text-white font-bold">${valAll}</span>
                         </div>
-                        <div class="flex justify-between gap-6">
-                            <span class="font-bold border-b border-dashed" style="color: ${color6w}; border-color: ${color6w};">Last 6 weeks (${closest.date6w||'--'})</span>
+                        <div class="flex justify-between gap-6 items-center">
+                            <div>
+                                <span class="font-bold border-b border-dashed" style="color: ${color6w}; border-color: ${color6w}; pb-[1px]">Last 6 weeks</span>
+                                <span class="text-slate-400 font-normal opacity-75 text-[10px] ml-1">(${closest.date6w||'--'})</span>
+                            </div>
                             <span class="text-white font-bold">${val6w}</span>
                         </div>
                     </div>`;
                 
                 TooltipManager.show(svg, html, e);
             }
-        });
+        };
 
-        svg.addEventListener('mouseleave', () => {
+        // Support mobile touch + desktop mouse tracking
+        svg.addEventListener('mousemove', handleInteraction);
+        svg.addEventListener('touchmove', handleInteraction, { passive: true });
+        svg.addEventListener('touchstart', handleInteraction, { passive: true });
+
+        const handleLeave = () => {
             if (svg.dataset.locked === 'true') return;
             guide.style.opacity = '0';
             TooltipManager.hide();
-        });
+        };
+
+        svg.addEventListener('mouseleave', handleLeave);
+        svg.addEventListener('touchend', handleLeave);
     },
 
     renderBikeHistory(canvasId, data, color) {
@@ -228,15 +240,15 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { 
                     type: 'linear', position: 'left',
-                    title: { display: true, text: 'Watts', color: color, font: { size: 9, weight: 'bold', family: 'monospace' } },
+                    title: { display: true, text: 'Watts', color: color, font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { color: '#334155' }, 
-                    ticks: { color: '#94a3b8', font: { family: 'monospace' } } 
+                    ticks: { color: '#94a3b8', font: { family: FONT_FAMILY } } 
                 },
                 y1: { 
                     type: 'linear', position: 'right',
-                    title: { display: true, text: 'W/kg', color: '#10b981', font: { size: 9, weight: 'bold', family: 'monospace' } },
+                    title: { display: true, text: 'W/kg', color: '#10b981', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { display: false }, 
-                    ticks: { color: '#10b981', font: { family: 'monospace' } } 
+                    ticks: { color: '#10b981', font: { family: FONT_FAMILY } } 
                 }
             }),
             plugins: [verticalLinePlugin, lockPlugin]
@@ -267,15 +279,15 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { 
                     type: 'linear', position: 'left', reverse: true,
-                    title: { display: true, text: 'Pace', color: color, font: { size: 9, weight: 'bold', family: 'monospace' } },
+                    title: { display: true, text: 'Pace', color: color, font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { color: '#334155' }, 
-                    ticks: { color: '#94a3b8', font: { family: 'monospace' }, callback: formatPaceSec } 
+                    ticks: { color: '#94a3b8', font: { family: FONT_FAMILY }, callback: formatPaceSec } 
                 },
                 y1: { 
                     type: 'linear', position: 'right',
-                    title: { display: true, text: 'BPM', color: '#ef4444', font: { size: 9, weight: 'bold', family: 'monospace' } },
+                    title: { display: true, text: 'BPM', color: '#ef4444', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { display: false }, 
-                    ticks: { color: '#ef4444', font: { family: 'monospace' } } 
+                    ticks: { color: '#ef4444', font: { family: FONT_FAMILY } } 
                 }
             }),
             plugins: [verticalLinePlugin, lockPlugin]
@@ -285,10 +297,11 @@ export const FTPCharts = {
     _getCommonOptions(scales) {
         return {
             responsive: true, maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
+            // Added axis: 'x' so it snaps cleanly along the X axis without dropping between plots
+            interaction: { mode: 'index', intersect: false, axis: 'x' },
             scales: { 
                 x: { 
-                    ticks: { maxTicksLimit: 8, color: '#64748b', font: { size: 9, family: 'monospace' } }, 
+                    ticks: { maxTicksLimit: 8, color: '#64748b', font: { size: 9, family: FONT_FAMILY } }, 
                     grid: { display: false } 
                 }, 
                 ...scales 
@@ -299,7 +312,7 @@ export const FTPCharts = {
                     position: 'bottom',
                     labels: {
                         color: '#94a3b8',
-                        font: { family: 'monospace', size: 10 },
+                        font: { family: FONT_FAMILY, size: 10 },
                         boxWidth: 12
                     }
                 },
@@ -310,17 +323,16 @@ export const FTPCharts = {
                         if (tooltip.opacity === 0) { TooltipManager.hide(); return; }
 
                         const date = tooltip.title[0];
-                        let itemsHtml = `<div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${date}</div>`;
+                        let itemsHtml = `<div class="font-bold text-slate-400 border-b border-slate-700 pb-1 mb-2 opacity-80" style="font-family: ${FONT_FAMILY};">${date}</div>`;
                         
                         tooltip.dataPoints.forEach(dp => {
                             let val = dp.formattedValue;
                             if (dp.dataset.label === 'Pace') val = formatPaceSec(dp.raw);
                             
-                            // Reflect dataset lines exactly via style matching native legend approach
                             const dashedBorder = dp.dataset.borderDash ? `border-bottom: 2px dashed ${dp.dataset.borderColor};` : '';
                             
                             itemsHtml += `
-                                <div class="flex justify-between gap-6 items-center mb-1">
+                                <div class="flex justify-between gap-6 items-center mb-1 font-mono" style="font-family: ${FONT_FAMILY};">
                                     <span style="color:${dp.dataset.borderColor}; ${dashedBorder}" class="text-[10px] font-bold uppercase">${dp.dataset.label}</span>
                                     <span class="text-white font-bold">${val}</span>
                                 </div>`;

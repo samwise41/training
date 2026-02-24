@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4360,9 +4360,9 @@
     },
     {
         "date": "2026-02-24",
-        "complianceStatus": "Partial",
+        "complianceStatus": "Completed",
         "plannedDuration": 60.0,
-        "actualDuration": 46.6,
+        "actualDuration": 60.0,
         "sports": [
             "Bike"
         ],
@@ -4372,7 +4372,7 @@
             {
                 "name": "Zwift - Race: Stage 2: Zwift Games: Hudson Hustle (C) on Hudson Hustle in New York",
                 "sport": "Bike",
-                "actual": 46.6
+                "actual": 60.0
             }
         ]
     },

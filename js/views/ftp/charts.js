@@ -1,3 +1,5 @@
+// js/views/ftp/charts.js
+
 import { TooltipManager } from '../../utils/tooltipManager.js';
 import { KEY_DISTANCES } from './data.js';
 
@@ -40,15 +42,34 @@ const verticalLinePlugin = {
     }
 };
 
+// Custom Chart.js Plugin to handle Click-to-Lock behavior
+const lockPlugin = {
+    id: 'lockPlugin',
+    beforeEvent(chart, args) {
+        const event = args.event;
+        if (event.type === 'click') {
+            chart._customLocked = !chart._customLocked;
+            return false; 
+        }
+        if (chart._customLocked) {
+            if (TooltipManager.tooltipEl && TooltipManager.tooltipEl.style.opacity === '0') {
+                chart._customLocked = false;
+            } else if (event.type === 'mousemove' || event.type === 'mouseout' || event.type === 'touchstart' || event.type === 'touchmove') {
+                return false; // Stop Chart.js from updating state, freezing the tooltip in place
+            }
+        }
+    }
+};
+
 export const FTPCharts = {
     
     renderSvgCurve(data, options) {
         const { width = 600, height = 250, colorAll, color6w, xType } = options;
-        const pad = { t: 20, b: 40, l: 45, r: 20 }; // Increased left pad for pace labels
+        const pad = { t: 20, b: 40, l: 45, r: 20 }; 
         const xVals = data.map(d => d.x);
         const yVals = data.flatMap(d => [d.yAll, d.y6w]).filter(v => v);
         
-        if (!xVals.length) return '<div class="text-xs text-slate-500 p-4 text-center">No Data</div>';
+        if (!xVals.length) return '<div class="text-xs text-slate-500 p-4 text-center font-mono">No Data</div>';
 
         const minX = Math.min(...xVals), maxX = Math.max(...xVals);
         let minY = Math.min(...yVals), maxY = Math.max(...yVals);
@@ -59,7 +80,7 @@ export const FTPCharts = {
 
         let gridHtml = '';
         
-        // Y-Axis Grid (Fix: Added proper formatting for Pace)
+        // Y-Axis Grid
         for (let i = 0; i <= 4; i++) {
             const val = minY + (i/4 * (maxY - minY));
             const y = getLinY(val, minY, maxY, height, pad);
@@ -95,13 +116,23 @@ export const FTPCharts = {
         };
 
         return `
-        <div class="relative w-full h-full group select-none">
-            <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full h-full cursor-crosshair" preserveAspectRatio="none">
+        <div class="relative w-full h-full group select-none flex flex-col">
+            <svg id="${options.containerId}-svg" viewBox="0 0 ${width} ${height}" class="w-full min-h-0 flex-grow cursor-crosshair" preserveAspectRatio="none">
                 ${gridHtml}
                 <path d="${genPath('y6w')}" fill="none" stroke="${color6w}" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
                 <path d="${genPath('yAll')}" fill="none" stroke="${colorAll}" stroke-width="2.5"/>
                 <line id="${options.containerId}-guide" x1="0" y1="${pad.t}" x2="0" y2="${height - pad.b}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" opacity="0" style="pointer-events: none;" />
             </svg>
+            <div class="flex justify-center gap-6 mt-2 text-[10px] font-mono text-slate-400 shrink-0">
+                <div class="flex items-center gap-2">
+                    <div style="width: 12px; height: 2px; background-color: ${colorAll};"></div>
+                    <span>All time</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div style="width: 12px; border-top: 2px dashed ${color6w}; opacity: 0.8;"></div>
+                    <span>Last 6 weeks</span>
+                </div>
+            </div>
         </div>`;
     },
 
@@ -115,7 +146,22 @@ export const FTPCharts = {
         const minX = Math.min(...data.map(d => d.x)), maxX = Math.max(...data.map(d => d.x));
         const lookup = data.map(d => ({ ...d, px: getLogX(d.x, minX, maxX, width, pad) }));
 
+        // Lock tooltip click handler
+        svg.addEventListener('click', (e) => {
+            svg.dataset.locked = svg.dataset.locked === 'true' ? 'false' : 'true';
+        });
+
         svg.addEventListener('mousemove', (e) => {
+            if (svg.dataset.locked === 'true') {
+                // If it's locked but TooltipManager was forcibly hidden (e.g. Esc or click out), unlock it
+                if (TooltipManager.tooltipEl && TooltipManager.tooltipEl.style.opacity === '0') {
+                    svg.dataset.locked = 'false';
+                    guide.style.opacity = '0';
+                } else {
+                    return; // Retain current locked visual state
+                }
+            }
+
             const rect = svg.getBoundingClientRect();
             const mouseX = (e.clientX - rect.left) * (width / rect.width);
             
@@ -137,13 +183,13 @@ export const FTPCharts = {
                 const html = `
                     <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">${label}</div>
                     <div class="space-y-1.5">
-                        <div class="flex justify-between gap-4">
-                            <span class="text-slate-400">All Time (${closest.dateAll||'--'})</span>
-                            <span class="font-mono text-white font-bold">${valAll}</span>
+                        <div class="flex justify-between gap-6">
+                            <span class="font-bold" style="color: ${colorAll};">All time (${closest.dateAll||'--'})</span>
+                            <span class="text-white font-bold">${valAll}</span>
                         </div>
-                        <div class="flex justify-between gap-4">
-                            <span class="text-slate-400">6 Weeks (${closest.date6w||'--'})</span>
-                            <span class="font-mono text-white font-bold">${val6w}</span>
+                        <div class="flex justify-between gap-6">
+                            <span class="font-bold border-b border-dashed" style="color: ${color6w}; border-color: ${color6w};">Last 6 weeks (${closest.date6w||'--'})</span>
+                            <span class="text-white font-bold">${val6w}</span>
                         </div>
                     </div>`;
                 
@@ -152,6 +198,7 @@ export const FTPCharts = {
         });
 
         svg.addEventListener('mouseleave', () => {
+            if (svg.dataset.locked === 'true') return;
             guide.style.opacity = '0';
             TooltipManager.hide();
         });
@@ -181,18 +228,18 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { 
                     type: 'linear', position: 'left',
-                    title: { display: true, text: 'Watts', color: color, font: { size: 9, weight: 'bold' } },
+                    title: { display: true, text: 'Watts', color: color, font: { size: 9, weight: 'bold', family: 'monospace' } },
                     grid: { color: '#334155' }, 
                     ticks: { color: '#94a3b8', font: { family: 'monospace' } } 
                 },
                 y1: { 
                     type: 'linear', position: 'right',
-                    title: { display: true, text: 'W/kg', color: '#10b981', font: { size: 9, weight: 'bold' } },
+                    title: { display: true, text: 'W/kg', color: '#10b981', font: { size: 9, weight: 'bold', family: 'monospace' } },
                     grid: { display: false }, 
                     ticks: { color: '#10b981', font: { family: 'monospace' } } 
                 }
             }),
-            plugins: [verticalLinePlugin]
+            plugins: [verticalLinePlugin, lockPlugin]
         });
     },
 
@@ -220,18 +267,18 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { 
                     type: 'linear', position: 'left', reverse: true,
-                    title: { display: true, text: 'Pace', color: color, font: { size: 9, weight: 'bold' } },
+                    title: { display: true, text: 'Pace', color: color, font: { size: 9, weight: 'bold', family: 'monospace' } },
                     grid: { color: '#334155' }, 
                     ticks: { color: '#94a3b8', font: { family: 'monospace' }, callback: formatPaceSec } 
                 },
                 y1: { 
                     type: 'linear', position: 'right',
-                    title: { display: true, text: 'BPM', color: '#ef4444', font: { size: 9, weight: 'bold' } },
+                    title: { display: true, text: 'BPM', color: '#ef4444', font: { size: 9, weight: 'bold', family: 'monospace' } },
                     grid: { display: false }, 
                     ticks: { color: '#ef4444', font: { family: 'monospace' } } 
                 }
             }),
-            plugins: [verticalLinePlugin]
+            plugins: [verticalLinePlugin, lockPlugin]
         });
     },
 
@@ -247,7 +294,15 @@ export const FTPCharts = {
                 ...scales 
             },
             plugins: {
-                legend: { display: false },
+                legend: { 
+                    display: true, 
+                    position: 'bottom',
+                    labels: {
+                        color: '#94a3b8',
+                        font: { family: 'monospace', size: 10 },
+                        boxWidth: 12
+                    }
+                },
                 tooltip: {
                     enabled: false,
                     external: (context) => {
@@ -260,10 +315,14 @@ export const FTPCharts = {
                         tooltip.dataPoints.forEach(dp => {
                             let val = dp.formattedValue;
                             if (dp.dataset.label === 'Pace') val = formatPaceSec(dp.raw);
+                            
+                            // Reflect dataset lines exactly via style matching native legend approach
+                            const dashedBorder = dp.dataset.borderDash ? `border-bottom: 2px dashed ${dp.dataset.borderColor};` : '';
+                            
                             itemsHtml += `
                                 <div class="flex justify-between gap-6 items-center mb-1">
-                                    <span style="color:${dp.dataset.borderColor}" class="text-[10px] font-bold uppercase">${dp.dataset.label}</span>
-                                    <span class="font-mono text-white">${val}</span>
+                                    <span style="color:${dp.dataset.borderColor}; ${dashedBorder}" class="text-[10px] font-bold uppercase">${dp.dataset.label}</span>
+                                    <span class="text-white font-bold">${val}</span>
                                 </div>`;
                         });
 

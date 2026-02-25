@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-24 02:33:01
+**Generated:** 2026-02-25 02:34:13
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -40,11 +40,11 @@
     "plannedDuration": 60.0,
     "notes": "**Focus:** Zwift Games (Stage 2) / Anaerobic Impact. 15m Warmup, Race hard, 15m Cooldown. Empty the tank.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 60.0,
+    "actualWorkout": "Zwift - Race: Stage 2: Zwift Games: Hudson Hustle (C) on Hudson Hustle in New York",
+    "status": "COMPLETED",
+    "compliance": 100,
+    "completed": true
   },
   {
     "date": "2026-02-25",

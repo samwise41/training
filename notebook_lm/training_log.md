@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-24 02:33:00
+**Generated:** 2026-02-25 02:34:12
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-24",
+    "day": "Tuesday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Zwift Race",
+    "plannedDuration": 60.0,
+    "notes": "**Focus:** Zwift Games (Stage 2) / Anaerobic Impact. 15m Warmup, Race hard, 15m Cooldown. Empty the tank.",
+    "actualDuration": 60.0,
+    "id": "21968919280,21969118247",
+    "actualWorkout": "Zwift - Race: Stage 2: Zwift Games: Hudson Hustle (C) on Hudson Hustle in New York",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 2799.0,
+    "distance": 25763.26025390625,
+    "averageHR": 155.6948910325116,
+    "maxHR": 189.0,
+    "aerobicTrainingEffect": 3.799999952316284,
+    "anaerobicTrainingEffect": 2.4000000953674316,
+    "trainingEffectLabel": "LACTATE_THRESHOLD",
+    "avgPower": 201.13147552697393,
+    "maxPower": 612.0,
+    "normPower": 212.49116416625867,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 11.470999717712402,
+    "maxSpeed": 20.46299934387207,
+    "averageBikingCadenceInRevPerMinute": 77.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 615.0,
+    "elevationGain": 285.0,
+    "RPE": null,
+    "Feeling": null,
+    "matchStatus": "Linked Group",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-02-23",
     "day": "Monday",

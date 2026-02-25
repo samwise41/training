@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Other",
-            "Bike"
+            "Bike",
+            "Other"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4373,6 +4373,24 @@
                 "name": "Zwift - Race: Stage 2: Zwift Games: Hudson Hustle (C) on Hudson Hustle in New York",
                 "sport": "Bike",
                 "actual": 60.0
+            }
+        ]
+    },
+    {
+        "date": "2026-02-25",
+        "complianceStatus": "Partial",
+        "plannedDuration": 90.0,
+        "actualDuration": 79.8,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Innsbruck Virtual Cycling",
+                "sport": "Bike",
+                "actual": 79.8
             }
         ]
     },

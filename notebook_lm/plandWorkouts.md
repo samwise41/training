@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-25 02:34:13
+**Generated:** 2026-02-26 02:30:13
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -53,11 +53,11 @@
     "plannedDuration": 90.0,
     "notes": "**Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 79.8,
+    "actualWorkout": "Innsbruck Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 89,
+    "completed": true
   },
   {
     "date": "2026-02-26",

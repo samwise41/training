@@ -84,6 +84,7 @@ def bundle_activities(activities):
         return sum((safe_get(a, key, 0) or 0) for a in activities)
 
     combined['duration'] = get_sum('duration')
+    combined['elapsedDuration'] = get_sum('elapsedDuration')
     combined['distance'] = get_sum('distance')
     combined['calories'] = get_sum('calories')
     combined['elevationGain'] = get_sum('elevationGain') 
@@ -298,7 +299,7 @@ def main():
             continue
 
         try:
-            dur_sec = safe_get(composite, 'duration', 0) or 0
+            dur_sec = safe_get(composite, 'elapsedDuration', 0) or 0
             act_dur_min = dur_sec / 60.0
         except:
             act_dur_min = 0

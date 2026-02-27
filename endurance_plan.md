@@ -198,7 +198,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 | PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean. | 2026-02-26 |
 | PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 90 mins | | | **Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here. | 2026-02-25 |
 | PLANNED | Friday | [RUN] Aerobic Maintenance | 45 mins | | | **Focus:** Active Recovery. Strict Zone 2 HR. | 2026-02-27 |
-| PLANNED | Friday | [SWIM] Touch Swim | 20 mins | | | **Focus:** Frequency. Drills only. Catch and pull focus. | 2026-02-27 |
+| PLANNED | Thursday | [SWIM] Touch Swim | 20 mins | | | **Focus:** Frequency. Drills only. Catch and pull focus. | 2026-02-26 |
 | PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady to protect your HR Drift gains. | 2026-02-28 |
 
 

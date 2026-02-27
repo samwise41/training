@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Bike",
-            "Other"
+            "Other",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4420,17 +4420,19 @@
     },
     {
         "date": "2026-02-27",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Completed",
         "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 44.8,
+        "sports": [
+            "Run"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[RUN] Aerobic Maintenance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy Running",
+                "sport": "Run",
+                "actual": 44.8
             }
         ]
     },

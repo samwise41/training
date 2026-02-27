@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Other",
-            "Bike"
+            "Bike",
+            "Other"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4397,7 +4397,7 @@
     {
         "date": "2026-02-26",
         "complianceStatus": "Completed",
-        "plannedDuration": 45.0,
+        "plannedDuration": 65.0,
         "actualDuration": 74.7,
         "sports": [
             "Run",
@@ -4415,6 +4415,22 @@
                 "name": "Drills with coach",
                 "sport": "Swim",
                 "actual": 30.0
+            }
+        ]
+    },
+    {
+        "date": "2026-02-27",
+        "complianceStatus": "Missed",
+        "plannedDuration": 45.0,
+        "actualDuration": 0.0,
+        "sports": [],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "[RUN] Aerobic Maintenance",
+                "sport": "Other",
+                "actual": 0.0
             }
         ]
     },

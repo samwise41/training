@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Bike",
-            "Other"
+            "Other",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4304,8 +4304,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 75.9,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4398,9 +4398,10 @@
         "date": "2026-02-26",
         "complianceStatus": "Completed",
         "plannedDuration": 45.0,
-        "actualDuration": 44.7,
+        "actualDuration": 74.7,
         "sports": [
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4409,6 +4410,11 @@
                 "name": "Roy - 20 minutes at Tempo with 6x20 St",
                 "sport": "Run",
                 "actual": 44.7
+            },
+            {
+                "name": "Drills with coach",
+                "sport": "Swim",
+                "actual": 30.0
             }
         ]
     },

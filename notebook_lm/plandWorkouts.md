@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-26 02:30:13
+**Generated:** 2026-02-27 02:28:40
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -53,10 +53,10 @@
     "plannedDuration": 90.0,
     "notes": "**Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here.",
     "actualSport": "Bike",
-    "actualDuration": 79.8,
+    "actualDuration": 83.0,
     "actualWorkout": "Innsbruck Virtual Cycling",
     "status": "COMPLETED",
-    "compliance": 89,
+    "compliance": 92,
     "completed": true
   },
   {
@@ -66,11 +66,24 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 44.7,
+    "actualWorkout": "Roy - 20 minutes at Tempo with 6x20 St",
+    "status": "COMPLETED",
+    "compliance": 99,
+    "completed": true
+  },
+  {
+    "date": "2026-02-26",
+    "day": "Thursday",
+    "plannedWorkout": "Unplanned Activity",
+    "plannedDuration": 0,
+    "notes": "Unplanned Swim volume",
+    "actualSport": "Swim",
+    "status": "UNPLANNED",
+    "actualDuration": 30.0,
+    "actualWorkout": "Drills with coach",
+    "compliance": 100,
+    "completed": true
   },
   {
     "date": "2026-02-27",

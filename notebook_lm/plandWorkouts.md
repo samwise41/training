@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-02-27 02:28:40
+**Generated:** 2026-02-28 02:11:52
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -75,14 +75,14 @@
   {
     "date": "2026-02-26",
     "day": "Thursday",
-    "plannedWorkout": "Unplanned Activity",
-    "plannedDuration": 0,
-    "notes": "Unplanned Swim volume",
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 20.0,
+    "notes": "**Focus:** Frequency. Drills only. Catch and pull focus.",
     "actualSport": "Swim",
-    "status": "UNPLANNED",
     "actualDuration": 30.0,
     "actualWorkout": "Drills with coach",
-    "compliance": 100,
+    "status": "COMPLETED",
+    "compliance": 150,
     "completed": true
   },
   {
@@ -92,24 +92,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Active Recovery. Strict Zone 2 HR.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
-  },
-  {
-    "date": "2026-02-27",
-    "day": "Friday",
-    "plannedWorkout": "[SWIM] Touch Swim",
-    "plannedDuration": 20.0,
-    "notes": "**Focus:** Frequency. Drills only. Catch and pull focus.",
-    "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 44.8,
+    "actualWorkout": "Roy Running",
+    "status": "COMPLETED",
+    "compliance": 100,
+    "completed": true
   },
   {
     "date": "2026-02-28",

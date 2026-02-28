@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-27 02:28:40
+**Generated:** 2026-02-28 02:11:51
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-27",
+    "day": "Friday",
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[RUN] Aerobic Maintenance",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Active Recovery. Strict Zone 2 HR.",
+    "actualDuration": 44.8,
+    "id": 22008023548,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "Roy Running",
+    "actualSport": "Run",
+    "sportTypeId": 1,
+    "duration": 2672.27490234375,
+    "distance": 8177.31005859375,
+    "averageHR": 150.0,
+    "maxHR": 164.0,
+    "aerobicTrainingEffect": 3.5,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "TEMPO",
+    "avgPower": 345.0,
+    "maxPower": 488.0,
+    "normPower": 354.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 3.059999942779541,
+    "maxSpeed": 3.5920000076293945,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 172.21875,
+    "avgStrideLength": 106.1300048828125,
+    "avgVerticalOscillation": 8.3,
+    "avgVerticalRatio": 7.840000152587891,
+    "avgGroundContactTime": 253.89999389648438,
+    "vO2MaxValue": 53.0,
+    "calories": 645.0,
+    "elevationGain": 41.0,
+    "RPE": 4.0,
+    "Feeling": 4
+  },
   {
     "date": "2026-02-26",
     "day": "Wednesday",
@@ -57,14 +104,6 @@
   {
     "date": "2026-02-26",
     "day": "Thursday",
-    "plannedWorkout": "",
-    "plannedDuration": 0,
-    "notes": "",
-    "matchStatus": "Unplanned",
-    "actualWorkout": "Drills with coach",
-    "actualDuration": 30.0,
-    "actualSport": "Swim",
-    "id": 21998350288,
     "activityType": {
       "typeId": 26,
       "typeKey": "swimming",
@@ -73,6 +112,13 @@
       "restricted": false,
       "trimmable": true
     },
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 20.0,
+    "notes": "**Focus:** Frequency. Drills only. Catch and pull focus.",
+    "actualDuration": 30.0,
+    "id": 21998350288,
+    "actualWorkout": "Drills with coach",
+    "actualSport": "Swim",
     "sportTypeId": 5,
     "duration": 1800.0,
     "distance": 0.0,
@@ -99,7 +145,8 @@
     "elevationGain": null,
     "RPE": null,
     "Feeling": null,
-    "status": "UNPLANNED"
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
   },
   {
     "date": "2026-02-25",

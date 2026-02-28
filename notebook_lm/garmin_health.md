@@ -1,5 +1,5 @@
 # Health Trends
-**Generated:** 2026-02-27 02:28:40
+**Generated:** 2026-02-28 02:11:52
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json
 
 ---
@@ -8,15 +8,41 @@
 ```json
 [
   {
-    "Date": "2026-02-26",
+    "Date": "2026-02-27",
     "Respiration Avg": null,
     "SpO2 Avg": null,
-    "Fitness Age": 30.755743097980357,
+    "Fitness Age": 30.680634848221995,
     "Intensity Min Mod": null,
     "Intensity Min Vig": null,
     "Lactate Threshold HR": 171,
     "FTP": 265,
     "Run FTP Pace": "7:45"
+  },
+  {
+    "Date": "2026-02-26",
+    "Respiration Avg": 14.0,
+    "SpO2 Avg": 95.0,
+    "Fitness Age": null,
+    "Intensity Min Mod": 7,
+    "Intensity Min Vig": 45,
+    "Lactate Threshold HR": 171,
+    "FTP": 265,
+    "Run FTP Pace": "7:45",
+    "Resting HR": 53,
+    "Min HR": 46,
+    "Max HR": 171,
+    "Stress Avg": 29,
+    "Stress Max": 97,
+    "Steps": 14101,
+    "Steps Goal": 4870,
+    "Daily Distance (m)": 14046,
+    "Body Batt Max": 67,
+    "Body Batt Min": 12,
+    "Sleep Hours": 3.6,
+    "VO2 Max": 53.0,
+    "Intensity Min Total": 97,
+    "Run Avg Cadence": 168.984375,
+    "Run Avg Speed (m/s)": 3.16
   },
   {
     "Date": "2026-02-25",

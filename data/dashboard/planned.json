@@ -6,7 +6,7 @@
         "plannedWorkout": "Rest",
         "plannedDuration": 0.0,
         "activityType": "Other",
-        "notes": "**Focus:** Sleep catch-up. Your body needs to absorb the stress before Phase 2.",
+        "notes": "**Focus:** Sleep catch-up. Let your body absorb the work before Phase 2.",
         "status": "PLANNED"
     },
     {
@@ -16,7 +16,7 @@
         "plannedWorkout": "[SWIM] Endurance Intervals",
         "plannedDuration": 45.0,
         "activityType": "Swim",
-        "notes": "**Focus:** Open Water Transfer. Must include one 400m+ continuous segment and 6-10 'sighting reps' (lift head mid-stroke).",
+        "notes": "**Focus:** Open Water Transfer. Include one 400m+ continuous segment and 6-10 'sighting reps'.",
         "status": "PLANNED"
     },
     {
@@ -26,7 +26,7 @@
         "plannedWorkout": "[BIKE] Zwift Race",
         "plannedDuration": 60.0,
         "activityType": "Bike",
-        "notes": "**Focus:** Zwift Games (Stage 3). Anaerobic Impact fix. Save your energy on the flats and bury yourself on the final spikes.",
+        "notes": "**Focus:** Zwift Games. Let's attack that Anaerobic Impact weakness (1.63). Empty the tank on the spikes!",
         "status": "PLANNED"
     },
     {
@@ -36,37 +36,47 @@
         "plannedWorkout": "[RUN] Tempo / Speed Intervals",
         "plannedDuration": 45.0,
         "activityType": "Run",
-        "notes": "**Focus:** Fix Run Efficiency. 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides. Focus entirely on quick feet and high cadence.",
+        "notes": "**Focus:** Quick feet! Your Run PE is 0.58. 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides.",
         "status": "PLANNED"
     },
     {
         "id": "PLAN-2026-03-05-Swim",
         "date": "2026-03-05",
         "day": "Thursday",
-        "plannedWorkout": "[SWIM] Recovery + T1 Simulation",
+        "plannedWorkout": "[SWIM] Recovery Endurance",
         "plannedDuration": 45.0,
         "activityType": "Swim",
-        "notes": "**Focus:** T1 Practice. After your main set, practice the 'Shore Exit' and wetsuit strip (peel to waist while running).",
+        "notes": "**Focus:** T1 Practice. After your main set, practice the 'Shore Exit'.",
         "status": "PLANNED"
     },
     {
         "id": "PLAN-2026-03-06-Run",
         "date": "2026-03-06",
         "day": "Friday",
-        "plannedWorkout": "[RUN] Aerobic Maintenance",
+        "plannedWorkout": "[RUN] Aerobic Endurance",
         "plannedDuration": 40.0,
         "activityType": "Run",
-        "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (< 152 bpm). Keep it light and easy.",
+        "notes": "**Focus:** Active Recovery. Strict Zone 2 HR.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-03-07-Other",
+        "id": "PLAN-2026-03-07-Bike",
         "date": "2026-03-07",
         "day": "Saturday",
-        "plannedWorkout": "[BRICK] Long Steady Distance + T2 Practice",
-        "plannedDuration": 135.0,
-        "activityType": "Other",
-        "notes": "**Focus:** Fix Bike HR Drift. 120m Bike (Strict Z2) + 15m Run. Set up transition area early. Obey the '5-Minute Discipline' rule off the bike.",
+        "plannedWorkout": "[BIKE] Long Steady Distance",
+        "plannedDuration": 120.0,
+        "activityType": "Bike",
+        "notes": "**Focus:** Fix Bike HR Drift (8.53%). Strict Z2. Set up your transition area before you clip in.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-07-Run",
+        "date": "2026-03-07",
+        "day": "Saturday",
+        "plannedWorkout": "[RUN] Zone 2 Base",
+        "plannedDuration": 15.0,
+        "activityType": "Run",
+        "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
         "status": "PLANNED"
     }
 ]

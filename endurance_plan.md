@@ -192,15 +192,14 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 mins | | | **Focus:** Sleep catch-up and complete rest. | 2026-02-22 |
-| PLANNED | Monday | [SWIM] Technique Focus | 40 mins | | | **Focus:** Form Consistency. Use a pull buoy if your legs are heavy from the weekend. Smooth rotation. | 2026-02-23 |
-| PLANNED | Tuesday | [BIKE] Zwift Race | 60 mins | | | **Focus:** Zwift Games (Stage 2) / Anaerobic Impact. 15m Warmup, Race hard, 15m Cooldown. Empty the tank. | 2026-02-24 |
-| PLANNED | Wednesday | [RUN] Tempo / Threshold | 45 mins | | | **Focus:** Fix Perceived Efficiency (0.58). 10m Warmup; 20m @ Tempo; **6 x 20s Strides**. Focus entirely on quick feet and forward lean. | 2026-02-26 |
-| PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 90 mins | | | **Focus:** Aerobic Efficiency (1.28). Strict Zone 2 (144-195W). Do not surge. Re-allocating winter volume here. | 2026-02-25 |
-| PLANNED | Friday | [RUN] Aerobic Maintenance | 45 mins | | | **Focus:** Active Recovery. Strict Zone 2 HR. | 2026-02-27 |
-| PLANNED | Thursday | [SWIM] Touch Swim | 20 mins | | | **Focus:** Frequency. Drills only. Catch and pull focus. | 2026-02-26 |
-| PLANNED | Saturday | [BIKE] Long Steady Distance | 120 mins | | | **Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady to protect your HR Drift gains. | 2026-02-28 |
 
+| PLANNED | Sunday | Rest | 0 | | | **Focus:** Sleep catch-up. Your body needs to absorb the stress before Phase 2. | 2026-03-01 |
+| PLANNED | Monday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Must include one 400m+ continuous segment and 6-10 'sighting reps' (lift head mid-stroke). | 2026-03-02 |
+| PLANNED | Tuesday | [BIKE] Zwift Race | 60 | | | **Focus:** Zwift Games (Stage 3). Anaerobic Impact fix. Save your energy on the flats and bury yourself on the final spikes. | 2026-03-03 |
+| PLANNED | Wednesday | [RUN] Tempo / Speed Intervals | 45 | | | **Focus:** Fix Run Efficiency. 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides. Focus entirely on quick feet and high cadence. | 2026-03-04 |
+| PLANNED | Thursday | [SWIM] Recovery + T1 Simulation | 45 | | | **Focus:** T1 Practice. After your main set, practice the 'Shore Exit' and wetsuit strip (peel to waist while running). | 2026-03-05 |
+| PLANNED | Friday | [RUN] Aerobic Maintenance | 40 | | | **Focus:** Active Recovery. Strict Zone 2 HR (< 152 bpm). Keep it light and easy. | 2026-03-06 |
+| PLANNED | Saturday | [BRICK] Long Steady Distance + T2 Practice | 135 | | | **Focus:** Fix Bike HR Drift. 120m Bike (Strict Z2) + 15m Run. Set up transition area early. Obey the '5-Minute Discipline' rule off the bike. | 2026-03-07 |
 
 ## 6. Fueling Strategy & Equipment
 

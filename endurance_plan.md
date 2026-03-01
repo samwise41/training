@@ -192,7 +192,6 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-
 | PLANNED | Sunday | Rest | 0 | | | **Focus:** Sleep catch-up. Your body needs to absorb the stress before Phase 2. | 2026-03-01 |
 | PLANNED | Monday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Must include one 400m+ continuous segment and 6-10 'sighting reps' (lift head mid-stroke). | 2026-03-02 |
 | PLANNED | Tuesday | [BIKE] Zwift Race | 60 | | | **Focus:** Zwift Games (Stage 3). Anaerobic Impact fix. Save your energy on the flats and bury yourself on the final spikes. | 2026-03-03 |

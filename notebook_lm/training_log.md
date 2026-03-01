@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-02-28 02:11:51
+**Generated:** 2026-03-01 02:43:02
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,18 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-02-28",
+    "day": "Saturday",
+    "activityType": "Bike",
+    "plannedWorkout": "[BIKE] Long Steady Distance",
+    "plannedDuration": 120.0,
+    "notes": "**Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady to protect your HR Drift gains.",
+    "actualDuration": 0,
+    "id": "PLAN-2026-02-28-Bike",
+    "matchStatus": "Planned",
+    "status": "PLANNED"
+  },
   {
     "date": "2026-02-27",
     "day": "Friday",

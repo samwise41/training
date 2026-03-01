@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-01 02:43:03
+**Generated:** 2026-03-01 13:54:15
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -105,11 +105,11 @@
     "plannedDuration": 120.0,
     "notes": "**Focus:** Winter Cap (2.0h). **Nutrition:** 60-90g carbs/hr. Zone 2 steady to protect your HR Drift gains.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 82.5,
+    "actualWorkout": "Thio Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 69,
+    "completed": true
   }
 ]
 ```

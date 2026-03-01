@@ -1,1 +1,72 @@
-[]
+[
+    {
+        "id": "PLAN-2026-03-01-Other",
+        "date": "2026-03-01",
+        "day": "Sunday",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0.0,
+        "activityType": "Other",
+        "notes": "**Focus:** Sleep catch-up. Your body needs to absorb the stress before Phase 2.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-02-Swim",
+        "date": "2026-03-02",
+        "day": "Monday",
+        "plannedWorkout": "[SWIM] Endurance Intervals",
+        "plannedDuration": 45.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** Open Water Transfer. Must include one 400m+ continuous segment and 6-10 'sighting reps' (lift head mid-stroke).",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-03-Bike",
+        "date": "2026-03-03",
+        "day": "Tuesday",
+        "plannedWorkout": "[BIKE] Zwift Race",
+        "plannedDuration": 60.0,
+        "activityType": "Bike",
+        "notes": "**Focus:** Zwift Games (Stage 3). Anaerobic Impact fix. Save your energy on the flats and bury yourself on the final spikes.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-04-Run",
+        "date": "2026-03-04",
+        "day": "Wednesday",
+        "plannedWorkout": "[RUN] Tempo / Speed Intervals",
+        "plannedDuration": 45.0,
+        "activityType": "Run",
+        "notes": "**Focus:** Fix Run Efficiency. 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides. Focus entirely on quick feet and high cadence.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-05-Swim",
+        "date": "2026-03-05",
+        "day": "Thursday",
+        "plannedWorkout": "[SWIM] Recovery + T1 Simulation",
+        "plannedDuration": 45.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** T1 Practice. After your main set, practice the 'Shore Exit' and wetsuit strip (peel to waist while running).",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-06-Run",
+        "date": "2026-03-06",
+        "day": "Friday",
+        "plannedWorkout": "[RUN] Aerobic Maintenance",
+        "plannedDuration": 40.0,
+        "activityType": "Run",
+        "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (< 152 bpm). Keep it light and easy.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-07-Other",
+        "date": "2026-03-07",
+        "day": "Saturday",
+        "plannedWorkout": "[BRICK] Long Steady Distance + T2 Practice",
+        "plannedDuration": 135.0,
+        "activityType": "Other",
+        "notes": "**Focus:** Fix Bike HR Drift. 120m Bike (Strict Z2) + 15m Run. Set up transition area early. Obey the '5-Minute Discipline' rule off the bike.",
+        "status": "PLANNED"
+    }
+]

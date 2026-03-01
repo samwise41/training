@@ -200,6 +200,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 | PLANNED | Friday | [RUN] Aerobic Maintenance | 40 | | | **Focus:** Active Recovery. Strict Zone 2 HR (< 152 bpm). Keep it light and easy. | 2026-03-06 |
 | PLANNED | Saturday | [BRICK] Long Steady Distance + T2 Practice | 135 | | | **Focus:** Fix Bike HR Drift. 120m Bike (Strict Z2) + 15m Run. Set up transition area early. Obey the '5-Minute Discipline' rule off the bike. | 2026-03-07 |
 
+
 ## 6. Fueling Strategy & Equipment
 
 ### Equipment "Lock-In" Dates

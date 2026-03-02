@@ -1,5 +1,17 @@
 [
     {
+        "date": "2026-03-02",
+        "day": "Monday",
+        "activityType": "Swim",
+        "plannedWorkout": "[SWIM] Endurance Intervals",
+        "plannedDuration": 45.0,
+        "notes": "**Focus:** Open Water Transfer. Include one 400m+ continuous segment and 6-10 'sighting reps'.",
+        "actualDuration": 0,
+        "id": "PLAN-2026-03-02-Swim",
+        "matchStatus": "Planned",
+        "status": "PLANNED"
+    },
+    {
         "date": "2026-03-01",
         "day": "Sunday",
         "activityType": "Other",
@@ -8,7 +20,7 @@
         "notes": "**Focus:** Sleep catch-up. Let your body absorb the work before Phase 2.",
         "actualDuration": 0,
         "id": "PLAN-2026-03-01-Other",
-        "status": "PLANNED"
+        "status": "UNKNOWN"
     },
     {
         "date": "2026-02-28",

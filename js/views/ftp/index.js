@@ -16,8 +16,21 @@ function setupWkgCalculator() {
     const kInput = document.getElementById('calc-wkg');
     const resultBox = document.getElementById('calc-result-box');
     const tableContainer = document.getElementById('calc-table-container');
+    const wKgDisplay = document.getElementById('calc-weight-kg');
 
     if (!wInput || !fInput || !kInput) return;
+
+    // Helper to instantly display the kg translation as they type
+    const updateKgDisplay = (lbs) => {
+        if (lbs && !isNaN(lbs) && lbs > 0) {
+            wKgDisplay.textContent = `≈ ${(lbs / 2.20462).toFixed(1)} kg`;
+        } else {
+            wKgDisplay.textContent = '';
+        }
+    };
+
+    // Listen to manual typing in the weight box
+    wInput.addEventListener('input', () => updateKgDisplay(parseFloat(wInput.value)));
 
     const calculate = () => {
         const w = parseFloat(wInput.value);
@@ -64,8 +77,13 @@ function setupWkgCalculator() {
         else if (hasF && hasK) {
             kg = f / k;
             resultVal = (kg * 2.20462).toFixed(1);
-            resultBox.innerHTML = `<span class="text-xs text-slate-400 uppercase tracking-widest mb-1">Target Weight</span><span class="text-5xl font-black text-blue-400">${resultVal} <span class="text-xl text-slate-500 font-normal">lbs</span></span>`;
+            resultBox.innerHTML = `
+                <span class="text-xs text-slate-400 uppercase tracking-widest mb-1">Target Weight</span>
+                <span class="text-5xl font-black text-blue-400 mb-1">${resultVal} <span class="text-xl text-slate-500 font-normal">lbs</span></span>
+                <span class="text-sm font-bold text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">${kg.toFixed(1)} kg</span>
+            `;
             wInput.value = '';
+            updateKgDisplay(null); // Clear the small input label since the box is empty
             wInput.classList.replace('bg-slate-900', 'bg-blue-900/20');
             wInput.classList.replace('border-slate-700', 'border-blue-500');
             renderTable('Weight', resultVal, f, k);
@@ -91,7 +109,7 @@ function setupWkgCalculator() {
 
         // If calculating FTP or W/kg, show how Watts impact W/kg at current weight
         if (solveFor === 'FTP' || solveFor === 'W/kg') {
-            rows += `<table class="w-full text-sm text-left"><thead class="text-[10px] text-slate-400 uppercase bg-slate-800 sticky top-0"><tr><th class="px-4 py-2">Watts</th><th class="px-4 py-2">W/kg @ ${weightLbs} lbs</th></tr></thead><tbody>`;
+            rows += `<table class="w-full text-sm text-left"><thead class="text-[10px] text-slate-400 uppercase bg-slate-800 sticky top-0 z-10"><tr><th class="px-4 py-2">Watts</th><th class="px-4 py-2">W/kg @ ${weightLbs} lbs</th></tr></thead><tbody>`;
             
             // Generate rows -5 to +5 watts
             for(let i = -5; i <= 5; i++) {
@@ -106,7 +124,7 @@ function setupWkgCalculator() {
         // If calculating Weight, show how Lbs impact W/kg at current FTP
         else if (solveFor === 'Weight') {
             const baseWeight = Math.round(parseFloat(weightLbs));
-            rows += `<table class="w-full text-sm text-left"><thead class="text-[10px] text-slate-400 uppercase bg-slate-800 sticky top-0"><tr><th class="px-4 py-2">Weight</th><th class="px-4 py-2">W/kg @ ${ftp} W</th></tr></thead><tbody>`;
+            rows += `<table class="w-full text-sm text-left"><thead class="text-[10px] text-slate-400 uppercase bg-slate-800 sticky top-0 z-10"><tr><th class="px-4 py-2">Weight</th><th class="px-4 py-2">W/kg @ ${ftp} W</th></tr></thead><tbody>`;
             
             // Generate rows -5 to +5 lbs
             for(let i = -5; i <= 5; i++) {

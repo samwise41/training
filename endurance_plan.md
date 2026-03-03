@@ -25,7 +25,7 @@ The Master Training Plan is to provide structured training for the athlete over 
 ### Biometrics & Fitness
 
 * **Weight:** 176 lbs.
-* **Cycling FTP:** 265 Watts (Earned Feb 24th, 2026 via Zwift Games Hudson Hustle).
+* **Cycling FTP:** 272 Watts (Earned Mar 3rd, 2026 via Zwift Games Cobbled Crown).
 * **Running Fitness:**
   * **Lactate Threshold HR (LTHR):** 171 bpm (Validated Dec 26, 2025).
   * **Functional Threshold Pace (FTP):** 7:45 min/mile (Wind-adjusted estimate).
@@ -222,6 +222,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 | Date | FTP (Watts) | Growth |
 | :--- | :--- | :--- |
+| Mar 03, 2025 | 272 W | +7 W |
 | Feb 24, 2025 | 265 W | +5 W |
 | Feb 05, 2025 | 260 W | +19 W |
 | Dec 23, 2025 | 241 W | +1 W |

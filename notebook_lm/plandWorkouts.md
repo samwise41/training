@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-02 02:31:54
+**Generated:** 2026-03-03 02:34:26
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -27,11 +27,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Open Water Transfer. Include one 400m+ continuous segment and 6-10 'sighting reps'.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 42.2,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 94,
+    "completed": true
   },
   {
     "date": "2026-03-03",

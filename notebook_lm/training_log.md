@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-02 02:31:53
+**Generated:** 2026-03-03 02:34:25
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-02",
+    "day": "Monday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": false
+    },
+    "plannedWorkout": "[SWIM] Endurance Intervals",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Open Water Transfer. Include one 400m+ continuous segment and 6-10 'sighting reps'.",
+    "actualDuration": 42.2,
+    "id": 22038962795,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 2521.0419921875,
+    "distance": 950.0,
+    "averageHR": 121.0,
+    "maxHR": 160.0,
+    "aerobicTrainingEffect": 2.0999999046325684,
+    "anaerobicTrainingEffect": 2.0,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.796999990940094,
+    "maxSpeed": 1.3650000095367432,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 416.0,
+    "elevationGain": null,
+    "RPE": 5.0,
+    "Feeling": 2
+  },
   {
     "date": "2026-03-01",
     "day": "Sunday",
@@ -16,7 +63,7 @@
     "notes": "**Focus:** Sleep catch-up. Let your body absorb the work before Phase 2.",
     "actualDuration": 0,
     "id": "PLAN-2026-03-01-Other",
-    "status": "PLANNED"
+    "status": "UNKNOWN"
   },
   {
     "date": "2026-02-28",

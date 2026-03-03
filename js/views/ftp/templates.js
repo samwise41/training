@@ -62,7 +62,10 @@ export const FTPTemplates = {
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="relative">
-                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Weight (lbs)</label>
+                    <div class="flex justify-between items-end mb-1">
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase">Weight (lbs)</label>
+                        <span id="calc-weight-kg" class="text-[10px] font-mono font-bold text-blue-400/80"></span>
+                    </div>
                     <input type="number" id="calc-weight" step="0.1" class="calc-input w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xl font-mono transition-colors placeholder-slate-600" placeholder="e.g. 175">
                 </div>
                 <div class="relative">

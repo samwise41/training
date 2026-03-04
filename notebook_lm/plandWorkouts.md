@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-03 02:34:26
+**Generated:** 2026-03-04 02:27:05
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -40,11 +40,11 @@
     "plannedDuration": 60.0,
     "notes": "**Focus:** Zwift Games. Let's attack that Anaerobic Impact weakness (1.63). Empty the tank on the spikes!",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 72.9,
+    "actualWorkout": "Zwift - Race: Stage 3: Zwift Games: Cobbled Crown (C)",
+    "status": "COMPLETED",
+    "compliance": 122,
+    "completed": true
   },
   {
     "date": "2026-03-04",

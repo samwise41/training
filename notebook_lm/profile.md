@@ -1,5 +1,5 @@
 # Athlete Profile
-**Generated:** 2026-03-03 02:34:26
+**Generated:** 2026-03-04 02:27:05
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/zones/profile.json
 
 ---
@@ -9,8 +9,8 @@
 {
   "weight_lbs": 176,
   "weight_kg": 79.8,
-  "ftp_watts": 265,
-  "wkg": 3.32,
+  "ftp_watts": 272,
+  "wkg": 3.41,
   "lthr": "171",
   "run_ftp_pace": "7:45",
   "five_k_time": "23:42",
@@ -19,6 +19,6 @@
     "label": "Good",
     "color": "#22c55e"
   },
-  "gauge_percent": 0.46399999999999997
+  "gauge_percent": 0.48200000000000004
 }
 ```

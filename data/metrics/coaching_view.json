@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04 13:58:27",
+  "generated_at": "2026-03-04 15:06:52",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -410,24 +410,24 @@
             "min_duration_minutes": 15,
             "ignore_zero": true
           },
-          "current_value": 0.57,
-          "status": "Off Target",
+          "current_value": 0.58,
+          "status": "Warning",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.0052164646233020225
+              "slope": 0.013680353321456043
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.009503138669457662
+              "slope": -0.008184091080134957
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0008505753002037747
+              "slope": 0.0012617763705594352
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0008505753002037747
+              "slope": 0.0012617763705594352
             }
           },
           "has_data": true
@@ -603,24 +603,24 @@
             "min_duration_minutes": 40,
             "ignore_zero": false
           },
-          "current_value": 4.38,
-          "status": "On Target",
+          "current_value": 5.15,
+          "status": "Warning",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.1410000000000001
+              "slope": 0.8400000000000002
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.16631868131868124
+              "slope": -0.012021978021978004
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.11422077922077921
+              "slope": -0.05239412761151891
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.11422077922077921
+              "slope": -0.05239412761151891
             }
           },
           "has_data": true

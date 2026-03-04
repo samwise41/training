@@ -240,15 +240,15 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { 
                     type: 'linear', position: 'left',
-                    title: { display: true, text: 'Watts', color: color, font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
+                    title: { display: true, text: 'Watts', color: '#64748b', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { color: '#334155' }, 
-                    ticks: { color: '#94a3b8', font: { family: FONT_FAMILY } } 
+                    ticks: { color: '#64748b', font: { family: FONT_FAMILY } } 
                 },
                 y1: { 
                     type: 'linear', position: 'right',
-                    title: { display: true, text: 'W/kg', color: '#10b981', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
+                    title: { display: true, text: 'W/kg', color: '#64748b', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { display: false }, 
-                    ticks: { color: '#10b981', font: { family: FONT_FAMILY } } 
+                    ticks: { color: '#64748b', font: { family: FONT_FAMILY } } 
                 }
             }),
             plugins: [verticalLinePlugin, lockPlugin]
@@ -279,15 +279,15 @@ export const FTPCharts = {
             options: this._getCommonOptions({
                 y: { 
                     type: 'linear', position: 'left', reverse: true,
-                    title: { display: true, text: 'Pace', color: color, font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
+                    title: { display: true, text: 'Pace', color: '#64748b', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { color: '#334155' }, 
-                    ticks: { color: '#94a3b8', font: { family: FONT_FAMILY }, callback: formatPaceSec } 
+                    ticks: { color: '#64748b', font: { family: FONT_FAMILY }, callback: formatPaceSec } 
                 },
                 y1: { 
                     type: 'linear', position: 'right',
-                    title: { display: true, text: 'BPM', color: '#ef4444', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
+                    title: { display: true, text: 'BPM', color: '#64748b', font: { size: 9, weight: 'bold', family: FONT_FAMILY } },
                     grid: { display: false }, 
-                    ticks: { color: '#ef4444', font: { family: FONT_FAMILY } } 
+                    ticks: { color: '#64748b', font: { family: FONT_FAMILY } } 
                 }
             }),
             plugins: [verticalLinePlugin, lockPlugin]
@@ -296,8 +296,8 @@ export const FTPCharts = {
 
     _getCommonOptions(scales) {
         return {
+            color: '#64748b', // Forces all default Chart text (if any) to not render black
             responsive: true, maintainAspectRatio: false,
-            // Added axis: 'x' so it snaps cleanly along the X axis without dropping between plots
             interaction: { mode: 'index', intersect: false, axis: 'x' },
             scales: { 
                 x: { 
@@ -311,7 +311,7 @@ export const FTPCharts = {
                     display: true, 
                     position: 'bottom',
                     labels: {
-                        color: '#94a3b8',
+                        color: '#64748b',
                         font: { family: FONT_FAMILY, size: 10 },
                         boxWidth: 12
                     }

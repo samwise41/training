@@ -4509,6 +4509,24 @@
         ]
     },
     {
+        "date": "2026-03-05",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 41.2,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 41.2
+            }
+        ]
+    },
+    {
         "date": "2026-05-09",
         "complianceStatus": "Event",
         "plannedDuration": 0,

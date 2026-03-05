@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-04 02:27:05
+**Generated:** 2026-03-05 02:29:55
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -53,11 +53,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Quick feet! Your Run PE is 0.58. 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 44.7,
+    "actualWorkout": "Roy - 20 minutes at Tempo with 6x20 St",
+    "status": "COMPLETED",
+    "compliance": 99,
+    "completed": true
   },
   {
     "date": "2026-03-05",

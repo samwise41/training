@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-05 02:29:55
+**Generated:** 2026-03-06 02:27:57
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -66,11 +66,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** T1 Practice. After your main set, practice the 'Shore Exit'.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 41.2,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 92,
+    "completed": true
   },
   {
     "date": "2026-03-06",

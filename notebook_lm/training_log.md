@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-05 02:29:54
+**Generated:** 2026-03-06 02:27:56
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-05",
+    "day": "Thursday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": false
+    },
+    "plannedWorkout": "[SWIM] Recovery Endurance",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** T1 Practice. After your main set, practice the 'Shore Exit'.",
+    "actualDuration": 41.2,
+    "id": 22069825977,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 2462.044921875,
+    "distance": 1350.0,
+    "averageHR": 118.0,
+    "maxHR": 155.0,
+    "aerobicTrainingEffect": 2.200000047683716,
+    "anaerobicTrainingEffect": 0.699999988079071,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.8040000200271608,
+    "maxSpeed": 1.7239999771118164,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 382.0,
+    "elevationGain": null,
+    "RPE": 3.0,
+    "Feeling": 3,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-03-04",
     "day": "Wednesday",

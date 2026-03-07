@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-07 02:21:45
+**Generated:** 2026-03-07 14:25:19
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -92,11 +92,11 @@
     "plannedDuration": 120.0,
     "notes": "**Focus:** Fix Bike HR Drift (8.53%). Strict Z2. Set up your transition area before you clip in.",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 122.2,
+    "actualWorkout": "Thio Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 102,
+    "completed": true
   },
   {
     "date": "2026-03-07",
@@ -105,11 +105,11 @@
     "plannedDuration": 15.0,
     "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 14.0,
+    "actualWorkout": "Roy Running",
+    "status": "COMPLETED",
+    "compliance": 93,
+    "completed": true
   }
 ]
 ```

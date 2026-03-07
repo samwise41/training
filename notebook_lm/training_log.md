@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-06 02:27:56
+**Generated:** 2026-03-07 02:21:44
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-06",
+    "day": "Friday",
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[RUN] Aerobic Endurance",
+    "plannedDuration": 40.0,
+    "notes": "**Focus:** Active Recovery. Strict Zone 2 HR.",
+    "actualDuration": 46.1,
+    "id": 22081072286,
+    "actualWorkout": "Roy - Z2 - 45 Minutes",
+    "actualSport": "Run",
+    "sportTypeId": 1,
+    "duration": 2766.5869140625,
+    "distance": 8086.77978515625,
+    "averageHR": 145.0,
+    "maxHR": 157.0,
+    "aerobicTrainingEffect": 3.299999952316284,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 334.0,
+    "maxPower": 426.0,
+    "normPower": 345.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 2.9230000972747803,
+    "maxSpeed": 3.7320001125335693,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 174.375,
+    "avgStrideLength": 100.39000244140625,
+    "avgVerticalOscillation": 7.769999694824219,
+    "avgVerticalRatio": 7.760000228881836,
+    "avgGroundContactTime": 250.5,
+    "vO2MaxValue": 54.0,
+    "calories": 668.0,
+    "elevationGain": 44.0,
+    "RPE": 3.0,
+    "Feeling": 5,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-03-05",
     "day": "Thursday",

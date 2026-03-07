@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-06 02:27:57
+**Generated:** 2026-03-07 02:21:45
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -79,11 +79,11 @@
     "plannedDuration": 40.0,
     "notes": "**Focus:** Active Recovery. Strict Zone 2 HR.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 46.1,
+    "actualWorkout": "Roy - Z2 - 45 Minutes",
+    "status": "COMPLETED",
+    "compliance": 115,
+    "completed": true
   },
   {
     "date": "2026-03-07",

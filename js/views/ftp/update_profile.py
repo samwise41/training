@@ -32,6 +32,50 @@ def extract_value(text, patterns):
             return match.group(1).strip()
     return None
 
+def update_cycling_zones_in_markdown(file_path, content, ftp):
+    if ftp <= 0:
+        return content
+        
+    # Calculate zones based on the proportions of your current table
+    z1_max = round(ftp * 0.54)
+    z2_min = z1_max + 1
+    z2_max = round(ftp * 0.73)
+    z3_min = z2_max + 1
+    z3_max = round(ftp * 0.86)
+    ss_min = z3_max + 1
+    ss_max = round(ftp * 0.92)
+    z4_min = ss_max + 1
+    z4_max = round(ftp * 1.02)
+    z5_min = z4_max + 1
+    z5_max = round(ftp * 1.17)
+    
+    new_table_rows = (
+        f"| Zone 1 (Recovery) | < {z1_max}W |\n"
+        f"| Zone 2 (Endurance) | {z2_min}W – {z2_max}W |\n"
+        f"| Zone 3 (Tempo) | {z3_min}W – {z3_max}W |\n"
+        f"| Sweet Spot | {ss_min}W – {ss_max}W | \n"
+        f"| Zone 4 (Threshold)| {z4_min}W – {z4_max}W |\n"
+        f"| Zone 5 (VO2 Max) | {z5_min}W – {z5_max}W |\n"
+    )
+    
+    # Regex to find the Cycling Power Zones table and replace just the data rows
+    pattern = re.compile(
+        r"(### Cycling Power Zones\s*\n\s*\|.*?\|\s*\n\s*\|:---\|:---\|\s*\n)([\s\S]*?)(?=\n\n|\n###|$)", 
+        re.IGNORECASE
+    )
+    
+    if pattern.search(content):
+        # Swap in the new rows
+        new_content = pattern.sub(rf"\g<1>{new_table_rows}", content)
+        
+        if new_content != content:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            print(f"   • Updated Cycling Zones table in markdown for {ftp}W")
+        return new_content
+        
+    return content
+
 def parse_plan():
     if not PROJECT_ROOT:
         print("❌ CRITICAL ERROR: Could not find 'endurance_plan.md'.")

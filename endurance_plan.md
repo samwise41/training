@@ -69,12 +69,13 @@ The Master Training Plan is to provide structured training for the athlete over 
 
 | Zone | Range |
 |:---|:---|
-| Zone 1 (Recovery) | < 147W |
-| Zone 2 (Endurance) | 148W – 199W |
-| Zone 3 (Tempo) | 200W – 234W |
-| Sweet Spot | 235W – 250W | 
-| Zone 4 (Threshold)| 251W – 277W |
-| Zone 5 (VO2 Max) | 278W – 318W |
+| Zone 1 (Recovery) | < 150W |
+| Zone 2 (Endurance) | 151W – 204W |
+| Zone 3 (Tempo) | 205W – 245W |
+| Sweet Spot | 246W – 264W | 
+| Zone 4 (Threshold)| 265W – 286W |
+| Zone 5 (VO2 Max) | 287W – 326W |
+
 
 
 

@@ -190,16 +190,7 @@ This logic dictates the maximum allowed week-over-week volume increase. The tota
 
 ## 5. Weekly Schedule & Logistics
 
-| **Status** | **Day** | **Planned Workout** | **Planned Duration** | **Actual Workout** | **Actual Duration** | **Notes / Targets** | **Date** |
-|:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 | | | **Focus:** Sleep catch-up. Let your body absorb the work before Phase 2. | 2026-03-01 |
-| PLANNED | Monday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Include one 400m+ continuous segment and 6-10 'sighting reps'. | 2026-03-02 |
-| PLANNED | Tuesday | [BIKE] Zwift Race | 60 | | | **Focus:** Zwift Games. Let's attack that Anaerobic Impact weakness (1.63). Empty the tank on the spikes! | 2026-03-03 |
-| PLANNED | Wednesday | [RUN] Tempo / Speed Intervals | 45 | | | **Focus:** Quick feet! Your Run PE is 0.58. 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides. | 2026-03-04 |
-| PLANNED | Thursday | [SWIM] Recovery Endurance | 45 | | | **Focus:** T1 Practice. After your main set, practice the 'Shore Exit'. | 2026-03-05 |
-| PLANNED | Friday | [RUN] Aerobic Endurance | 40 | | | **Focus:** Active Recovery. Strict Zone 2 HR. | 2026-03-06 |
-| PLANNED | Saturday | [BIKE] Long Steady Distance | 120 | | | **Focus:** Fix Bike HR Drift (8.53%). Strict Z2. Set up your transition area before you clip in. | 2026-03-07 |
-| PLANNED | Saturday | [RUN] Zone 2 Base | 15 | | | **Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike. | 2026-03-07 |
+See data/current_week.md
 
 
 ## 6. Fueling Strategy & Equipment

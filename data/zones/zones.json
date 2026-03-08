@@ -35,31 +35,31 @@
         "zones": [
             {
                 "name": "Zone 1 (Recovery)",
-                "range": "< 139 bpm"
+                "range": "< 130 bpm"
             },
             {
                 "name": "Zone 2 (Endurance)",
-                "range": "140 \u2013 152 bpm"
+                "range": "131 \u2013 143 bpm"
             },
             {
                 "name": "Zone 3 (Tempo)",
-                "range": "153 \u2013 161 bpm"
+                "range": "144 \u2013 151 bpm"
             },
             {
                 "name": "Zone 4 (Threshold)",
-                "range": "162 \u2013 170 bpm"
+                "range": "152 \u2013 160 bpm"
             },
             {
                 "name": "Zone 5a (Anaerobic Capacity)",
-                "range": "171 \u2013 174 bpm"
+                "range": "161 \u2013 164 bpm"
             },
             {
                 "name": "Zone 5b (Anaerobic Endurance)",
-                "range": "175 \u2013 181 bpm"
+                "range": "165 \u2013 171 bpm"
             },
             {
                 "name": "Zone 5c (Anaerobic Power)",
-                "range": "> 182 bpm"
+                "range": "> 171 bpm"
             }
         ]
     }

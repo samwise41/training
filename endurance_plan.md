@@ -82,17 +82,19 @@ The Master Training Plan is to provide structured training for the athlete over 
 
 
 
+
 ### Running Heart Rate Zones
 
 | Zone | Range |
 |:---|:---|
-| Zone 1 (Recovery) | < 130 bpm |
-| Zone 2 (Endurance) | 131 – 143 bpm |
-| Zone 3 (Tempo) | 144 – 151 bpm |
-| Zone 4 (Threshold) | 152 – 160 bpm |
-| Zone 5a (Anaerobic Capacity) | 161 – 164 bpm |
-| Zone 5b (Anaerobic Endurance) | 165 – 171 bpm |
-| Zone 5c (Anaerobic Power) | > 171 bpm |
+| Zone 1 (Recovery) | < 139 bpm |
+| Zone 2 (Endurance) | 140 – 152 bpm |
+| Zone 3 (Tempo) | 153 – 161 bpm |
+| Zone 4 (Threshold) | 162 – 170 bpm |
+| Zone 5a (Anaerobic Capacity) | 171 – 174 bpm |
+| Zone 5b (Anaerobic Endurance) | 175 – 181 bpm |
+| Zone 5c (Anaerobic Power) | > 181 bpm |
+
 
 
 
@@ -235,6 +237,7 @@ See data/current_week.md
 
 | Date | LTHR (bpm) | Growth (bpm) | FTP | Growth (Pace) |
 | :--- | :--- | :--- | :--- | :--- |
+| Mar 08, 2026 | 171 bpm | -- | 7:45 | -- |
 | Dec 26, 2025 | 171 bpm | Baseline | 7:45 min/mile | Baseline |
 
 ## 8. Documentation Workflow

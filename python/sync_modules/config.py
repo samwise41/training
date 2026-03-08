@@ -15,7 +15,7 @@ GARMIN_JSON = os.path.join(DATA_DIR, 'my_garmin_data_ALL.json')
 PLANNED_JSON = os.path.join(DASHBOARD_DIR, 'planned.json') 
 MASTER_DB_JSON = os.path.join(DATA_DIR, 'training_log.json')
 COACH_BRIEFING_MD = os.path.join(DATA_DIR, 'COACH_BRIEFING.md')
-PLAN_MARKDOWN = os.path.join(BASE_DIR, 'endurance_plan.md')
+PLAN_MARKDOWN = os.path.join(DATA_DIR, 'current_week.md')
 
 # --- SETTINGS ---
 GARMIN_FETCH_LIMIT = 40

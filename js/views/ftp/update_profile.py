@@ -1,6 +1,7 @@
 import re
 import json
 import os
+from datetime import datetime 
 
 # --- CONFIGURATION ---
 def find_project_root():
@@ -76,6 +77,54 @@ def update_cycling_zones_in_markdown(file_path, content, ftp):
         
     return content
 
+def update_historical_ftp_log(file_path, content, current_ftp):
+    if current_ftp <= 0:
+        return content
+
+    # Regex to find the Historical FTP Log table and its formatting header
+    pattern = re.compile(
+        r"(### Historical FTP Log\s*\n\s*\|.*?\|\s*\n\s*\|[:\-\s|]+\|\s*\n)([\s\S]*?)(?=\n\n|\n###|$)", 
+        re.IGNORECASE
+    )
+    
+    match = pattern.search(content)
+    if not match:
+        return content
+        
+    header_block = match.group(1)
+    rows_block = match.group(2)
+    
+    # Safely parse the top data row to get the previous FTP
+    try:
+        first_row = rows_block.strip().split('\n')[0]
+        # cols format: ['', ' Mar 03, 2025 ', ' 272 W ', ' +7 W ', '']
+        prev_ftp_str = first_row.split('|')[2] 
+        prev_ftp = int(re.sub(r"[^\d]", "", prev_ftp_str))
+    except (IndexError, ValueError, AttributeError):
+        prev_ftp = current_ftp # Fallback to prevent crash
+        
+    # Stop if the top row already matches our current FTP (prevents duplicates)
+    if current_ftp == prev_ftp:
+        return content
+        
+    # Calculate the change
+    diff = current_ftp - prev_ftp
+    growth_str = f"+{diff} W" if diff > 0 else f"{diff} W"
+    date_str = datetime.now().strftime('%b %d, %Y')
+    
+    # Build the new table row
+    new_row = f"| {date_str} | {current_ftp} W | {growth_str} |\n"
+    
+    # Replace the content, injecting the new row immediately after the header block
+    new_content = pattern.sub(rf"\g<1>{new_row}\g<2>", content)
+    
+    if new_content != content:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+        print(f"   • Logged new FTP: {current_ftp}W ({growth_str}) on {date_str}")
+        
+    return new_content
+
 def parse_plan():
     if not PROJECT_ROOT:
         print("❌ CRITICAL ERROR: Could not find 'endurance_plan.md'.")
@@ -107,6 +156,10 @@ def parse_plan():
 
     if watts > 0:
         content = update_cycling_zones_in_markdown(plan_file, content, watts)
+        content = update_historical_ftp_log(plan_file, content, watts)
+
+
+
     
     # LTHR: Matches "Lactate Threshold HR (LTHR): 171" or "LTHR: 171"
     # The '.*?' ignores the "(LTHR)" part

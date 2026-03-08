@@ -26,7 +26,7 @@
         "plannedWorkout": "[BIKE] Zwift Race",
         "plannedDuration": 60.0,
         "activityType": "Bike",
-        "notes": "**Focus:** Zwift Games (Peaky Pave). Fix Anaerobic Impact (1.71). Suffer on the mountain, drive the flats!",
+        "notes": "**Focus:** Zwift Games (Peaky Pave). Cat 390-510. Fix Anaerobic Impact (1.71). Suffer on the mountain, drive the flats!",
         "status": "PLANNED"
     },
     {
@@ -43,20 +43,30 @@
         "id": "PLAN-2026-03-12-Swim",
         "date": "2026-03-12",
         "day": "Thursday",
-        "plannedWorkout": "[SWIM] Recovery Endurance",
-        "plannedDuration": 45.0,
+        "plannedWorkout": "[SWIM] Touch Swim",
+        "plannedDuration": 15.0,
         "activityType": "Swim",
-        "notes": "**Focus:** T1 Simulation. Practice the 'Shore Exit' and smooth rotation. Keep it light.",
+        "notes": "**Focus:** Drills only. Maintain feel for the water.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-12-Bike",
+        "date": "2026-03-12",
+        "day": "Thursday",
+        "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
+        "plannedDuration": 60.0,
+        "activityType": "Bike",
+        "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2.",
         "status": "PLANNED"
     },
     {
         "id": "PLAN-2026-03-13-Run",
         "date": "2026-03-13",
         "day": "Friday",
-        "plannedWorkout": "[RUN] Aerobic Endurance",
+        "plannedWorkout": "[RUN] Aerobic Maintenance",
         "plannedDuration": 40.0,
         "activityType": "Run",
-        "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs for the weekend.",
+        "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
         "status": "PLANNED"
     },
     {
@@ -64,9 +74,9 @@
         "date": "2026-03-14",
         "day": "Saturday",
         "plannedWorkout": "[BIKE] Long Steady Distance",
-        "plannedDuration": 120.0,
+        "plannedDuration": 150.0,
         "activityType": "Bike",
-        "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Z2 to build Aerobic Efficiency (1.27). Winter Cap applies (2.0h max).",
+        "notes": "**Focus:** East Canyon Prep. Winter cap broken (2.5h). Fix Bike HR Drift (9.06%). Strict Z2 only!",
         "status": "PLANNED"
     },
     {

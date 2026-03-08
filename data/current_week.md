@@ -1,6 +1,6 @@
 | Status | Day | Planned Workout | Planned Duration | Actual Workout | Actual Duration | Notes / Targets | Date |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 | | | **Focus:** Complete rest. Let your body absorb last week's adaptations. | 2026-03-08 |
+| PLANNED | Sunday | Rest | 0 |  | 0 | **Focus:** Complete rest. Let your body absorb last week's adaptations. | 2026-03-08 |
 | PLANNED | Monday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Add 6-10 'sighting reps'. | 2026-03-09 |
 | PLANNED | Tuesday | [BIKE] Zwift Race | 60 | | | **Focus:** Zwift Games (Peaky Pave). Cat 390-510. Fix Anaerobic Impact (1.71). Suffer on the mountain, drive the flats! | 2026-03-10 |
 | PLANNED | Wednesday | [RUN] Tempo / Speed Intervals | 45 | | | **Focus:** Quick turnover to maintain that great 0.65 PE! 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides. | 2026-03-11 |

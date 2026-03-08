@@ -104,6 +104,9 @@ def parse_plan():
         r'FTP[:\s|*]+(\d+)\s*w'
     ])
     watts = int(watts_str) if watts_str else 0
+
+    if watts > 0:
+        content = update_cycling_zones_in_markdown(plan_file, content, watts)
     
     # LTHR: Matches "Lactate Threshold HR (LTHR): 171" or "LTHR: 171"
     # The '.*?' ignores the "(LTHR)" part

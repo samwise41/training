@@ -38,17 +38,17 @@ def update_cycling_zones_in_markdown(file_path, content, ftp):
         return content
         
     # Calculate zones based on the proportions of your current table
-    z1_max = round(ftp * 0.54)
+    z1_max = round(ftp * 0.55)
     z2_min = z1_max + 1
-    z2_max = round(ftp * 0.73)
+    z2_max = round(ftp * 0.75)
     z3_min = z2_max + 1
-    z3_max = round(ftp * 0.86)
+    z3_max = round(ftp * 0.90)
     ss_min = z3_max + 1
-    ss_max = round(ftp * 0.92)
+    ss_max = round(ftp * 0.97)
     z4_min = ss_max + 1
-    z4_max = round(ftp * 1.02)
+    z4_max = round(ftp * 1.05)
     z5_min = z4_max + 1
-    z5_max = round(ftp * 1.17)
+    z5_max = round(ftp * 1.20)
     
     new_table_rows = (
         f"| Zone 1 (Recovery) | < {z1_max}W |\n"

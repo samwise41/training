@@ -300,6 +300,17 @@ def parse_plan():
         r'5k[:\s|*~]+([\d:]+)'
     ])
     five_k = five_k_str if five_k_str else "--"
+    # ---> ADD THIS BLOCK to trigger the Running Updates <---
+    try:
+        # Clean the lthr string (e.g. "171 bpm") into a pure integer for math
+        lthr_int = int(re.sub(r"[^\d]", "", lthr_str)) if lthr_str else 0
+    except:
+        lthr_int = 0
+
+    if lthr_int > 0:
+        content = update_running_zones_in_markdown(plan_file, content, lthr_int)
+        content = update_historical_lthr_log(plan_file, content, lthr_int, run_ftp)
+
 
     # --- 2. CALCULATIONS ---
     weight_kg = weight * 0.453592

@@ -27,8 +27,8 @@ The Master Training Plan is to provide structured training for the athlete over 
 * **Weight:** 176 lbs.
 * **Cycling FTP:** 272 Watts (Earned Mar 3rd, 2026 via Zwift Games Cobbled Crown).
 * **Running Fitness:**
-  * **Lactate Threshold HR (LTHR):** 161 bpm (Validated Dec 26, 2025).
-  * **Functional Threshold Pace (FTP):** 7:30 min/mile (Wind-adjusted estimate).
+  * **Lactate Threshold HR (LTHR):** 171 bpm (Validated Dec 26, 2025).
+  * **Functional Threshold Pace (FTP):** 7:45 min/mile (Wind-adjusted estimate).
   * **Longest Run:** 9 miles.
   * **5K Prediction:** ~23:42.
 * **Swimming Fitness:** Beginner. Focus on form/drills with coach.
@@ -235,7 +235,6 @@ See data/current_week.md
 
 | Date | LTHR (bpm) | Growth (bpm) | FTP | Growth (Pace) |
 | :--- | :--- | :--- | :--- | :--- |
-| Mar 08, 2026 | 161 bpm | -10 bpm | 7:30 | -15 sec/mi |
 | Dec 26, 2025 | 171 bpm | Baseline | 7:45 min/mile | Baseline |
 
 ## 8. Documentation Workflow

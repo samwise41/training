@@ -125,6 +125,121 @@ def update_historical_ftp_log(file_path, content, current_ftp):
         
     return new_content
 
+def update_running_zones_in_markdown(file_path, content, lthr):
+    if lthr <= 0:
+        return content
+
+    # Calculate zones based on standard Friel LTHR multipliers (matches your current 171bpm table)
+    z1_max = round(lthr * 0.81)
+    z2_min = z1_max + 1
+    z2_max = round(lthr * 0.89)
+    z3_min = z2_max + 1
+    z3_max = round(lthr * 0.94)
+    z4_min = z3_max + 1
+    z4_max = lthr - 1
+    z5a_min = lthr
+    z5a_max = round(lthr * 1.02)
+    z5b_min = z5a_max + 1
+    z5b_max = round(lthr * 1.06)
+    z5c_min = z5b_max + 1
+
+    new_table_rows = (
+        f"| Zone 1 (Recovery) | < {z1_max} bpm |\n"
+        f"| Zone 2 (Endurance) | {z2_min} – {z2_max} bpm |\n"
+        f"| Zone 3 (Tempo) | {z3_min} – {z3_max} bpm |\n"
+        f"| Zone 4 (Threshold) | {z4_min} – {z4_max} bpm |\n"
+        f"| Zone 5a (Anaerobic Capacity) | {z5a_min} – {z5a_max} bpm |\n"
+        f"| Zone 5b (Anaerobic Endurance) | {z5b_min} – {z5b_max} bpm |\n"
+        f"| Zone 5c (Anaerobic Power) | > {z5c_min - 1} bpm |\n"
+    )
+
+    # Regex to find the Running Heart Rate Zones table
+    pattern = re.compile(
+        r"(### Running Heart Rate Zones\s*\n\s*\|.*?\|\s*\n\s*\|:---\|:---\|\s*\n)([\s\S]*?)(?=\n\n|\n###|$)", 
+        re.IGNORECASE
+    )
+    
+    if pattern.search(content):
+        new_content = pattern.sub(rf"\g<1>{new_table_rows}", content)
+        if new_content != content:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            print(f"   • Updated Running Zones table in markdown for {lthr} bpm")
+        return new_content
+        
+    return content
+
+def update_historical_lthr_log(file_path, content, current_lthr, current_run_ftp):
+    if current_lthr <= 0:
+        return content
+
+    pattern = re.compile(
+        r"(### Historical LTHR Log\s*\n\s*\|.*?\|\s*\n\s*\|[:\-\s|]+\|\s*\n)([\s\S]*?)(?=\n\n|\n###|$)", 
+        re.IGNORECASE
+    )
+    
+    match = pattern.search(content)
+    if not match:
+        return content
+        
+    header_block = match.group(1)
+    rows_block = match.group(2)
+    
+    try:
+        first_row = rows_block.strip().split('\n')[0]
+        cols = first_row.split('|')
+        # Format: ['', ' Dec 26, 2025 ', ' 171 bpm ', ' Baseline ', ' 7:45 min/mile ', ' Baseline ', '']
+        prev_lthr = int(re.sub(r"[^\d]", "", cols[2]))
+        prev_ftp_str = cols[4].strip()
+    except (IndexError, ValueError, AttributeError):
+        prev_lthr = current_lthr
+        prev_ftp_str = current_run_ftp
+        
+    # Stop if neither LTHR nor Pace has changed to prevent duplicates
+    if current_lthr == prev_lthr and current_run_ftp == prev_ftp_str:
+        return content
+        
+    # Calculate LTHR Change
+    lthr_diff = current_lthr - prev_lthr
+    if lthr_diff > 0:
+        lthr_growth = f"+{lthr_diff} bpm"
+    elif lthr_diff < 0:
+        lthr_growth = f"{lthr_diff} bpm"
+    else:
+        lthr_growth = "--"
+
+    # Calculate Pace Change in seconds
+    def pace_to_sec(p):
+        try:
+            clean_p = re.sub(r"[^\d:]", "", p)
+            parts = clean_p.split(':')
+            return int(parts[0]) * 60 + int(parts[1]) if len(parts) >= 2 else 0
+        except:
+            return 0
+
+    curr_sec = pace_to_sec(current_run_ftp)
+    prev_sec = pace_to_sec(prev_ftp_str)
+    
+    if curr_sec > 0 and prev_sec > 0 and curr_sec != prev_sec:
+        sec_diff = curr_sec - prev_sec # Negative means faster (e.g. 7:45 to 7:30 = -15)
+        sign = "+" if sec_diff > 0 else "" 
+        pace_growth = f"{sign}{sec_diff} sec/mi"
+    else:
+        pace_growth = "--"
+
+    date_str = datetime.now().strftime('%b %d, %Y')
+    new_row = f"| {date_str} | {current_lthr} bpm | {lthr_growth} | {current_run_ftp} | {pace_growth} |\n"
+    
+    new_content = pattern.sub(rf"\g<1>{new_row}\g<2>", content)
+    
+    if new_content != content:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(new_content)
+        print(f"   • Logged new Run Stats: {current_lthr}bpm / {current_run_ftp} on {date_str}")
+        
+    return new_content
+
+
 def parse_plan():
     if not PROJECT_ROOT:
         print("❌ CRITICAL ERROR: Could not find 'endurance_plan.md'.")

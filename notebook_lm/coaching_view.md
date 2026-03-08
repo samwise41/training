@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-03-07 14:25:18
+**Generated:** 2026-03-08 02:33:21
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-03-07 14:22:13",
+  "generated_at": "2026-03-07 14:35:23",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -147,19 +147,19 @@
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 2.272177419354838
+              "slope": 2.6705645161290317
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.20295844625112913
+              "slope": -0.18064588979223126
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.4460627400768247
+              "slope": 0.4501173708920189
             },
             "1y": {
               "direction": "Falling",
-              "slope": -1.1993304887432175
+              "slope": -1.1983432094570963
             }
           },
           "has_data": true
@@ -212,24 +212,24 @@
           "description": "Subjective vs Objective.",
           "improvement": "\u2022 Align RPE with TSS",
           "formula": "RPE vs TSS",
-          "current_value": 3.53,
+          "current_value": 3.6,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.043859649122807015
+              "slope": 0.058646616541353384
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.009183673469387756
+              "slope": 0.012004801920768306
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0005163511187607576
+              "slope": 0.0016806722689075636
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0020714456555164518
+              "slope": 0.0027114245791469826
             }
           },
           "has_data": true
@@ -256,24 +256,24 @@
             "min_duration_minutes": 20,
             "ignore_zero": true
           },
-          "current_value": 25.44,
+          "current_value": 36.3,
           "status": "On Target",
           "trends": {
             "30d": {
-              "direction": "Falling",
-              "slope": -10.310414246999613
+              "direction": "Rising",
+              "slope": 13.7
             },
             "90d": {
-              "direction": "Falling",
-              "slope": -0.8193941092507285
+              "direction": "Rising",
+              "slope": 0.5198466778049887
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.22177974373573373
+              "slope": 0.8470555009700474
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.14600282671731638
+              "slope": -0.07136542039541076
             }
           },
           "has_data": true

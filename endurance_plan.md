@@ -25,7 +25,7 @@ The Master Training Plan is to provide structured training for the athlete over 
 ### Biometrics & Fitness
 
 * **Weight:** 176 lbs.
-* **Cycling FTP:** 272 Watts (Earned Mar 3rd, 2026 via Zwift Games Cobbled Crown).
+* **Cycling FTP:** 400 Watts (Earned Mar 3rd, 2026 via Zwift Games Cobbled Crown).
 * **Running Fitness:**
   * **Lactate Threshold HR (LTHR):** 171 bpm (Validated Dec 26, 2025).
   * **Functional Threshold Pace (FTP):** 7:45 min/mile (Wind-adjusted estimate).

@@ -217,8 +217,6 @@ See data/current_week.md
 
 | Date | FTP (Watts) | Growth |
 | :--- | :--- | :--- |
-| Mar 08, 2026 | 272 W | -28 W |
-| Mar 08, 2026 | 300 W | +28 W |
 | Mar 03, 2025 | 272 W | +7 W |
 | Feb 24, 2025 | 265 W | +5 W |
 | Feb 05, 2025 | 260 W | +19 W |

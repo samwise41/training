@@ -5,27 +5,27 @@
         "zones": [
             {
                 "name": "Zone 1 (Recovery)",
-                "range": "< 216W"
+                "range": "< 162W"
             },
             {
                 "name": "Zone 2 (Endurance)",
-                "range": "217W \u2013 292W"
+                "range": "163W \u2013 219W"
             },
             {
                 "name": "Zone 3 (Tempo)",
-                "range": "293W \u2013 344W"
+                "range": "220W \u2013 258W"
             },
             {
                 "name": "Sweet Spot",
-                "range": "345W \u2013 368W"
+                "range": "259W \u2013 276W"
             },
             {
                 "name": "Zone 4 (Threshold)",
-                "range": "369W \u2013 408W"
+                "range": "277W \u2013 306W"
             },
             {
                 "name": "Zone 5 (VO2 Max)",
-                "range": "409W \u2013 468W"
+                "range": "307W \u2013 351W"
             }
         ]
     },

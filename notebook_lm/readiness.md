@@ -1,5 +1,5 @@
 # Daily Readiness Scores
-**Generated:** 2026-03-08 02:33:21
+**Generated:** 2026-03-09 02:34:20
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/readiness/readiness.json
 
 ---
@@ -7,14 +7,29 @@
 ## Data Content
 ```json
 {
-  "generatedAt": "2026-03-07T14:35:23.329070",
+  "generatedAt": "2026-03-08T16:25:42.157556",
   "trainingStats": {
     "maxSwim": 42.2,
     "maxBike": 131.1,
-    "maxRun": 53.1,
+    "maxRun": 48.9,
     "maxBikeElev": 1893
   },
   "upcomingEvents": [
+    {
+      "dateStr": "Mar 08, 2026",
+      "name": "171 bpm",
+      "goal": "--",
+      "priority": "7:45",
+      "courseProfile": "--",
+      "trainingImplication": "",
+      "swimDist": "",
+      "swimGoal": "",
+      "bikeDist": "",
+      "bikeGoal": "",
+      "bikeElevGoal": "",
+      "runDist": "",
+      "runGoal": ""
+    },
     {
       "dateStr": "May 9, 2026",
       "name": "East Canyon and Back",

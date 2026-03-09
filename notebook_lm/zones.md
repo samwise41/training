@@ -1,5 +1,5 @@
 # Athlete Zones
-**Generated:** 2026-03-08 02:33:22
+**Generated:** 2026-03-09 02:34:20
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/zones/zones.json
 
 ---
@@ -13,27 +13,27 @@
     "zones": [
       {
         "name": "Zone 1 (Recovery)",
-        "range": "< 146W"
+        "range": "< 150W"
       },
       {
         "name": "Zone 2 (Endurance)",
-        "range": "147W \u2013 199W"
+        "range": "151W \u2013 204W"
       },
       {
         "name": "Zone 3 (Tempo)",
-        "range": "200W \u2013 233W"
+        "range": "205W \u2013 245W"
       },
       {
         "name": "Sweet Spot",
-        "range": "234W \u2013 249W"
+        "range": "246W \u2013 264W"
       },
       {
         "name": "Zone 4 (Threshold)",
-        "range": "250W \u2013 278W"
+        "range": "265W \u2013 286W"
       },
       {
         "name": "Zone 5 (VO2 Max)",
-        "range": "279W \u2013 318W"
+        "range": "287W \u2013 326W"
       }
     ]
   },
@@ -67,7 +67,7 @@
       },
       {
         "name": "Zone 5c (Anaerobic Power)",
-        "range": "> 182 bpm"
+        "range": "> 181 bpm"
       }
     ]
   }

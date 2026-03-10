@@ -1,5 +1,5 @@
 # Daily Readiness Scores
-**Generated:** 2026-03-09 02:34:20
+**Generated:** 2026-03-10 02:26:10
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/readiness/readiness.json
 
 ---
@@ -7,26 +7,26 @@
 ## Data Content
 ```json
 {
-  "generatedAt": "2026-03-08T16:25:42.157556",
+  "generatedAt": "2026-03-09T20:42:01.112698",
   "trainingStats": {
-    "maxSwim": 42.2,
-    "maxBike": 131.1,
+    "maxSwim": 45.3,
+    "maxBike": 122.2,
     "maxRun": 48.9,
     "maxBikeElev": 1893
   },
   "upcomingEvents": [
     {
-      "dateStr": "Mar 08, 2026",
-      "name": "171 bpm",
-      "goal": "--",
-      "priority": "7:45",
-      "courseProfile": "--",
-      "trainingImplication": "",
+      "dateStr": "March 29, 2026",
+      "name": "Alpe du Zwift 1 Hour Challenge",
+      "goal": "Finish 1:00:00",
+      "priority": "C-Race",
+      "courseProfile": "3400 ft of climb",
+      "trainingImplication": "Needs low-cadence/high-torque bike intervals (Strength Endurance).",
       "swimDist": "",
       "swimGoal": "",
-      "bikeDist": "",
-      "bikeGoal": "",
-      "bikeElevGoal": "",
+      "bikeDist": "7.6 Miles",
+      "bikeGoal": "1:00:00",
+      "bikeElevGoal": "3600 ft",
       "runDist": "",
       "runGoal": ""
     },
@@ -59,6 +59,21 @@
       "bikeElevGoal": "1202 ft",
       "runDist": "10 k",
       "runGoal": "00:50:33"
+    },
+    {
+      "dateStr": "July 4, 2026",
+      "name": "Four Horsemen Route in Zwift",
+      "goal": "Finish",
+      "priority": "C-Race",
+      "courseProfile": "6932 ft of climb",
+      "trainingImplication": "Enduration at high zone 2.",
+      "swimDist": "",
+      "swimGoal": "",
+      "bikeDist": "55.1 Miles",
+      "bikeGoal": "4:00:00",
+      "bikeElevGoal": "6932 ft",
+      "runDist": "",
+      "runGoal": ""
     },
     {
       "dateStr": "July 25, 2026",

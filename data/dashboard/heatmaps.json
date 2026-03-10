@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4304,8 +4304,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 75.9,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4400,8 +4400,8 @@
         "plannedDuration": 65.0,
         "actualDuration": 74.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4583,6 +4583,24 @@
                 "name": "Pool Swim",
                 "sport": "Swim",
                 "actual": 45.3
+            }
+        ]
+    },
+    {
+        "date": "2026-03-10",
+        "complianceStatus": "Completed",
+        "plannedDuration": 60.0,
+        "actualDuration": 75.0,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Zwift - Race: Stage 4: Zwift Games: Peaky Pave (B)",
+                "sport": "Bike",
+                "actual": 75.0
             }
         ]
     },

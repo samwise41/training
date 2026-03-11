@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-10 02:26:11
+**Generated:** 2026-03-11 02:25:49
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -40,11 +40,11 @@
     "plannedDuration": 60.0,
     "notes": "**Focus:** Zwift Games (Peaky Pave). Cat 390-510. Fix Anaerobic Impact (1.71). Suffer on the mountain, drive the flats!",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 75.0,
+    "actualWorkout": "Zwift - Race: Stage 4: Zwift Games: Peaky Pave (B)",
+    "status": "COMPLETED",
+    "compliance": 125,
+    "completed": true
   },
   {
     "date": "2026-03-11",

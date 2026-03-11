@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-10 02:26:10
+**Generated:** 2026-03-11 02:25:48
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-10",
+    "day": "Tuesday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Zwift Race",
+    "plannedDuration": 60.0,
+    "notes": "**Focus:** Zwift Games (Peaky Pave). Cat 390-510. Fix Anaerobic Impact (1.71). Suffer on the mountain, drive the flats!",
+    "actualDuration": 75.0,
+    "id": "22125236984,22125517345",
+    "actualWorkout": "Zwift - Race: Stage 4: Zwift Games: Peaky Pave (B)",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 4364.0,
+    "distance": 35680.63037109375,
+    "averageHR": 152.62557286892758,
+    "maxHR": 181.0,
+    "aerobicTrainingEffect": 4.400000095367432,
+    "anaerobicTrainingEffect": 1.5,
+    "trainingEffectLabel": "VO2MAX",
+    "avgPower": 192.01191567369386,
+    "maxPower": 633.0,
+    "normPower": 202.56355835805167,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 9.8149995803833,
+    "maxSpeed": 17.655000686645508,
+    "averageBikingCadenceInRevPerMinute": 72.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 878.0,
+    "elevationGain": 419.0,
+    "RPE": null,
+    "Feeling": null,
+    "matchStatus": "Linked Group",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-03-09",
     "day": "Monday",

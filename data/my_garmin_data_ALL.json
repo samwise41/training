@@ -9,8 +9,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -70,7 +70,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -137,15 +138,15 @@
         "endTimeGMT": "2026-03-10 12:27:10",
         "qualifyingDive": false,
         "activityUUID": "3698bda9-dd84-4cad-9d0d-f99ae52f2d59",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -159,8 +160,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -220,7 +221,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -289,15 +291,15 @@
         "endTimeGMT": "2026-03-10 12:03:29",
         "qualifyingDive": false,
         "activityUUID": "1a881d17-d088-4794-ba2a-390b057bb6b8",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -311,8 +313,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -370,7 +372,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -420,15 +423,15 @@
         "endTimeGMT": "2026-03-09 12:09:20",
         "qualifyingDive": false,
         "activityUUID": "06d8228f-2aee-4d7e-8b8c-600e105a43dc",
-        "atpActivity": false,
-        "pr": true,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": true,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 4.0,
         "Feeling": 5
     },
@@ -442,8 +445,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -505,7 +508,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -615,15 +619,15 @@
         "endTimeGMT": "2026-03-07 14:18:43",
         "qualifyingDive": false,
         "activityUUID": "72f0fa30-3e0e-41a6-92d7-a222c992b152",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 3.0,
         "Feeling": 5
     },
@@ -637,8 +641,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -699,7 +703,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -771,15 +776,15 @@
         "endTimeGMT": "2026-03-07 13:58:09",
         "qualifyingDive": false,
         "activityUUID": "db826996-e911-40e6-865d-546366b7a64d",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 3.0,
         "Feeling": 5
     },
@@ -793,8 +798,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -856,7 +861,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -998,15 +1004,15 @@
         "endTimeGMT": "2026-03-06 13:42:44",
         "qualifyingDive": false,
         "activityUUID": "dcd8e040-770c-4dbe-b872-4b5a54d7c673",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 3.0,
         "Feeling": 5
     },
@@ -1020,8 +1026,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -1079,7 +1085,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -1128,15 +1135,15 @@
         "endTimeGMT": "2026-03-05 13:04:00",
         "qualifyingDive": false,
         "activityUUID": "cf2d6547-992c-48f3-93e7-fa20f70e6b33",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 3.0,
         "Feeling": 3
     },
@@ -1150,8 +1157,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1213,7 +1220,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -1388,15 +1396,15 @@
         "endTimeGMT": "2026-03-04 13:46:43",
         "qualifyingDive": false,
         "activityUUID": "4ecfeadc-652a-4634-b38c-8a0f0a37c4c2",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 6.0,
         "Feeling": 4
     },
@@ -1410,8 +1418,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1471,7 +1479,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -1540,15 +1549,15 @@
         "endTimeGMT": "2026-03-03 12:51:11",
         "qualifyingDive": false,
         "activityUUID": "7743d1fb-fd24-49c3-80aa-197b7f62676b",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -1562,8 +1571,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -1621,7 +1630,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -1669,15 +1679,15 @@
         "endTimeGMT": "2026-03-02 19:01:32",
         "qualifyingDive": false,
         "activityUUID": "07ee7a02-475b-47bc-bd51-0048007080d3",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 5.0,
         "Feeling": 2
     },
@@ -1691,8 +1701,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1752,7 +1762,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -1822,15 +1833,15 @@
         "endTimeGMT": "2026-02-28 13:55:50",
         "qualifyingDive": false,
         "activityUUID": "dab21bb5-294e-41ce-aaaa-daa336854c2c",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -1844,8 +1855,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -1907,7 +1918,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2018,15 +2030,15 @@
         "endTimeGMT": "2026-02-27 23:14:12",
         "qualifyingDive": false,
         "activityUUID": "042f9f09-02a5-40b8-84d4-253ea35bc1fe",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 4.0,
         "Feeling": 4
     },
@@ -2040,8 +2052,8 @@
             "typeKey": "swimming",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 4,
@@ -2092,7 +2104,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2121,15 +2134,15 @@
         "endTimeGMT": "2026-02-27 00:15:02",
         "qualifyingDive": false,
         "activityUUID": "d4684213-8141-4124-b6ec-9973c1684356",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": true,
+        "pr": false,
         "autoCalcCalories": true,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": true,
         "RPE": null,
         "Feeling": null
     },
@@ -2143,8 +2156,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2206,7 +2219,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2378,15 +2392,15 @@
         "endTimeGMT": "2026-02-26 22:27:59",
         "qualifyingDive": false,
         "activityUUID": "78622e5e-a927-42a8-bedf-719b5a28c360",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 7.0,
         "Feeling": 4
     },
@@ -2400,8 +2414,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2461,7 +2475,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2531,15 +2546,15 @@
         "endTimeGMT": "2026-02-25 13:52:11",
         "qualifyingDive": false,
         "activityUUID": "a90fa22e-e7aa-4383-b1f6-ecf64e8b3fa9",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -2553,8 +2568,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2614,7 +2629,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2679,15 +2695,15 @@
         "endTimeGMT": "2026-02-24 13:00:13",
         "qualifyingDive": false,
         "activityUUID": "b71f2198-7fa4-4985-926a-589794c63f34",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -2701,8 +2717,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -2762,7 +2778,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2830,15 +2847,15 @@
         "endTimeGMT": "2026-02-24 12:42:04",
         "qualifyingDive": false,
         "activityUUID": "7384af6c-04ea-417d-a0d3-187864fe4cbf",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -2852,8 +2869,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -2911,7 +2928,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -2959,15 +2977,15 @@
         "endTimeGMT": "2026-02-23 13:09:42",
         "qualifyingDive": false,
         "activityUUID": "bdff6e72-431a-46f8-9261-2e23c8d5b80c",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 4.0,
         "Feeling": 2
     },
@@ -2981,8 +2999,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -3040,7 +3058,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -3087,15 +3106,15 @@
         "endTimeGMT": "2026-02-23 12:50:00",
         "qualifyingDive": false,
         "activityUUID": "23486f80-db7f-4a09-b0b4-2fb9cf40d9cf",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 4.0,
         "Feeling": 3
     },
@@ -3109,8 +3128,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3170,7 +3189,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -3240,15 +3260,15 @@
         "endTimeGMT": "2026-02-21 14:15:00",
         "qualifyingDive": false,
         "activityUUID": "5d76fa28-ee03-4526-9268-6cc7d310040b",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -3262,8 +3282,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3325,7 +3345,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -3421,15 +3442,15 @@
         "endTimeGMT": "2026-02-20 21:34:01",
         "qualifyingDive": false,
         "activityUUID": "882e3ad5-f932-450c-9b6c-bcacadbc336c",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 5.0,
         "Feeling": 4
     },
@@ -3443,8 +3464,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -3502,7 +3523,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -3550,15 +3572,15 @@
         "endTimeGMT": "2026-02-20 12:54:57",
         "qualifyingDive": false,
         "activityUUID": "506e3071-78dc-42ac-ace3-314fbc793d44",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 3.0,
         "Feeling": 2
     },
@@ -3572,8 +3594,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3633,7 +3655,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -3703,15 +3726,15 @@
         "endTimeGMT": "2026-02-19 13:59:33",
         "qualifyingDive": false,
         "activityUUID": "c761dc42-e906-4f3f-857d-89ba2e4acba3",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -3725,8 +3748,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -3788,7 +3811,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -3960,15 +3984,15 @@
         "endTimeGMT": "2026-02-18 14:00:53",
         "qualifyingDive": false,
         "activityUUID": "e1b3fa45-e673-42ed-a2f3-0b05b35ba9f4",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 6.0,
         "Feeling": 3
     },
@@ -3982,8 +4006,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4043,7 +4067,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4108,15 +4133,15 @@
         "endTimeGMT": "2026-02-17 12:56:49",
         "qualifyingDive": false,
         "activityUUID": "721268d0-cbe3-4920-8b96-1492a469d377",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -4130,8 +4155,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4191,7 +4216,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4258,15 +4284,15 @@
         "endTimeGMT": "2026-02-17 12:40:52",
         "qualifyingDive": false,
         "activityUUID": "51c5dbf1-4be5-4b9b-80d1-14ca34b40da2",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 9.0,
         "Feeling": 4
     },
@@ -4280,8 +4306,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -4339,7 +4365,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4388,15 +4415,15 @@
         "endTimeGMT": "2026-02-16 13:08:02",
         "qualifyingDive": false,
         "activityUUID": "f4663ed4-30e6-4635-b0af-698bdfc89547",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 5.0,
         "Feeling": 4
     },
@@ -4410,8 +4437,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4471,7 +4498,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4541,15 +4569,15 @@
         "endTimeGMT": "2026-02-14 15:48:41",
         "qualifyingDive": false,
         "activityUUID": "6fb3a789-22cc-4c67-a52a-0ba8005d3411",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -4563,8 +4591,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -4622,7 +4650,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4670,15 +4699,15 @@
         "endTimeGMT": "2026-02-13 12:30:31",
         "qualifyingDive": false,
         "activityUUID": "27de814d-b38e-497f-aa8b-c23dc19b04f5",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 4.0,
         "Feeling": 2
     },
@@ -4692,8 +4721,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -4753,7 +4782,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4821,15 +4851,15 @@
         "endTimeGMT": "2026-02-12 13:53:49",
         "qualifyingDive": false,
         "activityUUID": "0afff56b-7e2d-4bfe-866d-a66b112beb27",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -4843,8 +4873,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -4902,7 +4932,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -4951,15 +4982,15 @@
         "endTimeGMT": "2026-02-11 12:40:58",
         "qualifyingDive": false,
         "activityUUID": "045ac0fe-3606-4db5-9b8c-98f867987b17",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 5.0,
         "Feeling": 5
     },
@@ -4973,8 +5004,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5034,7 +5065,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -5103,15 +5135,15 @@
         "endTimeGMT": "2026-02-10 14:00:04",
         "qualifyingDive": false,
         "activityUUID": "e89bffc9-ff91-4874-8891-c31eca3f010c",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -5125,8 +5157,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5188,7 +5220,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -5283,15 +5316,15 @@
         "endTimeGMT": "2026-02-09 13:46:58",
         "qualifyingDive": false,
         "activityUUID": "cb14bde5-0585-41ae-a697-73b92d30df43",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 6.0,
         "Feeling": 4
     },
@@ -5305,8 +5338,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5366,7 +5399,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -5439,15 +5473,15 @@
         "endTimeGMT": "2026-02-07 14:39:03",
         "qualifyingDive": false,
         "activityUUID": "6950e72d-cd85-4f14-9cbd-50ddd976acad",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 5.0,
         "Feeling": 4
     },
@@ -5461,8 +5495,8 @@
             "typeKey": "running",
             "parentTypeId": 17,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5524,7 +5558,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -5681,15 +5716,15 @@
         "endTimeGMT": "2026-02-06 14:02:44",
         "qualifyingDive": false,
         "activityUUID": "64f5ccf4-1cc1-418d-bd14-4ba30f853258",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 4.0,
         "Feeling": 3
     },
@@ -5703,8 +5738,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -5762,7 +5797,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -5809,15 +5845,15 @@
         "endTimeGMT": "2026-02-06 12:23:14",
         "qualifyingDive": false,
         "activityUUID": "0ceeeb66-e4a2-4759-8ab4-43c61077e3a8",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 3.0,
         "Feeling": 2
     },
@@ -5831,8 +5867,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -5892,7 +5928,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -5957,15 +5994,15 @@
         "endTimeGMT": "2026-02-05 13:27:07",
         "qualifyingDive": false,
         "activityUUID": "ab48ec67-0ddd-4e4e-a019-b011d3df8e05",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -5979,8 +6016,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -6040,7 +6077,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -6108,15 +6146,15 @@
         "endTimeGMT": "2026-02-05 13:10:31",
         "qualifyingDive": false,
         "activityUUID": "998c64fc-d01c-4cd2-a413-ce210740e27d",
-        "atpActivity": false,
-        "pr": true,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": true,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },
@@ -6130,8 +6168,8 @@
             "typeKey": "lap_swimming",
             "parentTypeId": 26,
             "isHidden": false,
-            "trimmable": false,
-            "restricted": false
+            "restricted": false,
+            "trimmable": false
         },
         "eventType": {
             "typeId": 9,
@@ -6189,7 +6227,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -6238,15 +6277,15 @@
         "endTimeGMT": "2026-02-04 13:01:11",
         "qualifyingDive": false,
         "activityUUID": "446e6388-759a-442d-8e93-cba5787ba59b",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": 5.0,
         "Feeling": 2
     },
@@ -6260,8 +6299,8 @@
             "typeKey": "virtual_ride",
             "parentTypeId": 2,
             "isHidden": false,
-            "trimmable": true,
-            "restricted": false
+            "restricted": false,
+            "trimmable": true
         },
         "eventType": {
             "typeId": 9,
@@ -6321,7 +6360,8 @@
             "SCOPE_ATP_WRITE",
             "ROLE_CONNECTUSER",
             "ROLE_FITNESS_USER",
-            "ROLE_WELLNESS_USER"
+            "ROLE_WELLNESS_USER",
+            "ROLE_GARMIN_USER"
         ],
         "privacy": {
             "typeId": 3,
@@ -6390,15 +6430,15 @@
         "endTimeGMT": "2026-02-03 13:51:42",
         "qualifyingDive": false,
         "activityUUID": "301bbfa9-4b4e-48bf-912f-b2d537028186",
-        "atpActivity": false,
-        "pr": false,
         "parent": false,
-        "decoDive": false,
-        "purposeful": false,
-        "manualActivity": false,
+        "pr": false,
         "autoCalcCalories": false,
-        "elevationCorrected": false,
         "favorite": false,
+        "purposeful": false,
+        "decoDive": false,
+        "elevationCorrected": false,
+        "atpActivity": false,
+        "manualActivity": false,
         "RPE": null,
         "Feeling": null
     },

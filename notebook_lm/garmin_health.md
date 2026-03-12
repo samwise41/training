@@ -1,5 +1,5 @@
 # Health Trends
-**Generated:** 2026-03-11 02:25:49
+**Generated:** 2026-03-12 02:31:42
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/garmin_data/garmin_health.json
 
 ---
@@ -8,24 +8,38 @@
 ```json
 [
   {
-    "Date": "2026-03-10",
-    "Resting HR": 52,
-    "Min HR": 56,
-    "Max HR": 62,
-    "Stress Avg": 22,
-    "Stress Max": 27,
-    "Steps Goal": 5800,
-    "Body Batt Max": 53,
-    "Body Batt Min": 48,
-    "Respiration Avg": 16.0,
-    "SpO2 Avg": 94.0,
+    "Date": "2026-03-11",
+    "Respiration Avg": null,
+    "SpO2 Avg": null,
     "Fitness Age": 30.886367752357952,
-    "Intensity Min Mod": 0,
-    "Intensity Min Vig": 0,
-    "Intensity Min Total": 0,
+    "Intensity Min Mod": null,
+    "Intensity Min Vig": null,
     "Lactate Threshold HR": 171,
     "FTP": 272,
     "Run FTP Pace": "7:45"
+  },
+  {
+    "Date": "2026-03-10",
+    "Resting HR": 50,
+    "Min HR": 45,
+    "Max HR": 179,
+    "Stress Avg": 32,
+    "Stress Max": 99,
+    "Steps Goal": 5400,
+    "Body Batt Max": 87,
+    "Body Batt Min": 24,
+    "Respiration Avg": 12.0,
+    "SpO2 Avg": 95.0,
+    "Fitness Age": 30.886367752357952,
+    "Intensity Min Mod": 9,
+    "Intensity Min Vig": 55,
+    "Intensity Min Total": 119,
+    "Lactate Threshold HR": 171,
+    "FTP": 272,
+    "Run FTP Pace": "7:45",
+    "Steps": 3609,
+    "Daily Distance (m)": 38661,
+    "Sleep Hours": 4.6
   },
   {
     "Date": "2026-03-09",

@@ -52,19 +52,6 @@
         "completed": true
     },
     {
-        "date": "2026-03-13",
-        "day": "Thursday",
-        "plannedWorkout": "[SWIM] Touch Swim",
-        "plannedDuration": 15.0,
-        "notes": "**Focus:** Drills only. Maintain feel for the water.",
-        "actualSport": "Swim",
-        "actualDuration": 0.0,
-        "actualWorkout": null,
-        "status": "PLANNED",
-        "compliance": 0,
-        "completed": false
-    },
-    {
         "date": "2026-03-12",
         "day": "Thursday",
         "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
@@ -76,6 +63,19 @@
         "status": "COMPLETED",
         "compliance": 112,
         "completed": true
+    },
+    {
+        "date": "2026-03-13",
+        "day": "Friday",
+        "plannedWorkout": "[SWIM] Touch Swim",
+        "plannedDuration": 15.0,
+        "notes": "**Focus:** Drills only. Maintain feel for the water.",
+        "actualSport": "Swim",
+        "actualDuration": 0.0,
+        "actualWorkout": null,
+        "status": "PLANNED",
+        "compliance": 0,
+        "completed": false
     },
     {
         "date": "2026-03-13",

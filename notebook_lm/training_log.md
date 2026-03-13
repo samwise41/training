@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-12 02:31:41
+**Generated:** 2026-03-13 02:29:50
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,65 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-12",
+    "day": "Thursday",
+    "activityType": "Swim",
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 15.0,
+    "notes": "**Focus:** Drills only. Maintain feel for the water.",
+    "actualDuration": 0,
+    "id": "PLAN-2026-03-12-Swim",
+    "matchStatus": "Planned",
+    "status": "PLANNED"
+  },
+  {
+    "date": "2026-03-12",
+    "day": "Thursday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
+    "plannedDuration": 60.0,
+    "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2.",
+    "actualDuration": 67.5,
+    "id": 22148879675,
+    "actualWorkout": "Zwift - Watopia",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 3696.0,
+    "distance": 24524.859375,
+    "averageHR": 97.0,
+    "maxHR": 138.0,
+    "aerobicTrainingEffect": 2.299999952316284,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 152.0,
+    "maxPower": 386.0,
+    "normPower": 164.3496952996036,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 6.635000228881836,
+    "maxSpeed": 10.87600040435791,
+    "averageBikingCadenceInRevPerMinute": 74.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 562.0,
+    "elevationGain": 161.0,
+    "RPE": null,
+    "Feeling": null,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-03-11",
     "day": "Wednesday",

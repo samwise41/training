@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Bike",
-            "Swim"
+            "Swim",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Run",
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4647,11 +4647,12 @@
     },
     {
         "date": "2026-03-13",
-        "complianceStatus": "Partial",
+        "complianceStatus": "Completed",
         "plannedDuration": 55.0,
-        "actualDuration": 15.8,
+        "actualDuration": 55.8,
         "sports": [
-            "Swim"
+            "Swim",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4662,9 +4663,9 @@
                 "actual": 15.8
             },
             {
-                "name": "[RUN] Aerobic Maintenance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy - Z2 - 45 Minutes",
+                "sport": "Run",
+                "actual": 40.0
             }
         ]
     },

@@ -169,8 +169,9 @@ These templates define the "default" week structure.
   * **Tue:** [BIKE] Strength Intervals (Sweet Spot or Threshold) (60-75m)
     * *Target: Sustained power at lower cadence for muscular endurance.*
   * **Wed:** [RUN] Tempo / Speed Intervals (45-60m)
-    * *Week A:_ Tempo / Speed Intervals.*
-    * *Week B:_ Steady Z2 + 4-6 x 20sec Strides (Focus on form, not metabolic cost).*
+    * *Choose from one of these workouts (intervals is preference, but ok to switch it up if needed).*
+    * *Tempo / Speed Intervals-1km Repeats @ 7:45 min/mile pace with STRICT 60-second rests. Start at 5 reps. Add 1 rep per week until you hit 7 reps, then drop target pace to 7:30 and restart at 5.*
+    * *Steady Z2 + 4-6 x 20sec Strides (Focus on form, not metabolic cost).*
   *  **Thu:** [SWIM] Recovery + **T1 Simulation** (45m Total)
       * *Drill:* If in open water or appropriate pool setting, practice the "Shore Exit" (run until water is knee-deep, then high-step) and "Wetsuit Strip" (peel to waist while running) immediately after the main set.
   * **Fri:** [RUN] Aerobic Maintenance (40m)

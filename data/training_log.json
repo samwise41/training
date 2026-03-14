@@ -1,5 +1,29 @@
 [
     {
+        "date": "2026-03-14",
+        "day": "Saturday",
+        "activityType": "Bike",
+        "plannedWorkout": "[BIKE] Long Steady Distance",
+        "plannedDuration": 150.0,
+        "notes": "**Focus:** East Canyon Prep. Winter cap broken (2.5h). Fix Bike HR Drift (9.06%). Strict Z2 only!",
+        "actualDuration": 0,
+        "id": "PLAN-2026-03-14-Bike",
+        "matchStatus": "Planned",
+        "status": "PLANNED"
+    },
+    {
+        "date": "2026-03-14",
+        "day": "Saturday",
+        "activityType": "Run",
+        "plannedWorkout": "[RUN] Zone 2 Base",
+        "plannedDuration": 15.0,
+        "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
+        "actualDuration": 0,
+        "id": "PLAN-2026-03-14-Run",
+        "matchStatus": "Planned",
+        "status": "PLANNED"
+    },
+    {
         "date": "2026-03-13",
         "day": "Thursday",
         "activityType": {

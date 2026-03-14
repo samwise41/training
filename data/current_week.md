@@ -7,5 +7,5 @@
 | PLANNED | Thursday | [SWIM] Touch Swim | 15 |  | 0 | **Focus:** Drills only. Maintain feel for the water. | 2026-03-13 |
 | PLANNED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 60 | | | **Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. | 2026-03-12 |
 | PLANNED | Friday | [RUN] Aerobic Maintenance | 40 |  | 0 | **Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs. | 2026-03-13 |
-| PLANNED | Saturday | [BIKE] Long Steady Distance | 150 | | | **Focus:** East Canyon Prep. Winter cap broken (2.5h). Fix Bike HR Drift (9.06%). Strict Z2 only! | 2026-03-14 |
-| PLANNED | Saturday | [RUN] Zone 2 Base | 15 | | | **Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike. | 2026-03-14 |
+| PLANNED | Saturday | [BIKE] Long Steady Distance | 150 |  | 0 | **Focus:** East Canyon Prep. Winter cap broken (2.5h). Fix Bike HR Drift (9.06%). Strict Z2 only! | 2026-03-14 |
+| PLANNED | Saturday | [RUN] Zone 2 Base | 15 |  | 0 | **Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike. | 2026-03-14 |

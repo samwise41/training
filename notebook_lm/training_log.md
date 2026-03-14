@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-13 02:29:50
+**Generated:** 2026-03-14 02:27:21
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,100 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-13",
+    "day": "Thursday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "trimmable": false,
+      "restricted": false
+    },
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 15.0,
+    "notes": "**Focus:** Drills only. Maintain feel for the water.",
+    "actualDuration": 15.8,
+    "id": 22158510092,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 935.3170166015625,
+    "distance": 425.0,
+    "averageHR": 119.0,
+    "maxHR": 154.0,
+    "aerobicTrainingEffect": 1.5,
+    "anaerobicTrainingEffect": 1.399999976158142,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.8809999823570253,
+    "maxSpeed": 1.4490000009536743,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 166.0,
+    "elevationGain": null,
+    "RPE": 3.0,
+    "Feeling": 3,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
+  {
+    "date": "2026-03-13",
+    "day": "Friday",
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[RUN] Aerobic Maintenance",
+    "plannedDuration": 40.0,
+    "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
+    "actualDuration": 40.0,
+    "id": 22159163983,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "Roy - Z2 - 45 Minutes",
+    "actualSport": "Run",
+    "sportTypeId": 1,
+    "duration": 2401.092041015625,
+    "distance": 7025.5498046875,
+    "averageHR": 143.0,
+    "maxHR": 155.0,
+    "aerobicTrainingEffect": 3.0999999046325684,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "AEROBIC_BASE",
+    "avgPower": 332.0,
+    "maxPower": 473.0,
+    "normPower": 344.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 2.9260001182556152,
+    "maxSpeed": 3.3399999141693115,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 173.34375,
+    "avgStrideLength": 100.5,
+    "avgVerticalOscillation": 7.940000152587891,
+    "avgVerticalRatio": 7.920000076293945,
+    "avgGroundContactTime": 253.89999389648438,
+    "vO2MaxValue": 55.0,
+    "calories": 568.0,
+    "elevationGain": 44.0,
+    "RPE": 3.0,
+    "Feeling": 5
+  },
   {
     "date": "2026-03-12",
     "day": "Thursday",
@@ -17,7 +111,7 @@
     "actualDuration": 0,
     "id": "PLAN-2026-03-12-Swim",
     "matchStatus": "Planned",
-    "status": "PLANNED"
+    "status": "MISSED"
   },
   {
     "date": "2026-03-12",

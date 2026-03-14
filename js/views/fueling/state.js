@@ -7,16 +7,16 @@ const DEFAULT_CONFIG = {
     eatInterval: 45,
 
     // BOTTLE SETTINGS
-    bottleVolume: 750,       // Size of your bottle in ml
+    bottleVolume: 700,       // Size of your bottle in ml
     sipsPerBottle: 5,        // How many sips to empty a bottle (draws the lines)
-    carbsPerBottle: 90,      // Grams of carbs in your Mix bottle
+    carbsPerBottle: 63,      // Grams of carbs in your Mix bottle
 
     // FLASK SETTINGS
     carbsPerFlask: 150,      // Grams of carbs in your Flask
     squeezesPerFlask: 5,     // How many squeezes to empty a flask
 
     // RIDE GOALS
-    targetHourlyCarbs: 70,   // Grams per hour
+    targetHourlyCarbs: 75,   // Grams per hour
     targetHourlyFluid: 700,  // ML per hour
     plannedDuration: 180     // Minutes
 };

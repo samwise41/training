@@ -19,14 +19,13 @@ export const FuelTimer = {
         const hasSavedSession = this.state.load();
 
         if (this.state.fuelMenu.length === 0) {
-            // Default quantity is 0
             this.state.fuelMenu = library.map(item => ({ ...item, quantity: 0 }));
         }
         
         const html = FuelView.getHtml(this.state);
 
         setTimeout(() => {
-            this.updatePlanSummary(); // Update the calculator on load
+            this.updatePlanSummary(); 
             if (hasSavedSession && this.state.totalTime > 0) {
                 this.switchView('active');
                 this.updateDisplays();
@@ -86,7 +85,6 @@ export const FuelTimer = {
             if(row && confirm("Remove this entry?")) this.removeLogEntry(parseInt(row.dataset.index));
         });
 
-        // Setup the + and - buttons on the custom food packer
         const editor = document.getElementById('fuel-library-editor');
         if(editor) editor.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-qty-adj');
@@ -104,10 +102,13 @@ export const FuelTimer = {
         
         bind('btn-add-item', () => this.addNewItem());
         
-        // Live updates for typing into the Config Grid
+        // Live updates for typing/toggling in the Config Grid
         const configInputs = document.querySelectorAll('#fuel-config-view input');
         configInputs.forEach(input => {
             input.addEventListener('input', () => this.updatePlanSummary());
+            if (input.type === 'checkbox') {
+                input.addEventListener('change', () => this.updatePlanSummary());
+            }
         });
     },
 
@@ -117,28 +118,43 @@ export const FuelTimer = {
         // Calculate Targets
         const hours = this.state.plannedDuration / 60;
         const targetCarbs = hours * this.state.targetHourlyCarbs;
+        const targetFluid = hours * this.state.targetHourlyFluid;
         
-        // Calculate Packed
-        let packedCarbs = (this.state.plannedBottles * this.state.carbsPerBottle) + 
+        // Calculate Packed Carbs
+        let packedCarbs = (this.state.plannedMixBottles * this.state.carbsPerBottle) + 
                           (this.state.plannedFlasks * this.state.carbsPerFlask);
                           
         this.state.fuelMenu.forEach(item => {
             packedCarbs += (item.carbs * (item.quantity || 0));
         });
-        
         const diffCarbs = packedCarbs - targetCarbs;
+
+        // Calculate Packed Fluid
+        const packedFluid = (this.state.plannedMixBottles + this.state.plannedWaterBottles) * this.state.bottleVolume;
+        const diffFluid = packedFluid - targetFluid;
         
-        // Update DOM
-        const elTarget = document.getElementById('summary-target-carbs');
-        const elPacked = document.getElementById('summary-packed-carbs');
-        const elDiff = document.getElementById('summary-diff-carbs');
+        // Update DOM - Carbs
+        const elTargetCarbs = document.getElementById('summary-target-carbs');
+        const elPackedCarbs = document.getElementById('summary-packed-carbs');
+        const elDiffCarbs = document.getElementById('summary-diff-carbs');
         
-        if(elTarget) elTarget.innerText = Math.round(targetCarbs) + 'g';
-        if(elPacked) elPacked.innerText = Math.round(packedCarbs) + 'g';
+        if(elTargetCarbs) elTargetCarbs.innerText = Math.round(targetCarbs) + 'g';
+        if(elPackedCarbs) elPackedCarbs.innerText = Math.round(packedCarbs) + 'g';
+        if(elDiffCarbs) {
+            elDiffCarbs.innerText = (diffCarbs > 0 ? '+' : '') + Math.round(diffCarbs) + 'g';
+            elDiffCarbs.className = `text-sm font-mono font-bold ${diffCarbs >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+        }
+
+        // Update DOM - Fluid
+        const elTargetFluid = document.getElementById('summary-target-fluid');
+        const elPackedFluid = document.getElementById('summary-packed-fluid');
+        const elDiffFluid = document.getElementById('summary-diff-fluid');
         
-        if(elDiff) {
-            elDiff.innerText = (diffCarbs > 0 ? '+' : '') + Math.round(diffCarbs) + 'g';
-            elDiff.className = `text-xl font-mono font-bold ${diffCarbs >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+        if(elTargetFluid) elTargetFluid.innerText = Math.round(targetFluid) + 'ml';
+        if(elPackedFluid) elPackedFluid.innerText = Math.round(packedFluid) + 'ml';
+        if(elDiffFluid) {
+            elDiffFluid.innerText = (diffFluid > 0 ? '+' : '') + Math.round(diffFluid) + 'ml';
+            elDiffFluid.className = `text-sm font-mono font-bold ${diffFluid >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
         }
     },
 
@@ -152,6 +168,8 @@ export const FuelTimer = {
     },
 
     playAlertTone() {
+        if (this.state.muteAlerts) return; // Escape early if user muted alerts
+
         if (!this.audioCtx) this.initAudio();
         if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
 
@@ -177,7 +195,7 @@ export const FuelTimer = {
     },
 
     toggleTimer() {
-        if (!this.audioCtx) this.initAudio();
+        if (!this.audioCtx && !this.state.muteAlerts) this.initAudio();
         if (this.audioCtx && this.audioCtx.state === 'suspended') {
             this.audioCtx.resume();
         }
@@ -187,8 +205,10 @@ export const FuelTimer = {
     },
 
     startTimer() {
-        this.initAudio();
-        this.audioCtx.resume(); 
+        if (!this.state.muteAlerts) {
+            this.initAudio();
+            this.audioCtx.resume(); 
+        }
         this.enableNavigationGuards();
         
         if (this.state.totalTime === 0) {
@@ -257,7 +277,6 @@ export const FuelTimer = {
         const name = nameInput.value.trim(); 
         const carbs = parseInt(carbsInput.value) || 0; 
         if (name && carbs > 0) { 
-            // Give it quantity: 1 automatically when added
             this.state.fuelMenu.push({ id: 'c_'+Date.now(), label: name, carbs, icon: 'fa-utensils', quantity: 1 }); 
             nameInput.value = ''; 
             carbsInput.value = ''; 
@@ -283,8 +302,12 @@ export const FuelTimer = {
         this.state.targetHourlyCarbs = getVal('input-target-hourly') || 90; 
         this.state.targetHourlyFluid = getVal('input-target-fluid') || 500; 
         this.state.plannedDuration = getVal('input-planned-duration') || 180; 
-        this.state.plannedBottles = getVal('input-planned-bottles') || 0;
+        this.state.plannedMixBottles = getVal('input-planned-mix') || 0;
+        this.state.plannedWaterBottles = getVal('input-planned-water') || 0;
         this.state.plannedFlasks = getVal('input-planned-flasks') || 0;
+
+        const muteEl = document.getElementById('input-mute-alerts');
+        if (muteEl) this.state.muteAlerts = muteEl.checked;
     },
     
     refreshUI() { document.getElementById('fuel-menu-container').innerHTML = FuelView.renderFuelButtons(this.state.fuelMenu); document.getElementById('fuel-library-editor').innerHTML = FuelView.renderFuelEditor(this.state.fuelMenu); },

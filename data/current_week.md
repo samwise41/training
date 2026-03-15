@@ -20,7 +20,7 @@ Because your legs are heavily fatigued today, **Option 2 is the physiologically 
 
 | Status | Day | Planned Workout | Planned Duration | Actual Workout | Actual Duration | Notes / Targets | Date |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 | | | **Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3. | 2026-03-15 |
+| PLANNED | Sunday | Rest | 0 |  | 0 | **Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3. | 2026-03-15 |
 | PLANNED | Monday | [BIKE] Zwift Race | 60 | | | **Focus:** Zwift Games Stage 5 (11:10 AM). Empty the tank on the spikes to fix Anaerobic Impact (1.71). | 2026-03-16 |
 | PLANNED | Tuesday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Active recovery for the legs! | 2026-03-17 |
 | PLANNED | Wednesday | [RUN] Tempo / Speed Intervals | 45 | | | **Focus:** Leg speed! 10m Warmup; 5 x 1km Repeats @ 7:45 pace with STRICT 60s rests. | 2026-03-18 |

@@ -10,8 +10,8 @@ const DEFAULT_CONFIG = {
     bottleVolume: 700,       
     sipsPerBottle: 5,        
     carbsPerBottle: 63,      
-    plannedMixBottles: 1,    // NEW: Mix bottles packed
-    plannedWaterBottles: 1,  // NEW: Water bottles packed
+    plannedMixBottles: 1,    
+    plannedWaterBottles: 1,  
 
     // FLASK SETTINGS
     carbsPerFlask: 150,      
@@ -24,7 +24,7 @@ const DEFAULT_CONFIG = {
     plannedDuration: 180,
     
     // SYSTEM
-    muteAlerts: false        // NEW: Audio toggle
+    muteAlerts: false        
 };
 
 export const FuelState = {
@@ -70,7 +70,7 @@ export const FuelState = {
             fuelMenu: this.fuelMenu, 
             timestamp: Date.now(),
 
-            // Save Config (So changes persist during ride)
+            // Save Config
             drinkInterval: this.drinkInterval,
             eatInterval: this.eatInterval,
             carbsPerBottle: this.carbsPerBottle,
@@ -81,10 +81,10 @@ export const FuelState = {
             targetHourlyCarbs: this.targetHourlyCarbs,
             targetHourlyFluid: this.targetHourlyFluid,
             plannedDuration: this.plannedDuration,
-            plannedMixBottles: this.plannedMixBottles,     // NEW
-            plannedWaterBottles: this.plannedWaterBottles, // NEW
+            plannedMixBottles: this.plannedMixBottles,     
+            plannedWaterBottles: this.plannedWaterBottles, 
             plannedFlasks: this.plannedFlasks,
-            muteAlerts: this.muteAlerts                    // NEW
+            muteAlerts: this.muteAlerts                    
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
     },
@@ -109,7 +109,7 @@ export const FuelState = {
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
             if (data.fuelMenu && data.fuelMenu.length > 0) this.fuelMenu = data.fuelMenu;
             
-            // Restore Config (Or use Defaults if missing in save)
+            // Restore Config
             this.drinkInterval = data.drinkInterval || DEFAULT_CONFIG.drinkInterval;
             this.eatInterval = data.eatInterval || DEFAULT_CONFIG.eatInterval;
             this.carbsPerBottle = data.carbsPerBottle || DEFAULT_CONFIG.carbsPerBottle;

@@ -1,4 +1,3 @@
-
 import { FuelComponents } from './components.js';
 
 export const FuelTemplates = {
@@ -129,22 +128,42 @@ export const FuelTemplates = {
         return `
         <div id="fuel-config-view" class="bg-slate-800 rounded-xl p-4 border border-slate-700 mb-6 shadow-2xl">
             <h3 class="text-sm font-bold text-white mb-4 border-b border-slate-700 pb-2 flex items-center gap-2"><i class="fa-solid fa-sliders text-blue-400"></i> Mission Control</h3>
+            
+            <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 mb-5 flex justify-around text-center shadow-inner">
+                <div>
+                    <div class="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">Target Carbs</div>
+                    <div id="summary-target-carbs" class="text-xl font-mono font-bold text-white">0g</div>
+                </div>
+                <div>
+                    <div class="text-[9px] text-blue-400/80 uppercase font-bold tracking-widest mb-1">Packed Carbs</div>
+                    <div id="summary-packed-carbs" class="text-xl font-mono font-bold text-blue-400">0g</div>
+                </div>
+                <div>
+                    <div class="text-[9px] text-slate-500 uppercase font-bold tracking-widest mb-1">Diff</div>
+                    <div id="summary-diff-carbs" class="text-xl font-mono font-bold">0g</div>
+                </div>
+            </div>
+
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50 col-span-2 lg:col-span-1"><label class="block text-[10px] text-purple-400 uppercase font-bold mb-1">Ride Time (min)</label><input type="number" id="input-planned-duration" value="${state.plannedDuration}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-emerald-400 uppercase font-bold mb-1">Target Carbs/Hr</label><input type="number" id="input-target-hourly" value="${state.targetHourlyCarbs}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-cyan-400 uppercase font-bold mb-1">Target Fluid/Hr</label><input type="number" id="input-target-fluid" value="${state.targetHourlyFluid}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
+                
+                <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Packed Bottles</label><input type="number" id="input-planned-bottles" value="${state.plannedBottles}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
+                <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-orange-400 uppercase font-bold mb-1">Packed Flasks</label><input type="number" id="input-planned-flasks" value="${state.plannedFlasks}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
+                
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Drink Timer</label><input type="number" id="input-drink-int" value="${state.drinkInterval}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-slate-400 uppercase font-bold mb-1">Eat Timer</label><input type="number" id="input-eat-int" value="${state.eatInterval}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Bottle Vol (ml)</label><input type="number" id="input-bottle-vol" value="${state.bottleVolume}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Mix Strength (g)</label><input type="number" id="input-bottle-carbs" value="${state.carbsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-blue-400 uppercase font-bold mb-1">Sips/Bottle</label><input type="number" id="input-sips-bottle" value="${state.sipsPerBottle}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
+                <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-orange-400 uppercase font-bold mb-1">Flask Capacity (g)</label><input type="number" id="input-flask-carbs" value="${state.carbsPerFlask}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
                 <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50"><label class="block text-[10px] text-orange-400 uppercase font-bold mb-1">Squeezes/Flask</label><input type="number" id="input-sqz-flask" value="${state.squeezesPerFlask}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
-                <div class="bg-slate-900/50 p-2 rounded border border-slate-700/50 col-span-2"><label class="block text-[10px] text-orange-400 uppercase font-bold mb-1">Flask Capacity (g)</label><input type="number" id="input-flask-carbs" value="${state.carbsPerFlask}" class="w-full bg-slate-800 border-slate-600 rounded p-1 text-white text-xs font-mono"></div>
             </div>
             
             <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                <div class="flex justify-between items-center mb-3"><span class="text-[10px] text-slate-500 uppercase font-bold">Active Menu Items</span><button id="btn-toggle-all-fuel" class="text-[10px] text-blue-400 hover:text-blue-300 font-bold px-2 py-1 uppercase tracking-wider">Toggle All</button></div>
-                <div id="fuel-library-editor" class="space-y-2 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar mb-3">${FuelComponents.renderFuelEditor(state.fuelMenu)}</div>
+                <div class="flex justify-between items-center mb-3"><span class="text-[10px] text-slate-500 uppercase font-bold">Solid Food Menu</span></div>
+                <div id="fuel-library-editor" class="space-y-1 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar mb-3">${FuelComponents.renderFuelEditor(state.fuelMenu)}</div>
                 <div class="pt-3 border-t border-slate-700/50 flex gap-2">
                     <input type="text" id="new-item-name" placeholder="Name" class="flex-1 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-xs text-white">
                     <input type="number" id="new-item-carbs" placeholder="g" class="w-16 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-xs text-white text-center">

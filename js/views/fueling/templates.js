@@ -81,7 +81,7 @@ export const FuelTemplates = {
                         <span class="text-[9px] opacity-80 uppercase leading-none mb-0.5">Mix</span>
                         <span class="text-sm font-bold uppercase leading-none">SIP</span>
                     </button>
-                    <button id="btn-log-sip-water" class="flex-1 bg-slate-700 active:bg-cyan-600 text-cyan-100 active:text-white rounded-lg border-b-4 border-slate-900 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center">
+                    <button id="btn-log-sip-water" class="flex-1 bg-cyan-600 active:bg-cyan-500 text-white rounded-lg border-b-4 border-cyan-800 active:border-b-0 active:translate-y-0.5 transition-all flex flex-col items-center justify-center">
                         <span class="text-[9px] opacity-80 uppercase leading-none mb-0.5">Water</span>
                         <span class="text-sm font-bold uppercase leading-none">SIP</span>
                     </button>

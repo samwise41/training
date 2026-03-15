@@ -7,18 +7,20 @@ const DEFAULT_CONFIG = {
     eatInterval: 45,
 
     // BOTTLE SETTINGS
-    bottleVolume: 700,       // Size of your bottle in ml
-    sipsPerBottle: 5,        // How many sips to empty a bottle (draws the lines)
-    carbsPerBottle: 63,      // Grams of carbs in your Mix bottle
+    bottleVolume: 700,       
+    sipsPerBottle: 5,        
+    carbsPerBottle: 63,      
+    plannedBottles: 2,       // NEW: Default packed bottles
 
     // FLASK SETTINGS
-    carbsPerFlask: 150,      // Grams of carbs in your Flask
-    squeezesPerFlask: 5,     // How many squeezes to empty a flask
+    carbsPerFlask: 150,      
+    squeezesPerFlask: 5,     
+    plannedFlasks: 1,        // NEW: Default packed flasks
 
     // RIDE GOALS
-    targetHourlyCarbs: 75,   // Grams per hour
-    targetHourlyFluid: 700,  // ML per hour
-    plannedDuration: 180     // Minutes
+    targetHourlyCarbs: 75,   
+    targetHourlyFluid: 700,  
+    plannedDuration: 180     
 };
 
 export const FuelState = {
@@ -61,6 +63,7 @@ export const FuelState = {
             flasksConsumed: this.flasksConsumed,
             consumptionLog: this.consumptionLog,
             lastTickTimestamp: this.lastTickTimestamp,
+            fuelMenu: this.fuelMenu, // NEW: Save menu state/quantities
             timestamp: Date.now(),
 
             // Save Config (So changes persist during ride)
@@ -68,12 +71,14 @@ export const FuelState = {
             eatInterval: this.eatInterval,
             carbsPerBottle: this.carbsPerBottle,
             bottleVolume: this.bottleVolume,
-            sipsPerBottle: this.sipsPerBottle,       // Saved
+            sipsPerBottle: this.sipsPerBottle,       
             carbsPerFlask: this.carbsPerFlask,
-            squeezesPerFlask: this.squeezesPerFlask, // Saved
+            squeezesPerFlask: this.squeezesPerFlask, 
             targetHourlyCarbs: this.targetHourlyCarbs,
             targetHourlyFluid: this.targetHourlyFluid,
-            plannedDuration: this.plannedDuration
+            plannedDuration: this.plannedDuration,
+            plannedBottles: this.plannedBottles,     // NEW
+            plannedFlasks: this.plannedFlasks        // NEW
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
     },
@@ -96,6 +101,7 @@ export const FuelState = {
             this.flasksConsumed = data.flasksConsumed || 0;
             this.consumptionLog = data.consumptionLog || [];
             this.lastTickTimestamp = data.lastTickTimestamp || Date.now();
+            if (data.fuelMenu && data.fuelMenu.length > 0) this.fuelMenu = data.fuelMenu;
             
             // Restore Config (Or use Defaults if missing in save)
             this.drinkInterval = data.drinkInterval || DEFAULT_CONFIG.drinkInterval;
@@ -108,6 +114,9 @@ export const FuelState = {
             this.targetHourlyCarbs = data.targetHourlyCarbs || DEFAULT_CONFIG.targetHourlyCarbs;
             this.targetHourlyFluid = data.targetHourlyFluid || DEFAULT_CONFIG.targetHourlyFluid;
             this.plannedDuration = data.plannedDuration || DEFAULT_CONFIG.plannedDuration;
+            
+            this.plannedBottles = data.plannedBottles !== undefined ? data.plannedBottles : DEFAULT_CONFIG.plannedBottles;
+            this.plannedFlasks = data.plannedFlasks !== undefined ? data.plannedFlasks : DEFAULT_CONFIG.plannedFlasks;
 
             this.isRunning = false; 
             return true; 

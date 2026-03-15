@@ -10,17 +10,21 @@ const DEFAULT_CONFIG = {
     bottleVolume: 700,       
     sipsPerBottle: 5,        
     carbsPerBottle: 63,      
-    plannedBottles: 2,       // NEW: Default packed bottles
+    plannedMixBottles: 1,    // NEW: Mix bottles packed
+    plannedWaterBottles: 1,  // NEW: Water bottles packed
 
     // FLASK SETTINGS
     carbsPerFlask: 150,      
     squeezesPerFlask: 5,     
-    plannedFlasks: 1,        // NEW: Default packed flasks
+    plannedFlasks: 1,        
 
     // RIDE GOALS
     targetHourlyCarbs: 75,   
     targetHourlyFluid: 700,  
-    plannedDuration: 180     
+    plannedDuration: 180,
+    
+    // SYSTEM
+    muteAlerts: false        // NEW: Audio toggle
 };
 
 export const FuelState = {
@@ -63,7 +67,7 @@ export const FuelState = {
             flasksConsumed: this.flasksConsumed,
             consumptionLog: this.consumptionLog,
             lastTickTimestamp: this.lastTickTimestamp,
-            fuelMenu: this.fuelMenu, // NEW: Save menu state/quantities
+            fuelMenu: this.fuelMenu, 
             timestamp: Date.now(),
 
             // Save Config (So changes persist during ride)
@@ -77,8 +81,10 @@ export const FuelState = {
             targetHourlyCarbs: this.targetHourlyCarbs,
             targetHourlyFluid: this.targetHourlyFluid,
             plannedDuration: this.plannedDuration,
-            plannedBottles: this.plannedBottles,     // NEW
-            plannedFlasks: this.plannedFlasks        // NEW
+            plannedMixBottles: this.plannedMixBottles,     // NEW
+            plannedWaterBottles: this.plannedWaterBottles, // NEW
+            plannedFlasks: this.plannedFlasks,
+            muteAlerts: this.muteAlerts                    // NEW
         };
         localStorage.setItem('fuel_timer_state', JSON.stringify(data));
     },
@@ -115,8 +121,10 @@ export const FuelState = {
             this.targetHourlyFluid = data.targetHourlyFluid || DEFAULT_CONFIG.targetHourlyFluid;
             this.plannedDuration = data.plannedDuration || DEFAULT_CONFIG.plannedDuration;
             
-            this.plannedBottles = data.plannedBottles !== undefined ? data.plannedBottles : DEFAULT_CONFIG.plannedBottles;
+            this.plannedMixBottles = data.plannedMixBottles !== undefined ? data.plannedMixBottles : DEFAULT_CONFIG.plannedMixBottles;
+            this.plannedWaterBottles = data.plannedWaterBottles !== undefined ? data.plannedWaterBottles : DEFAULT_CONFIG.plannedWaterBottles;
             this.plannedFlasks = data.plannedFlasks !== undefined ? data.plannedFlasks : DEFAULT_CONFIG.plannedFlasks;
+            this.muteAlerts = data.muteAlerts !== undefined ? data.muteAlerts : DEFAULT_CONFIG.muteAlerts;
 
             this.isRunning = false; 
             return true; 

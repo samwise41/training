@@ -102,7 +102,6 @@ export const FuelTimer = {
         
         bind('btn-add-item', () => this.addNewItem());
         
-        // Live updates for typing/toggling in the Config Grid
         const configInputs = document.querySelectorAll('#fuel-config-view input');
         configInputs.forEach(input => {
             input.addEventListener('input', () => this.updatePlanSummary());
@@ -115,12 +114,10 @@ export const FuelTimer = {
     updatePlanSummary() {
         this.readConfigInputs(); 
         
-        // Calculate Targets
         const hours = this.state.plannedDuration / 60;
         const targetCarbs = hours * this.state.targetHourlyCarbs;
         const targetFluid = hours * this.state.targetHourlyFluid;
         
-        // Calculate Packed Carbs
         let packedCarbs = (this.state.plannedMixBottles * this.state.carbsPerBottle) + 
                           (this.state.plannedFlasks * this.state.carbsPerFlask);
                           
@@ -129,11 +126,9 @@ export const FuelTimer = {
         });
         const diffCarbs = packedCarbs - targetCarbs;
 
-        // Calculate Packed Fluid
         const packedFluid = (this.state.plannedMixBottles + this.state.plannedWaterBottles) * this.state.bottleVolume;
         const diffFluid = packedFluid - targetFluid;
         
-        // Update DOM - Carbs
         const elTargetCarbs = document.getElementById('summary-target-carbs');
         const elPackedCarbs = document.getElementById('summary-packed-carbs');
         const elDiffCarbs = document.getElementById('summary-diff-carbs');
@@ -145,7 +140,6 @@ export const FuelTimer = {
             elDiffCarbs.className = `text-sm font-mono font-bold ${diffCarbs >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
         }
 
-        // Update DOM - Fluid
         const elTargetFluid = document.getElementById('summary-target-fluid');
         const elPackedFluid = document.getElementById('summary-packed-fluid');
         const elDiffFluid = document.getElementById('summary-diff-fluid');
@@ -158,7 +152,9 @@ export const FuelTimer = {
         }
     },
 
-    toggleHelp(show) { document.getElementById('fuel-help-modal').classList.toggle('hidden', !show); },
+    toggleHelp(show) { 
+        document.getElementById('fuel-help-modal').classList.toggle('hidden', !show); 
+    },
 
     initAudio() {
         if (!this.audioCtx) {
@@ -168,7 +164,7 @@ export const FuelTimer = {
     },
 
     playAlertTone() {
-        if (this.state.muteAlerts) return; // Escape early if user muted alerts
+        if (this.state.muteAlerts) return;
 
         if (!this.audioCtx) this.initAudio();
         if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
@@ -264,12 +260,79 @@ export const FuelTimer = {
         }
     },
 
-    logSip(type) { const sips = this.state.sipsPerBottle || 4; const vol = this.state.bottleVolume || 750; const fluid = Math.round(vol / sips); const portion = 1 / sips; let carbs = 0; if (type === 'mix') { carbs = Math.round((this.state.carbsPerBottle || 90) / sips); this.state.totalCarbsConsumed += carbs; this.state.bottlesConsumed += portion; this.state.nextDrink = this.state.drinkInterval * 60; } else { this.state.waterBottlesConsumed += portion; this.state.nextDrink = this.state.drinkInterval * 60; } this.state.totalFluidConsumed += fluid; this.addToLog(type === 'mix' ? 'drink' : 'water', type === 'mix' ? 'Mix Sip' : 'Water Sip', carbs, fluid); this.updateDisplays(); this.state.save(); },
-    logFlask() { const sqz = this.state.squeezesPerFlask || 4; const portion = 1 / sqz; const carbs = Math.round((this.state.carbsPerFlask || 150) * portion); this.state.totalCarbsConsumed += carbs; this.state.flasksConsumed += portion; this.state.nextEat = this.state.eatInterval * 60; this.addToLog('flask', 'Flask Squeeze', carbs, 0); this.updateDisplays(); this.state.save(); },
-    logFood(carbs, name) { this.state.totalCarbsConsumed += carbs; this.addToLog('eat', name || 'Food', carbs, 0); this.state.nextEat = this.state.eatInterval * 60; this.updateDisplays(); this.state.save(); },
-    addToLog(type, item, carbs, fluid) { const timeStr = FuelView.formatTime(this.state.totalTime); this.state.consumptionLog.push({ type, item, carbs, fluid, time: timeStr }); this.refreshLogUI(); },
-    removeLogEntry(index) { const entry = this.state.consumptionLog[index]; if(!entry) return; this.state.totalCarbsConsumed -= entry.carbs; if(this.state.totalCarbsConsumed < 0) this.state.totalCarbsConsumed = 0; this.state.totalFluidConsumed -= (entry.fluid || 0); if(this.state.totalFluidConsumed < 0) this.state.totalFluidConsumed = 0; if(entry.type === 'drink') this.state.bottlesConsumed -= (1 / (this.state.sipsPerBottle || 4)); if(entry.type === 'water') this.state.waterBottlesConsumed -= (1 / (this.state.sipsPerBottle || 4)); if(entry.type === 'flask') this.state.flasksConsumed -= (1 / (this.state.squeezesPerFlask || 4)); this.state.consumptionLog.splice(index, 1); this.updateDisplays(); this.refreshLogUI(); this.state.save(); },
-    refreshLogUI() { const log = document.getElementById('fuel-history-log'); if (log) log.innerHTML = FuelView.renderHistoryLog(this.state.consumptionLog); },
+    logSip(type) { 
+        const sips = this.state.sipsPerBottle || 4; 
+        const vol = this.state.bottleVolume || 750; 
+        const fluid = Math.round(vol / sips); 
+        const portion = 1 / sips; 
+        let carbs = 0; 
+        
+        if (type === 'mix') { 
+            carbs = Math.round((this.state.carbsPerBottle || 90) / sips); 
+            this.state.totalCarbsConsumed += carbs; 
+            this.state.bottlesConsumed += portion; 
+            this.state.nextDrink = this.state.drinkInterval * 60; 
+        } else { 
+            this.state.waterBottlesConsumed += portion; 
+            this.state.nextDrink = this.state.drinkInterval * 60; 
+        } 
+        
+        this.state.totalFluidConsumed += fluid; 
+        this.addToLog(type === 'mix' ? 'drink' : 'water', type === 'mix' ? 'Mix Sip' : 'Water Sip', carbs, fluid); 
+        this.updateDisplays(); 
+        this.state.save(); 
+    },
+    
+    logFlask() { 
+        const sqz = this.state.squeezesPerFlask || 4; 
+        const portion = 1 / sqz; 
+        const carbs = Math.round((this.state.carbsPerFlask || 150) * portion); 
+        this.state.totalCarbsConsumed += carbs; 
+        this.state.flasksConsumed += portion; 
+        this.state.nextEat = this.state.eatInterval * 60; 
+        this.addToLog('flask', 'Flask Squeeze', carbs, 0); 
+        this.updateDisplays(); 
+        this.state.save(); 
+    },
+    
+    logFood(carbs, name) { 
+        this.state.totalCarbsConsumed += carbs; 
+        this.addToLog('eat', name || 'Food', carbs, 0); 
+        this.state.nextEat = this.state.eatInterval * 60; 
+        this.updateDisplays(); 
+        this.state.save(); 
+    },
+    
+    addToLog(type, item, carbs, fluid) { 
+        const timeStr = FuelView.formatTime(this.state.totalTime); 
+        this.state.consumptionLog.push({ type, item, carbs, fluid, time: timeStr }); 
+        this.refreshLogUI(); 
+    },
+    
+    removeLogEntry(index) { 
+        const entry = this.state.consumptionLog[index]; 
+        if(!entry) return; 
+        
+        this.state.totalCarbsConsumed -= entry.carbs; 
+        if(this.state.totalCarbsConsumed < 0) this.state.totalCarbsConsumed = 0; 
+        
+        this.state.totalFluidConsumed -= (entry.fluid || 0); 
+        if(this.state.totalFluidConsumed < 0) this.state.totalFluidConsumed = 0; 
+        
+        if(entry.type === 'drink') this.state.bottlesConsumed -= (1 / (this.state.sipsPerBottle || 4)); 
+        if(entry.type === 'water') this.state.waterBottlesConsumed -= (1 / (this.state.sipsPerBottle || 4)); 
+        if(entry.type === 'flask') this.state.flasksConsumed -= (1 / (this.state.squeezesPerFlask || 4)); 
+        
+        this.state.consumptionLog.splice(index, 1); 
+        this.updateDisplays(); 
+        this.refreshLogUI(); 
+        this.state.save(); 
+    },
+    
+    refreshLogUI() { 
+        const log = document.getElementById('fuel-history-log'); 
+        if (log) log.innerHTML = FuelView.renderHistoryLog(this.state.consumptionLog); 
+    },
     
     addNewItem() { 
         const nameInput = document.getElementById('new-item-name'); 
@@ -285,10 +348,68 @@ export const FuelTimer = {
         } 
     },
     
-    updateDisplays() { const timeEl = document.getElementById('fuel-total-time'); if (timeEl) timeEl.innerText = FuelView.formatTime(this.state.totalTime); this.updateBottleVisuals(); this.updateProgressBars(); this.updateCard('drink', this.state.nextDrink); this.updateCard('eat', this.state.nextEat); },
-    updateBottleVisuals() { if(!document.getElementById('mix-bottle-liquid')) return; const mixPct = (1 - (this.state.bottlesConsumed % 1)) * 100; document.getElementById('mix-bottle-liquid').style.height = `${mixPct}%`; document.getElementById('mix-bottle-count').innerText = Math.floor(this.state.bottlesConsumed) + 1; const waterPct = (1 - (this.state.waterBottlesConsumed % 1)) * 100; document.getElementById('water-bottle-liquid').style.height = `${waterPct}%`; document.getElementById('water-bottle-count').innerText = Math.floor(this.state.waterBottlesConsumed) + 1; const flaskPct = (1 - (this.state.flasksConsumed % 1)) * 100; document.getElementById('flask-liquid').style.height = `${flaskPct}%`; document.getElementById('flask-count').innerText = Math.floor(this.state.flasksConsumed) + 1; },
-    updateProgressBars() { if(!document.getElementById('carb-val')) return; const hours = this.state.totalTime / 3600; const planHours = (this.state.plannedDuration || 180) / 60; const goalCarbs = planHours * this.state.targetHourlyCarbs; const currentCarbTarget = hours * this.state.targetHourlyCarbs; document.getElementById('carb-val').innerText = Math.round(this.state.totalCarbsConsumed); document.getElementById('carb-pacer').innerText = Math.round(currentCarbTarget); document.getElementById('carb-progress-bar').style.width = `${Math.min((this.state.totalCarbsConsumed/goalCarbs)*100, 100)}%`; document.getElementById('carb-pacer-marker').style.left = `${Math.min((this.state.totalTime/(planHours*3600))*100, 100)}%`; const goalFluid = planHours * this.state.targetHourlyFluid; const currentFluidTarget = hours * this.state.targetHourlyFluid; document.getElementById('fluid-val').innerText = Math.round(this.state.totalFluidConsumed); document.getElementById('fluid-pacer').innerText = Math.round(currentFluidTarget); document.getElementById('fluid-progress-bar').style.width = `${Math.min((this.state.totalFluidConsumed/goalFluid)*100, 100)}%`; document.getElementById('fluid-pacer-marker').style.left = `${Math.min((this.state.totalTime/(planHours*3600))*100, 100)}%`; },
-    updateCard(type, sec) { const el = document.getElementById(`timer-${type}`); if(!el) return; if (sec <= 0) { const overdue = Math.abs(sec); el.innerText = `+${FuelView.formatTime(overdue)}`; el.classList.remove('text-white'); el.classList.add('text-red-500', 'animate-pulse'); if (overdue % 10 === 0) this.playAlertTone(); } else { el.innerText = FuelView.formatTime(sec); el.classList.add('text-white'); el.classList.remove('text-red-500', 'animate-pulse'); } },
+    updateDisplays() { 
+        const timeEl = document.getElementById('fuel-total-time'); 
+        if (timeEl) timeEl.innerText = FuelView.formatTime(this.state.totalTime); 
+        this.updateBottleVisuals(); 
+        this.updateProgressBars(); 
+        this.updateCard('drink', this.state.nextDrink); 
+        this.updateCard('eat', this.state.nextEat); 
+    },
+    
+    updateBottleVisuals() { 
+        if(!document.getElementById('mix-bottle-liquid')) return; 
+        
+        const mixPct = (1 - (this.state.bottlesConsumed % 1)) * 100; 
+        document.getElementById('mix-bottle-liquid').style.height = `${mixPct}%`; 
+        document.getElementById('mix-bottle-count').innerText = Math.floor(this.state.bottlesConsumed) + 1; 
+        
+        const waterPct = (1 - (this.state.waterBottlesConsumed % 1)) * 100; 
+        document.getElementById('water-bottle-liquid').style.height = `${waterPct}%`; 
+        document.getElementById('water-bottle-count').innerText = Math.floor(this.state.waterBottlesConsumed) + 1; 
+        
+        const flaskPct = (1 - (this.state.flasksConsumed % 1)) * 100; 
+        document.getElementById('flask-liquid').style.height = `${flaskPct}%`; 
+        document.getElementById('flask-count').innerText = Math.floor(this.state.flasksConsumed) + 1; 
+    },
+    
+    updateProgressBars() { 
+        if(!document.getElementById('carb-val')) return; 
+        
+        const hours = this.state.totalTime / 3600; 
+        const planHours = (this.state.plannedDuration || 180) / 60; 
+        
+        const goalCarbs = planHours * this.state.targetHourlyCarbs; 
+        const currentCarbTarget = hours * this.state.targetHourlyCarbs; 
+        document.getElementById('carb-val').innerText = Math.round(this.state.totalCarbsConsumed); 
+        document.getElementById('carb-pacer').innerText = Math.round(currentCarbTarget); 
+        document.getElementById('carb-progress-bar').style.width = `${Math.min((this.state.totalCarbsConsumed/goalCarbs)*100, 100)}%`; 
+        document.getElementById('carb-pacer-marker').style.left = `${Math.min((this.state.totalTime/(planHours*3600))*100, 100)}%`; 
+        
+        const goalFluid = planHours * this.state.targetHourlyFluid; 
+        const currentFluidTarget = hours * this.state.targetHourlyFluid; 
+        document.getElementById('fluid-val').innerText = Math.round(this.state.totalFluidConsumed); 
+        document.getElementById('fluid-pacer').innerText = Math.round(currentFluidTarget); 
+        document.getElementById('fluid-progress-bar').style.width = `${Math.min((this.state.totalFluidConsumed/goalFluid)*100, 100)}%`; 
+        document.getElementById('fluid-pacer-marker').style.left = `${Math.min((this.state.totalTime/(planHours*3600))*100, 100)}%`; 
+    },
+    
+    updateCard(type, sec) { 
+        const el = document.getElementById(`timer-${type}`); 
+        if(!el) return; 
+        
+        if (sec <= 0) { 
+            const overdue = Math.abs(sec); 
+            el.innerText = `+${FuelView.formatTime(overdue)}`; 
+            el.classList.remove('text-white'); 
+            el.classList.add('text-red-500', 'animate-pulse'); 
+            if (overdue % 10 === 0) this.playAlertTone(); 
+        } else { 
+            el.innerText = FuelView.formatTime(sec); 
+            el.classList.add('text-white'); 
+            el.classList.remove('text-red-500', 'animate-pulse'); 
+        } 
+    },
     
     readConfigInputs() { 
         const getVal = (id) => { const el = document.getElementById(id); return el ? (parseInt(el.value) || 0) : 0; }; 
@@ -310,11 +431,34 @@ export const FuelTimer = {
         if (muteEl) this.state.muteAlerts = muteEl.checked;
     },
     
-    refreshUI() { document.getElementById('fuel-menu-container').innerHTML = FuelView.renderFuelButtons(this.state.fuelMenu); document.getElementById('fuel-library-editor').innerHTML = FuelView.renderFuelEditor(this.state.fuelMenu); },
-    switchView(view) { document.getElementById('fuel-config-view').classList.toggle('hidden', view === 'active'); document.getElementById('fuel-active-view').classList.toggle('hidden', view === 'config'); document.getElementById('btn-fuel-reset').classList.toggle('hidden', view === 'config'); },
-    updateBtnState(text, bgClass) { const btn = document.getElementById('btn-fuel-toggle'); btn.innerText = text; btn.className = `w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest text-white shadow-lg transition-colors ${bgClass}`; },
-    enableNavigationGuards() { history.pushState(null, document.title, location.href); window.addEventListener('popstate', this.handlePopState); window.addEventListener('beforeunload', this.handleBeforeUnload); },
-    disableNavigationGuards() { window.removeEventListener('popstate', this.handlePopState); window.removeEventListener('beforeunload', this.handleBeforeUnload); },
+    refreshUI() { 
+        document.getElementById('fuel-menu-container').innerHTML = FuelView.renderFuelButtons(this.state.fuelMenu); 
+        document.getElementById('fuel-library-editor').innerHTML = FuelView.renderFuelEditor(this.state.fuelMenu); 
+    },
+    
+    switchView(view) { 
+        document.getElementById('fuel-config-view').classList.toggle('hidden', view === 'active'); 
+        document.getElementById('fuel-active-view').classList.toggle('hidden', view === 'config'); 
+        document.getElementById('btn-fuel-reset').classList.toggle('hidden', view === 'config'); 
+    },
+    
+    updateBtnState(text, bgClass) { 
+        const btn = document.getElementById('btn-fuel-toggle'); 
+        btn.innerText = text; 
+        btn.className = `w-full py-4 rounded-xl font-bold text-xl uppercase tracking-widest text-white shadow-lg transition-colors ${bgClass}`; 
+    },
+    
+    enableNavigationGuards() { 
+        history.pushState(null, document.title, location.href); 
+        window.addEventListener('popstate', this.handlePopState); 
+        window.addEventListener('beforeunload', this.handleBeforeUnload); 
+    },
+    
+    disableNavigationGuards() { 
+        window.removeEventListener('popstate', this.handlePopState); 
+        window.removeEventListener('beforeunload', this.handleBeforeUnload); 
+    },
+    
     handlePopState(event) { history.pushState(null, document.title, location.href); },
     handleBeforeUnload(e) { e.preventDefault(); e.returnValue = ''; }
 };

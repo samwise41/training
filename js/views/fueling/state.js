@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
     // FLASK SETTINGS
     carbsPerFlask: 150,      
     squeezesPerFlask: 5,     
-    plannedFlasks: 1,        
+    plannedFlasks: 0,        
 
     // RIDE GOALS
     targetHourlyCarbs: 75,   

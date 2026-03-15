@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-14 02:27:22
+**Generated:** 2026-03-15 02:47:48
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -105,11 +105,11 @@
     "plannedDuration": 150.0,
     "notes": "**Focus:** East Canyon Prep. Winter cap broken (2.5h). Fix Bike HR Drift (9.06%). Strict Z2 only!",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 160.3,
+    "actualWorkout": "Virtual Cycling",
+    "status": "COMPLETED",
+    "compliance": 107,
+    "completed": true
   },
   {
     "date": "2026-03-14",
@@ -118,11 +118,11 @@
     "plannedDuration": 15.0,
     "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 15.1,
+    "actualWorkout": "Roy Running",
+    "status": "COMPLETED",
+    "compliance": 101,
+    "completed": true
   }
 ]
 ```

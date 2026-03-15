@@ -32,7 +32,8 @@ export const FuelComponents = {
         if (!log || log.length === 0) return '<div class="italic opacity-50 text-center py-2">System Live... Log data to begin.</div>';
         return log.slice().reverse().map((entry, index) => {
             const realIndex = log.length - 1 - index;
-            const color = entry.type === 'drink' ? 'text-blue-400' : (entry.type === 'water' ? 'text-cyan-400' : 'text-orange-400');
+            // UPDATE: Changed drink to purple-400
+            const color = entry.type === 'drink' ? 'text-purple-400' : (entry.type === 'water' ? 'text-cyan-400' : 'text-orange-400');
             return `
             <div class="btn-delete-log flex justify-between items-center py-1 border-b border-slate-800 last:border-0 cursor-pointer" data-index="${realIndex}">
                 <div class="flex items-center gap-2">

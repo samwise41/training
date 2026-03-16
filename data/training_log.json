@@ -1,5 +1,17 @@
 [
     {
+        "date": "2026-03-16",
+        "day": "Monday",
+        "activityType": "Swim",
+        "plannedWorkout": "[SWIM] Endurance Intervals",
+        "plannedDuration": 45.0,
+        "notes": "**Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Flush the sore legs today!",
+        "actualDuration": 0,
+        "id": "PLAN-2026-03-16-Swim",
+        "matchStatus": "Planned",
+        "status": "PLANNED"
+    },
+    {
         "date": "2026-03-15",
         "day": "Sunday",
         "activityType": "Other",
@@ -8,7 +20,7 @@
         "notes": "**Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3.",
         "actualDuration": 0,
         "id": "PLAN-2026-03-15-Other",
-        "status": "PLANNED"
+        "status": "UNKNOWN"
     },
     {
         "date": "2026-03-14",

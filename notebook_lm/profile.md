@@ -1,5 +1,5 @@
 # Athlete Profile
-**Generated:** 2026-03-15 02:47:48
+**Generated:** 2026-03-16 02:48:29
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/zones/profile.json
 
 ---

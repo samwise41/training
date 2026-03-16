@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-15 02:47:48
+**Generated:** 2026-03-16 02:48:29
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -8,11 +8,11 @@
 ```json
 [
   {
-    "date": "2026-03-08",
+    "date": "2026-03-15",
     "day": "Sunday",
     "plannedWorkout": "Rest",
     "plannedDuration": 0.0,
-    "notes": "**Focus:** Complete rest. Let your body absorb last week's adaptations.",
+    "notes": "**Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3.",
     "actualSport": "Rest",
     "actualDuration": 0.0,
     "actualWorkout": null,
@@ -21,108 +21,108 @@
     "completed": true
   },
   {
-    "date": "2026-03-09",
+    "date": "2026-03-16",
     "day": "Monday",
-    "plannedWorkout": "[SWIM] Endurance Intervals",
-    "plannedDuration": 45.0,
-    "notes": "**Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Add 6-10 'sighting reps'.",
-    "actualSport": "Swim",
-    "actualDuration": 45.3,
-    "actualWorkout": "Pool Swim",
-    "status": "COMPLETED",
-    "compliance": 101,
-    "completed": true
-  },
-  {
-    "date": "2026-03-10",
-    "day": "Tuesday",
     "plannedWorkout": "[BIKE] Zwift Race",
     "plannedDuration": 60.0,
-    "notes": "**Focus:** Zwift Games (Peaky Pave). Cat 390-510. Fix Anaerobic Impact (1.71). Suffer on the mountain, drive the flats!",
+    "notes": "**Focus:** Zwift Games Stage 5 (11:10 AM). Empty the tank on the spikes to fix Anaerobic Impact (1.71).",
     "actualSport": "Bike",
-    "actualDuration": 75.0,
-    "actualWorkout": "Zwift - Race: Stage 4: Zwift Games: Peaky Pave (B)",
-    "status": "COMPLETED",
-    "compliance": 125,
-    "completed": true
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
   },
   {
-    "date": "2026-03-11",
+    "date": "2026-03-17",
+    "day": "Tuesday",
+    "plannedWorkout": "[SWIM] Endurance Intervals",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Active recovery for the legs!",
+    "actualSport": "Swim",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
+  },
+  {
+    "date": "2026-03-18",
     "day": "Wednesday",
     "plannedWorkout": "[RUN] Tempo / Speed Intervals",
     "plannedDuration": 45.0,
-    "notes": "**Focus:** Quick turnover to maintain that great 0.65 PE! 10m Warmup; 20m @ Tempo; 4-6 x 20s Strides.",
+    "notes": "**Focus:** Leg speed! 10m Warmup; 5 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
     "actualSport": "Run",
-    "actualDuration": 45.5,
-    "actualWorkout": "Roy - 20min at Tempo with 6x20 Strides",
-    "status": "COMPLETED",
-    "compliance": 101,
-    "completed": true
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
   },
   {
-    "date": "2026-03-12",
+    "date": "2026-03-19",
+    "day": "Thursday",
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 15.0,
+    "notes": "**Focus:** Drills only. Maintain your feel for the water.",
+    "actualSport": "Swim",
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
+  },
+  {
+    "date": "2026-03-19",
     "day": "Thursday",
     "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
     "plannedDuration": 60.0,
-    "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2.",
+    "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
     "actualSport": "Bike",
-    "actualDuration": 67.5,
-    "actualWorkout": "Zwift - Watopia",
-    "status": "COMPLETED",
-    "compliance": 112,
-    "completed": true
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
   },
   {
-    "date": "2026-03-13",
-    "day": "Friday",
-    "plannedWorkout": "[SWIM] Touch Swim",
-    "plannedDuration": 15.0,
-    "notes": "**Focus:** Drills only. Maintain feel for the water.",
-    "actualSport": "Swim",
-    "actualDuration": 15.8,
-    "actualWorkout": "Pool Swim",
-    "status": "COMPLETED",
-    "compliance": 105,
-    "completed": true
-  },
-  {
-    "date": "2026-03-13",
+    "date": "2026-03-20",
     "day": "Friday",
     "plannedWorkout": "[RUN] Aerobic Maintenance",
     "plannedDuration": 40.0,
     "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
     "actualSport": "Run",
-    "actualDuration": 40.0,
-    "actualWorkout": "Roy - Z2 - 45 Minutes",
-    "status": "COMPLETED",
-    "compliance": 100,
-    "completed": true
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
   },
   {
-    "date": "2026-03-14",
+    "date": "2026-03-21",
     "day": "Saturday",
     "plannedWorkout": "[BIKE] Long Steady Distance",
     "plannedDuration": 150.0,
-    "notes": "**Focus:** East Canyon Prep. Winter cap broken (2.5h). Fix Bike HR Drift (9.06%). Strict Z2 only!",
+    "notes": "**Focus:** Block 1 step-ladder cap (2.5h). Strict Z2 to fix Aerobic Efficiency (1.27).",
     "actualSport": "Bike",
-    "actualDuration": 160.3,
-    "actualWorkout": "Virtual Cycling",
-    "status": "COMPLETED",
-    "compliance": 107,
-    "completed": true
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
   },
   {
-    "date": "2026-03-14",
+    "date": "2026-03-21",
     "day": "Saturday",
     "plannedWorkout": "[RUN] Zone 2 Base",
     "plannedDuration": 15.0,
     "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
     "actualSport": "Run",
-    "actualDuration": 15.1,
-    "actualWorkout": "Roy Running",
-    "status": "COMPLETED",
-    "compliance": 101,
-    "completed": true
+    "actualDuration": 0.0,
+    "actualWorkout": null,
+    "status": "PLANNED",
+    "compliance": 0,
+    "completed": false
   }
 ]
 ```

@@ -5,7 +5,7 @@
 
 | Status | Day | Planned Workout | Planned Duration | Actual Workout | Actual Duration | Notes / Targets | Date |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| PLANNED | Sunday | Rest | 0 | | | **Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3. | 2026-03-15 |
+| PLANNED | Sunday | Rest | 0 |  | 0 | **Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3. | 2026-03-15 |
 | PLANNED | Monday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Flush the sore legs today! | 2026-03-16 |
 | PLANNED | Tuesday | [RUN] Tempo / Speed Intervals | 45 | | | **Focus:** Leg speed! 10m Warmup; 5 x 1km Repeats @ 7:45 pace with STRICT 60s rests. | 2026-03-17 |
 | PLANNED | Wednesday | [BIKE] Zwift Race | 60 | | | **Focus:** Three Step Sisters (330-450 Cat). Suffer on the climbs to fix Anaerobic Impact (1.71). | 2026-03-18 |

@@ -83,7 +83,7 @@ def scrape_zwift_insider(slug):
     return None, None, None
 
 def build_event_list():
-    url = "https://us-or-rly101.zwift.com/api/public/events/upcoming"
+    url = "https://us-or-rly101.zwift.com/api/public/events/upcoming?limit=2000"
     headers = {"User-Agent": "ZwiftCustomFilter/1.0"}
     
     try:

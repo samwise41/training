@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-16 02:48:28
+**Generated:** 2026-03-17 02:31:46
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-16",
+    "day": "Monday",
+    "activityType": {
+      "typeId": 152,
+      "typeKey": "virtual_ride",
+      "parentTypeId": 2,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[BIKE] Zwift Race",
+    "plannedDuration": 60.0,
+    "notes": "**Focus:** Zwift Games Stage 5 (11:10 AM). Empty the tank on the spikes to fix Anaerobic Impact (1.71).",
+    "actualDuration": 68.2,
+    "id": 22194735121,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "Zwift - Race: Stage 5: Zwift Games: Three Step Sisters (C)",
+    "actualSport": "Bike",
+    "sportTypeId": 2,
+    "duration": 4095.0,
+    "distance": 37970.5703125,
+    "averageHR": 166.0,
+    "maxHR": 190.0,
+    "aerobicTrainingEffect": 5.0,
+    "anaerobicTrainingEffect": 2.5,
+    "trainingEffectLabel": "VO2MAX",
+    "avgPower": 261.0,
+    "maxPower": 678.0,
+    "normPower": 269.56304554673693,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 9.272000312805176,
+    "maxSpeed": 21.18899917602539,
+    "averageBikingCadenceInRevPerMinute": 76.0,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 1142.0,
+    "elevationGain": 588.0,
+    "RPE": null,
+    "Feeling": null
+  },
   {
     "date": "2026-03-15",
     "day": "Sunday",
@@ -16,7 +63,7 @@
     "notes": "**Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3.",
     "actualDuration": 0,
     "id": "PLAN-2026-03-15-Other",
-    "status": "PLANNED"
+    "status": "UNKNOWN"
   },
   {
     "date": "2026-03-14",

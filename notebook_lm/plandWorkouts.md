@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-16 02:48:29
+**Generated:** 2026-03-17 02:31:48
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -27,11 +27,11 @@
     "plannedDuration": 60.0,
     "notes": "**Focus:** Zwift Games Stage 5 (11:10 AM). Empty the tank on the spikes to fix Anaerobic Impact (1.71).",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 68.2,
+    "actualWorkout": "Zwift - Race: Stage 5: Zwift Games: Three Step Sisters (C)",
+    "status": "COMPLETED",
+    "compliance": 114,
+    "completed": true
   },
   {
     "date": "2026-03-17",

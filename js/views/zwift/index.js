@@ -22,7 +22,10 @@ export const ZwiftFinder = {
                         <option value="ALL">All Types</option>
                         <option value="RACE">Race</option>
                         <option value="GROUP_RIDE">Group Ride</option>
-                        <option value="WORKOUT">Workout</option>
+                        <option value="GROUP_WORKOUT">Group Workout</option>
+                        <option value="TIME_TRIAL">Time Trial</option>
+                        <option value="TEAM_TIME_TRIAL">Team Time Trial</option>
+                        <option value="FONDO">Fondo</option>
                     </select>
                     
                     <select id="zf-time" class="bg-slate-900 border border-slate-600 text-white text-sm rounded px-3 py-1.5 outline-none focus:border-blue-500">
@@ -101,12 +104,12 @@ export const ZwiftFinder = {
         const filterTime = document.getElementById('zf-time').value;
         const filterDist = parseFloat(document.getElementById('zf-dist').value) || 0;
 
-        // 1. Setup the Horizon (Changed from 7 to 14 days)
+        // 1. Setup the Next 14 Days Columns
         const days = [];
         const today = new Date();
         today.setHours(0,0,0,0);
         
-        for (let i = 0; i < 14; i++) { // <--- 14 DAYS HERE
+        for (let i = 0; i < 14; i++) {
             const d = new Date(today);
             d.setDate(d.getDate() + i);
             const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -125,7 +128,7 @@ export const ZwiftFinder = {
             const eventDateStr = localDate.toDateString();
             
             const targetDay = days.find(d => d.idStr === eventDateStr);
-            if (!targetDay) return; 
+            if (!targetDay) return; // Skips events outside our window
 
             // Type Filter
             if (filterType !== 'ALL' && ev.type !== filterType) return;
@@ -142,8 +145,9 @@ export const ZwiftFinder = {
 
             // Distance Filter (Convert km to miles)
             const myDistMiles = Math.round(myCat.data.distance_km * 0.621371 * 10) / 10;
-            if (filterDist > 0 && myDistMiles < filterDist && myCat.data.laps === 0) return; 
+            if (filterDist > 0 && myDistMiles < filterDist) return; 
 
+            // Add the parsed event to the day's column
             targetDay.events.push({
                 ...ev,
                 localDate,
@@ -156,6 +160,7 @@ export const ZwiftFinder = {
         // 3. Build the HTML Grid
         let html = '';
         days.forEach(day => {
+            // Sort events in the column chronologically
             day.events.sort((a, b) => a.localDate - b.localDate);
 
             html += `
@@ -174,6 +179,7 @@ export const ZwiftFinder = {
             day.events.forEach(ev => {
                 const timeStr = ev.localDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
                 
+                // Formulate the distance or lap text
                 let distText = '';
                 if (ev.myCatData.distance_km > 0) {
                     distText = `${ev.myDistMiles} mi`;
@@ -183,7 +189,7 @@ export const ZwiftFinder = {
                     distText = `${ev.max_duration_minutes} min`;
                 }
 
-                // FIX: Dynamically build the Racing Score Label
+                // Identify if it's a Racing Score group
                 let scoreLabel = '';
                 if (ev.myCatData.score_min !== null && ev.myCatData.score_max !== null) {
                     const min = ev.myCatData.score_min;
@@ -198,7 +204,7 @@ export const ZwiftFinder = {
                     <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 hover:border-slate-500 transition-colors flex flex-col relative group">
                         <div class="flex justify-between items-start mb-2">
                             <span class="font-bold text-blue-400">${timeStr}</span>
-                            <span class="text-[10px] font-bold px-2 py-0.5 bg-slate-800 text-slate-300 rounded uppercase tracking-wider">${ev.type}</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 bg-slate-800 text-slate-300 rounded uppercase tracking-wider">${ev.type.replace(/_/g, ' ')}</span>
                         </div>
                         
                         <h4 class="font-bold text-white text-sm leading-snug mb-3">${ev.title}</h4>

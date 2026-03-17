@@ -3,7 +3,6 @@ import json
 import os
 import re
 import html
-import time # <--- NEW IMPORT
 
 MJS_URL = "https://raw.githubusercontent.com/andipaetzold/zwift-data/main/data/routes.mjs"
 MAX_SCRAPES_PER_RUN = 10 
@@ -85,50 +84,37 @@ def scrape_zwift_insider(slug):
 
 def build_event_list():
     headers = {"User-Agent": "ZwiftCustomFilter/1.0"}
+    events_data = []
     
-    print("🌐 Slicing through the Zwift API firewall...")
-    
-    raw_events_list = []
-    
-    # 1. The Time-Window Slicing Loop (Bypasses the 500-Event Cap)
-    now_ms = int(time.time() * 1000)
-    ms_per_day = 24 * 60 * 60 * 1000
-    
-    for day in range(14):
-        start_ms = now_ms + (day * ms_per_day)
-        end_ms = start_ms + ms_per_day
-        
-        start_offset = 0
-        limit = 200
-        
-        while True:
-            # We inject the exact millisecond window to force Zwift to return that specific day
-            url = f"https://us-or-rly101.zwift.com/api/public/events/upcoming?limit={limit}&start={start_offset}&eventStartsAfter={start_ms}&eventStartsBefore={end_ms}"
-            try:
-                response = requests.get(url, headers=headers)
-                response.raise_for_status() 
-                batch = response.json()
-                
-                if not batch:
-                    break
-                    
-                raw_events_list.extend(batch)
-                
-                if len(batch) < limit:
-                    break 
-                    
-                start_offset += limit
-            except requests.exceptions.RequestException as e:
-                print(f"❌ Failed to fetch events for day {day}: {e}")
+    start = 0
+    limit = 200
+    print("🌐 Fetching events from Zwift...")
+    while True:
+        # Standard paginator hits the 500-event API wall efficiently
+        url = f"https://us-or-rly101.zwift.com/api/public/events/upcoming?limit={limit}&start={start}"
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status() 
+            batch = response.json()
+            
+            if not batch:
                 break
                 
-        print(f"   ...Day {day+1}/14 fetched. (Total pooled: {len(raw_events_list)})")
+            events_data.extend(batch)
+            print(f"   ...fetched {len(events_data)} events so far...")
+            
+            if len(batch) < limit:
+                break 
+                
+            start += limit
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Failed to fetch events: {e}")
+            break
 
-    # Deduplicate events in case boundaries overlap
-    unique_events = {ev.get("id"): ev for ev in raw_events_list if ev.get("id")}
+    # Deduplicate just in case the API hiccuped
+    unique_events = {ev.get("id"): ev for ev in events_data if ev.get("id")}
     events_data = list(unique_events.values())
-
-    print(f"✅ Successfully extracted {len(events_data)} total events!")
+    print(f"✅ Extracted {len(events_data)} total upcoming events!")
     
     local_routes = load_json("routes.json")
     unknown_routes = load_json("unknown_routes.json")
@@ -140,7 +126,13 @@ def build_event_list():
     all_events = []
 
     for event in events_data:
-        # API NULL PROTECTION ON HEADERS
+        # ==========================================
+        # DROP RUNNING EVENTS
+        # ==========================================
+        sport = event.get("sport")
+        if sport == "RUNNING":
+            continue
+
         parent_id = event.get("id")
         name = event.get("name") or "Unknown Event"
         event_type = event.get("eventType") or "UNKNOWN"
@@ -152,7 +144,6 @@ def build_event_list():
         max_duration = 0
         
         for sg in subgroups:
-            # API NULL PROTECTION ON MATH VARIABLES
             dist = sg.get("distanceInMeters") or 0
             dur = sg.get("durationInSeconds") or 0
             laps = sg.get("laps") or 0
@@ -265,14 +256,13 @@ def build_event_list():
         })
 
     save_json(all_events, "events.json")
-    print(f"\n✅ Successfully saved {len(all_events)} events.")
+    print(f"\n✅ Filtered out all runs. Successfully saved {len(all_events)} CYCLING events.")
     print(f"📡 Scrapes performed this run: {scrapes_performed}/{MAX_SCRAPES_PER_RUN}")
     
     if routes_updated:
         save_json(local_routes, "routes.json")
     if unknown_updated:
         save_json(unknown_routes, "unknown_routes.json")
-        print(f"🛠️ {len(unknown_routes)} routes are sitting in your backlog. Check them manually!")
 
 if __name__ == "__main__":
     build_event_list()

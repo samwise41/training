@@ -12,7 +12,7 @@
     const [
         dashMod, trendsMod, gearMod, zonesMod, ftpMod, metricsMod, readinessMod, analyzerMod, 
         tooltipMod, uiMod, dataMod, formatMod,
-        fuelMod 
+        fuelMod, zwiftMod
     ] = await Promise.all([
         safeImport('./views/dashboard/index.js', 'Dashboard'),
         safeImport('./views/trends/index.js', 'Trends'),
@@ -161,7 +161,8 @@
                     zones: () => (zonesMod && zonesMod.renderZonesTab) ? zonesMod.renderZonesTab(this.profileData) : "Zones module loading...",
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
-                    fueling: () => fuelMod?.FuelTimer?.init()
+                    fueling: () => fuelMod?.FuelTimer?.init(),
+                    zwift: () => zwiftMod?.ZwiftFinder?.init()
                 };
 
                 try {

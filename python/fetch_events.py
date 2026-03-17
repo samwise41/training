@@ -86,7 +86,6 @@ def build_event_list():
     headers = {"User-Agent": "ZwiftCustomFilter/1.0"}
     events_data = []
     
-    # 1. Paginator: Ask for 200 at a time until the calendar is empty
     start = 0
     limit = 200
     print("🌐 Fetching events from Zwift...")
@@ -104,7 +103,7 @@ def build_event_list():
             print(f"   ...fetched {len(events_data)} events so far...")
             
             if len(batch) < limit:
-                break # We reached the end of the calendar
+                break 
                 
             start += limit
         except requests.exceptions.RequestException as e:
@@ -123,26 +122,28 @@ def build_event_list():
     all_events = []
 
     for event in events_data:
+        # API NULL PROTECTION ON HEADERS
         parent_id = event.get("id")
-        name = event.get("name", "Unknown Event")
-        event_type = event.get("eventType", "UNKNOWN")
-        start_str = event.get("eventStart", "")
+        name = event.get("name") or "Unknown Event"
+        event_type = event.get("eventType") or "UNKNOWN"
+        start_str = event.get("eventStart") or ""
 
-        subgroups = event.get("eventSubgroups", [])
+        subgroups = event.get("eventSubgroups") or []
         categories = {} 
         max_distance = 0
         max_duration = 0
         
         for sg in subgroups:
-            dist = sg.get("distanceInMeters", 0)
-            dur = sg.get("durationInSeconds", 0)
-            laps = sg.get("laps", 0)
+            # API NULL PROTECTION ON MATH VARIABLES
+            dist = sg.get("distanceInMeters") or 0
+            dur = sg.get("durationInSeconds") or 0
+            laps = sg.get("laps") or 0
             route_id = sg.get("routeId")
 
             if dist > max_distance: max_distance = dist
             if dur > max_duration: max_duration = dur
 
-            cat_letter = sg.get("subgroupLabel", "Unknown")
+            cat_letter = sg.get("subgroupLabel") or "Unknown"
             range_label = sg.get("rangeAccessLabel", "")
             score_min, score_max = None, None
             
@@ -164,7 +165,6 @@ def build_event_list():
             str_route_id = str(route_id) if route_id else None
 
             if str_route_id:
-                # 1. Check Local DB
                 if str_route_id in local_routes:
                     route_info = local_routes[str_route_id]
                     cleaned_local_name = clean_route_name(route_info.get("name", ""))
@@ -173,11 +173,9 @@ def build_event_list():
                         local_routes[str_route_id] = route_info
                         routes_updated = True
                 
-                # 2. Check if it's already in the backlog (Failed previously)
                 elif str_route_id in unknown_routes:
                     route_info = unknown_routes[str_route_id]
                 
-                # 3. Try to Scrape (First time seeing it)
                 else:
                     if slug_map is None:
                         slug_map = fetch_slug_map() 
@@ -215,8 +213,8 @@ def build_event_list():
 
             if route_info:
                 route_name = route_info.get("name", "Unknown Route")
-                lap_km = route_info.get("lap_km", 0.0)
-                leadin_km = route_info.get("leadin_km", 0.0)
+                lap_km = route_info.get("lap_km") or 0.0
+                leadin_km = route_info.get("leadin_km") or 0.0
             else:
                 route_name = "Unknown Route"
                 lap_km = 0.0

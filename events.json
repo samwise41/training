@@ -1,70 +1,5 @@
 [
     {
-        "parent_event_id": 5498576,
-        "title": "BMTR Chase Adventure",
-        "start_time_utc": "2026-03-17T12:05:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7023584,
-                "route_id": 1776635757,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 7023585,
-                "route_id": 1776635757,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 7023586,
-                "route_id": 1776635757,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 7023587,
-                "route_id": 1776635757,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5498577,
-        "title": "Outseason Tuesdays with Endurance Nation",
-        "start_time_utc": "2026-03-17T12:05:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023588,
-                "route_id": 3994934674,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 66.0
-    },
-    {
         "parent_event_id": 5498579,
         "title": "TTR SONG RIDE",
         "start_time_utc": "2026-03-17T12:10:00.000+0000",
@@ -6182,6 +6117,80 @@
             }
         },
         "max_distance_km": 1.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498806,
+        "title": "GGCC Glasgow Green CC Tuesday Training ride",
+        "start_time_utc": "2026-03-17T20:45:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7024015,
+                "route_id": 3366225080,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 2
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498808,
+        "title": "Rhino Racing Short Crits",
+        "start_time_utc": "2026-03-17T21:00:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7024018,
+                "route_id": 1258415487,
+                "route_name": "Unknown Route",
+                "score_min": 690.0,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 6
+            },
+            "B": {
+                "subgroup_id": 7024019,
+                "route_id": 1258415487,
+                "route_name": "Unknown Route",
+                "score_min": 530.0,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 6
+            },
+            "C": {
+                "subgroup_id": 7024020,
+                "route_id": 1258415487,
+                "route_name": "Unknown Route",
+                "score_min": 370.0,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 6
+            },
+            "D": {
+                "subgroup_id": 7024021,
+                "route_id": 1258415487,
+                "route_name": "Unknown Route",
+                "score_min": 210.0,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 6
+            },
+            "E": {
+                "subgroup_id": 7024022,
+                "route_id": 1258415487,
+                "route_name": "Unknown Route",
+                "score_min": 0.0,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 6
+            }
+        },
+        "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     }
 ]

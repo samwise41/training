@@ -83,17 +83,35 @@ def scrape_zwift_insider(slug):
     return None, None, None
 
 def build_event_list():
-    url = "https://us-or-rly101.zwift.com/api/public/events/upcoming?limit=2000"
     headers = {"User-Agent": "ZwiftCustomFilter/1.0"}
+    events_data = []
     
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status() 
-    except requests.exceptions.RequestException as e:
-        print(f"❌ Failed to fetch events: {e}")
-        return
+    # 1. Paginator: Ask for 200 at a time until the calendar is empty
+    start = 0
+    limit = 200
+    print("🌐 Fetching events from Zwift...")
+    while True:
+        url = f"https://us-or-rly101.zwift.com/api/public/events/upcoming?limit={limit}&start={start}"
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status() 
+            batch = response.json()
+            
+            if not batch:
+                break
+                
+            events_data.extend(batch)
+            print(f"   ...fetched {len(events_data)} events so far...")
+            
+            if len(batch) < limit:
+                break # We reached the end of the calendar
+                
+            start += limit
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Failed to fetch events: {e}")
+            break
 
-    events_data = response.json()
+    print(f"✅ Fetched a total of {len(events_data)} raw events!")
     
     local_routes = load_json("routes.json")
     unknown_routes = load_json("unknown_routes.json")
@@ -155,10 +173,9 @@ def build_event_list():
                         local_routes[str_route_id] = route_info
                         routes_updated = True
                 
-                # 2. THE FIX: Check if it's already in the backlog (Failed previously)
+                # 2. Check if it's already in the backlog (Failed previously)
                 elif str_route_id in unknown_routes:
                     route_info = unknown_routes[str_route_id]
-                    # We just load the 0.0 distance info and skip the scraper entirely!
                 
                 # 3. Try to Scrape (First time seeing it)
                 else:
@@ -185,18 +202,13 @@ def build_event_list():
                                 routes_updated = True
                                 print(f"✨ Auto-Scraped: {final_name} ({lap_km}km lap)")
                             else:
-                                # SCRAPE FAILED: Add to Sin Bin so we never try it again
                                 print(f"❌ Scrape failed for slug '{slug}'. Adding to backlog.")
                                 unknown_routes[str_route_id] = {"name": fallback_name, "lap_km": 0.0, "leadin_km": 0.0}
                                 unknown_updated = True
                                 route_info = unknown_routes[str_route_id]
                         else:
-                            # Throttle limit hit. Add to backlog, we'll try again later.
-                            # Note: To let it try again later, we DON'T add it to unknown_routes here,
-                            # we just skip it for this run, so it stays entirely missing.
                             pass
                     else:
-                        # Entirely missing from Andi's file
                         unknown_routes[str_route_id] = {"name": f"UNKNOWN (Event: {name})", "lap_km": 0.0, "leadin_km": 0.0}
                         unknown_updated = True
                         route_info = unknown_routes[str_route_id]

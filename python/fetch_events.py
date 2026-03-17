@@ -7,7 +7,7 @@ def build_event_list():
     
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status() # This will catch any 404 or 500 errors
+        response.raise_for_status() 
     except requests.exceptions.RequestException as e:
         print(f"Failed to fetch events: {e}")
         return
@@ -15,6 +15,7 @@ def build_event_list():
     events_data = response.json()
     all_events = []
     
+    # 1=A, 2=B, 3=C, 4=D, 5=E
     category_map = {1: 'A', 2: 'B', 3: 'C', 4: 'D', 5: 'E'}
 
     for event in events_data:
@@ -22,8 +23,6 @@ def build_event_list():
         event_id = event.get("id")
         name = event.get("name", "Unknown Event")
         event_type = event.get("eventType", "UNKNOWN")
-        
-        # Keep the raw UTC string for the frontend to parse into local time
         start_str = event.get("eventStart", "")
 
         # Dive into subgroups to find distance, duration, categories, and scores
@@ -43,8 +42,15 @@ def build_event_list():
             if dur > max_duration:
                 max_duration = dur
 
+            # --- THE FIX ---
+            # Look for "label", not "subgroupLabel", and safely force it into an integer
+            raw_label = sg.get("label")
+            try:
+                label_num = int(raw_label) if raw_label is not None else None
+            except (ValueError, TypeError):
+                label_num = None
+
             # Map category and grab Zwift Racing Scores
-            label_num = sg.get("subgroupLabel")
             if label_num in category_map:
                 cat_letter = category_map[label_num]
                 

@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import re
+import html  # <--- NEW IMPORT
 
 MJS_URL = "https://raw.githubusercontent.com/andipaetzold/zwift-data/main/data/routes.mjs"
 

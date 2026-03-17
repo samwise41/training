@@ -1,209 +1,5 @@
 [
     {
-        "parent_event_id": 5498580,
-        "title": "Zwift Mexicanisimo ",
-        "start_time_utc": "2026-03-17T12:15:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7023592,
-                "route_id": 947394567,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 15
-            },
-            "B": {
-                "subgroup_id": 7023593,
-                "route_id": 947394567,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 15
-            },
-            "C": {
-                "subgroup_id": 7023594,
-                "route_id": 947394567,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 15
-            },
-            "D": {
-                "subgroup_id": 7023595,
-                "route_id": 947394567,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 15
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5476332,
-        "title": "Zwift TT Club Racing - Outer Scotland",
-        "start_time_utc": "2026-03-17T12:20:00.000+0000",
-        "type": "TIME_TRIAL",
-        "categories": {
-            "A": {
-                "subgroup_id": 6993863,
-                "route_id": 2826340040,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6993864,
-                "route_id": 2826340040,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6993865,
-                "route_id": 2826340040,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6993866,
-                "route_id": 2826340040,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5474282,
-        "title": "Stage 1 - The Zwift Big Spin",
-        "start_time_utc": "2026-03-17T12:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 6990881,
-                "route_id": 1258526800,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5498581,
-        "title": "RCC Global Club Ride",
-        "start_time_utc": "2026-03-17T12:30:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023596,
-                "route_id": 2852153296,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 45.0
-    },
-    {
-        "parent_event_id": 5476823,
-        "title": "Zwift Crit Racing Club - The Bell Lap",
-        "start_time_utc": "2026-03-17T12:40:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6995933,
-                "route_id": 2875658892,
-                "route_name": "Unknown Route",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 0.0,
-                "laps": 10
-            },
-            "B": {
-                "subgroup_id": 6995934,
-                "route_id": 2875658892,
-                "route_name": "Unknown Route",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 0.0,
-                "laps": 10
-            },
-            "C": {
-                "subgroup_id": 6995935,
-                "route_id": 2875658892,
-                "route_name": "Unknown Route",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 0.0,
-                "laps": 10
-            },
-            "D": {
-                "subgroup_id": 6995936,
-                "route_id": 2875658892,
-                "route_name": "Unknown Route",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 0.0,
-                "laps": 10
-            },
-            "E": {
-                "subgroup_id": 6995937,
-                "route_id": 2875658892,
-                "route_name": "Unknown Route",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 0.0,
-                "laps": 10
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5498582,
-        "title": "Tower 26 Group Workout",
-        "start_time_utc": "2026-03-17T12:45:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023597,
-                "route_id": 2128890027,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 67.0
-    },
-    {
         "parent_event_id": 5498584,
         "title": "Hercules - Taco Track Tuesday",
         "start_time_utc": "2026-03-17T13:00:00.000+0000",
@@ -711,37 +507,37 @@
             "A": {
                 "subgroup_id": 6993511,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6993512,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6993513,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6993514,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             }
         },
@@ -2440,25 +2236,6 @@
         "max_duration_minutes": 0.0
     },
     {
-        "parent_event_id": 5498653,
-        "title": "Team Italy Fat Burn Ride",
-        "start_time_utc": "2026-03-17T17:15:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7023740,
-                "route_id": 2128890027,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
         "parent_event_id": 5498652,
         "title": "Ca Va Fumer Bleu",
         "start_time_utc": "2026-03-17T17:15:00.000+0000",
@@ -2476,6 +2253,25 @@
         },
         "max_distance_km": 0.0,
         "max_duration_minutes": 75.0
+    },
+    {
+        "parent_event_id": 5498653,
+        "title": "Team Italy Fat Burn Ride",
+        "start_time_utc": "2026-03-17T17:15:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7023740,
+                "route_id": 2128890027,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
     },
     {
         "parent_event_id": 5498654,
@@ -2699,37 +2495,37 @@
             "A": {
                 "subgroup_id": 6993471,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6993472,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6993473,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6993474,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             }
         },
@@ -3989,37 +3785,37 @@
             "A": {
                 "subgroup_id": 6993996,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6993997,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6993998,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6993999,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             }
         },
@@ -5119,37 +4915,37 @@
             "A": {
                 "subgroup_id": 6993867,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6993868,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6993869,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6993870,
                 "route_id": 2826340040,
-                "route_name": "Unknown Route",
+                "route_name": "UNKNOWN_ROUTE (Found in: Zwift TT Club Racing - Outer Scotland)",
                 "score_min": null,
                 "score_max": null,
-                "distance_km": 0.0,
+                "distance_km": 11.3,
                 "laps": 1
             }
         },
@@ -6191,6 +5987,120 @@
             }
         },
         "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498811,
+        "title": "Ride to End ALZ",
+        "start_time_utc": "2026-03-17T21:15:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7024025,
+                "route_id": 3680493479,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5430346,
+        "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
+        "start_time_utc": "2026-03-17T21:15:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6938282,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 650.0,
+                "score_max": 1000.0,
+                "distance_km": 38.2,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498812,
+        "title": "DIRT Family Values Ride",
+        "start_time_utc": "2026-03-17T21:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7024026,
+                "route_id": 1258526800,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 50.0
+    },
+    {
+        "parent_event_id": 5498813,
+        "title": "Giant Tuesday Ride Series",
+        "start_time_utc": "2026-03-17T21:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7024027,
+                "route_id": 3680493479,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5474225,
+        "title": "Stage 1 - The Zwift Big Spin",
+        "start_time_utc": "2026-03-17T21:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 6990824,
+                "route_id": 1258526800,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498814,
+        "title": "Turn It Up Tuesdays",
+        "start_time_utc": "2026-03-17T21:30:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7024028,
+                "route_id": 3819095753,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 7.2,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 7.2,
         "max_duration_minutes": 0.0
     }
 ]

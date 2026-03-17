@@ -1,149 +1,5 @@
 [
     {
-        "parent_event_id": 5498554,
-        "title": "GGCC Glasgow Green Cycle Club Tuesday Training Ride",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7023544,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5498557,
-        "title": "NVDM Coaching Group Workout",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023547,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 75.0
-    },
-    {
-        "parent_event_id": 5498556,
-        "title": "Half & Full IM distance with Beyond The Line ",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023546,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 90.0
-    },
-    {
-        "parent_event_id": 5498555,
-        "title": "The Feed Community Ride",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "C": {
-                "subgroup_id": 7023545,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5470255,
-        "title": "Club Yummy's Workout Party",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 6985951,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 62.0
-    },
-    {
-        "parent_event_id": 5459444,
-        "title": "Workout 3: Alpecin-Premier Tech Team Camp",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 6973291,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 90.0
-    },
-    {
-        "parent_event_id": 5366304,
-        "title": "BaseCamp Power and Speed FTP and Attack Intervals p/b TrainingPeaks",
-        "start_time_utc": "2026-03-17T11:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 6857486,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 62.0
-    },
-    {
-        "parent_event_id": 5498559,
-        "title": "DIRT Rolling Thunder",
-        "start_time_utc": "2026-03-17T11:05:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "C": {
-                "subgroup_id": 7023549,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 90.0
-    },
-    {
         "parent_event_id": 5430043,
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T11:10:00.000+0000",
@@ -151,42 +7,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6937306,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 510.0,
                 "score_max": 650.0,
                 "raw_score_label": "510-650",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6937307,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 390.0,
                 "score_max": 510.0,
                 "raw_score_label": "390-510",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6937308,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 270.0,
                 "score_max": 390.0,
                 "raw_score_label": "270-390",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6937309,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 160.0,
                 "score_max": 270.0,
                 "raw_score_label": "160-270",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6937310,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 160.0,
                 "raw_score_label": "0-160",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -201,10 +67,12 @@
         "categories": {
             "A": {
                 "subgroup_id": 6938413,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 650.0,
                 "score_max": 1000.0,
                 "raw_score_label": "650-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -219,6 +87,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023551,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 1000.0,
                 "raw_score_label": "0-1000",
@@ -237,6 +107,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990734,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -255,6 +127,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023557,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -263,6 +137,8 @@
             },
             "D": {
                 "subgroup_id": 7023558,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -281,6 +157,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023561,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -299,6 +177,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023562,
+                "route_id": 2143464829,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -317,6 +197,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023560,
+                "route_id": 576953930,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -335,6 +217,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023563,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -353,6 +237,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023577,
+                "route_id": 1258415487,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": null,
                 "raw_score_label": "690-850 Max",
@@ -361,6 +247,8 @@
             },
             "B": {
                 "subgroup_id": 7023578,
+                "route_id": 1258415487,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 530.0,
                 "score_max": null,
                 "raw_score_label": "530-690 Max",
@@ -369,6 +257,8 @@
             },
             "C": {
                 "subgroup_id": 7023579,
+                "route_id": 1258415487,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 370.0,
                 "score_max": null,
                 "raw_score_label": "370-530 Max",
@@ -377,6 +267,8 @@
             },
             "D": {
                 "subgroup_id": 7023580,
+                "route_id": 1258415487,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 210.0,
                 "score_max": null,
                 "raw_score_label": "210-370 Max",
@@ -385,6 +277,8 @@
             },
             "E": {
                 "subgroup_id": 7023581,
+                "route_id": 1258415487,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": null,
                 "raw_score_label": "0-210 Max",
@@ -403,6 +297,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023572,
+                "route_id": 1453570384,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -411,6 +307,8 @@
             },
             "B": {
                 "subgroup_id": 7023573,
+                "route_id": 1453570384,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -419,6 +317,8 @@
             },
             "C": {
                 "subgroup_id": 7023574,
+                "route_id": 1453570384,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -427,6 +327,8 @@
             },
             "D": {
                 "subgroup_id": 7023575,
+                "route_id": 1453570384,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -435,6 +337,8 @@
             },
             "E": {
                 "subgroup_id": 7023576,
+                "route_id": 1453570384,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -453,6 +357,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023566,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -471,6 +377,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023564,
+                "route_id": 3351665212,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -479,6 +387,8 @@
             },
             "B": {
                 "subgroup_id": 7023565,
+                "route_id": 3351665212,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -497,6 +407,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7020891,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -515,6 +427,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7006369,
+                "route_id": 1538375239,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -533,42 +447,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6939642,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 500.0,
                 "score_max": 1000.0,
                 "raw_score_label": "500-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6939643,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 400.0,
                 "score_max": 500.0,
                 "raw_score_label": "400-500",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6939644,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 300.0,
                 "score_max": 400.0,
                 "raw_score_label": "300-400",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6939645,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 200.0,
                 "score_max": 300.0,
                 "raw_score_label": "200-300",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6939646,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 200.0,
                 "raw_score_label": "0-200",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -583,6 +507,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023584,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -591,6 +517,8 @@
             },
             "B": {
                 "subgroup_id": 7023585,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -599,6 +527,8 @@
             },
             "C": {
                 "subgroup_id": 7023586,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -607,6 +537,8 @@
             },
             "D": {
                 "subgroup_id": 7023587,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -625,6 +557,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023588,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -643,6 +577,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023591,
+                "route_id": 1464561389,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -661,6 +597,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023589,
+                "route_id": 3694952104,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -669,6 +607,8 @@
             },
             "D": {
                 "subgroup_id": 7023590,
+                "route_id": 3694952104,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -687,42 +627,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6936970,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 570.0,
                 "score_max": 725.0,
                 "raw_score_label": "570-725",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6936971,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 450.0,
                 "score_max": 570.0,
                 "raw_score_label": "450-570",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6936972,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 330.0,
                 "score_max": 450.0,
                 "raw_score_label": "330-450",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6936973,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 210.0,
                 "score_max": 330.0,
                 "raw_score_label": "210-330",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6936974,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 210.0,
                 "raw_score_label": "0-210",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -737,6 +687,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023592,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -745,6 +697,8 @@
             },
             "B": {
                 "subgroup_id": 7023593,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -753,6 +707,8 @@
             },
             "C": {
                 "subgroup_id": 7023594,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -761,6 +717,8 @@
             },
             "D": {
                 "subgroup_id": 7023595,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -779,6 +737,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6993863,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -787,6 +747,8 @@
             },
             "B": {
                 "subgroup_id": 6993864,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -795,6 +757,8 @@
             },
             "C": {
                 "subgroup_id": 6993865,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -803,6 +767,8 @@
             },
             "D": {
                 "subgroup_id": 6993866,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -821,6 +787,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990881,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -839,6 +807,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023596,
+                "route_id": 2852153296,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -857,6 +827,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6995933,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -865,6 +837,8 @@
             },
             "B": {
                 "subgroup_id": 6995934,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -873,6 +847,8 @@
             },
             "C": {
                 "subgroup_id": 6995935,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -881,6 +857,8 @@
             },
             "D": {
                 "subgroup_id": 6995936,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -889,6 +867,8 @@
             },
             "E": {
                 "subgroup_id": 6995937,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -907,6 +887,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023597,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -925,6 +907,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023599,
+                "route_id": 3012588561,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -943,6 +927,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023598,
+                "route_id": 3532866973,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -961,6 +947,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6972979,
+                "route_id": 890800649,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -979,6 +967,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6922690,
+                "route_id": 46799750,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -997,6 +987,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7011786,
+                "route_id": 1092181131,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1015,6 +1007,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023602,
+                "route_id": 1638640398,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1023,6 +1017,8 @@
             },
             "E": {
                 "subgroup_id": 7023603,
+                "route_id": 3454338139,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1041,42 +1037,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6936980,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 510.0,
                 "score_max": 650.0,
                 "raw_score_label": "510-650",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6936981,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 390.0,
                 "score_max": 510.0,
                 "raw_score_label": "390-510",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6936982,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 270.0,
                 "score_max": 390.0,
                 "raw_score_label": "270-390",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6936983,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 160.0,
                 "score_max": 270.0,
                 "raw_score_label": "160-270",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6936984,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 160.0,
                 "raw_score_label": "0-160",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -1091,10 +1097,12 @@
         "categories": {
             "A": {
                 "subgroup_id": 6938538,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 650.0,
                 "score_max": 1000.0,
                 "raw_score_label": "650-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -1109,6 +1117,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990855,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1127,6 +1137,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023604,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1145,6 +1157,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023606,
+                "route_id": 604330868,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1163,6 +1177,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023605,
+                "route_id": 4199497144,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1181,6 +1197,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023608,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1199,6 +1217,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023607,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1217,6 +1237,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023614,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1235,6 +1257,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023616,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1253,6 +1277,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023615,
+                "route_id": 986252325,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1271,6 +1297,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7020901,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1289,6 +1317,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7007827,
+                "route_id": 4009235104,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1307,6 +1337,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6857483,
+                "route_id": 1635842477,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1325,6 +1357,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023625,
+                "route_id": 742057576,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1343,42 +1377,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6936530,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 570.0,
                 "score_max": 725.0,
                 "raw_score_label": "570-725",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6936531,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 450.0,
                 "score_max": 570.0,
                 "raw_score_label": "450-570",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6936532,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 330.0,
                 "score_max": 450.0,
                 "raw_score_label": "330-450",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6936533,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 210.0,
                 "score_max": 330.0,
                 "raw_score_label": "210-330",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6936534,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 210.0,
                 "raw_score_label": "0-210",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -1393,6 +1437,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6993511,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -1401,6 +1447,8 @@
             },
             "B": {
                 "subgroup_id": 6993512,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -1409,6 +1457,8 @@
             },
             "C": {
                 "subgroup_id": 6993513,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -1417,6 +1467,8 @@
             },
             "D": {
                 "subgroup_id": 6993514,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -1435,6 +1487,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990823,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1453,6 +1507,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023629,
+                "route_id": 3379779247,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1461,6 +1517,8 @@
             },
             "B": {
                 "subgroup_id": 7023630,
+                "route_id": 3379779247,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1469,6 +1527,8 @@
             },
             "C": {
                 "subgroup_id": 7023631,
+                "route_id": 3379779247,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1477,6 +1537,8 @@
             },
             "D": {
                 "subgroup_id": 7023632,
+                "route_id": 3379779247,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1495,6 +1557,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023628,
+                "route_id": 1656629976,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1513,6 +1577,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023627,
+                "route_id": 1760877317,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1531,6 +1597,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023626,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1549,6 +1617,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6995387,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -1557,6 +1627,8 @@
             },
             "B": {
                 "subgroup_id": 6995388,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -1565,6 +1637,8 @@
             },
             "C": {
                 "subgroup_id": 6995389,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -1573,6 +1647,8 @@
             },
             "D": {
                 "subgroup_id": 6995390,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -1581,6 +1657,8 @@
             },
             "E": {
                 "subgroup_id": 6995391,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -1599,6 +1677,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023633,
+                "route_id": 3811569265,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1617,6 +1697,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023634,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -1625,6 +1707,8 @@
             },
             "B": {
                 "subgroup_id": 7023635,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -1633,6 +1717,8 @@
             },
             "C": {
                 "subgroup_id": 7023636,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -1641,6 +1727,8 @@
             },
             "D": {
                 "subgroup_id": 7023637,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -1649,6 +1737,8 @@
             },
             "E": {
                 "subgroup_id": 7023638,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -1667,6 +1757,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023639,
+                "route_id": 246712730,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1685,6 +1777,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023644,
+                "route_id": 986252325,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1703,6 +1797,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023643,
+                "route_id": 3364574135,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1721,6 +1817,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023642,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1739,6 +1837,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023640,
+                "route_id": 3351665212,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1747,6 +1847,8 @@
             },
             "B": {
                 "subgroup_id": 7023641,
+                "route_id": 3351665212,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1765,6 +1867,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6973169,
+                "route_id": 890800649,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1783,6 +1887,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6951527,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -1791,6 +1897,8 @@
             },
             "B": {
                 "subgroup_id": 6951529,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -1799,6 +1907,8 @@
             },
             "C": {
                 "subgroup_id": 6951526,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -1807,6 +1917,8 @@
             },
             "D": {
                 "subgroup_id": 6951525,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -1815,6 +1927,8 @@
             },
             "E": {
                 "subgroup_id": 6951528,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -1833,6 +1947,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023647,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1851,6 +1967,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023653,
+                "route_id": 1373909093,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1859,6 +1977,8 @@
             },
             "D": {
                 "subgroup_id": 7023654,
+                "route_id": 1373909093,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1877,42 +1997,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6936600,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 510.0,
                 "score_max": 650.0,
                 "raw_score_label": "510-650",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6936601,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 390.0,
                 "score_max": 510.0,
                 "raw_score_label": "390-510",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6936602,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 270.0,
                 "score_max": 390.0,
                 "raw_score_label": "270-390",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6936603,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 160.0,
                 "score_max": 270.0,
                 "raw_score_label": "160-270",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6936604,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 160.0,
                 "raw_score_label": "0-160",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -1927,6 +2057,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023655,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1935,6 +2067,8 @@
             },
             "D": {
                 "subgroup_id": 7023656,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1953,10 +2087,12 @@
         "categories": {
             "A": {
                 "subgroup_id": 6938320,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 650.0,
                 "score_max": 1000.0,
                 "raw_score_label": "650-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -1971,6 +2107,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990765,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -1989,6 +2127,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023657,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -1997,6 +2137,8 @@
             },
             "B": {
                 "subgroup_id": 7023658,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -2005,6 +2147,8 @@
             },
             "C": {
                 "subgroup_id": 7023659,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -2013,6 +2157,8 @@
             },
             "D": {
                 "subgroup_id": 7023660,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -2021,6 +2167,8 @@
             },
             "E": {
                 "subgroup_id": 7023661,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -2039,6 +2187,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023663,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2047,6 +2197,8 @@
             },
             "B": {
                 "subgroup_id": 7023664,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2055,6 +2207,8 @@
             },
             "C": {
                 "subgroup_id": 7023665,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2063,6 +2217,8 @@
             },
             "D": {
                 "subgroup_id": 7023666,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2081,6 +2237,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023662,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2099,6 +2257,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023676,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": null,
                 "raw_score_label": "690-1000 Max",
@@ -2107,6 +2267,8 @@
             },
             "B": {
                 "subgroup_id": 7023677,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": null,
                 "raw_score_label": "520-690 Max",
@@ -2115,6 +2277,8 @@
             },
             "C": {
                 "subgroup_id": 7023678,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": null,
                 "raw_score_label": "350-520 Max",
@@ -2123,6 +2287,8 @@
             },
             "D": {
                 "subgroup_id": 7023679,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": null,
                 "raw_score_label": "180-350 Max",
@@ -2131,6 +2297,8 @@
             },
             "E": {
                 "subgroup_id": 7023680,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": null,
                 "raw_score_label": "0-180 Max",
@@ -2149,6 +2317,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023672,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2157,6 +2327,8 @@
             },
             "B": {
                 "subgroup_id": 7023673,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2165,6 +2337,8 @@
             },
             "C": {
                 "subgroup_id": 7023674,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2173,6 +2347,8 @@
             },
             "D": {
                 "subgroup_id": 7023675,
+                "route_id": 1600198346,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2191,6 +2367,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023667,
+                "route_id": 2592027600,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -2199,6 +2377,8 @@
             },
             "B": {
                 "subgroup_id": 7023668,
+                "route_id": 2592027600,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -2207,6 +2387,8 @@
             },
             "C": {
                 "subgroup_id": 7023669,
+                "route_id": 2592027600,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -2215,6 +2397,8 @@
             },
             "D": {
                 "subgroup_id": 7023670,
+                "route_id": 2592027600,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -2223,6 +2407,8 @@
             },
             "E": {
                 "subgroup_id": 7023671,
+                "route_id": 2592027600,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -2241,6 +2427,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7020899,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2259,6 +2447,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7009504,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2277,6 +2467,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6857482,
+                "route_id": 1635842477,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2295,6 +2487,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023683,
+                "route_id": 2333249368,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2313,42 +2507,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6937126,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 570.0,
                 "score_max": 725.0,
                 "raw_score_label": "570-725",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6937127,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 450.0,
                 "score_max": 570.0,
                 "raw_score_label": "450-570",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6937128,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 330.0,
                 "score_max": 450.0,
                 "raw_score_label": "330-450",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6937129,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 210.0,
                 "score_max": 330.0,
                 "raw_score_label": "210-330",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6937130,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 210.0,
                 "raw_score_label": "0-210",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -2363,6 +2567,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023689,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -2371,6 +2577,8 @@
             },
             "B": {
                 "subgroup_id": 7023690,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -2379,6 +2587,8 @@
             },
             "C": {
                 "subgroup_id": 7023691,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -2387,6 +2597,8 @@
             },
             "D": {
                 "subgroup_id": 7023692,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -2395,6 +2607,8 @@
             },
             "E": {
                 "subgroup_id": 7023693,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -2413,6 +2627,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023694,
+                "route_id": 1635842477,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2431,6 +2647,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990841,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2449,6 +2667,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023695,
+                "route_id": 553661379,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -2457,6 +2677,8 @@
             },
             "B": {
                 "subgroup_id": 7023696,
+                "route_id": 553661379,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -2465,6 +2687,8 @@
             },
             "C": {
                 "subgroup_id": 7023697,
+                "route_id": 553661379,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -2473,6 +2697,8 @@
             },
             "D": {
                 "subgroup_id": 7023698,
+                "route_id": 553661379,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -2491,6 +2717,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023708,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2499,6 +2727,8 @@
             },
             "B": {
                 "subgroup_id": 7023709,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2507,6 +2737,8 @@
             },
             "C": {
                 "subgroup_id": 7023710,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2515,6 +2747,8 @@
             },
             "D": {
                 "subgroup_id": 7023711,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2533,6 +2767,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023703,
+                "route_id": 1201172818,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -2541,6 +2777,8 @@
             },
             "B": {
                 "subgroup_id": 7023704,
+                "route_id": 1201172818,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -2549,6 +2787,8 @@
             },
             "C": {
                 "subgroup_id": 7023705,
+                "route_id": 1201172818,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -2557,6 +2797,8 @@
             },
             "D": {
                 "subgroup_id": 7023706,
+                "route_id": 1201172818,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -2565,6 +2807,8 @@
             },
             "E": {
                 "subgroup_id": 7023707,
+                "route_id": 1201172818,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -2583,6 +2827,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023702,
+                "route_id": 913172163,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2601,6 +2847,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023701,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2619,6 +2867,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023699,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2627,6 +2877,8 @@
             },
             "D": {
                 "subgroup_id": 7023700,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2645,6 +2897,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023713,
+                "route_id": 2888820995,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2663,6 +2917,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023712,
+                "route_id": 1178708985,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2681,6 +2937,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023714,
+                "route_id": 1917017591,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2699,6 +2957,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023715,
+                "route_id": 65777922,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -2707,6 +2967,8 @@
             },
             "B": {
                 "subgroup_id": 7023716,
+                "route_id": 65777922,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -2715,6 +2977,8 @@
             },
             "C": {
                 "subgroup_id": 7023717,
+                "route_id": 65777922,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -2723,6 +2987,8 @@
             },
             "D": {
                 "subgroup_id": 7023718,
+                "route_id": 65777922,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -2731,6 +2997,8 @@
             },
             "E": {
                 "subgroup_id": 7023719,
+                "route_id": 65777922,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -2749,6 +3017,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023720,
+                "route_id": 1917017591,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2757,6 +3027,8 @@
             },
             "D": {
                 "subgroup_id": 7023721,
+                "route_id": 686828068,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2765,6 +3037,8 @@
             },
             "E": {
                 "subgroup_id": 7023722,
+                "route_id": 3366225080,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2783,6 +3057,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023734,
+                "route_id": 1378559127,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2801,6 +3077,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023733,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2819,6 +3097,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023729,
+                "route_id": 986252325,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2827,6 +3107,8 @@
             },
             "B": {
                 "subgroup_id": 7023730,
+                "route_id": 986252325,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2835,6 +3117,8 @@
             },
             "C": {
                 "subgroup_id": 7023731,
+                "route_id": 986252325,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2843,6 +3127,8 @@
             },
             "D": {
                 "subgroup_id": 7023732,
+                "route_id": 986252325,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2861,6 +3147,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6973097,
+                "route_id": 890800649,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2879,42 +3167,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6939552,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 500.0,
                 "score_max": 1000.0,
                 "raw_score_label": "500-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6939553,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 400.0,
                 "score_max": 500.0,
                 "raw_score_label": "400-500",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6939554,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 300.0,
                 "score_max": 400.0,
                 "raw_score_label": "300-400",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6939555,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 200.0,
                 "score_max": 300.0,
                 "raw_score_label": "200-300",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6939556,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 200.0,
                 "raw_score_label": "0-200",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -2929,6 +3227,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023737,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -2947,42 +3247,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6937100,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 510.0,
                 "score_max": 650.0,
                 "raw_score_label": "510-650",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6937101,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 390.0,
                 "score_max": 510.0,
                 "raw_score_label": "390-510",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6937102,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 270.0,
                 "score_max": 390.0,
                 "raw_score_label": "270-390",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6937103,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 160.0,
                 "score_max": 270.0,
                 "raw_score_label": "160-270",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6937104,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 160.0,
                 "raw_score_label": "0-160",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -2997,6 +3307,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023740,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3015,6 +3327,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023739,
+                "route_id": 3051823795,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3033,6 +3347,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023741,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3041,6 +3357,8 @@
             },
             "B": {
                 "subgroup_id": 7023742,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3049,6 +3367,8 @@
             },
             "C": {
                 "subgroup_id": 7023743,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3057,6 +3377,8 @@
             },
             "D": {
                 "subgroup_id": 7023744,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3065,6 +3387,8 @@
             },
             "E": {
                 "subgroup_id": 7023745,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3083,6 +3407,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023738,
+                "route_id": 3811569265,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3101,10 +3427,12 @@
         "categories": {
             "A": {
                 "subgroup_id": 6938650,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 650.0,
                 "score_max": 1000.0,
                 "raw_score_label": "650-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -3119,6 +3447,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023750,
+                "route_id": 2892858917,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3137,6 +3467,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023746,
+                "route_id": 4232620535,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3145,6 +3477,8 @@
             },
             "B": {
                 "subgroup_id": 7023747,
+                "route_id": 4232620535,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3153,6 +3487,8 @@
             },
             "C": {
                 "subgroup_id": 7023748,
+                "route_id": 4232620535,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3161,6 +3497,8 @@
             },
             "D": {
                 "subgroup_id": 7023749,
+                "route_id": 4232620535,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3179,6 +3517,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023751,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -3187,6 +3527,8 @@
             },
             "B": {
                 "subgroup_id": 7023752,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -3195,6 +3537,8 @@
             },
             "C": {
                 "subgroup_id": 7023753,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -3203,6 +3547,8 @@
             },
             "D": {
                 "subgroup_id": 7023754,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -3211,6 +3557,8 @@
             },
             "E": {
                 "subgroup_id": 7023755,
+                "route_id": 947394567,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -3229,6 +3577,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6993471,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3237,6 +3587,8 @@
             },
             "B": {
                 "subgroup_id": 6993472,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3245,6 +3597,8 @@
             },
             "C": {
                 "subgroup_id": 6993473,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3253,6 +3607,8 @@
             },
             "D": {
                 "subgroup_id": 6993474,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3271,6 +3627,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990800,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3289,6 +3647,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023757,
+                "route_id": 686828068,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3307,6 +3667,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023756,
+                "route_id": 1942591558,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3325,6 +3687,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023763,
+                "route_id": 2590569306,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3343,6 +3707,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023758,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -3351,6 +3717,8 @@
             },
             "B": {
                 "subgroup_id": 7023759,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -3359,6 +3727,8 @@
             },
             "C": {
                 "subgroup_id": 7023760,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -3367,6 +3737,8 @@
             },
             "D": {
                 "subgroup_id": 7023761,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 350.0,
                 "raw_score_label": "0-350",
@@ -3375,6 +3747,8 @@
             },
             "E": {
                 "subgroup_id": 7023762,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 0.0,
                 "raw_score_label": "0-0",
@@ -3393,6 +3767,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7020504,
+                "route_id": 1880443431,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3411,6 +3787,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6848254,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": null,
                 "raw_score_label": "690-1000 Max",
@@ -3419,6 +3797,8 @@
             },
             "B": {
                 "subgroup_id": 6848255,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": null,
                 "raw_score_label": "520-690 Max",
@@ -3427,6 +3807,8 @@
             },
             "C": {
                 "subgroup_id": 6848256,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": null,
                 "raw_score_label": "350-520 Max",
@@ -3435,6 +3817,8 @@
             },
             "D": {
                 "subgroup_id": 6848257,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": null,
                 "raw_score_label": "180-350 Max",
@@ -3443,6 +3827,8 @@
             },
             "E": {
                 "subgroup_id": 6848258,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": null,
                 "raw_score_label": "0-180 Max",
@@ -3461,6 +3847,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023771,
+                "route_id": 2007026433,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3469,6 +3857,8 @@
             },
             "B": {
                 "subgroup_id": 7023772,
+                "route_id": 2007026433,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3477,6 +3867,8 @@
             },
             "C": {
                 "subgroup_id": 7023773,
+                "route_id": 2007026433,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3485,6 +3877,8 @@
             },
             "D": {
                 "subgroup_id": 7023774,
+                "route_id": 2007026433,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3503,6 +3897,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023775,
+                "route_id": 5745690,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -3511,6 +3907,8 @@
             },
             "B": {
                 "subgroup_id": 7023776,
+                "route_id": 5745690,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -3519,6 +3917,8 @@
             },
             "C": {
                 "subgroup_id": 7023777,
+                "route_id": 5745690,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -3527,6 +3927,8 @@
             },
             "D": {
                 "subgroup_id": 7023778,
+                "route_id": 5745690,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -3535,6 +3937,8 @@
             },
             "E": {
                 "subgroup_id": 7023779,
+                "route_id": 5745690,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -3553,6 +3957,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6995202,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -3561,6 +3967,8 @@
             },
             "B": {
                 "subgroup_id": 6995203,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -3569,6 +3977,8 @@
             },
             "C": {
                 "subgroup_id": 6995204,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -3577,6 +3987,8 @@
             },
             "D": {
                 "subgroup_id": 6995205,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -3585,6 +3997,8 @@
             },
             "E": {
                 "subgroup_id": 6995206,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -3603,6 +4017,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023780,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3621,6 +4037,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023785,
+                "route_id": 3665959404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3639,6 +4057,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023781,
+                "route_id": 1993374659,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3647,6 +4067,8 @@
             },
             "B": {
                 "subgroup_id": 7023782,
+                "route_id": 1993374659,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3655,6 +4077,8 @@
             },
             "C": {
                 "subgroup_id": 7023783,
+                "route_id": 1993374659,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3663,6 +4087,8 @@
             },
             "D": {
                 "subgroup_id": 7023784,
+                "route_id": 1993374659,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3681,6 +4107,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023786,
+                "route_id": 3701568815,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3699,6 +4127,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023787,
+                "route_id": 3453194200,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3717,6 +4147,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023930,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3725,6 +4157,8 @@
             },
             "B": {
                 "subgroup_id": 7023931,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3733,6 +4167,8 @@
             },
             "C": {
                 "subgroup_id": 7023932,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3741,6 +4177,8 @@
             },
             "D": {
                 "subgroup_id": 7023933,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3749,6 +4187,8 @@
             },
             "E": {
                 "subgroup_id": 7023934,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -3767,6 +4207,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023792,
+                "route_id": 1638640398,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3785,6 +4227,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023788,
+                "route_id": 1638640398,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3793,6 +4237,8 @@
             },
             "B": {
                 "subgroup_id": 7023789,
+                "route_id": 1638640398,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3801,6 +4247,8 @@
             },
             "C": {
                 "subgroup_id": 7023790,
+                "route_id": 1638640398,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3809,6 +4257,8 @@
             },
             "D": {
                 "subgroup_id": 7023791,
+                "route_id": 1638640398,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3827,6 +4277,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023795,
+                "route_id": 1917017591,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3845,6 +4297,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023793,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3853,6 +4307,8 @@
             },
             "D": {
                 "subgroup_id": 7023794,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3871,6 +4327,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023813,
+                "route_id": 2953010285,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3889,6 +4347,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023806,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3907,6 +4367,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023799,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3925,6 +4387,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023798,
+                "route_id": 3707791029,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3943,6 +4407,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023796,
+                "route_id": 3351665212,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3951,6 +4417,8 @@
             },
             "B": {
                 "subgroup_id": 7023797,
+                "route_id": 3351665212,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3969,6 +4437,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7020887,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -3987,6 +4457,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6951530,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -3995,6 +4467,8 @@
             },
             "B": {
                 "subgroup_id": 6951533,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -4003,6 +4477,8 @@
             },
             "C": {
                 "subgroup_id": 6951531,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -4011,6 +4487,8 @@
             },
             "D": {
                 "subgroup_id": 6951532,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -4019,6 +4497,8 @@
             },
             "E": {
                 "subgroup_id": 6951534,
+                "route_id": 4102513789,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -4037,6 +4517,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6868987,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4045,6 +4527,8 @@
             },
             "B": {
                 "subgroup_id": 6868985,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4053,6 +4537,8 @@
             },
             "C": {
                 "subgroup_id": 6868986,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4061,6 +4547,8 @@
             },
             "D": {
                 "subgroup_id": 6868988,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4079,42 +4567,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6939717,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 500.0,
                 "score_max": 1000.0,
                 "raw_score_label": "500-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6939718,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 400.0,
                 "score_max": 500.0,
                 "raw_score_label": "400-500",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6939719,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 300.0,
                 "score_max": 400.0,
                 "raw_score_label": "300-400",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6939720,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 200.0,
                 "score_max": 300.0,
                 "raw_score_label": "200-300",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6939721,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 200.0,
                 "raw_score_label": "0-200",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -4129,6 +4627,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023816,
+                "route_id": 3023359358,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -4137,6 +4637,8 @@
             },
             "B": {
                 "subgroup_id": 7023817,
+                "route_id": 3023359358,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -4145,6 +4647,8 @@
             },
             "C": {
                 "subgroup_id": 7023818,
+                "route_id": 3023359358,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -4153,6 +4657,8 @@
             },
             "D": {
                 "subgroup_id": 7023819,
+                "route_id": 3023359358,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -4161,6 +4667,8 @@
             },
             "E": {
                 "subgroup_id": 7023820,
+                "route_id": 3023359358,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -4179,6 +4687,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023821,
+                "route_id": 3012588561,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4197,42 +4707,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6936655,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 570.0,
                 "score_max": 725.0,
                 "raw_score_label": "570-725",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6936656,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 450.0,
                 "score_max": 570.0,
                 "raw_score_label": "450-570",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6936657,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 330.0,
                 "score_max": 450.0,
                 "raw_score_label": "330-450",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6936658,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 210.0,
                 "score_max": 330.0,
                 "raw_score_label": "210-330",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6936659,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 210.0,
                 "raw_score_label": "0-210",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -4247,6 +4767,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6969910,
+                "route_id": 2698009951,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4265,6 +4787,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023827,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4283,10 +4807,12 @@
         "categories": {
             "A": {
                 "subgroup_id": 6938260,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 650.0,
                 "score_max": 1000.0,
                 "raw_score_label": "650-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -4301,6 +4827,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023954,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4309,6 +4837,8 @@
             },
             "B": {
                 "subgroup_id": 7023955,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4317,6 +4847,8 @@
             },
             "C": {
                 "subgroup_id": 7023956,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4325,6 +4857,8 @@
             },
             "D": {
                 "subgroup_id": 7023957,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4333,6 +4867,8 @@
             },
             "E": {
                 "subgroup_id": 7023958,
+                "route_id": 3994934674,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4351,6 +4887,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023828,
+                "route_id": 1917017591,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4369,6 +4907,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6708186,
+                "route_id": 910684583,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4377,6 +4917,8 @@
             },
             "B": {
                 "subgroup_id": 6708187,
+                "route_id": 910684583,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4385,6 +4927,8 @@
             },
             "C": {
                 "subgroup_id": 6708188,
+                "route_id": 910684583,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4393,6 +4937,8 @@
             },
             "D": {
                 "subgroup_id": 6708189,
+                "route_id": 910684583,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4401,6 +4947,8 @@
             },
             "E": {
                 "subgroup_id": 6708190,
+                "route_id": 910684583,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4419,6 +4967,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6993996,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4427,6 +4977,8 @@
             },
             "B": {
                 "subgroup_id": 6993997,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4435,6 +4987,8 @@
             },
             "C": {
                 "subgroup_id": 6993998,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4443,6 +4997,8 @@
             },
             "D": {
                 "subgroup_id": 6993999,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4461,6 +5017,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023829,
+                "route_id": 742057576,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4479,6 +5037,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023830,
+                "route_id": 3600776267,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4497,6 +5057,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6990735,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4515,6 +5077,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023831,
+                "route_id": 3023359358,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4533,6 +5097,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023832,
+                "route_id": 1178708985,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4551,6 +5117,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023866,
+                "route_id": 3407362320,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4569,6 +5137,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023850,
+                "route_id": 2748657713,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4577,6 +5147,8 @@
             },
             "B": {
                 "subgroup_id": 7023851,
+                "route_id": 2748657713,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4585,6 +5157,8 @@
             },
             "C": {
                 "subgroup_id": 7023852,
+                "route_id": 2748657713,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4593,6 +5167,8 @@
             },
             "D": {
                 "subgroup_id": 7023853,
+                "route_id": 2748657713,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4611,6 +5187,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023839,
+                "route_id": 3012588561,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4629,6 +5207,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023878,
+                "route_id": 3597939700,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 290.0,
                 "score_max": 390.0,
                 "raw_score_label": "290-390",
@@ -4637,6 +5217,8 @@
             },
             "D": {
                 "subgroup_id": 7023879,
+                "route_id": 3597939700,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 200.0,
                 "score_max": 290.0,
                 "raw_score_label": "200-290",
@@ -4645,6 +5227,8 @@
             },
             "E": {
                 "subgroup_id": 7023880,
+                "route_id": 3597939700,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 200.0,
                 "raw_score_label": "0-200",
@@ -4663,6 +5247,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023981,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4671,6 +5257,8 @@
             },
             "B": {
                 "subgroup_id": 7023982,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4679,6 +5267,8 @@
             },
             "C": {
                 "subgroup_id": 7023983,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4687,6 +5277,8 @@
             },
             "D": {
                 "subgroup_id": 7023984,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4695,6 +5287,8 @@
             },
             "E": {
                 "subgroup_id": 7023985,
+                "route_id": 54700404,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -4713,6 +5307,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023885,
+                "route_id": 3669622170,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4731,6 +5327,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6994897,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 690.0,
                 "score_max": 1000.0,
                 "raw_score_label": "690-1000",
@@ -4739,6 +5337,8 @@
             },
             "B": {
                 "subgroup_id": 6994898,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 520.0,
                 "score_max": 690.0,
                 "raw_score_label": "520-690",
@@ -4747,6 +5347,8 @@
             },
             "C": {
                 "subgroup_id": 6994899,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 350.0,
                 "score_max": 520.0,
                 "raw_score_label": "350-520",
@@ -4755,6 +5357,8 @@
             },
             "D": {
                 "subgroup_id": 6994900,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 180.0,
                 "score_max": 350.0,
                 "raw_score_label": "180-350",
@@ -4763,6 +5367,8 @@
             },
             "E": {
                 "subgroup_id": 6994901,
+                "route_id": 2875658892,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 180.0,
                 "raw_score_label": "0-180",
@@ -4781,6 +5387,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023886,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4799,6 +5407,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023888,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 669.0,
                 "score_max": 1000.0,
                 "raw_score_label": "669-1000",
@@ -4807,6 +5417,8 @@
             },
             "B": {
                 "subgroup_id": 7023889,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 511.0,
                 "score_max": 669.0,
                 "raw_score_label": "511-669",
@@ -4815,6 +5427,8 @@
             },
             "C": {
                 "subgroup_id": 7023890,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 405.0,
                 "score_max": 511.0,
                 "raw_score_label": "405-511",
@@ -4823,6 +5437,8 @@
             },
             "D": {
                 "subgroup_id": 7023891,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 299.0,
                 "score_max": 405.0,
                 "raw_score_label": "299-405",
@@ -4831,6 +5447,8 @@
             },
             "E": {
                 "subgroup_id": 7023892,
+                "route_id": 872351836,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 299.0,
                 "raw_score_label": "0-299",
@@ -4849,6 +5467,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023887,
+                "route_id": 2244765560,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4867,6 +5487,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023900,
+                "route_id": 3378411990,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4885,6 +5507,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023895,
+                "route_id": 2843604888,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 1000.0,
                 "raw_score_label": "0-1000",
@@ -4893,6 +5517,8 @@
             },
             "B": {
                 "subgroup_id": 7023896,
+                "route_id": 2207442179,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 1000.0,
                 "raw_score_label": "0-1000",
@@ -4901,6 +5527,8 @@
             },
             "C": {
                 "subgroup_id": 7023897,
+                "route_id": 2694166390,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 1000.0,
                 "raw_score_label": "0-1000",
@@ -4909,6 +5537,8 @@
             },
             "D": {
                 "subgroup_id": 7023898,
+                "route_id": 2592027600,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 1000.0,
                 "raw_score_label": "0-1000",
@@ -4917,6 +5547,8 @@
             },
             "E": {
                 "subgroup_id": 7023899,
+                "route_id": 2422779354,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 1000.0,
                 "raw_score_label": "0-1000",
@@ -4935,6 +5567,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023894,
+                "route_id": 2905381067,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4953,6 +5587,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6968165,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4971,6 +5607,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023902,
+                "route_id": 2627606248,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4979,6 +5617,8 @@
             },
             "D": {
                 "subgroup_id": 7023903,
+                "route_id": 3453194200,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -4997,6 +5637,8 @@
         "categories": {
             "B": {
                 "subgroup_id": 7023904,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5005,6 +5647,8 @@
             },
             "C": {
                 "subgroup_id": 7023905,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5023,6 +5667,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023906,
+                "route_id": 2143464829,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5041,6 +5687,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023913,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 669.0,
                 "score_max": 1000.0,
                 "raw_score_label": "669-1000",
@@ -5049,6 +5697,8 @@
             },
             "B": {
                 "subgroup_id": 7023914,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 511.0,
                 "score_max": 669.0,
                 "raw_score_label": "511-669",
@@ -5057,6 +5707,8 @@
             },
             "C": {
                 "subgroup_id": 7023915,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 405.0,
                 "score_max": 511.0,
                 "raw_score_label": "405-511",
@@ -5065,6 +5717,8 @@
             },
             "D": {
                 "subgroup_id": 7023916,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 299.0,
                 "score_max": 405.0,
                 "raw_score_label": "299-405",
@@ -5073,6 +5727,8 @@
             },
             "E": {
                 "subgroup_id": 7023917,
+                "route_id": 3680493479,
+                "route_name_mapped": "Unknown Route",
                 "score_min": 0.0,
                 "score_max": 299.0,
                 "raw_score_label": "0-299",
@@ -5091,6 +5747,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 7023908,
+                "route_id": 2949228237,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5099,6 +5757,8 @@
             },
             "B": {
                 "subgroup_id": 7023909,
+                "route_id": 2949228237,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5107,6 +5767,8 @@
             },
             "C": {
                 "subgroup_id": 7023910,
+                "route_id": 2949228237,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5115,6 +5777,8 @@
             },
             "D": {
                 "subgroup_id": 7023911,
+                "route_id": 2949228237,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5123,6 +5787,8 @@
             },
             "E": {
                 "subgroup_id": 7023912,
+                "route_id": 2949228237,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5141,6 +5807,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023918,
+                "route_id": 4232620535,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5159,6 +5827,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023929,
+                "route_id": 4240327959,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5177,6 +5847,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023928,
+                "route_id": 2128890027,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5195,6 +5867,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023927,
+                "route_id": 2595459121,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5213,6 +5887,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023907,
+                "route_id": 3600776267,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5231,6 +5907,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7020713,
+                "route_id": 1880443431,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5249,6 +5927,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 6972999,
+                "route_id": 890800649,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5267,6 +5947,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7023942,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5275,6 +5957,8 @@
             },
             "D": {
                 "subgroup_id": 7023943,
+                "route_id": 1776635757,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5293,6 +5977,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023944,
+                "route_id": 890800649,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5311,6 +5997,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023945,
+                "route_id": 553661379,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5329,42 +6017,52 @@
         "categories": {
             "A": {
                 "subgroup_id": 6936720,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 510.0,
                 "score_max": 650.0,
                 "raw_score_label": "510-650",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "B": {
                 "subgroup_id": 6936721,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 390.0,
                 "score_max": 510.0,
                 "raw_score_label": "390-510",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "C": {
                 "subgroup_id": 6936722,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 270.0,
                 "score_max": 390.0,
                 "raw_score_label": "270-390",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "D": {
                 "subgroup_id": 6936723,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 160.0,
                 "score_max": 270.0,
                 "raw_score_label": "160-270",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             },
             "E": {
                 "subgroup_id": 6936724,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 0.0,
                 "score_max": 160.0,
                 "raw_score_label": "0-160",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -5379,6 +6077,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023946,
+                "route_id": 4263172118,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5397,6 +6097,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7024001,
+                "route_id": 1453570384,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5415,6 +6117,8 @@
         "categories": {
             "E": {
                 "subgroup_id": 7023952,
+                "route_id": 2966818006,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5433,10 +6137,12 @@
         "categories": {
             "A": {
                 "subgroup_id": 6938781,
+                "route_id": 3536020075,
+                "route_name_mapped": "Three Step Sisters",
                 "score_min": 650.0,
                 "score_max": 1000.0,
                 "raw_score_label": "650-1000",
-                "distance_km": 0.0,
+                "distance_km": 38.2,
                 "laps": 1
             }
         },
@@ -5451,6 +6157,8 @@
         "categories": {
             "D": {
                 "subgroup_id": 7023953,
+                "route_id": 2140131142,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": null,
@@ -5469,6 +6177,8 @@
         "categories": {
             "A": {
                 "subgroup_id": 6993867,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -5477,6 +6187,8 @@
             },
             "B": {
                 "subgroup_id": 6993868,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -5485,6 +6197,8 @@
             },
             "C": {
                 "subgroup_id": 6993869,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
@@ -5493,11 +6207,313 @@
             },
             "D": {
                 "subgroup_id": 6993870,
+                "route_id": 2826340040,
+                "route_name_mapped": "Unknown Route",
                 "score_min": null,
                 "score_max": null,
                 "raw_score_label": "",
                 "distance_km": 0.0,
                 "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498784,
+        "title": "ZWB Omnium - Sprint Quali (3/4)",
+        "start_time_utc": "2026-03-17T19:25:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7023959,
+                "route_id": 2422779354,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 669.0,
+                "score_max": 1000.0,
+                "raw_score_label": "669-1000",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 7023960,
+                "route_id": 2422779354,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 511.0,
+                "score_max": 669.0,
+                "raw_score_label": "511-669",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 7023961,
+                "route_id": 2422779354,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 405.0,
+                "score_max": 511.0,
+                "raw_score_label": "405-511",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 7023962,
+                "route_id": 2422779354,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 299.0,
+                "score_max": 405.0,
+                "raw_score_label": "299-405",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 7023963,
+                "route_id": 2422779354,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 0.0,
+                "score_max": 299.0,
+                "raw_score_label": "0-299",
+                "distance_km": 0.0,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5474272,
+        "title": "Stage 1 - The Zwift Big Spin",
+        "start_time_utc": "2026-03-17T19:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 6990871,
+                "route_id": 1258526800,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498788,
+        "title": "Good Time Riders - TT Race",
+        "start_time_utc": "2026-03-17T19:30:00.000+0000",
+        "type": "TIME_TRIAL",
+        "categories": {
+            "A": {
+                "subgroup_id": 7023971,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 16.1,
+                "laps": 0
+            },
+            "B": {
+                "subgroup_id": 7023972,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 16.1,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 7023973,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 16.1,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7023974,
+                "route_id": 172610229,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 16.1,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 16.1,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498785,
+        "title": "JETT Warm up Ride for JZMR (2.5~3.0w/kg)",
+        "start_time_utc": "2026-03-17T19:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7023964,
+                "route_id": 243949867,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 30.0
+    },
+    {
+        "parent_event_id": 5498786,
+        "title": "Turn It Up Tuesdays",
+        "start_time_utc": "2026-03-17T19:30:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7023965,
+                "route_id": 3819095753,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 7.2,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 7.2,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5433218,
+        "title": "SDW Chase Race Series No 3",
+        "start_time_utc": "2026-03-17T19:30:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6942378,
+                "route_id": 2829629527,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 31.0,
+                "laps": 0
+            },
+            "B": {
+                "subgroup_id": 6942375,
+                "route_id": 2829629527,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 31.0,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 6942376,
+                "route_id": 2829629527,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 31.0,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 6942377,
+                "route_id": 2829629527,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 31.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 31.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5358954,
+        "title": "2025/26 SISU Racing Club Championships - Climb",
+        "start_time_utc": "2026-03-17T19:30:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6848262,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 690.0,
+                "score_max": null,
+                "raw_score_label": "690-1000 Max",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 6848259,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 520.0,
+                "score_max": null,
+                "raw_score_label": "520-690 Max",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 6848260,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 350.0,
+                "score_max": null,
+                "raw_score_label": "350-520 Max",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 6848261,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 180.0,
+                "score_max": null,
+                "raw_score_label": "180-350 Max",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 6848263,
+                "route_id": 3079921742,
+                "route_name_mapped": "Unknown Route",
+                "score_min": 0.0,
+                "score_max": null,
+                "raw_score_label": "0-180 Max",
+                "distance_km": 0.0,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498789,
+        "title": "Madhare Flat and Fast",
+        "start_time_utc": "2026-03-17T19:35:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7023975,
+                "route_id": 928793662,
+                "route_name_mapped": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 2
             }
         },
         "max_distance_km": 0.0,

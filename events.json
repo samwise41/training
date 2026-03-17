@@ -1,107 +1,5 @@
 [
     {
-        "parent_event_id": 5498579,
-        "title": "TTR SONG RIDE",
-        "start_time_utc": "2026-03-17T12:10:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "B": {
-                "subgroup_id": 7023591,
-                "route_id": 1464561389,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5498578,
-        "title": "Group Run 10k",
-        "start_time_utc": "2026-03-17T12:10:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "B": {
-                "subgroup_id": 7023589,
-                "route_id": 3694952104,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 10.0,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7023590,
-                "route_id": 3694952104,
-                "route_name": "Unknown Route",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 10.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 10.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5429975,
-        "title": "Stage 5: Zwift Games: Three Step Sisters",
-        "start_time_utc": "2026-03-17T12:10:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6936970,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 570.0,
-                "score_max": 725.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6936971,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 450.0,
-                "score_max": 570.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6936972,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 330.0,
-                "score_max": 450.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6936973,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 210.0,
-                "score_max": 330.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 6936974,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 0.0,
-                "score_max": 210.0,
-                "distance_km": 38.2,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
         "parent_event_id": 5498580,
         "title": "Zwift Mexicanisimo ",
         "start_time_utc": "2026-03-17T12:15:00.000+0000",
@@ -6188,6 +6086,108 @@
                 "score_max": null,
                 "distance_km": 0.0,
                 "laps": 6
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498807,
+        "title": "NPRC - Run Every Day Powered By NoblePro",
+        "start_time_utc": "2026-03-17T21:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7024016,
+                "route_id": 3351665212,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0,
+                "laps": 0
+            },
+            "B": {
+                "subgroup_id": 7024017,
+                "route_id": 3351665212,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 10.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5459345,
+        "title": "Workout 3: Alpecin-Premier Tech Team Camp",
+        "start_time_utc": "2026-03-17T21:00:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 6973192,
+                "route_id": 890800649,
+                "route_name": "Unknown Route",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 90.0
+    },
+    {
+        "parent_event_id": 5430026,
+        "title": "Stage 5: Zwift Games: Three Step Sisters",
+        "start_time_utc": "2026-03-17T21:10:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6937221,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 510.0,
+                "score_max": 650.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 6937222,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 390.0,
+                "score_max": 510.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 6937223,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 270.0,
+                "score_max": 390.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 6937224,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 160.0,
+                "score_max": 270.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 6937225,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 0.0,
+                "score_max": 160.0,
+                "distance_km": 38.2,
+                "laps": 1
             }
         },
         "max_distance_km": 0.0,

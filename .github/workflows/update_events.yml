@@ -1,0 +1,47 @@
+name: Fetch Zwift Events
+
+# This section dictates WHEN the action runs
+on:
+  # 1. Runs automatically every hour at the top of the hour
+  schedule:
+    - cron: '0 * * * *'
+  
+  # 2. Allows you to trigger the run manually from the GitHub Actions tab
+  workflow_dispatch:
+
+# Ensure the action has permission to commit the new JSON file back to the repo
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out your repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Step 3: Install the requests library
+      - name: Install dependencies
+        run: pip install requests
+
+      # Step 4: Run the Python script to generate events.json
+      - name: Run data fetcher
+        run: python fetch_events.py
+
+      # Step 5: Commit and push the updated events.json file back to the repo
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add events.json
+          # Only commit if there are changes to avoid failing the workflow
+          git commit -m "Automated update of Zwift events data" || exit 0
+          git push

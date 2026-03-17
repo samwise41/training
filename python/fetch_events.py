@@ -1,9 +1,10 @@
 import requests
 import json
 import os
+import re
 
-# Put the raw JSON URL of your community source here
-COMMUNITY_URL = "https://raw.githubusercontent.com/YOUR_COMMUNITY_SOURCE_HERE/routes.json"
+# The Raw URL of the GitHub .mjs file you found
+COMMUNITY_URL = "https://raw.githubusercontent.com/andipaetzold/zwift-data/main/data/routes.mjs"
 
 def load_json(filename):
     if os.path.exists(filename):
@@ -17,13 +18,50 @@ def save_json(data, filename):
     print(f"💾 Saved updates to {filename}")
 
 def fetch_community_routes():
-    print("🌐 Checking community source for updated routes...")
+    print("🌐 Fetching community .mjs routes from GitHub...")
+    community_routes = {}
     try:
         response = requests.get(COMMUNITY_URL, timeout=10)
         if response.status_code == 200:
-            return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"⚠️ Could not fetch community routes: {e}")
+            text = response.text
+            
+            # Since it's a JS file, we split the text by curly braces to isolate each route
+            blocks = re.split(r'\}\s*,?', text)
+            
+            for block in blocks:
+                # Regex search for the specific keys in the Javascript object
+                id_match = re.search(r'(?:id|routeId):\s*([0-9]{1,15})', block)
+                name_match = re.search(r'name:\s*[\'"]([^\'"]+)[\'"]', block)
+                dist_match = re.search(r'distance:\s*([\d.]+)', block)
+                
+                # Check for leadInDistance (or variations)
+                leadin_match = re.search(r'leadInDistance:\s*([\d.]+)', block)
+                if not leadin_match:
+                    leadin_match = re.search(r'(?:leadIn|leadin_distance):\s*([\d.]+)', block)
+                
+                if id_match and name_match:
+                    route_id = id_match.group(1)
+                    name = name_match.group(1)
+                    
+                    dist = float(dist_match.group(1)) if dist_match else 0.0
+                    leadin = float(leadin_match.group(1)) if leadin_match else 0.0
+                    
+                    # Sanity check: If the distance is listed in meters (e.g. 15000) instead of km, convert it
+                    if dist > 500: dist = dist / 1000.0
+                    if leadin > 500: leadin = leadin / 1000.0
+
+                    community_routes[route_id] = {
+                        "name": name,
+                        "lap_km": round(dist, 1),
+                        "leadin_km": round(leadin, 1)
+                    }
+            
+            print(f"✅ Successfully extracted and parsed {len(community_routes)} routes from the .mjs file!")
+            return community_routes
+        else:
+            print(f"⚠️ Community URL returned status code: {response.status_code}")
+    except Exception as e:
+        print(f"⚠️ Could not fetch or parse community routes: {e}")
     return {}
 
 def build_event_list():
@@ -39,7 +77,6 @@ def build_event_list():
 
     events_data = response.json()
     
-    # 1. Load all databases
     local_routes = load_json("routes.json")
     unknown_routes = load_json("unknown_routes.json")
     community_routes = fetch_community_routes()
@@ -72,7 +109,6 @@ def build_event_list():
             range_label = sg.get("rangeAccessLabel", "")
             score_min, score_max = None, None
             
-            # ZRS Parsing
             if range_label and isinstance(range_label, str):
                 parts = range_label.split("-")
                 if len(parts) == 2:
@@ -89,9 +125,6 @@ def build_event_list():
             if score_min is None: score_min = sg.get("raceScoreMin")
             if score_max is None: score_max = sg.get("raceScoreMax")
 
-            # ==========================================
-            # DYNAMIC ROUTE JOIN, SYNC & BACKLOG LOGIC
-            # ==========================================
             calculated_distance_km = 0.0
             route_name = "Unknown Route"
 
@@ -104,23 +137,19 @@ def build_event_list():
                 # Check Community First
                 if str_route_id in community_routes:
                     route_info = community_routes[str_route_id]
-                    # If it's in the community but not local, sync it!
                     if str_route_id not in local_routes:
                         local_routes[str_route_id] = route_info
                         routes_updated = True
-                        print(f"➕ Synced new route from community: {route_info.get('name', str_route_id)}")
                         
-                        # Self-Cleaning: Remove it from unknown_routes if it was sitting there
                         if str_route_id in unknown_routes:
                             del unknown_routes[str_route_id]
                             unknown_updated = True
-                            print(f"🧹 Removed {str_route_id} from unknown_routes.json (It was solved by the community!)")
                 
-                # If not in Community, check Local
+                # Check Local Second
                 elif str_route_id in local_routes:
                     route_info = local_routes[str_route_id]
                 
-                # If we found info in either database, do the math
+                # Do the Math
                 if route_info:
                     route_name = route_info.get("name", "Unknown")
                     lap_km = route_info.get("lap_km", 0.0)
@@ -128,7 +157,7 @@ def build_event_list():
                     total_km = (laps * lap_km) + leadin_km
                     calculated_distance_km = round(total_km, 1)
                 else:
-                    # Missing from everywhere -> Add to our unknown backlog
+                    # Log Unknowns
                     if str_route_id not in unknown_routes:
                         unknown_routes[str_route_id] = {
                             "name": f"UNKNOWN_ROUTE (Found in: {name})",
@@ -136,7 +165,6 @@ def build_event_list():
                             "leadin_km": 0.0
                         }
                         unknown_updated = True
-                        print(f"⚠️ Added ID '{str_route_id}' to unknown_routes.json")
 
             categories[cat_letter] = {
                 "subgroup_id": sg.get("id"),
@@ -158,7 +186,6 @@ def build_event_list():
             "max_duration_minutes": round(max_duration / 60, 1)
         })
 
-    # Save all the files
     save_json(all_events, "events.json")
     print(f"✅ Successfully saved {len(all_events)} events.")
     
@@ -166,7 +193,6 @@ def build_event_list():
         save_json(local_routes, "routes.json")
     if unknown_updated:
         save_json(unknown_routes, "unknown_routes.json")
-        print(f"🛠️ You have {len(unknown_routes)} routes sitting in your unknown_routes.json backlog to manually look up!")
 
 if __name__ == "__main__":
     build_event_list()

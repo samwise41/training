@@ -26,7 +26,8 @@
         safeImport('./utils/ui.js', 'UI'),
         safeImport('./utils/data.js', 'DataManager'),
         safeImport('./utils/formatting.js', 'Formatters'),
-        safeImport('./views/fueling/timer.js', 'FuelTimer')
+        safeImport('./views/fueling/timer.js', 'FuelTimer'),
+        safeImport('./views/zwift/index.js', 'Zwift')
     ]);
 
     if (tooltipMod?.TooltipManager?.initGlobalListener) {

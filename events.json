@@ -1,163 +1,5 @@
 [
     {
-        "parent_event_id": 5430712,
-        "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
-        "start_time_utc": "2026-03-17T03:15:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6938648,
-                "score_min": 650.0,
-                "score_max": 1000.0,
-                "raw_score_label": "650-1000",
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5474199,
-        "title": "Stage 1 - The Zwift Big Spin",
-        "start_time_utc": "2026-03-17T03:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 6990798,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5498476,
-        "title": " Aktivitus 1 h Group workout",
-        "start_time_utc": "2026-03-17T04:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023440,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 62.0
-    },
-    {
-        "parent_event_id": 5498477,
-        "title": "The Zombie 5k",
-        "start_time_utc": "2026-03-17T04:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 7023441,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 5.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 5.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5429909,
-        "title": "Stage 5: Zwift Games: Three Step Sisters",
-        "start_time_utc": "2026-03-17T04:10:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6936640,
-                "score_min": 570.0,
-                "score_max": 725.0,
-                "raw_score_label": "570-725",
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6936641,
-                "score_min": 450.0,
-                "score_max": 570.0,
-                "raw_score_label": "450-570",
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6936642,
-                "score_min": 330.0,
-                "score_max": 450.0,
-                "raw_score_label": "330-450",
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6936643,
-                "score_min": 210.0,
-                "score_max": 330.0,
-                "raw_score_label": "210-330",
-                "distance_km": 0.0,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 6936644,
-                "score_min": 0.0,
-                "score_max": 210.0,
-                "raw_score_label": "0-210",
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5474134,
-        "title": "Stage 1 - The Zwift Big Spin",
-        "start_time_utc": "2026-03-17T04:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 6990733,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5498481,
-        "title": "INC Relentless Intervals",
-        "start_time_utc": "2026-03-17T04:40:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7023448,
-                "score_min": null,
-                "score_max": null,
-                "raw_score_label": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 80.0
-    },
-    {
         "parent_event_id": 5498482,
         "title": "Cycle Nation Joburg Sunrise",
         "start_time_utc": "2026-03-17T05:00:00.000+0000",
@@ -5078,5 +4920,203 @@
         },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5498637,
+        "title": "ZLDR Workout Tuesday",
+        "start_time_utc": "2026-03-17T16:45:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7023712,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 45.0
+    },
+    {
+        "parent_event_id": 5498639,
+        "title": "The Herd Gallops",
+        "start_time_utc": "2026-03-17T16:50:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7023714,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5498640,
+        "title": "CMC/NamZ Tuesday ZRL Practice Race",
+        "start_time_utc": "2026-03-17T16:50:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7023715,
+                "score_min": 690.0,
+                "score_max": 1000.0,
+                "raw_score_label": "690-1000",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 7023716,
+                "score_min": 520.0,
+                "score_max": 690.0,
+                "raw_score_label": "520-690",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 7023717,
+                "score_min": 350.0,
+                "score_max": 520.0,
+                "raw_score_label": "350-520",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 7023718,
+                "score_min": 180.0,
+                "score_max": 350.0,
+                "raw_score_label": "180-350",
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 7023719,
+                "score_min": 0.0,
+                "score_max": 180.0,
+                "raw_score_label": "0-180",
+                "distance_km": 0.0,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498641,
+        "title": "Cycle Nation Joburg Sundowner",
+        "start_time_utc": "2026-03-17T17:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7023720,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7023721,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "E": {
+                "subgroup_id": 7023722,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5498647,
+        "title": "Film My Run 500 with NoblePro ",
+        "start_time_utc": "2026-03-17T17:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7023734,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 4.2,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 4.2,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5498646,
+        "title": "TEAM ITALY HIGH INTENSITY AND STRENGTH INCREASE WORKOUT SERIES by Ferroni",
+        "start_time_utc": "2026-03-17T17:00:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7023733,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 50.0
+    },
+    {
+        "parent_event_id": 5498645,
+        "title": "NonStop Madrid-Lisboa Race Day",
+        "start_time_utc": "2026-03-17T17:00:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7023729,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 7023730,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 7023731,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 7023732,
+                "score_min": null,
+                "score_max": null,
+                "raw_score_label": null,
+                "distance_km": 0.0,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
     }
 ]

@@ -20,15 +20,16 @@ def save_json(data, filename):
     print(f"💾 Saved updates to {filename}")
 
 def fetch_slug_map():
-    """Fetches the .mjs file and builds a dictionary mapping routeId to slug & name."""
+    """Fetches the .mjs file and builds a bulletproof dictionary mapping routeId to slug & name."""
     print("🌐 Fetching slug map from GitHub...")
     slug_map = {}
     try:
         response = requests.get(MJS_URL, timeout=10)
         if response.status_code == 200:
-            blocks = re.split(r'\}\s*,?', response.text)
-            for block in blocks:
-                id_match = re.search(r'(?:id|routeId):\s*([0-9]+)', block)
+            # Splitting by "id:" guarantees we capture every route regardless of JS formatting
+            blocks = response.text.split('id:')
+            for block in blocks[1:]: # Skip the file header before the first ID
+                id_match = re.match(r'\s*([0-9]+)', block)
                 slug_match = re.search(r'slug:\s*[\'"]([^\'"]+)[\'"]', block)
                 name_match = re.search(r'name:\s*[\'"]([^\'"]+)[\'"]', block)
                 
@@ -37,32 +38,45 @@ def fetch_slug_map():
                         "slug": slug_match.group(1),
                         "name": name_match.group(1) if name_match else "Unknown Route"
                     }
+            print(f"✅ Successfully extracted {len(slug_map)} route slugs from community data!")
             return slug_map
     except Exception as e:
         print(f"⚠️ Failed to fetch slug map: {e}")
     return slug_map
 
 def scrape_zwift_insider(slug):
-    """Scrapes ZwiftInsider for the lap and lead-in distances."""
+    """Scrapes ZwiftInsider for the lap distance, lead-in distance, AND route name."""
     url = f"https://zwiftinsider.com/route/{slug}/"
     print(f"🕵️ Scraping ZwiftInsider: {url}")
     try:
         response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
         if response.status_code == 200:
-            # Strip all HTML tags from the page so we just have raw text
-            clean_text = re.sub(r'<[^>]+>', ' ', response.text)
+            html = response.text
             
-            # Use Regex to find "Length: 16.9 km" and "Lead-In: 0.4 km"
+            # Grab the name before we strip the HTML
+            scraped_name = None
+            h1_match = re.search(r'<h1[^>]*>(.*?)</h1>', html, re.IGNORECASE)
+            if h1_match:
+                raw_title = h1_match.group(1)
+                quote_match = re.search(r'[“"”](.*?)[“"”]', raw_title)
+                if quote_match:
+                    scraped_name = quote_match.group(1)
+                else:
+                    scraped_name = re.sub(r'(?i)\s*Route Details.*', '', raw_title).strip()
+            
+            # Strip all HTML tags to cleanly find the numbers
+            clean_text = re.sub(r'<[^>]+>', ' ', html)
+            
             length_match = re.search(r'Length:\s*([\d.]+)\s*km', clean_text, re.IGNORECASE)
             leadin_match = re.search(r'Lead-In:\s*([\d.]+)\s*km', clean_text, re.IGNORECASE)
             
             lap_km = float(length_match.group(1)) if length_match else 0.0
             leadin_km = float(leadin_match.group(1)) if leadin_match else 0.0
             
-            return lap_km, leadin_km
+            return lap_km, leadin_km, scraped_name
     except Exception as e:
         print(f"⚠️ Failed to scrape ZwiftInsider for {slug}: {e}")
-    return None, None
+    return None, None, None
 
 def build_event_list():
     url = "https://us-or-rly101.zwift.com/api/public/events/upcoming"
@@ -80,7 +94,6 @@ def build_event_list():
     local_routes = load_json("routes.json")
     unknown_routes = load_json("unknown_routes.json")
     
-    # We will only fetch the slug map if we ACTUALLY encounter a missing route
     slug_map = None 
     routes_updated = False
     unknown_updated = False
@@ -127,60 +140,63 @@ def build_event_list():
             # ==========================================
             # DYNAMIC ROUTE JOIN & AUTO-SCRAPER LOGIC
             # ==========================================
-            calculated_distance_km = 0.0
-            route_name = "Unknown Route"
+            route_info = None
+            str_route_id = str(route_id) if route_id else None
 
-            if dist > 0:
-                calculated_distance_km = round(dist / 1000, 1)
-            elif laps > 0 and route_id:
-                str_route_id = str(route_id) 
-                
-                # Check Local DB First
+            # 1. ALWAYS resolve the route info if an ID exists (even if laps = 0)
+            if str_route_id:
                 if str_route_id in local_routes:
                     route_info = local_routes[str_route_id]
-                    route_name = route_info.get("name", "Unknown")
-                    lap_km = route_info.get("lap_km", 0.0)
-                    leadin_km = route_info.get("leadin_km", 0.0)
-                    calculated_distance_km = round((laps * lap_km) + leadin_km, 1)
-                
-                # Auto-Scrape Pipeline if missing
                 else:
                     if slug_map is None:
-                        slug_map = fetch_slug_map() # Only fetch if we need it!
+                        slug_map = fetch_slug_map() 
                     
                     if str_route_id in slug_map:
                         route_data = slug_map[str_route_id]
-                        route_name = route_data["name"]
+                        fallback_name = route_data["name"]
                         slug = route_data["slug"]
                         
-                        # Trigger the ZwiftInsider Scraper
-                        lap_km, leadin_km = scrape_zwift_insider(slug)
+                        lap_km, leadin_km, scraped_name = scrape_zwift_insider(slug)
                         
                         if lap_km is not None:
-                            # SUCCESS! Save to local database so we never scrape it again
-                            local_routes[str_route_id] = {
-                                "name": route_name,
+                            final_name = scraped_name if scraped_name else fallback_name
+                            route_info = {
+                                "name": final_name,
                                 "lap_km": lap_km,
                                 "leadin_km": leadin_km
                             }
+                            local_routes[str_route_id] = route_info
                             routes_updated = True
-                            calculated_distance_km = round((laps * lap_km) + leadin_km, 1)
-                            print(f"✨ Auto-Scraped successfully: {route_name} ({lap_km}km lap)")
+                            print(f"✨ Auto-Scraped: {final_name} ({lap_km}km lap)")
                             
-                            # Clean up backlog if it was in there
                             if str_route_id in unknown_routes:
                                 del unknown_routes[str_route_id]
                                 unknown_updated = True
                         else:
-                            # Scrape failed (maybe ZwiftInsider formatted the page weird)
                             if str_route_id not in unknown_routes:
-                                unknown_routes[str_route_id] = {"name": route_name, "lap_km": 0.0, "leadin_km": 0.0}
+                                unknown_routes[str_route_id] = {"name": fallback_name, "lap_km": 0.0, "leadin_km": 0.0}
                                 unknown_updated = True
                     else:
-                        # Missing from GitHub .mjs file entirely
                         if str_route_id not in unknown_routes:
                             unknown_routes[str_route_id] = {"name": f"UNKNOWN (Event: {name})", "lap_km": 0.0, "leadin_km": 0.0}
                             unknown_updated = True
+
+            # 2. Extract values for JSON
+            if route_info:
+                route_name = route_info.get("name", "Unknown Route")
+                lap_km = route_info.get("lap_km", 0.0)
+                leadin_km = route_info.get("leadin_km", 0.0)
+            else:
+                route_name = "Unknown Route"
+                lap_km = 0.0
+                leadin_km = 0.0
+
+            # 3. Apply the Math
+            calculated_distance_km = 0.0
+            if dist > 0:
+                calculated_distance_km = round(dist / 1000, 1)
+            elif laps > 0 and route_info:
+                calculated_distance_km = round((laps * lap_km) + leadin_km, 1)
 
             categories[cat_letter] = {
                 "subgroup_id": sg.get("id"),

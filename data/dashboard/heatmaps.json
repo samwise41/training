@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Run",
-            "Bike"
+            "Bike",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4708,6 +4708,24 @@
                 "name": "Zwift - Race: Stage 5: Zwift Games: Three Step Sisters (C)",
                 "sport": "Bike",
                 "actual": 68.2
+            }
+        ]
+    },
+    {
+        "date": "2026-03-17",
+        "complianceStatus": "Partial",
+        "plannedDuration": 45.0,
+        "actualDuration": 25.2,
+        "sports": [
+            "Swim"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 25.2
             }
         ]
     },

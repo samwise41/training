@@ -4,7 +4,13 @@
         "title": "Cycle Nation Nightcrawler Ride",
         "start_time_utc": "2026-03-17T02:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -13,7 +19,13 @@
         "title": "Team Vitality Group Social Ride ",
         "start_time_utc": "2026-03-17T03:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -22,7 +34,13 @@
         "title": "Vitality for UNICEF Group Ride",
         "start_time_utc": "2026-03-17T03:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -31,7 +49,13 @@
         "title": "ZLDR AYOP Event",
         "start_time_utc": "2026-03-17T03:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 30.0
     },
@@ -40,7 +64,18 @@
         "title": "NPRC - Run Every Day Powered By NoblePro",
         "start_time_utc": "2026-03-17T03:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -49,7 +84,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T03:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -58,7 +99,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T03:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -67,7 +134,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T03:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -76,7 +149,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T03:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -85,7 +164,13 @@
         "title": " Aktivitus 1 h Group workout",
         "start_time_utc": "2026-03-17T04:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -94,7 +179,13 @@
         "title": "The Zombie 5k",
         "start_time_utc": "2026-03-17T04:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 5.0,
         "max_duration_minutes": 0.0
     },
@@ -103,7 +194,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T04:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -112,7 +229,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T04:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -121,7 +244,13 @@
         "title": "INC Relentless Intervals",
         "start_time_utc": "2026-03-17T04:40:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 80.0
     },
@@ -130,7 +259,13 @@
         "title": "Cycle Nation Joburg Sunrise",
         "start_time_utc": "2026-03-17T05:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -139,7 +274,13 @@
         "title": "Team Italy - Smile! It's Tuesday Ride",
         "start_time_utc": "2026-03-17T05:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -148,7 +289,18 @@
         "title": "Vikings Valhalla Tuesday Climb",
         "start_time_utc": "2026-03-17T05:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -157,7 +309,13 @@
         "title": "Zwift Beginners Weekly Group Workouts",
         "start_time_utc": "2026-03-17T05:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 30.0
     },
@@ -166,7 +324,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T05:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -175,7 +339,13 @@
         "title": "Hercules - Breakfast Club",
         "start_time_utc": "2026-03-17T05:10:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -184,7 +354,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T05:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -193,7 +389,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T05:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -202,7 +404,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T05:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -211,7 +419,13 @@
         "title": "EVO CC Vortex Interval Ride [~3-3.8w/kg avg]",
         "start_time_utc": "2026-03-17T05:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 70.0
     },
@@ -220,7 +434,13 @@
         "title": "EVO CC Core Interval Ride [2.5-3.2w/kg avg]",
         "start_time_utc": "2026-03-17T05:40:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -229,7 +449,13 @@
         "title": "EVO CC Flux Ride [1.8 - 2.0w/kg avg]",
         "start_time_utc": "2026-03-17T05:45:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -238,7 +464,13 @@
         "title": "Tango Tuesday",
         "start_time_utc": "2026-03-17T05:45:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -247,7 +479,13 @@
         "title": "INC Relentless Intervals",
         "start_time_utc": "2026-03-17T05:45:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 80.0
     },
@@ -256,7 +494,13 @@
         "title": "Team Valhalla Early/Late Everybody's In Spin",
         "start_time_utc": "2026-03-17T05:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -265,7 +509,13 @@
         "title": "SZR Early Birdies",
         "start_time_utc": "2026-03-17T05:55:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -274,7 +524,13 @@
         "title": "3R VOLT Interval Ride [~2.6-3.2 w/kg avg]",
         "start_time_utc": "2026-03-17T06:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -283,7 +539,13 @@
         "title": "3R Octane Interval Ride [~3.2-3.6 w/kg avg]",
         "start_time_utc": "2026-03-17T06:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -292,7 +554,13 @@
         "title": "3R SPARK Steady State Ride [~2.0-2.2 w/kg avg]",
         "start_time_utc": "2026-03-17T06:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -301,7 +569,13 @@
         "title": "Bens Bash ",
         "start_time_utc": "2026-03-17T06:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -310,7 +584,18 @@
         "title": "NPRC - Run Every Day Powered By NoblePro",
         "start_time_utc": "2026-03-17T06:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -319,7 +604,13 @@
         "title": "GXY SURGE [1.6-2.5wkg] \u2013 CAT D",
         "start_time_utc": "2026-03-17T06:10:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -328,7 +619,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T06:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -337,7 +654,18 @@
         "title": "PAOLO BARBERA THE STAB",
         "start_time_utc": "2026-03-17T06:15:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 59.0
     },
@@ -346,7 +674,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T06:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -355,7 +689,13 @@
         "title": "Hercules - Breakfast Club",
         "start_time_utc": "2026-03-17T06:30:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 5.0,
         "max_duration_minutes": 0.0
     },
@@ -364,7 +704,13 @@
         "title": "PAOLO BARBERA & SCANNELLATORI SERIALI WORKOUT",
         "start_time_utc": "2026-03-17T06:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 7.1
+            }
+        },
         "max_distance_km": 7.1,
         "max_duration_minutes": 0.0
     },
@@ -373,7 +719,13 @@
         "title": "Compass Community Cycling Thriving Tuesday",
         "start_time_utc": "2026-03-17T06:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 42.0
     },
@@ -382,7 +734,13 @@
         "title": "NGNM UNITED WE ARE Women's Workout Series",
         "start_time_utc": "2026-03-17T06:45:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -391,7 +749,13 @@
         "title": "Bikealicious Rubberband Joy Ride",
         "start_time_utc": "2026-03-17T07:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -400,7 +764,13 @@
         "title": "TBR Sprinters paradise team intervals",
         "start_time_utc": "2026-03-17T07:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -409,7 +779,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T07:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -418,7 +794,28 @@
         "title": "SZR Sunrise Ride",
         "start_time_utc": "2026-03-17T07:05:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -427,7 +824,13 @@
         "title": "Le Col Sessions Weekday Wind On",
         "start_time_utc": "2026-03-17T07:10:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 40.0
     },
@@ -436,7 +839,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T07:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -445,7 +874,13 @@
         "title": "Morning Free-Hisp",
         "start_time_utc": "2026-03-17T07:15:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -454,7 +889,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T07:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -463,7 +904,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T07:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -472,7 +919,13 @@
         "title": "AHDR Ladies Cake Ride p/b Liv",
         "start_time_utc": "2026-03-17T07:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -481,7 +934,13 @@
         "title": "Tous ensemble en bleu",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -490,7 +949,13 @@
         "title": "PACK Run Social",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 5.0,
         "max_duration_minutes": 0.0
     },
@@ -499,7 +964,13 @@
         "title": "AusCycling Talent Identification",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 32.0
     },
@@ -508,7 +979,28 @@
         "title": "Heffron Handicap",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -517,7 +1009,13 @@
         "title": "TEAM VTO POWERPUSH",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 40.0
+            }
+        },
         "max_distance_km": 40.0,
         "max_duration_minutes": 0.0
     },
@@ -526,7 +1024,13 @@
         "title": "Zwift Women's Training Club Workout ",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -535,7 +1039,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Women Only",
         "start_time_utc": "2026-03-17T08:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -544,7 +1074,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T08:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -553,7 +1109,13 @@
         "title": "Orange Unicorn Lite",
         "start_time_utc": "2026-03-17T08:20:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 31.0
     },
@@ -562,7 +1124,28 @@
         "title": "Zwift TT Club Racing - Outer Scotland",
         "start_time_utc": "2026-03-17T08:20:00.000+0000",
         "type": "TIME_TRIAL",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -571,7 +1154,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T08:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -580,7 +1169,13 @@
         "title": "Team Italy Coffee Italian Ride",
         "start_time_utc": "2026-03-17T08:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -589,7 +1184,13 @@
         "title": "Elastic social ride",
         "start_time_utc": "2026-03-17T08:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -598,7 +1199,13 @@
         "title": "TEZH Racing | Endurance Ride",
         "start_time_utc": "2026-03-17T08:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 75.0
+            }
+        },
         "max_distance_km": 75.0,
         "max_duration_minutes": 0.0
     },
@@ -607,7 +1214,13 @@
         "title": "Turn It Up Tuesdays",
         "start_time_utc": "2026-03-17T08:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 7.2
+            }
+        },
         "max_distance_km": 7.2,
         "max_duration_minutes": 0.0
     },
@@ -616,7 +1229,33 @@
         "title": "2025/26 SISU Racing Club Championships - Climb",
         "start_time_utc": "2026-03-17T08:30:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -625,7 +1264,13 @@
         "title": "WKG ROULEURS DOWN UNDER",
         "start_time_utc": "2026-03-17T08:35:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -634,7 +1279,33 @@
         "title": "Zwift Crit Racing Club - The Bell Lap",
         "start_time_utc": "2026-03-17T08:40:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -643,7 +1314,13 @@
         "title": "Velos Sunny Side Up",
         "start_time_utc": "2026-03-17T08:55:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -652,7 +1329,13 @@
         "title": "Ascenders Banded Brunch Bunch Ride",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -661,7 +1344,13 @@
         "title": "Triathlon Australia - Sprint Triathlon Workout",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 5.0,
         "max_duration_minutes": 0.0
     },
@@ -670,7 +1359,13 @@
         "title": "RCC Global Club Ride",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 50.0
     },
@@ -679,7 +1374,13 @@
         "title": "SantiTreinos GroupWorkout",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -688,7 +1389,13 @@
         "title": " Run 10K Every Day Powered By NoblePro",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -697,7 +1404,13 @@
         "title": "ZLDR AYOP Hour",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -706,7 +1419,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T09:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -715,7 +1434,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T09:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -724,7 +1469,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T09:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -733,7 +1484,13 @@
         "title": "PACK\ud83d\udc3a 1.5 Beginners Ride",
         "start_time_utc": "2026-03-17T09:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -742,7 +1499,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T09:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -751,7 +1514,13 @@
         "title": "Over-Under Threshold Builder - P2T",
         "start_time_utc": "2026-03-17T09:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 72.0
     },
@@ -760,7 +1529,13 @@
         "title": "5K Down Under",
         "start_time_utc": "2026-03-17T09:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 5.0,
         "max_duration_minutes": 0.0
     },
@@ -769,7 +1544,13 @@
         "title": "La ride de Miss Sunshine",
         "start_time_utc": "2026-03-17T09:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -778,7 +1559,33 @@
         "title": "HISP Spring Classics Mini Lombardia Week 5",
         "start_time_utc": "2026-03-17T09:30:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            }
+        },
         "max_distance_km": 23.6,
         "max_duration_minutes": 0.0
     },
@@ -787,7 +1594,18 @@
         "title": "All American Bikes Ride presented by GRIT",
         "start_time_utc": "2026-03-17T09:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 43.1
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 43.1
+            }
+        },
         "max_distance_km": 43.1,
         "max_duration_minutes": 0.0
     },
@@ -796,7 +1614,13 @@
         "title": "Escape Collective Tuesday Escapade",
         "start_time_utc": "2026-03-17T09:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -805,7 +1629,13 @@
         "title": "CRYO-GEN Power Tuesday Group Ride",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -814,7 +1644,13 @@
         "title": "SWX Sweet Spot Tuesday by Coach Cindy \ud83c\uddf8\ud83c\uddec\ud83c\uddef\ud83c\uddf5\ud83c\udde6\ud83c\uddfa",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -823,7 +1659,13 @@
         "title": "Coeur Velo Weekly Interval Session",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -832,7 +1674,33 @@
         "title": "Rhino Racing Short Crits",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -841,7 +1709,13 @@
         "title": "Team Valhalla Wake-up North America Ride",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -850,7 +1724,13 @@
         "title": "Zwift Women's Training Club Workout ",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -859,7 +1739,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Women Only",
         "start_time_utc": "2026-03-17T10:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -868,7 +1774,23 @@
         "title": "DWGZ Endurance \u2013 Who Let the DWGZ Out?!",
         "start_time_utc": "2026-03-17T10:04:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -877,7 +1799,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T10:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -886,7 +1834,28 @@
         "title": "Zwift TT Club Racing - Outer Scotland",
         "start_time_utc": "2026-03-17T10:20:00.000+0000",
         "type": "TIME_TRIAL",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -895,7 +1864,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T10:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -904,7 +1879,33 @@
         "title": "2025/26 SISU Racing Club Championships - Climb",
         "start_time_utc": "2026-03-17T10:30:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -913,7 +1914,13 @@
         "title": "Over-Under Threshold Builder - P2T",
         "start_time_utc": "2026-03-17T10:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 72.0
     },
@@ -922,7 +1929,13 @@
         "title": "Turn It Up Tuesdays",
         "start_time_utc": "2026-03-17T10:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 7.2
+            }
+        },
         "max_distance_km": 7.2,
         "max_duration_minutes": 0.0
     },
@@ -931,7 +1944,13 @@
         "title": "Film My Run 500 with NoblePro ",
         "start_time_utc": "2026-03-17T10:35:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 4.2
+            }
+        },
         "max_distance_km": 4.2,
         "max_duration_minutes": 0.0
     },
@@ -940,7 +1959,13 @@
         "title": "Kinetic Group Ride",
         "start_time_utc": "2026-03-17T10:40:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 50.0
     },
@@ -949,7 +1974,33 @@
         "title": "Zwift Crit Racing Club - The Bell Lap",
         "start_time_utc": "2026-03-17T10:40:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -958,7 +2009,13 @@
         "title": "The Ride For Mental Health",
         "start_time_utc": "2026-03-17T10:45:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -967,7 +2024,13 @@
         "title": "GGCC Glasgow Green Cycle Club Tuesday Training Ride",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -976,7 +2039,13 @@
         "title": "NVDM Coaching Group Workout",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 75.0
     },
@@ -985,7 +2054,13 @@
         "title": "Half & Full IM distance with Beyond The Line ",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -994,7 +2069,13 @@
         "title": "The Feed Community Ride",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1003,7 +2084,13 @@
         "title": "Club Yummy's Workout Party",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1012,7 +2099,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -1021,7 +2114,13 @@
         "title": "BaseCamp Power and Speed FTP and Attack Intervals p/b TrainingPeaks",
         "start_time_utc": "2026-03-17T11:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1030,7 +2129,13 @@
         "title": "DIRT Rolling Thunder",
         "start_time_utc": "2026-03-17T11:05:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -1039,7 +2144,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T11:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1048,7 +2179,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T11:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1057,7 +2194,13 @@
         "title": "NTPE #Next UP ITT Tuesday",
         "start_time_utc": "2026-03-17T11:25:00.000+0000",
         "type": "TIME_TRIAL",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1066,7 +2209,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T11:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1075,7 +2224,18 @@
         "title": "Group Run 5k",
         "start_time_utc": "2026-03-17T11:35:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 5.0,
         "max_duration_minutes": 0.0
     },
@@ -1084,7 +2244,13 @@
         "title": "SROZ's Two-Tired for Tuesday",
         "start_time_utc": "2026-03-17T11:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 70.0
     },
@@ -1093,7 +2259,13 @@
         "title": "Hercules - Taco Tuesday",
         "start_time_utc": "2026-03-17T11:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1102,7 +2274,13 @@
         "title": "USMeS \u2013 Ruck-n-Roll 90min [D] 1.8-2.2w/kg",
         "start_time_utc": "2026-03-17T11:50:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -1111,7 +2289,13 @@
         "title": "REVO Social SUB2",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1120,7 +2304,33 @@
         "title": "Rhino Racing Short Crits",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1129,7 +2339,33 @@
         "title": "EMU Japan Race",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1138,7 +2374,13 @@
         "title": "Hong Kong Cycling Group Ride",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -1147,7 +2389,18 @@
         "title": "NPRC - Run Every Day Powered By NoblePro",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -1156,7 +2409,13 @@
         "title": "Zwift Women's Training Club Workout ",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1165,7 +2424,13 @@
         "title": "GCN: Ride with Lorraine and Dan",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -1174,7 +2439,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Women Only",
         "start_time_utc": "2026-03-17T12:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1183,7 +2474,28 @@
         "title": "BMTR Chase Adventure",
         "start_time_utc": "2026-03-17T12:05:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1192,7 +2504,13 @@
         "title": "Outseason Tuesdays with Endurance Nation",
         "start_time_utc": "2026-03-17T12:05:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 66.0
     },
@@ -1201,7 +2519,13 @@
         "title": "TTR SONG RIDE",
         "start_time_utc": "2026-03-17T12:10:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1210,7 +2534,18 @@
         "title": "Group Run 10k",
         "start_time_utc": "2026-03-17T12:10:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -1219,7 +2554,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T12:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1228,7 +2589,28 @@
         "title": "Zwift Mexicanisimo ",
         "start_time_utc": "2026-03-17T12:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1237,7 +2619,28 @@
         "title": "Zwift TT Club Racing - Outer Scotland",
         "start_time_utc": "2026-03-17T12:20:00.000+0000",
         "type": "TIME_TRIAL",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1246,7 +2649,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T12:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1255,7 +2664,13 @@
         "title": "RCC Global Club Ride",
         "start_time_utc": "2026-03-17T12:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -1264,7 +2679,33 @@
         "title": "Zwift Crit Racing Club - The Bell Lap",
         "start_time_utc": "2026-03-17T12:40:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1273,7 +2714,13 @@
         "title": "Tower 26 Group Workout",
         "start_time_utc": "2026-03-17T12:45:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 67.0
     },
@@ -1282,7 +2729,13 @@
         "title": "Hercules - Taco Track Tuesday",
         "start_time_utc": "2026-03-17T13:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -1291,7 +2744,13 @@
         "title": "ZLDR Speed Session",
         "start_time_utc": "2026-03-17T13:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 51.0
     },
@@ -1300,7 +2759,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T13:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -1309,7 +2774,13 @@
         "title": "Fast Talk Labs + Q&A Ride with Ben Delaney",
         "start_time_utc": "2026-03-17T13:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1318,7 +2789,13 @@
         "title": "Coach Jake's Training Series, Week 2/6",
         "start_time_utc": "2026-03-17T13:00:37.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1327,7 +2804,18 @@
         "title": "Ascenders Spin & Sprint",
         "start_time_utc": "2026-03-17T13:05:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1336,7 +2824,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T13:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1345,7 +2859,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T13:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1354,7 +2874,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T13:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1363,7 +2889,13 @@
         "title": "(Rubber-Banded) Ride with James' Friends!",
         "start_time_utc": "2026-03-17T13:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1372,7 +2904,13 @@
         "title": "ZZRC Group Workout",
         "start_time_utc": "2026-03-17T13:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1381,7 +2919,13 @@
         "title": "EZR Tuesday Base Miles",
         "start_time_utc": "2026-03-17T13:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1390,7 +2934,13 @@
         "title": "Turn It Up Tuesdays",
         "start_time_utc": "2026-03-17T13:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 7.2
+            }
+        },
         "max_distance_km": 7.2,
         "max_duration_minutes": 0.0
     },
@@ -1399,7 +2949,13 @@
         "title": "Nosco Foundation Social Ride p/b Liv Cycling",
         "start_time_utc": "2026-03-17T13:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1408,7 +2964,13 @@
         "title": "SWX Sweet Spot Tuesday by Coach Cindy \ud83c\uddec\ud83c\udde7 \ud83c\uddf3\ud83c\uddf1 \ud83c\udde6\ud83c\uddea",
         "start_time_utc": "2026-03-17T13:55:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1417,7 +2979,13 @@
         "title": "Best Buddies Challenge - Tuesday Tuneup",
         "start_time_utc": "2026-03-17T14:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 50.0
     },
@@ -1426,7 +2994,13 @@
         "title": "The Grind Finale",
         "start_time_utc": "2026-03-17T14:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 49.0
     },
@@ -1435,7 +3009,13 @@
         "title": "Zwift Women's Training Club Workout ",
         "start_time_utc": "2026-03-17T14:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1444,7 +3024,13 @@
         "title": "Team Challenge for Crohn's & Colitis Ride",
         "start_time_utc": "2026-03-17T14:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1453,7 +3039,13 @@
         "title": "BaseCamp Power and Speed FTP and Attack Intervals p/b TrainingPeaks",
         "start_time_utc": "2026-03-17T14:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1462,7 +3054,13 @@
         "title": "CAF Ride",
         "start_time_utc": "2026-03-17T14:10:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -1471,7 +3069,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T14:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1480,7 +3104,28 @@
         "title": "Zwift TT Club Racing - Outer Scotland",
         "start_time_utc": "2026-03-17T14:20:00.000+0000",
         "type": "TIME_TRIAL",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1489,7 +3134,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T14:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1498,7 +3149,28 @@
         "title": " Team DRAFT Tuesday Race",
         "start_time_utc": "2026-03-17T14:30:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1507,7 +3179,13 @@
         "title": "Le Col SUB6 Endurance Series",
         "start_time_utc": "2026-03-17T14:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 50.0
     },
@@ -1516,7 +3194,13 @@
         "title": "US Military Endurance Sports Fun Run",
         "start_time_utc": "2026-03-17T14:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.6
+            }
+        },
         "max_distance_km": 5.6,
         "max_duration_minutes": 0.0
     },
@@ -1525,7 +3209,13 @@
         "title": "Lance Watson's Champion Intervals",
         "start_time_utc": "2026-03-17T14:30:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1534,7 +3224,33 @@
         "title": "Zwift Crit Racing Club - The Bell Lap",
         "start_time_utc": "2026-03-17T14:40:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1543,7 +3259,13 @@
         "title": "SWX Sweet Spot Tuesday by Coach Cindy",
         "start_time_utc": "2026-03-17T14:45:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1552,7 +3274,33 @@
         "title": "EVO CC Sprint Race Series ",
         "start_time_utc": "2026-03-17T14:45:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1561,7 +3309,13 @@
         "title": "Epic Run Crew: Tuesday Trot ",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 45.0
     },
@@ -1570,7 +3324,13 @@
         "title": "GXY LOW STRATOSPHERE [1.9-2.3wkg] \u2013 CAT D",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1579,7 +3339,13 @@
         "title": "Dubai Roadsters Club ride",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1588,7 +3354,13 @@
         "title": "Braunstein Cycling Club Danish Group Ride",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1597,7 +3369,18 @@
         "title": "NPRC - Run Every Day Powered By NoblePro",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 5.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -1606,7 +3389,13 @@
         "title": "Workout 3: Alpecin-Premier Tech Team Camp",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 90.0
     },
@@ -1615,7 +3404,33 @@
         "title": "HISP Spring Classics Mini Lombardia Week 5",
         "start_time_utc": "2026-03-17T15:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.6
+            }
+        },
         "max_distance_km": 23.6,
         "max_duration_minutes": 0.0
     },
@@ -1624,7 +3439,13 @@
         "title": "Outseason Tuesdays with Endurance Nation",
         "start_time_utc": "2026-03-17T15:05:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1633,7 +3454,18 @@
         "title": "Group Run 10k",
         "start_time_utc": "2026-03-17T15:10:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -1642,7 +3474,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T15:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1651,7 +3509,18 @@
         "title": "Yas Cycles Community Ride",
         "start_time_utc": "2026-03-17T15:15:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 80.0
     },
@@ -1660,7 +3529,13 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
         "start_time_utc": "2026-03-17T15:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1669,7 +3544,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T15:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1678,7 +3559,33 @@
         "title": "Stanga Racing after work crit",
         "start_time_utc": "2026-03-17T15:30:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1687,7 +3594,28 @@
         "title": "Good Time Riders - TT Race",
         "start_time_utc": "2026-03-17T15:30:00.000+0000",
         "type": "TIME_TRIAL",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 16.1
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 16.1
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 16.1
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 16.1
+            }
+        },
         "max_distance_km": 16.1,
         "max_duration_minutes": 0.0
     },
@@ -1696,7 +3624,13 @@
         "title": "Dusk Patrol Run",
         "start_time_utc": "2026-03-17T15:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1705,7 +3639,33 @@
         "title": "DBR Tuesday Race ",
         "start_time_utc": "2026-03-17T16:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1714,7 +3674,28 @@
         "title": "ZTPL Cycling Club with Handbikers Training Session",
         "start_time_utc": "2026-03-17T16:00:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 10.0
+            }
+        },
         "max_distance_km": 10.0,
         "max_duration_minutes": 0.0
     },
@@ -1723,7 +3704,33 @@
         "title": "Sydkysten Race",
         "start_time_utc": "2026-03-17T16:00:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1732,7 +3739,13 @@
         "title": "Zwift Women's Training Club Workout ",
         "start_time_utc": "2026-03-17T16:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1741,7 +3754,13 @@
         "title": "Operation 5.W.4.T - FTP Rollercoaster 3",
         "start_time_utc": "2026-03-17T16:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1750,7 +3769,13 @@
         "title": "BaseCamp Power and Speed FTP and Attack Intervals p/b TrainingPeaks",
         "start_time_utc": "2026-03-17T16:00:00.000+0000",
         "type": "GROUP_WORKOUT",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 62.0
     },
@@ -1759,7 +3784,13 @@
         "title": "Team Africa Rising",
         "start_time_utc": "2026-03-17T16:05:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
     },
@@ -1768,7 +3799,33 @@
         "title": "Stage 5: Zwift Games: Three Step Sisters",
         "start_time_utc": "2026-03-17T16:10:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1777,7 +3834,33 @@
         "title": "BRAUNSTEIN X VELOFIT CRIT SERIES",
         "start_time_utc": "2026-03-17T16:15:00.000+0000",
         "type": "RACE",
-        "categories": {},
+        "categories": {
+            "A": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "B": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "C": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            },
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     },
@@ -1786,7 +3869,13 @@
         "title": "The Break Away Ride",
         "start_time_utc": "2026-03-17T16:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "D": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 32.0
     },
@@ -1795,7 +3884,13 @@
         "title": "Stage 1 - The Zwift Big Spin",
         "start_time_utc": "2026-03-17T16:30:00.000+0000",
         "type": "GROUP_RIDE",
-        "categories": {},
+        "categories": {
+            "E": {
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0
+            }
+        },
         "max_distance_km": 0.0,
         "max_duration_minutes": 0.0
     }

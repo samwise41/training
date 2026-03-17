@@ -5,12 +5,10 @@ import re
 import html
 
 MJS_URL = "https://raw.githubusercontent.com/andipaetzold/zwift-data/main/data/routes.mjs"
-MAX_SCRAPES_PER_RUN = 10  # Polite rate limiting to avoid IP bans
+MAX_SCRAPES_PER_RUN = 10 
 
 def clean_route_name(raw_name):
-    """Brute-force cleans ANY name string to remove HTML entities and quotes."""
-    if not raw_name:
-        return "Unknown Route"
+    if not raw_name: return "Unknown Route"
     cleaned = html.unescape(raw_name)
     for char in ['“', '”', '"', "'", '&#8220;', '&#8221;']:
         cleaned = cleaned.replace(char, '')
@@ -103,7 +101,7 @@ def build_event_list():
     slug_map = None 
     routes_updated = False
     unknown_updated = False
-    scrapes_performed = 0  # <--- NEW COUNTER
+    scrapes_performed = 0  
     all_events = []
 
     for event in events_data:
@@ -148,14 +146,21 @@ def build_event_list():
             str_route_id = str(route_id) if route_id else None
 
             if str_route_id:
+                # 1. Check Local DB
                 if str_route_id in local_routes:
                     route_info = local_routes[str_route_id]
-                    # Retroactive Cleaner
                     cleaned_local_name = clean_route_name(route_info.get("name", ""))
                     if cleaned_local_name != route_info.get("name"):
                         route_info["name"] = cleaned_local_name
                         local_routes[str_route_id] = route_info
                         routes_updated = True
+                
+                # 2. THE FIX: Check if it's already in the backlog (Failed previously)
+                elif str_route_id in unknown_routes:
+                    route_info = unknown_routes[str_route_id]
+                    # We just load the 0.0 distance info and skip the scraper entirely!
+                
+                # 3. Try to Scrape (First time seeing it)
                 else:
                     if slug_map is None:
                         slug_map = fetch_slug_map() 
@@ -165,7 +170,6 @@ def build_event_list():
                         fallback_name = route_data["name"]
                         slug = route_data["slug"]
                         
-                        # RATE LIMITER LOGIC
                         if scrapes_performed < MAX_SCRAPES_PER_RUN:
                             lap_km, leadin_km, scraped_name = scrape_zwift_insider(slug)
                             scrapes_performed += 1
@@ -180,24 +184,22 @@ def build_event_list():
                                 local_routes[str_route_id] = route_info
                                 routes_updated = True
                                 print(f"✨ Auto-Scraped: {final_name} ({lap_km}km lap)")
-                                
-                                if str_route_id in unknown_routes:
-                                    del unknown_routes[str_route_id]
-                                    unknown_updated = True
                             else:
-                                if str_route_id not in unknown_routes:
-                                    unknown_routes[str_route_id] = {"name": fallback_name, "lap_km": 0.0, "leadin_km": 0.0}
-                                    unknown_updated = True
-                        else:
-                            # We hit the throttle limit. Push to backlog for the next run.
-                            if str_route_id not in unknown_routes:
+                                # SCRAPE FAILED: Add to Sin Bin so we never try it again
+                                print(f"❌ Scrape failed for slug '{slug}'. Adding to backlog.")
                                 unknown_routes[str_route_id] = {"name": fallback_name, "lap_km": 0.0, "leadin_km": 0.0}
                                 unknown_updated = True
-                                print(f"⏸️ Skipped scraping for {fallback_name} (Hit limit of {MAX_SCRAPES_PER_RUN})")
+                                route_info = unknown_routes[str_route_id]
+                        else:
+                            # Throttle limit hit. Add to backlog, we'll try again later.
+                            # Note: To let it try again later, we DON'T add it to unknown_routes here,
+                            # we just skip it for this run, so it stays entirely missing.
+                            pass
                     else:
-                        if str_route_id not in unknown_routes:
-                            unknown_routes[str_route_id] = {"name": f"UNKNOWN (Event: {name})", "lap_km": 0.0, "leadin_km": 0.0}
-                            unknown_updated = True
+                        # Entirely missing from Andi's file
+                        unknown_routes[str_route_id] = {"name": f"UNKNOWN (Event: {name})", "lap_km": 0.0, "leadin_km": 0.0}
+                        unknown_updated = True
+                        route_info = unknown_routes[str_route_id]
 
             if route_info:
                 route_name = route_info.get("name", "Unknown Route")
@@ -242,7 +244,7 @@ def build_event_list():
         save_json(local_routes, "routes.json")
     if unknown_updated:
         save_json(unknown_routes, "unknown_routes.json")
-        print(f"🛠️ {len(unknown_routes)} routes are sitting in your backlog. The script will tackle more next run!")
+        print(f"🛠️ {len(unknown_routes)} routes are sitting in your backlog. Check them manually!")
 
 if __name__ == "__main__":
     build_event_list()

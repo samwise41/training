@@ -101,12 +101,12 @@ export const ZwiftFinder = {
         const filterTime = document.getElementById('zf-time').value;
         const filterDist = parseFloat(document.getElementById('zf-dist').value) || 0;
 
-        // 1. Setup the Next 7 Days Columns
+        // 1. Setup the Horizon (Changed from 7 to 14 days)
         const days = [];
         const today = new Date();
         today.setHours(0,0,0,0);
         
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < 14; i++) { // <--- 14 DAYS HERE
             const d = new Date(today);
             d.setDate(d.getDate() + i);
             const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -121,13 +121,11 @@ export const ZwiftFinder = {
 
         // 2. Filter and Group Events
         this.events.forEach(ev => {
-            // Convert UTC to local browser time
             const localDate = new Date(ev.start_time_utc);
             const eventDateStr = localDate.toDateString();
             
-            // Find the column it belongs to
             const targetDay = days.find(d => d.idStr === eventDateStr);
-            if (!targetDay) return; // Skips events outside our 7-day window
+            if (!targetDay) return; 
 
             // Type Filter
             if (filterType !== 'ALL' && ev.type !== filterType) return;
@@ -146,7 +144,6 @@ export const ZwiftFinder = {
             const myDistMiles = Math.round(myCat.data.distance_km * 0.621371 * 10) / 10;
             if (filterDist > 0 && myDistMiles < filterDist && myCat.data.laps === 0) return; 
 
-            // Add the parsed event to the day's column
             targetDay.events.push({
                 ...ev,
                 localDate,
@@ -159,7 +156,6 @@ export const ZwiftFinder = {
         // 3. Build the HTML Grid
         let html = '';
         days.forEach(day => {
-            // Sort events in the column chronologically
             day.events.sort((a, b) => a.localDate - b.localDate);
 
             html += `
@@ -178,7 +174,6 @@ export const ZwiftFinder = {
             day.events.forEach(ev => {
                 const timeStr = ev.localDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
                 
-                // Formulate the distance or lap text
                 let distText = '';
                 if (ev.myCatData.distance_km > 0) {
                     distText = `${ev.myDistMiles} mi`;
@@ -188,9 +183,16 @@ export const ZwiftFinder = {
                     distText = `${ev.max_duration_minutes} min`;
                 }
 
-                // Identify if it's a Racing Score group
-                const scoreLabel = ev.myCatData.raw_score_label ? `(${ev.myCatData.raw_score_label})` : '';
-                const catColor = ev.myCatLetter === 'A' ? 'bg-red-500' : ev.myCatLetter === 'B' ? 'bg-green-500' : ev.myCatLetter === 'C' ? 'bg-blue-500' : 'bg-yellow-500';
+                // FIX: Dynamically build the Racing Score Label
+                let scoreLabel = '';
+                if (ev.myCatData.score_min !== null && ev.myCatData.score_max !== null) {
+                    const min = ev.myCatData.score_min;
+                    // If the max is 1000 (meaning 750+), display a plus instead of "-1000"
+                    const maxDisplay = ev.myCatData.score_max === 1000 ? '+' : `-${ev.myCatData.score_max}`;
+                    scoreLabel = `<span class="text-orange-400 ml-1">(${min}${maxDisplay})</span>`;
+                }
+
+                const catColor = ev.myCatLetter === 'A' ? 'bg-red-500' : ev.myCatLetter === 'B' ? 'bg-green-500' : ev.myCatLetter === 'C' ? 'bg-blue-500' : ev.myCatLetter === 'D' ? 'bg-yellow-500' : 'bg-purple-500';
 
                 html += `
                     <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 hover:border-slate-500 transition-colors flex flex-col relative group">

@@ -76,6 +76,10 @@ def main():
     print("   -> Authenticating with Garmin Connect...")
     client = Garmin(email, password)
     client.login()
+
+    
+    # NEW: Tell Garmin to cache session tokens to bypass 429 rate limits
+    client.login(tokenstore="garmin_tokens.json")
     
     print(f"   -> Fetching last {config.GARMIN_FETCH_LIMIT} activities...")
     activities = client.get_activities(0, config.GARMIN_FETCH_LIMIT)

@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4304,8 +4304,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 75.9,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4400,8 +4400,8 @@
         "plannedDuration": 65.0,
         "actualDuration": 74.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4651,8 +4651,8 @@
         "plannedDuration": 55.0,
         "actualDuration": 55.8,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4675,8 +4675,8 @@
         "plannedDuration": 165.0,
         "actualDuration": 175.4,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4731,17 +4731,19 @@
     },
     {
         "date": "2026-03-18",
-        "complianceStatus": "Missed",
-        "plannedDuration": 45.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "complianceStatus": "Completed",
+        "plannedDuration": 40.0,
+        "actualDuration": 38.0,
+        "sports": [
+            "Other"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
                 "name": "[RUN] Tempo / Speed Intervals",
                 "sport": "Other",
-                "actual": 0.0
+                "actual": 38.0
             }
         ]
     },

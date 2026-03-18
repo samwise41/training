@@ -22,6 +22,15 @@ jobs:
       with:
         python-version: '3.10'
 
+    # --- NEW: Securely restore/save Garmin tokens between runs ---
+    - name: Cache Garmin Tokens
+      uses: actions/cache@v3
+      with:
+        path: garmin_tokens.json
+        key: garmin-tokens-${{ github.run_id }}
+        restore-keys: |
+          garmin-tokens-
+
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip

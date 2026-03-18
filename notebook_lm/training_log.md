@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-17 02:31:46
+**Generated:** 2026-03-18 02:37:18
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-17",
+    "day": "Tuesday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": false
+    },
+    "plannedWorkout": "[SWIM] Endurance Intervals",
+    "plannedDuration": 45.0,
+    "notes": "**Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Active recovery for the legs!",
+    "actualDuration": 25.2,
+    "id": 22201933310,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 1500.5789794921875,
+    "distance": 825.0,
+    "averageHR": 114.0,
+    "maxHR": 146.0,
+    "aerobicTrainingEffect": 1.600000023841858,
+    "anaerobicTrainingEffect": 1.0,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.9369999766349792,
+    "maxSpeed": 1.555999994277954,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 247.0,
+    "elevationGain": null,
+    "RPE": 4.0,
+    "Feeling": 1,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-03-16",
     "day": "Monday",

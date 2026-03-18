@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-03-17 02:31:46
+**Generated:** 2026-03-18 02:37:19
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-03-17 02:12:28",
+  "generated_at": "2026-03-17 14:19:42",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -104,24 +104,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 1.66,
+          "current_value": 1.62,
           "status": "Off Target",
           "trends": {
             "30d": {
               "direction": "Falling",
-              "slope": -0.029999999154139968
+              "slope": -0.03799019531145984
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.011901374653980439
+              "slope": 0.009027245487127291
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.0040734265873598316
+              "slope": -0.004659221389869712
             },
             "1y": {
               "direction": "Falling",
-              "slope": -0.0007573761882893179
+              "slope": -0.0009666218241209539
             }
           },
           "has_data": true
@@ -142,24 +142,24 @@
           "filters": {
             "ignore_zero": true
           },
-          "current_value": 4425.4,
+          "current_value": 4483.03,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 6.343047830923248
+              "slope": 3.418548387096774
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.9119054615675247
+              "slope": 0.5734838513718739
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.5711147850732167
+              "slope": 0.4603819421013563
             },
             "1y": {
               "direction": "Falling",
-              "slope": -1.0171872572979193
+              "slope": -1.047680285503323
             }
           },
           "has_data": true
@@ -212,24 +212,24 @@
           "description": "Subjective vs Objective.",
           "improvement": "\u2022 Align RPE with TSS",
           "formula": "RPE vs TSS",
-          "current_value": 3.95,
+          "current_value": 3.8,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.0912280701754386
+              "slope": 0.03609022556390978
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.018739861692136938
+              "slope": 0.012014191259474274
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.005447735784814436
+              "slope": 0.003341976375684241
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.004605231923277786
+              "slope": 0.003411194986469164
             }
           },
           "has_data": true
@@ -659,19 +659,19 @@
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.013142560358325272
+              "slope": 0.010084424919792213
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.003141944482122976
+              "slope": 0.003175733061582744
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0018652629926980105
+              "slope": 0.0019377255600170821
             },
             "1y": {
               "direction": "Rising",
-              "slope": 0.0018652629926980105
+              "slope": 0.0019377255600170821
             }
           },
           "has_data": true
@@ -693,24 +693,24 @@
             "ignore_zero": true,
             "require_hr": true
           },
-          "current_value": 0.39,
+          "current_value": 0.4,
           "status": "On Target",
           "trends": {
             "30d": {
               "direction": "Rising",
-              "slope": 0.0030878053136883044
+              "slope": 0.010802519599159283
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.004841791857865948
+              "slope": 0.006069300307634026
             },
             "6m": {
               "direction": "Rising",
-              "slope": 1.4611829284437378e-05
+              "slope": 0.0006870981766130926
             },
             "1y": {
               "direction": "Rising",
-              "slope": 1.4611829284437378e-05
+              "slope": 0.0006870981766130926
             }
           },
           "has_data": true
@@ -731,7 +731,7 @@
           "filters": {
             "ignore_zero": false
           },
-          "current_value": 1.87,
+          "current_value": 2.1,
           "status": "On Target",
           "trends": {
             "30d": {

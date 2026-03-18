@@ -2,8 +2,8 @@
 
 | Distance | All Time Best | Date | 6 Week Best | Date |
 |---|---|---|---|---|
-| 400m | **1:44** | [2026-02-02](https://www.strava.com/activities/17266519156) | 1:50 | [2026-03-04](https://www.strava.com/activities/17600727811) |
-| 1/2 mile | **3:36** | [2026-02-02](https://www.strava.com/activities/17266519156) | 3:49 | [2026-03-04](https://www.strava.com/activities/17600727811) |
+| 400m | **1:44** | [2026-02-02](https://www.strava.com/activities/17266519156) | 1:49 | [2026-03-18](https://www.strava.com/activities/17765970219) |
+| 1/2 mile | **3:36** | [2026-02-02](https://www.strava.com/activities/17266519156) | 3:40 | [2026-03-18](https://www.strava.com/activities/17765970219) |
 | 1 mile | **7:13** | [2026-02-02](https://www.strava.com/activities/17266519156) | 7:43 | [2026-02-26](https://www.strava.com/activities/17535453667) |
 | 2 mile | **15:16** | [2026-02-02](https://www.strava.com/activities/17266519156) | 15:48 | [2026-03-04](https://www.strava.com/activities/17600727811) |
 | 5k | **24:07** | [2026-02-02](https://www.strava.com/activities/17266519156) | 25:20 | [2026-03-04](https://www.strava.com/activities/17600727811) |

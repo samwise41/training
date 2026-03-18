@@ -26,6 +26,9 @@ def init_garmin():
         print("🔐 Authenticating with Garmin Connect...")
         client = Garmin(EMAIL, PASSWORD)
         client.login()
+       # NEW: Tell Garmin to cache session tokens to bypass 429 rate limits
+    client.login(tokenstore="garmin_tokens.json")
+
         return client
     except Exception as e:
         print(f"❌ Login Failed: {e}")

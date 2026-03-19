@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-18 02:37:19
+**Generated:** 2026-03-19 02:38:38
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -50,14 +50,14 @@
     "date": "2026-03-18",
     "day": "Wednesday",
     "plannedWorkout": "[RUN] Tempo / Speed Intervals",
-    "plannedDuration": 45.0,
+    "plannedDuration": 40.0,
     "notes": "**Focus:** Leg speed! 10m Warmup; 5 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 38.0,
+    "actualWorkout": "Activity",
+    "status": "COMPLETED",
+    "compliance": 95,
+    "completed": true
   },
   {
     "date": "2026-03-19",

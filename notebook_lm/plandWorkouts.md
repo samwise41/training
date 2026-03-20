@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-19 02:38:38
+**Generated:** 2026-03-20 02:30:23
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -62,10 +62,10 @@
   {
     "date": "2026-03-19",
     "day": "Thursday",
-    "plannedWorkout": "[SWIM] Touch Swim",
-    "plannedDuration": 15.0,
-    "notes": "**Focus:** Drills only. Maintain your feel for the water.",
-    "actualSport": "Swim",
+    "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
+    "plannedDuration": 60.0,
+    "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
+    "actualSport": "Bike",
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",
@@ -73,12 +73,12 @@
     "completed": false
   },
   {
-    "date": "2026-03-19",
-    "day": "Thursday",
-    "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
-    "plannedDuration": 60.0,
-    "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
-    "actualSport": "Bike",
+    "date": "2026-03-20",
+    "day": "Friday",
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 15.0,
+    "notes": "**Focus:** Drills only. Maintain your feel for the water.",
+    "actualSport": "Swim",
     "actualDuration": 0.0,
     "actualWorkout": null,
     "status": "PLANNED",

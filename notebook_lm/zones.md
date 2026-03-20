@@ -1,5 +1,5 @@
 # Athlete Zones
-**Generated:** 2026-03-19 02:38:37
+**Generated:** 2026-03-20 02:30:23
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/zones/zones.json
 
 ---

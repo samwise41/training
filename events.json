@@ -1,1077 +1,5 @@
 [
     {
-        "parent_event_id": 5504268,
-        "title": "Flash Race - Team INOX",
-        "start_time_utc": "2026-03-20T17:45:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031702,
-                "route_id": 2843604888,
-                "route_name": "Time Trial Lap",
-                "score_min": 680.0,
-                "score_max": 1000.0,
-                "distance_km": 4.0,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 7031703,
-                "route_id": 2843604888,
-                "route_name": "Time Trial Lap",
-                "score_min": 540.0,
-                "score_max": 680.0,
-                "distance_km": 4.0,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 7031704,
-                "route_id": 2843604888,
-                "route_name": "Time Trial Lap",
-                "score_min": 400.0,
-                "score_max": 540.0,
-                "distance_km": 4.0,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7031705,
-                "route_id": 2843604888,
-                "route_name": "Time Trial Lap",
-                "score_min": 200.0,
-                "score_max": 400.0,
-                "distance_km": 4.0,
-                "laps": 0
-            },
-            "E": {
-                "subgroup_id": 7031706,
-                "route_id": 2843604888,
-                "route_name": "Time Trial Lap",
-                "score_min": 0.0,
-                "score_max": 200.0,
-                "distance_km": 4.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 4.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504269,
-        "title": "Team Italy Social SUB2 Ride",
-        "start_time_utc": "2026-03-20T17:50:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031707,
-                "route_id": 1258526800,
-                "route_name": "Flat Out Fast",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5504270,
-        "title": "EVOLVE 25km Road Race",
-        "start_time_utc": "2026-03-20T17:50:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031708,
-                "route_id": 1671282746,
-                "route_name": "Empire Elevation",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 25.0,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 7031709,
-                "route_id": 1671282746,
-                "route_name": "Empire Elevation",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 25.0,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 7031710,
-                "route_id": 1671282746,
-                "route_name": "Empire Elevation",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 25.0,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7031711,
-                "route_id": 1671282746,
-                "route_name": "Empire Elevation",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 25.0,
-                "laps": 0
-            },
-            "E": {
-                "subgroup_id": 7031712,
-                "route_id": 1671282746,
-                "route_name": "Empire Elevation",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 25.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 25.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504271,
-        "title": "SNOWcial Sprint & Spin",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031713,
-                "route_id": 1638640398,
-                "route_name": "The Fan Flats",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5431008,
-        "title": "Stage 5: Zwift Games: Three Step Sisters | Women Only",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6939452,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 500.0,
-                "score_max": 1000.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6939453,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 400.0,
-                "score_max": 500.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6939454,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 300.0,
-                "score_max": 400.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6939455,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 200.0,
-                "score_max": 300.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 6939456,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 0.0,
-                "score_max": 200.0,
-                "distance_km": 38.2,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504273,
-        "title": "Castelli Donne || Women's Ride",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031718,
-                "route_id": 3314406972,
-                "route_name": "Spinfinity",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5450186,
-        "title": "FRR CLASSICA SERIES - ITALIA - ITT",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "TIME_TRIAL",
-        "categories": {
-            "A": {
-                "subgroup_id": 6962538,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": 725.0,
-                "score_max": 1000.0,
-                "distance_km": 21.0,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6962540,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": 525.0,
-                "score_max": 725.0,
-                "distance_km": 21.0,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6962539,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": 375.0,
-                "score_max": 525.0,
-                "distance_km": 21.0,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6962542,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": 250.0,
-                "score_max": 375.0,
-                "distance_km": 21.0,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 6962541,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": 0.0,
-                "score_max": 250.0,
-                "distance_km": 21.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504275,
-        "title": "Bikealicious Zone 2 Fat Burner Ride",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 7031720,
-                "route_id": 3378411990,
-                "route_name": "Waisted 8",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 120.0
-    },
-    {
-        "parent_event_id": 5504277,
-        "title": "Sledgehammer Inbetweeners Races",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031726,
-                "route_id": 743730361,
-                "route_name": "Jungle Circuit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 23.7,
-                "laps": 3
-            },
-            "B": {
-                "subgroup_id": 7031727,
-                "route_id": 743730361,
-                "route_name": "Jungle Circuit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 23.7,
-                "laps": 3
-            },
-            "C": {
-                "subgroup_id": 7031728,
-                "route_id": 743730361,
-                "route_name": "Jungle Circuit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 23.7,
-                "laps": 3
-            },
-            "D": {
-                "subgroup_id": 7031729,
-                "route_id": 743730361,
-                "route_name": "Jungle Circuit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 23.7,
-                "laps": 3
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5441071,
-        "title": "HISP Spring Classics Mini Lombardia Week 5",
-        "start_time_utc": "2026-03-20T18:00:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6951552,
-                "route_id": 4102513789,
-                "route_name": "Radio Rendezvous",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 23.6,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 6951551,
-                "route_id": 4102513789,
-                "route_name": "Radio Rendezvous",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 23.6,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 6951554,
-                "route_id": 4102513789,
-                "route_name": "Radio Rendezvous",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 23.6,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 6951555,
-                "route_id": 4102513789,
-                "route_name": "Radio Rendezvous",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 23.6,
-                "laps": 0
-            },
-            "E": {
-                "subgroup_id": 6951553,
-                "route_id": 4102513789,
-                "route_name": "Radio Rendezvous",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 23.6,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 23.6,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5429967,
-        "title": "Stage 5: Zwift Games: Three Step Sisters",
-        "start_time_utc": "2026-03-20T18:10:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6936930,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 510.0,
-                "score_max": 650.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6936931,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 390.0,
-                "score_max": 510.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6936932,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 270.0,
-                "score_max": 390.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6936933,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 160.0,
-                "score_max": 270.0,
-                "distance_km": 38.2,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 6936934,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 0.0,
-                "score_max": 160.0,
-                "distance_km": 38.2,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5430471,
-        "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
-        "start_time_utc": "2026-03-20T18:15:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6938407,
-                "route_id": 3536020075,
-                "route_name": "Three Step Sisters",
-                "score_min": 650.0,
-                "score_max": 1000.0,
-                "distance_km": 38.2,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504284,
-        "title": "Foudre Friday Apero League Race",
-        "start_time_utc": "2026-03-20T18:15:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031738,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.3,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 7031739,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.3,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 7031740,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.3,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 7031741,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.3,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5247712,
-        "title": "\ud83d\udeb4\u200d\u2640\u2744 Masters Winter Tour - Stage 17 \u2744\ud83d\udeb4\u200d\u2640",
-        "start_time_utc": "2026-03-20T18:20:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6708194,
-                "route_id": 358794394,
-                "route_name": "Ven-10",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 9.5,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 6708192,
-                "route_id": 358794394,
-                "route_name": "Ven-10",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 9.5,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 6708196,
-                "route_id": 358794394,
-                "route_name": "Ven-10",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 9.5,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 6708195,
-                "route_id": 358794394,
-                "route_name": "Ven-10",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 9.5,
-                "laps": 0
-            },
-            "E": {
-                "subgroup_id": 6708193,
-                "route_id": 358794394,
-                "route_name": "Ven-10",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 9.5,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 9.5,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5476285,
-        "title": "Zwift TT Club Racing - Outer Scotland",
-        "start_time_utc": "2026-03-20T18:20:00.000+0000",
-        "type": "TIME_TRIAL",
-        "categories": {
-            "A": {
-                "subgroup_id": 6993675,
-                "route_id": 2826340040,
-                "route_name": "Outer Scotland",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 11.1,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6993676,
-                "route_id": 2826340040,
-                "route_name": "Outer Scotland",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 11.1,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6993677,
-                "route_id": 2826340040,
-                "route_name": "Outer Scotland",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 11.1,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6993678,
-                "route_id": 2826340040,
-                "route_name": "Outer Scotland",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 11.1,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504286,
-        "title": "PACK\ud83d\udc3a 1.5 Weekly Wind Down",
-        "start_time_utc": "2026-03-20T18:25:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031746,
-                "route_id": 3366225080,
-                "route_name": "Tick Tock",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5504288,
-        "title": "GXY SHOOTING STARS [2.8-3.2 wkg] CAT C",
-        "start_time_utc": "2026-03-20T18:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "C": {
-                "subgroup_id": 7031748,
-                "route_id": 4131664304,
-                "route_name": "Itza Party",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 75.0
-    },
-    {
-        "parent_event_id": 5474233,
-        "title": "Stage 1 - The Zwift Big Spin",
-        "start_time_utc": "2026-03-20T18:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 6990832,
-                "route_id": 1258526800,
-                "route_name": "Flat Out Fast",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 21.4,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504287,
-        "title": "ZZRC The Weekend Starts Here",
-        "start_time_utc": "2026-03-20T18:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031747,
-                "route_id": 3680493479,
-                "route_name": "Southern Coast Cruise",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 26.3,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504301,
-        "title": "EVO CC Sprint Race Series ",
-        "start_time_utc": "2026-03-20T18:30:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031765,
-                "route_id": 975408707,
-                "route_name": "Avon Flyer",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 19.8,
-                "laps": 6
-            },
-            "B": {
-                "subgroup_id": 7031766,
-                "route_id": 975408707,
-                "route_name": "Avon Flyer",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 19.8,
-                "laps": 6
-            },
-            "C": {
-                "subgroup_id": 7031767,
-                "route_id": 975408707,
-                "route_name": "Avon Flyer",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 19.8,
-                "laps": 6
-            },
-            "D": {
-                "subgroup_id": 7031768,
-                "route_id": 975408707,
-                "route_name": "Avon Flyer",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 19.8,
-                "laps": 6
-            },
-            "E": {
-                "subgroup_id": 7031769,
-                "route_id": 975408707,
-                "route_name": "Avon Flyer",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 19.8,
-                "laps": 6
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5477103,
-        "title": "Zwift Epic Race - Loch Loop",
-        "start_time_utc": "2026-03-20T18:30:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6996959,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "B": {
-                "subgroup_id": 6996960,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "C": {
-                "subgroup_id": 6996961,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "D": {
-                "subgroup_id": 6996962,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "E": {
-                "subgroup_id": 6996963,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 64.0,
-                "laps": 8
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5462004,
-        "title": "Friday Night Fun Race",
-        "start_time_utc": "2026-03-20T18:30:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6976564,
-                "route_id": 1258415487,
-                "route_name": "Glasgow Reverse",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 18.0,
-                "laps": 6
-            },
-            "B": {
-                "subgroup_id": 6976565,
-                "route_id": 1258415487,
-                "route_name": "Glasgow Reverse",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 18.0,
-                "laps": 6
-            },
-            "C": {
-                "subgroup_id": 6976566,
-                "route_id": 1258415487,
-                "route_name": "Glasgow Reverse",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 18.0,
-                "laps": 6
-            },
-            "D": {
-                "subgroup_id": 6976567,
-                "route_id": 1258415487,
-                "route_name": "Glasgow Reverse",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 18.0,
-                "laps": 6
-            },
-            "E": {
-                "subgroup_id": 6976568,
-                "route_id": 1258415487,
-                "route_name": "Glasgow Reverse",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 18.0,
-                "laps": 6
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504309,
-        "title": "Newbury Velo Crit",
-        "start_time_utc": "2026-03-20T18:35:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031781,
-                "route_id": 947394567,
-                "route_name": "Downtown Dolphin",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 24.0,
-                "laps": 12
-            },
-            "B": {
-                "subgroup_id": 7031782,
-                "route_id": 947394567,
-                "route_name": "Downtown Dolphin",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 24.0,
-                "laps": 12
-            },
-            "C": {
-                "subgroup_id": 7031783,
-                "route_id": 947394567,
-                "route_name": "Downtown Dolphin",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 24.0,
-                "laps": 12
-            },
-            "D": {
-                "subgroup_id": 7031784,
-                "route_id": 947394567,
-                "route_name": "Downtown Dolphin",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 24.0,
-                "laps": 12
-            },
-            "E": {
-                "subgroup_id": 7031785,
-                "route_id": 947394567,
-                "route_name": "Downtown Dolphin",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 24.0,
-                "laps": 12
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504310,
-        "title": "ZZRC Goat Airlines Flight Sub 2",
-        "start_time_utc": "2026-03-20T18:40:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031786,
-                "route_id": 553661379,
-                "route_name": "Figure 8 Reverse",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5476850,
-        "title": "Zwift Crit Racing Club - The Bell Lap",
-        "start_time_utc": "2026-03-20T18:40:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6996068,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 20.0,
-                "laps": 10
-            },
-            "B": {
-                "subgroup_id": 6996069,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 20.0,
-                "laps": 10
-            },
-            "C": {
-                "subgroup_id": 6996070,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 20.0,
-                "laps": 10
-            },
-            "D": {
-                "subgroup_id": 6996071,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 20.0,
-                "laps": 10
-            },
-            "E": {
-                "subgroup_id": 6996072,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 20.0,
-                "laps": 10
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504312,
-        "title": "Friday Fun - GTR Group Ride",
-        "start_time_utc": "2026-03-20T18:45:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031788,
-                "route_id": 2196019512,
-                "route_name": "2015 Worlds Course",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5504320,
-        "title": "Full Glaz Challenge",
-        "start_time_utc": "2026-03-20T18:45:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7031796,
-                "route_id": 2592027600,
-                "route_name": "Innsbruckring",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.6,
-                "laps": 2
-            },
-            "B": {
-                "subgroup_id": 7031797,
-                "route_id": 2592027600,
-                "route_name": "Innsbruckring",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.6,
-                "laps": 2
-            },
-            "C": {
-                "subgroup_id": 7031798,
-                "route_id": 2592027600,
-                "route_name": "Innsbruckring",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.6,
-                "laps": 2
-            },
-            "D": {
-                "subgroup_id": 7031799,
-                "route_id": 2592027600,
-                "route_name": "Innsbruckring",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 17.6,
-                "laps": 2
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5504319,
-        "title": "VirtuSlo 4Endurance Steady Ride",
-        "start_time_utc": "2026-03-20T18:45:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7031795,
-                "route_id": 1776635757,
-                "route_name": "R.G.V.",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 75.0
-    },
-    {
         "parent_event_id": 5504325,
         "title": "Giant Friday Funday",
         "start_time_utc": "2026-03-20T19:00:00.000+0000",
@@ -4310,6 +3238,25 @@
         "max_duration_minutes": 0.0
     },
     {
+        "parent_event_id": 5505704,
+        "title": "EVO CC Igniter [~2.8-3.6w/kg avg]",
+        "start_time_utc": "2026-03-21T06:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "B": {
+                "subgroup_id": 7033301,
+                "route_id": 2062126722,
+                "route_name": "Tair Dringfa Fechan",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 37.5,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 37.5,
+        "max_duration_minutes": 0.0
+    },
+    {
         "parent_event_id": 5505703,
         "title": "INC Relentless Endurance Intervals",
         "start_time_utc": "2026-03-21T06:00:00.000+0000",
@@ -4386,25 +3333,6 @@
                 "score_min": 0.0,
                 "score_max": 250.0,
                 "distance_km": 79.6,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5505704,
-        "title": "EVO CC Igniter [~2.8-3.6w/kg avg]",
-        "start_time_utc": "2026-03-21T06:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "B": {
-                "subgroup_id": 7033301,
-                "route_id": 2569385980,
-                "route_name": "Coast Crusher",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 34.7,
                 "laps": 1
             }
         },
@@ -4567,8 +3495,8 @@
         "categories": {
             "C": {
                 "subgroup_id": 7033315,
-                "route_id": 1115260805,
-                "route_name": "Accelerate to Elevate",
+                "route_id": 979250573,
+                "route_name": "Watts of the Wild",
                 "score_min": null,
                 "score_max": null,
                 "distance_km": 0.0,
@@ -6945,282 +5873,6 @@
             }
         },
         "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5505787,
-        "title": "ZZRC Group Workout",
-        "start_time_utc": "2026-03-21T10:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7033467,
-                "route_id": 928793662,
-                "route_name": "Greater London Flat",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 70.0
-    },
-    {
-        "parent_event_id": 5505786,
-        "title": "Tiny Race (1 of 4) by Zwift Insider",
-        "start_time_utc": "2026-03-21T10:00:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7033462,
-                "route_id": 2896159042,
-                "route_name": "Temples and Towers",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 5.3,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 7033463,
-                "route_id": 2896159042,
-                "route_name": "Temples and Towers",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 5.3,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 7033464,
-                "route_id": 2896159042,
-                "route_name": "Temples and Towers",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 5.3,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7033465,
-                "route_id": 2896159042,
-                "route_name": "Temples and Towers",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 5.3,
-                "laps": 0
-            },
-            "E": {
-                "subgroup_id": 7033466,
-                "route_id": 2896159042,
-                "route_name": "Temples and Towers",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 5.3,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 5.3,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5505797,
-        "title": "Rhino Racing Short Crits",
-        "start_time_utc": "2026-03-21T10:00:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7033477,
-                "route_id": 79243399,
-                "route_name": "Glasgow Crit Six",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 18.1,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 7033478,
-                "route_id": 79243399,
-                "route_name": "Glasgow Crit Six",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 18.1,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 7033479,
-                "route_id": 79243399,
-                "route_name": "Glasgow Crit Six",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 18.1,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 7033480,
-                "route_id": 79243399,
-                "route_name": "Glasgow Crit Six",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 18.1,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 7033481,
-                "route_id": 79243399,
-                "route_name": "Glasgow Crit Six",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 18.1,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5477095,
-        "title": "Zwift Epic Race - Loch Loop",
-        "start_time_utc": "2026-03-21T10:00:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6996919,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "B": {
-                "subgroup_id": 6996920,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "C": {
-                "subgroup_id": 6996921,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "D": {
-                "subgroup_id": 6996922,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 64.0,
-                "laps": 8
-            },
-            "E": {
-                "subgroup_id": 6996923,
-                "route_id": 742057576,
-                "route_name": "Loch Loop",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 64.0,
-                "laps": 8
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5450246,
-        "title": "FRR CLASSICA SERIES - ITALIA - POINTS",
-        "start_time_utc": "2026-03-21T10:05:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6962694,
-                "route_id": 762151244,
-                "route_name": "Zwift Games 2024 Epic",
-                "score_min": 725.0,
-                "score_max": 1000.0,
-                "distance_km": 79.6,
-                "laps": 1
-            },
-            "B": {
-                "subgroup_id": 6962697,
-                "route_id": 762151244,
-                "route_name": "Zwift Games 2024 Epic",
-                "score_min": 525.0,
-                "score_max": 725.0,
-                "distance_km": 79.6,
-                "laps": 1
-            },
-            "C": {
-                "subgroup_id": 6962695,
-                "route_id": 762151244,
-                "route_name": "Zwift Games 2024 Epic",
-                "score_min": 375.0,
-                "score_max": 525.0,
-                "distance_km": 79.6,
-                "laps": 1
-            },
-            "D": {
-                "subgroup_id": 6962698,
-                "route_id": 762151244,
-                "route_name": "Zwift Games 2024 Epic",
-                "score_min": 250.0,
-                "score_max": 375.0,
-                "distance_km": 79.6,
-                "laps": 1
-            },
-            "E": {
-                "subgroup_id": 6962696,
-                "route_id": 762151244,
-                "route_name": "Zwift Games 2024 Epic",
-                "score_min": 0.0,
-                "score_max": 250.0,
-                "distance_km": 79.6,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5505798,
-        "title": "DWGZ Hot Hundo \u2013 Get Gritty!",
-        "start_time_utc": "2026-03-21T10:05:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "B": {
-                "subgroup_id": 7033482,
-                "route_id": 2927651296,
-                "route_name": "Makuri Pretzel",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 160.9,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 7033483,
-                "route_id": 2927651296,
-                "route_name": "Makuri Pretzel",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 160.9,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7033484,
-                "route_id": 2927651296,
-                "route_name": "Makuri Pretzel",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 160.9,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 160.9,
         "max_duration_minutes": 0.0
     },
     {
@@ -15406,6 +14058,1058 @@
                 "score_min": null,
                 "score_max": null,
                 "distance_km": 60.8,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507513,
+        "title": "GXY 100 [2.0-2.4WKG]  CAT HIGH D & [1.6-2.0WKG] CAT LOW D",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7035465,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "E": {
+                "subgroup_id": 7035466,
+                "route_id": 3636436865,
+                "route_name": "Tropic Rush",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 100.0
+    },
+    {
+        "parent_event_id": 5507512,
+        "title": "SYN x RAD RACE Spin",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7035464,
+                "route_id": 3302953739,
+                "route_name": "Sleepless City",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 90.0
+    },
+    {
+        "parent_event_id": 5507514,
+        "title": "EVO CC Rosa Ladies Ride [1.8 - 2.5w/kg avg]",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7035467,
+                "route_id": 3407362320,
+                "route_name": "Neon Flats",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5507516,
+        "title": "KISS Racing 100",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7035469,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": 690.0,
+                "score_max": 1000.0,
+                "distance_km": 101.7,
+                "laps": 3
+            },
+            "B": {
+                "subgroup_id": 7035470,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": 520.0,
+                "score_max": 690.0,
+                "distance_km": 101.7,
+                "laps": 3
+            },
+            "C": {
+                "subgroup_id": 7035471,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": 350.0,
+                "score_max": 520.0,
+                "distance_km": 101.7,
+                "laps": 3
+            },
+            "D": {
+                "subgroup_id": 7035472,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": 180.0,
+                "score_max": 350.0,
+                "distance_km": 101.7,
+                "laps": 3
+            },
+            "E": {
+                "subgroup_id": 7035473,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": 0.0,
+                "score_max": 180.0,
+                "distance_km": 101.7,
+                "laps": 3
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507521,
+        "title": "Rowe & King - Fire Breather",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035478,
+                "route_id": 2128890027,
+                "route_name": "Tempus Fugit",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 80.0
+    },
+    {
+        "parent_event_id": 5507520,
+        "title": "ZU4R eSport Masochist Climber",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035477,
+                "route_id": 2663908549,
+                "route_name": "Road to Sky",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 17.6,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 17.6,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507519,
+        "title": "Het is Koers in the Dutch mountains",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7035476,
+                "route_id": 3921412335,
+                "route_name": "Big Foot Hills",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 67.5,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507517,
+        "title": " ZTPL Cycling Club Psycho Poranek",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7035474,
+                "route_id": 186601870,
+                "route_name": "Makuri Madness",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 120.0
+    },
+    {
+        "parent_event_id": 5459327,
+        "title": "Workout 3: Alpecin-Premier Tech Team Camp",
+        "start_time_utc": "2026-03-22T07:00:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 6973174,
+                "route_id": 890800649,
+                "route_name": "Makuri 40",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 90.0
+    },
+    {
+        "parent_event_id": 5430012,
+        "title": "Stage 5: Zwift Games: Three Step Sisters",
+        "start_time_utc": "2026-03-22T07:10:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6937151,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 570.0,
+                "score_max": 725.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 6937152,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 450.0,
+                "score_max": 570.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 6937153,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 330.0,
+                "score_max": 450.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 6937154,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 210.0,
+                "score_max": 330.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 6937155,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 0.0,
+                "score_max": 210.0,
+                "distance_km": 38.2,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507524,
+        "title": "TEZH Racing | Cuerpo Escombro",
+        "start_time_utc": "2026-03-22T07:15:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035481,
+                "route_id": 2569385980,
+                "route_name": "Coast Crusher",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 34.7,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507526,
+        "title": "3R Endurance Steady Ride",
+        "start_time_utc": "2026-03-22T07:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "B": {
+                "subgroup_id": 7035483,
+                "route_id": 3366225080,
+                "route_name": "Tick Tock",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 100.0,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 7035484,
+                "route_id": 319138658,
+                "route_name": "Three Musketeers",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 100.0,
+                "laps": 0
+            },
+            "E": {
+                "subgroup_id": 7035485,
+                "route_id": 2494975884,
+                "route_name": "The Pretzel",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 120.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 120.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5474179,
+        "title": "Stage 1 - The Zwift Big Spin",
+        "start_time_utc": "2026-03-22T07:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 6990778,
+                "route_id": 1258526800,
+                "route_name": "Flat Out Fast",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 21.4,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507527,
+        "title": "LEQP Provence Badge Hunter Series",
+        "start_time_utc": "2026-03-22T07:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7035486,
+                "route_id": 156457316,
+                "route_name": "Lutscher",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 27.4,
+                "laps": 2
+            },
+            "D": {
+                "subgroup_id": 7035487,
+                "route_id": 156457316,
+                "route_name": "Lutscher",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 27.4,
+                "laps": 2
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507528,
+        "title": "LGBTQz Ride with Pride ",
+        "start_time_utc": "2026-03-22T07:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7035488,
+                "route_id": 3600776267,
+                "route_name": "Neon Shore Loop",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5507530,
+        "title": "Hotchillee Race, Ride or Conquer Endurance ride",
+        "start_time_utc": "2026-03-22T07:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7035494,
+                "route_id": 3921412335,
+                "route_name": "Big Foot Hills",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 67.5,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 7035495,
+                "route_id": 3921412335,
+                "route_name": "Big Foot Hills",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 67.5,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 7035496,
+                "route_id": 3921412335,
+                "route_name": "Big Foot Hills",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 67.5,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 7035497,
+                "route_id": 3921412335,
+                "route_name": "Big Foot Hills",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 67.5,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507531,
+        "title": "Bikealicious Endurance & Espresso",
+        "start_time_utc": "2026-03-22T07:35:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035498,
+                "route_id": 1327147942,
+                "route_name": "Zwift Gran Fondo 2022",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 92.5,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507532,
+        "title": "Frenchy Fuzion Fondo",
+        "start_time_utc": "2026-03-22T07:45:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7035499,
+                "route_id": 1064303857,
+                "route_name": "Watopia\u2019s Waistband",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "B": {
+                "subgroup_id": 7035500,
+                "route_id": 1064303857,
+                "route_name": "Watopia\u2019s Waistband",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 7035501,
+                "route_id": 1064303857,
+                "route_name": "Watopia\u2019s Waistband",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7035502,
+                "route_id": 1064303857,
+                "route_name": "Watopia\u2019s Waistband",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 150.0
+    },
+    {
+        "parent_event_id": 5507537,
+        "title": "Zwift NL Weekend Warriors ",
+        "start_time_utc": "2026-03-22T08:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035510,
+                "route_id": 1724903700,
+                "route_name": "ZG25 Queen",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 44.6,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507536,
+        "title": "WELCOME TO THE BRAUNSTEIN CYCLING CLUB DANISH GROUP RIDE",
+        "start_time_utc": "2026-03-22T08:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035509,
+                "route_id": 2128890027,
+                "route_name": "Tempus Fugit",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5507534,
+        "title": "Watts More To the Top!",
+        "start_time_utc": "2026-03-22T08:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7035507,
+                "route_id": 2896159042,
+                "route_name": "Temples and Towers",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 65.2,
+                "laps": 2
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5477064,
+        "title": "Zwift Epic Race - Loch Loop",
+        "start_time_utc": "2026-03-22T08:00:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6996764,
+                "route_id": 742057576,
+                "route_name": "Loch Loop",
+                "score_min": 690.0,
+                "score_max": 1000.0,
+                "distance_km": 64.0,
+                "laps": 8
+            },
+            "B": {
+                "subgroup_id": 6996765,
+                "route_id": 742057576,
+                "route_name": "Loch Loop",
+                "score_min": 520.0,
+                "score_max": 690.0,
+                "distance_km": 64.0,
+                "laps": 8
+            },
+            "C": {
+                "subgroup_id": 6996766,
+                "route_id": 742057576,
+                "route_name": "Loch Loop",
+                "score_min": 350.0,
+                "score_max": 520.0,
+                "distance_km": 64.0,
+                "laps": 8
+            },
+            "D": {
+                "subgroup_id": 6996767,
+                "route_id": 742057576,
+                "route_name": "Loch Loop",
+                "score_min": 180.0,
+                "score_max": 350.0,
+                "distance_km": 64.0,
+                "laps": 8
+            },
+            "E": {
+                "subgroup_id": 6996768,
+                "route_id": 742057576,
+                "route_name": "Loch Loop",
+                "score_min": 0.0,
+                "score_max": 180.0,
+                "distance_km": 64.0,
+                "laps": 8
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5450128,
+        "title": "Stage 5: Zwift Games: Three Step Sisters | Women Only",
+        "start_time_utc": "2026-03-22T08:00:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6962425,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 500.0,
+                "score_max": 1000.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 6962423,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 400.0,
+                "score_max": 500.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 6962424,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 300.0,
+                "score_max": 400.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 6962427,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 200.0,
+                "score_max": 300.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 6962426,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 0.0,
+                "score_max": 200.0,
+                "distance_km": 38.2,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507538,
+        "title": "Vikings Valhalla Sunday Skaal ride",
+        "start_time_utc": "2026-03-22T08:05:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7035511,
+                "route_id": 890800649,
+                "route_name": "Makuri 40",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 103.0,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7035512,
+                "route_id": 3366225080,
+                "route_name": "Tick Tock",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 100.8,
+                "laps": 6
+            }
+        },
+        "max_distance_km": 103.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507541,
+        "title": "Norwegian Watts Club Endurance Ride ",
+        "start_time_utc": "2026-03-22T08:10:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7035519,
+                "route_id": 3453194200,
+                "route_name": "Triple Flat Loops",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 100.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 100.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507540,
+        "title": "SZR Groupworkouts by Aktivitus",
+        "start_time_utc": "2026-03-22T08:10:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035518,
+                "route_id": 2675063596,
+                "route_name": "Dust In the Wind",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 120.0
+    },
+    {
+        "parent_event_id": 5429943,
+        "title": "Stage 5: Zwift Games: Three Step Sisters",
+        "start_time_utc": "2026-03-22T08:10:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6936810,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 510.0,
+                "score_max": 650.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 6936811,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 390.0,
+                "score_max": 510.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 6936812,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 270.0,
+                "score_max": 390.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 6936813,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 160.0,
+                "score_max": 270.0,
+                "distance_km": 38.2,
+                "laps": 1
+            },
+            "E": {
+                "subgroup_id": 6936814,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 0.0,
+                "score_max": 160.0,
+                "distance_km": 38.2,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507542,
+        "title": "Kiss Kiss Bang Bang ride",
+        "start_time_utc": "2026-03-22T08:15:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7035520,
+                "route_id": 604330868,
+                "route_name": "Sand and Sequoias",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "B": {
+                "subgroup_id": 7035521,
+                "route_id": 604330868,
+                "route_name": "Sand and Sequoias",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 7035522,
+                "route_id": 604330868,
+                "route_name": "Sand and Sequoias",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7035523,
+                "route_id": 604330868,
+                "route_name": "Sand and Sequoias",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 90.0
+    },
+    {
+        "parent_event_id": 5507543,
+        "title": "ZZRC Wacky Chase",
+        "start_time_utc": "2026-03-22T08:15:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "B": {
+                "subgroup_id": 7035524,
+                "route_id": 226950646,
+                "route_name": "Mayan San Remo",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 33.5,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 7035525,
+                "route_id": 226950646,
+                "route_name": "Mayan San Remo",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 33.5,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7035526,
+                "route_id": 226950646,
+                "route_name": "Mayan San Remo",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 33.5,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 33.5,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5430699,
+        "title": "Stage 5: Zwift Games: Three Step Sisters | Advanced",
+        "start_time_utc": "2026-03-22T08:15:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6938635,
+                "route_id": 3536020075,
+                "route_name": "Three Step Sisters",
+                "score_min": 650.0,
+                "score_max": 1000.0,
+                "distance_km": 38.2,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507547,
+        "title": "Foudre Sunday Coffee Ride",
+        "start_time_utc": "2026-03-22T08:20:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7035542,
+                "route_id": 2328501978,
+                "route_name": "Shorelines and Summits",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 90.0
+    },
+    {
+        "parent_event_id": 5507548,
+        "title": " Flanders Endurance Race ",
+        "start_time_utc": "2026-03-22T08:20:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7035543,
+                "route_id": 2494975884,
+                "route_name": "The Pretzel",
+                "score_min": 690.0,
+                "score_max": 1000.0,
+                "distance_km": 100.0,
+                "laps": 0
+            },
+            "B": {
+                "subgroup_id": 7035544,
+                "route_id": 2494975884,
+                "route_name": "The Pretzel",
+                "score_min": 520.0,
+                "score_max": 690.0,
+                "distance_km": 100.0,
+                "laps": 0
+            },
+            "C": {
+                "subgroup_id": 7035545,
+                "route_id": 2494975884,
+                "route_name": "The Pretzel",
+                "score_min": 350.0,
+                "score_max": 520.0,
+                "distance_km": 100.0,
+                "laps": 0
+            },
+            "D": {
+                "subgroup_id": 7035546,
+                "route_id": 2494975884,
+                "route_name": "The Pretzel",
+                "score_min": 180.0,
+                "score_max": 350.0,
+                "distance_km": 100.0,
+                "laps": 0
+            },
+            "E": {
+                "subgroup_id": 7035547,
+                "route_id": 2494975884,
+                "route_name": "The Pretzel",
+                "score_min": 0.0,
+                "score_max": 180.0,
+                "distance_km": 100.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 100.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5476428,
+        "title": "Zwift TT Club Racing - Outer Scotland",
+        "start_time_utc": "2026-03-22T08:20:00.000+0000",
+        "type": "TIME_TRIAL",
+        "categories": {
+            "A": {
+                "subgroup_id": 6994244,
+                "route_id": 2826340040,
+                "route_name": "Outer Scotland",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 11.1,
+                "laps": 1
+            },
+            "B": {
+                "subgroup_id": 6994245,
+                "route_id": 2826340040,
+                "route_name": "Outer Scotland",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 11.1,
+                "laps": 1
+            },
+            "C": {
+                "subgroup_id": 6994246,
+                "route_id": 2826340040,
+                "route_name": "Outer Scotland",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 11.1,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 6994247,
+                "route_id": 2826340040,
+                "route_name": "Outer Scotland",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 11.1,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5507550,
+        "title": "T-VGN \ud83c\udf31 Smoothie",
+        "start_time_utc": "2026-03-22T08:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7035550,
+                "route_id": 3636436865,
+                "route_name": "Tropic Rush",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 41.2,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5474291,
+        "title": "Stage 1 - The Zwift Big Spin",
+        "start_time_utc": "2026-03-22T08:30:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 6990890,
+                "route_id": 1258526800,
+                "route_name": "Flat Out Fast",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 21.4,
                 "laps": 1
             }
         },

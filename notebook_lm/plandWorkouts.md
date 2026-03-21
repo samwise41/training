@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-20 02:30:23
+**Generated:** 2026-03-21 02:24:31
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -68,7 +68,7 @@
     "actualSport": "Bike",
     "actualDuration": 0.0,
     "actualWorkout": null,
-    "status": "PLANNED",
+    "status": "MISSED",
     "compliance": 0,
     "completed": false
   },

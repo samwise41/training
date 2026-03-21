@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-20 02:30:23
+**Generated:** 2026-03-21 02:24:31
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,30 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-20",
+    "day": "FRIDAY",
+    "activityType": "Swim",
+    "plannedWorkout": "[SWIM] Touch Swim",
+    "plannedDuration": 15.0,
+    "notes": "**Focus:** Drills only. Maintain your feel for the water.",
+    "actualDuration": 0,
+    "id": "PLAN-2026-03-20-Swim",
+    "matchStatus": "Planned",
+    "status": "PLANNED"
+  },
+  {
+    "date": "2026-03-20",
+    "day": "Friday",
+    "activityType": "Run",
+    "plannedWorkout": "[RUN] Aerobic Maintenance",
+    "plannedDuration": 40.0,
+    "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
+    "actualDuration": 0,
+    "id": "PLAN-2026-03-20-Run",
+    "matchStatus": "Planned",
+    "status": "PLANNED"
+  },
   {
     "date": "2026-03-19",
     "day": "Thursday",
@@ -17,7 +41,7 @@
     "actualDuration": 0,
     "id": "PLAN-2026-03-19-Swim",
     "matchStatus": "Planned",
-    "status": "PLANNED"
+    "status": "MISSED"
   },
   {
     "date": "2026-03-19",
@@ -29,7 +53,7 @@
     "actualDuration": 0,
     "id": "PLAN-2026-03-19-Bike",
     "matchStatus": "Planned",
-    "status": "PLANNED"
+    "status": "MISSED"
   },
   {
     "date": "2026-03-18",

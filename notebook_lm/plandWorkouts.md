@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-21 02:24:31
+**Generated:** 2026-03-22 02:39:36
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -66,9 +66,9 @@
     "plannedDuration": 60.0,
     "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "MISSED",
+    "actualDuration": 60.0,
+    "actualWorkout": "Bike",
+    "status": "Completed",
     "compliance": 0,
     "completed": false
   },
@@ -79,9 +79,9 @@
     "plannedDuration": 15.0,
     "notes": "**Focus:** Drills only. Maintain your feel for the water.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
+    "actualDuration": 8.0,
+    "actualWorkout": "Swim",
+    "status": "Completed",
     "compliance": 0,
     "completed": false
   },
@@ -92,9 +92,9 @@
     "plannedDuration": 40.0,
     "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
+    "actualDuration": 45.0,
+    "actualWorkout": "Run",
+    "status": "COMPLETED",
     "compliance": 0,
     "completed": false
   },
@@ -105,9 +105,9 @@
     "plannedDuration": 150.0,
     "notes": "**Focus:** Block 1 step-ladder cap (2.5h). Strict Z2 to fix Aerobic Efficiency (1.27).",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
+    "actualDuration": 165.0,
+    "actualWorkout": "Bike",
+    "status": "COMPLETED",
     "compliance": 0,
     "completed": false
   },
@@ -118,9 +118,9 @@
     "plannedDuration": 15.0,
     "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
+    "actualDuration": 13.0,
+    "actualWorkout": "Run",
+    "status": "COMPLETED",
     "compliance": 0,
     "completed": false
   }

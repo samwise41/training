@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-21 02:24:31
+**Generated:** 2026-03-22 02:39:35
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -8,16 +8,40 @@
 ```json
 [
   {
+    "date": "2026-03-21",
+    "day": "Saturday",
+    "activityType": "Bike",
+    "plannedWorkout": "[BIKE] Long Steady Distance",
+    "plannedDuration": 150.0,
+    "notes": "**Focus:** Block 1 step-ladder cap (2.5h). Strict Z2 to fix Aerobic Efficiency (1.27).",
+    "actualDuration": 165.0,
+    "id": "PLAN-2026-03-21-Bike",
+    "matchStatus": "Completed",
+    "status": "COMPLETED"
+  },
+  {
+    "date": "2026-03-21",
+    "day": "Saturday",
+    "activityType": "Run",
+    "plannedWorkout": "[RUN] Zone 2 Base",
+    "plannedDuration": 15.0,
+    "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
+    "actualDuration": 13.0,
+    "id": "PLAN-2026-03-21-Run",
+    "matchStatus": "Completed",
+    "status": "COMPELTED"
+  },
+  {
     "date": "2026-03-20",
     "day": "FRIDAY",
     "activityType": "Swim",
     "plannedWorkout": "[SWIM] Touch Swim",
     "plannedDuration": 15.0,
     "notes": "**Focus:** Drills only. Maintain your feel for the water.",
-    "actualDuration": 0,
+    "actualDuration": 8.0,
     "id": "PLAN-2026-03-20-Swim",
-    "matchStatus": "Planned",
-    "status": "PLANNED"
+    "matchStatus": "Completed",
+    "status": "COMPLETED"
   },
   {
     "date": "2026-03-20",
@@ -26,22 +50,10 @@
     "plannedWorkout": "[RUN] Aerobic Maintenance",
     "plannedDuration": 40.0,
     "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
-    "actualDuration": 0,
+    "actualDuration": 46.0,
     "id": "PLAN-2026-03-20-Run",
-    "matchStatus": "Planned",
-    "status": "PLANNED"
-  },
-  {
-    "date": "2026-03-19",
-    "day": "Thursday",
-    "activityType": "Swim",
-    "plannedWorkout": "[SWIM] Touch Swim",
-    "plannedDuration": 15.0,
-    "notes": "**Focus:** Drills only. Maintain your feel for the water.",
-    "actualDuration": 0,
-    "id": "PLAN-2026-03-19-Swim",
-    "matchStatus": "Planned",
-    "status": "MISSED"
+    "matchStatus": "Completed",
+    "status": "COMPLETED"
   },
   {
     "date": "2026-03-19",
@@ -50,10 +62,10 @@
     "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
     "plannedDuration": 60.0,
     "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
-    "actualDuration": 0,
+    "actualDuration": 60.0,
     "id": "PLAN-2026-03-19-Bike",
-    "matchStatus": "Planned",
-    "status": "MISSED"
+    "matchStatus": "Completed",
+    "status": "COMPLETED"
   },
   {
     "date": "2026-03-18",

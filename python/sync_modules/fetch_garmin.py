@@ -75,11 +75,17 @@ def main():
     
     print("   -> Authenticating with Garmin Connect...")
     client = Garmin(email, password)
-    client.login()
-
     
-    # NEW: Tell Garmin to cache session tokens to bypass 429 rate limits
-    client.login(tokenstore="garmin_tokens.json")
+    # Perfectly aligned with the GitHub Action root directory
+    TOKEN_DIR = "garmin_tokens"
+    try:
+        client.login(tokenstore=TOKEN_DIR)
+        print("   -> Success! Logged in using cached tokens.")
+    except Exception:
+        print("   -> No valid tokens found. Logging in with credentials...")
+        client.login()
+        os.makedirs(TOKEN_DIR, exist_ok=True)
+        client.garth.dump(TOKEN_DIR)
     
     print(f"   -> Fetching last {config.GARMIN_FETCH_LIMIT} activities...")
     activities = client.get_activities(0, config.GARMIN_FETCH_LIMIT)
@@ -94,19 +100,14 @@ def main():
         act_id = activity['activityId']
         sport_type_id = activity.get('sportTypeId')
         
-        # Filter Allowed Sports
         if sport_type_id not in config.ALLOWED_SPORT_TYPES:
             continue
 
-        # Check if we need to update or add
-        # We deep fetch if it's new OR if we have it but missing RPE (user might have edited it later)
         is_new = act_id not in cache_map
         existing_rpe = cache_map[act_id].get('RPE') if not is_new else None
         
         if is_new or existing_rpe is None:
             rpe, feeling = deep_fetch_activity(client, act_id)
-            
-            # Inject into the activity object
             activity['RPE'] = rpe
             activity['Feeling'] = feeling
             
@@ -116,15 +117,12 @@ def main():
             else:
                 updated_count += 1
         else:
-            # Even if we don't deep fetch, ensure the basic metadata is fresh
-            # But preserve the RPE/Feeling we already caught
             cached_rpe = cache_map[act_id].get('RPE')
             cached_feeling = cache_map[act_id].get('Feeling')
             activity['RPE'] = cached_rpe
             activity['Feeling'] = cached_feeling
             cache_map[act_id] = activity
 
-    # Convert back to list and sort
     final_list = sorted(list(cache_map.values()), key=lambda x: x['startTimeLocal'], reverse=True)
     save_cache(final_list)
     print(f"   -> Saved {len(final_list)} activities (New: {new_count}, Updated: {updated_count}).")

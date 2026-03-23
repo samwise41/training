@@ -1,92 +1,82 @@
 [
     {
-        "id": "PLAN-2026-03-15-Other",
-        "date": "2026-03-15",
+        "id": "PLAN-2026-03-22-Other",
+        "date": "2026-03-22",
         "day": "Sunday",
         "plannedWorkout": "Rest",
         "plannedDuration": 0.0,
         "activityType": "Other",
-        "notes": "**Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3.",
-        "status": "UNKNOWN"
+        "notes": "**Focus:** Complete rest.",
+        "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-03-16-Bike",
-        "date": "2026-03-16",
+        "id": "PLAN-2026-03-23-Run",
+        "date": "2026-03-23",
         "day": "Monday",
-        "plannedWorkout": "[BIKE] Zwift Race",
-        "plannedDuration": 60.0,
-        "activityType": "Bike",
-        "notes": "**Focus:** Zwift Games Stage 5 (11:10 AM). Empty the tank on the spikes to fix Anaerobic Impact (1.71).",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-03-17-Swim",
-        "date": "2026-03-17",
-        "day": "Tuesday",
-        "plannedWorkout": "[SWIM] Endurance Intervals",
-        "plannedDuration": 45.0,
-        "activityType": "Swim",
-        "notes": "**Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Active recovery for the legs!",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-03-18-Run",
-        "date": "2026-03-18",
-        "day": "Wednesday",
-        "plannedWorkout": "[RUN] Tempo / Speed Intervals",
-        "plannedDuration": 40.0,
-        "activityType": "Run",
-        "notes": "**Focus:** Leg speed! 10m Warmup; 5 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
-        "status": "MISSED"
-    },
-    {
-        "id": "PLAN-2026-03-20-Swim",
-        "date": "2026-03-20",
-        "day": "FRIDAY",
-        "plannedWorkout": "[SWIM] Touch Swim",
-        "plannedDuration": 15.0,
-        "activityType": "Swim",
-        "notes": "**Focus:** Drills only. Maintain your feel for the water.",
-        "status": "MISSED"
-    },
-    {
-        "id": "PLAN-2026-03-19-Bike",
-        "date": "2026-03-19",
-        "day": "Thursday",
-        "plannedWorkout": "[BIKE] Mid-Week Aerobic Endurance",
-        "plannedDuration": 60.0,
-        "activityType": "Bike",
-        "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
-        "status": "MISSED"
-    },
-    {
-        "id": "PLAN-2026-03-20-Run",
-        "date": "2026-03-20",
-        "day": "Friday",
         "plannedWorkout": "[RUN] Aerobic Maintenance",
-        "plannedDuration": 40.0,
+        "plannedDuration": 25.0,
         "activityType": "Run",
-        "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
-        "status": "MISSED"
+        "notes": "**Focus:** Swapped from Friday! Strict Zone 2 HR (<152 bpm). Flush the legs.",
+        "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-03-21-Bike",
-        "date": "2026-03-21",
-        "day": "Saturday",
-        "plannedWorkout": "[BIKE] Long Steady Distance",
-        "plannedDuration": 150.0,
+        "id": "PLAN-2026-03-24-Bike",
+        "date": "2026-03-24",
+        "day": "Tuesday",
+        "plannedWorkout": "[BIKE] Zwift Race",
+        "plannedDuration": 45.0,
         "activityType": "Bike",
-        "notes": "**Focus:** Block 1 step-ladder cap (2.5h). Strict Z2 to fix Aerobic Efficiency (1.27).",
-        "status": "MISSED"
+        "notes": "**Focus:** Zwift Games Double Header TT/Crit! Empty the tank to fix Anaerobic Impact (1.59).",
+        "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-03-21-Run",
-        "date": "2026-03-21",
+        "id": "PLAN-2026-03-25-Swim",
+        "date": "2026-03-25",
+        "day": "Wednesday",
+        "plannedWorkout": "[SWIM] Endurance Intervals",
+        "plannedDuration": 30.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** Swapped from Monday! Deload Volume. Open Water Transfer. Minimum one 400m+ continuous block.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-26-Swim",
+        "date": "2026-03-26",
+        "day": "Thursday",
+        "plannedWorkout": "[SWIM] Recovery + T1 Simulation",
+        "plannedDuration": 30.0,
+        "activityType": "Swim",
+        "notes": "**Focus:** Deload Volume. Practice 'Shore Exit' after the main set.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-27-Run",
+        "date": "2026-03-27",
+        "day": "Friday",
+        "plannedWorkout": "[RUN] Tempo / Speed Intervals",
+        "plannedDuration": 30.0,
+        "activityType": "Run",
+        "notes": "**Focus:** Swapped from Wed! Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-28-Other",
+        "date": "2026-03-28",
+        "day": "Saturday",
+        "plannedWorkout": "[BRICK] Long Steady Distance",
+        "plannedDuration": 90.0,
+        "activityType": "Other",
+        "notes": "**Focus:** Deload Volume (60%). Strict Z2 to fix HR Drift (10.75%). Do not surge on tired legs!",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-28-Run",
+        "date": "2026-03-28",
         "day": "Saturday",
         "plannedWorkout": "[RUN] Zone 2 Base",
-        "plannedDuration": 15.0,
+        "plannedDuration": 10.0,
         "activityType": "Run",
         "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
-        "status": "MISSED"
+        "status": "PLANNED"
     }
 ]

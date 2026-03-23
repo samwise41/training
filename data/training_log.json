@@ -1,5 +1,28 @@
 [
     {
+        "date": "2026-03-23",
+        "day": "Monday",
+        "activityType": "Run",
+        "plannedWorkout": "[RUN] Aerobic Maintenance",
+        "plannedDuration": 25.0,
+        "notes": "**Focus:** Swapped from Friday! Strict Zone 2 HR (<152 bpm). Flush the legs.",
+        "actualDuration": 0,
+        "id": "PLAN-2026-03-23-Run",
+        "matchStatus": "Planned",
+        "status": "PLANNED"
+    },
+    {
+        "date": "2026-03-22",
+        "day": "Sunday",
+        "activityType": "Other",
+        "plannedWorkout": "Rest",
+        "plannedDuration": 0.0,
+        "notes": "**Focus:** Complete rest.",
+        "actualDuration": 0,
+        "id": "PLAN-2026-03-22-Other",
+        "status": "UNKNOWN"
+    },
+    {
         "date": "2026-03-21",
         "day": "Saturday",
         "activityType": {

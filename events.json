@@ -1,332 +1,5 @@
 [
     {
-        "parent_event_id": 5510004,
-        "title": "SROZ's The Avatar is Fine, I'm Dying",
-        "start_time_utc": "2026-03-23T20:45:00.000+0000",
-        "type": "TIME_TRIAL",
-        "categories": {
-            "A": {
-                "subgroup_id": 7038710,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 7038707,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 7038708,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7038709,
-                "route_id": 2128890027,
-                "route_name": "Tempus Fugit",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 20.0
-    },
-    {
-        "parent_event_id": 5509742,
-        "title": "ZLDR Coffee Mondays",
-        "start_time_utc": "2026-03-23T21:00:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7038395,
-                "route_id": 1258526800,
-                "route_name": "Flat Out Fast",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5459485,
-        "title": "Workout 4: Alpecin-Premier Tech Team Camp",
-        "start_time_utc": "2026-03-23T21:00:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 6973332,
-                "route_id": 1880443431,
-                "route_name": "Greatest London Flat",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 78.0
-    },
-    {
-        "parent_event_id": 5509746,
-        "title": "Restart Esports - Monday Mash",
-        "start_time_utc": "2026-03-23T21:05:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 7038400,
-                "route_id": 1917017591,
-                "route_name": "Big Flat 8",
-                "score_min": 690.0,
-                "score_max": 1000.0,
-                "distance_km": 50.0,
-                "laps": 0
-            },
-            "B": {
-                "subgroup_id": 7038401,
-                "route_id": 1917017591,
-                "route_name": "Big Flat 8",
-                "score_min": 520.0,
-                "score_max": 690.0,
-                "distance_km": 50.0,
-                "laps": 0
-            },
-            "C": {
-                "subgroup_id": 7038402,
-                "route_id": 1917017591,
-                "route_name": "Big Flat 8",
-                "score_min": 350.0,
-                "score_max": 520.0,
-                "distance_km": 50.0,
-                "laps": 0
-            },
-            "D": {
-                "subgroup_id": 7038403,
-                "route_id": 1917017591,
-                "route_name": "Big Flat 8",
-                "score_min": 180.0,
-                "score_max": 350.0,
-                "distance_km": 50.0,
-                "laps": 0
-            },
-            "E": {
-                "subgroup_id": 7038404,
-                "route_id": 1917017591,
-                "route_name": "Big Flat 8",
-                "score_min": 0.0,
-                "score_max": 180.0,
-                "distance_km": 50.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 50.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5430183,
-        "title": "Stage 6b: Zwift Games: Crit Cade",
-        "start_time_utc": "2026-03-23T21:10:00.000+0000",
-        "type": "RACE",
-        "categories": {
-            "A": {
-                "subgroup_id": 6937946,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 510.0,
-                "score_max": 650.0,
-                "distance_km": 16.0,
-                "laps": 8
-            },
-            "B": {
-                "subgroup_id": 6937947,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 390.0,
-                "score_max": 510.0,
-                "distance_km": 16.0,
-                "laps": 8
-            },
-            "C": {
-                "subgroup_id": 6937948,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 270.0,
-                "score_max": 390.0,
-                "distance_km": 16.0,
-                "laps": 8
-            },
-            "D": {
-                "subgroup_id": 6937949,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 160.0,
-                "score_max": 270.0,
-                "distance_km": 16.0,
-                "laps": 8
-            },
-            "E": {
-                "subgroup_id": 6937950,
-                "route_id": 2875658892,
-                "route_name": "The Bell Lap",
-                "score_min": 0.0,
-                "score_max": 160.0,
-                "distance_km": 16.0,
-                "laps": 8
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5509748,
-        "title": "L'Apero JZQc",
-        "start_time_utc": "2026-03-23T21:15:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 7038406,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 70.0
-    },
-    {
-        "parent_event_id": 5509747,
-        "title": "BMTR Misfits Social",
-        "start_time_utc": "2026-03-23T21:15:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 7038405,
-                "route_id": 1258526800,
-                "route_name": "Flat Out Fast",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5509749,
-        "title": "The Grind Finale",
-        "start_time_utc": "2026-03-23T21:20:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "E": {
-                "subgroup_id": 7038407,
-                "route_id": 1880443431,
-                "route_name": "Greatest London Flat",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 49.0
-    },
-    {
-        "parent_event_id": 5474343,
-        "title": "Stage 2 - The Zwift Big Spin",
-        "start_time_utc": "2026-03-23T21:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 6990942,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 21.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
-    },
-    {
-        "parent_event_id": 5509750,
-        "title": "Ascenders Team Steady States Training",
-        "start_time_utc": "2026-03-23T21:30:00.000+0000",
-        "type": "GROUP_WORKOUT",
-        "categories": {
-            "B": {
-                "subgroup_id": 7038408,
-                "route_id": 928793662,
-                "route_name": "Greater London Flat",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5163358,
-        "title": "Cycling Canada Weekly Ride Atlantic ",
-        "start_time_utc": "2026-03-23T21:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "D": {
-                "subgroup_id": 6594645,
-                "route_id": 1397026382,
-                "route_name": "Volcano Flat Reverse",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 0.0,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5509751,
-        "title": "PartyAnimal 80\u00a0(MonsterMinder\u00a03.5+)",
-        "start_time_utc": "2026-03-23T21:35:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "B": {
-                "subgroup_id": 7038409,
-                "route_id": 4084028627,
-                "route_name": "Mayan 8",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 49.3,
-                "laps": 0
-            }
-        },
-        "max_distance_km": 49.3,
-        "max_duration_minutes": 0.0
-    },
-    {
         "parent_event_id": 5509755,
         "title": "Giant Monday Motivation Ride Series ",
         "start_time_utc": "2026-03-23T22:00:00.000+0000",
@@ -5114,25 +4787,6 @@
         },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
-    },
-    {
-        "parent_event_id": 5474420,
-        "title": "Stage 2 - The Zwift Big Spin",
-        "start_time_utc": "2026-03-24T13:30:00.000+0000",
-        "type": "GROUP_RIDE",
-        "categories": {
-            "E": {
-                "subgroup_id": 6991019,
-                "route_id": 226950646,
-                "route_name": "Mayan San Remo",
-                "score_min": null,
-                "score_max": null,
-                "distance_km": 21.0,
-                "laps": 1
-            }
-        },
-        "max_distance_km": 0.0,
-        "max_duration_minutes": 0.0
     },
     {
         "parent_event_id": 5511382,
@@ -12693,5 +12347,305 @@
         },
         "max_distance_km": 0.0,
         "max_duration_minutes": 60.0
+    },
+    {
+        "parent_event_id": 5513056,
+        "title": "Zwift Women's Training Club Recovery Ride ",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7042674,
+                "route_id": 1258526800,
+                "route_name": "Flat Out Fast",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 45.0
+    },
+    {
+        "parent_event_id": 5513055,
+        "title": "True Portfolio Weekly Ride",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7042672,
+                "route_id": 849508252,
+                "route_name": "Volcano Climb",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.1,
+                "laps": 1
+            },
+            "D": {
+                "subgroup_id": 7042673,
+                "route_id": 849508252,
+                "route_name": "Volcano Climb",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 23.1,
+                "laps": 1
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5513054,
+        "title": "INC Relentless Sprint Intervals",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "C": {
+                "subgroup_id": 7042671,
+                "route_id": 2875658892,
+                "route_name": "The Bell Lap",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 40.0,
+                "laps": 20
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5513052,
+        "title": "Rowe & King - Wednesday Wake-up",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7042669,
+                "route_id": 2592027600,
+                "route_name": "Innsbruckring",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 49.0
+    },
+    {
+        "parent_event_id": 5513051,
+        "title": "Bikealicious Rubberband Joy Ride",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "E": {
+                "subgroup_id": 7042668,
+                "route_id": 2663908549,
+                "route_name": "Road to Sky",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 25.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 25.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5459268,
+        "title": "Workout 4: Alpecin-Premier Tech Team Camp",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 6973115,
+                "route_id": 1880443431,
+                "route_name": "Greatest London Flat",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 78.0
+    },
+    {
+        "parent_event_id": 5440500,
+        "title": "Mountain Massif structured training: Sweet Spot Training",
+        "start_time_utc": "2026-03-25T07:00:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 6950476,
+                "route_id": 2128890027,
+                "route_name": "Tempus Fugit",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 54.0
+    },
+    {
+        "parent_event_id": 5513060,
+        "title": "Aussie Crit Crushers Race 1",
+        "start_time_utc": "2026-03-25T07:05:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 7042681,
+                "route_id": 947394567,
+                "route_name": "Downtown Dolphin",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 8.0,
+                "laps": 4
+            },
+            "B": {
+                "subgroup_id": 7042682,
+                "route_id": 947394567,
+                "route_name": "Downtown Dolphin",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 8.0,
+                "laps": 4
+            },
+            "C": {
+                "subgroup_id": 7042683,
+                "route_id": 947394567,
+                "route_name": "Downtown Dolphin",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 8.0,
+                "laps": 4
+            },
+            "D": {
+                "subgroup_id": 7042684,
+                "route_id": 947394567,
+                "route_name": "Downtown Dolphin",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 8.0,
+                "laps": 4
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5513062,
+        "title": "Le Col Cycling Club Community Sessions",
+        "start_time_utc": "2026-03-25T07:10:00.000+0000",
+        "type": "GROUP_WORKOUT",
+        "categories": {
+            "E": {
+                "subgroup_id": 7042686,
+                "route_id": 1178708985,
+                "route_name": "Green to Screen",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 47.0
+    },
+    {
+        "parent_event_id": 5513061,
+        "title": "GXY LOW SURGE [1.6-2.2wkg] \u2013 CAT D",
+        "start_time_utc": "2026-03-25T07:10:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7042685,
+                "route_id": 1258526800,
+                "route_name": "Flat Out Fast",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 50.0
+    },
+    {
+        "parent_event_id": 5430107,
+        "title": "Stage 6b: Zwift Games: Crit Cade",
+        "start_time_utc": "2026-03-25T07:10:00.000+0000",
+        "type": "RACE",
+        "categories": {
+            "A": {
+                "subgroup_id": 6937578,
+                "route_id": 2875658892,
+                "route_name": "The Bell Lap",
+                "score_min": 570.0,
+                "score_max": 725.0,
+                "distance_km": 16.0,
+                "laps": 8
+            },
+            "B": {
+                "subgroup_id": 6937579,
+                "route_id": 2875658892,
+                "route_name": "The Bell Lap",
+                "score_min": 450.0,
+                "score_max": 570.0,
+                "distance_km": 16.0,
+                "laps": 8
+            },
+            "C": {
+                "subgroup_id": 6937580,
+                "route_id": 2875658892,
+                "route_name": "The Bell Lap",
+                "score_min": 330.0,
+                "score_max": 450.0,
+                "distance_km": 16.0,
+                "laps": 8
+            },
+            "D": {
+                "subgroup_id": 6937581,
+                "route_id": 2875658892,
+                "route_name": "The Bell Lap",
+                "score_min": 210.0,
+                "score_max": 330.0,
+                "distance_km": 16.0,
+                "laps": 8
+            },
+            "E": {
+                "subgroup_id": 6937582,
+                "route_id": 2875658892,
+                "route_name": "The Bell Lap",
+                "score_min": 0.0,
+                "score_max": 210.0,
+                "distance_km": 16.0,
+                "laps": 8
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 0.0
+    },
+    {
+        "parent_event_id": 5513063,
+        "title": "QueenBee Wellness Wednesday",
+        "start_time_utc": "2026-03-25T07:15:00.000+0000",
+        "type": "GROUP_RIDE",
+        "categories": {
+            "D": {
+                "subgroup_id": 7042687,
+                "route_id": 2661047295,
+                "route_name": "Jarvis Seaside Sprint",
+                "score_min": null,
+                "score_max": null,
+                "distance_km": 0.0,
+                "laps": 0
+            }
+        },
+        "max_distance_km": 0.0,
+        "max_duration_minutes": 45.0
     }
 ]

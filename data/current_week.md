@@ -1,14 +1,14 @@
 
-### **Option 1: The "YouTuber Hunt" (Monday Race)**
-
 | Status | Day | Planned Workout | Planned Duration | Actual Workout | Actual Duration | Notes / Targets | Date |
 |:---|:---|:---|:---|:---|:---|:---|:---|
-| UNKNOWN | Sunday | Rest | 0 |  | 0 | **Focus:** Complete rest. Let your body absorb the adaptations before Loading Week 3. | 2026-03-15 |
-| PLANNED | Monday | [BIKE] Zwift Race | 60 |  | 0 | **Focus:** Zwift Games Stage 5 (11:10 AM). Empty the tank on the spikes to fix Anaerobic Impact (1.71). | 2026-03-16 |
-| PLANNED | Tuesday | [SWIM] Endurance Intervals | 45 | | | **Focus:** Open Water Transfer. Minimum one 400m+ continuous block. Active recovery for the legs! | 2026-03-17 |
-| MISSED | Wednesday | [RUN] Tempo / Speed Intervals | 40 |  | 0 | **Focus:** Leg speed! 10m Warmup; 5 x 1km Repeats @ 7:45 pace with STRICT 60s rests. | 2026-03-18 |
-| MISSED | FRIDAY | [SWIM] Touch Swim | 15 |  | 0 | **Focus:** Drills only. Maintain your feel for the water. | 2026-03-20 |
-| MISSED | Thursday | [BIKE] Mid-Week Aerobic Endurance | 60 |  | 0 | **Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge! | 2026-03-19 |
-| MISSED | Friday | [RUN] Aerobic Maintenance | 40 |  | 0 | **Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs. | 2026-03-20 |
-| MISSED | Saturday | [BIKE] Long Steady Distance | 150 |  | 0 | **Focus:** Block 1 step-ladder cap (2.5h). Strict Z2 to fix Aerobic Efficiency (1.27). | 2026-03-21 |
-| MISSED | Saturday | [RUN] Zone 2 Base | 15 |  | 0 | **Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike. | 2026-03-21 |
+| PLANNED | Sunday | Rest | 0 | | | **Focus:** Complete rest. | 2026-03-22 |
+| PLANNED | Monday | [SWIM] Endurance Intervals | 30 | | | **Focus:** Deload Volume. Open Water Transfer. Minimum one 400m+ continuous block. | 2026-03-23 |
+| PLANNED | Tuesday | [BIKE] Zwift Race | 45 | | | **Focus:** Zwift Games Double Header TT! Empty the tank to fix Anaerobic Impact (1.64). | 2026-03-24 |
+| PLANNED | Wednesday | [RUN] Tempo / Speed Intervals | 30 | | | **Focus:** Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests. | 2026-03-25 |
+| PLANNED | Thursday | [SWIM] Recovery + T1 Simulation | 30 | | | **Focus:** Deload Volume. Practice 'Shore Exit' after the main set. | 2026-03-26 |
+| PLANNED | Friday | [OTHER] Transition Mechanics | 30 | | | **Focus:** The Fourth Discipline. Dry run practice: Wetsuit strip, helmet speed, shoe entry. | 2026-03-27 |
+| PLANNED | Friday | [RUN] Aerobic Maintenance | 25 | | | **Focus:** Deload Volume. Strict Zone 2 HR (<152 bpm). Flush the legs. | 2026-03-27 |
+| PLANNED | Saturday | [BRICK] Long Steady Distance | 90 | | | **Focus:** Deload Volume (60%). Strict Z2 to fix EF (1.29) and HR Drift (9.65%). | 2026-03-28 |
+| PLANNED | Saturday | [RUN] Zone 2 Base | 10 | | | **Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike. | 2026-03-28 |
+
+Rest up today, mentally prepare for that brutal Double TT on Tuesday, and let your body absorb the adaptations this week! Let's go!

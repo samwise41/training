@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Other",
-            "Bike"
+            "Bike",
+            "Other"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4304,8 +4304,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 75.9,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4400,8 +4400,8 @@
         "plannedDuration": 65.0,
         "actualDuration": 74.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4651,8 +4651,8 @@
         "plannedDuration": 55.0,
         "actualDuration": 55.8,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4675,8 +4675,8 @@
         "plannedDuration": 165.0,
         "actualDuration": 175.4,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4697,7 +4697,7 @@
         "date": "2026-03-16",
         "complianceStatus": "Completed",
         "plannedDuration": 60.0,
-        "actualDuration": 68.2,
+        "actualDuration": 82.6,
         "sports": [
             "Bike"
         ],
@@ -4707,7 +4707,7 @@
             {
                 "name": "Zwift - Race: Stage 5: Zwift Games: Three Step Sisters (C)",
                 "sport": "Bike",
-                "actual": 68.2
+                "actual": 82.6
             }
         ]
     },
@@ -4731,83 +4731,75 @@
     },
     {
         "date": "2026-03-18",
-        "complianceStatus": "Completed",
+        "complianceStatus": "Missed",
         "plannedDuration": 40.0,
-        "actualDuration": 38.0,
-        "sports": [
-            "Other"
-        ],
+        "actualDuration": 0.0,
+        "sports": [],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
                 "name": "[RUN] Tempo / Speed Intervals",
                 "sport": "Other",
-                "actual": 38.0
+                "actual": 0.0
             }
         ]
     },
     {
         "date": "2026-03-19",
-        "complianceStatus": "Completed",
+        "complianceStatus": "Missed",
         "plannedDuration": 60.0,
-        "actualDuration": 60.0,
-        "sports": [
-            "Other"
-        ],
+        "actualDuration": 0.0,
+        "sports": [],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
                 "name": "[BIKE] Mid-Week Aerobic Endurance",
                 "sport": "Other",
-                "actual": 60.0
+                "actual": 0.0
             }
         ]
     },
     {
         "date": "2026-03-20",
-        "complianceStatus": "Completed",
+        "complianceStatus": "Missed",
         "plannedDuration": 55.0,
-        "actualDuration": 54.0,
-        "sports": [
-            "Other"
-        ],
+        "actualDuration": 0.0,
+        "sports": [],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
                 "name": "[SWIM] Touch Swim",
                 "sport": "Other",
-                "actual": 8.0
+                "actual": 0.0
             },
             {
                 "name": "[RUN] Aerobic Maintenance",
                 "sport": "Other",
-                "actual": 46.0
+                "actual": 0.0
             }
         ]
     },
     {
         "date": "2026-03-21",
-        "complianceStatus": "Completed",
+        "complianceStatus": "Missed",
         "plannedDuration": 165.0,
-        "actualDuration": 178.0,
-        "sports": [
-            "Other"
-        ],
+        "actualDuration": 0.0,
+        "sports": [],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
                 "name": "[BIKE] Long Steady Distance",
                 "sport": "Other",
-                "actual": 165.0
+                "actual": 0.0
             },
             {
                 "name": "[RUN] Zone 2 Base",
                 "sport": "Other",
-                "actual": 13.0
+                "actual": 0.0
             }
         ]
     },

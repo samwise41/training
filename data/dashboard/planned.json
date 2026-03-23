@@ -16,7 +16,7 @@
         "plannedWorkout": "[RUN] Aerobic Maintenance",
         "plannedDuration": 25.0,
         "activityType": "Run",
-        "notes": "**Focus:** Swapped from Friday! Strict Zone 2 HR (<152 bpm). Flush the legs.",
+        "notes": "**Focus:** Strict Zone 2 HR (<152 bpm). Flush the legs.",
         "status": "PLANNED"
     },
     {
@@ -36,13 +36,23 @@
         "plannedWorkout": "[SWIM] Endurance Intervals",
         "plannedDuration": 30.0,
         "activityType": "Swim",
-        "notes": "**Focus:** Swapped from Monday! Deload Volume. Open Water Transfer. Minimum one 400m+ continuous block.",
+        "notes": "**Focus:** Deload Volume. Open Water Transfer. Minimum one 400m+ continuous block.",
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-03-26-Swim",
+        "id": "PLAN-2026-03-26-Run",
         "date": "2026-03-26",
         "day": "Thursday",
+        "plannedWorkout": "[RUN] Tempo / Speed Intervals",
+        "plannedDuration": 30.0,
+        "activityType": "Run",
+        "notes": "**Focus:** Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
+        "status": "PLANNED"
+    },
+    {
+        "id": "PLAN-2026-03-27-Swim",
+        "date": "2026-03-27",
+        "day": "Friday",
         "plannedWorkout": "[SWIM] Recovery + T1 Simulation",
         "plannedDuration": 30.0,
         "activityType": "Swim",
@@ -50,23 +60,13 @@
         "status": "PLANNED"
     },
     {
-        "id": "PLAN-2026-03-27-Run",
-        "date": "2026-03-27",
-        "day": "Friday",
-        "plannedWorkout": "[RUN] Tempo / Speed Intervals",
-        "plannedDuration": 30.0,
-        "activityType": "Run",
-        "notes": "**Focus:** Swapped from Wed! Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
-        "status": "PLANNED"
-    },
-    {
-        "id": "PLAN-2026-03-28-Other",
+        "id": "PLAN-2026-03-28-Bike",
         "date": "2026-03-28",
         "day": "Saturday",
-        "plannedWorkout": "[BRICK] Long Steady Distance",
+        "plannedWorkout": "[BIKE] Long Steady Distance",
         "plannedDuration": 90.0,
-        "activityType": "Other",
-        "notes": "**Focus:** Deload Volume (60%). Strict Z2 to fix HR Drift (10.75%). Do not surge on tired legs!",
+        "activityType": "Bike",
+        "notes": "**Focus:** Deload Volume (60%). Strict Z2 to fix HR Drift (10.75%). Do not surge!",
         "status": "PLANNED"
     },
     {

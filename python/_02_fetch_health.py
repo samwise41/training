@@ -25,10 +25,18 @@ def init_garmin():
     try:
         print("🔐 Authenticating with Garmin Connect...")
         client = Garmin(EMAIL, PASSWORD)
-        client.login()
-       # NEW: Tell Garmin to cache session tokens to bypass 429 rate limits
-    client.login(tokenstore="garmin_tokens.json")
-
+        
+        # Perfectly aligned with the GitHub Action root directory
+        TOKEN_DIR = "garmin_tokens"
+        try:
+            client.login(tokenstore=TOKEN_DIR)
+            print("   -> Success! Logged in using cached tokens.")
+        except Exception:
+            print("   -> No valid tokens found. Logging in with credentials...")
+            client.login()
+            os.makedirs(TOKEN_DIR, exist_ok=True)
+            client.garth.dump(TOKEN_DIR)
+        
         return client
     except Exception as e:
         print(f"❌ Login Failed: {e}")

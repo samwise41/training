@@ -1,6 +1,18 @@
 {
   "energy_gels": [
     {
+      "name": "Fast Flow Maltodextrin Gel",
+      "flavor": "NA",
+      "carbs_per_flask_grams": 280,
+      "flask_size_oz": 16,
+      "ingredients": [
+        { "item": "Maltodextrin", "amount": "155g" },
+        { "item": "Fructose", "amount": "125g" },
+        { "item": "Tap Water", "amount": "280ml" }
+      ],
+      "instructions": "Boil water, mix in maltodextrin, then fructose, then flavoring."
+    },
+    {
       "name": "Blueberry Energy Gel",
       "flavor": "Blueberry",
       "carbs_per_flask_grams": 180,

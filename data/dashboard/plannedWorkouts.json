@@ -59,10 +59,10 @@
         "notes": "**Focus:** Fix Bike HR Drift (9.06%). Strict Zone 2. Do not surge!",
         "actualSport": "Bike",
         "actualDuration": 60.0,
-        "actualWorkout": "Bike",
-        "status": "Completed",
-        "compliance": 0,
-        "completed": false
+        "actualWorkout": "Activity",
+        "status": "COMPLETED",
+        "compliance": 100,
+        "completed": true
     },
     {
         "date": "2026-03-20",
@@ -72,10 +72,10 @@
         "notes": "**Focus:** Drills only. Maintain your feel for the water.",
         "actualSport": "Swim",
         "actualDuration": 8.0,
-        "actualWorkout": "Swim",
-        "status": "Completed",
-        "compliance": 0,
-        "completed": false
+        "actualWorkout": "Activity",
+        "status": "COMPLETED",
+        "compliance": 53,
+        "completed": true
     },
     {
         "date": "2026-03-20",
@@ -84,11 +84,11 @@
         "plannedDuration": 40.0,
         "notes": "**Focus:** Active Recovery. Strict Zone 2 HR (<152 bpm). Flush the legs.",
         "actualSport": "Run",
-        "actualDuration": 45.0,
-        "actualWorkout": "Run",
+        "actualDuration": 46.0,
+        "actualWorkout": "Activity",
         "status": "COMPLETED",
-        "compliance": 0,
-        "completed": false
+        "compliance": 115,
+        "completed": true
     },
     {
         "date": "2026-03-21",
@@ -98,10 +98,10 @@
         "notes": "**Focus:** Block 1 step-ladder cap (2.5h). Strict Z2 to fix Aerobic Efficiency (1.27).",
         "actualSport": "Bike",
         "actualDuration": 165.0,
-        "actualWorkout": "Bike",
+        "actualWorkout": "Activity",
         "status": "COMPLETED",
-        "compliance": 0,
-        "completed": false
+        "compliance": 110,
+        "completed": true
     },
     {
         "date": "2026-03-21",
@@ -111,9 +111,9 @@
         "notes": "**Focus:** T2 Practice. Obey the 5-Minute Discipline rule off the bike.",
         "actualSport": "Run",
         "actualDuration": 13.0,
-        "actualWorkout": "Run",
+        "actualWorkout": "Activity",
         "status": "COMPLETED",
-        "compliance": 0,
-        "completed": false
+        "compliance": 87,
+        "completed": true
     }
 ]

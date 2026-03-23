@@ -22,7 +22,7 @@ jobs:
       with:
         python-version: '3.10'
 
-    # --- NEW: Securely restore/save Garmin tokens between runs ---
+    # --- 1. Restore the hidden GitHub cache (if it exists) ---
     - name: Cache Garmin Tokens
       uses: actions/cache@v3
       with:
@@ -30,12 +30,28 @@ jobs:
         key: garmin-tokens-${{ github.run_id }}
         restore-keys: |
           garmin-tokens-
-    # -------------------------------------------------------------
+
+    # --- 2. Inject local tokens to bypass 429 Firewall ---
+    - name: Reconstruct Local Tokens
+      env:
+        GARMIN_OAUTH1: ${{ secrets.GARMIN_OAUTH1 }}
+        GARMIN_OAUTH2: ${{ secrets.GARMIN_OAUTH2 }}
+      run: |
+        # Only build the folder if the secrets exist
+        if [ -n "$GARMIN_OAUTH1" ]; then
+          mkdir -p garmin_tokens
+          echo "$GARMIN_OAUTH1" > garmin_tokens/oauth1_token.json
+          echo "$GARMIN_OAUTH2" > garmin_tokens/oauth2_token.json
+          
+          # The missing domain file!
+          echo '"garmin.com"' > garmin_tokens/domain.json
+          
+          echo "✅ Successfully injected local Garmin tokens!"
+        fi
 
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        # We don't need 'tabulate' anymore since we aren't making markdown tables
         pip install pandas garminconnect requests
 
     - name: Run Health Fetcher
@@ -50,7 +66,7 @@ jobs:
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
         
-        # --- FIX: Stage the new JSON file instead of the old MD file ---
+        # Stage the new JSON file
         git add garmin_data/garmin_health.json
         
         # Commit only if there are changes

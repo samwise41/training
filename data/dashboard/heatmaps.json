@@ -1605,8 +1605,8 @@
         "plannedDuration": 0.0,
         "actualDuration": 340.40000000000003,
         "sports": [
-            "Bike",
-            "Other"
+            "Other",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4731,75 +4731,85 @@
     },
     {
         "date": "2026-03-18",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Completed",
         "plannedDuration": 40.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 38.0,
+        "sports": [
+            "Run"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[RUN] Tempo / Speed Intervals",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy - Tempo 1km Intervals x5",
+                "sport": "Run",
+                "actual": 38.0
             }
         ]
     },
     {
         "date": "2026-03-19",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Completed",
         "plannedDuration": 60.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 60.8,
+        "sports": [
+            "Bike"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[BIKE] Mid-Week Aerobic Endurance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Virtual Cycling",
+                "sport": "Bike",
+                "actual": 60.8
             }
         ]
     },
     {
         "date": "2026-03-20",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Completed",
         "plannedDuration": 55.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 60.7,
+        "sports": [
+            "Run",
+            "Swim"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[SWIM] Touch Swim",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Pool Swim",
+                "sport": "Swim",
+                "actual": 14.6
             },
             {
-                "name": "[RUN] Aerobic Maintenance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy - Z2 - 45 Minutes",
+                "sport": "Run",
+                "actual": 46.1
             }
         ]
     },
     {
         "date": "2026-03-21",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Completed",
         "plannedDuration": 165.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 182.60000000000002,
+        "sports": [
+            "Run",
+            "Bike"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[BIKE] Long Steady Distance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Virtual Cycling",
+                "sport": "Bike",
+                "actual": 167.8
             },
             {
-                "name": "[RUN] Zone 2 Base",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy Running",
+                "sport": "Run",
+                "actual": 14.8
             }
         ]
     },

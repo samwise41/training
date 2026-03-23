@@ -28,10 +28,11 @@ jobs:
     - name: Cache Garmin Tokens
       uses: actions/cache@v3
       with:
-        path: garmin_tokens.json
+        path: garmin_tokens
         key: garmin-tokens-${{ github.run_id }}
         restore-keys: |
           garmin-tokens-
+    # -------------------------------------------------------------
 
     - name: Install Dependencies
       run: |

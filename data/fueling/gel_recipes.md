@@ -55,18 +55,27 @@ To make this a true apples-to-apples comparison, we have to level the playing fi
 
 Your single 8 oz DIY baggie contains **140 grams of carbs** (which is equal to eating roughly 5.5 standard commercial gels!). 
 
-**The DIY Cost Math (Based on standard bulk Amazon pricing):**
-* **Maltodextrin:** ~$15 for 8 lbs = ~$0.32 per baggie
-* **Fructose:** ~$12 for 5 lbs = ~$0.33 per baggie
-* **Sodium Citrate:** ~$10 for 1 lb = ~$0.06 per baggie
-* **Flavoring/Caffeine:** ~$0.05 per baggie
-* **Total Cost for one 8 oz Baggie (140g carbs): ~$0.76**
+### Your True "Mad Scientist" Cost Breakdown
+*(Based on your exact purchase prices, converting pounds to grams: 1 lb = ~454g)*
+
+* **Maltodextrin:** $40 for 8 lbs (3,632g) = ~1.1 cents per gram. 
+    * *77.5g per baggie = $0.85*
+* **Fructose:** $18 for 3 lbs (1,362g) = ~1.3 cents per gram.
+    * *62.5g per baggie = $0.83*
+* **Sodium Citrate:** $25 for 2 lbs (908g) = ~2.7 cents per gram.
+    * *3g per baggie = $0.08*
+* **Emulsions:** Let's assign a generous **$0.10** per batch (since you only use 2-3 drops from those massive bottles).
+* **Caffeine:** $18 for 500 caps = **$0.04** per capsule.
+
+**Your Actual Total Cost:**
+* **One Standard 8 oz Baggie (140g carbs): $1.86**
+* 
 
 Here is how your homemade gel crushes the premium competition:
 
 | Gel Brand | Carbs per Serving | Sodium | Cost per Packet | Cost to equal your 8oz Flask (140g Carbs) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Your DIY Master Gel** | **25g equivalent** | **~134 mg** | **~$0.13** | **~$0.76** |
+| **Your Actual DIY Gel** | **25g equivalent** | **~134 mg** | **$0.33** | **$1.86** |
 | **Maurten Gel 100** | 25g | 34 mg | ~$4.00 | **~$22.40** |
 | **Neversecond C30** | 30g | 200 mg | ~$3.50 | **~$16.33** |
 | **SiS Beta Fuel** | 40g | 30 mg | ~$3.00 | **~$10.50** |
@@ -74,3 +83,11 @@ Here is how your homemade gel crushes the premium competition:
 
 ### The Ultimate Takeaway
 Every single time you mix up just **one** of homeade 8 oz flasks for a 2-hour Tuesday trainer ride, you are saving between **$10.00 and $21.00** compared to fueling with premium commercial gels. Over the course of a single summer riding season in Utah, this DIY lab setup will easily save you hundreds of dollars, while giving you a mathematically superior, custom-flavored product.
+
+
+### The Return on Investment (ROI)
+To put this into perspective: Every single time you make a single 8 oz flask, you are saving roughly **$20.50** compared to buying Maurten, or **$14.80** compared to Gu Roctane. 
+
+That means your entire $201 upfront investment for all your powders, capsules, and emulsions will completely pay for itself after just **10 to 14 rides**. Everything you mix after that is essentially pure profit in your pocket. Plus, you have enough emulsions and caffeine to last for years!
+
+Now that you have your entire pantry stocked, your precision droppers ordered, and the exact financial breakdown in hand, would you like me to map out how to safely store your large bulk powder bags so the Utah humidity doesn't turn your 8 lbs of maltodextrin into a giant, unusable brick?

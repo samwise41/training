@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Run",
-            "Bike"
+            "Bike",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4675,8 +4675,8 @@
         "plannedDuration": 165.0,
         "actualDuration": 175.4,
         "sports": [
-            "Run",
-            "Bike"
+            "Bike",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4795,8 +4795,8 @@
         "plannedDuration": 165.0,
         "actualDuration": 182.60000000000002,
         "sports": [
-            "Run",
-            "Bike"
+            "Bike",
+            "Run"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4815,17 +4815,37 @@
     },
     {
         "date": "2026-03-23",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Completed",
         "plannedDuration": 25.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 28.2,
+        "sports": [
+            "Run"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[RUN] Aerobic Maintenance",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Clinton Running",
+                "sport": "Run",
+                "actual": 28.2
+            }
+        ]
+    },
+    {
+        "date": "2026-03-24",
+        "complianceStatus": "Completed",
+        "plannedDuration": 45.0,
+        "actualDuration": 77.5,
+        "sports": [
+            "Bike"
+        ],
+        "isSunday": false,
+        "eventName": null,
+        "activities": [
+            {
+                "name": "Zwift - Race: Stage 6b: Zwift Games: Crit Cade (B)",
+                "sport": "Bike",
+                "actual": 77.5
             }
         ]
     },

@@ -1,9 +1,3 @@
-Never apologize for asking for the master cheat sheet! Having everything consolidated in one place is exactly what you need before you start setting up your kitchen lab. 
-
-Here is the complete, official "Mad Scientist" DIY Fueling Guide, perfectly calibrated for your 8 oz flasks and your specific flavor stash. Print this out and tape it inside your pantry!
-
----
-
 ### Part 1: The Dry Baggie Assembly Line
 *Do this on a Sunday to prep for your month of riding. Each baggie creates one 8 oz flask.*
 
@@ -55,6 +49,3 @@ Here is the complete, official "Mad Scientist" DIY Fueling Guide, perfectly cali
 **The "Naked" Gel**
 * **0 drops of anything.** *(The sodium citrate naturally gives the pure sugar a very mild, pleasant, sweet lemon-water taste. Great for sensitive stomachs!).*
 
----
-
-You are officially ready to crush those Utah miles with the best fueling system possible. Would you like me to help you calculate the exact bulk amounts of Maltodextrin and Fructose you should order to comfortably last you through the upcoming summer riding season?

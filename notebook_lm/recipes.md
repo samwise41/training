@@ -1,5 +1,5 @@
 # Recipes
-**Generated:** 2026-03-23 02:39:53
+**Generated:** 2026-03-24 02:31:14
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/recipes.json
 
 ---
@@ -8,6 +8,27 @@
 ```json
 {
   "energy_gels": [
+    {
+      "name": "Fast Flow Maltodextrin Gel",
+      "flavor": "NA",
+      "carbs_per_flask_grams": 280,
+      "flask_size_oz": 16,
+      "ingredients": [
+        {
+          "item": "Maltodextrin",
+          "amount": "155g"
+        },
+        {
+          "item": "Fructose",
+          "amount": "125g"
+        },
+        {
+          "item": "Tap Water",
+          "amount": "280ml"
+        }
+      ],
+      "instructions": "Boil water, mix in maltodextrin, then fructose, then flavoring."
+    },
     {
       "name": "Blueberry Energy Gel",
       "flavor": "Blueberry",

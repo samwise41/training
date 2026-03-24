@@ -1,5 +1,5 @@
 # Daily Readiness Scores
-**Generated:** 2026-03-23 02:39:52
+**Generated:** 2026-03-24 02:31:14
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/readiness/readiness.json
 
 ---
@@ -7,12 +7,12 @@
 ## Data Content
 ```json
 {
-  "generatedAt": "2026-03-21T13:42:37.262808",
+  "generatedAt": "2026-03-23T19:13:19.065311",
   "trainingStats": {
     "maxSwim": 45.3,
-    "maxBike": 160.3,
-    "maxRun": 48.9,
-    "maxBikeElev": 5253
+    "maxBike": 167.8,
+    "maxRun": 46.1,
+    "maxBikeElev": 5594
   },
   "upcomingEvents": [
     {

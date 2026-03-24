@@ -80,6 +80,7 @@ Here is how your homemade gel crushes the premium competition:
 | **Neversecond C30** | 30g | ~$3.50 | **$2.92** | ~$16.33 |
 | **Gu Roctane** | 21g | ~$2.50 | **$2.98** | ~$16.66 |
 | **Maurten Gel 100** | 25g | ~$4.00 | **$4.00** | ~$22.40 |
+| **Precision Fuel and Hydration** | 30g | ~$3.13 | **$2.60** | ~$14.98 |
 
 ### The Ultimate Takeaway
 Every single time you mix up just **one** of homeade 8 oz flasks for a 2-hour Tuesday trainer ride, you are saving between **$10.00 and $21.00** compared to fueling with premium commercial gels. Over the course of a single summer riding season in Utah, this DIY lab setup will easily save you hundreds of dollars, while giving you a mathematically superior, custom-flavored product.

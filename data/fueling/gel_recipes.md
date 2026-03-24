@@ -73,14 +73,14 @@ Your single 8 oz DIY baggie contains **140 grams of carbs** (which is equal to e
 
 Here is how your homemade gel crushes the premium competition:
 
-| Gel Brand | Carbs per Packet | Cost per Packet | **Cost per 25g Carbs** | Cost for 140g (Your 8 oz Flask) |
-| :--- | :--- | :--- | :--- | :--- |
-| **Your Actual DIY Gel** | **140g** (per flask) | **$1.86** | **$0.33** | **$1.86** |
-| **SiS Beta Fuel** | 40g | ~$3.00 | **$1.88** | ~$10.50 |
-| **Precision Fuel and Hydration** | 30g | ~$3.13 | **$2.60** | ~$14.98 |
-| **Neversecond C30** | 30g | ~$3.50 | **$2.92** | ~$16.33 |
-| **Gu Roctane** | 21g | ~$2.50 | **$2.98** | ~$16.66 |
-| **Maurten Gel 100** | 25g | ~$4.00 | **$4.00** | ~$22.40 |
+| Gel Brand | Carbs per Packet | Cost per Packet | **Cost per 25g Carbs** | Cost for 140g (Your 8 oz Flask) |  Premium Upcharge |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Your Actual DIY Gel** | **140g** (per flask) | **$1.86** | **$0.33** | **$1.86** | 0x |
+| **SiS Beta Fuel** | 40g | ~$3.00 | **$1.88** | ~$10.50 | 5.69x |
+| **Precision Fuel and Hydration** | 30g | ~$3.13 | **$2.60** | ~$14.98 | 7.87x |
+| **Neversecond C30** | 30g | ~$3.50 | **$2.92** | ~$16.33 | 8.84x |
+| **Gu Roctane** | 21g | ~$2.50 | **$2.98** | ~$16.66 | 9.03x |
+| **Maurten Gel 100** | 25g | ~$4.00 | **$4.00** | ~$22.40 | 12.12x |
 
 
 ### The Ultimate Takeaway

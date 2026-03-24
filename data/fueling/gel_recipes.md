@@ -73,13 +73,13 @@ Your single 8 oz DIY baggie contains **140 grams of carbs** (which is equal to e
 
 Here is how your homemade gel crushes the premium competition:
 
-| Gel Brand | Carbs per Serving | Sodium | Cost per Packet | Cost to equal your 8oz Flask (140g Carbs) |
+| Gel Brand | Carbs per Packet | Cost per Packet | **Cost per 25g Carbs** | Cost for 140g (Your 8 oz Flask) |
 | :--- | :--- | :--- | :--- | :--- |
-| **Your Actual DIY Gel** | **25g equivalent** | **~134 mg** | **$0.33** | **$1.86** |
-| **Maurten Gel 100** | 25g | 34 mg | ~$4.00 | **~$22.40** |
-| **Neversecond C30** | 30g | 200 mg | ~$3.50 | **~$16.33** |
-| **SiS Beta Fuel** | 40g | 30 mg | ~$3.00 | **~$10.50** |
-| **Gu Roctane** | 21g | 125 mg | ~$2.50 | **~$16.66** |
+| **Your Actual DIY Gel** | **140g** (per flask) | **$1.86** | **$0.33** | **$1.86** |
+| **SiS Beta Fuel** | 40g | ~$3.00 | **$1.88** | ~$10.50 |
+| **Neversecond C30** | 30g | ~$3.50 | **$2.92** | ~$16.33 |
+| **Gu Roctane** | 21g | ~$2.50 | **$2.98** | ~$16.66 |
+| **Maurten Gel 100** | 25g | ~$4.00 | **$4.00** | ~$22.40 |
 
 ### The Ultimate Takeaway
 Every single time you mix up just **one** of homeade 8 oz flasks for a 2-hour Tuesday trainer ride, you are saving between **$10.00 and $21.00** compared to fueling with premium commercial gels. Over the course of a single summer riding season in Utah, this DIY lab setup will easily save you hundreds of dollars, while giving you a mathematically superior, custom-flavored product.
@@ -89,4 +89,3 @@ Every single time you mix up just **one** of homeade 8 oz flasks for a 2-hour Tu
 To put this into perspective: Every single time you make a single 8 oz flask, you are saving roughly **$20.50** compared to buying Maurten, or **$14.80** compared to Gu Roctane. 
 
 That means your entire $201 upfront investment for all your powders, capsules, and emulsions will completely pay for itself after just **10 to 14 rides**. Everything you mix after that is essentially pure profit in your pocket. Plus, you have enough emulsions and caffeine to last for years!
-

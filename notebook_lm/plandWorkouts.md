@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-24 02:31:14
+**Generated:** 2026-03-25 02:36:18
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -27,11 +27,11 @@
     "plannedDuration": 25.0,
     "notes": "**Focus:** Strict Zone 2 HR (<152 bpm). Flush the legs.",
     "actualSport": "Run",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 28.2,
+    "actualWorkout": "Clinton Running",
+    "status": "COMPLETED",
+    "compliance": 113,
+    "completed": true
   },
   {
     "date": "2026-03-24",
@@ -40,11 +40,11 @@
     "plannedDuration": 45.0,
     "notes": "**Focus:** Zwift Games Double Header TT/Crit! Empty the tank to fix Anaerobic Impact (1.59).",
     "actualSport": "Bike",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 77.5,
+    "actualWorkout": "Zwift - Race: Stage 6b: Zwift Games: Crit Cade (B)",
+    "status": "COMPLETED",
+    "compliance": 172,
+    "completed": true
   },
   {
     "date": "2026-03-25",

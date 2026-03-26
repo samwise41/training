@@ -36,7 +36,7 @@ def install_strava_requirements():
             print("   ⚠️ Failed to install Strava dependencies.")
 
 def main():
-    print("🚀 STARTING DAILY TRAINING SYNC PIPELINE")
+    print("STARTING DAILY TRAINING SYNC PIPELINE")
     
     # ==========================================
     # STEP 1: API FETCHING (Can be skipped!)

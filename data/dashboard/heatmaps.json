@@ -2595,8 +2595,8 @@
         "plannedDuration": 30.0,
         "actualDuration": 96.4,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -2815,8 +2815,8 @@
         "plannedDuration": 180.0,
         "actualDuration": 101.7,
         "sports": [
-            "Swim",
-            "Bike"
+            "Bike",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3127,8 +3127,8 @@
         "plannedDuration": 64.75,
         "actualDuration": 105.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -3864,8 +3864,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 70.3,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4082,8 +4082,8 @@
         "plannedDuration": 60.0,
         "actualDuration": 77.1,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4304,8 +4304,8 @@
         "plannedDuration": 70.0,
         "actualDuration": 75.9,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4400,8 +4400,8 @@
         "plannedDuration": 65.0,
         "actualDuration": 74.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4550,8 +4550,8 @@
         "plannedDuration": 135.0,
         "actualDuration": 136.2,
         "sports": [
-            "Bike",
-            "Run"
+            "Run",
+            "Bike"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4651,8 +4651,8 @@
         "plannedDuration": 55.0,
         "actualDuration": 55.8,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4771,8 +4771,8 @@
         "plannedDuration": 55.0,
         "actualDuration": 60.7,
         "sports": [
-            "Swim",
-            "Run"
+            "Run",
+            "Swim"
         ],
         "isSunday": false,
         "eventName": null,
@@ -4851,10 +4851,12 @@
     },
     {
         "date": "2026-03-25",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Partial",
         "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 7.2,
+        "sports": [
+            "Run"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
@@ -4862,22 +4864,29 @@
                 "name": "[SWIM] Endurance Intervals",
                 "sport": "Other",
                 "actual": 0.0
+            },
+            {
+                "name": "Roy Running",
+                "sport": "Run",
+                "actual": 7.2
             }
         ]
     },
     {
         "date": "2026-03-26",
-        "complianceStatus": "Missed",
+        "complianceStatus": "Partial",
         "plannedDuration": 30.0,
-        "actualDuration": 0.0,
-        "sports": [],
+        "actualDuration": 23.6,
+        "sports": [
+            "Run"
+        ],
         "isSunday": false,
         "eventName": null,
         "activities": [
             {
-                "name": "[RUN] Tempo / Speed Intervals",
-                "sport": "Other",
-                "actual": 0.0
+                "name": "Roy - Tempo 1km Intervals x3",
+                "sport": "Run",
+                "actual": 23.6
             }
         ]
     },

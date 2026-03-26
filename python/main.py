@@ -38,34 +38,45 @@ def install_strava_requirements():
 def main():
     print("🚀 STARTING DAILY TRAINING SYNC PIPELINE")
     
-    # STEP 1: Garmin
-    print("\n[STEP 1] Fetching Garmin...")
-    try:
-        fetch_garmin.main()
-    except Exception as e:
-        print(f"⚠️ Garmin Fetch Warning: {e}")
-
-    # STEP 1.5: Strava (WITH FIX)
-    print("\n[STEP 1.5] Syncing Strava...")
-    
-    # FIX: Install dependencies first!
-    install_strava_requirements()
-    
-    # Now run the scripts
-    if os.path.exists(STRAVA_CYCLING_SCRIPT):
-        print("   🚴 Running Cycling Processor...")
+    # ==========================================
+    # STEP 1: API FETCHING (Can be skipped!)
+    # ==========================================
+    if os.getenv("SKIP_GARMIN") == "true":
+        print("\n⏭️ SKIP_GARMIN is active. Bypassing Garmin and Strava API fetches...")
+        print("📂 Relying on existing local cache files for database rebuild.")
+    else:
+        # STEP 1: Garmin
+        print("\n[STEP 1] Fetching Garmin...")
         try:
-            subprocess.run([sys.executable, STRAVA_CYCLING_SCRIPT], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"   ❌ Cycling Script Failed: {e}")
+            fetch_garmin.main()
+        except Exception as e:
+            print(f"⚠️ Garmin Fetch Warning: {e}")
 
-    if os.path.exists(STRAVA_RUNNING_SCRIPT):
-        print("   🏃 Running Running Processor...")
-        try:
-            subprocess.run([sys.executable, STRAVA_RUNNING_SCRIPT], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"   ❌ Running Script Failed: {e}")
+        # STEP 1.5: Strava (WITH FIX)
+        print("\n[STEP 1.5] Syncing Strava...")
+        
+        # FIX: Install dependencies first!
+        install_strava_requirements()
+        
+        # Now run the scripts
+        if os.path.exists(STRAVA_CYCLING_SCRIPT):
+            print("   🚴 Running Cycling Processor...")
+            try:
+                subprocess.run([sys.executable, STRAVA_CYCLING_SCRIPT], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"   ❌ Cycling Script Failed: {e}")
 
+        if os.path.exists(STRAVA_RUNNING_SCRIPT):
+            print("   🏃 Running Running Processor...")
+            try:
+                subprocess.run([sys.executable, STRAVA_RUNNING_SCRIPT], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"   ❌ Running Script Failed: {e}")
+
+    # ==========================================
+    # STEP 2-5: ALWAYS RUN (Rebuilds the App)
+    # ==========================================
+    
     # STEP 2: Database
     print("\n[STEP 2] Syncing Database...")
     try:

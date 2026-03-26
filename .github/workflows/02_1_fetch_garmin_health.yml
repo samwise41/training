@@ -31,23 +31,25 @@ jobs:
         restore-keys: |
           garmin-tokens-
 
-    # --- 2. Inject local tokens to bypass 429 Firewall ---
+    # --- 2. Inject local tokens (Bulletproof Python Method) ---
     - name: Reconstruct Local Tokens
       env:
         GARMIN_OAUTH1: ${{ secrets.GARMIN_OAUTH1 }}
         GARMIN_OAUTH2: ${{ secrets.GARMIN_OAUTH2 }}
       run: |
-        # Only build the folder if the secrets exist
-        if [ -n "$GARMIN_OAUTH1" ]; then
-          mkdir -p garmin_tokens
-          echo "$GARMIN_OAUTH1" > garmin_tokens/oauth1_token.json
-          echo "$GARMIN_OAUTH2" > garmin_tokens/oauth2_token.json
-          
-          # The missing domain file!
-          echo '"garmin.com"' > garmin_tokens/domain.json
-          
-          echo "✅ Successfully injected local Garmin tokens!"
-        fi
+        python -c "
+        import os
+        o1 = os.environ.get('GARMIN_OAUTH1', '').strip()
+        o2 = os.environ.get('GARMIN_OAUTH2', '').strip()
+        if o1 and o2:
+            os.makedirs('garmin_tokens', exist_ok=True)
+            with open('garmin_tokens/oauth1_token.json', 'w') as f: f.write(o1)
+            with open('garmin_tokens/oauth2_token.json', 'w') as f: f.write(o2)
+            with open('garmin_tokens/domain.json', 'w') as f: f.write('\"garmin.com\"')
+            print('✅ Tokens constructed safely!')
+        else:
+            print('⚠️ ERROR: GitHub Secrets are empty or missing!')
+        "
 
     - name: Install Dependencies
       run: |

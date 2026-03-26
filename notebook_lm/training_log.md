@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-25 02:36:17
+**Generated:** 2026-03-26 02:43:45
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,18 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-25",
+    "day": "Wednesday",
+    "activityType": "Swim",
+    "plannedWorkout": "[SWIM] Endurance Intervals",
+    "plannedDuration": 30.0,
+    "notes": "**Focus:** Deload Volume. Open Water Transfer. Minimum one 400m+ continuous block.",
+    "actualDuration": 0,
+    "id": "PLAN-2026-03-25-Swim",
+    "matchStatus": "Planned",
+    "status": "PLANNED"
+  },
   {
     "date": "2026-03-24",
     "day": "Tuesday",

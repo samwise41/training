@@ -1,5 +1,5 @@
 # Current Coaching Metrics View
-**Generated:** 2026-03-25 02:36:17
+**Generated:** 2026-03-26 02:43:46
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/metrics/coaching_view.json
 
 ---
@@ -7,7 +7,7 @@
 ## Data Content
 ```json
 {
-  "generated_at": "2026-03-24 14:18:48",
+  "generated_at": "2026-03-25 22:44:30",
   "metrics_summary": [
     {
       "group": "General Fitness",
@@ -75,11 +75,11 @@
             },
             "90d": {
               "direction": "Falling",
-              "slope": -0.02794117647058776
+              "slope": -1.9285294117647054
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.22341346010227267
+              "slope": 0.20271977862660276
             },
             "1y": {
               "direction": "Rising",
@@ -151,11 +151,11 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.9418057884377048
+              "slope": 0.719769800462286
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.3792524112182763
+              "slope": 0.46043170687465995
             },
             "1y": {
               "direction": "Falling",
@@ -305,11 +305,11 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.005653581843938365
+              "slope": 0.004977018024800106
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.0038040798879209778
+              "slope": 0.003966755585204377
             },
             "1y": {
               "direction": "Rising",
@@ -344,11 +344,11 @@
             },
             "90d": {
               "direction": "Rising",
-              "slope": 0.015635623934626877
+              "slope": 0.012582558272588388
             },
             "6m": {
               "direction": "Rising",
-              "slope": 0.01081412458703864
+              "slope": 0.011410667439558741
             },
             "1y": {
               "direction": "Rising",
@@ -387,7 +387,7 @@
             },
             "6m": {
               "direction": "Falling",
-              "slope": -0.12365689865689868
+              "slope": -0.10005128205128207
             },
             "1y": {
               "direction": "Rising",

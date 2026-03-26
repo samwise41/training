@@ -28,7 +28,7 @@ jobs:
         restore-keys: |
           garmin-tokens-
 
-    # --- 2. Inject local tokens (Fixed Path & Syntax) ---
+    # --- 2. Inject local tokens (Simplified quoting for Windows) ---
     - name: Reconstruct Local Tokens
       env:
         GARMIN_OAUTH1: ${{ secrets.GARMIN_OAUTH1 }}
@@ -42,7 +42,9 @@ jobs:
             os.makedirs('garmin_tokens', exist_ok=True)
             with open('garmin_tokens/oauth1_token.json', 'w') as f: f.write(o1)
             with open('garmin_tokens/oauth2_token.json', 'w') as f: f.write(o2)
-            with open('garmin_tokens/domain.json', 'w') as f: f.write('\"garmin.com\"')
+            # Use chr(34) to write a literal double-quote without using backslashes
+            quote = chr(34)
+            with open('garmin_tokens/domain.json', 'w') as f: f.write(f'{quote}garmin.com{quote}')
             print('✅ Tokens constructed safely!')
         else:
             print('⚠️ ERROR: GitHub Secrets are empty or missing!')

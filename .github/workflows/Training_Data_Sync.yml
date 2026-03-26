@@ -19,10 +19,6 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
 
     # --- 1. Restore the hidden GitHub cache (if it exists) ---
     - name: Cache Garmin Tokens

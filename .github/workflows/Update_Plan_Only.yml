@@ -6,6 +6,7 @@ on:
     paths:
       - 'endurance_plan.md'
       - 'data/current_week.md'
+      - 'js/views/gear/Gear.md'
   # Also gives you a button to trigger it manually in the Actions tab
   workflow_dispatch:
 

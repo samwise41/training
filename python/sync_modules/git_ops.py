@@ -18,20 +18,24 @@ def main():
         print("   -> Not a git repository. Skipping.")
         return
 
-    # 2. Configure Git Identity
-    print("   -> Configuring Git Identity...")
+    # 2. Configure Git Identity & Safe Directory (THE FIX)
+    print("   -> Configuring Git Identity & Permissions...")
     try:
+        # Tell Git to trust this runner directory regardless of Windows user permissions
+        safe_path = config.BASE_DIR.replace('\\', '/')
+        run_cmd(["git", "config", "--global", "--add", "safe.directory", safe_path])
+        
         run_cmd(["git", "config", "user.email", "github-actions@github.com"])
         run_cmd(["git", "config", "user.name", "github-actions"])
     except Exception:
         pass 
 
-    # 3. Add Files (THE FIX)
+    # 3. Add Files
     print("   -> Staging files...")
     
     # Define paths relative to BASE_DIR
     data_folder = os.path.join(config.BASE_DIR, 'data')
-    garmin_folder = os.path.join(config.BASE_DIR, 'garmin_data') # <--- ADDED
+    garmin_folder = os.path.join(config.BASE_DIR, 'garmin_data')
     strava_folder = os.path.join(config.BASE_DIR, 'strava_data')
     plan_file = os.path.join(config.BASE_DIR, 'endurance_plan.md')
 
@@ -39,14 +43,13 @@ def main():
     
     # Add optional folders if they exist
     if os.path.exists(garmin_folder):
-        paths_to_add.append(garmin_folder) # <--- ADDED
+        paths_to_add.append(garmin_folder)
         
     if os.path.exists(strava_folder):
         paths_to_add.append(strava_folder)
 
     # Run the add command
     if paths_to_add:
-        # We use standard strings here to avoid path issues
         cmd = ["git", "add"] + paths_to_add
         run_cmd(cmd)
 

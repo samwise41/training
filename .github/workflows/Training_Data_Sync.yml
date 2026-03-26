@@ -12,7 +12,9 @@ permissions:
 jobs:
   sync-data:
     runs-on: self-hosted
-
+    env:
+      PYTHONUTF8: 1
+      
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3

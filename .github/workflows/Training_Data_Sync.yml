@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   sync-data:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: Checkout Repository

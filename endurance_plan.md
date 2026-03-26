@@ -15,7 +15,7 @@ The Master Training Plan is to provide structured training for the athlete over 
 | Aug 15, 2026 | CF Ride for Life Century Ride | Finish ~ 5:30:00 | **A-Race** |  4000+ ft of climb over two mountains  | Needs sustained Z2 endurance (4-5h saddle time). | | | 100 Miles | 5:30:00 | | | 4938 ft | 
 | Sept 11, 2026 | Brineman 70.3 Triathlon | sub 6:00:00 | **A-Race** |  1000 ft of climb total with no single climb over 200 ft.  | Need to pace effort. | 1.2 Miles | 01:00:00 | 52 Miles | 02:45:00 | 13.1 Miles | 02:15:00 | 1332 ft |
 | March 29, 2026 | Alpe du Zwift 1 Hour Challenge | Finish 1:00:00 | **C-Race** |  3400 ft of climb | Needs low-cadence/high-torque bike intervals (Strength Endurance). |  |  | 7.6 Miles | 1:00:00  |  |  | 3600 ft |
-| April 30, 2026 | East Canyon and Back | Finish ~ 2:30:00 | **C-Race** |  5000+ ft of climb | Needs low-cadence/high-torque bike intervals (Strength Endurance). |  |  | 41 Miles | 2:30:00  |  |  | 4905 ft |
+| April 4, 2026 | East Canyon and Back | Finish ~ 2:30:00 | **C-Race** |  5000+ ft of climb | Needs low-cadence/high-torque bike intervals (Strength Endurance). |  |  | 41 Miles | 2:30:00  |  |  | 4905 ft |
 | July 4, 2026 | Four Horsemen Route in Zwift | Finish | **C-Race** |  6932 ft of climb | Enduration at high zone 2. |  |  | 55.1 Miles | 4:00:00  |  |  | 6932 ft |
 | July 25, 2026 | Solo Century Simulation Roy to Holladay to Roy | Finish ~ 5:30:00 | **C-Race** |  Mostly flat with 1700+ ft of climb. Half of that climb is in the middle 10 miles | Need time in saddle and test fueling strategy. |  |  | 100 Miles | 5:30:00  |  |  | 1700 ft |
 

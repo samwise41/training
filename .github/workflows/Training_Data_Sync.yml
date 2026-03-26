@@ -19,8 +19,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
-
-    # --- 1. Restore the hidden GitHub cache (if it exists) ---
+    # --- 1. Restore the hidden GitHub cache ---
     - name: Cache Garmin Tokens
       uses: actions/cache@v3
       with:
@@ -29,13 +28,13 @@ jobs:
         restore-keys: |
           garmin-tokens-
 
-    # --- 2. Inject local tokens (Bulletproof Python Method) ---
+    # --- 2. Inject local tokens (Hardcoded Path Method) ---
     - name: Reconstruct Local Tokens
       env:
         GARMIN_OAUTH1: ${{ secrets.GARMIN_OAUTH1 }}
         GARMIN_OAUTH2: ${{ secrets.GARMIN_OAUTH2 }}
       run: |
-        python -c "
+        & "C:\Users\samwi\AppData\Local\Programs\Python\Python314\python.exe" -c "
         import os
         o1 = os.environ.get('GARMIN_OAUTH1', '').strip()
         o2 = os.environ.get('GARMIN_OAUTH2', '').strip()
@@ -51,8 +50,8 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install pandas garminconnect tabulate
+        & "C:\Users\samwi\AppData\Local\Programs\Python\Python314\python.exe" -m pip install --upgrade pip
+        & "C:\Users\samwi\AppData\Local\Programs\Python\Python314\python.exe" -m pip install pandas garminconnect tabulate
 
     - name: Run Training Plan Orchestrator
       env:
@@ -62,4 +61,4 @@ jobs:
         STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
         STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
       run: |
-        python python/main.py
+        & "C:\Users\samwi\AppData\Local\Programs\Python\Python314\python.exe" python/main.py

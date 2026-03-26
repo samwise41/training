@@ -28,7 +28,7 @@ jobs:
         restore-keys: |
           garmin-tokens-
 
-    # --- 2. Inject local tokens (Hardcoded Path Method) ---
+    # --- 2. Inject local tokens (Fixed Path & Syntax) ---
     - name: Reconstruct Local Tokens
       env:
         GARMIN_OAUTH1: ${{ secrets.GARMIN_OAUTH1 }}

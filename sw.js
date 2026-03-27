@@ -1,4 +1,4 @@
-const CACHE_NAME = 'training-pwa-v5'; // <-- Bumped to v4
+const CACHE_NAME = 'training-pwa-v6'; // <-- Bumped to v4
 const STATIC_ASSETS = [
     './',
     './index.html',

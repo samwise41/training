@@ -211,14 +211,15 @@
         }
 
         // Check URL for token on load (Modify 'access_token' if your app uses a different URL param)
-        const urlParams = new URLSearchParams(window.location.search);
+        // Check URL for token on load (looking at the Parent window because we are inside an iframe)
+        const urlParams = new URLSearchParams(window.parent.location.search);
         const token = urlParams.get('access_token') || urlParams.get('token'); 
-        
+
         if (token) {
             document.getElementById('strava-btn').style.display = 'none';
             fetchUserAlpePR(token);
-            // Clean URL visually
-            window.history.replaceState({}, document.title, window.location.pathname);
+            // Clean URL visually on the parent window
+            window.parent.history.replaceState({}, document.title, window.parent.location.pathname + window.parent.location.hash);
         }
 
         // --- 3. Pacing Calculator Logic ---

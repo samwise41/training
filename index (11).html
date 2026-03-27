@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alpe du Zwift Performance Pacer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0f172a; 
+            --bg-panel: #1e293b; 
+            --zwift-orange: #fc6719;
+            --ahead-green: #4caf50;
+            --behind-red: #f44336;
+            --target-blue: #3daee9;
+            --cur-color: #fff;
+        }
+        
+        body { font-family: -apple-system, sans-serif; background-color: var(--bg-dark); color: #ffffff; padding: 10px; max-width: 900px; margin: auto; }
+        .sticky-zone { position: sticky; top: 0; background-color: var(--bg-dark); z-index: 100; padding: 10px 0; border-bottom: 2px solid #1e293b; margin-bottom: 15px; }
+        h2 { text-align: center; margin: 0 0 10px 0; color: var(--zwift-orange); font-size: 1.5em; }
+        
+        /* New Strava Button Styles */
+        #strava-auth-zone { text-align: center; margin-bottom: 15px; }
+        .strava-btn { background-color: #fc4c02; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; }
+        .strava-btn:active { background-color: #e34402; }
+        .connected-text { color: var(--ahead-green); font-weight: bold; display: none; margin-bottom: 10px; }
+
+        /* Calculator Styles */
+        .calculator-box { background-color: #ffffff; color: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .calc-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .calc-input { background: #f1f5f9; border: 1px solid #94a3b8; color: #0f172a; padding: 8px; border-radius: 4px; font-size: 1.1em; width: 80px; text-align: center; font-weight: bold; }
+        .calc-btn { background-color: var(--target-blue); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        
+        /* Slider Styles */
+        .slider-container { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+        .slider-labels { display: flex; justify-content: space-between; font-size: 0.8em; color: #475569; font-weight: bold; }
+        input[type=range] { width: 100%; accent-color: var(--zwift-orange); }
+
+        /* Timer & Charts (Kept from your original) */
+        #controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; background-color: #ffffff; padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .timer-wrapper { display: flex; align-items: baseline; gap: 12px; }
+        #timer { font-size: 3em; font-variant-numeric: tabular-nums; font-weight: bold; color: #0f172a; }
+        #main-delta { font-size: 1.5em; font-weight: bold; }
+        #startBtn { background-color: var(--zwift-orange); color: white; border: none; padding: 12px 25px; font-size: 1.2em; border-radius: 8px; font-weight: bold; }
+        
+        .charts-section { display: flex; flex-direction: column; gap: 15px; }
+        .chart-container { background-color: #ffffff; border-radius: 8px; padding: 10px; border: 1px solid #cbd5e1; height: 200px; }
+        .chart-title { text-align: center; font-size: 0.85em; color: #475569; font-weight: bold; }
+        
+        /* Segments */
+        .segment { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e293b; }
+        .segment-info { flex: 1.2; }
+        .segment-name { font-size: 1em; font-weight: bold; }
+        .segment-target { color: #94a3b8; font-size: 0.85em; }
+        .prev-data-row { color: #64748b; font-size: 0.85em; font-style: italic; }
+        .segment-action { flex: 1.5; text-align: right; }
+        .split-btn { background-color: #334155; color: white; border: 1px solid #475569; padding: 10px 15px; border-radius: 6px; font-weight: bold; }
+        .split-btn:disabled { opacity: 0.5; }
+        
+        .result-container { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.9em; }
+        .ahead { color: var(--ahead-green); } 
+        .behind { color: var(--behind-red); } 
+    </style>
+</head>
+<body>
+
+    <div class="sticky-zone">
+        <h2 id="main-title">Alpe Pacer (59:30)</h2>
+        
+        <div id="strava-auth-zone">
+            <span id="strava-connected" class="connected-text">✓ Connected to Strava</span>
+            <a href="/api/auth" id="strava-btn" class="strava-btn">Connect with Strava</a>
+        </div>
+
+        <div class="calculator-box">
+            <div class="calc-row">
+                <label style="font-weight: bold;">Target Time:</label>
+                <input type="text" id="targetTimeInput" class="calc-input" placeholder="59:30" value="59:30">
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-labels">
+                    <span>Pos Split (Start Fast)</span>
+                    <span>Even</span>
+                    <span>Neg Split (End Fast)</span>
+                </div>
+                <input type="range" id="splitSlider" min="-10" max="10" value="0">
+            </div>
+            
+            <button class="calc-btn" onclick="applyNewTarget()">Calculate Pacing Plan</button>
+        </div>
+
+        <div id="controls">
+            <div class="timer-wrapper">
+                <div id="timer">00:00</div>
+                <div id="main-delta"></div>
+            </div>
+            <button id="startBtn" onclick="startRide()">START</button>
+        </div>
+
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-title">PACING TREND: Time Ahead (+)</div>
+                <canvas id="pacingTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="segmentList"></div>
+
+    <script>
+        // Check for Strava Token in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const stravaToken = urlParams.get('token');
+        
+        if (stravaToken) {
+            document.getElementById('strava-btn').style.display = 'none';
+            document.getElementById('strava-connected').style.display = 'block';
+            // Clean up the URL so it looks nice
+            window.history.replaceState({}, document.title, "/");
+        }
+
+        // --- Core Data ---
+        // We keep the original best effort pristine so we can always calculate from a baseline
+        const baseSegments = [
+            { name: "Start to Bend 21", targetStr: "04:25", targetCumSec: 265, targetPower: 250, prevSegSec: 282, prevWatts: 235 }, 
+            { name: "Bend 21 to 20",   targetStr: "08:36", targetCumSec: 516, targetPower: 238, prevSegSec: 267, prevWatts: 224 }, 
+            { name: "Bend 20 to 19",   targetStr: "09:35", targetCumSec: 575, targetPower: 236, prevSegSec: 63,  prevWatts: 222 }, 
+            { name: "Bend 19 to 18",   targetStr: "11:15", targetCumSec: 675, targetPower: 234, prevSegSec: 106, prevWatts: 220 }, 
+            { name: "Bend 18 to 17",   targetStr: "13:21", targetCumSec: 801, targetPower: 243, prevSegSec: 134, prevWatts: 229 }, 
+            { name: "Bend 17 to 16",   targetStr: "14:30", targetCumSec: 870, targetPower: 230, prevSegSec: 73,  prevWatts: 216 }, 
+            { name: "Bend 16 to 15",   targetStr: "17:38", targetCumSec: 1058, targetPower: 241, prevSegSec: 200, prevWatts: 227 }, 
+            { name: "Bend 15 to 14",   targetStr: "19:13", targetCumSec: 1153, targetPower: 241, prevSegSec: 101, prevWatts: 227 }, 
+            { name: "Bend 14 to 13",   targetStr: "22:52", targetCumSec: 1372, targetPower: 253, prevSegSec: 233, prevWatts: 238 }, 
+            { name: "Bend 13 to 12",   targetStr: "25:16", targetCumSec: 1516, targetPower: 250, prevSegSec: 153, prevWatts: 235 }, 
+            { name: "Bend 12 to 11",   targetStr: "27:32", targetCumSec: 1652, targetPower: 246, prevSegSec: 145, prevWatts: 231 }, 
+            { name: "Bend 11 to 10",   targetStr: "30:11", targetCumSec: 1811, targetPower: 252, prevSegSec: 169, prevWatts: 237 }, 
+            { name: "Bend 10 to 9",    targetStr: "33:00", targetCumSec: 1980, targetPower: 248, prevSegSec: 180, prevWatts: 233 }, 
+            { name: "Bend 9 to 8",     targetStr: "36:15", targetCumSec: 2175, targetPower: 247, prevSegSec: 207, prevWatts: 232 }, 
+            { name: "Bend 8 to 7",     targetStr: "38:45", targetCumSec: 2325, targetPower: 254, prevSegSec: 160, prevWatts: 239 }, 
+            { name: "Bend 7 to 6",     targetStr: "44:00", targetCumSec: 2640, targetPower: 259, prevSegSec: 335, prevWatts: 244 }, 
+            { name: "Bend 6 to 5",     targetStr: "46:01", targetCumSec: 2761, targetPower: 259, prevSegSec: 129, prevWatts: 244 }, 
+            { name: "Bend 5 to 4",     targetStr: "48:09", targetCumSec: 2889, targetPower: 264, prevSegSec: 136, prevWatts: 248 }, 
+            { name: "Bend 4 to 3",     targetStr: "51:55", targetCumSec: 3115, targetPower: 280, prevSegSec: 240, prevWatts: 263 }, 
+            { name: "Bend 3 to 2",     targetStr: "53:55", targetCumSec: 3235, targetPower: 284, prevSegSec: 128, prevWatts: 267 }, 
+            { name: "Bend 2 to 1",     targetStr: "56:24", targetCumSec: 3384, targetPower: 281, prevSegSec: 158, prevWatts: 264 }, 
+            { name: "Bend 1 to Banner",targetStr: "59:29", targetCumSec: 3569, targetPower: 308, prevSegSec: 197, prevWatts: 290 }  
+        ];
+
+        let activeSegments = JSON.parse(JSON.stringify(baseSegments));
+        let startTime = null;
+        let timerInterval = null;
+        let currentActiveIndex = 0;
+        let actualCumSecData = new Array(activeSegments.length).fill(null);
+        let trendData = new Array(activeSegments.length).fill(null);
+        let pacingTrendChart;
+
+        // --- Pacing Calculator Logic ---
+        function parseTimeToSeconds(timeStr) {
+            const parts = timeStr.split(':');
+            return (parseInt(parts[0]) * 60) + parseInt(parts[1]);
+        }
+
+        function formatTime(totalSeconds) {
+            if (totalSeconds === null) return "--:--";
+            const absSec = Math.abs(Math.round(totalSeconds));
+            const m = Math.floor(absSec / 60).toString().padStart(2, '0');
+            const s = (absSec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function applyNewTarget() {
+            const targetSeconds = parseTimeToSeconds(document.getElementById('targetTimeInput').value);
+            const sliderVal = parseInt(document.getElementById('splitSlider').value) / 100; // range: -0.1 to 0.1
+
+            const historicalTotal = baseSegments.reduce((sum, s) => sum + s.prevSegSec, 0);
+            const baseRatio = targetSeconds / historicalTotal;
+
+            // Step 1: Apply split adjustment based on segment position
+            let tempSegments = baseSegments.map((seg, i) => {
+                // Position goes from -1 (Start) to 1 (End)
+                const position = (i / (baseSegments.length - 1)) * 2 - 1;
+                
+                // If Slider is negative (Neg Split), we want the start to be slower (>1 multiplier) 
+                // and the end to be faster (<1 multiplier).
+                const splitMultiplier = 1 + (position * sliderVal);
+                
+                return { ...seg, rawScaledSec: seg.prevSegSec * baseRatio * splitMultiplier };
+            });
+
+            // Step 2: Normalize so the total time exactly matches the target
+            const rawTotalTime = tempSegments.reduce((sum, s) => sum + s.rawScaledSec, 0);
+            const correctionFactor = targetSeconds / rawTotalTime;
+
+            let cumulativeSec = 0;
+            activeSegments = tempSegments.map(seg => {
+                const finalSegSec = Math.round(seg.rawScaledSec * correctionFactor);
+                cumulativeSec += finalSegSec;
+                
+                // Power is inversely proportional to time change
+                const timeRatio = finalSegSec / seg.prevSegSec;
+                const newPower = Math.round(seg.prevWatts * (1 / timeRatio));
+
+                return {
+                    ...seg,
+                    targetCumSec: cumulativeSec,
+                    targetPower: newPower,
+                    currentSegTarget: finalSegSec
+                };
+            });
+
+            // Reset App State & Redraw UI
+            document.getElementById('main-title').innerText = `Alpe Pacer (${formatTime(targetSeconds)})`;
+            resetRide();
+            renderList();
+        }
+
+        // --- UI & Ride Logic ---
+        function resetRide() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            startTime = null;
+            currentActiveIndex = 0;
+            actualCumSecData = new Array(activeSegments.length).fill(null);
+            trendData = new Array(activeSegments.length).fill(null);
+            
+            document.getElementById('timer').innerText = "00:00";
+            document.getElementById('main-delta').innerText = "";
+            document.getElementById('startBtn').style.backgroundColor = 'var(--zwift-orange)';
+            document.getElementById('startBtn').innerText = "START";
+            
+            if(pacingTrendChart) {
+                pacingTrendChart.data.datasets[0].data = trendData;
+                pacingTrendChart.update();
+            }
+        }
+
+        function startRide() {
+            if (timerInterval) return; 
+            startTime = Date.now();
+            document.getElementById('startBtn').style.backgroundColor = '#334155';
+            document.getElementById('startBtn').innerText = "RIDING";
+            renderActionDiv(currentActiveIndex); 
+            
+            timerInterval = setInterval(() => {
+                const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+                document.getElementById('timer').innerText = formatTime(elapsedSec);
+            }, 1000);
+        }
+
+        function recordSplit(index) {
+            if (!startTime || index !== currentActiveIndex) return; 
+            const currentCumSec = Math.floor((Date.now() - startTime) / 1000);
+            actualCumSecData[index] = currentCumSec;
+            
+            const splitDelta = activeSegments[index].targetCumSec - currentCumSec;
+            trendData[index] = splitDelta;
+            
+            const deltaEl = document.getElementById('main-delta');
+            deltaEl.innerText = splitDelta >= 0 ? `-${formatTime(splitDelta)}` : `+${formatTime(Math.abs(splitDelta))}`;
+            deltaEl.className = splitDelta >= 0 ? "ahead" : "behind";
+            
+            currentActiveIndex = index + 1; 
+            if (pacingTrendChart) pacingTrendChart.update();
+            renderList();
+        }
+
+        function renderActionDiv(i) {
+            const actionDiv = document.getElementById(`action-${i}`);
+            if (!actionDiv) return;
+
+            if (actualCumSecData[i] !== null) {
+                const delta = activeSegments[i].targetCumSec - actualCumSecData[i];
+                let resTxt = delta >= 0 ? `-${formatTime(delta)} Ahead` : `+${formatTime(Math.abs(delta))} Behind`;
+                let resCls = delta >= 0 ? 'ahead' : 'behind';
+                
+                actionDiv.innerHTML = `
+                    <div class="result-container">
+                        <div style="font-weight:bold">${formatTime(actualCumSecData[i])}</div>
+                        <div class="${resCls}">${resTxt}</div>
+                    </div>
+                `;
+            } else if (i === currentActiveIndex) {
+                const disabledState = !startTime ? 'disabled' : '';
+                actionDiv.innerHTML = `<button class="split-btn" ${disabledState} onclick="recordSplit(${i})">Split</button>`;
+            } else {
+                actionDiv.innerHTML = `<button class="split-btn" disabled>Split</button>`;
+            }
+        }
+
+        function renderList() {
+            const list = document.getElementById('segmentList');
+            list.innerHTML = '';
+            let runningPrevCumSec = 0;
+
+            activeSegments.forEach((seg, index) => {
+                const prevTargetCumSec = index > 0 ? activeSegments[index-1].targetCumSec : 0;
+                const targetSegSec = seg.targetCumSec - prevTargetCumSec;
+                runningPrevCumSec += seg.prevSegSec;
+
+                const div = document.createElement('div');
+                div.className = 'segment';
+                div.innerHTML = `
+                    <div class="segment-info">
+                        <div class="segment-name">${seg.name}</div>
+                        <div class="segment-target">Target: ${formatTime(seg.targetCumSec)} (${formatTime(targetSegSec)}) @ ${seg.targetPower}W</div>
+                        <div class="prev-data-row">Prev: ${formatTime(runningPrevCumSec)} (${formatTime(seg.prevSegSec)}) @ ${seg.prevWatts}W</div>
+                    </div>
+                    <div class="segment-action" id="action-${index}"></div>
+                `;
+                list.appendChild(div);
+                renderActionDiv(index); 
+            });
+            initCharts();
+        }
+
+        function initCharts() {
+            if(pacingTrendChart) pacingTrendChart.destroy();
+            const ctxTrend = document.getElementById('pacingTrendChart').getContext('2d');
+            const chartLabels = activeSegments.map((seg, i) => i === 0 ? "Start" : i === activeSegments.length - 1 ? "Banner" : "B" + seg.name.split(" to ")[1]);
+            
+            pacingTrendChart = new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Time Ahead/Behind', data: trendData,
+                        borderColor: '#fc6719', backgroundColor: 'rgba(252, 103, 25, 0.15)',
+                        borderWidth: 2, pointBackgroundColor: '#fff', fill: true, tension: 0.1
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // Initialize on load
+        applyNewTarget(); 
+    </script>
+</body>
+</html>

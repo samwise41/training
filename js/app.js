@@ -164,6 +164,7 @@
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
                     fueling: () => fuelMod?.FuelTimer?.init(),
                     zwift: () => zwiftMod?.ZwiftFinder?.init()
+                    alpe: () => `<iframe src="./alpe_pacer.html" class="w-full h-[calc(100vh-6rem)] border-0 rounded-lg overflow-hidden"></iframe>`
                 };
 
                 try {

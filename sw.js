@@ -3,7 +3,8 @@ const STATIC_ASSETS = [
     './',
     './index.html',
     './css/styles.css',
-    './js/app.js'
+    './js/app.js',
+    './alpe_pacer.html'
     // The service worker will dynamically cache other JS/CSS as you browse
 ];
 

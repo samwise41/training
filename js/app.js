@@ -161,7 +161,7 @@
                     fueling: () => fuelMod?.FuelTimer?.init(),
                     zwift: () => zwiftMod?.ZwiftFinder?.init(),
                     // ALPE PACER IFRAME ADDED HERE:
-                    alpe: () => `<iframe src="./alpe_pacer.html" class="w-full h-[calc(100vh-6rem)] border-0 rounded-lg overflow-hidden"></iframe>`
+                    alpe: () => `<iframe src="./alpe_pacer.html" class="w-full h-[calc(100vh-5rem)] border-0 rounded-lg pointer-events-auto" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>`
                 };
 
                 try {

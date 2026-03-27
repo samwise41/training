@@ -1,4 +1,4 @@
-const CACHE_NAME = 'training-pwa-v2'; // <-- Just change the number
+const CACHE_NAME = 'training-pwa-v3'; // <-- Just change the number
 const STATIC_ASSETS = [
     './',
     './index.html',

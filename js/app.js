@@ -141,10 +141,6 @@
 
             const content = document.getElementById('main-content');
             
-            // --- FIX: RESTORE LAYOUT BUFFER ---
-            // 1. Removed 'w-full' (causes scrollbar when combined with margin)
-            // 2. Changed 'md:pl-64' to 'md:ml-64' (Margin Left). 
-            //    This lets the standard 'p-4' create the gap between sidebar and text.
             content.className = "flex-1 p-4 overflow-y-auto pt-20 md:pt-6 md:ml-64 transition-all duration-300";
 
             content.classList.add('opacity-0');
@@ -163,7 +159,8 @@
                     gear: () => gearMod?.renderGear(this.gearData, this.weather.current, this.weather.hourly),
                     plan: () => analyzerMod?.renderAnalyzer(this.rawLogData),
                     fueling: () => fuelMod?.FuelTimer?.init(),
-                    zwift: () => zwiftMod?.ZwiftFinder?.init()
+                    zwift: () => zwiftMod?.ZwiftFinder?.init(),
+                    // ALPE PACER IFRAME ADDED HERE:
                     alpe: () => `<iframe src="./alpe_pacer.html" class="w-full h-[calc(100vh-6rem)] border-0 rounded-lg overflow-hidden"></iframe>`
                 };
 

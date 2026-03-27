@@ -20,11 +20,11 @@
         .sticky-zone { position: sticky; top: 0; background-color: var(--bg-dark); z-index: 100; padding: 10px 0; border-bottom: 2px solid #1e293b; margin-bottom: 15px; }
         h2 { text-align: center; margin: 0 0 10px 0; color: var(--zwift-orange); font-size: 1.5em; }
         
-        /* New Strava Button Styles */
+        /* Strava Auth Zone */
         #strava-auth-zone { text-align: center; margin-bottom: 15px; }
-        .strava-btn { background-color: #fc4c02; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; }
+        .strava-btn { background-color: #fc4c02; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; cursor: pointer; border: none;}
         .strava-btn:active { background-color: #e34402; }
-        .connected-text { color: var(--ahead-green); font-weight: bold; display: none; margin-bottom: 10px; }
+        .status-text { font-weight: bold; display: none; margin-bottom: 10px; padding: 8px; border-radius: 4px; background-color: var(--bg-panel); }
 
         /* Calculator Styles */
         .calculator-box { background-color: #ffffff; color: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
@@ -37,28 +37,28 @@
         .slider-labels { display: flex; justify-content: space-between; font-size: 0.8em; color: #475569; font-weight: bold; }
         input[type=range] { width: 100%; accent-color: var(--zwift-orange); }
 
-        /* Timer & Charts (Kept from your original) */
+        /* Timer & Charts */
         #controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; background-color: #ffffff; padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; }
         .timer-wrapper { display: flex; align-items: baseline; gap: 12px; }
         #timer { font-size: 3em; font-variant-numeric: tabular-nums; font-weight: bold; color: #0f172a; }
         #main-delta { font-size: 1.5em; font-weight: bold; }
-        #startBtn { background-color: var(--zwift-orange); color: white; border: none; padding: 12px 25px; font-size: 1.2em; border-radius: 8px; font-weight: bold; }
+        #startBtn { background-color: var(--zwift-orange); color: white; border: none; padding: 12px 25px; font-size: 1.2em; border-radius: 8px; font-weight: bold; cursor: pointer;}
         
         .charts-section { display: flex; flex-direction: column; gap: 15px; }
-        .chart-container { background-color: #ffffff; border-radius: 8px; padding: 10px; border: 1px solid #cbd5e1; height: 200px; }
+        .chart-container { background-color: #ffffff; border-radius: 8px; padding: 10px; border: 1px solid #cbd5e1; height: 180px; }
         .chart-title { text-align: center; font-size: 0.85em; color: #475569; font-weight: bold; }
         
         /* Segments */
         .segment { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1e293b; }
         .segment-info { flex: 1.2; }
-        .segment-name { font-size: 1em; font-weight: bold; }
-        .segment-target { color: #94a3b8; font-size: 0.85em; }
+        .segment-name { font-size: 1em; font-weight: bold; margin-bottom: 3px; }
+        .segment-target { color: #94a3b8; font-size: 0.85em; margin-bottom: 2px; }
         .prev-data-row { color: #64748b; font-size: 0.85em; font-style: italic; }
         .segment-action { flex: 1.5; text-align: right; }
-        .split-btn { background-color: #334155; color: white; border: 1px solid #475569; padding: 10px 15px; border-radius: 6px; font-weight: bold; }
-        .split-btn:disabled { opacity: 0.5; }
+        .split-btn { background-color: #334155; color: white; border: 1px solid #475569; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .split-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        .result-container { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.9em; }
+        .result-container { display: flex; flex-direction: column; align-items: flex-end; font-size: 0.9em; line-height: 1.4; }
         .ahead { color: var(--ahead-green); } 
         .behind { color: var(--behind-red); } 
     </style>
@@ -69,8 +69,8 @@
         <h2 id="main-title">Alpe Pacer (59:30)</h2>
         
         <div id="strava-auth-zone">
-            <span id="strava-connected" class="connected-text">✓ Connected to Strava</span>
-            <a href="/api/auth" id="strava-btn" class="strava-btn">Connect with Strava</a>
+            <div id="strava-status" class="status-text"></div>
+            <a href="/login" id="strava-btn" class="strava-btn">Connect Strava to fetch PR</a>
         </div>
 
         <div class="calculator-box">
@@ -102,7 +102,9 @@
         <div class="charts-section">
             <div class="chart-container">
                 <div class="chart-title">PACING TREND: Time Ahead (+)</div>
-                <canvas id="pacingTrendChart"></canvas>
+                <div style="position: relative; height: 140px; width: 100%;">
+                    <canvas id="pacingTrendChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -110,42 +112,31 @@
     <div id="segmentList"></div>
 
     <script>
-        // Check for Strava Token in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const stravaToken = urlParams.get('token');
-        
-        if (stravaToken) {
-            document.getElementById('strava-btn').style.display = 'none';
-            document.getElementById('strava-connected').style.display = 'block';
-            // Clean up the URL so it looks nice
-            window.history.replaceState({}, document.title, "/");
-        }
-
-        // --- Core Data ---
-        // We keep the original best effort pristine so we can always calculate from a baseline
-        const baseSegments = [
-            { name: "Start to Bend 21", targetStr: "04:25", targetCumSec: 265, targetPower: 250, prevSegSec: 282, prevWatts: 235 }, 
-            { name: "Bend 21 to 20",   targetStr: "08:36", targetCumSec: 516, targetPower: 238, prevSegSec: 267, prevWatts: 224 }, 
-            { name: "Bend 20 to 19",   targetStr: "09:35", targetCumSec: 575, targetPower: 236, prevSegSec: 63,  prevWatts: 222 }, 
-            { name: "Bend 19 to 18",   targetStr: "11:15", targetCumSec: 675, targetPower: 234, prevSegSec: 106, prevWatts: 220 }, 
-            { name: "Bend 18 to 17",   targetStr: "13:21", targetCumSec: 801, targetPower: 243, prevSegSec: 134, prevWatts: 229 }, 
-            { name: "Bend 17 to 16",   targetStr: "14:30", targetCumSec: 870, targetPower: 230, prevSegSec: 73,  prevWatts: 216 }, 
-            { name: "Bend 16 to 15",   targetStr: "17:38", targetCumSec: 1058, targetPower: 241, prevSegSec: 200, prevWatts: 227 }, 
-            { name: "Bend 15 to 14",   targetStr: "19:13", targetCumSec: 1153, targetPower: 241, prevSegSec: 101, prevWatts: 227 }, 
-            { name: "Bend 14 to 13",   targetStr: "22:52", targetCumSec: 1372, targetPower: 253, prevSegSec: 233, prevWatts: 238 }, 
-            { name: "Bend 13 to 12",   targetStr: "25:16", targetCumSec: 1516, targetPower: 250, prevSegSec: 153, prevWatts: 235 }, 
-            { name: "Bend 12 to 11",   targetStr: "27:32", targetCumSec: 1652, targetPower: 246, prevSegSec: 145, prevWatts: 231 }, 
-            { name: "Bend 11 to 10",   targetStr: "30:11", targetCumSec: 1811, targetPower: 252, prevSegSec: 169, prevWatts: 237 }, 
-            { name: "Bend 10 to 9",    targetStr: "33:00", targetCumSec: 1980, targetPower: 248, prevSegSec: 180, prevWatts: 233 }, 
-            { name: "Bend 9 to 8",     targetStr: "36:15", targetCumSec: 2175, targetPower: 247, prevSegSec: 207, prevWatts: 232 }, 
-            { name: "Bend 8 to 7",     targetStr: "38:45", targetCumSec: 2325, targetPower: 254, prevSegSec: 160, prevWatts: 239 }, 
-            { name: "Bend 7 to 6",     targetStr: "44:00", targetCumSec: 2640, targetPower: 259, prevSegSec: 335, prevWatts: 244 }, 
-            { name: "Bend 6 to 5",     targetStr: "46:01", targetCumSec: 2761, targetPower: 259, prevSegSec: 129, prevWatts: 244 }, 
-            { name: "Bend 5 to 4",     targetStr: "48:09", targetCumSec: 2889, targetPower: 264, prevSegSec: 136, prevWatts: 248 }, 
-            { name: "Bend 4 to 3",     targetStr: "51:55", targetCumSec: 3115, targetPower: 280, prevSegSec: 240, prevWatts: 263 }, 
-            { name: "Bend 3 to 2",     targetStr: "53:55", targetCumSec: 3235, targetPower: 284, prevSegSec: 128, prevWatts: 267 }, 
-            { name: "Bend 2 to 1",     targetStr: "56:24", targetCumSec: 3384, targetPower: 281, prevSegSec: 158, prevWatts: 264 }, 
-            { name: "Bend 1 to Banner",targetStr: "59:29", targetCumSec: 3569, targetPower: 308, prevSegSec: 197, prevWatts: 290 }  
+        // --- 1. Core State & Fallback Data ---
+        // This acts as a fallback if the user doesn't connect Strava
+        let baseSegments = [
+            { name: "Start to Bend 21", targetCumSec: 265, targetPower: 250, prevSegSec: 282, prevWatts: 235 }, 
+            { name: "Bend 21 to 20",   targetCumSec: 516, targetPower: 238, prevSegSec: 267, prevWatts: 224 }, 
+            { name: "Bend 20 to 19",   targetCumSec: 575, targetPower: 236, prevSegSec: 63,  prevWatts: 222 }, 
+            { name: "Bend 19 to 18",   targetCumSec: 675, targetPower: 234, prevSegSec: 106, prevWatts: 220 }, 
+            { name: "Bend 18 to 17",   targetCumSec: 801, targetPower: 243, prevSegSec: 134, prevWatts: 229 }, 
+            { name: "Bend 17 to 16",   targetCumSec: 870, targetPower: 230, prevSegSec: 73,  prevWatts: 216 }, 
+            { name: "Bend 16 to 15",   targetCumSec: 1058, targetPower: 241, prevSegSec: 200, prevWatts: 227 }, 
+            { name: "Bend 15 to 14",   targetCumSec: 1153, targetPower: 241, prevSegSec: 101, prevWatts: 227 }, 
+            { name: "Bend 14 to 13",   targetCumSec: 1372, targetPower: 253, prevSegSec: 233, prevWatts: 238 }, 
+            { name: "Bend 13 to 12",   targetCumSec: 1516, targetPower: 250, prevSegSec: 153, prevWatts: 235 }, 
+            { name: "Bend 12 to 11",   targetCumSec: 1652, targetPower: 246, prevSegSec: 145, prevWatts: 231 }, 
+            { name: "Bend 11 to 10",   targetCumSec: 1811, targetPower: 252, prevSegSec: 169, prevWatts: 237 }, 
+            { name: "Bend 10 to 9",    targetCumSec: 1980, targetPower: 248, prevSegSec: 180, prevWatts: 233 }, 
+            { name: "Bend 9 to 8",     targetCumSec: 2175, targetPower: 247, prevSegSec: 207, prevWatts: 232 }, 
+            { name: "Bend 8 to 7",     targetCumSec: 2325, targetPower: 254, prevSegSec: 160, prevWatts: 239 }, 
+            { name: "Bend 7 to 6",     targetCumSec: 2640, targetPower: 259, prevSegSec: 335, prevWatts: 244 }, 
+            { name: "Bend 6 to 5",     targetCumSec: 2761, targetPower: 259, prevSegSec: 129, prevWatts: 244 }, 
+            { name: "Bend 5 to 4",     targetCumSec: 2889, targetPower: 264, prevSegSec: 136, prevWatts: 248 }, 
+            { name: "Bend 4 to 3",     targetCumSec: 3115, targetPower: 280, prevSegSec: 240, prevWatts: 263 }, 
+            { name: "Bend 3 to 2",     targetCumSec: 3235, targetPower: 284, prevSegSec: 128, prevWatts: 267 }, 
+            { name: "Bend 2 to 1",     targetCumSec: 3384, targetPower: 281, prevSegSec: 158, prevWatts: 264 }, 
+            { name: "Bend 1 to Banner",targetCumSec: 3569, targetPower: 308, prevSegSec: 197, prevWatts: 290 }  
         ];
 
         let activeSegments = JSON.parse(JSON.stringify(baseSegments));
@@ -156,7 +147,81 @@
         let trendData = new Array(activeSegments.length).fill(null);
         let pacingTrendChart;
 
-        // --- Pacing Calculator Logic ---
+        // --- 2. Strava Integration ---
+        async function fetchUserAlpePR(accessToken) {
+            const statusEl = document.getElementById('strava-status');
+            statusEl.innerText = "⏳ Analyzing your best Alpe climb...";
+            statusEl.style.display = 'block';
+            statusEl.className = "status-text"; 
+
+            try {
+                const ALPE_SEGMENT_ID = 17267489;
+                
+                // Fetch best effort
+                const effortsRes = await fetch(`https://www.strava.com/api/v3/segment_efforts?segment_id=${ALPE_SEGMENT_ID}&per_page=1`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                const effortsData = await effortsRes.json();
+
+                if (!effortsData || effortsData.length === 0 || effortsData.errors) {
+                    statusEl.innerText = "❌ No Alpe du Zwift efforts found, or token expired.";
+                    statusEl.classList.add("behind");
+                    return;
+                }
+
+                const activityId = effortsData[0].activity.id;
+
+                // Fetch full activity to get hairpins
+                const activityRes = await fetch(`https://www.strava.com/api/v3/activities/${activityId}`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                const activityData = await activityRes.json();
+                const segmentEfforts = activityData.segment_efforts;
+
+                const hairpinNames = baseSegments.map(s => s.name);
+                let personalizedSegments = [];
+
+                for (let targetName of hairpinNames) {
+                    const match = segmentEfforts.find(seg => seg.name === targetName);
+                    if (match) {
+                        personalizedSegments.push({
+                            name: targetName,
+                            prevSegSec: match.elapsed_time,
+                            prevWatts: Math.round(match.average_watts || 0),
+                            targetCumSec: 0, targetPower: 0
+                        });
+                    }
+                }
+
+                if (personalizedSegments.length === 22) {
+                    baseSegments = personalizedSegments; 
+                    applyNewTarget(); // Recalculate everything!
+                    
+                    statusEl.innerText = "✓ Personal PR Loaded! Ready to pace.";
+                    statusEl.classList.add("ahead");
+                } else {
+                    statusEl.innerText = "⚠️ Found your activity, but some hairpins were missing.";
+                    statusEl.classList.add("behind");
+                }
+            } catch (error) {
+                console.error(error);
+                statusEl.innerText = "❌ Connection Error with Strava.";
+                statusEl.classList.add("behind");
+            }
+        }
+
+        // Check URL for token on load (Modify 'access_token' if your app uses a different URL param)
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('access_token') || urlParams.get('token'); 
+        
+        if (token) {
+            document.getElementById('strava-btn').style.display = 'none';
+            fetchUserAlpePR(token);
+            // Clean URL visually
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // --- 3. Pacing Calculator Logic ---
         function parseTimeToSeconds(timeStr) {
             const parts = timeStr.split(':');
             return (parseInt(parts[0]) * 60) + parseInt(parts[1]);
@@ -172,24 +237,19 @@
 
         function applyNewTarget() {
             const targetSeconds = parseTimeToSeconds(document.getElementById('targetTimeInput').value);
-            const sliderVal = parseInt(document.getElementById('splitSlider').value) / 100; // range: -0.1 to 0.1
+            const sliderVal = parseInt(document.getElementById('splitSlider').value) / 100;
 
             const historicalTotal = baseSegments.reduce((sum, s) => sum + s.prevSegSec, 0);
             const baseRatio = targetSeconds / historicalTotal;
 
-            // Step 1: Apply split adjustment based on segment position
+            // Apply pacing slider math
             let tempSegments = baseSegments.map((seg, i) => {
-                // Position goes from -1 (Start) to 1 (End)
                 const position = (i / (baseSegments.length - 1)) * 2 - 1;
-                
-                // If Slider is negative (Neg Split), we want the start to be slower (>1 multiplier) 
-                // and the end to be faster (<1 multiplier).
                 const splitMultiplier = 1 + (position * sliderVal);
-                
                 return { ...seg, rawScaledSec: seg.prevSegSec * baseRatio * splitMultiplier };
             });
 
-            // Step 2: Normalize so the total time exactly matches the target
+            // Normalize
             const rawTotalTime = tempSegments.reduce((sum, s) => sum + s.rawScaledSec, 0);
             const correctionFactor = targetSeconds / rawTotalTime;
 
@@ -198,25 +258,18 @@
                 const finalSegSec = Math.round(seg.rawScaledSec * correctionFactor);
                 cumulativeSec += finalSegSec;
                 
-                // Power is inversely proportional to time change
                 const timeRatio = finalSegSec / seg.prevSegSec;
                 const newPower = Math.round(seg.prevWatts * (1 / timeRatio));
 
-                return {
-                    ...seg,
-                    targetCumSec: cumulativeSec,
-                    targetPower: newPower,
-                    currentSegTarget: finalSegSec
-                };
+                return { ...seg, targetCumSec: cumulativeSec, targetPower: newPower };
             });
 
-            // Reset App State & Redraw UI
             document.getElementById('main-title').innerText = `Alpe Pacer (${formatTime(targetSeconds)})`;
             resetRide();
             renderList();
         }
 
-        // --- UI & Ride Logic ---
+        // --- 4. UI & Ride Logic ---
         function resetRide() {
             clearInterval(timerInterval);
             timerInterval = null;
@@ -330,7 +383,11 @@
                         borderWidth: 2, pointBackgroundColor: '#fff', fill: true, tension: 0.1
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: { 
+                    responsive: true, maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } },
+                    scales: { y: { ticks: { color: '#64748b' }, grid: { color: '#e2e8f0' } }, x: { ticks: { color: '#64748b' }, grid: { display: false } } }
+                }
             });
         }
 

@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-26 02:43:45
+**Generated:** 2026-03-27 02:46:01
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-26",
+    "day": "Thursday",
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "plannedWorkout": "[RUN] Tempo / Speed Intervals",
+    "plannedDuration": 30.0,
+    "notes": "**Focus:** Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
+    "actualDuration": 24.0,
+    "id": 22305222694,
+    "matchStatus": "Linked",
+    "status": "COMPLETED",
+    "actualWorkout": "Roy - Tempo 1km Intervals x3",
+    "actualSport": "Run",
+    "sportTypeId": 1,
+    "duration": 1417.5389404296875,
+    "distance": 4508.56005859375,
+    "averageHR": 146.0,
+    "maxHR": 164.0,
+    "aerobicTrainingEffect": 3.0,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "TEMPO",
+    "avgPower": 348.0,
+    "maxPower": 580.0,
+    "normPower": 384.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 3.180999994277954,
+    "maxSpeed": 4.684000015258789,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 165.15625,
+    "avgStrideLength": 110.65999755859376,
+    "avgVerticalOscillation": 7.980000305175782,
+    "avgVerticalRatio": 7.260000228881836,
+    "avgGroundContactTime": 239.0,
+    "vO2MaxValue": 56.0,
+    "calories": 350.0,
+    "elevationGain": 28.0,
+    "RPE": 4.0,
+    "Feeling": 5
+  },
   {
     "date": "2026-03-25",
     "day": "Wednesday",
@@ -17,7 +64,54 @@
     "actualDuration": 0,
     "id": "PLAN-2026-03-25-Swim",
     "matchStatus": "Planned",
-    "status": "PLANNED"
+    "status": "MISSED"
+  },
+  {
+    "date": "2026-03-25",
+    "day": "Wednesday",
+    "plannedWorkout": "",
+    "plannedDuration": 0,
+    "notes": "",
+    "matchStatus": "Unplanned",
+    "actualWorkout": "Roy Running",
+    "actualDuration": 7.2,
+    "actualSport": "Run",
+    "id": 22298054224,
+    "activityType": {
+      "typeId": 1,
+      "typeKey": "running",
+      "parentTypeId": 17,
+      "isHidden": false,
+      "restricted": false,
+      "trimmable": true
+    },
+    "sportTypeId": 1,
+    "duration": 356.9630126953125,
+    "distance": 834.7000122070312,
+    "averageHR": 110.0,
+    "maxHR": 136.0,
+    "aerobicTrainingEffect": 0.699999988079071,
+    "anaerobicTrainingEffect": 0.0,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": 277.0,
+    "maxPower": 549.0,
+    "normPower": 266.0,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 2.3380000591278076,
+    "maxSpeed": 3.9660000801086426,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": 147.796875,
+    "avgStrideLength": 98.99000244140626,
+    "avgVerticalOscillation": 7.95,
+    "avgVerticalRatio": 8.260000228881836,
+    "avgGroundContactTime": 265.20001220703125,
+    "vO2MaxValue": null,
+    "calories": 61.0,
+    "elevationGain": 4.0,
+    "RPE": 10,
+    "Feeling": 3,
+    "status": "UNPLANNED"
   },
   {
     "date": "2026-03-24",

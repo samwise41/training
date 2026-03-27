@@ -1,5 +1,5 @@
 # Long Term Trends
-**Generated:** 2026-03-26 02:43:46
+**Generated:** 2026-03-27 02:46:01
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/trends/trends.json
 
 ---
@@ -9,11 +9,11 @@
 {
   "config": {
     "trailing_weeks": 12,
-    "last_updated": "2026-03-25T22:44:30.687326"
+    "last_updated": "2026-03-26T14:47:56.518721"
   },
   "data": [
     {
-      "week_label": "11/08",
+      "week_label": "11/8",
       "week_end": "2025-11-08",
       "categories": {
         "total": {
@@ -133,7 +133,7 @@
       }
     },
     {
-      "week_label": "12/06",
+      "week_label": "12/6",
       "week_end": "2025-12-06",
       "categories": {
         "total": {
@@ -253,7 +253,7 @@
       }
     },
     {
-      "week_label": "01/03",
+      "week_label": "1/3",
       "week_end": "2026-01-03",
       "categories": {
         "total": {
@@ -283,7 +283,7 @@
       }
     },
     {
-      "week_label": "01/10",
+      "week_label": "1/10",
       "week_end": "2026-01-10",
       "categories": {
         "total": {
@@ -313,7 +313,7 @@
       }
     },
     {
-      "week_label": "01/17",
+      "week_label": "1/17",
       "week_end": "2026-01-17",
       "categories": {
         "total": {
@@ -343,7 +343,7 @@
       }
     },
     {
-      "week_label": "01/24",
+      "week_label": "1/24",
       "week_end": "2026-01-24",
       "categories": {
         "total": {

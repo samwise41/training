@@ -1,11 +1,10 @@
-const CACHE_NAME = 'training-pwa-v3'; // <-- Just change the number
+const CACHE_NAME = 'training-pwa-v4'; // <-- Bumped to v4
 const STATIC_ASSETS = [
     './',
     './index.html',
     './css/styles.css',
     './js/app.js',
-    './alpe_pacer.html'
-    // The service worker will dynamically cache other JS/CSS as you browse
+    './alpe_pacer.html' // <-- Added the new file here
 ];
 
 // Install Event: Cache static shell

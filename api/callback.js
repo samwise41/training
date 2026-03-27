@@ -6,7 +6,6 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Exchange the code for an access token
         const response = await fetch('https://www.strava.com/oauth/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -21,8 +20,8 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (data.access_token) {
-            // Success! Send the user back to your app with the token in the URL so your frontend can use it.
-            res.redirect(`/?token=${data.access_token}`);
+            // Success! Send them back to your main app, open the #alpe tab, and pass the token
+            res.redirect(`/?token=${data.access_token}#alpe`);
         } else {
             res.status(400).json({ error: 'Failed to get token', details: data });
         }

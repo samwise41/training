@@ -453,4 +453,120 @@
                 inputEl.style.border = '1px solid var(--ahead-green)';
                 inputEl.style.color = 'var(--ahead-green)';
             } else {
-                inputEl.style.borde
+                inputEl.style.border = '1px solid var(--behind-red)';
+                inputEl.style.color = 'var(--behind-red)';
+            }
+        }
+
+        function init() {
+            initCharts();
+            const list = document.getElementById('segmentList');
+            let runningPrevCumSec = 0;
+
+            segments.forEach((seg, index) => {
+                // Calculate Segment Target Time
+                const prevTargetCumSec = index > 0 ? segments[index-1].targetCumSec : 0;
+                const targetSegSec = seg.targetCumSec - prevTargetCumSec;
+                
+                // Calculate Cumulative Previous Time
+                runningPrevCumSec += seg.prevSegSec;
+
+                const div = document.createElement('div');
+                div.className = 'segment';
+                div.innerHTML = `
+                    <div class="segment-info">
+                        <div class="segment-name">${seg.name}</div>
+                        <div class="segment-target">Target: ${formatTime(seg.targetCumSec)} (${formatTime(targetSegSec)}) @ ${seg.targetPower}W</div>
+                        <div class="prev-data-row">Prev: ${formatTime(runningPrevCumSec)} (${formatTime(seg.prevSegSec)}) @ ${seg.prevWatts}W</div>
+                    </div>
+                    <div class="segment-action" id="action-${index}"></div>
+                `;
+                list.appendChild(div);
+                renderActionDiv(index); 
+            });
+        }
+
+        function startRide() {
+            if (timerInterval) return; 
+            startTime = Date.now();
+            document.getElementById('startBtn').style.backgroundColor = '#333';
+            document.getElementById('startBtn').innerText = "RIDING";
+            
+            renderActionDiv(currentActiveIndex); 
+            
+            timerInterval = setInterval(() => {
+                const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+                document.getElementById('timer').innerText = formatTime(elapsedSec);
+            }, 1000);
+        }
+
+        function updateComparisonWatts(index, element) {
+            const val = element.value;
+            if (val === '') {
+                currentSegWattsData[index] = null;
+                element.style.border = 'none';
+                element.style.color = 'var(--cur-color)'; 
+            } else {
+                const watts = parseInt(val);
+                if (!isNaN(watts)) {
+                    currentSegWattsData[index] = watts;
+                    applyPowerInputStyles(element, watts, segments[index].targetPower);
+                }
+            }
+            comparisonChart.update('none'); 
+        }
+
+        function recordSplit(index) {
+            if (!startTime || index !== currentActiveIndex) return; 
+
+            const currentCumSec = Math.floor((Date.now() - startTime) / 1000);
+            actualCumSecData[index] = currentCumSec;
+            
+            const prevCumSec = index > 0 ? actualCumSecData[index-1] : 0;
+            currentSegTimeData[index] = currentCumSec - prevCumSec;
+            
+            const splitDelta = segments[index].targetCumSec - currentCumSec;
+            trendData[index] = splitDelta;
+            
+            updateMainDelta(splitDelta);
+            
+            currentActiveIndex = index + 1; 
+
+            pacingTrendChart.update();
+            comparisonChart.update();
+
+            renderActionDiv(index);
+            if (index > 0) renderActionDiv(index - 1); 
+            if (index + 1 < segments.length) renderActionDiv(index + 1); 
+        }
+
+        function undoSplit(index) {
+            if (index !== currentActiveIndex - 1) return;
+
+            actualCumSecData[index] = null;
+            currentSegTimeData[index] = null;
+            trendData[index] = null;
+            currentSegWattsData[index] = null;
+
+            if (index > 0) {
+                const prevIndex = index - 1;
+                const prevDelta = segments[prevIndex].targetCumSec - actualCumSecData[prevIndex];
+                updateMainDelta(prevDelta);
+            } else {
+                updateMainDelta(null);
+            }
+
+            currentActiveIndex = index; 
+
+            pacingTrendChart.update();
+            comparisonChart.update();
+
+            renderActionDiv(index);
+            if (index > 0) renderActionDiv(index - 1);
+            if (index + 1 < segments.length) renderActionDiv(index + 1);
+        }
+
+        init();
+    </script>
+</body>
+</html>

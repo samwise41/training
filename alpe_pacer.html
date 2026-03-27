@@ -7,8 +7,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #121212;
-            --bg-panel: #1e1e1e;
+            /* Matched to AthleteOS bg-slate-900 */
+            --bg-dark: #0f172a; 
+            /* Softened for segment borders */
+            --bg-panel: #1e293b; 
             --zwift-orange: #fc6719;
             --ahead-green: #4caf50;
             --behind-red: #f44336;
@@ -33,21 +35,23 @@
             background-color: var(--bg-dark);
             z-index: 100;
             padding: 10px 0;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid #1e293b;
             margin-bottom: 15px;
         }
 
         h2 { text-align: center; margin: 0 0 10px 0; color: var(--zwift-orange); font-size: 1.5em; }
         
+        /* Updated Timer Box to White */
         #controls {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
-            background-color: var(--bg-panel);
+            background-color: #ffffff; 
             padding: 10px 15px;
             border-radius: 8px;
-            border: 1px solid #333;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
         .timer-wrapper {
@@ -56,11 +60,12 @@
             gap: 12px;
         }
 
+        /* Updated Timer Font Color for White BG */
         #timer {
             font-size: 3em;
             font-variant-numeric: tabular-nums;
             font-weight: bold;
-            color: var(--cur-color);
+            color: #0f172a; 
         }
 
         #main-delta {
@@ -87,19 +92,22 @@
             gap: 15px;
         }
         
+        /* Updated Chart Containers to White */
         .chart-container {
-            background-color: var(--bg-panel);
+            background-color: #ffffff;
             border-radius: 8px;
             padding: 10px;
-            border: 1px solid #333;
+            border: 1px solid #cbd5e1;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
         }
 
+        /* Updated Chart Title for White BG */
         .chart-title {
             text-align: center;
             font-size: 0.85em;
-            color: #aaa;
+            color: #475569;
             margin-bottom: 5px;
             font-weight: bold;
         }
@@ -116,17 +124,18 @@
             .chart-wrapper { height: 220px; }
         }
 
+        /* Segment Styles (Kept dark since they scroll under the white boxes) */
         .segment {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #1e293b;
         }
         .segment-info { flex: 1.2; }
         .segment-name { font-size: 1em; font-weight: bold; margin-bottom: 3px;}
-        .segment-target { color: #aaa; font-size: 0.85em; margin-bottom: 2px;}
-        .prev-data-row { color: #888; font-size: 0.85em; font-style: italic;}
+        .segment-target { color: #94a3b8; font-size: 0.85em; margin-bottom: 2px;}
+        .prev-data-row { color: #64748b; font-size: 0.85em; font-style: italic;}
         
         .segment-action { 
             flex: 1.5; 
@@ -137,20 +146,20 @@
         }
         
         .split-btn {
-            background-color: #333;
+            background-color: #334155;
             color: white;
-            border: 1px solid #555;
+            border: 1px solid #475569;
             padding: 10px 15px;
             font-size: 1em;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
         }
-        .split-btn:active { background-color: #555; }
+        .split-btn:active { background-color: #475569; }
         .split-btn:disabled {
-            background-color: #1a1a1a;
-            color: #444;
-            border-color: #222;
+            background-color: #1e293b;
+            color: #475569;
+            border-color: #1e293b;
             cursor: not-allowed;
         }
         
@@ -163,7 +172,7 @@
         }
         .time-row { margin-bottom: 4px; white-space: nowrap;}
         .cur-cum { color: var(--cur-color); font-variant-numeric: tabular-nums; font-weight: bold; }
-        .cur-seg { color: #aaa; font-size: 0.9em;}
+        .cur-seg { color: #94a3b8; font-size: 0.9em;}
         
         .power-input-container {
             display: flex;
@@ -174,28 +183,30 @@
         
         .undo-btn {
             background: none;
-            border: 1px solid #555;
-            color: #aaa;
+            border: 1px solid #475569;
+            color: #94a3b8;
             padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.85em;
         }
-        .undo-btn:active { background: #333; color: white;}
+        .undo-btn:active { background: #334155; color: white;}
 
-        .power-label { color: #aaa; font-size: 0.8em; margin-left: 5px;}
+        .power-label { color: #94a3b8; font-size: 0.8em; margin-left: 5px;}
         
         .power-input {
             width: 55px;
             padding: 6px 3px;
-            background-color: #2a2a2a;
+            background-color: #1e293b;
             border-radius: 4px;
             text-align: center;
             font-size: 1em;
             font-weight: bold;
+            color: white;
+            border: 1px solid #1e293b;
         }
-        .power-input::placeholder { color: #777; font-weight: normal;}
-        .power-input:focus { outline: none; border-color: #fff; background-color: #333; }
+        .power-input::placeholder { color: #64748b; font-weight: normal;}
+        .power-input:focus { outline: none; border-color: #3daee9; background-color: #334155; }
 
         .result { font-weight: bold; font-variant-numeric: tabular-nums;}
         .ahead { color: var(--ahead-green); } 
@@ -307,8 +318,9 @@
         }
 
         function initCharts() {
-            Chart.defaults.color = '#aaa';
-            Chart.defaults.borderColor = '#333';
+            // UPDATED DEFAULTS FOR WHITE BACKGROUND
+            Chart.defaults.color = '#64748b'; // Darker text for axes
+            Chart.defaults.borderColor = '#e2e8f0'; // Light gray grid lines
             Chart.defaults.font.size = 10;
 
             const ctxTrend = document.getElementById('pacingTrendChart').getContext('2d');
@@ -458,38 +470,10 @@
             }
         }
 
-        function init() {
-            initCharts();
-            const list = document.getElementById('segmentList');
-            let runningPrevCumSec = 0;
-
-            segments.forEach((seg, index) => {
-                // Calculate Segment Target Time
-                const prevTargetCumSec = index > 0 ? segments[index-1].targetCumSec : 0;
-                const targetSegSec = seg.targetCumSec - prevTargetCumSec;
-                
-                // Calculate Cumulative Previous Time
-                runningPrevCumSec += seg.prevSegSec;
-
-                const div = document.createElement('div');
-                div.className = 'segment';
-                div.innerHTML = `
-                    <div class="segment-info">
-                        <div class="segment-name">${seg.name}</div>
-                        <div class="segment-target">Target: ${formatTime(seg.targetCumSec)} (${formatTime(targetSegSec)}) @ ${seg.targetPower}W</div>
-                        <div class="prev-data-row">Prev: ${formatTime(runningPrevCumSec)} (${formatTime(seg.prevSegSec)}) @ ${seg.prevWatts}W</div>
-                    </div>
-                    <div class="segment-action" id="action-${index}"></div>
-                `;
-                list.appendChild(div);
-                renderActionDiv(index); 
-            });
-        }
-
         function startRide() {
             if (timerInterval) return; 
             startTime = Date.now();
-            document.getElementById('startBtn').style.backgroundColor = '#333';
+            document.getElementById('startBtn').style.backgroundColor = '#334155';
             document.getElementById('startBtn').innerText = "RIDING";
             
             renderActionDiv(currentActiveIndex); 
@@ -504,7 +488,7 @@
             const val = element.value;
             if (val === '') {
                 currentSegWattsData[index] = null;
-                element.style.border = 'none';
+                element.style.border = '1px solid #1e293b';
                 element.style.color = 'var(--cur-color)'; 
             } else {
                 const watts = parseInt(val);
@@ -513,7 +497,7 @@
                     applyPowerInputStyles(element, watts, segments[index].targetPower);
                 }
             }
-            comparisonChart.update('none'); 
+            if (comparisonChart) comparisonChart.update('none'); 
         }
 
         function recordSplit(index) {
@@ -529,11 +513,10 @@
             trendData[index] = splitDelta;
             
             updateMainDelta(splitDelta);
-            
             currentActiveIndex = index + 1; 
 
-            pacingTrendChart.update();
-            comparisonChart.update();
+            if (pacingTrendChart) pacingTrendChart.update();
+            if (comparisonChart) comparisonChart.update();
 
             renderActionDiv(index);
             if (index > 0) renderActionDiv(index - 1); 
@@ -558,12 +541,42 @@
 
             currentActiveIndex = index; 
 
-            pacingTrendChart.update();
-            comparisonChart.update();
+            if (pacingTrendChart) pacingTrendChart.update();
+            if (comparisonChart) comparisonChart.update();
 
             renderActionDiv(index);
             if (index > 0) renderActionDiv(index - 1);
             if (index + 1 < segments.length) renderActionDiv(index + 1);
+        }
+
+        function init() {
+            try {
+                initCharts();
+            } catch (e) {
+                console.warn("Charts failed to load (likely offline), continuing with pacing timer.", e);
+            }
+
+            const list = document.getElementById('segmentList');
+            let runningPrevCumSec = 0;
+
+            segments.forEach((seg, index) => {
+                const prevTargetCumSec = index > 0 ? segments[index-1].targetCumSec : 0;
+                const targetSegSec = seg.targetCumSec - prevTargetCumSec;
+                runningPrevCumSec += seg.prevSegSec;
+
+                const div = document.createElement('div');
+                div.className = 'segment';
+                div.innerHTML = `
+                    <div class="segment-info">
+                        <div class="segment-name">${seg.name}</div>
+                        <div class="segment-target">Target: ${formatTime(seg.targetCumSec)} (${formatTime(targetSegSec)}) @ ${seg.targetPower}W</div>
+                        <div class="prev-data-row">Prev: ${formatTime(runningPrevCumSec)} (${formatTime(seg.prevSegSec)}) @ ${seg.prevWatts}W</div>
+                    </div>
+                    <div class="segment-action" id="action-${index}"></div>
+                `;
+                list.appendChild(div);
+                renderActionDiv(index); 
+            });
         }
 
         init();

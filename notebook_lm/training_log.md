@@ -1,5 +1,5 @@
 # Training Log History
-**Generated:** 2026-03-27 02:46:01
+**Generated:** 2026-03-28 02:35:03
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/training_log.json
 
 ---
@@ -7,6 +7,53 @@
 ## Data Content
 ```json
 [
+  {
+    "date": "2026-03-27",
+    "day": "Friday",
+    "activityType": {
+      "typeId": 27,
+      "typeKey": "lap_swimming",
+      "parentTypeId": 26,
+      "isHidden": false,
+      "trimmable": false,
+      "restricted": false
+    },
+    "plannedWorkout": "[SWIM] Recovery + T1 Simulation",
+    "plannedDuration": 30.0,
+    "notes": "**Focus:** Deload Volume. Practice 'Shore Exit' after the main set.",
+    "actualDuration": 29.2,
+    "id": 22315317874,
+    "actualWorkout": "Pool Swim",
+    "actualSport": "Swim",
+    "sportTypeId": 5,
+    "duration": 1740.905029296875,
+    "distance": 1000.0,
+    "averageHR": 124.0,
+    "maxHR": 152.0,
+    "aerobicTrainingEffect": 2.200000047683716,
+    "anaerobicTrainingEffect": 2.0,
+    "trainingEffectLabel": "RECOVERY",
+    "avgPower": null,
+    "maxPower": null,
+    "normPower": null,
+    "trainingStressScore": null,
+    "intensityFactor": null,
+    "averageSpeed": 0.8309999704360962,
+    "maxSpeed": 1.1759999990463257,
+    "averageBikingCadenceInRevPerMinute": null,
+    "averageRunningCadenceInStepsPerMinute": null,
+    "avgStrideLength": null,
+    "avgVerticalOscillation": null,
+    "avgVerticalRatio": null,
+    "avgGroundContactTime": null,
+    "vO2MaxValue": null,
+    "calories": 335.0,
+    "elevationGain": null,
+    "RPE": 4.0,
+    "Feeling": 3,
+    "matchStatus": "Linked",
+    "status": "COMPLETED"
+  },
   {
     "date": "2026-03-26",
     "day": "Thursday",
@@ -21,7 +68,7 @@
     "plannedWorkout": "[RUN] Tempo / Speed Intervals",
     "plannedDuration": 30.0,
     "notes": "**Focus:** Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
-    "actualDuration": 24.0,
+    "actualDuration": 27.0,
     "id": 22305222694,
     "matchStatus": "Linked",
     "status": "COMPLETED",

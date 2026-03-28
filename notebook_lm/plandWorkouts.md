@@ -1,5 +1,5 @@
 # Current Week Workouts
-**Generated:** 2026-03-27 02:46:01
+**Generated:** 2026-03-28 02:35:04
 **Source:** https://raw.githubusercontent.com/samwise41/training/main/data/dashboard/plannedWorkouts.json
 
 ---
@@ -79,10 +79,10 @@
     "plannedDuration": 30.0,
     "notes": "**Focus:** Deload (50% reps). 10m Warmup; 3 x 1km Repeats @ 7:45 pace with STRICT 60s rests.",
     "actualSport": "Run",
-    "actualDuration": 23.6,
+    "actualDuration": 27.0,
     "actualWorkout": "Roy - Tempo 1km Intervals x3",
     "status": "COMPLETED",
-    "compliance": 79,
+    "compliance": 90,
     "completed": true
   },
   {
@@ -92,11 +92,11 @@
     "plannedDuration": 30.0,
     "notes": "**Focus:** Deload Volume. Practice 'Shore Exit' after the main set.",
     "actualSport": "Swim",
-    "actualDuration": 0.0,
-    "actualWorkout": null,
-    "status": "PLANNED",
-    "compliance": 0,
-    "completed": false
+    "actualDuration": 29.2,
+    "actualWorkout": "Pool Swim",
+    "status": "COMPLETED",
+    "compliance": 97,
+    "completed": true
   },
   {
     "date": "2026-03-28",
